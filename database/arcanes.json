@@ -1,324 +1,99 @@
 {
     "Cascadia Accuracy": {
-        "stats": {},
-        "conditional stats": {
-            "crit_chance": [
-                0.5,
-                1.0,
-                1.5,
-                2.0,
-                2.5,
-                3.0
-            ]
-        }
+        "damage_dist": {},
+        "conditional_crit_chance": [0.5, 1.0, 1.5, 2.0, 2.5, 3.0]
     },
     "Cascadia Flare": {
-        "stats": {
-            "base_damage": [
-                0.02,
-                0.04,
-                0.06,
-                0.08,
-                0.1,
-                0.12
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.02, 0.04, 0.06, 0.08, 0.1, 0.12]
     },
     "Cascadia Overcharge": {
-        "stats": {
-            "crit_chance": [
-                0.5,
-                1.0,
-                1.5,
-                2.0,
-                2.5,
-                3.0
-            ]
-        }
+        "damage_dist": {},
+        "crit_chance": [0.5, 1.0, 1.5, 2.0, 2.5, 3.0]
     },
     "Conjunction Voltage": {
-        "stats": {},
-        "stacks": {
-            "reload_speed": [
-                0.003,
-                0.005,
-                0.007,
-                0.01,
-                0.013,
-                0.015
-            ],
-            "multishot": [
-                0.005,
-                0.01,
-                0.015,
-                0.02,
-                0.025,
-                0.03
-            ]
-        },
-        "max stacks": 40
+        "damage_dist": {},
+        "stack_reload_speed": [0.003, 0.005, 0.007, 0.01, 0.013, 0.015],
+        "stack_multishot": [0.005, 0.01, 0.015, 0.02, 0.025, 0.03],
+        "max_stacks": 40
     },
     "Fractalized Reset": {
-        "stats": {
-            "reload_speed": [
-                0.4,
-                0.8,
-                1.2,
-                1.6,
-                2.0,
-                2.4
-            ]
-        }
+        "damage_dist": {},
+        "reload_speed": [0.4, 0.8, 1.2, 1.6, 2.0, 2.4]
     },
     "Primary Blight": {
-        "stats": {},
-        "stacks": {
-            "crit_damage": [
-                0.006,
-                0.012,
-                0.018,
-                0.024,
-                0.03,
-                0.036
-            ],
-            "multishot": [
-                0.003,
-                0.006,
-                0.009,
-                0.012,
-                0.015,
-                0.018
-            ]
-        },
-        "max stacks": 40
+        "damage_dist": {},
+        "stack_crit_damage": [0.006, 0.012, 0.018, 0.024, 0.03, 0.036],
+        "stack_multishot": [0.003, 0.006, 0.009, 0.012, 0.015, 0.018],
+        "max_stacks": 40
     },
     "Primary Crux": {
-        "stats": {},
-        "stacks": {
-            "status_chance": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        },
-        "max stacks": 10
+        "damage_dist": {},
+        "stack_status_chance": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
+        "max_stacks": 10
     },
     "Primary Deadhead": {
-        "stats": {
-            "weakpoint_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        },
-        "stacks": {
-            "base_damage": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
-        },
-        "max stacks": 3
+        "damage_dist": {},
+        "weakpoint_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
+        "stack_base_damage": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2],
+        "max_stacks": 3
     },
     "Primary Dexterity": {
-        "stats": {},
-        "stacks": {
-            "base_damage": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ]
-        },
-        "max stacks": 6
+        "damage_dist": {},
+        "stack_base_damage": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
+        "max_stacks": 6
     },
     "Primary Frostbite": {
-        "stats": {},
-        "stacks": {
-            "crit_damage": [
-                0.005,
-                0.01,
-                0.015,
-                0.02,
-                0.025,
-                0.03
-            ],
-            "multishot": [
-                0.004,
-                0.007,
-                0.011,
-                0.015,
-                0.019,
-                0.022
-            ]
-        },
-        "max stacks": 40
+        "damage_dist": {},
+        "stack_crit_damage": [0.005, 0.01, 0.015, 0.02, 0.025, 0.03],
+        "stack_multishot": [0.004, 0.007, 0.011, 0.015, 0.019, 0.022],
+        "max_stacks": 40
     },
     "Primary Merciless": {
-        "stats": {
-            "reload_speed": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        },
-        "stacks": {
-            "base_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        },
-        "max stacks": 12
+        "damage_dist": {},
+        "reload_speed": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
+        "stack_base_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
+        "max_stacks": 12
     },
     "Secondary Deadhead": {
-        "stats": {
-            "weakpoint_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        },
-        "stacks": {
-            "base_damage": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
-        },
-        "max stacks": 3
+        "damage_dist": {},
+        "weakpoint_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
+        "stack_base_damage": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2],
+        "max_stacks": 3
     },
     "Secondary Dexterity": {
-        "stats": {},
-        "stacks": {
-            "base_damage": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ]
-        },
-        "max stacks": 6
+        "damage_dist": {},
+        "stack_base_damage": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
+        "max_stacks": 6
     },
     "Secondary Enervate": {
-        "stats": {},
-        "conditional stats": {
-            "crit_chance": [
-                0.017,
-                0.033,
-                0.05,
-                0.067,
-                0.083,
-                0.1
-            ]
-        }
+        "damage_dist": {},
+        "conditional_crit_chance": [0.017, 0.033, 0.05, 0.067, 0.083, 0.1]
     },
     "Secondary Fortifier": {
-        "stats": {
-            "faction_damage": [
-                1.167,
-                2.333,
-                3.5,
-                4.667,
-                5.833,
-                7.0
-            ]
-        }
+        "damage_dist": {},
+        "faction_damage": [1.167, 2.333, 3.5, 4.667, 5.833, 7.0]
     },
     "Secondary Kinship": {
-        "stats": {
-            "crit_chance": [
-                0.033,
-                0.067,
-                0.1,
-                0.133,
-                0.167,
-                0.2
-            ]
-        }
+        "damage_dist": {},
+        "crit_chance": [0.033, 0.067, 0.1, 0.133, 0.167, 0.2]
     },
     "Secondary Merciless": {
-        "stats": {
-            "reload_speed": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        },
-        "stacks": {
-            "base_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        },
-        "max stacks": 12
+        "damage_dist": {},
+        "reload_speed": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
+        "stack_base_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
+        "max_stacks": 12
     },
     "Secondary Outburst": {
-        "stats": {
-            "crit_damage": [
-                0.033,
-                0.067,
-                0.1,
-                0.133,
-                0.167,
-                0.2
-            ]
-        }
+        "damage_dist": {},
+        "crit_damage": [0.033, 0.067, 0.1, 0.133, 0.167, 0.2]
     },
     "Secondary Shiver": {
-        "stats": {
-            "base_damage": [
-                0.075,
-                0.15,
-                0.225,
-                0.3,
-                0.375,
-                0.45
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.075, 0.15, 0.225, 0.3, 0.375, 0.45]
     },
     "Secondary Surge": {
-        "stats": {
-            "base_damage": [
-                1.167,
-                2.333,
-                3.5,
-                4.667,
-                5.833,
-                7.0
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [1.167, 2.333, 3.5, 4.667, 5.833, 7.0]
     }
 }

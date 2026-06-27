@@ -1,4586 +1,1431 @@
 {
     "Accelerated Blast": {
-        "stats": {
-            "fire_rate": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "puncture": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "puncture": [0.15, 0.3, 0.45, 0.6]
+        },
+        "fire_rate": [0.15, 0.3, 0.45, 0.6]
     },
     "Accelerated Isotope": {
-        "stats": {
-            "radiation": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "fire_rate": [
-                0.1,
-                0.2,
-                0.3,
-                0.4
-            ]
-        }
+        "damage_dist": {
+            "radiation": [0.15, 0.3, 0.45, 0.6]
+        },
+        "fire_rate": [0.1, 0.2, 0.3, 0.4]
     },
     "Amalgam Barrel Diffusion": {
-        "stats": {
-            "multishot": [
-                0.183,
-                0.367,
-                0.55,
-                0.733,
-                0.917,
-                1.1
-            ]
-        }
+        "damage_dist": {},
+        "multishot": [0.183, 0.367, 0.55, 0.733, 0.917, 1.1]
     },
     "Amalgam Organ Shatter": {
-        "stats": {
-            "crit_damage": [
-                0.142,
-                0.283,
-                0.425,
-                0.567,
-                0.708,
-                0.85
-            ]
-        }
+        "damage_dist": {},
+        "crit_damage": [0.142, 0.283, 0.425, 0.567, 0.708, 0.85]
     },
     "Amalgam Serration": {
-        "stats": {
-            "base_damage": [
-                0.141,
-                0.282,
-                0.423,
-                0.564,
-                0.705,
-                0.845,
-                0.986,
-                1.127,
-                1.268,
-                1.409,
-                1.55
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.141, 0.282, 0.423, 0.564, 0.705, 0.845, 0.986, 1.127, 1.268, 1.409, 1.55]
     },
     "Amalgam Shotgun Barrage": {
-        "stats": {
-            "fire_rate": [
-                0.142,
-                0.283,
-                0.425,
-                0.567,
-                0.708,
-                0.85
-            ]
-        }
+        "damage_dist": {},
+        "fire_rate": [0.142, 0.283, 0.425, 0.567, 0.708, 0.85]
     },
     "Ammo Stock": {
-        "stats": {
-            "magazine_capacity": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ]
-        }
+        "damage_dist": {},
+        "magazine_capacity": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
     },
     "Anemic Agility": {
-        "stats": {
-            "fire_rate": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ],
-            "base_damage": [
-                -0.025,
-                -0.05,
-                -0.075,
-                -0.1,
-                -0.125,
-                -0.15
-            ]
-        }
+        "damage_dist": {},
+        "fire_rate": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
+        "base_damage": [-0.025, -0.05, -0.075, -0.1, -0.125, -0.15]
     },
     "Argon Scope": {
-        "stats": {},
-        "conditional stats": {
-            "crit_chance": [
-                0.225,
-                0.45,
-                0.675,
-                0.9,
-                1.125,
-                1.35
-            ]
-        }
+        "damage_dist": {},
+        "conditional_crit_chance": [0.225, 0.45, 0.675, 0.9, 1.125, 1.35]
     },
     "Atomic Fallout": {
-        "stats": {
-            "radiation": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "magazine_capacity": [
-                0.1,
-                0.2,
-                0.3,
-                0.4
-            ]
-        }
+        "damage_dist": {
+            "radiation": [0.15, 0.3, 0.45, 0.6]
+        },
+        "magazine_capacity": [0.1, 0.2, 0.3, 0.4]
     },
     "Auger Strike": {
-        "stats": {
-            "puncture": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
+        "damage_dist": {
+            "puncture": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         }
     },
     "Augur Pact": {
-        "stats": {
-            "base_damage": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
     },
     "Bane of Corpus": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Bane of Grineer": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Bane of Infested": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Bane of Orokin": {
-        "stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Bane of The Murmur": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Barrel Diffusion": {
-        "stats": {
-            "multishot": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
-        }
+        "damage_dist": {},
+        "multishot": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
     },
     "Bladed Rounds": {
-        "stats": {},
-        "conditional stats": {
-            "crit_damage": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
-        }
+        "damage_dist": {},
+        "conditional_crit_damage": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
     },
     "Blaze": {
-        "stats": {
-            "base_damage": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "heat": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "heat": [0.15, 0.3, 0.45, 0.6]
+        },
+        "base_damage": [0.15, 0.3, 0.45, 0.6]
     },
     "Blood Rush": {
-        "stats": {
-            "crit_chance": [
-                0.036,
-                0.073,
-                0.109,
-                0.145,
-                0.182,
-                0.218,
-                0.255,
-                0.291,
-                0.327,
-                0.364,
-                0.4
-            ]
-        }
+        "damage_dist": {},
+        "crit_chance": [0.036, 0.073, 0.109, 0.145, 0.182, 0.218, 0.255, 0.291, 0.327, 0.364, 0.4]
     },
     "Blunderbuss": {
-        "stats": {
-            "crit_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
-        }
+        "damage_dist": {},
+        "crit_chance": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
     },
     "Bore": {
-        "stats": {
-            "puncture": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
+        "damage_dist": {
+            "puncture": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         }
     },
     "Breach Loader": {
-        "stats": {
-            "puncture": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
+        "damage_dist": {
+            "puncture": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         }
     },
     "Burdened Magazine": {
-        "stats": {
-            "magazine_capacity": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ],
-            "reload_speed": [
-                -0.03,
-                -0.06,
-                -0.09,
-                -0.12,
-                -0.15,
-                -0.18
-            ]
-        }
+        "damage_dist": {},
+        "magazine_capacity": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
+        "reload_speed": [-0.03, -0.06, -0.09, -0.12, -0.15, -0.18]
     },
     "Buzz Kill": {
-        "stats": {
-            "slash": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
+        "damage_dist": {
+            "slash": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         }
     },
     "Carnis Mandible": {
-        "stats": {
-            "slash": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ],
-            "status_chance": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "slash": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
+        },
+        "status_chance": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
     },
     "Carnis Stinger": {
-        "stats": {
-            "slash": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ],
-            "status_chance": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "slash": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
+        },
+        "status_chance": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
     },
     "Catalyzer Link": {
-        "stats": {},
-        "conditional stats": {
-            "status_chance": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ]
-        }
+        "damage_dist": {},
+        "conditional_status_chance": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
     },
     "Charged Shell": {
-        "stats": {
-            "electricity": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "electricity": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Chilling Grasp": {
-        "stats": {
-            "cold": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "cold": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Chilling Reload": {
-        "stats": {
-            "cold": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "reload_speed": [
-                0.1,
-                0.2,
-                0.3,
-                0.4
-            ]
-        }
+        "damage_dist": {
+            "cold": [0.15, 0.3, 0.45, 0.6]
+        },
+        "reload_speed": [0.1, 0.2, 0.3, 0.4]
     },
     "Cleanse Corpus": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Cleanse Grineer": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Cleanse Infested": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Cleanse Orokin": {
-        "stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Cleanse The Murmur": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Collision Force": {
-        "stats": {
-            "impact": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
+        "damage_dist": {
+            "impact": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         }
     },
     "Comet Rounds": {
-        "stats": {
-            "base_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.05, 0.1, 0.15, 0.2]
     },
     "Concussion Rounds": {
-        "stats": {
-            "impact": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "impact": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Condition Overload": {
-        "stats": {
-            "base_damage": [
-                0.133,
-                0.267,
-                0.4,
-                0.533,
-                0.667,
-                0.8
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.133, 0.267, 0.4, 0.533, 0.667, 0.8]
     },
     "Condition's Perfection": {
-        "stats": {},
-        "conditional stats": {
-            "status_chance": [
-                0.25,
-                0.5,
-                0.75,
-                1.0
-            ]
-        }
+        "damage_dist": {},
+        "conditional_status_chance": [0.25, 0.5, 0.75, 1.0]
     },
     "Contagious Spread": {
-        "stats": {
-            "toxin": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "toxin": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Convulsion": {
-        "stats": {
-            "electricity": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "electricity": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Counterweight": {
-        "stats": {
-            "base_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.05, 0.1, 0.15, 0.2]
     },
     "Covert Lethality": {
-        "stats": {
-            "base_damage": [
-                0.25,
-                0.5,
-                0.75,
-                1.0
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.25, 0.5, 0.75, 1.0]
     },
     "Crash Course": {
-        "stats": {
-            "impact": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
+        "damage_dist": {
+            "impact": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         }
     },
     "Crash Shot": {
-        "stats": {
-            "base_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.05, 0.1, 0.15, 0.2]
     },
     "Creeping Bullseye": {
-        "stats": {
-            "crit_chance": [
-                0.333,
-                0.667,
-                1.0,
-                1.333,
-                1.667,
-                2.0
-            ],
-            "fire_rate": [
-                -0.033,
-                -0.067,
-                -0.1,
-                -0.133,
-                -0.167,
-                -0.2
-            ]
-        }
+        "damage_dist": {},
+        "crit_chance": [0.333, 0.667, 1.0, 1.333, 1.667, 2.0],
+        "fire_rate": [-0.033, -0.067, -0.1, -0.133, -0.167, -0.2]
     },
     "Critical Deceleration": {
-        "stats": {
-            "crit_chance": [
-                0.333,
-                0.667,
-                1.0,
-                1.333,
-                1.667,
-                2.0
-            ],
-            "fire_rate": [
-                -0.033,
-                -0.067,
-                -0.1,
-                -0.133,
-                -0.167,
-                -0.2
-            ]
-        }
+        "damage_dist": {},
+        "crit_chance": [0.333, 0.667, 1.0, 1.333, 1.667, 2.0],
+        "fire_rate": [-0.033, -0.067, -0.1, -0.133, -0.167, -0.2]
     },
     "Critical Delay": {
-        "stats": {
-            "crit_chance": [
-                0.333,
-                0.667,
-                1.0,
-                1.333,
-                1.667,
-                2.0
-            ],
-            "fire_rate": [
-                -0.033,
-                -0.067,
-                -0.1,
-                -0.133,
-                -0.167,
-                -0.2
-            ]
-        },
-        "conditional stats": {
-            "fire_rate": [
-                -0.033,
-                -0.067,
-                -0.1,
-                -0.133,
-                -0.167,
-                -0.2
-            ]
-        }
+        "damage_dist": {},
+        "crit_chance": [0.333, 0.667, 1.0, 1.333, 1.667, 2.0],
+        "fire_rate": [-0.033, -0.067, -0.1, -0.133, -0.167, -0.2],
+        "conditional_fire_rate": [-0.033, -0.067, -0.1, -0.133, -0.167, -0.2]
     },
     "Cryo Rounds": {
-        "stats": {
-            "cold": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "cold": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Deep Freeze": {
-        "stats": {
-            "cold": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "cold": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Disruptor": {
-        "stats": {
-            "impact": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "impact": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Dreamer's Wrath": {
-        "stats": {
-            "crit_damage": [
-                0.08,
-                0.16,
-                0.24,
-                0.32
-            ]
-        }
+        "damage_dist": {},
+        "crit_damage": [0.08, 0.16, 0.24, 0.32]
     },
     "Drifting Contact": {
-        "stats": {
-            "status_chance": [
-                0.1,
-                0.2,
-                0.3,
-                0.4
-            ]
-        }
+        "damage_dist": {},
+        "status_chance": [0.1, 0.2, 0.3, 0.4]
     },
     "Embedded Catalyzer": {
-        "stats": {},
-        "conditional stats": {
-            "status_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
-        }
+        "damage_dist": {},
+        "conditional_status_chance": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
     },
     "Enduring Affliction": {
-        "stats": {},
-        "conditional stats": {
-            "status_chance": [
-                0.167,
-                0.333,
-                0.5,
-                0.667,
-                0.833,
-                1.0
-            ]
-        }
+        "damage_dist": {},
+        "conditional_status_chance": [0.167, 0.333, 0.5, 0.667, 0.833, 1.0]
     },
     "Energy Channel": {
-        "stats": {},
-        "conditional stats": {
-            "base_damage": [
-                0.333,
-                0.667,
-                1.0,
-                1.333,
-                1.667,
-                2.0
-            ]
-        }
+        "damage_dist": {},
+        "conditional_base_damage": [0.333, 0.667, 1.0, 1.333, 1.667, 2.0]
     },
     "Expel Corpus": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Expel Grineer": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Expel Infested": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Expel Orokin": {
-        "stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Expel The Murmur": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Fanged Fusillade": {
-        "stats": {
-            "slash": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
+        "damage_dist": {
+            "slash": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         }
     },
     "Fast Hands": {
-        "stats": {
-            "reload_speed": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "reload_speed": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Fever Strike": {
-        "stats": {
-            "toxin": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "toxin": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Finishing Touch": {
-        "stats": {
-            "base_damage": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
     },
     "Firestorm": {
-        "stats": {
-            "blast": [
-                0.06,
-                0.12,
-                0.18,
-                0.24
-            ]
+        "damage_dist": {
+            "blast": [0.06, 0.12, 0.18, 0.24]
         }
     },
     "Flak Shot": {
-        "stats": {
-            "base_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.05, 0.1, 0.15, 0.2]
     },
     "Flawed Ammo Stock": {
-        "stats": {
-            "magazine_capacity": [
-                0.05,
-                0.1,
-                0.15,
-                0.2
-            ]
-        }
+        "damage_dist": {},
+        "magazine_capacity": [0.05, 0.1, 0.15, 0.2]
     },
     "Flawed Bane of Corpus": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.025,
-                0.05,
-                0.075,
-                0.1
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.025, 0.05, 0.075, 0.1]
     },
     "Flawed Bane of Grineer": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.025,
-                0.05,
-                0.075,
-                0.1
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.025, 0.05, 0.075, 0.1]
     },
     "Flawed Charged Shell": {
-        "stats": {
-            "electricity": [
-                0.1,
-                0.2,
-                0.3,
-                0.4
-            ]
+        "damage_dist": {
+            "electricity": [0.1, 0.2, 0.3, 0.4]
         }
     },
     "Flawed Convulsion": {
-        "stats": {
-            "electricity": [
-                0.1,
-                0.2,
-                0.3,
-                0.4
-            ]
+        "damage_dist": {
+            "electricity": [0.1, 0.2, 0.3, 0.4]
         }
     },
     "Flawed Deep Freeze": {
-        "stats": {
-            "cold": [
-                0.05,
-                0.1,
-                0.15,
-                0.2
-            ]
+        "damage_dist": {
+            "cold": [0.05, 0.1, 0.15, 0.2]
         }
     },
     "Flawed Expel Corpus": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.025,
-                0.05,
-                0.075,
-                0.1
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.025, 0.05, 0.075, 0.1]
     },
     "Flawed Expel Grineer": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.025,
-                0.05,
-                0.075,
-                0.1
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.025, 0.05, 0.075, 0.1]
     },
     "Flawed Fast Hands": {
-        "stats": {
-            "reload_speed": [
-                0.03,
-                0.06,
-                0.09,
-                0.12
-            ]
-        }
+        "damage_dist": {},
+        "reload_speed": [0.03, 0.06, 0.09, 0.12]
     },
     "Flawed Fever Strike": {
-        "stats": {
-            "toxin": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
+        "damage_dist": {
+            "toxin": [0.15, 0.3, 0.45, 0.6]
         }
     },
     "Flawed Heated Charge": {
-        "stats": {
-            "heat": [
-                0.1,
-                0.2,
-                0.3,
-                0.4
-            ]
+        "damage_dist": {
+            "heat": [0.1, 0.2, 0.3, 0.4]
         }
     },
     "Flawed Hellfire": {
-        "stats": {
-            "heat": [
-                0.1,
-                0.2,
-                0.3,
-                0.4
-            ]
+        "damage_dist": {
+            "heat": [0.1, 0.2, 0.3, 0.4]
         }
     },
     "Flawed Hornet Strike": {
-        "stats": {
-            "base_damage": [
-                0.1,
-                0.2,
-                0.3,
-                0.4
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.1, 0.2, 0.3, 0.4]
     },
     "Flawed Incendiary Coat": {
-        "stats": {
-            "heat": [
-                0.1,
-                0.2,
-                0.3,
-                0.4
-            ]
+        "damage_dist": {
+            "heat": [0.1, 0.2, 0.3, 0.4]
         }
     },
     "Flawed Magazine Warp": {
-        "stats": {
-            "magazine_capacity": [
-                0.03,
-                0.06,
-                0.09,
-                0.12
-            ]
-        }
+        "damage_dist": {},
+        "magazine_capacity": [0.03, 0.06, 0.09, 0.12]
     },
     "Flawed Molten Impact": {
-        "stats": {
-            "heat": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
+        "damage_dist": {
+            "heat": [0.15, 0.3, 0.45, 0.6]
         }
     },
     "Flawed North Wind": {
-        "stats": {
-            "cold": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
+        "damage_dist": {
+            "cold": [0.15, 0.3, 0.45, 0.6]
         }
     },
     "Flawed Organ Shatter": {
-        "stats": {
-            "crit_damage": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
-        }
+        "damage_dist": {},
+        "crit_damage": [0.15, 0.3, 0.45, 0.6]
     },
     "Flawed Pathogen Rounds": {
-        "stats": {
-            "toxin": [
-                0.1,
-                0.2,
-                0.3,
-                0.4
-            ]
+        "damage_dist": {
+            "toxin": [0.1, 0.2, 0.3, 0.4]
         }
     },
     "Flawed Pistol Gambit": {
-        "stats": {
-            "crit_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
-        }
+        "damage_dist": {},
+        "crit_chance": [0.15, 0.3, 0.45, 0.6]
     },
     "Flawed Point Blank": {
-        "stats": {
-            "base_damage": [
-                0.1,
-                0.2,
-                0.3,
-                0.4
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.1, 0.2, 0.3, 0.4]
     },
     "Flawed Pressure Point": {
-        "stats": {
-            "base_damage": [
-                0.2,
-                0.4,
-                0.6,
-                0.8
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.2, 0.4, 0.6, 0.8]
     },
     "Flawed Quickdraw": {
-        "stats": {
-            "reload_speed": [
-                0.05,
-                0.1,
-                0.15,
-                0.2
-            ]
-        }
+        "damage_dist": {},
+        "reload_speed": [0.05, 0.1, 0.15, 0.2]
     },
     "Flawed Serration": {
-        "stats": {
-            "base_damage": [
-                0.1,
-                0.2,
-                0.3,
-                0.4
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.1, 0.2, 0.3, 0.4]
     },
     "Flawed Shocking Touch": {
-        "stats": {
-            "electricity": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
+        "damage_dist": {
+            "electricity": [0.15, 0.3, 0.45, 0.6]
         }
     },
     "Flawed Shotgun Barrage": {
-        "stats": {
-            "fire_rate": [
-                0.1,
-                0.2,
-                0.3,
-                0.4
-            ]
-        }
+        "damage_dist": {},
+        "fire_rate": [0.1, 0.2, 0.3, 0.4]
     },
     "Flawed Slip Magazine": {
-        "stats": {
-            "magazine_capacity": [
-                0.025,
-                0.05,
-                0.075,
-                0.1
-            ]
-        }
+        "damage_dist": {},
+        "magazine_capacity": [0.025, 0.05, 0.075, 0.1]
     },
     "Flawed Smite Grineer": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2]
     },
     "Flawed Speed Trigger": {
-        "stats": {
-            "fire_rate": [
-                0.05,
-                0.1,
-                0.15,
-                0.2
-            ]
-        },
-        "conditional stats": {
-            "fire_rate": [
-                0.05,
-                0.1,
-                0.15,
-                0.2
-            ]
-        }
+        "damage_dist": {},
+        "fire_rate": [0.05, 0.1, 0.15, 0.2],
+        "conditional_fire_rate": [0.05, 0.1, 0.15, 0.2]
     },
     "Flawed Stormbringer": {
-        "stats": {
-            "electricity": [
-                0.1,
-                0.2,
-                0.3,
-                0.4
-            ]
+        "damage_dist": {
+            "electricity": [0.1, 0.2, 0.3, 0.4]
         }
     },
     "Flawed Tactical Pump": {
-        "stats": {
-            "reload_speed": [
-                0.03,
-                0.06,
-                0.09,
-                0.12
-            ]
-        }
+        "damage_dist": {},
+        "reload_speed": [0.03, 0.06, 0.09, 0.12]
     },
     "Flawed Target Cracker": {
-        "stats": {
-            "crit_damage": [
-                0.075,
-                0.15,
-                0.225,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "crit_damage": [0.075, 0.15, 0.225, 0.3]
     },
     "Flawed True Steel": {
-        "stats": {
-            "crit_chance": [
-                0.2,
-                0.4,
-                0.6,
-                0.8
-            ]
-        },
-        "conditional stats": {
-            "crit_chance": [
-                0.2,
-                0.4,
-                0.6,
-                0.8
-            ]
-        }
+        "damage_dist": {},
+        "crit_chance": [0.2, 0.4, 0.6, 0.8],
+        "conditional_crit_chance": [0.2, 0.4, 0.6, 0.8]
     },
     "Flechette": {
-        "stats": {
-            "puncture": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "puncture": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Focus Energy": {
-        "stats": {
-            "electricity": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
+        "damage_dist": {
+            "electricity": [0.15, 0.3, 0.45, 0.6]
         }
     },
     "Focus Radon": {
-        "stats": {
-            "radiation": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
+        "damage_dist": {
+            "radiation": [0.15, 0.3, 0.45, 0.6]
         }
     },
     "Frail Momentum": {
-        "stats": {
-            "fire_rate": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ],
-            "base_damage": [
-                -0.025,
-                -0.05,
-                -0.075,
-                -0.1,
-                -0.125,
-                -0.15
-            ]
-        }
+        "damage_dist": {},
+        "fire_rate": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
+        "base_damage": [-0.025, -0.05, -0.075, -0.1, -0.125, -0.15]
     },
     "Frigid Blast": {
-        "stats": {
-            "cold": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "status_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "cold": [0.15, 0.3, 0.45, 0.6]
+        },
+        "status_chance": [0.15, 0.3, 0.45, 0.6]
     },
     "Frostbite": {
-        "stats": {
-            "cold": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "status_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "cold": [0.15, 0.3, 0.45, 0.6]
+        },
+        "status_chance": [0.15, 0.3, 0.45, 0.6]
     },
     "Full Capacity": {
-        "stats": {
-            "magazine_capacity": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ],
-            "reload_speed": [
-                -0.025,
-                -0.05,
-                -0.075,
-                -0.1,
-                -0.125,
-                -0.15
-            ]
-        }
+        "damage_dist": {},
+        "magazine_capacity": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
+        "reload_speed": [-0.025, -0.05, -0.075, -0.1, -0.125, -0.15]
     },
     "Full Contact": {
-        "stats": {
-            "impact": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
+        "damage_dist": {
+            "impact": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         }
     },
     "Fulmination": {
-        "stats": {
-            "blast": [
-                0.06,
-                0.12,
-                0.18,
-                0.24
-            ]
+        "damage_dist": {
+            "blast": [0.06, 0.12, 0.18, 0.24]
         }
     },
     "Galvanized Aptitude": {
-        "stats": {
-            "status_chance": [
-                0.073,
-                0.145,
-                0.218,
-                0.291,
-                0.364,
-                0.436,
-                0.509,
-                0.582,
-                0.655,
-                0.727,
-                0.8
-            ]
-        },
-        "stacks": {
-            "base_damage": [
-                0.036,
-                0.073,
-                0.109,
-                0.145,
-                0.182,
-                0.218,
-                0.255,
-                0.291,
-                0.327,
-                0.364,
-                0.4
-            ]
-        },
-        "max stacks": 2
+        "damage_dist": {},
+        "status_chance": [0.073, 0.145, 0.218, 0.291, 0.364, 0.436, 0.509, 0.582, 0.655, 0.727, 0.8],
+        "stack_base_damage": [0.036, 0.073, 0.109, 0.145, 0.182, 0.218, 0.255, 0.291, 0.327, 0.364, 0.4],
+        "max_stacks": 2
     },
     "Galvanized Chamber": {
-        "stats": {
-            "multishot": [
-                0.073,
-                0.145,
-                0.218,
-                0.291,
-                0.364,
-                0.436,
-                0.509,
-                0.582,
-                0.655,
-                0.727,
-                0.8
-            ]
-        },
-        "stacks": {
-            "multishot": [
-                0.027,
-                0.055,
-                0.082,
-                0.109,
-                0.136,
-                0.164,
-                0.191,
-                0.218,
-                0.245,
-                0.273,
-                0.3
-            ]
-        },
-        "max stacks": 5
+        "damage_dist": {},
+        "multishot": [0.073, 0.145, 0.218, 0.291, 0.364, 0.436, 0.509, 0.582, 0.655, 0.727, 0.8],
+        "stack_multishot": [0.027, 0.055, 0.082, 0.109, 0.136, 0.164, 0.191, 0.218, 0.245, 0.273, 0.3],
+        "max_stacks": 5
     },
     "Galvanized Crosshairs": {
-        "stats": {},
-        "stacks": {
-            "crit_chance": [
-                0.036,
-                0.073,
-                0.109,
-                0.145,
-                0.182,
-                0.218,
-                0.255,
-                0.291,
-                0.327,
-                0.364,
-                0.4
-            ]
-        },
-        "max stacks": 5,
-        "conditional stats": {
-            "crit_chance": [
-                0.109,
-                0.218,
-                0.327,
-                0.436,
-                0.545,
-                0.655,
-                0.764,
-                0.873,
-                0.982,
-                1.091,
-                1.2
-            ]
-        }
+        "damage_dist": {},
+        "conditional_crit_chance": [0.109, 0.218, 0.327, 0.436, 0.545, 0.655, 0.764, 0.873, 0.982, 1.091, 1.2],
+        "stack_crit_chance": [0.036, 0.073, 0.109, 0.145, 0.182, 0.218, 0.255, 0.291, 0.327, 0.364, 0.4],
+        "max_stacks": 5
     },
     "Galvanized Diffusion": {
-        "stats": {
-            "multishot": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6,
-                0.7,
-                0.8,
-                0.9,
-                1.0,
-                1.1
-            ]
-        },
-        "stacks": {
-            "multishot": [
-                0.027,
-                0.055,
-                0.082,
-                0.109,
-                0.136,
-                0.164,
-                0.191,
-                0.218,
-                0.245,
-                0.273,
-                0.3
-            ]
-        },
-        "max stacks": 4
+        "damage_dist": {},
+        "multishot": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1],
+        "stack_multishot": [0.027, 0.055, 0.082, 0.109, 0.136, 0.164, 0.191, 0.218, 0.245, 0.273, 0.3],
+        "max_stacks": 4
     },
     "Galvanized Elementalist": {
-        "stats": {
-            "status_damage": [
-                0.073,
-                0.145,
-                0.218,
-                0.291,
-                0.364,
-                0.436,
-                0.509,
-                0.582,
-                0.655,
-                0.727,
-                0.8
-            ]
-        },
-        "stacks": {
-            "status_chance": [
-                0.027,
-                0.055,
-                0.082,
-                0.109,
-                0.136,
-                0.164,
-                0.191,
-                0.218,
-                0.245,
-                0.273,
-                0.3
-            ]
-        },
-        "max stacks": 4
+        "damage_dist": {},
+        "status_damage": [0.073, 0.145, 0.218, 0.291, 0.364, 0.436, 0.509, 0.582, 0.655, 0.727, 0.8],
+        "stack_status_chance": [0.027, 0.055, 0.082, 0.109, 0.136, 0.164, 0.191, 0.218, 0.245, 0.273, 0.3],
+        "max_stacks": 4
     },
     "Galvanized Hell": {
-        "stats": {
-            "multishot": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6,
-                0.7,
-                0.8,
-                0.9,
-                1.0,
-                1.1
-            ]
-        },
-        "stacks": {
-            "multishot": [
-                0.027,
-                0.055,
-                0.082,
-                0.109,
-                0.136,
-                0.164,
-                0.191,
-                0.218,
-                0.245,
-                0.273,
-                0.3
-            ]
-        },
-        "max stacks": 4
+        "damage_dist": {},
+        "multishot": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1],
+        "stack_multishot": [0.027, 0.055, 0.082, 0.109, 0.136, 0.164, 0.191, 0.218, 0.245, 0.273, 0.3],
+        "max_stacks": 4
     },
     "Galvanized Savvy": {
-        "stats": {
-            "status_chance": [
-                0.073,
-                0.145,
-                0.218,
-                0.291,
-                0.364,
-                0.436,
-                0.509,
-                0.582,
-                0.655,
-                0.727,
-                0.8
-            ]
-        },
-        "stacks": {
-            "base_damage": [
-                0.036,
-                0.073,
-                0.109,
-                0.145,
-                0.182,
-                0.218,
-                0.255,
-                0.291,
-                0.327,
-                0.364,
-                0.4
-            ]
-        },
-        "max stacks": 2
+        "damage_dist": {},
+        "status_chance": [0.073, 0.145, 0.218, 0.291, 0.364, 0.436, 0.509, 0.582, 0.655, 0.727, 0.8],
+        "stack_base_damage": [0.036, 0.073, 0.109, 0.145, 0.182, 0.218, 0.255, 0.291, 0.327, 0.364, 0.4],
+        "max_stacks": 2
     },
     "Galvanized Scope": {
-        "stats": {},
-        "stacks": {
-            "crit_chance": [
-                0.036,
-                0.073,
-                0.109,
-                0.145,
-                0.182,
-                0.218,
-                0.255,
-                0.291,
-                0.327,
-                0.364,
-                0.4
-            ]
-        },
-        "max stacks": 5,
-        "conditional stats": {
-            "crit_chance": [
-                0.109,
-                0.218,
-                0.327,
-                0.436,
-                0.545,
-                0.655,
-                0.764,
-                0.873,
-                0.982,
-                1.091,
-                1.2
-            ]
-        }
+        "damage_dist": {},
+        "conditional_crit_chance": [0.109, 0.218, 0.327, 0.436, 0.545, 0.655, 0.764, 0.873, 0.982, 1.091, 1.2],
+        "stack_crit_chance": [0.036, 0.073, 0.109, 0.145, 0.182, 0.218, 0.255, 0.291, 0.327, 0.364, 0.4],
+        "max_stacks": 5
     },
     "Galvanized Shot": {
-        "stats": {
-            "status_chance": [
-                0.073,
-                0.145,
-                0.218,
-                0.291,
-                0.364,
-                0.436,
-                0.509,
-                0.582,
-                0.655,
-                0.727,
-                0.8
-            ]
-        },
-        "stacks": {
-            "base_damage": [
-                0.036,
-                0.073,
-                0.109,
-                0.145,
-                0.182,
-                0.218,
-                0.255,
-                0.291,
-                0.327,
-                0.364,
-                0.4
-            ]
-        },
-        "max stacks": 3
+        "damage_dist": {},
+        "status_chance": [0.073, 0.145, 0.218, 0.291, 0.364, 0.436, 0.509, 0.582, 0.655, 0.727, 0.8],
+        "stack_base_damage": [0.036, 0.073, 0.109, 0.145, 0.182, 0.218, 0.255, 0.291, 0.327, 0.364, 0.4],
+        "max_stacks": 3
     },
     "Galvanized Steel": {
-        "stats": {
-            "crit_chance": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6,
-                0.7,
-                0.8,
-                0.9,
-                1.0,
-                1.1
-            ]
-        },
-        "stacks": {
-            "crit_damage": [
-                0.027,
-                0.055,
-                0.082,
-                0.109,
-                0.136,
-                0.164,
-                0.191,
-                0.218,
-                0.245,
-                0.273,
-                0.3
-            ]
-        },
-        "max stacks": 4,
-        "conditional stats": {
-            "crit_chance": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6,
-                0.7,
-                0.8,
-                0.9,
-                1.0,
-                1.1
-            ]
-        }
+        "damage_dist": {},
+        "crit_chance": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1],
+        "conditional_crit_chance": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1],
+        "stack_crit_damage": [0.027, 0.055, 0.082, 0.109, 0.136, 0.164, 0.191, 0.218, 0.245, 0.273, 0.3],
+        "max_stacks": 4
     },
     "Gladiator Might": {
-        "stats": {
-            "crit_damage": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ]
-        }
+        "damage_dist": {},
+        "crit_damage": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
     },
     "Gunslinger": {
-        "stats": {
-            "fire_rate": [
-                0.12,
-                0.24,
-                0.36,
-                0.48,
-                0.6,
-                0.72
-            ]
-        }
+        "damage_dist": {},
+        "fire_rate": [0.12, 0.24, 0.36, 0.48, 0.6, 0.72]
     },
     "Hammer Shot": {
-        "stats": {
-            "crit_damage": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "status_chance": [
-                0.2,
-                0.4,
-                0.6,
-                0.8
-            ]
-        }
+        "damage_dist": {},
+        "crit_damage": [0.15, 0.3, 0.45, 0.6],
+        "status_chance": [0.2, 0.4, 0.6, 0.8]
     },
     "Heated Charge": {
-        "stats": {
-            "heat": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "heat": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Heavy Caliber": {
-        "stats": {
-            "base_damage": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9,
-                1.05,
-                1.2,
-                1.35,
-                1.5,
-                1.65
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65]
     },
     "Heavy Trauma": {
-        "stats": {
-            "impact": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "impact": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Heavy Warhead": {
-        "stats": {
-            "blast": [
-                0.25,
-                0.5,
-                0.75,
-                1.0
-            ]
+        "damage_dist": {
+            "blast": [0.25, 0.5, 0.75, 1.0]
         }
     },
     "Hell's Chamber": {
-        "stats": {
-            "multishot": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
-        }
+        "damage_dist": {},
+        "multishot": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
     },
     "Hellfire": {
-        "stats": {
-            "heat": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "heat": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Hemorrhage": {
-        "stats": {},
-        "conditional stats": {
-            "internal_bleeding": [
-                0.058,
-                0.117,
-                0.175,
-                0.233,
-                0.292,
-                0.35
-            ]
-        }
+        "damage_dist": {},
+        "conditional_internal_bleeding": [0.058, 0.117, 0.175, 0.233, 0.292, 0.35]
     },
     "High Voltage": {
-        "stats": {
-            "electricity": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "status_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "electricity": [0.15, 0.3, 0.45, 0.6]
+        },
+        "status_chance": [0.15, 0.3, 0.45, 0.6]
     },
     "Hollow Point": {
-        "stats": {
-            "crit_damage": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ],
-            "base_damage": [
-                -0.025,
-                -0.05,
-                -0.075,
-                -0.1,
-                -0.125,
-                -0.15
-            ]
-        }
+        "damage_dist": {},
+        "crit_damage": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
+        "base_damage": [-0.025, -0.05, -0.075, -0.1, -0.125, -0.15]
     },
     "Hornet Strike": {
-        "stats": {
-            "base_damage": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2,
-                1.4,
-                1.6,
-                1.8,
-                2.0,
-                2.2
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2]
     },
     "Hunter Munitions": {
-        "stats": {},
-        "conditional stats": {
-            "hunter_munitions": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "conditional_hunter_munitions": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Hydraulic Barrel": {
-        "stats": {
-            "magazine_capacity": [
-                -0.05,
-                -0.1,
-                -0.15,
-                -0.2
-            ]
-        }
+        "damage_dist": {},
+        "magazine_capacity": [-0.05, -0.1, -0.15, -0.2]
     },
     "Hydraulic Chamber": {
-        "stats": {
-            "magazine_capacity": [
-                -0.025,
-                -0.05,
-                -0.075,
-                -0.1
-            ]
-        }
+        "damage_dist": {},
+        "magazine_capacity": [-0.025, -0.05, -0.075, -0.1]
     },
     "Hydraulic Crosshairs": {
-        "stats": {},
-        "conditional stats": {
-            "crit_chance": [
-                0.225,
-                0.45,
-                0.675,
-                0.9,
-                1.125,
-                1.35
-            ]
-        }
+        "damage_dist": {},
+        "conditional_crit_chance": [0.225, 0.45, 0.675, 0.9, 1.125, 1.35]
     },
     "Ice Storm": {
-        "stats": {
-            "magazine_capacity": [
-                0.1,
-                0.2,
-                0.3,
-                0.4
-            ],
-            "cold": [
-                0.1,
-                0.2,
-                0.3,
-                0.4
-            ]
-        }
+        "damage_dist": {
+            "cold": [0.1, 0.2, 0.3, 0.4]
+        },
+        "magazine_capacity": [0.1, 0.2, 0.3, 0.4]
     },
     "Impaler Munitions": {
-        "stats": {
-            "base_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.05, 0.1, 0.15, 0.2]
     },
     "Impenetrable Offense": {
-        "stats": {
-            "base_damage": [
-                -0.025,
-                -0.05,
-                -0.075,
-                -0.1
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [-0.025, -0.05, -0.075, -0.1]
     },
     "Incendiary Coat": {
-        "stats": {
-            "heat": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "heat": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Infected Clip": {
-        "stats": {
-            "toxin": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "toxin": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Internal Bleeding": {
-        "stats": {},
-        "conditional stats": {
-            "internal_bleeding": [
-                0.058,
-                0.117,
-                0.175,
-                0.233,
-                0.292,
-                0.35
-            ]
-        }
+        "damage_dist": {},
+        "conditional_internal_bleeding": [0.058, 0.117, 0.175, 0.233, 0.292, 0.35]
     },
     "Jagged Edge": {
-        "stats": {
-            "slash": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "slash": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Jolt": {
-        "stats": {
-            "electricity": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "status_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "electricity": [0.15, 0.3, 0.45, 0.6]
+        },
+        "status_chance": [0.15, 0.3, 0.45, 0.6]
     },
     "Jugulus Barbs": {
-        "stats": {
-            "puncture": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ],
-            "status_chance": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "puncture": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
+        },
+        "status_chance": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
     },
     "Jugulus Spines": {
-        "stats": {
-            "puncture": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ],
-            "status_chance": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "puncture": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
+        },
+        "status_chance": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
     },
     "Kill Switch": {
-        "stats": {
-            "reload_speed": [
-                0.125,
-                0.25,
-                0.375,
-                0.5
-            ]
-        }
+        "damage_dist": {},
+        "reload_speed": [0.125, 0.25, 0.375, 0.5]
     },
     "Killing Blow": {
-        "stats": {},
-        "conditional stats": {
-            "base_damage": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
-        }
+        "damage_dist": {},
+        "conditional_base_damage": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
     },
     "Laser Sight": {
-        "stats": {},
-        "conditional stats": {
-            "crit_chance": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
-        }
+        "damage_dist": {},
+        "conditional_crit_chance": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
     },
     "Lethal Torrent": {
-        "stats": {
-            "fire_rate": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ],
-            "multishot": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ]
-        }
+        "damage_dist": {},
+        "fire_rate": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
+        "multishot": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
     },
     "Loaded Capacity": {
-        "stats": {
-            "magazine_capacity": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ],
-            "reload_speed": [
-                -0.025,
-                -0.05,
-                -0.075,
-                -0.1,
-                -0.125,
-                -0.15
-            ]
-        }
+        "damage_dist": {},
+        "magazine_capacity": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
+        "reload_speed": [-0.025, -0.05, -0.075, -0.1, -0.125, -0.15]
     },
     "Loose Chamber": {
-        "stats": {
-            "reload_speed": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "reload_speed": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Loose Magazine": {
-        "stats": {
-            "reload_speed": [
-                0.083,
-                0.167,
-                0.25,
-                0.333,
-                0.417,
-                0.5
-            ]
-        }
+        "damage_dist": {},
+        "reload_speed": [0.083, 0.167, 0.25, 0.333, 0.417, 0.5]
     },
     "Magazine Warp": {
-        "stats": {
-            "magazine_capacity": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "magazine_capacity": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Magnetic Capacity": {
-        "stats": {
-            "magnetic": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "magazine_capacity": [
-                0.1,
-                0.2,
-                0.3,
-                0.4
-            ]
-        }
+        "damage_dist": {
+            "magnetic": [0.15, 0.3, 0.45, 0.6]
+        },
+        "magazine_capacity": [0.1, 0.2, 0.3, 0.4]
     },
     "Magnetic Might": {
-        "stats": {
-            "magnetic": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "crit_damage": [
-                0.1,
-                0.2,
-                0.3,
-                0.4
-            ]
-        }
+        "damage_dist": {
+            "magnetic": [0.15, 0.3, 0.45, 0.6]
+        },
+        "crit_damage": [0.1, 0.2, 0.3, 0.4]
     },
     "Magnetic Rush": {
-        "stats": {
-            "magnetic": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
+        "damage_dist": {
+            "magnetic": [0.15, 0.3, 0.45, 0.6]
         }
     },
     "Magnetic Strafe": {
-        "stats": {
-            "magnetic": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "fire_rate": [
-                0.1,
-                0.2,
-                0.3,
-                0.4
-            ]
-        }
+        "damage_dist": {
+            "magnetic": [0.15, 0.3, 0.45, 0.6]
+        },
+        "fire_rate": [0.1, 0.2, 0.3, 0.4]
     },
     "Magnetic Welt": {
-        "stats": {},
-        "conditional stats": {
-            "fire_rate": [
-                0.058,
-                0.117,
-                0.175,
-                0.233,
-                0.292,
-                0.35
-            ]
-        }
+        "damage_dist": {},
+        "conditional_fire_rate": [0.058, 0.117, 0.175, 0.233, 0.292, 0.35]
     },
     "Magnum Force": {
-        "stats": {
-            "base_damage": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9,
-                1.05,
-                1.2,
-                1.35,
-                1.5,
-                1.65
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65]
     },
     "Maim": {
-        "stats": {
-            "slash": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
+        "damage_dist": {
+            "slash": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         }
     },
     "Maiming Strike": {
-        "stats": {
-            "crit_chance": [
-                0.25,
-                0.5,
-                0.75,
-                1.0,
-                1.25,
-                1.5
-            ]
-        }
+        "damage_dist": {},
+        "crit_chance": [0.25, 0.5, 0.75, 1.0, 1.25, 1.5]
     },
     "Malignant Force": {
-        "stats": {
-            "toxin": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "status_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "toxin": [0.15, 0.3, 0.45, 0.6]
+        },
+        "status_chance": [0.15, 0.3, 0.45, 0.6]
     },
     "Master's Edge": {
-        "stats": {
-            "base_damage": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
     },
     "Melee Elementalist": {
-        "stats": {
-            "status_damage": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
-        }
+        "damage_dist": {},
+        "status_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
     },
     "Melee Prowess": {
-        "stats": {
-            "status_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
-        }
+        "damage_dist": {},
+        "status_chance": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
     },
     "Merciless Gunfight": {
-        "stats": {
-            "crit_damage": [
-                0.075,
-                0.15,
-                0.225,
-                0.3,
-                0.375,
-                0.45
-            ]
-        }
+        "damage_dist": {},
+        "crit_damage": [0.075, 0.15, 0.225, 0.3, 0.375, 0.45]
     },
     "Meteor Munitions": {
-        "stats": {
-            "base_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.05, 0.1, 0.15, 0.2]
     },
     "Molten Impact": {
-        "stats": {
-            "heat": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "heat": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Mortal Conduct": {
-        "stats": {},
-        "conditional stats": {
-            "base_damage": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
-        }
+        "damage_dist": {},
+        "conditional_base_damage": [0.15, 0.3, 0.45, 0.6]
     },
     "Nano-Applicator": {
-        "stats": {},
-        "conditional stats": {
-            "status_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
-        }
+        "damage_dist": {},
+        "conditional_status_chance": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
     },
     "No Return": {
-        "stats": {
-            "puncture": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "puncture": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "North Wind": {
-        "stats": {
-            "cold": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "cold": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Organ Shatter": {
-        "stats": {
-            "crit_damage": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
-        }
+        "damage_dist": {},
+        "crit_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
     },
     "Pathogen Rounds": {
-        "stats": {
-            "toxin": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "toxin": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Piercing Caliber": {
-        "stats": {
-            "puncture": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
+        "damage_dist": {
+            "puncture": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         }
     },
     "Piercing Hit": {
-        "stats": {
-            "puncture": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "puncture": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Pistol Acuity": {
-        "stats": {
-            "weakpoint_damage": [
-                0.318,
-                0.636,
-                0.955,
-                1.273,
-                1.591,
-                1.909,
-                2.227,
-                2.545,
-                2.864,
-                3.182,
-                3.5
-            ],
-            "weakpoint_crit_chance": [
-                0.318,
-                0.636,
-                0.955,
-                1.273,
-                1.591,
-                1.909,
-                2.227,
-                2.545,
-                2.864,
-                3.182,
-                3.5
-            ]
-        }
+        "damage_dist": {},
+        "weakpoint_damage": [0.318, 0.636, 0.955, 1.273, 1.591, 1.909, 2.227, 2.545, 2.864, 3.182, 3.5],
+        "weakpoint_crit_chance": [0.318, 0.636, 0.955, 1.273, 1.591, 1.909, 2.227, 2.545, 2.864, 3.182, 3.5]
     },
     "Pistol Elementalist": {
-        "stats": {
-            "status_damage": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ],
-            "reload_speed": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ]
-        }
+        "damage_dist": {},
+        "status_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
+        "reload_speed": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
     },
     "Pistol Gambit": {
-        "stats": {
-            "crit_chance": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
-        }
+        "damage_dist": {},
+        "crit_chance": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
     },
     "Pistol Pestilence": {
-        "stats": {
-            "toxin": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "status_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "toxin": [0.15, 0.3, 0.45, 0.6]
+        },
+        "status_chance": [0.15, 0.3, 0.45, 0.6]
     },
     "Point Blank": {
-        "stats": {
-            "base_damage": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
     },
     "Point Strike": {
-        "stats": {
-            "crit_chance": [
-                0.25,
-                0.5,
-                0.75,
-                1.0,
-                1.25,
-                1.5
-            ]
-        }
+        "damage_dist": {},
+        "crit_chance": [0.25, 0.5, 0.75, 1.0, 1.25, 1.5]
     },
     "Pressure Point": {
-        "stats": {
-            "base_damage": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
     },
     "Pressurized Magazine": {
-        "stats": {},
-        "conditional stats": {
-            "fire_rate": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
-        }
+        "damage_dist": {},
+        "conditional_fire_rate": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
     },
     "Primary Acuity": {
-        "stats": {
-            "weakpoint_damage": [
-                0.318,
-                0.636,
-                0.955,
-                1.273,
-                1.591,
-                1.909,
-                2.227,
-                2.545,
-                2.864,
-                3.182,
-                3.5
-            ],
-            "weakpoint_crit_chance": [
-                0.318,
-                0.636,
-                0.955,
-                1.273,
-                1.591,
-                1.909,
-                2.227,
-                2.545,
-                2.864,
-                3.182,
-                3.5
-            ]
-        }
+        "damage_dist": {},
+        "weakpoint_damage": [0.318, 0.636, 0.955, 1.273, 1.591, 1.909, 2.227, 2.545, 2.864, 3.182, 3.5],
+        "weakpoint_crit_chance": [0.318, 0.636, 0.955, 1.273, 1.591, 1.909, 2.227, 2.545, 2.864, 3.182, 3.5]
     },
     "Primed Ammo Stock": {
-        "stats": {
-            "magazine_capacity": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6,
-                0.7,
-                0.8,
-                0.9,
-                1.0,
-                1.1
-            ]
-        }
+        "damage_dist": {},
+        "magazine_capacity": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1]
     },
     "Primed Bane of Corpus": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3,
-                0.35,
-                0.4,
-                0.45,
-                0.5,
-                0.55
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55]
     },
     "Primed Bane of Grineer": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3,
-                0.35,
-                0.4,
-                0.45,
-                0.5,
-                0.55
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55]
     },
     "Primed Bane of Infested": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3,
-                0.35,
-                0.4,
-                0.45,
-                0.5,
-                0.55
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55]
     },
     "Primed Bane of Orokin": {
-        "stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3,
-                0.35,
-                0.4,
-                0.45,
-                0.5,
-                0.55
-            ]
-        }
+        "damage_dist": {},
+        "faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55]
     },
     "Primed Charged Shell": {
-        "stats": {
-            "electricity": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9,
-                1.05,
-                1.2,
-                1.35,
-                1.5,
-                1.65
-            ]
+        "damage_dist": {
+            "electricity": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65]
         }
     },
     "Primed Chilling Grasp": {
-        "stats": {
-            "cold": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9,
-                1.05,
-                1.2,
-                1.35,
-                1.5,
-                1.65
-            ]
+        "damage_dist": {
+            "cold": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65]
         }
     },
     "Primed Cleanse Corpus": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3,
-                0.35,
-                0.4,
-                0.45,
-                0.5,
-                0.55
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55]
     },
     "Primed Cleanse Grineer": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3,
-                0.35,
-                0.4,
-                0.45,
-                0.5,
-                0.55
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55]
     },
     "Primed Cleanse Infested": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3,
-                0.35,
-                0.4,
-                0.45,
-                0.5,
-                0.55
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55]
     },
     "Primed Cleanse Orokin": {
-        "stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3,
-                0.35,
-                0.4,
-                0.45,
-                0.5,
-                0.55
-            ]
-        }
+        "damage_dist": {},
+        "faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55]
     },
     "Primed Convulsion": {
-        "stats": {
-            "electricity": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9,
-                1.05,
-                1.2,
-                1.35,
-                1.5,
-                1.65
-            ]
+        "damage_dist": {
+            "electricity": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65]
         }
     },
     "Primed Cryo Rounds": {
-        "stats": {
-            "cold": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9,
-                1.05,
-                1.2,
-                1.35,
-                1.5,
-                1.65
-            ]
+        "damage_dist": {
+            "cold": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65]
         }
     },
     "Primed Expel Corpus": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3,
-                0.35,
-                0.4,
-                0.45,
-                0.5,
-                0.55
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55]
     },
     "Primed Expel Grineer": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3,
-                0.35,
-                0.4,
-                0.45,
-                0.5,
-                0.55
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55]
     },
     "Primed Expel Infested": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3,
-                0.35,
-                0.4,
-                0.45,
-                0.5,
-                0.55
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55]
     },
     "Primed Expel Orokin": {
-        "stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3,
-                0.35,
-                0.4,
-                0.45,
-                0.5,
-                0.55
-            ]
-        }
+        "damage_dist": {},
+        "faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55]
     },
     "Primed Fast Hands": {
-        "stats": {
-            "reload_speed": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3,
-                0.35,
-                0.4,
-                0.45,
-                0.5,
-                0.55
-            ]
-        }
+        "damage_dist": {},
+        "reload_speed": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55]
     },
     "Primed Fever Strike": {
-        "stats": {
-            "toxin": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9,
-                1.05,
-                1.2,
-                1.35,
-                1.5,
-                1.65
-            ]
+        "damage_dist": {
+            "toxin": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65]
         }
     },
     "Primed Firestorm": {
-        "stats": {
-            "blast": [
-                0.04,
-                0.08,
-                0.12,
-                0.16,
-                0.2,
-                0.24,
-                0.28,
-                0.32,
-                0.36,
-                0.4,
-                0.44
-            ]
+        "damage_dist": {
+            "blast": [0.04, 0.08, 0.12, 0.16, 0.2, 0.24, 0.28, 0.32, 0.36, 0.4, 0.44]
         }
     },
     "Primed Fulmination": {
-        "stats": {
-            "blast": [
-                0.04,
-                0.08,
-                0.12,
-                0.16,
-                0.2,
-                0.24,
-                0.28,
-                0.32,
-                0.36,
-                0.4,
-                0.44
-            ]
+        "damage_dist": {
+            "blast": [0.04, 0.08, 0.12, 0.16, 0.2, 0.24, 0.28, 0.32, 0.36, 0.4, 0.44]
         }
     },
     "Primed Heated Charge": {
-        "stats": {
-            "heat": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9,
-                1.05,
-                1.2,
-                1.35,
-                1.5,
-                1.65
-            ]
+        "damage_dist": {
+            "heat": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65]
         }
     },
     "Primed Heavy Trauma": {
-        "stats": {
-            "impact": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9,
-                1.05,
-                1.2,
-                1.35,
-                1.5,
-                1.65
-            ]
+        "damage_dist": {
+            "impact": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65]
         }
     },
     "Primed Magazine Warp": {
-        "stats": {
-            "magazine_capacity": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3,
-                0.35,
-                0.4,
-                0.45,
-                0.5,
-                0.55
-            ]
-        }
+        "damage_dist": {},
+        "magazine_capacity": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55]
     },
     "Primed Pistol Gambit": {
-        "stats": {
-            "crit_chance": [
-                0.17,
-                0.34,
-                0.51,
-                0.68,
-                0.85,
-                1.02,
-                1.19,
-                1.36,
-                1.53,
-                1.7,
-                1.87
-            ]
-        }
+        "damage_dist": {},
+        "crit_chance": [0.17, 0.34, 0.51, 0.68, 0.85, 1.02, 1.19, 1.36, 1.53, 1.7, 1.87]
     },
     "Primed Point Blank": {
-        "stats": {
-            "base_damage": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9,
-                1.05,
-                1.2,
-                1.35,
-                1.5,
-                1.65
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65]
     },
     "Primed Pressure Point": {
-        "stats": {
-            "base_damage": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9,
-                1.05,
-                1.2,
-                1.35,
-                1.5,
-                1.65
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65]
     },
     "Primed Quickdraw": {
-        "stats": {
-            "reload_speed": [
-                0.08,
-                0.16,
-                0.24,
-                0.32,
-                0.4,
-                0.48,
-                0.56,
-                0.64,
-                0.72,
-                0.8,
-                0.88
-            ]
-        }
+        "damage_dist": {},
+        "reload_speed": [0.08, 0.16, 0.24, 0.32, 0.4, 0.48, 0.56, 0.64, 0.72, 0.8, 0.88]
     },
     "Primed Ravage": {
-        "stats": {
-            "crit_damage": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6,
-                0.7,
-                0.8,
-                0.9,
-                1.0,
-                1.1
-            ]
-        }
+        "damage_dist": {},
+        "crit_damage": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1]
     },
     "Primed Shred": {
-        "stats": {
-            "fire_rate": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3,
-                0.35,
-                0.4,
-                0.45,
-                0.5,
-                0.55
-            ]
-        },
-        "conditional stats": {
-            "fire_rate": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3,
-                0.35,
-                0.4,
-                0.45,
-                0.5,
-                0.55
-            ]
-        }
+        "damage_dist": {},
+        "fire_rate": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
+        "conditional_fire_rate": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55]
     },
     "Primed Slip Magazine": {
-        "stats": {
-            "magazine_capacity": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3,
-                0.35,
-                0.4,
-                0.45,
-                0.5,
-                0.55
-            ]
-        }
+        "damage_dist": {},
+        "magazine_capacity": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55]
     },
     "Primed Smite Corpus": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3,
-                0.35,
-                0.4,
-                0.45,
-                0.5,
-                0.55
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55]
     },
     "Primed Smite Grineer": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3,
-                0.35,
-                0.4,
-                0.45,
-                0.5,
-                0.55
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55]
     },
     "Primed Smite Infested": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3,
-                0.35,
-                0.4,
-                0.45,
-                0.5,
-                0.55
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55]
     },
     "Primed Smite Orokin": {
-        "stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3,
-                0.35,
-                0.4,
-                0.45,
-                0.5,
-                0.55
-            ]
-        }
+        "damage_dist": {},
+        "faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55]
     },
     "Primed Tactical Pump": {
-        "stats": {
-            "reload_speed": [
-                0.091,
-                0.182,
-                0.273,
-                0.364,
-                0.455,
-                0.545,
-                0.636,
-                0.727,
-                0.818,
-                0.909,
-                1.0
-            ]
-        }
+        "damage_dist": {},
+        "reload_speed": [0.091, 0.182, 0.273, 0.364, 0.455, 0.545, 0.636, 0.727, 0.818, 0.909, 1.0]
     },
     "Primed Target Cracker": {
-        "stats": {
-            "crit_damage": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6,
-                0.7,
-                0.8,
-                0.9,
-                1.0,
-                1.1
-            ]
-        }
+        "damage_dist": {},
+        "crit_damage": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1]
     },
     "Proton Jet": {
-        "stats": {},
-        "conditional stats": {
-            "status_chance": [
-                0.3,
-                0.6,
-                0.9,
-                1.2
-            ]
-        }
+        "damage_dist": {},
+        "conditional_status_chance": [0.3, 0.6, 0.9, 1.2]
     },
     "Proton Snap": {
-        "stats": {
-            "base_damage": [
-                0.25,
-                0.5,
-                0.75,
-                1.0
-            ],
-            "status_chance": [
-                0.125,
-                0.25,
-                0.375,
-                0.5
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.25, 0.5, 0.75, 1.0],
+        "status_chance": [0.125, 0.25, 0.375, 0.5]
     },
     "Pummel": {
-        "stats": {
-            "impact": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
+        "damage_dist": {
+            "impact": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         }
     },
     "Quickdraw": {
-        "stats": {
-            "reload_speed": [
-                0.08,
-                0.16,
-                0.24,
-                0.32,
-                0.4,
-                0.48
-            ]
-        }
+        "damage_dist": {},
+        "reload_speed": [0.08, 0.16, 0.24, 0.32, 0.4, 0.48]
     },
     "Radiated Reload": {
-        "stats": {
-            "radiation": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "reload_speed": [
-                0.1,
-                0.2,
-                0.3,
-                0.4
-            ]
-        }
+        "damage_dist": {
+            "radiation": [0.15, 0.3, 0.45, 0.6]
+        },
+        "reload_speed": [0.1, 0.2, 0.3, 0.4]
     },
     "Ravage": {
-        "stats": {
-            "crit_damage": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ]
-        }
+        "damage_dist": {},
+        "crit_damage": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
     },
     "Razor Munitions": {
-        "stats": {
-            "base_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.05, 0.1, 0.15, 0.2]
     },
     "Razor Shot": {
-        "stats": {
-            "slash": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "slash": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Relentless Combination": {
-        "stats": {},
-        "conditional stats": {
-            "base_damage": [
-                0.25,
-                0.5,
-                0.75,
-                1.0
-            ]
-        }
+        "damage_dist": {},
+        "conditional_base_damage": [0.25, 0.5, 0.75, 1.0]
     },
     "Rending Strike": {
-        "stats": {
-            "slash": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "puncture": [
-                0.2,
-                0.4,
-                0.6,
-                0.8
-            ]
+        "damage_dist": {
+            "slash": [0.15, 0.3, 0.45, 0.6],
+            "puncture": [0.2, 0.4, 0.6, 0.8]
         }
     },
     "Repeater Clip": {
-        "stats": {},
-        "conditional stats": {
-            "fire_rate": [
-                0.175,
-                0.35,
-                0.525,
-                0.7,
-                0.875,
-                1.05
-            ]
-        }
+        "damage_dist": {},
+        "conditional_fire_rate": [0.175, 0.35, 0.525, 0.7, 0.875, 1.05]
     },
     "Rifle Aptitude": {
-        "stats": {
-            "status_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
-        }
+        "damage_dist": {},
+        "status_chance": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
     },
     "Rifle Elementalist": {
-        "stats": {
-            "status_damage": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
-        }
+        "damage_dist": {},
+        "status_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
     },
     "Rime Rounds": {
-        "stats": {
-            "cold": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "status_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "cold": [0.15, 0.3, 0.45, 0.6]
+        },
+        "status_chance": [0.15, 0.3, 0.45, 0.6]
     },
     "Ripper Rounds": {
-        "stats": {
-            "base_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.05, 0.1, 0.15, 0.2]
     },
     "Rupture": {
-        "stats": {
-            "impact": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "impact": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Sacrificial Pressure": {
-        "stats": {
-            "base_damage": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6,
-                0.7,
-                0.8,
-                0.9,
-                1.0,
-                1.1
-            ]
-        },
-        "conditional stats": {
-            "base_damage": [
-                0.025,
-                0.05,
-                0.075,
-                0.1,
-                0.125,
-                0.15,
-                0.175,
-                0.2,
-                0.225,
-                0.25,
-                0.275
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1],
+        "conditional_base_damage": [0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.175, 0.2, 0.225, 0.25, 0.275]
     },
     "Sacrificial Steel": {
-        "stats": {
-            "crit_chance": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2,
-                1.4,
-                1.6,
-                1.8,
-                2.0,
-                2.2
-            ]
-        },
-        "conditional stats": {
-            "crit_chance": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3,
-                0.35,
-                0.4,
-                0.45,
-                0.5,
-                0.55
-            ]
-        }
+        "damage_dist": {},
+        "crit_chance": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2],
+        "conditional_crit_chance": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55]
     },
     "Sawtooth Clip": {
-        "stats": {
-            "slash": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "slash": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Saxum Spittle": {
-        "stats": {
-            "impact": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ],
-            "status_chance": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "impact": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
+        },
+        "status_chance": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
     },
     "Saxum Thorax": {
-        "stats": {
-            "impact": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ],
-            "status_chance": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "impact": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
+        },
+        "status_chance": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
     },
     "Scattering Inferno": {
-        "stats": {
-            "heat": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "status_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "heat": [0.15, 0.3, 0.45, 0.6]
+        },
+        "status_chance": [0.15, 0.3, 0.45, 0.6]
     },
     "Scorch": {
-        "stats": {
-            "heat": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "status_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "heat": [0.15, 0.3, 0.45, 0.6]
+        },
+        "status_chance": [0.15, 0.3, 0.45, 0.6]
     },
     "Secondary Wind": {
-        "stats": {
-            "reload_speed": [
-                0.125,
-                0.25,
-                0.375,
-                0.5
-            ]
-        }
+        "damage_dist": {},
+        "reload_speed": [0.125, 0.25, 0.375, 0.5]
     },
     "Seeking Fury": {
-        "stats": {
-            "reload_speed": [
-                0.025,
-                0.05,
-                0.075,
-                0.1,
-                0.125,
-                0.15
-            ]
-        }
+        "damage_dist": {},
+        "reload_speed": [0.025, 0.05, 0.075, 0.1, 0.125, 0.15]
     },
     "Seismic Wave": {
-        "stats": {
-            "base_damage": [
-                0.5,
-                1.0,
-                1.5,
-                2.0
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.5, 1.0, 1.5, 2.0]
     },
     "Semi-Pistol Cannonade": {
-        "stats": {
-            "fire_rate_lock": [
-                true,
-                true,
-                true,
-                true,
-                true,
-                true
-            ],
-            "base_damage": [
-                0.5,
-                1.0,
-                1.5,
-                2.0,
-                2.5,
-                3.0
-            ]
-        }
+        "damage_dist": {},
+        "fire_rate_lock": [true, true, true, true, true, true],
+        "base_damage": [0.5, 1.0, 1.5, 2.0, 2.5, 3.0]
     },
     "Semi-Rifle Cannonade": {
-        "stats": {
-            "fire_rate_lock": [
-                true,
-                true,
-                true,
-                true,
-                true,
-                true
-            ],
-            "base_damage": [
-                0.4,
-                0.8,
-                1.2,
-                1.6,
-                2.0,
-                2.4
-            ]
-        }
+        "damage_dist": {},
+        "fire_rate_lock": [true, true, true, true, true, true],
+        "base_damage": [0.4, 0.8, 1.2, 1.6, 2.0, 2.4]
     },
     "Semi-Shotgun Cannonade": {
-        "stats": {
-            "fire_rate_lock": [
-                true,
-                true,
-                true,
-                true,
-                true,
-                true
-            ],
-            "base_damage": [
-                0.4,
-                0.8,
-                1.2,
-                1.6,
-                2.0,
-                2.4
-            ]
-        }
+        "damage_dist": {},
+        "fire_rate_lock": [true, true, true, true, true, true],
+        "base_damage": [0.4, 0.8, 1.2, 1.6, 2.0, 2.4]
     },
     "Serrated Edges": {
-        "stats": {
-            "base_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.05, 0.1, 0.15, 0.2]
     },
     "Serrated Rounds": {
-        "stats": {
-            "base_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.05, 0.1, 0.15, 0.2]
     },
     "Serration": {
-        "stats": {
-            "base_damage": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9,
-                1.05,
-                1.2,
-                1.35,
-                1.5,
-                1.65
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65]
     },
     "Sharpened Blade": {
-        "stats": {
-            "base_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.05, 0.1, 0.15, 0.2]
     },
     "Sharpened Bullets": {
-        "stats": {},
-        "conditional stats": {
-            "crit_damage": [
-                0.125,
-                0.25,
-                0.375,
-                0.5,
-                0.625,
-                0.75
-            ]
-        }
+        "damage_dist": {},
+        "conditional_crit_damage": [0.125, 0.25, 0.375, 0.5, 0.625, 0.75]
     },
     "Shell Shock": {
-        "stats": {
-            "electricity": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "status_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "electricity": [0.15, 0.3, 0.45, 0.6]
+        },
+        "status_chance": [0.15, 0.3, 0.45, 0.6]
     },
     "Shivering Contagion": {
-        "stats": {
-            "cold": [
-                0.167,
-                0.333,
-                0.5,
-                0.667,
-                0.833,
-                1.0
-            ]
+        "damage_dist": {
+            "cold": [0.167, 0.333, 0.5, 0.667, 0.833, 1.0]
         }
     },
     "Shocking Touch": {
-        "stats": {
-            "electricity": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "electricity": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Shotgun Barrage": {
-        "stats": {
-            "fire_rate": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
-        }
+        "damage_dist": {},
+        "fire_rate": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
     },
     "Shotgun Elementalist": {
-        "stats": {
-            "status_damage": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ],
-            "magazine_capacity": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ]
-        }
+        "damage_dist": {},
+        "status_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
+        "magazine_capacity": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
     },
     "Shotgun Savvy": {
-        "stats": {
-            "status_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
-        }
+        "damage_dist": {},
+        "status_chance": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
     },
     "Shrapnel Shot": {
-        "stats": {},
-        "conditional stats": {
-            "crit_damage": [
-                0.165,
-                0.33,
-                0.495,
-                0.66,
-                0.825,
-                0.99
-            ]
-        }
+        "damage_dist": {},
+        "conditional_crit_damage": [0.165, 0.33, 0.495, 0.66, 0.825, 0.99]
     },
     "Shred": {
-        "stats": {
-            "fire_rate": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        },
-        "conditional stats": {
-            "fire_rate": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "fire_rate": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
+        "conditional_fire_rate": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Shred Shot": {
-        "stats": {
-            "base_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.05, 0.1, 0.15, 0.2]
     },
     "Shredder": {
-        "stats": {
-            "slash": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "slash": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Slip Magazine": {
-        "stats": {
-            "magazine_capacity": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "magazine_capacity": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Smite Corpus": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Smite Grineer": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Smite Infested": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Smite Orokin": {
-        "stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Smite The Murmur": {
-        "stats": {},
-        "conditional stats": {
-            "faction_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2,
-                0.25,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "conditional_faction_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
     },
     "Spectral Serration": {
-        "stats": {},
-        "conditional stats": {
-            "base_damage": [
-                0.3,
-                0.6,
-                0.9,
-                1.2,
-                1.5,
-                1.8,
-                2.1,
-                2.4,
-                2.7,
-                3.0,
-                3.3
-            ]
-        }
+        "damage_dist": {},
+        "conditional_base_damage": [0.3, 0.6, 0.9, 1.2, 1.5, 1.8, 2.1, 2.4, 2.7, 3.0, 3.3]
     },
     "Speed Trigger": {
-        "stats": {
-            "fire_rate": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ]
-        },
-        "conditional stats": {
-            "fire_rate": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ]
-        }
+        "damage_dist": {},
+        "fire_rate": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
+        "conditional_fire_rate": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
     },
     "Split Chamber": {
-        "stats": {
-            "multishot": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
-        }
+        "damage_dist": {},
+        "multishot": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
     },
     "Spoiled Strike": {
-        "stats": {
-            "base_damage": [
-                0.25,
-                0.5,
-                0.75,
-                1.0
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.25, 0.5, 0.75, 1.0]
     },
     "Stand Ground": {
-        "stats": {
-            "base_damage": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
     },
     "Stormbringer": {
-        "stats": {
-            "electricity": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "electricity": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Strain Infection": {
-        "stats": {
-            "crit_damage": [
-                0.05,
-                0.1,
-                0.15,
-                0.2
-            ]
-        }
+        "damage_dist": {},
+        "crit_damage": [0.05, 0.1, 0.15, 0.2]
     },
     "Stunning Speed": {
-        "stats": {
-            "reload_speed": [
-                0.1,
-                0.2,
-                0.3,
-                0.4
-            ],
-            "status_chance": [
-                0.075,
-                0.15,
-                0.225,
-                0.3
-            ]
-        }
+        "damage_dist": {},
+        "reload_speed": [0.1, 0.2, 0.3, 0.4],
+        "status_chance": [0.075, 0.15, 0.225, 0.3]
     },
     "Sundering Strike": {
-        "stats": {
-            "puncture": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
+        "damage_dist": {
+            "puncture": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         }
     },
     "Sure Shot": {
-        "stats": {
-            "status_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
-        }
+        "damage_dist": {},
+        "status_chance": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
     },
     "Sweeping Serration": {
-        "stats": {
-            "slash": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
+        "damage_dist": {
+            "slash": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         }
     },
     "Synth Charge": {
-        "stats": {},
-        "conditional stats": {
-            "base_damage": [
-                0.5,
-                1.0,
-                1.5,
-                2.0
-            ]
-        }
+        "damage_dist": {},
+        "conditional_base_damage": [0.5, 1.0, 1.5, 2.0]
     },
     "Tactical Pump": {
-        "stats": {
-            "reload_speed": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ]
-        }
+        "damage_dist": {},
+        "reload_speed": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
     },
     "Tainted Clip": {
-        "stats": {
-            "magazine_capacity": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ],
-            "reload_speed": [
-                -0.05,
-                -0.1,
-                -0.15,
-                -0.2,
-                -0.25,
-                -0.3
-            ]
-        }
+        "damage_dist": {},
+        "magazine_capacity": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
+        "reload_speed": [-0.05, -0.1, -0.15, -0.2, -0.25, -0.3]
     },
     "Tainted Shell": {
-        "stats": {
-            "fire_rate": [
-                -0.05,
-                -0.1,
-                -0.15,
-                -0.2,
-                -0.25,
-                -0.3,
-                -0.35,
-                -0.4,
-                -0.45,
-                -0.5,
-                -0.55
-            ]
-        }
+        "damage_dist": {},
+        "fire_rate": [-0.05, -0.1, -0.15, -0.2, -0.25, -0.3, -0.35, -0.4, -0.45, -0.5, -0.55]
     },
     "Target Cracker": {
-        "stats": {
-            "crit_damage": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ]
-        }
+        "damage_dist": {},
+        "crit_damage": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
     },
     "Thermite Rounds": {
-        "stats": {
-            "heat": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "status_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "heat": [0.15, 0.3, 0.45, 0.6]
+        },
+        "status_chance": [0.15, 0.3, 0.45, 0.6]
     },
     "Toxic Barrage": {
-        "stats": {
-            "toxin": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "status_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "toxin": [0.15, 0.3, 0.45, 0.6]
+        },
+        "status_chance": [0.15, 0.3, 0.45, 0.6]
     },
     "True Steel": {
-        "stats": {
-            "crit_chance": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
-        },
-        "conditional stats": {
-            "crit_chance": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
-        }
+        "damage_dist": {},
+        "crit_chance": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2],
+        "conditional_crit_chance": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
     },
     "Vicious Frost": {
-        "stats": {
-            "cold": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "status_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "cold": [0.15, 0.3, 0.45, 0.6]
+        },
+        "status_chance": [0.15, 0.3, 0.45, 0.6]
     },
     "Vicious Spread": {
-        "stats": {
-            "base_damage": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
-        }
+        "damage_dist": {},
+        "base_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
     },
     "Vigilante Armaments": {
-        "stats": {
-            "multishot": [
-                0.1,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.6
-            ],
-            "vigilante_bonus": [
-                0.05,
-                0.05,
-                0.05,
-                0.05,
-                0.05,
-                0.05
-            ]
-        }
+        "damage_dist": {},
+        "multishot": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
+        "vigilante_bonus": [0.05, 0.05, 0.05, 0.05, 0.05, 0.05]
     },
     "Vigilante Fervor": {
-        "stats": {
-            "fire_rate": [
-                0.075,
-                0.15,
-                0.225,
-                0.3,
-                0.375,
-                0.45
-            ],
-            "vigilante_bonus": [
-                0.05,
-                0.05,
-                0.05,
-                0.05,
-                0.05,
-                0.05
-            ]
-        },
-        "conditional stats": {
-            "fire_rate": [
-                0.075,
-                0.15,
-                0.225,
-                0.3,
-                0.375,
-                0.45
-            ]
-        }
+        "damage_dist": {},
+        "fire_rate": [0.075, 0.15, 0.225, 0.3, 0.375, 0.45],
+        "vigilante_bonus": [0.05, 0.05, 0.05, 0.05, 0.05, 0.05],
+        "conditional_fire_rate": [0.075, 0.15, 0.225, 0.3, 0.375, 0.45]
     },
     "Vigilante Offense": {
-        "stats": {
-            "vigilante_bonus": [
-                0.05,
-                0.05,
-                0.05,
-                0.05,
-                0.05,
-                0.05
-            ]
-        }
+        "damage_dist": {},
+        "vigilante_bonus": [0.05, 0.05, 0.05, 0.05, 0.05, 0.05]
     },
     "Vigilante Supplies": {
-        "stats": {
-            "vigilante_bonus": [
-                0.05,
-                0.05,
-                0.05,
-                0.05,
-                0.05,
-                0.05
-            ]
-        }
+        "damage_dist": {},
+        "vigilante_bonus": [0.05, 0.05, 0.05, 0.05, 0.05, 0.05]
     },
     "Vile Acceleration": {
-        "stats": {
-            "fire_rate": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ],
-            "base_damage": [
-                -0.025,
-                -0.05,
-                -0.075,
-                -0.1,
-                -0.125,
-                -0.15
-            ]
-        },
-        "conditional stats": {
-            "fire_rate": [
-                0.15,
-                0.3,
-                0.45,
-                0.6,
-                0.75,
-                0.9
-            ]
-        }
+        "damage_dist": {},
+        "fire_rate": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
+        "base_damage": [-0.025, -0.05, -0.075, -0.1, -0.125, -0.15],
+        "conditional_fire_rate": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
     },
     "Vile Precision": {
-        "stats": {
-            "fire_rate": [
-                -0.06,
-                -0.12,
-                -0.18,
-                -0.24,
-                -0.3,
-                -0.36
-            ]
-        },
-        "conditional stats": {
-            "fire_rate": [
-                -0.06,
-                -0.12,
-                -0.18,
-                -0.24,
-                -0.3,
-                -0.36
-            ]
-        }
+        "damage_dist": {},
+        "fire_rate": [-0.06, -0.12, -0.18, -0.24, -0.3, -0.36],
+        "conditional_fire_rate": [-0.06, -0.12, -0.18, -0.24, -0.3, -0.36]
     },
     "Virulent Scourge": {
-        "stats": {
-            "toxin": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "status_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "toxin": [0.15, 0.3, 0.45, 0.6]
+        },
+        "status_chance": [0.15, 0.3, 0.45, 0.6]
     },
     "Vital Sense": {
-        "stats": {
-            "crit_damage": [
-                0.2,
-                0.4,
-                0.6,
-                0.8,
-                1.0,
-                1.2
-            ]
-        }
+        "damage_dist": {},
+        "crit_damage": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
     },
     "Volcanic Edge": {
-        "stats": {
-            "heat": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "status_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "heat": [0.15, 0.3, 0.45, 0.6]
+        },
+        "status_chance": [0.15, 0.3, 0.45, 0.6]
     },
     "Voltaic Strike": {
-        "stats": {
-            "electricity": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ],
-            "status_chance": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "electricity": [0.15, 0.3, 0.45, 0.6]
+        },
+        "status_chance": [0.15, 0.3, 0.45, 0.6]
     },
     "Weeping Wounds": {
-        "stats": {
-            "status_chance": [
-                0.067,
-                0.133,
-                0.2,
-                0.267,
-                0.333,
-                0.4
-            ]
-        }
+        "damage_dist": {},
+        "status_chance": [0.067, 0.133, 0.2, 0.267, 0.333, 0.4]
     },
     "Wildfire": {
-        "stats": {
-            "magazine_capacity": [
-                0.05,
-                0.1,
-                0.15,
-                0.2
-            ],
-            "heat": [
-                0.15,
-                0.3,
-                0.45,
-                0.6
-            ]
-        }
+        "damage_dist": {
+            "heat": [0.15, 0.3, 0.45, 0.6]
+        },
+        "magazine_capacity": [0.05, 0.1, 0.15, 0.2]
     }
 }
