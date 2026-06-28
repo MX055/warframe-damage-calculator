@@ -70,6 +70,8 @@ class Dist:
         return Dist(**{dt: d for dt, d in self if d > 0})
     
     def weight(self, dt: str) -> float:
+        if self.total_damage == 0:
+            return 0.0
         return self.get(dt) / self.total_damage
     
     def apply(self, other: Dist) -> Dist:

@@ -36,12 +36,6 @@ class Melee(Weapon):
     def flat_dotps(self) -> float:
         return self.effective_attack_speed * self.flat_dotph()
     
-    def total_dph(self) -> float:
-        return self.flat_dph() + self.flat_dotph()
-    
-    def total_dps(self) -> float:
-        return self.flat_dps() + self.flat_dotps()
-    
     def summary(self) -> str:
         return "\n".join([
             f"{'ATTACK SPEED:':<14} {f'{self.base_attack_speed:.2f}x':<6} -> {self.effective_attack_speed:.2f}x",

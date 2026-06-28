@@ -56,3 +56,9 @@ class Weapon:
     
     def average_crit_multiplier(self) -> float:
         return 1 + self.effective_crit_chance * (self.effective_crit_damage - 1)
+
+    def total_dph(self) -> float:
+        return self.flat_dph() + self.flat_dotph()
+
+    def total_dps(self) -> float:
+        return self.flat_dps() + self.flat_dotps()

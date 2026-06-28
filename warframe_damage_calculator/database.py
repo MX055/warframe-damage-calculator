@@ -35,14 +35,15 @@ class Database:
 
     def weapon(self, name: str) -> Melee | Primary | Secondary:
         table, record = self.find(WEAPON_TABLES, name)
-        weapon_common = dict(base_damage_dist=Dist(**record.get("damage_dist", {})), base_crit_chance=record.get("crit_chance", 0.0), base_crit_damage=record.get("crit_damage", 0.0), base_status_chance=record.get("status_chance", 0.0))
+        weapon_common = dict(base_damage_dist=Dist(**record.get("damage_dist", {})), forced_procs=Dist(**record.get("forced_procs", {})), base_crit_chance=record.get("crit_chance", 0.0), base_crit_damage=record.get("crit_damage", 0.0), base_status_chance=record.get("status_chance", 0.0))
         if table == "melee":
             return Melee(**weapon_common, base_attack_speed=record.get("attack_speed", 0.0))
-        ranged_common = dict(weapon_common, base_explosion_damage_dist=Dist(**record.get("explosion_damage_dist", {})), forced_procs=Dist(**record.get("forced_procs", {})), base_fire_rate=record.get("fire_rate", 0.0), base_charge_time=record.get("charge_time", 0.0), base_reload_speed=record.get("reload_speed", 0.0), base_magazine_capacity=record.get("magazine_capacity", 0), base_multishot=record.get("multishot", 1.0), is_beam=record.get("is_beam", False))
+        ranged_common = dict(weapon_common, base_explosion_damage_dist=Dist(**record.get("explosion_damage_dist", {})), explosion_forced_procs=Dist(**record.get("explosion_forced_procs", {})), base_fire_rate=record.get("fire_rate", 0.0), base_charge_time=record.get("charge_time", 0.0), base_reload_speed=record.get("reload_speed", 0.0), base_magazine_capacity=record.get("magazine_capacity", 0), base_multishot=record.get("multishot", 1.0), is_beam=record.get("is_beam", False))
         if table == "primary":
             return Primary(**ranged_common)
         if table == "secondary":
             return Secondary(**ranged_common)
+        raise RuntimeError(f"Unknown weapon table {table}")
 
     def upgrade(self, name: str, rank: int | None = None, stacks: int | None = None, conditional: bool | None = None) -> Upgrade:
         _, record = self.find(UPGRADE_TABLES, name)

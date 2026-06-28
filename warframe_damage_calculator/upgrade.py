@@ -35,7 +35,15 @@ class Upgrade:
     multishot_lock: bool = False
 
     def __add__(self, other: Upgrade) -> Upgrade:
-        return Upgrade(**{field.name: getattr(self, field.name) + getattr(other, field.name) for field in fields(self)})
+        combined: dict[str, object] = {}
+        for field in fields(self):
+            left = getattr(self, field.name)
+            right = getattr(other, field.name)
+            if isinstance(left, bool) and isinstance(right, bool):
+                combined[field.name] = left or right
+            else:
+                combined[field.name] = left + right
+        return Upgrade(**combined)
     
     def __radd__(self, other: int | float) -> Upgrade:
         if other == 0: return self
