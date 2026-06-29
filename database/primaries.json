@@ -1,2842 +1,2515 @@
 {
     "AX-52": {
-        "damage_dist": {
-            "puncture": 40.0
-        },
         "crit_chance": 0.26,
         "crit_damage": 2.4,
+        "damage_dist": {
+            "puncture": 40
+        },
+        "fire_rate": 10,
         "status_chance": 0.18,
-        "fire_rate": 10.0,
-        "reload_speed": 2.0,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 40,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Acceltra": {
+        "crit_chance": 0.32,
+        "crit_damage": 2.8,
         "damage_dist": {
-            "impact": 35.0
+            "impact": 35
         },
-        "forced_procs": {
-            "impact": 1.0
-        },
+        "fire_rate": 12,
+        "status_chance": 0.06,
+        "multishot": 1,
         "explosion_damage_dist": {
             "puncture": 35.2,
             "slash": 8.8
         },
-        "crit_chance": 0.32,
-        "crit_damage": 2.8,
-        "status_chance": 0.06,
-        "fire_rate": 12.0,
-        "reload_speed": 2.0,
+        "reload_speed": 2,
         "magazine_capacity": 48,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Acceltra Prime": {
+        "crit_chance": 0.34,
+        "crit_damage": 3,
         "damage_dist": {
-            "impact": 44.0
+            "impact": 44
         },
-        "forced_procs": {
-            "impact": 1.0
-        },
+        "fire_rate": 10,
+        "status_chance": 0.18,
+        "multishot": 1,
         "explosion_damage_dist": {
             "puncture": 42.4,
             "slash": 10.6
         },
-        "crit_chance": 0.34,
-        "crit_damage": 3.0,
-        "status_chance": 0.18,
-        "fire_rate": 10.0,
         "reload_speed": 1.6,
         "magazine_capacity": 48,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Aeolak": {
-        "damage_dist": {
-            "impact": 15.0,
-            "puncture": 23.0,
-            "radiation": 5.0,
-            "slash": 17.0
-        },
         "crit_chance": 0.21,
         "crit_damage": 2.3,
+        "damage_dist": {
+            "impact": 15,
+            "puncture": 23,
+            "radiation": 5,
+            "slash": 17
+        },
+        "fire_rate": 6,
         "status_chance": 0.33,
-        "fire_rate": 6.0,
-        "reload_speed": 2.0,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 40,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Afentis": {
-        "damage_dist": {
-            "impact": 240.0,
-            "puncture": 120.0,
-            "slash": 40.0
-        },
         "explosion_damage_dist": {
-            "blast": 800.0
+            "blast": 800
         },
-        "crit_chance": 0.3,
-        "crit_damage": 3.0,
-        "status_chance": 0.2,
-        "fire_rate": 1.0,
         "reload_speed": 1.8,
         "magazine_capacity": 4,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Alternox": {
-        "damage_dist": {
-            "electricity": 62.0
-        },
         "crit_chance": 0.14,
         "crit_damage": 2.2,
-        "status_chance": 0.3,
+        "damage_dist": {
+            "electricity": 62
+        },
         "fire_rate": 4.33,
+        "status_chance": 0.3,
         "reload_speed": 1.8,
         "magazine_capacity": 28,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Ambassador": {
-        "damage_dist": {
-            "electricity": 24.0
-        },
         "crit_chance": 0.14,
         "crit_damage": 2.8,
-        "status_chance": 0.26,
+        "damage_dist": {
+            "electricity": 24
+        },
         "fire_rate": 13.33,
+        "status_chance": 0.26,
+        "multishot": 1,
         "reload_speed": 2.6,
         "magazine_capacity": 96,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Amprex": {
-        "damage_dist": {
-            "electricity": 22.0
-        },
         "crit_chance": 0.32,
         "crit_damage": 2.2,
+        "damage_dist": {
+            "electricity": 22
+        },
+        "fire_rate": 12,
         "status_chance": 0.22,
-        "fire_rate": 12.0,
+        "multishot": 1,
         "reload_speed": 2.6,
         "magazine_capacity": 100,
-        "multishot": 1.0,
         "is_beam": true
     },
     "Arca Plasmor": {
-        "damage_dist": {
-            "radiation": 600.0
-        },
-        "forced_procs": {
-            "impact": 1.0
-        },
         "crit_chance": 0.22,
         "crit_damage": 1.6,
-        "status_chance": 0.28,
+        "damage_dist": {
+            "radiation": 600
+        },
         "fire_rate": 1.1,
+        "status_chance": 0.28,
+        "multishot": 1,
         "reload_speed": 2.8,
         "magazine_capacity": 10,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Argonak": {
+        "crit_chance": 0.09,
+        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 24.51,
             "puncture": 6.27,
             "slash": 26.22
         },
-        "crit_chance": 0.27,
-        "crit_damage": 2.3,
-        "status_chance": 0.19,
-        "fire_rate": 4.33,
+        "fire_rate": 6,
+        "status_chance": 0.27,
+        "multishot": 1,
         "reload_speed": 2.4,
         "magazine_capacity": 43,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Artemis Bow": {
-        "damage_dist": {
-            "impact": 33.6,
-            "puncture": 192.0,
-            "slash": 14.4
-        },
-        "forced_procs": {
-            "impact": 1.0
-        },
-        "crit_chance": 0.25,
-        "crit_damage": 2.0,
-        "status_chance": 0.2,
-        "fire_rate": 1.0,
         "reload_speed": 0.9,
         "magazine_capacity": 1,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Artemis Bow Prime": {
-        "damage_dist": {
-            "impact": 33.6,
-            "puncture": 192.0,
-            "slash": 14.4
-        },
-        "forced_procs": {
-            "impact": 1.0
-        },
-        "crit_chance": 0.25,
-        "crit_damage": 2.0,
-        "status_chance": 0.2,
-        "fire_rate": 1.0,
         "reload_speed": 0.9,
         "magazine_capacity": 1,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Astilla": {
-        "damage_dist": {
-            "impact": 70.0
-        },
-        "forced_procs": {
-            "impact": 1.0
-        },
-        "explosion_damage_dist": {
-            "puncture": 42.0,
-            "slash": 78.0
-        },
         "crit_chance": 0.17,
         "crit_damage": 1.9,
-        "status_chance": 0.33,
+        "damage_dist": {
+            "impact": 70
+        },
         "fire_rate": 4.33,
-        "reload_speed": 2.0,
+        "status_chance": 0.33,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "puncture": 42,
+            "slash": 78
+        },
+        "reload_speed": 2,
         "magazine_capacity": 16,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Astilla Prime": {
-        "damage_dist": {
-            "impact": 100.0
-        },
-        "forced_procs": {
-            "impact": 1.0
-        },
-        "explosion_damage_dist": {
-            "puncture": 49.0,
-            "slash": 91.0
-        },
         "crit_chance": 0.21,
         "crit_damage": 1.9,
-        "status_chance": 0.37,
+        "damage_dist": {
+            "impact": 100
+        },
         "fire_rate": 4.33,
-        "reload_speed": 2.0,
+        "status_chance": 0.37,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "puncture": 49,
+            "slash": 91
+        },
+        "reload_speed": 2,
         "magazine_capacity": 24,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Attica": {
-        "damage_dist": {
-            "impact": 4.0,
-            "puncture": 60.0,
-            "slash": 16.0
-        },
         "crit_chance": 0.25,
-        "crit_damage": 3.0,
-        "status_chance": 0.1,
+        "crit_damage": 3,
+        "damage_dist": {
+            "impact": 4,
+            "puncture": 60,
+            "slash": 16
+        },
         "fire_rate": 3.67,
+        "status_chance": 0.1,
+        "multishot": 1,
         "reload_speed": 2.83,
         "magazine_capacity": 20,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Basmu": {
-        "damage_dist": {
-            "electricity": 39.0
-        },
-        "explosion_damage_dist": {
-            "heat": 19.0
-        },
         "crit_chance": 0.15,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "electricity": 39
+        },
+        "fire_rate": 12,
         "status_chance": 0.29,
-        "fire_rate": 12.0,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "heat": 19
+        },
         "reload_speed": 2.5,
         "magazine_capacity": 21,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Battacor": {
-        "damage_dist": {
-            "magnetic": 42.0,
-            "puncture": 24.0
-        },
         "crit_chance": 0.32,
         "crit_damage": 2.4,
-        "status_chance": 0.18,
+        "damage_dist": {
+            "magnetic": 42,
+            "puncture": 24
+        },
         "fire_rate": 2.5,
-        "reload_speed": 2.0,
+        "status_chance": 0.18,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 60,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Baza": {
+        "crit_chance": 0.26,
+        "crit_damage": 3,
         "damage_dist": {
             "impact": 5.76,
             "puncture": 6.72,
             "slash": 3.52
         },
-        "crit_chance": 0.26,
-        "crit_damage": 3.0,
-        "status_chance": 0.1,
         "fire_rate": 16.67,
+        "status_chance": 0.1,
+        "multishot": 1,
         "reload_speed": 1.4,
         "magazine_capacity": 40,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Baza Prime": {
+        "crit_chance": 0.28,
+        "crit_damage": 3,
         "damage_dist": {
             "impact": 5.76,
             "puncture": 6.72,
             "slash": 3.52
         },
-        "crit_chance": 0.28,
-        "crit_damage": 3.0,
-        "status_chance": 0.14,
         "fire_rate": 16.67,
+        "status_chance": 0.14,
+        "multishot": 1,
         "reload_speed": 1.1,
         "magazine_capacity": 60,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Boar": {
+        "crit_chance": 0.1,
+        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 12.1,
             "puncture": 3.3,
             "slash": 6.6
         },
-        "crit_chance": 0.1,
-        "crit_damage": 1.5,
-        "status_chance": 0.075,
         "fire_rate": 4.17,
+        "status_chance": 0.075,
+        "multishot": 8,
         "reload_speed": 2.7,
         "magazine_capacity": 20,
-        "multishot": 8.0,
         "is_beam": false
     },
     "Boar Prime": {
-        "damage_dist": {
-            "impact": 26.0,
-            "puncture": 6.0,
-            "slash": 8.0
-        },
         "crit_chance": 0.15,
-        "crit_damage": 2.0,
-        "status_chance": 0.1125,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 26,
+            "puncture": 6,
+            "slash": 8
+        },
         "fire_rate": 4.67,
+        "status_chance": 0.1125,
+        "multishot": 8,
         "reload_speed": 2.75,
         "magazine_capacity": 20,
-        "multishot": 8.0,
         "is_beam": false
     },
     "Boltor": {
-        "damage_dist": {
-            "impact": 2.5,
-            "puncture": 20.0,
-            "slash": 2.5
-        },
         "crit_chance": 0.1,
         "crit_damage": 1.8,
-        "status_chance": 0.14,
+        "damage_dist": {
+            "impact": 2.5,
+            "puncture": 20,
+            "slash": 2.5
+        },
         "fire_rate": 8.75,
+        "status_chance": 0.14,
+        "multishot": 1,
         "reload_speed": 2.6,
         "magazine_capacity": 60,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Boltor Prime": {
+        "crit_chance": 0.12,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 4.6,
             "puncture": 41.4
         },
-        "crit_chance": 0.12,
-        "crit_damage": 2.0,
+        "fire_rate": 10,
         "status_chance": 0.34,
-        "fire_rate": 10.0,
+        "multishot": 1,
         "reload_speed": 2.4,
         "magazine_capacity": 60,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Braton": {
+        "crit_chance": 0.12,
+        "crit_damage": 1.6,
         "damage_dist": {
             "impact": 7.92,
             "puncture": 7.92,
             "slash": 8.16
         },
-        "crit_chance": 0.12,
-        "crit_damage": 1.6,
-        "status_chance": 0.06,
         "fire_rate": 8.75,
-        "reload_speed": 2.0,
+        "status_chance": 0.06,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 45,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Braton Prime": {
+        "crit_chance": 0.12,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 1.75,
             "puncture": 12.25,
-            "slash": 21.0
+            "slash": 21
         },
-        "crit_chance": 0.12,
-        "crit_damage": 2.0,
-        "status_chance": 0.26,
         "fire_rate": 9.58,
+        "status_chance": 0.26,
+        "multishot": 1,
         "reload_speed": 2.15,
         "magazine_capacity": 75,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Braton Vandal": {
+        "crit_chance": 0.16,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 12.25,
             "puncture": 1.75,
-            "slash": 21.0
+            "slash": 21
         },
-        "crit_chance": 0.16,
-        "crit_damage": 2.0,
-        "status_chance": 0.16,
         "fire_rate": 7.5,
+        "status_chance": 0.16,
+        "multishot": 1,
         "reload_speed": 1.75,
         "magazine_capacity": 50,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Bubonico": {
-        "damage_dist": {
-            "impact": 2.0,
-            "puncture": 13.0,
-            "slash": 19.0,
-            "toxin": 7.0
-        },
         "crit_chance": 0.25,
         "crit_damage": 2.3,
-        "status_chance": 0.0929,
+        "damage_dist": {
+            "impact": 2,
+            "puncture": 13,
+            "slash": 19,
+            "toxin": 7
+        },
         "fire_rate": 3.83,
+        "status_chance": 0.0929,
+        "multishot": 7,
+        "explosion_damage_dist": {
+            "viral": 143
+        },
         "reload_speed": 4.5,
         "magazine_capacity": 27,
-        "multishot": 7.0,
         "is_beam": false
     },
     "Burston": {
-        "damage_dist": {
-            "impact": 10.0,
-            "puncture": 10.0,
-            "slash": 10.0
-        },
         "crit_chance": 0.06,
         "crit_damage": 1.6,
+        "damage_dist": {
+            "impact": 10,
+            "puncture": 10,
+            "slash": 10
+        },
+        "fire_rate": 5,
         "status_chance": 0.18,
-        "fire_rate": 5.0,
-        "reload_speed": 2.0,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 45,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Burston Prime": {
+        "crit_chance": 0.18,
+        "crit_damage": 1.8,
         "damage_dist": {
             "impact": 13.8,
             "puncture": 13.8,
             "slash": 18.4
         },
-        "crit_chance": 0.18,
-        "crit_damage": 1.8,
+        "fire_rate": 5,
         "status_chance": 0.3,
-        "fire_rate": 5.0,
-        "reload_speed": 2.0,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 45,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Buzlok": {
-        "damage_dist": {
-            "impact": 30.0,
-            "puncture": 24.0,
-            "slash": 6.0
-        },
         "crit_chance": 0.23,
         "crit_damage": 2.5,
-        "status_chance": 0.21,
+        "damage_dist": {
+            "impact": 30,
+            "puncture": 24,
+            "slash": 6
+        },
         "fire_rate": 6.25,
-        "reload_speed": 3.0,
+        "status_chance": 0.21,
+        "multishot": 1,
+        "reload_speed": 3,
         "magazine_capacity": 50,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Carmine Penta": {
-        "damage_dist": {
-            "impact": 75.0
-        },
-        "explosion_damage_dist": {
-            "blast": 350.0
-        },
         "crit_chance": 0.1,
-        "crit_damage": 2.0,
-        "status_chance": 0.1,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 75
+        },
         "fire_rate": 2.7,
+        "status_chance": 0.1,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "blast": 350
+        },
         "reload_speed": 2.5,
         "magazine_capacity": 10,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Cedo": {
-        "damage_dist": {
-            "puncture": 30.0
-        },
         "crit_chance": 0.2,
         "crit_damage": 2.4,
-        "status_chance": 0.003,
+        "damage_dist": {
+            "puncture": 30
+        },
         "fire_rate": 3.83,
+        "status_chance": 0.003,
+        "multishot": 6,
         "reload_speed": 2.2,
         "magazine_capacity": 40,
-        "multishot": 6.0,
         "is_beam": false
     },
     "Cernos": {
-        "damage_dist": {
-            "impact": 171.0,
-            "puncture": 9.5,
-            "slash": 9.5
-        },
         "crit_chance": 0.36,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 342,
+            "puncture": 19,
+            "slash": 19
+        },
+        "fire_rate": 1,
         "status_chance": 0.18,
-        "fire_rate": 1.0,
+        "multishot": 1,
         "reload_speed": 0.6,
         "magazine_capacity": 1,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Cernos Prime": {
-        "damage_dist": {
-            "impact": 82.8,
-            "puncture": 4.6,
-            "slash": 4.6
-        },
-        "crit_chance": 0.35,
-        "crit_damage": 2.0,
-        "status_chance": 0.3,
-        "fire_rate": 1.0,
         "reload_speed": 0.65,
         "magazine_capacity": 1,
-        "multishot": 3.0,
         "is_beam": false
     },
     "Cinta": {
+        "crit_chance": 0.36,
+        "crit_damage": 3,
         "damage_dist": {
-            "heat": 600.0
+            "puncture": 640,
+            "slash": 160
         },
-        "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.34,
         "fire_rate": 1.5,
-        "charge_time": 1.0,
+        "status_chance": 0.32,
         "reload_speed": 0.6,
         "magazine_capacity": 1,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Convectrix": {
+        "crit_chance": 0.16,
+        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 1.2,
             "puncture": 1.2,
             "slash": 9.6
         },
-        "crit_chance": 0.16,
-        "crit_damage": 2.4,
+        "fire_rate": 12,
         "status_chance": 0.45,
-        "fire_rate": 12.0,
-        "reload_speed": 2.0,
+        "multishot": 2,
+        "reload_speed": 2,
         "magazine_capacity": 70,
-        "multishot": 2.0,
         "is_beam": true
     },
     "Corinth": {
+        "crit_chance": 0.3,
+        "crit_damage": 2.8,
         "damage_dist": {
             "impact": 25.2,
             "puncture": 37.8,
-            "slash": 27.0
+            "slash": 27
         },
-        "crit_chance": 0.3,
-        "crit_damage": 2.8,
-        "status_chance": 0.06,
         "fire_rate": 1.17,
+        "status_chance": 0.06,
+        "multishot": 6,
         "reload_speed": 2.3,
         "magazine_capacity": 5,
-        "multishot": 6.0,
         "is_beam": false
     },
     "Corinth Prime": {
+        "crit_chance": 0.3,
+        "crit_damage": 2.8,
         "damage_dist": {
             "impact": 25.2,
             "puncture": 37.8,
-            "slash": 27.0
+            "slash": 27
         },
-        "crit_chance": 0.3,
-        "crit_damage": 2.8,
-        "status_chance": 0.09,
         "fire_rate": 1.42,
-        "reload_speed": 3.0,
+        "status_chance": 0.09,
+        "multishot": 6,
+        "reload_speed": 3,
         "magazine_capacity": 20,
-        "multishot": 6.0,
         "is_beam": false
     },
     "Daikyu": {
-        "damage_dist": {
-            "impact": 210.0,
-            "puncture": 280.0,
-            "slash": 210.0
-        },
-        "forced_procs": {
-            "impact": 1.0
-        },
         "crit_chance": 0.34,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 210,
+            "puncture": 280,
+            "slash": 210
+        },
+        "fire_rate": 1,
         "status_chance": 0.46,
-        "fire_rate": 1.0,
-        "charge_time": 1.0,
+        "multishot": 1,
         "reload_speed": 0.6,
         "magazine_capacity": 1,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Dera": {
+        "crit_chance": 0.08,
+        "crit_damage": 1.6,
         "damage_dist": {
-            "impact": 6.0,
+            "impact": 6,
             "puncture": 22.5,
             "slash": 1.5
         },
-        "crit_chance": 0.08,
-        "crit_damage": 1.6,
-        "status_chance": 0.22,
         "fire_rate": 11.25,
+        "status_chance": 0.22,
+        "multishot": 1,
         "reload_speed": 1.8,
         "magazine_capacity": 45,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Dera Vandal": {
+        "crit_chance": 0.08,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 6.4,
-            "puncture": 24.0,
+            "puncture": 24,
             "slash": 1.6
         },
-        "crit_chance": 0.08,
-        "crit_damage": 2.0,
-        "status_chance": 0.3,
         "fire_rate": 11.25,
+        "status_chance": 0.3,
+        "multishot": 1,
         "reload_speed": 1.8,
         "magazine_capacity": 60,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Dex Sybaris": {
+        "crit_chance": 0.35,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 22.5,
             "puncture": 18.75,
             "slash": 33.75
         },
-        "crit_chance": 0.35,
-        "crit_damage": 2.0,
-        "status_chance": 0.1,
         "fire_rate": 3.33,
+        "status_chance": 0.1,
+        "multishot": 1,
         "reload_speed": 1.5,
         "magazine_capacity": 14,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Drakgoon": {
+        "crit_chance": 0.075,
+        "crit_damage": 2,
         "damage_dist": {
-            "impact": 8.0,
-            "puncture": 8.0,
-            "slash": 24.0
+            "impact": 7,
+            "puncture": 7,
+            "slash": 56
         },
-        "crit_chance": 0.05,
-        "crit_damage": 2.0,
-        "status_chance": 0.063,
         "fire_rate": 3.33,
+        "status_chance": 0.069,
+        "multishot": 10,
         "reload_speed": 2.3,
         "magazine_capacity": 7,
-        "multishot": 10.0,
         "is_beam": false
     },
     "Dread": {
+        "crit_chance": 0.5,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 16.8,
             "puncture": 16.8,
-            "slash": 134.4
+            "slash": 302.4
         },
-        "crit_chance": 0.5,
-        "crit_damage": 2.0,
+        "fire_rate": 1,
         "status_chance": 0.2,
-        "fire_rate": 1.0,
+        "multishot": 1,
         "reload_speed": 0.7,
         "magazine_capacity": 1,
-        "multishot": 1.0,
         "is_beam": false
     },
     "EFV-0 Somnus": {
+        "crit_chance": 0.2,
+        "crit_damage": 2.5,
         "damage_dist": {
-            "corrosive": 7.0,
-            "puncture": 31.0,
-            "slash": 23.0
+            "impact": 20,
+            "gas": 550,
+            "slash": 10
         },
-        "crit_chance": 0.04,
-        "crit_damage": 2.3,
-        "status_chance": 0.25,
-        "fire_rate": 10.8334,
+        "fire_rate": 1,
+        "status_chance": 0.2,
+        "multishot": 1,
         "reload_speed": 2.5,
         "magazine_capacity": 65,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Evensong": {
-        "damage_dist": {
-            "puncture": 97.5,
-            "slash": 227.5
-        },
         "crit_chance": 0.25,
         "crit_damage": 2.2,
+        "damage_dist": {
+            "puncture": 150,
+            "slash": 350
+        },
+        "fire_rate": 1,
         "status_chance": 0.38,
-        "fire_rate": 1.0,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "puncture": 45,
+            "slash": 105
+        },
         "reload_speed": 0.6,
         "magazine_capacity": 1,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Exergis": {
-        "damage_dist": {
-            "impact": 20.0,
-            "puncture": 120.0,
-            "radiation": 140.0,
-            "slash": 260.0
-        },
         "crit_chance": 0.08,
         "crit_damage": 1.4,
-        "status_chance": 0.36,
+        "damage_dist": {
+            "impact": 20,
+            "puncture": 120,
+            "radiation": 140,
+            "slash": 260
+        },
         "fire_rate": 3.33,
+        "status_chance": 0.36,
+        "multishot": 3,
         "reload_speed": 1.6,
         "magazine_capacity": 1,
-        "multishot": 3.0,
         "is_beam": false
     },
     "Felarx": {
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "damage_dist": {
-            "impact": 38.0,
+            "impact": 38,
             "puncture": 68.4,
             "slash": 83.6
         },
-        "crit_chance": 0.2,
-        "crit_damage": 2.0,
+        "fire_rate": 3,
         "status_chance": 0.055,
-        "fire_rate": 3.0,
+        "multishot": 4,
         "reload_speed": 3.7,
         "magazine_capacity": 6,
-        "multishot": 4.0,
         "is_beam": false
     },
     "Ferrox": {
+        "crit_chance": 0.32,
+        "crit_damage": 2.8,
         "damage_dist": {
-            "impact": 35.0,
-            "puncture": 5.0,
-            "slash": 10.0
+            "impact": 35,
+            "puncture": 245,
+            "slash": 70
         },
+        "fire_rate": 1.33,
+        "status_chance": 0.1,
+        "multishot": 1,
         "explosion_damage_dist": {
-            "electricity": 150.0
+            "impact": 100
         },
-        "crit_chance": 0.04,
-        "crit_damage": 2.0,
-        "status_chance": 0.33,
-        "fire_rate": 1.0,
         "reload_speed": 1.8,
         "magazine_capacity": 10,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Flux Rifle": {
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "damage_dist": {
             "puncture": 4.84,
             "slash": 17.16
         },
-        "crit_chance": 0.1,
-        "crit_damage": 2.0,
+        "fire_rate": 12,
         "status_chance": 0.24,
-        "fire_rate": 12.0,
+        "multishot": 1,
         "reload_speed": 2.25,
         "magazine_capacity": 50,
-        "multishot": 1.0,
         "is_beam": true
     },
     "Fulmin": {
-        "damage_dist": {
-            "electricity": 25.0,
-            "puncture": 8.0
-        },
         "crit_chance": 0.28,
         "crit_damage": 2.4,
-        "status_chance": 0.1,
+        "damage_dist": {
+            "electricity": 25,
+            "puncture": 8
+        },
         "fire_rate": 9.33,
-        "reload_speed": 3.0,
+        "status_chance": 0.1,
+        "multishot": 1,
+        "reload_speed": 3,
         "magazine_capacity": 60,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Fulmin Prime": {
-        "damage_dist": {
-            "electricity": 25.0,
-            "puncture": 8.0
-        },
         "crit_chance": 0.34,
         "crit_damage": 2.4,
-        "status_chance": 0.1,
+        "damage_dist": {
+            "electricity": 25,
+            "puncture": 8
+        },
         "fire_rate": 9.33,
+        "status_chance": 0.1,
+        "multishot": 1,
         "reload_speed": 2.7,
         "magazine_capacity": 80,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Glaxion": {
-        "damage_dist": {
-            "cold": 26.0
-        },
         "crit_chance": 0.08,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "cold": 26
+        },
+        "fire_rate": 12,
         "status_chance": 0.34,
-        "fire_rate": 12.0,
+        "multishot": 1,
         "reload_speed": 2.2,
         "magazine_capacity": 80,
-        "multishot": 1.0,
         "is_beam": true
     },
     "Glaxion Vandal": {
-        "damage_dist": {
-            "cold": 29.0
-        },
         "crit_chance": 0.14,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "cold": 29
+        },
+        "fire_rate": 12,
         "status_chance": 0.38,
-        "fire_rate": 12.0,
+        "multishot": 1,
         "reload_speed": 1.8,
         "magazine_capacity": 100,
-        "multishot": 1.0,
         "is_beam": true
     },
     "Gorgon": {
+        "crit_chance": 0.17,
+        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 18.75,
             "puncture": 3.75,
             "slash": 2.5
         },
-        "crit_chance": 0.17,
-        "crit_damage": 1.5,
-        "status_chance": 0.09,
         "fire_rate": 12.5,
+        "status_chance": 0.09,
+        "multishot": 1,
         "reload_speed": 4.2,
         "magazine_capacity": 90,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Gorgon Wraith": {
+        "crit_chance": 0.15,
+        "crit_damage": 1.9,
         "damage_dist": {
             "impact": 22.95,
             "puncture": 2.7,
             "slash": 1.35
         },
-        "crit_chance": 0.15,
-        "crit_damage": 1.9,
-        "status_chance": 0.21,
         "fire_rate": 13.33,
-        "reload_speed": 3.0,
+        "status_chance": 0.21,
+        "multishot": 1,
+        "reload_speed": 3,
         "magazine_capacity": 90,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Gotva Prime": {
-        "damage_dist": {
-            "puncture": 25.0
-        },
         "crit_chance": 0.23,
         "crit_damage": 2.5,
-        "status_chance": 0.27,
+        "damage_dist": {
+            "puncture": 25
+        },
         "fire_rate": 13.33,
-        "reload_speed": 2.0,
+        "status_chance": 0.27,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 84,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Grakata": {
+        "crit_chance": 0.25,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 4.4,
             "puncture": 3.7,
             "slash": 2.9
         },
-        "crit_chance": 0.25,
-        "crit_damage": 2.0,
+        "fire_rate": 20,
         "status_chance": 0.2,
-        "fire_rate": 20.0,
+        "multishot": 1,
         "reload_speed": 2.4,
         "magazine_capacity": 60,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Grinlok": {
+        "crit_chance": 0.15,
+        "crit_damage": 2.5,
         "damage_dist": {
             "impact": 93.5,
             "puncture": 18.7,
             "slash": 74.8
         },
-        "crit_chance": 0.15,
-        "crit_damage": 2.5,
-        "status_chance": 0.35,
         "fire_rate": 1.67,
+        "status_chance": 0.35,
+        "multishot": 1,
         "reload_speed": 1.7,
         "magazine_capacity": 9,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Harpak": {
+        "crit_chance": 0.2,
+        "crit_damage": 2.3,
         "damage_dist": {
-            "impact": 5.0,
+            "impact": 5,
             "puncture": 37.5,
             "slash": 7.5
         },
-        "crit_chance": 0.2,
-        "crit_damage": 2.3,
+        "fire_rate": 5,
         "status_chance": 0.17,
-        "fire_rate": 5.0,
-        "reload_speed": 2.0,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 45,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Hek": {
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 11.25,
             "puncture": 48.75,
-            "slash": 15.0
+            "slash": 15
         },
-        "crit_chance": 0.1,
-        "crit_damage": 2.0,
-        "status_chance": 0.107,
         "fire_rate": 2.17,
-        "reload_speed": 2.0,
+        "status_chance": 0.107,
+        "multishot": 7,
+        "reload_speed": 2,
         "magazine_capacity": 4,
-        "multishot": 7.0,
         "is_beam": false
     },
     "Hema": {
-        "damage_dist": {
-            "viral": 47.0
-        },
         "crit_chance": 0.11,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "viral": 47
+        },
+        "fire_rate": 5,
         "status_chance": 0.25,
-        "fire_rate": 5.0,
-        "reload_speed": 2.0,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 60,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Higasa": {
-        "damage_dist": {
-            "puncture": 15.6,
-            "slash": 10.4
-        },
         "crit_chance": 0.24,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "blast": 390
+        },
+        "fire_rate": 1.2,
         "status_chance": 0.18,
-        "fire_rate": 2.5,
         "reload_speed": 2.5,
         "magazine_capacity": 90,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Hind": {
-        "damage_dist": {
-            "impact": 12.0,
-            "puncture": 12.0,
-            "slash": 36.0
-        },
-        "crit_chance": 0.15,
-        "crit_damage": 2.0,
-        "status_chance": 0.1,
-        "fire_rate": 2.5,
-        "reload_speed": 2.0,
+        "reload_speed": 2,
         "magazine_capacity": 65,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Ignis": {
-        "damage_dist": {
-            "heat": 33.0
-        },
         "crit_chance": 0.11,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "heat": 33
+        },
+        "fire_rate": 8,
         "status_chance": 0.27,
-        "fire_rate": 8.0,
-        "reload_speed": 2.0,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 150,
-        "multishot": 1.0,
         "is_beam": true
     },
     "Ignis Wraith": {
-        "damage_dist": {
-            "heat": 35.0
-        },
         "crit_chance": 0.17,
         "crit_damage": 2.5,
+        "damage_dist": {
+            "heat": 35
+        },
+        "fire_rate": 8,
         "status_chance": 0.29,
-        "fire_rate": 8.0,
+        "multishot": 1,
         "reload_speed": 1.7,
         "magazine_capacity": 200,
-        "multishot": 1.0,
         "is_beam": true
     },
     "Javlok": {
-        "damage_dist": {
-            "heat": 160.0
-        },
-        "explosion_damage_dist": {
-            "heat": 120.0
-        },
         "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.25,
+        "crit_damage": 2,
+        "damage_dist": {
+            "heat": 160
+        },
         "fire_rate": 3.33,
-        "charge_time": 0.3,
+        "status_chance": 0.25,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "heat": 120
+        },
         "reload_speed": 1.9,
         "magazine_capacity": 6,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Karak": {
+        "crit_chance": 0.09,
+        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 13.05,
             "puncture": 8.7,
             "slash": 7.25
         },
-        "crit_chance": 0.09,
-        "crit_damage": 1.5,
-        "status_chance": 0.15,
         "fire_rate": 11.67,
-        "reload_speed": 2.0,
+        "status_chance": 0.15,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 30,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Karak Wraith": {
+        "crit_chance": 0.13,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 13.95,
             "puncture": 9.3,
             "slash": 7.75
         },
-        "crit_chance": 0.13,
-        "crit_damage": 2.0,
-        "status_chance": 0.25,
         "fire_rate": 11.67,
-        "reload_speed": 2.0,
+        "status_chance": 0.25,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 60,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Keles": {
+        "crit_chance": 0.19,
+        "crit_damage": 2.3,
         "damage_dist": {
             "impact": 18.13,
             "puncture": 14.21,
             "slash": 16.66
         },
-        "crit_chance": 0.19,
-        "crit_damage": 2.3,
-        "status_chance": 0.27,
         "fire_rate": 1.58,
+        "status_chance": 0.27,
+        "multishot": 1,
         "reload_speed": 1.9,
         "magazine_capacity": 84,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Kohm": {
-        "damage_dist": {
-            "impact": 6.0,
-            "puncture": 6.0,
-            "slash": 18.0
-        },
         "crit_chance": 0.11,
         "crit_damage": 2.3,
-        "status_chance": 0.75,
-        "fire_rate": 0.734,
-        "reload_speed": 2.0,
+        "damage_dist": {
+            "impact": 6,
+            "puncture": 6,
+            "slash": 18
+        },
+        "fire_rate": 3.67,
+        "status_chance": 0.0625,
+        "multishot": 12,
+        "reload_speed": 2,
         "magazine_capacity": 245,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Komorex": {
-        "damage_dist": {
-            "impact": 9.7,
-            "puncture": 40.7,
-            "slash": 46.6
-        },
-        "crit_chance": 0.16,
-        "crit_damage": 2.1,
-        "status_chance": 0.35,
-        "fire_rate": 5.0,
-        "reload_speed": 3.0,
+        "reload_speed": 3,
         "magazine_capacity": 20,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Kuva Bramma": {
-        "damage_dist": {
-            "impact": 49.0
-        },
-        "explosion_damage_dist": {
-            "blast": 57.0
-        },
         "crit_chance": 0.35,
         "crit_damage": 2.1,
+        "damage_dist": {
+            "impact": 187
+        },
+        "fire_rate": 0.667,
         "status_chance": 0.21,
-        "fire_rate": 1.0,
-        "charge_time": 0.4,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "blast": 839
+        },
         "reload_speed": 0.6,
         "magazine_capacity": 1,
-        "multishot": 3.0,
         "is_beam": false
     },
     "Kuva Chakkhurr": {
-        "damage_dist": {
-            "impact": 260.0
-        },
-        "forced_procs": {
-            "impact": 1.0
-        },
-        "explosion_damage_dist": {
-            "blast": 25.0,
-            "puncture": 52.0,
-            "slash": 29.0
-        },
-        "explosion_forced_procs": {
-            "impact": 1.0
-        },
         "crit_chance": 0.5,
         "crit_damage": 2.3,
-        "status_chance": 0.27,
+        "damage_dist": {
+            "impact": 260
+        },
         "fire_rate": 1.17,
+        "status_chance": 0.27,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "blast": 25,
+            "puncture": 52,
+            "slash": 29
+        },
         "reload_speed": 3.3,
         "magazine_capacity": 11,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Kuva Drakgoon": {
+        "crit_chance": 0.21,
+        "crit_damage": 2.5,
         "damage_dist": {
             "impact": 4.6,
             "puncture": 4.6,
-            "slash": 13.8
+            "slash": 36.8
         },
-        "crit_chance": 0.19,
-        "crit_damage": 2.1,
-        "status_chance": 0.09,
         "fire_rate": 3.33,
-        "reload_speed": 2.0,
+        "status_chance": 0.09,
+        "multishot": 10,
+        "reload_speed": 2,
         "magazine_capacity": 11,
-        "multishot": 10.0,
         "is_beam": false
     },
     "Kuva Hek": {
+        "crit_chance": 0.23,
+        "crit_damage": 2.1,
         "damage_dist": {
             "impact": 13.05,
             "puncture": 56.55,
             "slash": 17.4
         },
-        "crit_chance": 0.23,
-        "crit_damage": 2.1,
-        "status_chance": 0.13,
         "fire_rate": 2.17,
-        "reload_speed": 2.0,
+        "status_chance": 0.13,
+        "multishot": 7,
+        "reload_speed": 2,
         "magazine_capacity": 4,
-        "multishot": 7.0,
         "is_beam": false
     },
     "Kuva Hind": {
+        "crit_chance": 0.21,
+        "crit_damage": 1.9,
         "damage_dist": {
-            "impact": 18.0,
-            "puncture": 18.0,
-            "slash": 54.0
+            "impact": 6,
+            "puncture": 6,
+            "slash": 18
         },
-        "crit_chance": 0.37,
-        "crit_damage": 2.9,
-        "status_chance": 0.21,
-        "fire_rate": 2.5,
+        "fire_rate": 10,
+        "status_chance": 0.33,
+        "multishot": 1,
         "reload_speed": 2.3,
         "magazine_capacity": 90,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Kuva Karak": {
+        "crit_chance": 0.23,
+        "crit_damage": 2.1,
         "damage_dist": {
             "impact": 7.1,
             "puncture": 6.2,
             "slash": 9.7
         },
-        "crit_chance": 0.23,
-        "crit_damage": 2.1,
-        "status_chance": 0.31,
         "fire_rate": 11.67,
+        "status_chance": 0.31,
+        "multishot": 1,
         "reload_speed": 1.7,
         "magazine_capacity": 70,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Kuva Keles": {
+        "crit_chance": 0.35,
+        "crit_damage": 3.5,
         "damage_dist": {
             "impact": 36.54,
             "puncture": 28.57,
             "slash": 26.87
         },
-        "crit_chance": 0.35,
-        "crit_damage": 3.5,
-        "status_chance": 0.3,
         "fire_rate": 3.5,
+        "status_chance": 0.3,
+        "multishot": 1,
         "reload_speed": 1.4,
         "magazine_capacity": 100,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Kuva Kohm": {
-        "damage_dist": {
-            "impact": 4.0,
-            "puncture": 4.0,
-            "slash": 12.0
-        },
         "crit_chance": 0.19,
         "crit_damage": 2.3,
-        "status_chance": 0.9,
-        "fire_rate": 0.834,
-        "reload_speed": 2.0,
+        "damage_dist": {
+            "impact": 4,
+            "puncture": 4,
+            "slash": 12
+        },
+        "fire_rate": 4.17,
+        "status_chance": 0.075,
+        "multishot": 12,
+        "reload_speed": 2,
         "magazine_capacity": 209,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Kuva Ogris": {
+        "crit_chance": 0.09,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 18.9,
             "puncture": 8.1
         },
-        "forced_procs": {
-            "impact": 1.0
-        },
-        "explosion_damage_dist": {
-            "blast": 349.0,
-            "puncture": 183.0,
-            "slash": 155.0
-        },
-        "crit_chance": 0.09,
-        "crit_damage": 2.0,
-        "status_chance": 0.47,
         "fire_rate": 1.5,
+        "status_chance": 0.47,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "blast": 349,
+            "puncture": 183,
+            "slash": 155
+        },
         "reload_speed": 2.1,
         "magazine_capacity": 3,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Kuva Quartakk": {
-        "damage_dist": {
-            "impact": 20.0,
-            "puncture": 15.65,
-            "slash": 18.35
-        },
-        "crit_chance": 0.21,
-        "crit_damage": 1.9,
-        "status_chance": 0.33,
-        "fire_rate": 4.83,
         "reload_speed": 1.7,
         "magazine_capacity": 88,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Kuva Sobek": {
+        "crit_chance": 0.21,
+        "crit_damage": 2.3,
         "damage_dist": {
             "impact": 57.75,
             "puncture": 9.625,
             "slash": 9.625
         },
-        "crit_chance": 0.21,
-        "crit_damage": 2.3,
-        "status_chance": 0.21,
         "fire_rate": 2.5,
+        "status_chance": 0.21,
+        "multishot": 5,
         "reload_speed": 2.1,
         "magazine_capacity": 20,
-        "multishot": 5.0,
         "is_beam": false
     },
     "Kuva Tonkor": {
-        "damage_dist": {
-            "puncture": 59.0
-        },
-        "explosion_damage_dist": {
-            "blast": 302.0,
-            "puncture": 168.0,
-            "slash": 204.0
-        },
         "crit_chance": 0.3,
         "crit_damage": 2.5,
-        "status_chance": 0.17,
+        "damage_dist": {
+            "puncture": 59
+        },
         "fire_rate": 3.17,
+        "status_chance": 0.17,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "blast": 302,
+            "puncture": 168,
+            "slash": 204
+        },
         "reload_speed": 1.5,
         "magazine_capacity": 1,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Kuva Zarr": {
-        "damage_dist": {
-            "impact": 50.0
-        },
-        "explosion_damage_dist": {
-            "blast": 673.0
-        },
         "crit_chance": 0.25,
         "crit_damage": 2.5,
-        "status_chance": 0.31,
+        "damage_dist": {
+            "impact": 50
+        },
         "fire_rate": 2.17,
+        "status_chance": 0.31,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "blast": 673
+        },
         "reload_speed": 4.8,
         "magazine_capacity": 5,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Lanka": {
-        "damage_dist": {
-            "electricity": 525.0
-        },
         "crit_chance": 0.25,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "electricity": 525
+        },
+        "fire_rate": 0,
         "status_chance": 0.25,
-        "fire_rate": 0.0,
-        "charge_time": 1.0,
-        "reload_speed": 2.0,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 10,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Latron": {
+        "crit_chance": 0.12,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 8.25,
             "puncture": 38.5,
             "slash": 8.25
         },
-        "crit_chance": 0.12,
-        "crit_damage": 2.0,
-        "status_chance": 0.12,
         "fire_rate": 4.17,
+        "status_chance": 0.12,
+        "multishot": 1,
         "reload_speed": 2.4,
         "magazine_capacity": 15,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Latron Prime": {
-        "damage_dist": {
-            "impact": 9.0,
-            "puncture": 72.0,
-            "slash": 9.0
-        },
         "crit_chance": 0.22,
         "crit_damage": 2.8,
-        "status_chance": 0.26,
+        "damage_dist": {
+            "impact": 9,
+            "puncture": 72,
+            "slash": 9
+        },
         "fire_rate": 4.17,
+        "status_chance": 0.26,
+        "multishot": 1,
         "reload_speed": 2.4,
         "magazine_capacity": 15,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Latron Wraith": {
+        "crit_chance": 0.26,
+        "crit_damage": 2.8,
         "damage_dist": {
             "impact": 15.5,
             "puncture": 43.4,
             "slash": 3.1
         },
-        "crit_chance": 0.26,
-        "crit_damage": 2.8,
+        "fire_rate": 5,
         "status_chance": 0.14,
-        "fire_rate": 5.0,
+        "multishot": 1,
         "reload_speed": 2.4,
         "magazine_capacity": 15,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Lenz": {
-        "damage_dist": {
-            "impact": 50.0
-        },
-        "forced_procs": {
-            "impact": 1.0
-        },
-        "explosion_damage_dist": {
-            "cold": 10.0
-        },
-        "explosion_forced_procs": {
-            "cold": 1.0
-        },
         "crit_chance": 0.5,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 50
+        },
+        "fire_rate": 1,
         "status_chance": 0.05,
-        "fire_rate": 1.0,
-        "charge_time": 1.2,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "blast": 660
+        },
         "reload_speed": 0.6,
         "magazine_capacity": 1,
-        "multishot": 1.0,
         "is_beam": false
     },
     "MK1-Braton": {
+        "crit_chance": 0.08,
+        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 4.5,
             "puncture": 4.5,
-            "slash": 9.0
+            "slash": 9
         },
-        "crit_chance": 0.08,
-        "crit_damage": 1.5,
-        "status_chance": 0.05,
         "fire_rate": 7.5,
-        "reload_speed": 2.0,
+        "status_chance": 0.05,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 60,
-        "multishot": 1.0,
         "is_beam": false
     },
     "MK1-Paris": {
-        "damage_dist": {
-            "impact": 5.75,
-            "puncture": 86.25,
-            "slash": 23.0
-        },
         "crit_chance": 0.3,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 11.5,
+            "puncture": 184,
+            "slash": 34.5
+        },
+        "fire_rate": 1,
         "status_chance": 0.15,
-        "fire_rate": 1.0,
+        "multishot": 1,
         "reload_speed": 0.55,
         "magazine_capacity": 1,
-        "multishot": 1.0,
         "is_beam": false
     },
     "MK1-Strun": {
+        "crit_chance": 0.075,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 9.9,
             "puncture": 2.7,
             "slash": 5.4
         },
-        "crit_chance": 0.075,
-        "crit_damage": 2.0,
-        "status_chance": 0.06,
         "fire_rate": 2.08,
+        "status_chance": 0.06,
+        "multishot": 10,
         "reload_speed": 3.75,
         "magazine_capacity": 6,
-        "multishot": 10.0,
         "is_beam": false
     },
     "Miter": {
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "damage_dist": {
-            "impact": 20.0,
-            "puncture": 10.0,
-            "slash": 70.0
+            "impact": 12.5,
+            "puncture": 12.5,
+            "slash": 225
         },
-        "crit_chance": 0.05,
-        "crit_damage": 2.0,
-        "status_chance": 0.2,
         "fire_rate": 2.5,
-        "reload_speed": 2.0,
+        "status_chance": 0.5,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 20,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Mutalist Cernos": {
-        "damage_dist": {
-            "impact": 184.5,
-            "puncture": 10.25,
-            "slash": 10.25
-        },
-        "explosion_damage_dist": {
-            "toxin": 5.0
-        },
-        "explosion_forced_procs": {
-            "toxin": 1.0
-        },
         "crit_chance": 0.15,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 369,
+            "puncture": 20.5,
+            "slash": 20.5
+        },
+        "fire_rate": 1,
         "status_chance": 0.49,
-        "fire_rate": 1.0,
+        "multishot": 1,
         "reload_speed": 0.6,
         "magazine_capacity": 1,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Mutalist Quanta": {
-        "damage_dist": {
-            "impact": 2.5,
-            "puncture": 15.0,
-            "slash": 7.5
-        },
-        "explosion_damage_dist": {
-            "toxin": 100.0
-        },
         "crit_chance": 0.025,
         "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 2.5,
+            "puncture": 15,
+            "slash": 7.5
+        },
+        "fire_rate": 10,
         "status_chance": 0.15,
-        "fire_rate": 10.0,
-        "reload_speed": 3.0,
+        "multishot": 1,
+        "reload_speed": 3,
         "magazine_capacity": 60,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Nagantaka": {
-        "damage_dist": {
-            "impact": 1.6,
-            "puncture": 14.3,
-            "slash": 143.1
-        },
-        "forced_procs": {
-            "impact": 1.0
-        },
-        "crit_chance": 0.15,
-        "crit_damage": 2.3,
-        "status_chance": 0.39,
-        "fire_rate": 2.5,
         "reload_speed": 2.3,
         "magazine_capacity": 9,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Nagantaka Prime": {
-        "damage_dist": {
-            "impact": 1.7,
-            "puncture": 15.6,
-            "slash": 155.7
-        },
-        "forced_procs": {
-            "impact": 1.0
-        },
-        "crit_chance": 0.25,
-        "crit_damage": 2.3,
-        "status_chance": 0.39,
-        "fire_rate": 2.5,
         "reload_speed": 2.3,
         "magazine_capacity": 11,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Nataruk": {
+        "crit_chance": 0.5,
+        "crit_damage": 2.2,
         "damage_dist": {
-            "puncture": 648.0,
-            "slash": 252.0
+            "puncture": 648,
+            "slash": 252
         },
-        "crit_chance": 0.6,
-        "crit_damage": 2.4,
-        "status_chance": 0.5,
         "fire_rate": 0.667,
-        "charge_time": 0.7,
+        "status_chance": 0.5,
+        "multishot": 1,
         "reload_speed": 0.6,
         "magazine_capacity": 1,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Neutralizer": {
-        "damage_dist": {
-            "impact": 12.75,
-            "puncture": 216.75,
-            "slash": 25.5
-        },
-        "explosion_damage_dist": {
-            "cold": 20.0
-        },
-        "explosion_forced_procs": {
-            "cold": 1.0
-        },
-        "crit_chance": 0.45,
-        "crit_damage": 3.0,
-        "status_chance": 0.1,
-        "fire_rate": 1.0,
         "reload_speed": 2.25,
         "magazine_capacity": 12,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Ogris": {
-        "damage_dist": {
-            "blast": 100.0
-        },
-        "explosion_damage_dist": {
-            "blast": 600.0
-        },
         "crit_chance": 0.05,
-        "crit_damage": 2.0,
-        "status_chance": 0.35,
+        "crit_damage": 2,
+        "damage_dist": {
+            "blast": 100
+        },
         "fire_rate": 1.5,
-        "charge_time": 0.3,
+        "status_chance": 0.35,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "blast": 600
+        },
         "reload_speed": 2.5,
         "magazine_capacity": 5,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Opticor": {
-        "damage_dist": {
-            "impact": 50.0,
-            "puncture": 425.0,
-            "slash": 25.0
-        },
-        "explosion_damage_dist": {
-            "magnetic": 400.0
-        },
         "crit_chance": 0.2,
         "crit_damage": 2.5,
+        "damage_dist": {
+            "impact": 100,
+            "puncture": 850,
+            "slash": 50
+        },
+        "fire_rate": 1,
         "status_chance": 0.2,
-        "fire_rate": 1.0,
-        "reload_speed": 2.0,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 5,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Opticor Vandal": {
-        "damage_dist": {
-            "impact": 20.0,
-            "puncture": 140.0,
-            "slash": 40.0
-        },
-        "explosion_damage_dist": {
-            "magnetic": 100.0
-        },
         "crit_chance": 0.24,
         "crit_damage": 2.6,
+        "damage_dist": {
+            "impact": 40,
+            "puncture": 280,
+            "slash": 80
+        },
+        "fire_rate": 2,
         "status_chance": 0.3,
-        "fire_rate": 2.0,
+        "multishot": 1,
         "reload_speed": 1.4,
         "magazine_capacity": 8,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Panthera": {
-        "damage_dist": {
-            "impact": 20.0,
-            "puncture": 10.0,
-            "slash": 70.0
-        },
         "crit_chance": 0.12,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 20,
+            "puncture": 10,
+            "slash": 70
+        },
+        "fire_rate": 3,
         "status_chance": 0.24,
-        "fire_rate": 3.0,
-        "reload_speed": 2.0,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 60,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Panthera Prime": {
-        "damage_dist": {
-            "impact": 20.0,
-            "puncture": 10.0,
-            "slash": 70.0
-        },
-        "explosion_damage_dist": {
-            "slash": 20.0
-        },
         "crit_chance": 0.18,
-        "crit_damage": 2.0,
-        "status_chance": 0.3,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 20,
+            "puncture": 10,
+            "slash": 70
+        },
         "fire_rate": 3.67,
+        "status_chance": 0.3,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "slash": 20
+        },
         "reload_speed": 2.4,
         "magazine_capacity": 80,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Paracyst": {
-        "damage_dist": {
-            "toxin": 33.0
-        },
         "crit_chance": 0.1,
-        "crit_damage": 2.0,
-        "status_chance": 0.3,
+        "crit_damage": 2,
+        "damage_dist": {
+            "toxin": 33
+        },
         "fire_rate": 8.33,
-        "reload_speed": 2.0,
+        "status_chance": 0.3,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 60,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Paris": {
-        "damage_dist": {
-            "impact": 8.0,
-            "puncture": 120.0,
-            "slash": 32.0
-        },
         "crit_chance": 0.3,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 16,
+            "puncture": 256,
+            "slash": 48
+        },
+        "fire_rate": 1,
         "status_chance": 0.1,
-        "fire_rate": 1.0,
+        "multishot": 1,
         "reload_speed": 0.65,
         "magazine_capacity": 1,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Paris Prime": {
-        "damage_dist": {
-            "impact": 9.0,
-            "puncture": 153.0,
-            "slash": 18.0
-        },
         "crit_chance": 0.45,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 9,
+            "puncture": 288,
+            "slash": 63
+        },
+        "fire_rate": 1,
         "status_chance": 0.2,
-        "fire_rate": 1.0,
+        "multishot": 1,
         "reload_speed": 0.7,
         "magazine_capacity": 1,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Penta": {
-        "damage_dist": {
-            "impact": 75.0
-        },
-        "explosion_damage_dist": {
-            "blast": 350.0
-        },
         "crit_chance": 0.1,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 75
+        },
+        "fire_rate": 1,
         "status_chance": 0.1,
-        "fire_rate": 1.0,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "blast": 350
+        },
         "reload_speed": 2.5,
         "magazine_capacity": 5,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Perigale": {
+        "crit_chance": 0.28,
+        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 20.6,
             "puncture": 96.3,
-            "slash": 55.0
+            "slash": 55
         },
-        "crit_chance": 0.28,
-        "crit_damage": 2.6,
+        "fire_rate": 2,
         "status_chance": 0.16,
-        "fire_rate": 2.0,
-        "reload_speed": 3.0,
+        "multishot": 1,
+        "reload_speed": 3,
         "magazine_capacity": 12,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Phage": {
-        "damage_dist": {
-            "viral": 5.0
-        },
         "crit_chance": 0.19,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "viral": 5
+        },
+        "fire_rate": 12,
         "status_chance": 0.155,
-        "fire_rate": 12.0,
-        "reload_speed": 2.0,
+        "multishot": 7,
+        "reload_speed": 2,
         "magazine_capacity": 90,
-        "multishot": 7.0,
-        "is_beam": false
+        "is_beam": true
     },
     "Phantasma": {
-        "damage_dist": {
-            "impact": 5.0,
-            "radiation": 10.0
-        },
         "crit_chance": 0.03,
         "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 5,
+            "radiation": 10
+        },
+        "fire_rate": 12,
         "status_chance": 0.222,
-        "fire_rate": 12.0,
+        "multishot": 6,
         "reload_speed": 0.5,
         "magazine_capacity": 11,
-        "multishot": 6.0,
         "is_beam": true
     },
     "Phantasma Prime": {
-        "damage_dist": {
-            "impact": 5.0,
-            "radiation": 10.0
-        },
         "crit_chance": 0.11,
         "crit_damage": 1.9,
+        "damage_dist": {
+            "impact": 5,
+            "radiation": 10
+        },
+        "fire_rate": 12,
         "status_chance": 0.222,
-        "fire_rate": 12.0,
+        "multishot": 6,
         "reload_speed": 0.5,
         "magazine_capacity": 11,
-        "multishot": 6.0,
         "is_beam": true
     },
     "Phenmor": {
-        "damage_dist": {
-            "puncture": 42.0,
-            "slash": 98.0
-        },
         "crit_chance": 0.2,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "puncture": 42,
+            "slash": 98
+        },
+        "fire_rate": 3,
         "status_chance": 0.2,
-        "fire_rate": 3.0,
+        "multishot": 1,
         "reload_speed": 2.8,
         "magazine_capacity": 30,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Prisma Gorgon": {
+        "crit_chance": 0.3,
+        "crit_damage": 2.3,
         "damage_dist": {
             "impact": 17.25,
             "puncture": 3.45,
             "slash": 2.3
         },
-        "crit_chance": 0.3,
-        "crit_damage": 2.3,
-        "status_chance": 0.15,
         "fire_rate": 14.17,
-        "reload_speed": 3.0,
+        "status_chance": 0.15,
+        "multishot": 1,
+        "reload_speed": 3,
         "magazine_capacity": 120,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Prisma Grakata": {
-        "damage_dist": {
-            "impact": 6.0,
-            "puncture": 5.0,
-            "slash": 4.0
-        },
         "crit_chance": 0.25,
         "crit_damage": 2.5,
-        "status_chance": 0.21,
+        "damage_dist": {
+            "impact": 6,
+            "puncture": 5,
+            "slash": 4
+        },
         "fire_rate": 21.67,
-        "reload_speed": 2.0,
+        "status_chance": 0.21,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 120,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Prisma Grinlok": {
+        "crit_chance": 0.21,
+        "crit_damage": 2.9,
         "damage_dist": {
             "impact": 74.8,
             "puncture": 18.7,
             "slash": 93.5
         },
-        "crit_chance": 0.21,
-        "crit_damage": 2.9,
-        "status_chance": 0.37,
         "fire_rate": 1.67,
+        "status_chance": 0.37,
+        "multishot": 1,
         "reload_speed": 1.7,
         "magazine_capacity": 21,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Prisma Lenz": {
-        "damage_dist": {
-            "impact": 56.0
-        },
-        "forced_procs": {
-            "impact": 1.0
-        },
-        "explosion_damage_dist": {
-            "cold": 10.0
-        },
-        "explosion_forced_procs": {
-            "cold": 1.0
-        },
         "crit_chance": 0.5,
         "crit_damage": 2.8,
+        "damage_dist": {
+            "impact": 56
+        },
+        "fire_rate": 1,
         "status_chance": 0.16,
-        "fire_rate": 1.0,
-        "charge_time": 1.2,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "blast": 740
+        },
         "reload_speed": 0.6,
         "magazine_capacity": 1,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Prisma Tetra": {
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 7.6,
             "puncture": 30.4
         },
-        "crit_chance": 0.1,
-        "crit_damage": 2.0,
-        "status_chance": 0.24,
         "fire_rate": 7.08,
-        "reload_speed": 2.0,
+        "status_chance": 0.24,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 60,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Proboscis Cernos": {
+        "crit_chance": 0.07,
+        "crit_damage": 1.9,
         "damage_dist": {
             "impact": 103.2,
             "puncture": 30.7,
             "slash": 145.1
         },
-        "explosion_damage_dist": {
-            "slash": 50.625,
-            "viral": 39.375
-        },
-        "crit_chance": 0.07,
-        "crit_damage": 1.9,
+        "fire_rate": 1,
         "status_chance": 0.43,
-        "fire_rate": 1.0,
-        "charge_time": 0.7,
+        "multishot": 1,
         "reload_speed": 0.6,
         "magazine_capacity": 1,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Quanta": {
+        "crit_chance": 0.16,
+        "crit_damage": 2.2,
         "damage_dist": {
-            "blast": 600.0
+            "electricity": 10
         },
-        "explosion_damage_dist": {
-            "blast": 150.0
-        },
-        "crit_chance": 0.05,
-        "crit_damage": 1.5,
-        "status_chance": 0.26,
-        "fire_rate": 4.0,
-        "reload_speed": 2.0,
+        "fire_rate": 12,
+        "status_chance": 0.24,
+        "multishot": 2,
+        "reload_speed": 2,
         "magazine_capacity": 60,
-        "multishot": 1.0,
         "is_beam": true
     },
     "Quanta Vandal": {
+        "crit_chance": 0.22,
+        "crit_damage": 2.4,
         "damage_dist": {
-            "blast": 600.0
+            "electricity": 13
         },
-        "explosion_damage_dist": {
-            "blast": 150.0
-        },
-        "crit_chance": 0.05,
-        "crit_damage": 1.5,
-        "status_chance": 0.26,
-        "fire_rate": 4.0,
+        "fire_rate": 12,
+        "status_chance": 0.45,
+        "multishot": 2,
         "reload_speed": 1.8,
         "magazine_capacity": 80,
-        "multishot": 1.0,
         "is_beam": true
     },
     "Quartakk": {
-        "damage_dist": {
-            "impact": 18.13,
-            "puncture": 14.21,
-            "slash": 16.66
-        },
-        "crit_chance": 0.19,
-        "crit_damage": 2.3,
-        "status_chance": 0.27,
-        "fire_rate": 1.58,
         "reload_speed": 1.9,
         "magazine_capacity": 84,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Quellor": {
-        "damage_dist": {
-            "cold": 16.0,
-            "impact": 8.0,
-            "puncture": 22.0,
-            "slash": 12.0
-        },
         "crit_chance": 0.12,
         "crit_damage": 1.6,
+        "damage_dist": {
+            "cold": 16,
+            "impact": 8,
+            "puncture": 22,
+            "slash": 12
+        },
+        "fire_rate": 6,
         "status_chance": 0.38,
-        "fire_rate": 6.0,
-        "reload_speed": 4.0,
+        "multishot": 1,
+        "reload_speed": 4,
         "magazine_capacity": 300,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Rakta Cernos": {
-        "damage_dist": {
-            "impact": 211.5,
-            "puncture": 11.75,
-            "slash": 11.75
-        },
         "crit_chance": 0.35,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 423,
+            "puncture": 23.5,
+            "slash": 23.5
+        },
+        "fire_rate": 1,
         "status_chance": 0.15,
-        "fire_rate": 1.0,
+        "multishot": 1,
         "reload_speed": 0.6,
         "magazine_capacity": 1,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Rauta": {
-        "damage_dist": {
-            "impact": 26.0,
-            "puncture": 26.0,
-            "slash": 78.0
-        },
         "crit_chance": 0.06,
-        "crit_damage": 2.0,
-        "status_chance": 0.12,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 26,
+            "puncture": 26,
+            "slash": 78
+        },
         "fire_rate": 0.8,
+        "status_chance": 0.12,
+        "multishot": 8,
         "reload_speed": 1.2,
         "magazine_capacity": 4,
-        "multishot": 8.0,
         "is_beam": false
     },
     "Reconifex": {
-        "damage_dist": {
-            "impact": 16.0,
-            "puncture": 24.0
-        },
         "crit_chance": 0.28,
         "crit_damage": 2.8,
+        "damage_dist": {
+            "impact": 16,
+            "puncture": 24
+        },
+        "fire_rate": 8,
         "status_chance": 0.16,
-        "fire_rate": 8.0,
-        "reload_speed": 5.0,
+        "multishot": 1,
+        "reload_speed": 5,
         "magazine_capacity": 200,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Rubico": {
-        "damage_dist": {
-            "impact": 144.0,
-            "puncture": 27.0,
-            "slash": 9.0
-        },
-        "crit_chance": 0.3,
-        "crit_damage": 3.0,
-        "status_chance": 0.12,
-        "fire_rate": 2.67,
         "reload_speed": 2.4,
         "magazine_capacity": 5,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Rubico Prime": {
-        "damage_dist": {
-            "impact": 149.6,
-            "puncture": 28.1,
-            "slash": 9.3
-        },
-        "crit_chance": 0.38,
-        "crit_damage": 3.0,
-        "status_chance": 0.16,
-        "fire_rate": 3.67,
-        "reload_speed": 2.0,
+        "reload_speed": 2,
         "magazine_capacity": 5,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Sancti Tigris": {
-        "damage_dist": {
-            "impact": 21.0,
-            "puncture": 21.0,
-            "slash": 168.0
-        },
         "crit_chance": 0.15,
         "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 21,
+            "puncture": 21,
+            "slash": 168
+        },
+        "fire_rate": 2,
         "status_chance": 0.14,
-        "fire_rate": 2.0,
+        "multishot": 6,
         "reload_speed": 1.5,
         "magazine_capacity": 2,
-        "multishot": 6.0,
         "is_beam": false
     },
     "Scourge": {
+        "crit_chance": 0.02,
+        "crit_damage": 1.5,
         "damage_dist": {
-            "impact": 105.0,
-            "puncture": 22.5,
-            "slash": 22.5
+            "corrosive": 70
         },
-        "explosion_damage_dist": {
-            "corrosive": 55.0
-        },
-        "explosion_forced_procs": {
-            "impact": 1.0
-        },
-        "crit_chance": 0.04,
-        "crit_damage": 2.0,
+        "fire_rate": 2.67,
         "status_chance": 0.3,
-        "fire_rate": 1.0,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "corrosive": 55
+        },
         "reload_speed": 2.5,
         "magazine_capacity": 40,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Scourge Prime": {
-        "damage_dist": {
-            "impact": 140.0,
-            "puncture": 30.0,
-            "slash": 30.0
-        },
-        "explosion_damage_dist": {
-            "corrosive": 55.0
-        },
-        "explosion_forced_procs": {
-            "impact": 1.0
-        },
         "crit_chance": 0.1,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "corrosive": 80
+        },
+        "fire_rate": 2.67,
         "status_chance": 0.3,
-        "fire_rate": 1.0,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "corrosive": 60
+        },
         "reload_speed": 2.2,
         "magazine_capacity": 40,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Secura Penta": {
-        "damage_dist": {
-            "impact": 75.0
-        },
-        "explosion_damage_dist": {
-            "blast": 300.0
-        },
         "crit_chance": 0.26,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 75
+        },
+        "fire_rate": 2,
         "status_chance": 0.26,
-        "fire_rate": 2.0,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "blast": 300
+        },
         "reload_speed": 2.5,
         "magazine_capacity": 7,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Shedu": {
-        "damage_dist": {
-            "heat": 71.0
-        },
-        "explosion_damage_dist": {
-            "electricity": 87.0
-        },
         "crit_chance": 0.25,
         "crit_damage": 2.1,
-        "status_chance": 0.23,
+        "damage_dist": {
+            "heat": 71
+        },
         "fire_rate": 2.5,
+        "status_chance": 0.23,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "electricity": 87
+        },
         "reload_speed": 1.25,
         "magazine_capacity": 7,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Simulor": {
-        "damage_dist": {
-            "magnetic": 100.0
-        },
-        "explosion_damage_dist": {
-            "magnetic": 200.0
-        },
-        "explosion_forced_procs": {
-            "electricity": 1.0
-        },
-        "crit_chance": 0.12,
-        "crit_damage": 2.0,
-        "status_chance": 0.3,
-        "fire_rate": 3.0,
-        "reload_speed": 3.0,
+        "reload_speed": 3,
         "magazine_capacity": 8,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Snipetron": {
-        "damage_dist": {
-            "impact": 18.0,
-            "puncture": 144.0,
-            "slash": 18.0
-        },
-        "crit_chance": 0.3,
-        "crit_damage": 1.5,
-        "status_chance": 0.12,
-        "fire_rate": 2.0,
         "reload_speed": 3.5,
         "magazine_capacity": 4,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Snipetron Vandal": {
-        "damage_dist": {
-            "impact": 10.0,
-            "puncture": 180.0,
-            "slash": 10.0
-        },
-        "crit_chance": 0.28,
-        "crit_damage": 2.0,
-        "status_chance": 0.16,
-        "fire_rate": 2.0,
-        "reload_speed": 2.0,
+        "reload_speed": 2,
         "magazine_capacity": 6,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Sobek": {
+        "crit_chance": 0.11,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 52.5,
             "puncture": 8.75,
             "slash": 8.75
         },
-        "crit_chance": 0.11,
-        "crit_damage": 2.0,
-        "status_chance": 0.162,
         "fire_rate": 2.5,
+        "status_chance": 0.162,
+        "multishot": 5,
         "reload_speed": 2.7,
         "magazine_capacity": 20,
-        "multishot": 5.0,
         "is_beam": false
     },
     "Soma": {
+        "crit_chance": 0.3,
+        "crit_damage": 3,
         "damage_dist": {
             "impact": 1.2,
             "puncture": 4.8,
-            "slash": 6.0
+            "slash": 6
         },
-        "crit_chance": 0.3,
-        "crit_damage": 3.0,
+        "fire_rate": 15,
         "status_chance": 0.07,
-        "fire_rate": 15.0,
-        "reload_speed": 3.0,
+        "multishot": 1,
+        "reload_speed": 3,
         "magazine_capacity": 100,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Soma Prime": {
+        "crit_chance": 0.3,
+        "crit_damage": 3,
         "damage_dist": {
             "impact": 1.2,
             "puncture": 4.8,
-            "slash": 6.0
+            "slash": 6
         },
-        "crit_chance": 0.3,
-        "crit_damage": 3.0,
+        "fire_rate": 15,
         "status_chance": 0.1,
-        "fire_rate": 15.0,
-        "reload_speed": 3.0,
+        "multishot": 1,
+        "reload_speed": 3,
         "magazine_capacity": 200,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Sporothrix": {
-        "damage_dist": {
-            "impact": 100.17,
-            "puncture": 115.01,
-            "slash": 155.82
-        },
-        "explosion_damage_dist": {
-            "slash": 22.0,
-            "viral": 19.0
-        },
-        "crit_chance": 0.01,
-        "crit_damage": 3.0,
-        "status_chance": 0.53,
-        "fire_rate": 1.83,
         "reload_speed": 2.7,
         "magazine_capacity": 9,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Stahlta": {
+        "crit_chance": 0.24,
+        "crit_damage": 1.8,
         "damage_dist": {
             "impact": 7.28,
             "puncture": 16.64,
             "slash": 28.08
         },
-        "crit_chance": 0.24,
-        "crit_damage": 1.8,
+        "fire_rate": 6,
         "status_chance": 0.22,
-        "fire_rate": 6.0,
+        "multishot": 1,
         "reload_speed": 1.4,
         "magazine_capacity": 40,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Steflos": {
-        "damage_dist": {
-            "impact": 130.0,
-            "heat": 190.0
-        },
         "crit_chance": 0.14,
         "crit_damage": 2.2,
+        "damage_dist": {
+            "impact": 130,
+            "heat": 190
+        },
+        "fire_rate": 3,
         "status_chance": 0.22,
-        "fire_rate": 3.0,
+        "multishot": 1,
         "reload_speed": 2.4,
         "magazine_capacity": 12,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Stradavar": {
+        "crit_chance": 0.24,
+        "crit_damage": 2,
         "damage_dist": {
-            "impact": 7.5,
-            "puncture": 30.0,
-            "slash": 12.5
+            "impact": 9.8,
+            "puncture": 9.8,
+            "slash": 8.4
         },
-        "crit_chance": 0.28,
-        "crit_damage": 2.0,
-        "status_chance": 0.16,
-        "fire_rate": 5.0,
-        "reload_speed": 2.0,
+        "fire_rate": 10,
+        "status_chance": 0.12,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 65,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Stradavar Prime": {
+        "crit_chance": 0.24,
+        "crit_damage": 2.6,
         "damage_dist": {
-            "impact": 8.0,
-            "puncture": 24.0,
-            "slash": 48.0
+            "impact": 10.5,
+            "puncture": 10.5,
+            "slash": 9
         },
-        "crit_chance": 0.3,
-        "crit_damage": 2.8,
-        "status_chance": 0.22,
-        "fire_rate": 3.33,
-        "reload_speed": 2.0,
+        "fire_rate": 10,
+        "status_chance": 0.12,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 90,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Strun": {
+        "crit_chance": 0.075,
+        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 13.75,
             "puncture": 3.75,
             "slash": 7.5
         },
-        "crit_chance": 0.075,
-        "crit_damage": 1.5,
-        "status_chance": 0.05,
         "fire_rate": 2.5,
+        "status_chance": 0.05,
+        "multishot": 12,
         "reload_speed": 3.75,
         "magazine_capacity": 6,
-        "multishot": 12.0,
         "is_beam": false
     },
     "Strun Prime": {
+        "crit_chance": 0.24,
+        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 24.3,
             "puncture": 8.1,
             "slash": 21.6
         },
-        "crit_chance": 0.24,
-        "crit_damage": 2.2,
-        "status_chance": 0.0667,
         "fire_rate": 3.33,
+        "status_chance": 0.0667,
+        "multishot": 12,
         "reload_speed": 4.6,
         "magazine_capacity": 10,
-        "multishot": 12.0,
         "is_beam": false
     },
     "Strun Wraith": {
-        "damage_dist": {
-            "impact": 26.0,
-            "puncture": 6.0,
-            "slash": 8.0
-        },
         "crit_chance": 0.18,
         "crit_damage": 2.2,
-        "status_chance": 0.12,
+        "damage_dist": {
+            "impact": 26,
+            "puncture": 6,
+            "slash": 8
+        },
         "fire_rate": 2.5,
-        "reload_speed": 5.0,
+        "status_chance": 0.12,
+        "multishot": 10,
+        "reload_speed": 5,
         "magazine_capacity": 10,
-        "multishot": 10.0,
         "is_beam": false
     },
     "Supra": {
-        "damage_dist": {
-            "impact": 4.0,
-            "puncture": 30.0,
-            "slash": 6.0
-        },
         "crit_chance": 0.12,
         "crit_damage": 1.8,
-        "status_chance": 0.3,
+        "damage_dist": {
+            "impact": 4,
+            "puncture": 30,
+            "slash": 6
+        },
         "fire_rate": 12.5,
-        "reload_speed": 3.0,
+        "status_chance": 0.3,
+        "multishot": 1,
+        "reload_speed": 3,
         "magazine_capacity": 180,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Supra Vandal": {
-        "damage_dist": {
-            "impact": 4.0,
-            "puncture": 30.0,
-            "slash": 6.0
-        },
         "crit_chance": 0.16,
-        "crit_damage": 2.0,
-        "status_chance": 0.3,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 4,
+            "puncture": 30,
+            "slash": 6
+        },
         "fire_rate": 12.5,
-        "reload_speed": 3.0,
+        "status_chance": 0.3,
+        "multishot": 1,
+        "reload_speed": 3,
         "magazine_capacity": 300,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Sybaris": {
+        "crit_chance": 0.25,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 26.4,
             "puncture": 26.4,
             "slash": 27.2
         },
-        "crit_chance": 0.25,
-        "crit_damage": 2.0,
-        "status_chance": 0.1,
         "fire_rate": 3.33,
-        "reload_speed": 2.0,
+        "status_chance": 0.1,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 10,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Sybaris Prime": {
+        "crit_chance": 0.3,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 29.04,
             "puncture": 29.04,
             "slash": 29.92
         },
-        "crit_chance": 0.3,
-        "crit_damage": 2.0,
-        "status_chance": 0.25,
         "fire_rate": 3.33,
-        "reload_speed": 2.0,
+        "status_chance": 0.25,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 20,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Synapse": {
-        "damage_dist": {
-            "corrosive": 20.0
-        },
         "crit_chance": 0.39,
         "crit_damage": 2.7,
+        "damage_dist": {
+            "corrosive": 20
+        },
+        "fire_rate": 12,
         "status_chance": 0.13,
-        "fire_rate": 12.0,
+        "multishot": 1,
         "reload_speed": 1.5,
         "magazine_capacity": 70,
-        "multishot": 1.0,
         "is_beam": true
     },
     "Synoid Simulor": {
-        "damage_dist": {
-            "magnetic": 50.0
-        },
-        "crit_chance": 0.0,
-        "crit_damage": 0.0,
-        "status_chance": 0.0,
-        "fire_rate": 4.0,
-        "reload_speed": 2.0,
+        "reload_speed": 2,
         "magazine_capacity": 16,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Telos Boltor": {
-        "damage_dist": {
-            "impact": 3.0,
-            "puncture": 27.0
-        },
         "crit_chance": 0.3,
         "crit_damage": 2.4,
-        "status_chance": 0.16,
+        "damage_dist": {
+            "impact": 3,
+            "puncture": 27
+        },
         "fire_rate": 9.33,
+        "status_chance": 0.16,
+        "multishot": 1,
         "reload_speed": 2.4,
         "magazine_capacity": 90,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Tenet Arca Plasmor": {
-        "damage_dist": {
-            "radiation": 760.0
-        },
-        "forced_procs": {
-            "impact": 1.0
-        },
         "crit_chance": 0.22,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "radiation": 760
+        },
+        "fire_rate": 1,
         "status_chance": 0.34,
-        "fire_rate": 1.0,
-        "reload_speed": 3.0,
+        "multishot": 1,
+        "reload_speed": 3,
         "magazine_capacity": 10,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Tenet Envoy": {
-        "damage_dist": {
-            "impact": 100.0
-        },
-        "explosion_damage_dist": {
-            "cold": 640.0
-        },
         "crit_chance": 0.28,
         "crit_damage": 2.6,
-        "status_chance": 0.24,
+        "damage_dist": {
+            "impact": 100
+        },
         "fire_rate": 0.83,
-        "reload_speed": 4.0,
+        "status_chance": 0.24,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "cold": 640
+        },
+        "reload_speed": 4,
         "magazine_capacity": 8,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Tenet Ferrox": {
+        "crit_chance": 0.34,
+        "crit_damage": 3,
         "damage_dist": {
-            "impact": 35.0,
-            "puncture": 5.0,
-            "slash": 10.0
+            "impact": 20,
+            "puncture": 140,
+            "slash": 40
         },
+        "fire_rate": 2.67,
+        "status_chance": 0.26,
+        "multishot": 1,
         "explosion_damage_dist": {
-            "electricity": 150.0
+            "impact": 6,
+            "puncture": 42,
+            "slash": 12
         },
-        "crit_chance": 0.04,
-        "crit_damage": 2.0,
-        "status_chance": 0.4,
-        "fire_rate": 1.0,
         "reload_speed": 1.8,
         "magazine_capacity": 20,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Tenet Flux Rifle": {
+        "crit_chance": 0.2,
+        "crit_damage": 1.8,
         "damage_dist": {
             "puncture": 4.84,
             "slash": 17.16
         },
-        "crit_chance": 0.2,
-        "crit_damage": 1.8,
+        "fire_rate": 15,
         "status_chance": 0.26,
-        "fire_rate": 15.0,
+        "multishot": 1,
         "reload_speed": 1.8,
         "magazine_capacity": 120,
-        "multishot": 1.0,
-        "is_beam": true
+        "is_beam": false
     },
     "Tenet Glaxion": {
-        "damage_dist": {
-            "cold": 34.0
-        },
         "crit_chance": 0.2,
         "crit_damage": 2.2,
+        "damage_dist": {
+            "cold": 34
+        },
+        "fire_rate": 12,
         "status_chance": 0.4,
-        "fire_rate": 12.0,
-        "reload_speed": 2.0,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 90,
-        "multishot": 1.0,
         "is_beam": true
     },
     "Tenet Tetra": {
-        "damage_dist": {
-            "impact": 13.2,
-            "puncture": 33.6,
-            "slash": 13.2
-        },
         "crit_chance": 0.28,
         "crit_damage": 2.2,
+        "damage_dist": {
+            "impact": 200
+        },
+        "fire_rate": 1.33,
         "status_chance": 0.3,
-        "fire_rate": 5.0,
-        "reload_speed": 2.2,
+        "multishot": 1,
+        "reload_speed": 1.8,
         "magazine_capacity": 80,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Tenora": {
+        "crit_chance": 0.28,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 7.2,
             "puncture": 9.6,
             "slash": 7.2
         },
-        "crit_chance": 0.28,
-        "crit_damage": 2.0,
-        "status_chance": 0.16,
         "fire_rate": 11.67,
+        "status_chance": 0.16,
+        "multishot": 1,
         "reload_speed": 2.5,
         "magazine_capacity": 150,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Tenora Prime": {
+        "crit_chance": 0.3,
+        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 8.4,
             "puncture": 11.2,
             "slash": 8.4
         },
-        "crit_chance": 0.3,
-        "crit_damage": 2.2,
-        "status_chance": 0.24,
         "fire_rate": 12.67,
+        "status_chance": 0.24,
+        "multishot": 1,
         "reload_speed": 2.5,
         "magazine_capacity": 200,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Tetra": {
+        "crit_chance": 0.04,
+        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 6.4,
             "puncture": 25.6
         },
-        "crit_chance": 0.04,
-        "crit_damage": 1.5,
-        "status_chance": 0.2,
         "fire_rate": 6.67,
-        "reload_speed": 2.0,
+        "status_chance": 0.2,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 60,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Tiberon": {
-        "damage_dist": {
-            "impact": 11.0,
-            "puncture": 22.0,
-            "slash": 11.0
-        },
         "crit_chance": 0.26,
         "crit_damage": 2.4,
-        "status_chance": 0.16,
+        "damage_dist": {
+            "impact": 11,
+            "puncture": 22,
+            "slash": 11
+        },
         "fire_rate": 6.67,
+        "status_chance": 0.16,
+        "multishot": 1,
         "reload_speed": 2.26,
         "magazine_capacity": 30,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Tiberon Prime": {
+        "crit_chance": 0.16,
+        "crit_damage": 2.8,
         "damage_dist": {
             "impact": 14.4,
             "puncture": 19.2,
             "slash": 14.4
         },
-        "crit_chance": 0.42,
-        "crit_damage": 3.4,
-        "status_chance": 0.18,
-        "fire_rate": 5.0,
-        "reload_speed": 2.0,
+        "fire_rate": 8.33,
+        "status_chance": 0.32,
+        "multishot": 1,
+        "reload_speed": 2,
         "magazine_capacity": 42,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Tigris": {
-        "damage_dist": {
-            "impact": 21.0,
-            "puncture": 21.0,
-            "slash": 168.0
-        },
         "crit_chance": 0.1,
-        "crit_damage": 2.0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 21,
+            "puncture": 21,
+            "slash": 168
+        },
+        "fire_rate": 2,
         "status_chance": 0.168,
-        "fire_rate": 2.0,
+        "multishot": 5,
         "reload_speed": 1.8,
         "magazine_capacity": 2,
-        "multishot": 5.0,
         "is_beam": false
     },
     "Tigris Prime": {
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 19.5,
             "puncture": 19.5,
-            "slash": 156.0
+            "slash": 156
         },
-        "crit_chance": 0.1,
-        "crit_damage": 2.0,
+        "fire_rate": 2,
         "status_chance": 0.1125,
-        "fire_rate": 2.0,
+        "multishot": 8,
         "reload_speed": 1.8,
         "magazine_capacity": 2,
-        "multishot": 8.0,
         "is_beam": false
     },
     "Tonkor": {
-        "damage_dist": {
-            "puncture": 75.0
-        },
-        "explosion_damage_dist": {
-            "blast": 650.0
-        },
         "crit_chance": 0.25,
         "crit_damage": 2.5,
-        "status_chance": 0.1,
+        "damage_dist": {
+            "puncture": 75
+        },
         "fire_rate": 3.17,
+        "status_chance": 0.1,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "blast": 650
+        },
         "reload_speed": 1.7,
         "magazine_capacity": 1,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Torid": {
+        "crit_chance": 0.15,
+        "crit_damage": 2,
         "damage_dist": {
-            "toxin": 51.0
+            "toxin": 100
         },
-        "crit_chance": 0.29,
-        "crit_damage": 3.1,
-        "status_chance": 0.39,
-        "fire_rate": 8.0,
+        "fire_rate": 1.5,
+        "status_chance": 0.23,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "toxin": 40
+        },
         "reload_speed": 1.7,
         "magazine_capacity": 5,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Trumna": {
-        "damage_dist": {
-            "heat": 53.0,
-            "impact": 32.0
-        },
-        "explosion_damage_dist": {
-            "heat": 50.0
-        },
-        "crit_chance": 0.24,
+        "crit_chance": 0.38,
         "crit_damage": 2.4,
-        "status_chance": 0.34,
-        "fire_rate": 4.67,
-        "reload_speed": 5.0,
+        "damage_dist": {
+            "impact": 100
+        },
+        "fire_rate": 1.33,
+        "status_chance": 0.5,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "heat": 50
+        },
+        "reload_speed": 5,
         "magazine_capacity": 200,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Trumna Prime": {
-        "damage_dist": {
-            "heat": 53.0,
-            "impact": 32.0
-        },
-        "explosion_damage_dist": {
-            "heat": 50.0
-        },
-        "crit_chance": 0.24,
+        "crit_chance": 0.38,
         "crit_damage": 2.4,
-        "status_chance": 0.34,
-        "fire_rate": 4.67,
-        "reload_speed": 4.0,
+        "damage_dist": {
+            "impact": 100
+        },
+        "fire_rate": 1.33,
+        "status_chance": 0.5,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "heat": 50
+        },
+        "reload_speed": 4,
         "magazine_capacity": 250,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Vaykor Hek": {
+        "crit_chance": 0.25,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 11.25,
             "puncture": 48.75,
-            "slash": 15.0
+            "slash": 15
         },
-        "crit_chance": 0.25,
-        "crit_damage": 2.0,
+        "fire_rate": 3,
         "status_chance": 0.107,
-        "fire_rate": 3.0,
+        "multishot": 7,
         "reload_speed": 2.25,
         "magazine_capacity": 8,
-        "multishot": 7.0,
         "is_beam": false
     },
     "Vectis": {
-        "damage_dist": {
-            "impact": 90.0,
-            "puncture": 78.75,
-            "slash": 56.25
-        },
-        "crit_chance": 0.25,
-        "crit_damage": 2.0,
-        "status_chance": 0.3,
-        "fire_rate": 1.5,
-        "reload_speed": 1.0,
+        "reload_speed": 1,
         "magazine_capacity": 1,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Vectis Prime": {
-        "damage_dist": {
-            "impact": 140.0,
-            "puncture": 157.5,
-            "slash": 52.5
-        },
-        "crit_chance": 0.3,
-        "crit_damage": 2.0,
-        "status_chance": 0.3,
-        "fire_rate": 2.67,
         "reload_speed": 0.85,
         "magazine_capacity": 2,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Veldt": {
+        "crit_chance": 0.22,
+        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 23.4,
             "puncture": 23.4,
             "slash": 43.2
         },
-        "crit_chance": 0.22,
-        "crit_damage": 2.2,
-        "status_chance": 0.22,
         "fire_rate": 3.67,
+        "status_chance": 0.22,
+        "multishot": 1,
         "reload_speed": 1.8,
         "magazine_capacity": 26,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Vulkar": {
-        "damage_dist": {
-            "impact": 180.0,
-            "puncture": 33.8,
-            "slash": 11.2
-        },
-        "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.25,
-        "fire_rate": 1.5,
-        "reload_speed": 3.0,
+        "reload_speed": 3,
         "magazine_capacity": 6,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Vulkar Wraith": {
-        "damage_dist": {
-            "impact": 245.7,
-            "puncture": 27.3
-        },
-        "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.25,
-        "fire_rate": 2.0,
-        "reload_speed": 3.0,
+        "reload_speed": 3,
         "magazine_capacity": 8,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Zarr": {
-        "damage_dist": {
-            "impact": 24.0,
-            "puncture": 40.0,
-            "slash": 16.0
-        },
-        "explosion_damage_dist": {
-            "blast": 175.0
-        },
         "crit_chance": 0.17,
         "crit_damage": 2.5,
-        "status_chance": 0.087,
-        "fire_rate": 3.0,
+        "damage_dist": {
+            "impact": 25
+        },
+        "fire_rate": 1.67,
+        "status_chance": 0.29,
+        "multishot": 1,
+        "explosion_damage_dist": {
+            "blast": 175
+        },
         "reload_speed": 2.25,
         "magazine_capacity": 3,
-        "multishot": 10.0,
         "is_beam": false
     },
     "Zenith": {
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "damage_dist": {
-            "impact": 15.0,
-            "puncture": 120.0,
-            "slash": 15.0
+            "impact": 4.5,
+            "puncture": 6,
+            "slash": 19.5
         },
-        "crit_chance": 0.35,
-        "crit_damage": 2.5,
-        "status_chance": 0.08,
-        "fire_rate": 3.0,
+        "fire_rate": 10.83,
+        "status_chance": 0.34,
+        "multishot": 1,
         "reload_speed": 1.6,
         "magazine_capacity": 90,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Zhuge": {
-        "damage_dist": {
-            "impact": 5.0,
-            "puncture": 75.0,
-            "slash": 20.0
-        },
         "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.35,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 5,
+            "puncture": 75,
+            "slash": 20
+        },
         "fire_rate": 4.17,
+        "status_chance": 0.35,
+        "multishot": 1,
         "reload_speed": 2.5,
         "magazine_capacity": 20,
-        "multishot": 1.0,
         "is_beam": false
     },
     "Zhuge Prime": {
+        "crit_chance": 0.26,
+        "crit_damage": 2,
         "damage_dist": {
-            "impact": 10.0,
+            "impact": 10,
             "puncture": 22.5,
             "slash": 17.5
         },
+        "fire_rate": 5.5,
+        "status_chance": 0.3,
+        "multishot": 1,
         "explosion_damage_dist": {
             "impact": 11.2,
-            "puncture": 4.0,
+            "puncture": 4,
             "slash": 24.8
         },
-        "crit_chance": 0.26,
-        "crit_damage": 2.0,
-        "status_chance": 0.3,
-        "fire_rate": 5.5,
-        "reload_speed": 3.0,
+        "reload_speed": 3,
         "magazine_capacity": 30,
-        "multishot": 1.0,
         "is_beam": false
     }
 }

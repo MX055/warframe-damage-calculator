@@ -1,2413 +1,2413 @@
 {
     "Ack & Brunt": {
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 14.9,
             "puncture": 14.9,
             "slash": 119.2
         },
-        "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.1,
-        "attack_speed": 0.833
+        "attack_speed": 0.833,
+        "status_chance": 0.1
     },
     "Amanata": {
+        "crit_chance": 0.24,
+        "crit_damage": 2,
         "damage_dist": {
             "puncture": 37.8,
             "slash": 88.2
         },
-        "crit_chance": 0.24,
-        "crit_damage": 2.0,
-        "status_chance": 0.24,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.24
     },
     "Amphis": {
+        "crit_chance": 0.13,
+        "crit_damage": 1.7,
         "damage_dist": {
-            "impact": 91.0,
+            "impact": 91,
             "puncture": 19.5,
             "slash": 19.5
         },
-        "crit_chance": 0.13,
-        "crit_damage": 1.7,
-        "status_chance": 0.21,
-        "attack_speed": 1.25
+        "attack_speed": 1.25,
+        "status_chance": 0.21
     },
     "Anku": {
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 25.5,
-            "puncture": 136.0,
+            "puncture": 136,
             "slash": 8.5
         },
-        "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.1,
-        "attack_speed": 1.08
+        "attack_speed": 1.08,
+        "status_chance": 0.1
     },
     "Ankyros": {
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "damage_dist": {
-            "impact": 63.0,
+            "impact": 63,
             "puncture": 13.5,
             "slash": 13.5
         },
-        "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.1,
-        "attack_speed": 1.17
+        "attack_speed": 1.17,
+        "status_chance": 0.1
     },
     "Ankyros Prime": {
+        "crit_chance": 0.28,
+        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 89.6,
             "puncture": 19.2,
             "slash": 19.2
         },
-        "crit_chance": 0.28,
-        "crit_damage": 2.4,
-        "status_chance": 0.16,
-        "attack_speed": 1.25
+        "attack_speed": 1.25,
+        "status_chance": 0.16
     },
     "Arca Titron": {
-        "damage_dist": {
-            "impact": 234.0,
-            "slash": 126.0
-        },
         "crit_chance": 0.24,
-        "crit_damage": 2.0,
-        "status_chance": 0.38,
-        "attack_speed": 0.733
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 234,
+            "slash": 126
+        },
+        "attack_speed": 0.733,
+        "status_chance": 0.38
     },
     "Argo & Vel": {
-        "damage_dist": {
-            "impact": 60.0,
-            "slash": 240.0
-        },
         "crit_chance": 0.32,
         "crit_damage": 2.4,
-        "status_chance": 0.24,
-        "attack_speed": 0.8
+        "damage_dist": {
+            "impact": 60,
+            "slash": 240
+        },
+        "attack_speed": 0.8,
+        "status_chance": 0.24
     },
     "Arum Spinosa": {
+        "crit_chance": 0.09,
+        "crit_damage": 1.9,
         "damage_dist": {
             "impact": 35.64,
             "puncture": 59.4,
             "slash": 201.96
         },
-        "crit_chance": 0.09,
-        "crit_damage": 1.9,
-        "status_chance": 0.37,
-        "attack_speed": 1.08
+        "attack_speed": 1.08,
+        "status_chance": 0.37
     },
     "Atterax": {
+        "crit_chance": 0.25,
+        "crit_damage": 3,
         "damage_dist": {
             "impact": 6.45,
             "puncture": 6.45,
             "slash": 116.1
         },
-        "crit_chance": 0.25,
-        "crit_damage": 3.0,
-        "status_chance": 0.2,
-        "attack_speed": 0.917
+        "attack_speed": 0.917,
+        "status_chance": 0.2
     },
     "Azothane": {
-        "damage_dist": {
-            "impact": 51.0,
-            "puncture": 34.0,
-            "slash": 85.0
-        },
         "crit_chance": 0.34,
-        "crit_damage": 3.0,
-        "status_chance": 0.22,
-        "attack_speed": 1.17
+        "crit_damage": 3,
+        "damage_dist": {
+            "impact": 51,
+            "puncture": 34,
+            "slash": 85
+        },
+        "attack_speed": 1.17,
+        "status_chance": 0.22
     },
     "Bo": {
-        "damage_dist": {
-            "impact": 126.0,
-            "puncture": 14.0
-        },
         "crit_chance": 0.125,
-        "crit_damage": 2.0,
-        "status_chance": 0.2,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 126,
+            "puncture": 14
+        },
+        "attack_speed": 1,
+        "status_chance": 0.2
     },
     "Bo Prime": {
+        "crit_chance": 0.24,
+        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 158.4,
             "puncture": 17.6
         },
-        "crit_chance": 0.24,
-        "crit_damage": 2.6,
-        "status_chance": 0.32,
-        "attack_speed": 1.08
+        "attack_speed": 1.08,
+        "status_chance": 0.32
     },
     "Boltace": {
+        "crit_chance": 0.06,
+        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 17.6,
             "puncture": 140.8,
             "slash": 17.6
         },
-        "crit_chance": 0.06,
-        "crit_damage": 1.5,
-        "status_chance": 0.28,
-        "attack_speed": 0.917
+        "attack_speed": 0.917,
+        "status_chance": 0.28
     },
     "Broken Scepter": {
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 125.3,
             "puncture": 17.9,
             "slash": 35.8
         },
-        "crit_chance": 0.1,
-        "crit_damage": 2.0,
-        "status_chance": 0.3,
-        "attack_speed": 1.25
+        "attack_speed": 1.25,
+        "status_chance": 0.3
     },
     "Broken War": {
+        "crit_chance": 0.35,
+        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 18.7,
             "puncture": 18.7,
             "slash": 149.6
         },
-        "crit_chance": 0.35,
-        "crit_damage": 2.2,
-        "status_chance": 0.2,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.2
     },
     "Cadus": {
-        "damage_dist": {
-            "electricity": 60.0,
-            "impact": 70.0
-        },
         "crit_chance": 0.15,
-        "crit_damage": 2.0,
-        "status_chance": 0.25,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "electricity": 60,
+            "impact": 70
+        },
+        "attack_speed": 1,
+        "status_chance": 0.25
     },
     "Cassowar": {
+        "crit_chance": 0.06,
+        "crit_damage": 1.4,
         "damage_dist": {
             "impact": 41.36,
             "puncture": 63.92,
             "slash": 82.72
         },
-        "crit_chance": 0.06,
-        "crit_damage": 1.4,
-        "status_chance": 0.28,
-        "attack_speed": 1.17
+        "attack_speed": 1.17,
+        "status_chance": 0.28
     },
     "Caustacyst": {
-        "damage_dist": {
-            "corrosive": 103.0,
-            "impact": 17.0,
-            "puncture": 71.0,
-            "slash": 69.0
-        },
         "crit_chance": 0.09,
-        "crit_damage": 2.0,
-        "status_chance": 0.37,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "corrosive": 103,
+            "impact": 17,
+            "puncture": 71,
+            "slash": 69
+        },
+        "attack_speed": 1,
+        "status_chance": 0.37
     },
     "Ceramic Dagger": {
-        "damage_dist": {
-            "impact": 14.0,
-            "puncture": 126.0
-        },
         "crit_chance": 0.1,
         "crit_damage": 1.5,
-        "status_chance": 0.2,
-        "attack_speed": 1.0
+        "damage_dist": {
+            "impact": 14,
+            "puncture": 126
+        },
+        "attack_speed": 1,
+        "status_chance": 0.2
     },
     "Cerata": {
-        "damage_dist": {
-            "impact": 19.0,
-            "puncture": 36.0,
-            "slash": 52.0,
-            "toxin": 76.0
-        },
         "crit_chance": 0.15,
-        "crit_damage": 2.0,
-        "status_chance": 0.3,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 19,
+            "puncture": 36,
+            "slash": 52,
+            "toxin": 76
+        },
+        "attack_speed": 1,
+        "status_chance": 0.3
     },
     "Ceti Lacera": {
-        "damage_dist": {
-            "electricity": 100.0,
-            "impact": 12.0,
-            "puncture": 38.0,
-            "slash": 66.0
-        },
         "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.4,
-        "attack_speed": 1.08
+        "crit_damage": 2,
+        "damage_dist": {
+            "electricity": 100,
+            "impact": 12,
+            "puncture": 38,
+            "slash": 66
+        },
+        "attack_speed": 1.08,
+        "status_chance": 0.4
     },
     "Cobra & Crane": {
+        "crit_chance": 0.15,
+        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 207.2,
             "puncture": 88.8
         },
-        "crit_chance": 0.15,
-        "crit_damage": 1.5,
-        "status_chance": 0.36,
-        "attack_speed": 0.917
+        "attack_speed": 0.917,
+        "status_chance": 0.36
     },
     "Cobra & Crane Prime": {
-        "damage_dist": {
-            "impact": 210.0,
-            "puncture": 90.0
-        },
         "crit_chance": 0.18,
-        "crit_damage": 2.0,
-        "status_chance": 0.38,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 210,
+            "puncture": 90
+        },
+        "attack_speed": 1,
+        "status_chance": 0.38
     },
     "Corufell": {
-        "damage_dist": {
-            "impact": 96.0,
-            "puncture": 68.0,
-            "slash": 36.0
-        },
         "crit_chance": 0.26,
         "crit_damage": 2.4,
-        "status_chance": 0.14,
-        "attack_speed": 1.0
+        "damage_dist": {
+            "impact": 96,
+            "puncture": 68,
+            "slash": 36
+        },
+        "attack_speed": 1,
+        "status_chance": 0.14
     },
     "Cronus": {
+        "crit_chance": 0.06,
+        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 31.8,
             "puncture": 15.9,
             "slash": 58.3
         },
-        "crit_chance": 0.06,
-        "crit_damage": 1.5,
-        "status_chance": 0.18,
-        "attack_speed": 0.917
+        "attack_speed": 0.917,
+        "status_chance": 0.18
     },
     "Dakra Prime": {
-        "damage_dist": {
-            "impact": 17.0,
-            "puncture": 17.0,
-            "slash": 136.0
-        },
         "crit_chance": 0.36,
         "crit_damage": 2.4,
-        "status_chance": 0.18,
-        "attack_speed": 1.0
+        "damage_dist": {
+            "impact": 17,
+            "puncture": 17,
+            "slash": 136
+        },
+        "attack_speed": 1,
+        "status_chance": 0.18
     },
     "Dark Dagger": {
-        "damage_dist": {
-            "puncture": 58.0,
-            "radiation": 60.0,
-            "slash": 36.0
-        },
         "crit_chance": 0.08,
         "crit_damage": 1.5,
-        "status_chance": 0.22,
-        "attack_speed": 0.917
+        "damage_dist": {
+            "puncture": 58,
+            "radiation": 60,
+            "slash": 36
+        },
+        "attack_speed": 0.917,
+        "status_chance": 0.22
     },
     "Dark Split-Sword (Dual Swords)": {
-        "damage_dist": {
-            "puncture": 56.0,
-            "radiation": 32.0,
-            "slash": 28.0
-        },
         "crit_chance": 0.25,
         "crit_damage": 2.5,
-        "status_chance": 0.15,
-        "attack_speed": 1.17
+        "damage_dist": {
+            "puncture": 56,
+            "radiation": 32,
+            "slash": 28
+        },
+        "attack_speed": 1.17,
+        "status_chance": 0.15
     },
     "Dark Split-Sword (Heavy Blade)": {
-        "damage_dist": {
-            "puncture": 78.0,
-            "radiation": 100.0,
-            "slash": 52.0
-        },
         "crit_chance": 0.15,
-        "crit_damage": 2.0,
-        "status_chance": 0.25,
-        "attack_speed": 0.917
+        "crit_damage": 2,
+        "damage_dist": {
+            "puncture": 78,
+            "radiation": 100,
+            "slash": 52
+        },
+        "attack_speed": 0.917,
+        "status_chance": 0.25
     },
     "Dark Sword": {
-        "damage_dist": {
-            "puncture": 120.0,
-            "radiation": 80.0,
-            "slash": 60.0
-        },
         "crit_chance": 0.05,
         "crit_damage": 1.5,
-        "status_chance": 0.4,
-        "attack_speed": 0.833
+        "damage_dist": {
+            "puncture": 120,
+            "radiation": 80,
+            "slash": 60
+        },
+        "attack_speed": 0.833,
+        "status_chance": 0.4
     },
     "Desert Wind": {
-        "damage_dist": {
-            "impact": 250.0
-        },
         "crit_chance": 0.5,
-        "crit_damage": 2.0,
-        "status_chance": 0.15,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 250
+        },
+        "attack_speed": 1,
+        "status_chance": 0.15
     },
     "Desert Wind Prime": {
-        "damage_dist": {
-            "impact": 250.0
-        },
         "crit_chance": 0.5,
-        "crit_damage": 2.0,
-        "status_chance": 0.15,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 250
+        },
+        "attack_speed": 1,
+        "status_chance": 0.15
     },
     "Destreza": {
+        "crit_chance": 0.28,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 3.95,
             "puncture": 134.3,
             "slash": 19.75
         },
-        "crit_chance": 0.28,
-        "crit_damage": 2.0,
-        "status_chance": 0.14,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.14
     },
     "Destreza Prime": {
+        "crit_chance": 0.32,
+        "crit_damage": 3,
         "damage_dist": {
             "impact": 20.4,
-            "puncture": 119.0,
+            "puncture": 119,
             "slash": 30.6
         },
-        "crit_chance": 0.32,
-        "crit_damage": 3.0,
-        "status_chance": 0.2,
-        "attack_speed": 0.917
+        "attack_speed": 0.917,
+        "status_chance": 0.2
     },
     "Dex Dakra": {
+        "crit_chance": 0.16,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 14.2,
             "puncture": 14.2,
             "slash": 113.6
         },
-        "crit_chance": 0.16,
-        "crit_damage": 2.0,
-        "status_chance": 0.24,
-        "attack_speed": 0.883
+        "attack_speed": 0.883,
+        "status_chance": 0.24
     },
     "Dex Nikana": {
+        "crit_chance": 0.24,
+        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 16.8,
             "puncture": 25.2,
-            "slash": 126.0
+            "slash": 126
         },
-        "crit_chance": 0.24,
-        "crit_damage": 2.6,
-        "status_chance": 0.18,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.18
     },
     "Diwata": {
-        "damage_dist": {
-            "impact": 30.0,
-            "puncture": 150.0,
-            "slash": 20.0
-        },
         "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.1,
-        "attack_speed": 1.08
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 30,
+            "puncture": 150,
+            "slash": 20
+        },
+        "attack_speed": 1.08,
+        "status_chance": 0.1
     },
     "Diwata Prime": {
-        "damage_dist": {
-            "impact": 30.0,
-            "puncture": 150.0,
-            "slash": 20.0
-        },
         "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.1,
-        "attack_speed": 1.08
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 30,
+            "puncture": 150,
+            "slash": 20
+        },
+        "attack_speed": 1.08,
+        "status_chance": 0.1
     },
     "Dorrclave": {
-        "damage_dist": {
-            "slash": 222.0
-        },
         "crit_chance": 0.26,
         "crit_damage": 2.2,
-        "status_chance": 0.24,
-        "attack_speed": 0.833
+        "damage_dist": {
+            "slash": 222
+        },
+        "attack_speed": 0.833,
+        "status_chance": 0.24
     },
     "Dragon Nikana": {
+        "crit_chance": 0.22,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 9.4,
             "puncture": 18.8,
             "slash": 159.8
         },
-        "crit_chance": 0.22,
-        "crit_damage": 2.0,
-        "status_chance": 0.22,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.22
     },
     "Dual Cleavers": {
+        "crit_chance": 0.25,
+        "crit_damage": 3,
         "damage_dist": {
             "impact": 23.55,
             "puncture": 23.55,
             "slash": 109.9
         },
-        "crit_chance": 0.25,
-        "crit_damage": 3.0,
-        "status_chance": 0.1,
-        "attack_speed": 0.833
+        "attack_speed": 0.833,
+        "status_chance": 0.1
     },
     "Dual Ether": {
-        "damage_dist": {
-            "impact": 27.0,
-            "puncture": 27.0,
-            "slash": 126.0
-        },
         "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.28,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 27,
+            "puncture": 27,
+            "slash": 126
+        },
+        "attack_speed": 1,
+        "status_chance": 0.28
     },
     "Dual Heat Swords": {
+        "crit_chance": 0.05,
+        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 22.05,
             "puncture": 22.05,
             "slash": 102.9
         },
-        "crit_chance": 0.05,
-        "crit_damage": 1.5,
-        "status_chance": 0.2,
-        "attack_speed": 0.917
+        "attack_speed": 0.917,
+        "status_chance": 0.2
     },
     "Dual Ichor": {
-        "damage_dist": {
-            "impact": 19.0,
-            "puncture": 11.0,
-            "slash": 45.0,
-            "toxin": 47.0
-        },
         "crit_chance": 0.25,
-        "crit_damage": 3.0,
-        "status_chance": 0.15,
-        "attack_speed": 1.08
+        "crit_damage": 3,
+        "damage_dist": {
+            "impact": 19,
+            "puncture": 11,
+            "slash": 45,
+            "toxin": 47
+        },
+        "attack_speed": 1.08,
+        "status_chance": 0.15
     },
     "Dual Kamas": {
+        "crit_chance": 0.1,
+        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 4.8,
             "puncture": 9.6,
             "slash": 81.6
         },
-        "crit_chance": 0.1,
-        "crit_damage": 1.5,
-        "status_chance": 0.15,
-        "attack_speed": 1.17
+        "attack_speed": 1.17,
+        "status_chance": 0.15
     },
     "Dual Kamas Prime": {
-        "damage_dist": {
-            "impact": 8.0,
-            "puncture": 32.0,
-            "slash": 120.0
-        },
         "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.25,
-        "attack_speed": 1.17
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 8,
+            "puncture": 32,
+            "slash": 120
+        },
+        "attack_speed": 1.17,
+        "status_chance": 0.25
     },
     "Dual Keres": {
+        "crit_chance": 0.28,
+        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 13.8,
             "puncture": 34.5,
             "slash": 66.7
         },
-        "crit_chance": 0.28,
-        "crit_damage": 2.6,
-        "status_chance": 0.14,
-        "attack_speed": 1.25
+        "attack_speed": 1.25,
+        "status_chance": 0.14
     },
     "Dual Keres Prime": {
-        "damage_dist": {
-            "impact": 21.6,
-            "puncture": 54.0,
-            "slash": 104.4
-        },
         "crit_chance": 0.32,
         "crit_damage": 2.6,
-        "status_chance": 0.24,
-        "attack_speed": 1.25
+        "damage_dist": {
+            "impact": 21.6,
+            "puncture": 54,
+            "slash": 104.4
+        },
+        "attack_speed": 1.25,
+        "status_chance": 0.24
     },
     "Dual Raza": {
-        "damage_dist": {
-            "impact": 11.0,
-            "puncture": 33.0,
-            "slash": 66.0
-        },
         "crit_chance": 0.25,
-        "crit_damage": 3.0,
-        "status_chance": 0.1,
-        "attack_speed": 0.917
+        "crit_damage": 3,
+        "damage_dist": {
+            "impact": 11,
+            "puncture": 33,
+            "slash": 66
+        },
+        "attack_speed": 0.917,
+        "status_chance": 0.1
     },
     "Dual Skana": {
-        "damage_dist": {
-            "impact": 18.0,
-            "puncture": 18.0,
-            "slash": 84.0
-        },
         "crit_chance": 0.05,
         "crit_damage": 1.5,
-        "status_chance": 0.16,
-        "attack_speed": 0.833
+        "damage_dist": {
+            "impact": 18,
+            "puncture": 18,
+            "slash": 84
+        },
+        "attack_speed": 0.833,
+        "status_chance": 0.16
     },
     "Dual Zoren": {
+        "crit_chance": 0.25,
+        "crit_damage": 3,
         "damage_dist": {
             "impact": 3.5,
             "puncture": 3.5,
-            "slash": 63.0
+            "slash": 63
         },
-        "crit_chance": 0.25,
-        "crit_damage": 3.0,
-        "status_chance": 0.05,
-        "attack_speed": 1.17
+        "attack_speed": 1.17,
+        "status_chance": 0.05
     },
     "Edun": {
-        "damage_dist": {
-            "impact": 44.0,
-            "puncture": 66.0,
-            "slash": 110.0
-        },
         "crit_chance": 0.34,
         "crit_damage": 2.6,
-        "status_chance": 0.2,
-        "attack_speed": 1.0
+        "damage_dist": {
+            "impact": 44,
+            "puncture": 66,
+            "slash": 110
+        },
+        "attack_speed": 1,
+        "status_chance": 0.2
     },
     "Ekhein": {
-        "damage_dist": {
-            "impact": 340.0
-        },
         "crit_chance": 0.3,
         "crit_damage": 2.4,
-        "status_chance": 0.15,
-        "attack_speed": 0.767
+        "damage_dist": {
+            "impact": 340
+        },
+        "attack_speed": 0.767,
+        "status_chance": 0.15
     },
     "Endura": {
-        "damage_dist": {
-            "impact": 10.0,
-            "puncture": 140.0,
-            "slash": 50.0
-        },
         "crit_chance": 0.1,
-        "crit_damage": 2.0,
-        "status_chance": 0.36,
-        "attack_speed": 0.917
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 10,
+            "puncture": 140,
+            "slash": 50
+        },
+        "attack_speed": 0.917,
+        "status_chance": 0.36
     },
     "Ether Daggers": {
+        "crit_chance": 0.1,
+        "crit_damage": 1.8,
         "damage_dist": {
             "impact": 33.6,
             "puncture": 33.6,
             "slash": 156.8
         },
-        "crit_chance": 0.1,
-        "crit_damage": 1.8,
-        "status_chance": 0.3,
-        "attack_speed": 0.833
+        "attack_speed": 0.833,
+        "status_chance": 0.3
     },
     "Ether Reaper": {
-        "damage_dist": {
-            "impact": 27.0,
-            "puncture": 27.0,
-            "slash": 126.0
-        },
         "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.2,
-        "attack_speed": 1.08
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 27,
+            "puncture": 27,
+            "slash": 126
+        },
+        "attack_speed": 1.08,
+        "status_chance": 0.2
     },
     "Ether Sword": {
+        "crit_chance": 0.1,
+        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 28.8,
             "puncture": 28.8,
             "slash": 134.4
         },
-        "crit_chance": 0.1,
-        "crit_damage": 1.5,
-        "status_chance": 0.34,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.34
     },
     "Exalted Blade": {
+        "crit_chance": 0.15,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 37.5,
             "puncture": 37.5,
-            "slash": 175.0
+            "slash": 175
         },
-        "crit_chance": 0.15,
-        "crit_damage": 2.0,
-        "status_chance": 0.15,
-        "attack_speed": 0.833
+        "attack_speed": 0.833,
+        "status_chance": 0.15
     },
     "Exalted Prime Blade": {
+        "crit_chance": 0.15,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 37.5,
             "puncture": 37.5,
-            "slash": 175.0
+            "slash": 175
         },
-        "crit_chance": 0.15,
-        "crit_damage": 2.0,
-        "status_chance": 0.15,
-        "attack_speed": 0.833
+        "attack_speed": 0.833,
+        "status_chance": 0.15
     },
     "Exalted Umbra Blade": {
+        "crit_chance": 0.15,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 37.5,
             "puncture": 37.5,
-            "slash": 175.0
+            "slash": 175
         },
-        "crit_chance": 0.15,
-        "crit_damage": 2.0,
-        "status_chance": 0.15,
-        "attack_speed": 0.833
+        "attack_speed": 0.833,
+        "status_chance": 0.15
     },
     "Falcor": {
-        "damage_dist": {
-            "electricity": 84.0,
-            "impact": 36.0,
-            "puncture": 18.0,
-            "slash": 92.0
-        },
         "crit_chance": 0.12,
         "crit_damage": 1.6,
-        "status_chance": 0.34,
-        "attack_speed": 0.833
+        "damage_dist": {
+            "electricity": 84,
+            "impact": 36,
+            "puncture": 18,
+            "slash": 92
+        },
+        "attack_speed": 0.833,
+        "status_chance": 0.34
     },
     "Fang": {
+        "crit_chance": 0.08,
+        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 16.2,
             "puncture": 75.6,
             "slash": 16.2
         },
-        "crit_chance": 0.08,
-        "crit_damage": 1.5,
-        "status_chance": 0.16,
-        "attack_speed": 0.917
+        "attack_speed": 0.917,
+        "status_chance": 0.16
     },
     "Fang Prime": {
+        "crit_chance": 0.26,
+        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 26.7,
             "puncture": 124.6,
             "slash": 26.7
         },
-        "crit_chance": 0.26,
-        "crit_damage": 2.6,
-        "status_chance": 0.26,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.26
     },
     "Fragor": {
-        "damage_dist": {
-            "impact": 140.0,
-            "puncture": 30.0,
-            "slash": 30.0
-        },
         "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.1,
-        "attack_speed": 0.833
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 140,
+            "puncture": 30,
+            "slash": 30
+        },
+        "attack_speed": 0.833,
+        "status_chance": 0.1
     },
     "Fragor Prime": {
+        "crit_chance": 0.4,
+        "crit_damage": 2.5,
         "damage_dist": {
-            "impact": 189.0,
+            "impact": 189,
             "puncture": 40.5,
             "slash": 40.5
         },
-        "crit_chance": 0.4,
-        "crit_damage": 2.5,
-        "status_chance": 0.18,
-        "attack_speed": 0.8
+        "attack_speed": 0.8,
+        "status_chance": 0.18
     },
     "Furax": {
+        "crit_chance": 0.25,
+        "crit_damage": 2.3,
         "damage_dist": {
             "impact": 94.5,
             "puncture": 20.3,
             "slash": 20.2
         },
-        "crit_chance": 0.25,
-        "crit_damage": 2.3,
-        "status_chance": 0.11,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.11
     },
     "Furax Wraith": {
+        "crit_chance": 0.3,
+        "crit_damage": 2.7,
         "damage_dist": {
             "impact": 97.3,
             "puncture": 20.9,
             "slash": 20.8
         },
-        "crit_chance": 0.3,
-        "crit_damage": 2.7,
-        "status_chance": 0.15,
-        "attack_speed": 1.08
+        "attack_speed": 1.08,
+        "status_chance": 0.15
     },
     "Galatine": {
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 4.55,
             "puncture": 4.55,
             "slash": 172.9
         },
-        "crit_chance": 0.1,
-        "crit_damage": 2.0,
-        "status_chance": 0.2,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.2
     },
     "Galatine Prime": {
-        "damage_dist": {
-            "impact": 7.0,
-            "puncture": 7.0,
-            "slash": 266.0
-        },
         "crit_chance": 0.26,
-        "crit_damage": 2.0,
-        "status_chance": 0.26,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 7,
+            "puncture": 7,
+            "slash": 266
+        },
+        "attack_speed": 1,
+        "status_chance": 0.26
     },
     "Galvacord": {
-        "damage_dist": {
-            "electricity": 96.0,
-            "impact": 12.0,
-            "puncture": 38.0,
-            "slash": 64.0
-        },
         "crit_chance": 0.12,
         "crit_damage": 1.8,
-        "status_chance": 0.3,
-        "attack_speed": 0.75
+        "damage_dist": {
+            "electricity": 96,
+            "impact": 12,
+            "puncture": 38,
+            "slash": 64
+        },
+        "attack_speed": 0.75,
+        "status_chance": 0.3
     },
     "Garuda Prime Talons": {
-        "damage_dist": {
-            "impact": 14.0,
-            "puncture": 28.0,
-            "slash": 238.0
-        },
         "crit_chance": 0.35,
-        "crit_damage": 2.0,
-        "status_chance": 0.36,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 14,
+            "puncture": 28,
+            "slash": 238
+        },
+        "attack_speed": 1,
+        "status_chance": 0.36
     },
     "Garuda Talons": {
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 19.84,
             "puncture": 54.56,
             "slash": 173.6
         },
-        "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.36,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.36
     },
     "Gazal Machete": {
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 17.8,
             "puncture": 26.7,
             "slash": 133.5
         },
-        "crit_chance": 0.1,
-        "crit_damage": 2.0,
-        "status_chance": 0.3,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.3
     },
     "Ghoulsaw": {
+        "crit_chance": 0.15,
+        "crit_damage": 1.9,
         "damage_dist": {
             "impact": 37.43,
             "puncture": 45.31,
             "slash": 114.26
         },
-        "crit_chance": 0.15,
-        "crit_damage": 1.9,
-        "status_chance": 0.27,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.27
     },
     "Glaive": {
+        "crit_chance": 0.12,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 15.75,
             "puncture": 15.75,
             "slash": 73.5
         },
-        "crit_chance": 0.12,
-        "crit_damage": 2.0,
-        "status_chance": 0.12,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.12
     },
     "Glaive Prime": {
+        "crit_chance": 0.22,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 24.6,
             "puncture": 24.6,
             "slash": 114.8
         },
-        "crit_chance": 0.22,
-        "crit_damage": 2.0,
-        "status_chance": 0.3,
-        "attack_speed": 1.25
+        "attack_speed": 1.25,
+        "status_chance": 0.3
     },
     "Gram": {
-        "damage_dist": {
-            "impact": 24.0,
-            "puncture": 24.0,
-            "slash": 112.0
-        },
         "crit_chance": 0.15,
-        "crit_damage": 2.0,
-        "status_chance": 0.15,
-        "attack_speed": 0.95
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 24,
+            "puncture": 24,
+            "slash": 112
+        },
+        "attack_speed": 0.95,
+        "status_chance": 0.15
     },
     "Gram Prime": {
-        "damage_dist": {
-            "impact": 60.0,
-            "puncture": 15.0,
-            "slash": 225.0
-        },
         "crit_chance": 0.32,
         "crit_damage": 2.6,
-        "status_chance": 0.32,
-        "attack_speed": 0.8
+        "damage_dist": {
+            "impact": 60,
+            "puncture": 15,
+            "slash": 225
+        },
+        "attack_speed": 0.8,
+        "status_chance": 0.32
     },
     "Guandao": {
+        "crit_chance": 0.28,
+        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 50.5,
             "puncture": 10.1,
             "slash": 141.4
         },
-        "crit_chance": 0.28,
-        "crit_damage": 2.2,
-        "status_chance": 0.04,
-        "attack_speed": 0.833
+        "attack_speed": 0.833,
+        "status_chance": 0.04
     },
     "Guandao Prime": {
-        "damage_dist": {
-            "impact": 60.0,
-            "puncture": 12.0,
-            "slash": 168.0
-        },
         "crit_chance": 0.32,
         "crit_damage": 2.4,
-        "status_chance": 0.2,
-        "attack_speed": 1.0
+        "damage_dist": {
+            "impact": 60,
+            "puncture": 12,
+            "slash": 168
+        },
+        "attack_speed": 1,
+        "status_chance": 0.2
     },
     "Gunsen": {
+        "crit_chance": 0.16,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 12.8,
             "puncture": 19.2,
-            "slash": 128.0
+            "slash": 128
         },
-        "crit_chance": 0.16,
-        "crit_damage": 2.0,
-        "status_chance": 0.28,
-        "attack_speed": 1.17
+        "attack_speed": 1.17,
+        "status_chance": 0.28
     },
     "Gunsen Prime": {
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "damage_dist": {
-            "impact": 9.0,
+            "impact": 9,
             "puncture": 13.5,
             "slash": 202.5
         },
-        "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.34,
-        "attack_speed": 1.17
+        "attack_speed": 1.17,
+        "status_chance": 0.34
     },
     "Halikar": {
+        "crit_chance": 0.17,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 14.9,
             "puncture": 119.2,
             "slash": 14.9
         },
-        "crit_chance": 0.17,
-        "crit_damage": 2.0,
-        "status_chance": 0.29,
-        "attack_speed": 1.17
+        "attack_speed": 1.17,
+        "status_chance": 0.29
     },
     "Halikar Wraith": {
-        "damage_dist": {
-            "impact": 22.5,
-            "puncture": 180.0,
-            "slash": 22.5
-        },
         "crit_chance": 0.19,
         "crit_damage": 2.3,
-        "status_chance": 0.35,
-        "attack_speed": 1.17
+        "damage_dist": {
+            "impact": 22.5,
+            "puncture": 180,
+            "slash": 22.5
+        },
+        "attack_speed": 1.17,
+        "status_chance": 0.35
     },
     "Harmony": {
-        "damage_dist": {
-            "puncture": 168.0,
-            "slash": 72.0
-        },
         "crit_chance": 0.2,
         "crit_damage": 2.2,
-        "status_chance": 0.36,
-        "attack_speed": 1.083
+        "damage_dist": {
+            "puncture": 168,
+            "slash": 72
+        },
+        "attack_speed": 1.083,
+        "status_chance": 0.36
     },
     "Hate": {
+        "crit_chance": 0.3,
+        "crit_damage": 2.5,
         "damage_dist": {
             "impact": 34.5,
             "puncture": 34.5,
-            "slash": 161.0
+            "slash": 161
         },
-        "crit_chance": 0.3,
-        "crit_damage": 2.5,
-        "status_chance": 0.2,
-        "attack_speed": 0.917
+        "attack_speed": 0.917,
+        "status_chance": 0.2
     },
     "Heat Dagger": {
-        "damage_dist": {
-            "heat": 62.0,
-            "impact": 14.0,
-            "puncture": 76.0,
-            "slash": 56.0
-        },
         "crit_chance": 0.14,
         "crit_damage": 1.6,
-        "status_chance": 0.14,
-        "attack_speed": 0.75
+        "damage_dist": {
+            "heat": 62,
+            "impact": 14,
+            "puncture": 76,
+            "slash": 56
+        },
+        "attack_speed": 0.75,
+        "status_chance": 0.14
     },
     "Heat Sword": {
+        "crit_chance": 0.05,
+        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 14.7,
             "puncture": 14.7,
             "slash": 117.6
         },
-        "crit_chance": 0.05,
-        "crit_damage": 1.5,
-        "status_chance": 0.2,
-        "attack_speed": 0.917
+        "attack_speed": 0.917,
+        "status_chance": 0.2
     },
     "Heliocor": {
-        "damage_dist": {
-            "impact": 238.0,
-            "puncture": 28.0,
-            "slash": 14.0
-        },
         "crit_chance": 0.38,
-        "crit_damage": 2.0,
-        "status_chance": 0.12,
-        "attack_speed": 0.833
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 238,
+            "puncture": 28,
+            "slash": 14
+        },
+        "attack_speed": 0.833,
+        "status_chance": 0.12
     },
     "Hespar": {
+        "crit_chance": 0.24,
+        "crit_damage": 2.2,
         "damage_dist": {
-            "impact": 112.0,
+            "impact": 112,
             "puncture": 33.6,
             "slash": 134.4
         },
-        "crit_chance": 0.24,
-        "crit_damage": 2.2,
-        "status_chance": 0.28,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.28
     },
     "Hirudo": {
+        "crit_chance": 0.3,
+        "crit_damage": 3,
         "damage_dist": {
             "impact": 19.5,
-            "puncture": 104.0,
+            "puncture": 104,
             "slash": 6.5
         },
-        "crit_chance": 0.3,
-        "crit_damage": 3.0,
-        "status_chance": 0.11,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.11
     },
     "Innodem": {
-        "damage_dist": {
-            "impact": 36.0,
-            "puncture": 144.0,
-            "slash": 180.0
-        },
         "crit_chance": 0.22,
-        "crit_damage": 2.0,
-        "status_chance": 0.22,
-        "attack_speed": 0.75
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 36,
+            "puncture": 144,
+            "slash": 180
+        },
+        "attack_speed": 0.75,
+        "status_chance": 0.22
     },
     "Iron Staff": {
-        "damage_dist": {
-            "impact": 204.0,
-            "slash": 96.0
-        },
         "crit_chance": 0.25,
-        "crit_damage": 2.0,
-        "status_chance": 0.3,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 204,
+            "slash": 96
+        },
+        "attack_speed": 1,
+        "status_chance": 0.3
     },
     "Iron Staff Prime": {
-        "damage_dist": {
-            "impact": 204.0,
-            "slash": 96.0
-        },
         "crit_chance": 0.25,
-        "crit_damage": 2.0,
-        "status_chance": 0.3,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 204,
+            "slash": 96
+        },
+        "attack_speed": 1,
+        "status_chance": 0.3
     },
     "Jat Kittag": {
-        "damage_dist": {
-            "impact": 160.0,
-            "puncture": 30.0,
-            "slash": 10.0
-        },
         "crit_chance": 0.15,
-        "crit_damage": 2.0,
-        "status_chance": 0.25,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 160,
+            "puncture": 30,
+            "slash": 10
+        },
+        "attack_speed": 1,
+        "status_chance": 0.25
     },
     "Jat Kusar": {
-        "damage_dist": {
-            "heat": 81.0,
-            "impact": 79.0,
-            "puncture": 13.0,
-            "slash": 45.0
-        },
         "crit_chance": 0.35,
         "crit_damage": 2.5,
-        "status_chance": 0.19,
-        "attack_speed": 0.833
+        "damage_dist": {
+            "heat": 81,
+            "impact": 79,
+            "puncture": 13,
+            "slash": 45
+        },
+        "attack_speed": 0.833,
+        "status_chance": 0.19
     },
     "Jaw Sword": {
-        "damage_dist": {
-            "impact": 6.0,
-            "puncture": 24.0,
-            "slash": 90.0
-        },
         "crit_chance": 0.08,
         "crit_damage": 1.5,
-        "status_chance": 0.16,
-        "attack_speed": 0.917
+        "damage_dist": {
+            "impact": 6,
+            "puncture": 24,
+            "slash": 90
+        },
+        "attack_speed": 0.917,
+        "status_chance": 0.16
     },
     "Kama": {
+        "crit_chance": 0.12,
+        "crit_damage": 1.8,
         "damage_dist": {
             "impact": 13.5,
             "puncture": 13.5,
-            "slash": 63.0
+            "slash": 63
         },
-        "crit_chance": 0.12,
-        "crit_damage": 1.8,
-        "status_chance": 0.1,
-        "attack_speed": 1.17
+        "attack_speed": 1.17,
+        "status_chance": 0.1
     },
     "Karyst": {
-        "damage_dist": {
-            "impact": 30.0,
-            "puncture": 84.0,
-            "slash": 72.0,
-            "toxin": 87.0
-        },
         "crit_chance": 0.1,
-        "crit_damage": 2.0,
-        "status_chance": 0.26,
-        "attack_speed": 0.75
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 30,
+            "puncture": 84,
+            "slash": 72,
+            "toxin": 87
+        },
+        "attack_speed": 0.75,
+        "status_chance": 0.26
     },
     "Karyst Prime": {
-        "damage_dist": {
-            "impact": 50.0,
-            "puncture": 96.0,
-            "slash": 102.0,
-            "toxin": 96.0
-        },
         "crit_chance": 0.24,
         "crit_damage": 2.2,
-        "status_chance": 0.3,
-        "attack_speed": 0.667
+        "damage_dist": {
+            "impact": 50,
+            "puncture": 96,
+            "slash": 102,
+            "toxin": 96
+        },
+        "attack_speed": 0.667,
+        "status_chance": 0.3
     },
     "Keratinos": {
-        "damage_dist": {
-            "impact": 79.0,
-            "puncture": 45.0,
-            "slash": 87.0,
-            "viral": 33.0
-        },
         "crit_chance": 0.13,
         "crit_damage": 2.1,
-        "status_chance": 0.29,
-        "attack_speed": 0.917
+        "damage_dist": {
+            "impact": 79,
+            "puncture": 45,
+            "slash": 87,
+            "viral": 33
+        },
+        "attack_speed": 0.917,
+        "status_chance": 0.29
     },
     "Kesheg": {
+        "crit_chance": 0.19,
+        "crit_damage": 2.5,
         "damage_dist": {
             "impact": 96.4,
             "puncture": 24.1,
             "slash": 120.5
         },
-        "crit_chance": 0.19,
-        "crit_damage": 2.5,
-        "status_chance": 0.23,
-        "attack_speed": 0.833
+        "attack_speed": 0.833,
+        "status_chance": 0.23
     },
     "Kestrel": {
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 58.8,
             "puncture": 12.6,
             "slash": 12.6
         },
-        "crit_chance": 0.1,
-        "crit_damage": 2.0,
-        "status_chance": 0.1,
-        "attack_speed": 1.08
+        "attack_speed": 1.08,
+        "status_chance": 0.1
     },
     "Kogake": {
-        "damage_dist": {
-            "impact": 84.0,
-            "puncture": 18.0,
-            "slash": 18.0
-        },
         "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.1,
-        "attack_speed": 0.917
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 84,
+            "puncture": 18,
+            "slash": 18
+        },
+        "attack_speed": 0.917,
+        "status_chance": 0.1
     },
     "Kogake Prime": {
+        "crit_chance": 0.16,
+        "crit_damage": 1.8,
         "damage_dist": {
             "impact": 169.4,
             "puncture": 36.3,
             "slash": 36.3
         },
-        "crit_chance": 0.16,
-        "crit_damage": 1.8,
-        "status_chance": 0.38,
-        "attack_speed": 0.917
+        "attack_speed": 0.917,
+        "status_chance": 0.38
     },
     "Korrudo": {
+        "crit_chance": 0.31,
+        "crit_damage": 2.5,
         "damage_dist": {
             "impact": 110.01,
             "puncture": 5.79,
             "slash": 77.2
         },
-        "crit_chance": 0.31,
-        "crit_damage": 2.5,
-        "status_chance": 0.09,
-        "attack_speed": 0.833
+        "attack_speed": 0.833,
+        "status_chance": 0.09
     },
     "Korumm": {
-        "damage_dist": {
-            "impact": 52.0,
-            "puncture": 104.0,
-            "slash": 104.0
-        },
         "crit_chance": 0.24,
         "crit_damage": 2.2,
-        "status_chance": 0.3,
-        "attack_speed": 1.0
+        "damage_dist": {
+            "impact": 52,
+            "puncture": 104,
+            "slash": 104
+        },
+        "attack_speed": 1,
+        "status_chance": 0.3
     },
     "Kreska": {
-        "damage_dist": {
-            "heat": 100.0,
-            "impact": 30.0,
-            "puncture": 15.0,
-            "slash": 45.0
-        },
         "crit_chance": 0.14,
-        "crit_damage": 2.0,
-        "status_chance": 0.22,
-        "attack_speed": 0.917
+        "crit_damage": 2,
+        "damage_dist": {
+            "heat": 100,
+            "impact": 30,
+            "puncture": 15,
+            "slash": 45
+        },
+        "attack_speed": 0.917,
+        "status_chance": 0.22
     },
     "Krohkur": {
+        "crit_chance": 0.29,
+        "crit_damage": 2.3,
         "damage_dist": {
-            "impact": 26.0,
+            "impact": 26,
             "puncture": 39.1,
             "slash": 151.9
         },
-        "crit_chance": 0.29,
-        "crit_damage": 2.3,
-        "status_chance": 0.19,
-        "attack_speed": 0.833
+        "attack_speed": 0.833,
+        "status_chance": 0.19
     },
     "Kronen": {
-        "damage_dist": {
-            "impact": 13.0,
-            "puncture": 13.0,
-            "slash": 104.0
-        },
         "crit_chance": 0.1,
         "crit_damage": 1.5,
-        "status_chance": 0.2,
-        "attack_speed": 1.08
+        "damage_dist": {
+            "impact": 13,
+            "puncture": 13,
+            "slash": 104
+        },
+        "attack_speed": 1.08,
+        "status_chance": 0.2
     },
     "Kronen Prime": {
+        "crit_chance": 0.22,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 21.2,
             "puncture": 21.2,
             "slash": 169.6
         },
-        "crit_chance": 0.22,
-        "crit_damage": 2.0,
-        "status_chance": 0.34,
-        "attack_speed": 1.17
+        "attack_speed": 1.17,
+        "status_chance": 0.34
     },
     "Kuva Shildeg": {
+        "crit_chance": 0.31,
+        "crit_damage": 2.7,
         "damage_dist": {
             "impact": 75.8,
             "puncture": 100.5,
             "slash": 28.7
         },
-        "crit_chance": 0.31,
-        "crit_damage": 2.7,
-        "status_chance": 0.27,
-        "attack_speed": 0.917
+        "attack_speed": 0.917,
+        "status_chance": 0.27
     },
     "Lacera": {
-        "damage_dist": {
-            "electricity": 100.0,
-            "impact": 12.0,
-            "puncture": 38.0,
-            "slash": 66.0
-        },
         "crit_chance": 0.05,
-        "crit_damage": 2.0,
-        "status_chance": 0.45,
-        "attack_speed": 0.917
+        "crit_damage": 2,
+        "damage_dist": {
+            "electricity": 100,
+            "impact": 12,
+            "puncture": 38,
+            "slash": 66
+        },
+        "attack_speed": 0.917,
+        "status_chance": 0.45
     },
     "Lecta": {
-        "damage_dist": {
-            "electricity": 56.0,
-            "puncture": 20.0,
-            "slash": 25.0
-        },
         "crit_chance": 0.05,
         "crit_damage": 1.5,
-        "status_chance": 0.25,
-        "attack_speed": 1.0
+        "damage_dist": {
+            "electricity": 56,
+            "puncture": 20,
+            "slash": 25
+        },
+        "attack_speed": 1,
+        "status_chance": 0.25
     },
     "Lesion": {
+        "crit_chance": 0.15,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 47.4,
             "puncture": 11.85,
             "slash": 177.75
         },
-        "crit_chance": 0.15,
-        "crit_damage": 2.0,
-        "status_chance": 0.37,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.37
     },
     "MK1-Bo": {
-        "damage_dist": {
-            "impact": 81.0,
-            "puncture": 9.0
-        },
         "crit_chance": 0.1,
-        "crit_damage": 2.0,
-        "status_chance": 0.1,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 81,
+            "puncture": 9
+        },
+        "attack_speed": 1,
+        "status_chance": 0.1
     },
     "MK1-Furax": {
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "damage_dist": {
-            "impact": 63.0,
+            "impact": 63,
             "puncture": 13.5,
             "slash": 13.5
         },
-        "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.1,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.1
     },
     "Machete": {
-        "damage_dist": {
-            "impact": 18.0,
-            "puncture": 18.0,
-            "slash": 84.0
-        },
         "crit_chance": 0.1,
         "crit_damage": 1.5,
-        "status_chance": 0.15,
-        "attack_speed": 0.917
+        "damage_dist": {
+            "impact": 18,
+            "puncture": 18,
+            "slash": 84
+        },
+        "attack_speed": 0.917,
+        "status_chance": 0.15
     },
     "Machete Wraith": {
+        "crit_chance": 0.19,
+        "crit_damage": 2.1,
         "damage_dist": {
             "impact": 31.65,
             "puncture": 31.65,
             "slash": 147.7
         },
-        "crit_chance": 0.19,
-        "crit_damage": 2.1,
-        "status_chance": 0.33,
-        "attack_speed": 1.08
+        "attack_speed": 1.08,
+        "status_chance": 0.33
     },
     "Magistar": {
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "damage_dist": {
-            "impact": 168.0,
+            "impact": 168,
             "puncture": 31.5,
             "slash": 10.5
         },
-        "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.1,
-        "attack_speed": 0.833
+        "attack_speed": 0.833,
+        "status_chance": 0.1
     },
     "Masseter": {
+        "crit_chance": 0.24,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 134.96,
             "slash": 106.04
         },
-        "crit_chance": 0.24,
-        "crit_damage": 2.0,
-        "status_chance": 0.28,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.28
     },
     "Masseter Prime": {
+        "crit_chance": 0.26,
+        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 145.6,
             "slash": 114.4
         },
-        "crit_chance": 0.26,
-        "crit_damage": 2.2,
-        "status_chance": 0.36,
-        "attack_speed": 1.083
+        "attack_speed": 1.083,
+        "status_chance": 0.36
     },
     "Mios": {
+        "crit_chance": 0.19,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 53.1,
             "puncture": 44.25,
             "slash": 79.65
         },
-        "crit_chance": 0.19,
-        "crit_damage": 2.0,
-        "status_chance": 0.25,
-        "attack_speed": 1.08
+        "attack_speed": 1.08,
+        "status_chance": 0.25
     },
     "Mire": {
-        "damage_dist": {
-            "impact": 23.0,
-            "puncture": 23.0,
-            "slash": 47.0,
-            "toxin": 65.0
-        },
         "crit_chance": 0.09,
         "crit_damage": 1.5,
-        "status_chance": 0.31,
-        "attack_speed": 1.08
+        "damage_dist": {
+            "impact": 23,
+            "puncture": 23,
+            "slash": 47,
+            "toxin": 65
+        },
+        "attack_speed": 1.08,
+        "status_chance": 0.31
     },
     "Nami Skyla": {
+        "crit_chance": 0.1,
+        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 18.75,
             "puncture": 18.75,
             "slash": 87.5
         },
-        "crit_chance": 0.1,
-        "crit_damage": 1.5,
-        "status_chance": 0.15,
-        "attack_speed": 0.917
+        "attack_speed": 0.917,
+        "status_chance": 0.15
     },
     "Nami Skyla Prime": {
-        "damage_dist": {
-            "impact": 18.0,
-            "puncture": 36.0,
-            "slash": 126.0
-        },
         "crit_chance": 0.22,
-        "crit_damage": 2.0,
-        "status_chance": 0.34,
-        "attack_speed": 1.33
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 18,
+            "puncture": 36,
+            "slash": 126
+        },
+        "attack_speed": 1.33,
+        "status_chance": 0.34
     },
     "Nami Solo": {
+        "crit_chance": 0.15,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 25.8,
             "puncture": 25.8,
             "slash": 120.4
         },
-        "crit_chance": 0.15,
-        "crit_damage": 2.0,
-        "status_chance": 0.25,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.25
     },
     "Nepheri": {
-        "damage_dist": {
-            "heat": 92.0,
-            "impact": 21.0,
-            "puncture": 63.0,
-            "slash": 85.0
-        },
         "crit_chance": 0.21,
         "crit_damage": 2.3,
-        "status_chance": 0.33,
-        "attack_speed": 1.0
+        "damage_dist": {
+            "heat": 92,
+            "impact": 21,
+            "puncture": 63,
+            "slash": 85
+        },
+        "attack_speed": 1,
+        "status_chance": 0.33
     },
     "Nikana": {
+        "crit_chance": 0.16,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 7.1,
             "puncture": 14.2,
             "slash": 120.7
         },
-        "crit_chance": 0.16,
-        "crit_damage": 2.0,
-        "status_chance": 0.16,
-        "attack_speed": 0.917
+        "attack_speed": 0.917,
+        "status_chance": 0.16
     },
     "Nikana Prime": {
+        "crit_chance": 0.28,
+        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 9.9,
             "puncture": 9.9,
             "slash": 178.2
         },
-        "crit_chance": 0.28,
-        "crit_damage": 2.4,
-        "status_chance": 0.28,
-        "attack_speed": 1.08
+        "attack_speed": 1.08,
+        "status_chance": 0.28
     },
     "Ninkondi": {
-        "damage_dist": {
-            "electricity": 100.0,
-            "impact": 90.0
-        },
         "crit_chance": 0.1,
-        "crit_damage": 2.0,
-        "status_chance": 0.35,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "electricity": 100,
+            "impact": 90
+        },
+        "attack_speed": 1,
+        "status_chance": 0.35
     },
     "Ninkondi Prime": {
-        "damage_dist": {
-            "electricity": 90.0,
-            "impact": 66.0,
-            "puncture": 28.0,
-            "slash": 50.0
-        },
         "crit_chance": 0.22,
         "crit_damage": 2.4,
-        "status_chance": 0.36,
-        "attack_speed": 1.0
+        "damage_dist": {
+            "electricity": 90,
+            "impact": 66,
+            "puncture": 28,
+            "slash": 50
+        },
+        "attack_speed": 1,
+        "status_chance": 0.36
     },
     "Obex": {
-        "damage_dist": {
-            "impact": 84.0,
-            "puncture": 18.0,
-            "slash": 18.0
-        },
         "crit_chance": 0.25,
-        "crit_damage": 2.0,
-        "status_chance": 0.1,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 84,
+            "puncture": 18,
+            "slash": 18
+        },
+        "attack_speed": 1,
+        "status_chance": 0.1
     },
     "Ohma": {
-        "damage_dist": {
-            "electricity": 110.0,
-            "impact": 76.0,
-            "slash": 38.0
-        },
         "crit_chance": 0.15,
-        "crit_damage": 2.0,
-        "status_chance": 0.3,
-        "attack_speed": 0.917
+        "crit_damage": 2,
+        "damage_dist": {
+            "electricity": 110,
+            "impact": 76,
+            "slash": 38
+        },
+        "attack_speed": 0.917,
+        "status_chance": 0.3
     },
     "Okina": {
-        "damage_dist": {
-            "impact": 7.0,
-            "puncture": 63.0,
-            "slash": 70.0
-        },
         "crit_chance": 0.16,
-        "crit_damage": 2.0,
-        "status_chance": 0.2,
-        "attack_speed": 1.08
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 7,
+            "puncture": 63,
+            "slash": 70
+        },
+        "attack_speed": 1.08,
+        "status_chance": 0.2
     },
     "Okina Prime": {
+        "crit_chance": 0.3,
+        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 9.2,
             "puncture": 64.4,
             "slash": 110.4
         },
-        "crit_chance": 0.3,
-        "crit_damage": 2.6,
-        "status_chance": 0.24,
-        "attack_speed": 1.17
+        "attack_speed": 1.17,
+        "status_chance": 0.24
     },
     "Orthos": {
+        "crit_chance": 0.06,
+        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 27.75,
             "puncture": 27.75,
             "slash": 129.5
         },
-        "crit_chance": 0.06,
-        "crit_damage": 1.5,
-        "status_chance": 0.18,
-        "attack_speed": 0.917
+        "attack_speed": 0.917,
+        "status_chance": 0.18
     },
     "Orthos Prime": {
+        "crit_chance": 0.24,
+        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 35.1,
             "puncture": 35.1,
             "slash": 163.8
         },
-        "crit_chance": 0.24,
-        "crit_damage": 2.2,
-        "status_chance": 0.36,
-        "attack_speed": 1.17
+        "attack_speed": 1.17,
+        "status_chance": 0.36
     },
     "Orvius": {
+        "crit_chance": 0.18,
+        "crit_damage": 2,
         "damage_dist": {
-            "impact": 39.0,
+            "impact": 39,
             "puncture": 9.75,
             "slash": 146.25
         },
-        "crit_chance": 0.18,
-        "crit_damage": 2.0,
-        "status_chance": 0.18,
-        "attack_speed": 0.75
+        "attack_speed": 0.75,
+        "status_chance": 0.18
     },
     "Pangolin Prime": {
+        "crit_chance": 0.26,
+        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 12.4,
             "puncture": 37.2,
             "slash": 198.4
         },
-        "crit_chance": 0.26,
-        "crit_damage": 2.2,
-        "status_chance": 0.3,
-        "attack_speed": 0.917
+        "attack_speed": 0.917,
+        "status_chance": 0.3
     },
     "Pangolin Sword": {
+        "crit_chance": 0.08,
+        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 7.5,
             "puncture": 22.5,
-            "slash": 120.0
+            "slash": 120
         },
-        "crit_chance": 0.08,
-        "crit_damage": 1.5,
-        "status_chance": 0.22,
-        "attack_speed": 0.917
+        "attack_speed": 0.917,
+        "status_chance": 0.22
     },
     "Paracesis": {
+        "crit_chance": 0.31,
+        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 48.8,
             "puncture": 17.8,
             "slash": 155.4
         },
-        "crit_chance": 0.31,
-        "crit_damage": 2.6,
-        "status_chance": 0.22,
-        "attack_speed": 0.917
+        "attack_speed": 0.917,
+        "status_chance": 0.22
     },
     "Pathocyst": {
-        "damage_dist": {
-            "impact": 57.0,
-            "puncture": 55.0,
-            "slash": 61.0,
-            "viral": 89.0
-        },
         "crit_chance": 0.15,
         "crit_damage": 2.1,
-        "status_chance": 0.3,
-        "attack_speed": 0.667
+        "damage_dist": {
+            "impact": 57,
+            "puncture": 55,
+            "slash": 61,
+            "viral": 89
+        },
+        "attack_speed": 0.667,
+        "status_chance": 0.3
     },
     "Pennant": {
-        "damage_dist": {
-            "impact": 20.0,
-            "puncture": 140.0,
-            "slash": 40.0
-        },
         "crit_chance": 0.32,
         "crit_damage": 2.4,
-        "status_chance": 0.1,
-        "attack_speed": 0.917
+        "damage_dist": {
+            "impact": 20,
+            "puncture": 140,
+            "slash": 40
+        },
+        "attack_speed": 0.917,
+        "status_chance": 0.1
     },
     "Plasma Sword": {
-        "damage_dist": {
-            "electricity": 66.0,
-            "impact": 34.0,
-            "puncture": 12.0,
-            "slash": 88.0
-        },
         "crit_chance": 0.18,
-        "crit_damage": 2.0,
-        "status_chance": 0.18,
-        "attack_speed": 0.667
+        "crit_damage": 2,
+        "damage_dist": {
+            "electricity": 66,
+            "impact": 34,
+            "puncture": 12,
+            "slash": 88
+        },
+        "attack_speed": 0.667,
+        "status_chance": 0.18
     },
     "Praedos": {
-        "damage_dist": {
-            "impact": 20.0,
-            "puncture": 20.0,
-            "slash": 160.0
-        },
         "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.2,
-        "attack_speed": 1.17
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 20,
+            "puncture": 20,
+            "slash": 160
+        },
+        "attack_speed": 1.17,
+        "status_chance": 0.2
     },
     "Prisma Dual Cleavers": {
+        "crit_chance": 0.25,
+        "crit_damage": 3,
         "damage_dist": {
             "impact": 13.3,
             "puncture": 13.3,
             "slash": 106.4
         },
-        "crit_chance": 0.25,
-        "crit_damage": 3.0,
-        "status_chance": 0.25,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.25
     },
     "Prisma Machete": {
+        "crit_chance": 0.15,
+        "crit_damage": 1.9,
         "damage_dist": {
             "impact": 28.95,
             "puncture": 28.95,
             "slash": 135.1
         },
-        "crit_chance": 0.15,
-        "crit_damage": 1.9,
-        "status_chance": 0.31,
-        "attack_speed": 0.917
+        "attack_speed": 0.917,
+        "status_chance": 0.31
     },
     "Prisma Obex": {
+        "crit_chance": 0.25,
+        "crit_damage": 2,
         "damage_dist": {
-            "impact": 105.0,
+            "impact": 105,
             "puncture": 22.5,
             "slash": 22.5
         },
-        "crit_chance": 0.25,
-        "crit_damage": 2.0,
-        "status_chance": 0.3,
-        "attack_speed": 1.33
+        "attack_speed": 1.33,
+        "status_chance": 0.3
     },
     "Prisma Ohma": {
-        "damage_dist": {
-            "electricity": 124.0,
-            "impact": 82.0,
-            "slash": 44.0
-        },
         "crit_chance": 0.3,
         "crit_damage": 2.2,
-        "status_chance": 0.2,
-        "attack_speed": 1.0
+        "damage_dist": {
+            "electricity": 124,
+            "impact": 82,
+            "slash": 44
+        },
+        "attack_speed": 1,
+        "status_chance": 0.2
     },
     "Prisma Skana": {
+        "crit_chance": 0.28,
+        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 25.5,
             "puncture": 25.5,
-            "slash": 119.0
+            "slash": 119
         },
-        "crit_chance": 0.28,
-        "crit_damage": 2.2,
-        "status_chance": 0.16,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.16
     },
     "Prova": {
-        "damage_dist": {
-            "electricity": 76.0,
-            "impact": 52.0
-        },
         "crit_chance": 0.14,
-        "crit_damage": 2.0,
-        "status_chance": 0.16,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "electricity": 76,
+            "impact": 52
+        },
+        "attack_speed": 1,
+        "status_chance": 0.16
     },
     "Prova Vandal": {
-        "damage_dist": {
-            "electricity": 118.0,
-            "impact": 80.0
-        },
         "crit_chance": 0.14,
-        "crit_damage": 2.0,
-        "status_chance": 0.32,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "electricity": 118,
+            "impact": 80
+        },
+        "attack_speed": 1,
+        "status_chance": 0.32
     },
     "Pulmonars": {
-        "damage_dist": {
-            "impact": 193.0,
-            "viral": 97.0
-        },
         "crit_chance": 0.19,
         "crit_damage": 2.3,
-        "status_chance": 0.33,
-        "attack_speed": 0.917
+        "damage_dist": {
+            "impact": 193,
+            "viral": 97
+        },
+        "attack_speed": 0.917,
+        "status_chance": 0.33
     },
     "Pupacyst": {
-        "damage_dist": {
-            "impact": 139.0,
-            "viral": 145.0
-        },
         "crit_chance": 0.13,
         "crit_damage": 1.5,
-        "status_chance": 0.27,
-        "attack_speed": 0.833
+        "damage_dist": {
+            "impact": 139,
+            "viral": 145
+        },
+        "attack_speed": 0.833,
+        "status_chance": 0.27
     },
     "Quassus": {
+        "crit_chance": 0.3,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 27.6,
-            "puncture": 46.0,
+            "puncture": 46,
             "slash": 156.4
         },
-        "crit_chance": 0.3,
-        "crit_damage": 2.0,
-        "status_chance": 0.12,
-        "attack_speed": 0.833
+        "attack_speed": 0.833,
+        "status_chance": 0.12
     },
     "Quassus Prime": {
-        "damage_dist": {
-            "impact": 26.0,
-            "puncture": 52.0,
-            "slash": 182.0
-        },
         "crit_chance": 0.35,
         "crit_damage": 2.5,
-        "status_chance": 0.18,
-        "attack_speed": 0.833
+        "damage_dist": {
+            "impact": 26,
+            "puncture": 52,
+            "slash": 182
+        },
+        "attack_speed": 0.833,
+        "status_chance": 0.18
     },
     "Rakta Dark Dagger": {
-        "damage_dist": {
-            "puncture": 88.0,
-            "radiation": 96.0,
-            "slash": 62.0
-        },
         "crit_chance": 0.12,
         "crit_damage": 1.8,
-        "status_chance": 0.3,
-        "attack_speed": 1.0
+        "damage_dist": {
+            "puncture": 88,
+            "radiation": 96,
+            "slash": 62
+        },
+        "attack_speed": 1,
+        "status_chance": 0.3
     },
     "Reaper Prime": {
-        "damage_dist": {
-            "impact": 30.0,
-            "puncture": 30.0,
-            "slash": 140.0
-        },
         "crit_chance": 0.35,
         "crit_damage": 2.5,
-        "status_chance": 0.25,
-        "attack_speed": 1.08
+        "damage_dist": {
+            "impact": 30,
+            "puncture": 30,
+            "slash": 140
+        },
+        "attack_speed": 1.08,
+        "status_chance": 0.25
     },
     "Redeemer": {
-        "damage_dist": {
-            "impact": 18.0,
-            "puncture": 36.0,
-            "slash": 126.0
-        },
         "crit_chance": 0.1,
         "crit_damage": 1.8,
-        "status_chance": 0.22,
-        "attack_speed": 0.833
+        "damage_dist": {
+            "impact": 18,
+            "puncture": 36,
+            "slash": 126
+        },
+        "attack_speed": 0.833,
+        "status_chance": 0.22
     },
     "Redeemer Prime": {
+        "crit_chance": 0.24,
+        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 21.2,
             "puncture": 42.4,
             "slash": 148.4
         },
-        "crit_chance": 0.24,
-        "crit_damage": 2.2,
-        "status_chance": 0.3,
-        "attack_speed": 0.917
+        "attack_speed": 0.917,
+        "status_chance": 0.3
     },
     "Ripkas": {
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 8.65,
             "puncture": 17.3,
             "slash": 147.05
         },
-        "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.15,
-        "attack_speed": 0.883
+        "attack_speed": 0.883,
+        "status_chance": 0.15
     },
     "Rumblejack": {
-        "damage_dist": {
-            "electricity": 180.0,
-            "impact": 120.0
-        },
         "crit_chance": 0.13,
         "crit_damage": 1.8,
-        "status_chance": 0.4,
-        "attack_speed": 0.67
+        "damage_dist": {
+            "electricity": 180,
+            "impact": 120
+        },
+        "attack_speed": 0.67,
+        "status_chance": 0.4
     },
     "Ruvox": {
-        "damage_dist": {
-            "impact": 170.0
-        },
         "crit_chance": 0.26,
         "crit_damage": 2.2,
-        "status_chance": 0.2,
-        "attack_speed": 1.0
+        "damage_dist": {
+            "impact": 170
+        },
+        "attack_speed": 1,
+        "status_chance": 0.2
     },
     "Sampotes": {
+        "crit_chance": 0.3,
+        "crit_damage": 3,
         "damage_dist": {
             "impact": 173.6,
             "puncture": 37.2,
             "slash": 37.2
         },
-        "crit_chance": 0.3,
-        "crit_damage": 3.0,
-        "status_chance": 0.28,
-        "attack_speed": 0.833
+        "attack_speed": 0.833,
+        "status_chance": 0.28
     },
     "Sancti Magistar": {
-        "damage_dist": {
-            "impact": 192.0,
-            "puncture": 36.0,
-            "slash": 12.0
-        },
         "crit_chance": 0.3,
-        "crit_damage": 2.0,
-        "status_chance": 0.2,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 192,
+            "puncture": 36,
+            "slash": 12
+        },
+        "attack_speed": 1,
+        "status_chance": 0.2
     },
     "Sarofang": {
-        "damage_dist": {
-            "impact": 80.0,
-            "puncture": 8.0,
-            "slash": 112.0
-        },
         "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.2,
-        "attack_speed": 1.17
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 80,
+            "puncture": 8,
+            "slash": 112
+        },
+        "attack_speed": 1.17,
+        "status_chance": 0.2
     },
     "Sarpa": {
-        "damage_dist": {
-            "impact": 16.0,
-            "puncture": 32.0,
-            "slash": 112.0
-        },
         "crit_chance": 0.14,
-        "crit_damage": 2.0,
-        "status_chance": 0.28,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 16,
+            "puncture": 32,
+            "slash": 112
+        },
+        "attack_speed": 1,
+        "status_chance": 0.28
     },
     "Scindo": {
-        "damage_dist": {
-            "impact": 20.0,
-            "puncture": 20.0,
-            "slash": 160.0
-        },
         "crit_chance": 0.15,
         "crit_damage": 1.5,
-        "status_chance": 0.1,
-        "attack_speed": 0.917
+        "damage_dist": {
+            "impact": 20,
+            "puncture": 20,
+            "slash": 160
+        },
+        "attack_speed": 0.917,
+        "status_chance": 0.1
     },
     "Scindo Prime": {
-        "damage_dist": {
-            "impact": 25.0,
-            "puncture": 25.0,
-            "slash": 200.0
-        },
         "crit_chance": 0.26,
         "crit_damage": 2.4,
-        "status_chance": 0.24,
-        "attack_speed": 0.967
+        "damage_dist": {
+            "impact": 25,
+            "puncture": 25,
+            "slash": 200
+        },
+        "attack_speed": 0.967,
+        "status_chance": 0.24
     },
     "Scoliac": {
+        "crit_chance": 0.13,
+        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 22.5,
             "puncture": 22.5,
-            "slash": 105.0
+            "slash": 105
         },
-        "crit_chance": 0.13,
-        "crit_damage": 1.5,
-        "status_chance": 0.29,
-        "attack_speed": 1.25
+        "attack_speed": 1.25,
+        "status_chance": 0.29
     },
     "Secura Lecta": {
-        "damage_dist": {
-            "electricity": 80.0,
-            "puncture": 30.0,
-            "slash": 66.0
-        },
         "crit_chance": 0.15,
         "crit_damage": 1.5,
-        "status_chance": 0.3,
-        "attack_speed": 1.25
+        "damage_dist": {
+            "electricity": 80,
+            "puncture": 30,
+            "slash": 66
+        },
+        "attack_speed": 1.25,
+        "status_chance": 0.3
     },
     "Serro": {
-        "damage_dist": {
-            "electricity": 138.0,
-            "slash": 96.0
-        },
         "crit_chance": 0.08,
         "crit_damage": 1.5,
-        "status_chance": 0.26,
-        "attack_speed": 0.917
+        "damage_dist": {
+            "electricity": 138,
+            "slash": 96
+        },
+        "attack_speed": 0.917,
+        "status_chance": 0.26
     },
     "Shadow Claws": {
-        "damage_dist": {
-            "impact": 75.0,
-            "puncture": 50.0,
-            "slash": 125.0
-        },
         "crit_chance": 0.38,
         "crit_damage": 2.6,
-        "status_chance": 0.24,
-        "attack_speed": 1.0
+        "damage_dist": {
+            "impact": 75,
+            "puncture": 50,
+            "slash": 125
+        },
+        "attack_speed": 1,
+        "status_chance": 0.24
     },
     "Shadow Claws Prime": {
-        "damage_dist": {
-            "impact": 75.0,
-            "puncture": 50.0,
-            "slash": 125.0
-        },
         "crit_chance": 0.38,
         "crit_damage": 2.6,
-        "status_chance": 0.24,
-        "attack_speed": 1.0
+        "damage_dist": {
+            "impact": 75,
+            "puncture": 50,
+            "slash": 125
+        },
+        "attack_speed": 1,
+        "status_chance": 0.24
     },
     "Shaku": {
-        "damage_dist": {
-            "impact": 180.0
-        },
         "crit_chance": 0.18,
-        "crit_damage": 2.0,
-        "status_chance": 0.34,
-        "attack_speed": 1.17
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 180
+        },
+        "attack_speed": 1.17,
+        "status_chance": 0.34
     },
     "Sheev": {
+        "crit_chance": 0.13,
+        "crit_damage": 2.1,
         "damage_dist": {
             "impact": 13.5,
             "puncture": 13.5,
-            "slash": 243.0
+            "slash": 243
         },
-        "crit_chance": 0.13,
-        "crit_damage": 2.1,
-        "status_chance": 0.25,
-        "attack_speed": 0.667
+        "attack_speed": 0.667,
+        "status_chance": 0.25
     },
     "Sibear": {
-        "damage_dist": {
-            "cold": 130.0,
-            "impact": 70.0,
-            "puncture": 20.0,
-            "slash": 50.0
-        },
         "crit_chance": 0.15,
-        "crit_damage": 2.0,
-        "status_chance": 0.3,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "cold": 130,
+            "impact": 70,
+            "puncture": 20,
+            "slash": 50
+        },
+        "attack_speed": 1,
+        "status_chance": 0.3
     },
     "Sigma & Octantis": {
+        "crit_chance": 0.28,
+        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 38.28,
             "puncture": 27.84,
             "slash": 107.88
         },
-        "crit_chance": 0.28,
-        "crit_damage": 2.2,
-        "status_chance": 0.16,
-        "attack_speed": 1.08
+        "attack_speed": 1.08,
+        "status_chance": 0.16
     },
     "Silva & Aegis": {
-        "damage_dist": {
-            "heat": 98.0
-        },
         "crit_chance": 0.05,
         "crit_damage": 1.5,
-        "status_chance": 0.2,
-        "attack_speed": 1.0
+        "damage_dist": {
+            "heat": 98
+        },
+        "attack_speed": 1,
+        "status_chance": 0.2
     },
     "Silva & Aegis Prime": {
-        "damage_dist": {
-            "heat": 318.0
-        },
         "crit_chance": 0.25,
-        "crit_damage": 2.0,
-        "status_chance": 0.3,
-        "attack_speed": 0.75
+        "crit_damage": 2,
+        "damage_dist": {
+            "heat": 318
+        },
+        "attack_speed": 0.75,
+        "status_chance": 0.3
     },
     "Skana": {
-        "damage_dist": {
-            "impact": 18.0,
-            "puncture": 18.0,
-            "slash": 84.0
-        },
         "crit_chance": 0.05,
         "crit_damage": 1.5,
-        "status_chance": 0.16,
-        "attack_speed": 0.833
+        "damage_dist": {
+            "impact": 18,
+            "puncture": 18,
+            "slash": 84
+        },
+        "attack_speed": 0.833,
+        "status_chance": 0.16
     },
     "Skana Prime": {
+        "crit_chance": 0.26,
+        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 31.5,
             "puncture": 31.5,
-            "slash": 147.0
+            "slash": 147
         },
-        "crit_chance": 0.26,
-        "crit_damage": 2.6,
-        "status_chance": 0.26,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.26
     },
     "Skiajati": {
+        "crit_chance": 0.19,
+        "crit_damage": 2.1,
         "damage_dist": {
             "impact": 26.25,
             "puncture": 12.25,
             "slash": 136.5
         },
-        "crit_chance": 0.19,
-        "crit_damage": 2.1,
-        "status_chance": 0.3,
-        "attack_speed": 1.17
+        "attack_speed": 1.17,
+        "status_chance": 0.3
     },
     "Slaytra": {
+        "crit_chance": 0.21,
+        "crit_damage": 1.9,
         "damage_dist": {
             "impact": 73.26,
             "puncture": 93.24,
             "slash": 166.5
         },
-        "crit_chance": 0.21,
-        "crit_damage": 1.9,
-        "status_chance": 0.35,
-        "attack_speed": 0.833
+        "attack_speed": 0.833,
+        "status_chance": 0.35
     },
     "Stropha": {
+        "crit_chance": 0.3,
+        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 61.6,
             "puncture": 74.8,
             "slash": 83.6
         },
-        "crit_chance": 0.3,
-        "crit_damage": 2.4,
-        "status_chance": 0.14,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.14
     },
     "Sun & Moon": {
+        "crit_chance": 0.2,
+        "crit_damage": 2.4,
         "damage_dist": {
-            "impact": 38.0,
+            "impact": 38,
             "puncture": 45.6,
             "slash": 106.4
         },
-        "crit_chance": 0.2,
-        "crit_damage": 2.4,
-        "status_chance": 0.22,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.22
     },
     "Syam": {
-        "damage_dist": {
-            "impact": 54.0,
-            "puncture": 108.0,
-            "slash": 108.0
-        },
         "crit_chance": 0.22,
-        "crit_damage": 2.0,
-        "status_chance": 0.34,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 54,
+            "puncture": 108,
+            "slash": 108
+        },
+        "attack_speed": 1,
+        "status_chance": 0.34
     },
     "Sydon": {
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 11.25,
             "puncture": 213.75
         },
-        "crit_chance": 0.1,
-        "crit_damage": 2.0,
-        "status_chance": 0.25,
-        "attack_speed": 0.917
+        "attack_speed": 0.917,
+        "status_chance": 0.25
     },
     "Synoid Heliocor": {
-        "damage_dist": {
-            "impact": 238.0,
-            "puncture": 28.0,
-            "slash": 14.0
-        },
         "crit_chance": 0.16,
-        "crit_damage": 2.0,
-        "status_chance": 0.4,
-        "attack_speed": 1.08
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 238,
+            "puncture": 28,
+            "slash": 14
+        },
+        "attack_speed": 1.08,
+        "status_chance": 0.4
     },
     "Tatsu": {
-        "damage_dist": {
-            "impact": 20.0,
-            "puncture": 54.0,
-            "radiation": 72.0,
-            "slash": 68.0
-        },
         "crit_chance": 0.16,
-        "crit_damage": 2.0,
-        "status_chance": 0.28,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 20,
+            "puncture": 54,
+            "radiation": 72,
+            "slash": 68
+        },
+        "attack_speed": 1,
+        "status_chance": 0.28
     },
     "Tatsu Prime": {
-        "damage_dist": {
-            "impact": 20.0,
-            "puncture": 54.0,
-            "radiation": 80.0,
-            "slash": 76.0
-        },
         "crit_chance": 0.22,
         "crit_damage": 2.4,
-        "status_chance": 0.3,
-        "attack_speed": 1.17
+        "damage_dist": {
+            "impact": 20,
+            "puncture": 54,
+            "radiation": 80,
+            "slash": 76
+        },
+        "attack_speed": 1.17,
+        "status_chance": 0.3
     },
     "Tekko": {
-        "damage_dist": {
-            "impact": 32.0,
-            "puncture": 16.0,
-            "slash": 112.0
-        },
         "crit_chance": 0.3,
-        "crit_damage": 2.0,
-        "status_chance": 0.1,
-        "attack_speed": 0.917
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 32,
+            "puncture": 16,
+            "slash": 112
+        },
+        "attack_speed": 0.917,
+        "status_chance": 0.1
     },
     "Tekko Prime": {
+        "crit_chance": 0.3,
+        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 39.6,
             "puncture": 25.2,
             "slash": 115.2
         },
-        "crit_chance": 0.3,
-        "crit_damage": 2.4,
-        "status_chance": 0.26,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.26
     },
     "Telos Boltace": {
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "damage_dist": {
-            "impact": 21.0,
+            "impact": 21,
             "puncture": 178.5,
             "slash": 10.5
         },
-        "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.35,
-        "attack_speed": 1.08
+        "attack_speed": 1.08,
+        "status_chance": 0.35
     },
     "Tenet Agendus": {
-        "damage_dist": {
-            "electricity": 140.0,
-            "impact": 120.0
-        },
         "crit_chance": 0.24,
-        "crit_damage": 2.0,
-        "status_chance": 0.28,
-        "attack_speed": 0.917
+        "crit_damage": 2,
+        "damage_dist": {
+            "electricity": 140,
+            "impact": 120
+        },
+        "attack_speed": 0.917,
+        "status_chance": 0.28
     },
     "Tenet Exec": {
+        "crit_chance": 0.38,
+        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 102.6,
             "slash": 87.4
         },
-        "crit_chance": 0.38,
-        "crit_damage": 2.4,
-        "status_chance": 0.22,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.22
     },
     "Tenet Grigori": {
+        "crit_chance": 0.24,
+        "crit_damage": 1.6,
         "damage_dist": {
             "impact": 9.1,
             "puncture": 82.1,
             "slash": 136.8
         },
-        "crit_chance": 0.24,
-        "crit_damage": 1.6,
-        "status_chance": 0.38,
-        "attack_speed": 1.08
+        "attack_speed": 1.08,
+        "status_chance": 0.38
     },
     "Tenet Livia": {
+        "crit_chance": 0.28,
+        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 9.9,
             "puncture": 9.9,
             "slash": 178.2
         },
-        "crit_chance": 0.28,
-        "crit_damage": 2.2,
-        "status_chance": 0.28,
-        "attack_speed": 1.08
+        "attack_speed": 1.08,
+        "status_chance": 0.28
     },
     "Tipedo": {
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 12.4,
             "puncture": 12.4,
             "slash": 99.2
         },
-        "crit_chance": 0.2,
-        "crit_damage": 2.0,
-        "status_chance": 0.2,
-        "attack_speed": 1.33
+        "attack_speed": 1.33,
+        "status_chance": 0.2
     },
     "Tipedo Prime": {
-        "damage_dist": {
-            "impact": 17.0,
-            "puncture": 17.0,
-            "slash": 136.0
-        },
         "crit_chance": 0.24,
         "crit_damage": 2.4,
-        "status_chance": 0.24,
-        "attack_speed": 1.17
+        "damage_dist": {
+            "impact": 17,
+            "puncture": 17,
+            "slash": 136
+        },
+        "attack_speed": 1.17,
+        "status_chance": 0.24
     },
     "Tonbo": {
+        "crit_chance": 0.05,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 18.4,
             "puncture": 27.6,
-            "slash": 138.0
+            "slash": 138
         },
-        "crit_chance": 0.05,
-        "crit_damage": 2.0,
-        "status_chance": 0.25,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.25
     },
     "Twin Basolk": {
-        "damage_dist": {
-            "heat": 85.0,
-            "impact": 55.0,
-            "puncture": 15.0,
-            "slash": 55.0
-        },
         "crit_chance": 0.05,
-        "crit_damage": 2.0,
-        "status_chance": 0.4,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "heat": 85,
+            "impact": 55,
+            "puncture": 15,
+            "slash": 55
+        },
+        "attack_speed": 1,
+        "status_chance": 0.4
     },
     "Twin Krohkur": {
-        "damage_dist": {
-            "impact": 30.0,
-            "puncture": 45.0,
-            "slash": 175.0
-        },
         "crit_chance": 0.19,
         "crit_damage": 1.7,
-        "status_chance": 0.33,
-        "attack_speed": 0.917
+        "damage_dist": {
+            "impact": 30,
+            "puncture": 45,
+            "slash": 175
+        },
+        "attack_speed": 0.917,
+        "status_chance": 0.33
     },
     "Valkyr Prime Talons": {
+        "crit_chance": 0.5,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 83.3,
             "puncture": 83.3,
             "slash": 83.3
         },
-        "crit_chance": 0.5,
-        "crit_damage": 2.0,
-        "status_chance": 0.1,
-        "attack_speed": 1.5
+        "attack_speed": 1.5,
+        "status_chance": 0.1
     },
     "Valkyr Talons": {
+        "crit_chance": 0.5,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 83.3,
             "puncture": 83.3,
             "slash": 83.3
         },
-        "crit_chance": 0.5,
-        "crit_damage": 2.0,
-        "status_chance": 0.1,
-        "attack_speed": 1.5
+        "attack_speed": 1.5,
+        "status_chance": 0.1
     },
     "Vastilok": {
+        "crit_chance": 0.19,
+        "crit_damage": 1.7,
         "damage_dist": {
             "impact": 19.53,
             "puncture": 25.11,
             "slash": 234.36
         },
-        "crit_chance": 0.19,
-        "crit_damage": 1.7,
-        "status_chance": 0.31,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.31
     },
     "Vaykor Sydon": {
+        "crit_chance": 0.21,
+        "crit_damage": 2.5,
         "damage_dist": {
             "impact": 10.65,
             "puncture": 202.35
         },
-        "crit_chance": 0.21,
-        "crit_damage": 2.5,
-        "status_chance": 0.33,
-        "attack_speed": 1.08
+        "attack_speed": 1.08,
+        "status_chance": 0.33
     },
     "Venato": {
-        "damage_dist": {
-            "impact": 33.0,
-            "puncture": 110.0,
-            "slash": 77.0
-        },
         "crit_chance": 0.27,
         "crit_damage": 2.1,
-        "status_chance": 0.24,
-        "attack_speed": 1.08
+        "damage_dist": {
+            "impact": 33,
+            "puncture": 110,
+            "slash": 77
+        },
+        "attack_speed": 1.08,
+        "status_chance": 0.24
     },
     "Venka": {
-        "damage_dist": {
-            "impact": 7.0,
-            "puncture": 35.0,
-            "slash": 98.0
-        },
         "crit_chance": 0.15,
-        "crit_damage": 2.0,
-        "status_chance": 0.15,
-        "attack_speed": 1.0
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 7,
+            "puncture": 35,
+            "slash": 98
+        },
+        "attack_speed": 1,
+        "status_chance": 0.15
     },
     "Venka Prime": {
+        "crit_chance": 0.32,
+        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 9.4,
             "puncture": 37.6,
-            "slash": 141.0
+            "slash": 141
         },
-        "crit_chance": 0.32,
-        "crit_damage": 2.6,
-        "status_chance": 0.24,
-        "attack_speed": 1.05
+        "attack_speed": 1.05,
+        "status_chance": 0.24
     },
     "Verdilac": {
+        "crit_chance": 0.3,
+        "crit_damage": 2.5,
         "damage_dist": {
             "impact": 21.3,
             "puncture": 85.2,
             "slash": 106.5
         },
-        "crit_chance": 0.3,
-        "crit_damage": 2.5,
-        "status_chance": 0.21,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.21
     },
     "Vericres": {
+        "crit_chance": 0.22,
+        "crit_damage": 2,
         "damage_dist": {
             "impact": 21.6,
             "puncture": 28.8,
             "slash": 129.6
         },
-        "crit_chance": 0.22,
-        "crit_damage": 2.0,
-        "status_chance": 0.2,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.2
     },
     "Vitrica": {
+        "crit_chance": 0.23,
+        "crit_damage": 2.3,
         "damage_dist": {
             "impact": 99.9,
             "puncture": 99.9,
             "slash": 133.2
         },
-        "crit_chance": 0.23,
-        "crit_damage": 2.3,
-        "status_chance": 0.33,
-        "attack_speed": 0.833
+        "attack_speed": 0.833,
+        "status_chance": 0.33
     },
     "Volnus": {
+        "crit_chance": 0.18,
+        "crit_damage": 1.6,
         "damage_dist": {
             "impact": 48.4,
             "puncture": 70.4,
             "slash": 101.2
         },
-        "crit_chance": 0.18,
-        "crit_damage": 1.6,
-        "status_chance": 0.3,
-        "attack_speed": 1.2
+        "attack_speed": 1.2,
+        "status_chance": 0.3
     },
     "Volnus Prime": {
-        "damage_dist": {
-            "impact": 55.0,
-            "puncture": 80.0,
-            "slash": 115.0
-        },
         "crit_chance": 0.2,
         "crit_damage": 1.8,
-        "status_chance": 0.34,
-        "attack_speed": 1.2
+        "damage_dist": {
+            "impact": 55,
+            "puncture": 80,
+            "slash": 115
+        },
+        "attack_speed": 1.2,
+        "status_chance": 0.34
     },
     "War": {
-        "damage_dist": {
-            "impact": 120.0,
-            "puncture": 60.0,
-            "slash": 70.0
-        },
         "crit_chance": 0.26,
         "crit_damage": 2.6,
-        "status_chance": 0.26,
-        "attack_speed": 0.917
+        "damage_dist": {
+            "impact": 120,
+            "puncture": 60,
+            "slash": 70
+        },
+        "attack_speed": 0.917,
+        "status_chance": 0.26
     },
     "Wolf Sledge": {
+        "crit_chance": 0.17,
+        "crit_damage": 1.9,
         "damage_dist": {
             "impact": 132.1,
             "puncture": 7.8,
             "slash": 119.1
         },
-        "crit_chance": 0.17,
-        "crit_damage": 1.9,
-        "status_chance": 0.33,
-        "attack_speed": 1.0
+        "attack_speed": 1,
+        "status_chance": 0.33
     },
     "Xoris": {
+        "crit_chance": 0.2,
+        "crit_damage": 2.4,
         "damage_dist": {
-            "impact": 24.0,
+            "impact": 24,
             "puncture": 40.8,
             "slash": 55.2
         },
-        "crit_chance": 0.2,
-        "crit_damage": 2.4,
-        "status_chance": 0.18,
-        "attack_speed": 1.17
+        "attack_speed": 1.17,
+        "status_chance": 0.18
     },
     "Zenistar": {
-        "damage_dist": {
-            "heat": 150.0,
-            "impact": 80.0,
-            "slash": 68.0
-        },
         "crit_chance": 0.1,
-        "crit_damage": 2.0,
-        "status_chance": 0.3,
-        "attack_speed": 0.833
+        "crit_damage": 2,
+        "damage_dist": {
+            "heat": 150,
+            "impact": 80,
+            "slash": 68
+        },
+        "attack_speed": 0.833,
+        "status_chance": 0.3
     }
 }
