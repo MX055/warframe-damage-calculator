@@ -36,8 +36,6 @@ class RangedState(WeaponState):
     magazine_capacity: int = 0
     multishot: float = 0.0
     is_beam: bool = False
-    has_multiplicative_base_damage: bool = False
-    has_multiplicative_weakpoint_crit_chance: bool = False
     multiplicative_weakpoint_crit_chance: float = 1.0
     weakpoint_crit_chance: float = 0.0
     internal_bleeding: float = 0.0
