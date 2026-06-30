@@ -197,7 +197,7 @@ def rank_series(max_value: float, max_rank: int, *, round_digits: int = 3) -> Ra
 
 
 def has_effective_stats(record: Stats) -> bool:
-    metadata_keys = {"max_rank", "compatible_weapons"}
+    metadata_keys = {"max_rank", "compatibility_tag"}
     return any(key not in metadata_keys for key in record)
 
 
@@ -340,7 +340,12 @@ def build_melee_record(name: str, melee: dict[str, Any]) -> Stats | None:
     if not record:
         return None
 
-    record["weapon_type"] = [str(melee.get("Class", "Melee")).strip() or "Melee"]
+    class_name = str(melee.get("Class", "Melee")).strip() or "Melee"
+    class_tags: list[str] = ["melee"]
+    lower_class_name = class_name.lower()
+    if lower_class_name != "melee":
+        class_tags.append(lower_class_name)
+    record["class_tags"] = class_tags
     return record
 
 
@@ -352,7 +357,7 @@ def build_ranged_weapon_record(
     weapon: dict[str, Any],
     *,
     base_type: str,
-    output_type_key: str,
+    output_type_key: str | None,
     beam_exceptions: tuple[str, ...],
 ) -> Stats | None:
     record: Stats = {}
@@ -370,7 +375,9 @@ def build_ranged_weapon_record(
     weapon_types = [base_type, weapon_class]
     if trigger_type := detect_trigger_type(weapon):
         weapon_types.append(f"{trigger_type}-{weapon_class}")
-    record[output_type_key] = weapon_types
+    if output_type_key is not None:
+        record[output_type_key] = weapon_types
+    record["class_tags"] = weapon_types.copy()
 
     return record or None
 
@@ -393,7 +400,7 @@ def build_secondary_record(name: str, secondary: dict[str, Any]) -> Stats | None
         name,
         secondary,
         base_type="secondary",
-        output_type_key="weapon_type",
+        output_type_key=None,
         beam_exceptions=SECONDARY_BEAM_EXCEPTIONS,
     )
 
@@ -405,8 +412,8 @@ MOD_COMPATIBILITY_MAP = {
     "Primary": "primary",
     "Pistol": "secondary",
     "Shotgun": "shotgun",
-    "Rifle": "primary",
-    "Sniper": "sniper",
+    "Rifle": "rifle",
+    "Sniper": "sniper rifle",
     "Melee": "melee",
     "Semi-Rifle": "semi-rifle",
     "Semi-Shotgun": "semi-shotgun",
@@ -533,8 +540,9 @@ def build_upgrade_record(
     if not has_effective_stats(output):
         return None
 
+    compatibility_tag = get_compatible_weapons(record)
     output["max_rank"] = max_rank
-    output["compatible_weapons"] = get_compatible_weapons(record)
+    output["compatibility_tag"] = compatibility_tag
     return output
 
 

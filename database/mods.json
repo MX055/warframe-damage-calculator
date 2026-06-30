@@ -5,7 +5,7 @@
             "puncture": [0.15, 0.3, 0.45, 0.6]
         },
         "max_rank": 3,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Accelerated Isotope": {
         "damage_dist": {
@@ -13,48 +13,48 @@
         },
         "fire_rate": [0.1, 0.2, 0.3, 0.4],
         "max_rank": 3,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Aero Agility": {
         "reload_speed": [0.25, 0.5, 0.75, 1.0],
         "max_rank": 3,
-        "compatible_weapons": "sniper"
+        "compatibility_tag": "sniper rifle"
     },
     "Amalgam Barrel Diffusion": {
         "multishot": [0.183, 0.367, 0.55, 0.733, 0.917, 1.1],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Amalgam Organ Shatter": {
         "crit_damage": [0.142, 0.283, 0.425, 0.567, 0.708, 0.85],
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Amalgam Serration": {
         "base_damage": [0.141, 0.282, 0.423, 0.564, 0.705, 0.845, 0.986, 1.127, 1.268, 1.409, 1.55],
         "max_rank": 10,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Amalgam Shotgun Barrage": {
         "fire_rate": [0.142, 0.283, 0.425, 0.567, 0.708, 0.85],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Ammo Stock": {
         "magazine_capacity": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Anemic Agility": {
         "fire_rate": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
         "base_damage": [-0.025, -0.05, -0.075, -0.1, -0.125, -0.15],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Argon Scope": {
         "conditional_crit_chance": [0.225, 0.45, 0.675, 0.9, 1.125, 1.35],
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Atomic Fallout": {
         "damage_dist": {
@@ -62,60 +62,60 @@
         },
         "magazine_capacity": [0.1, 0.2, 0.3, 0.4],
         "max_rank": 3,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Auger Strike": {
         "damage_dist": {
             "puncture": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         },
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Augur Pact": {
         "base_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Bane of Corpus": {
         "damage_to_corpus": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Bane of Grineer": {
         "damage_to_grinier": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Bane of Infested": {
         "damage_to_infested": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Bane of Orokin": {
         "damage_to_orokin": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Bane of The Murmur": {
         "damage_to_murmur": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Barrel Diffusion": {
         "multishot": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Berserker Fury": {
         "stacking_attack_speed": [0.058, 0.117, 0.175, 0.233, 0.292, 0.35],
         "max_stacks": 2,
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Bladed Rounds": {
         "conditional_crit_damage": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2],
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Blaze": {
         "base_damage": [0.15, 0.3, 0.45, 0.6],
@@ -123,44 +123,45 @@
             "heat": [0.15, 0.3, 0.45, 0.6]
         },
         "max_rank": 3,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Blood Rush": {
-        "crit_chance": [0.036, 0.073, 0.109, 0.145, 0.182, 0.218, 0.255, 0.291, 0.327, 0.364, 0.4],
+        "stacking_crit_chance": [0.036, 0.073, 0.109, 0.145, 0.182, 0.218, 0.255, 0.291, 0.327, 0.364, 0.4],
+        "max_stacks": null,
         "max_rank": 10,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Blunderbuss": {
         "crit_chance": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Bore": {
         "damage_dist": {
             "puncture": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         },
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Breach Loader": {
         "damage_dist": {
             "puncture": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         },
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Burdened Magazine": {
         "magazine_capacity": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         "reload_speed": [-0.03, -0.06, -0.09, -0.12, -0.15, -0.18],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Buzz Kill": {
         "damage_dist": {
             "slash": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         },
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Carnis Mandible": {
         "damage_dist": {
@@ -168,7 +169,7 @@
         },
         "status_chance": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Carnis Stinger": {
         "damage_dist": {
@@ -176,31 +177,31 @@
         },
         "status_chance": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Catalyzer Link": {
         "conditional_status_chance": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Charged Chamber": {
         "primed_chamber": [0.067, 0.133, 0.2, 0.267, 0.333, 0.4],
         "max_rank": 5,
-        "compatible_weapons": "sniper"
+        "compatibility_tag": "sniper rifle"
     },
     "Charged Shell": {
         "damage_dist": {
             "electricity": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Chilling Grasp": {
         "damage_dist": {
             "cold": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Chilling Reload": {
         "damage_dist": {
@@ -208,406 +209,406 @@
         },
         "reload_speed": [0.1, 0.2, 0.3, 0.4],
         "max_rank": 3,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Cleanse Corpus": {
         "damage_to_corpus": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Cleanse Grineer": {
         "damage_to_grinier": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Cleanse Infested": {
         "damage_to_infested": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Cleanse Orokin": {
         "damage_to_orokin": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Cleanse The Murmur": {
         "damage_to_murmur": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Collision Force": {
         "damage_dist": {
             "impact": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         },
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Concussion Rounds": {
         "damage_dist": {
             "impact": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Condition Overload": {
         "stacking_base_damage": [0.133, 0.267, 0.4, 0.533, 0.667, 0.8],
         "max_stacks": null,
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Contagious Spread": {
         "damage_dist": {
             "toxin": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Convulsion": {
         "damage_dist": {
             "electricity": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Crash Course": {
         "damage_dist": {
             "impact": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         },
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Creeping Bullseye": {
         "crit_chance": [0.333, 0.667, 1.0, 1.333, 1.667, 2.0],
         "fire_rate": [-0.033, -0.067, -0.1, -0.133, -0.167, -0.2],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Critical Deceleration": {
         "crit_chance": [0.333, 0.667, 1.0, 1.333, 1.667, 2.0],
         "fire_rate": [-0.033, -0.067, -0.1, -0.133, -0.167, -0.2],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Critical Delay": {
         "crit_chance": [0.333, 0.667, 1.0, 1.333, 1.667, 2.0],
         "fire_rate": [-0.033, -0.067, -0.1, -0.133, -0.167, -0.2],
         "conditional_fire_rate": [-0.033, -0.067, -0.1, -0.133, -0.167, -0.2],
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Cryo Rounds": {
         "damage_dist": {
             "cold": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Deep Freeze": {
         "damage_dist": {
             "cold": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Depleted Reload": {
         "magazine_capacity": [-0.1, -0.2, -0.3, -0.4, -0.5, -0.6],
         "reload_speed": [0.08, 0.16, 0.24, 0.32, 0.4, 0.48],
         "max_rank": 5,
-        "compatible_weapons": "sniper"
+        "compatibility_tag": "sniper rifle"
     },
     "Disruptor": {
         "damage_dist": {
             "impact": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Drifting Contact": {
         "status_chance": [0.1, 0.2, 0.3, 0.4],
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Embedded Catalyzer": {
         "conditional_status_chance": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Emergent Aftermath": {
         "conditional_reload_speed": [0.125, 0.25, 0.375, 0.5],
         "max_rank": 3,
-        "compatible_weapons": "sniper"
+        "compatibility_tag": "sniper rifle"
     },
     "Enduring Affliction": {
         "status_chance": [0.167, 0.333, 0.5, 0.667, 0.833, 1.0],
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Expel Corpus": {
         "damage_to_corpus": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Expel Grineer": {
         "damage_to_grinier": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Expel Infested": {
         "damage_to_infested": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Expel Orokin": {
         "damage_to_orokin": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Expel The Murmur": {
         "damage_to_murmur": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Fanged Fusillade": {
         "damage_dist": {
             "slash": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         },
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Fast Hands": {
         "reload_speed": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Fever Strike": {
         "damage_dist": {
             "toxin": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Flawed Ammo Stock": {
         "magazine_capacity": [0.05, 0.1, 0.15, 0.2],
         "max_rank": 3,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Flawed Bane of Corpus": {
         "damage_to_corpus": [0.025, 0.05, 0.075, 0.1],
         "max_rank": 3,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Flawed Bane of Grineer": {
         "damage_to_grinier": [0.025, 0.05, 0.075, 0.1],
         "max_rank": 3,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Flawed Charged Shell": {
         "damage_dist": {
             "electricity": [0.1, 0.2, 0.3, 0.4]
         },
         "max_rank": 3,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Flawed Convulsion": {
         "damage_dist": {
             "electricity": [0.1, 0.2, 0.3, 0.4]
         },
         "max_rank": 3,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Flawed Deep Freeze": {
         "damage_dist": {
             "cold": [0.05, 0.1, 0.15, 0.2]
         },
         "max_rank": 3,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Flawed Expel Corpus": {
         "damage_to_corpus": [0.025, 0.05, 0.075, 0.1],
         "max_rank": 3,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Flawed Expel Grineer": {
         "damage_to_grinier": [0.025, 0.05, 0.075, 0.1],
         "max_rank": 3,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Flawed Fast Hands": {
         "reload_speed": [0.03, 0.06, 0.09, 0.12],
         "max_rank": 3,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Flawed Fever Strike": {
         "damage_dist": {
             "toxin": [0.15, 0.3, 0.45, 0.6]
         },
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Flawed Fury": {
         "attack_speed": [0.05, 0.1, 0.15, 0.2],
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Flawed Heated Charge": {
         "damage_dist": {
             "heat": [0.1, 0.2, 0.3, 0.4]
         },
         "max_rank": 3,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Flawed Hellfire": {
         "damage_dist": {
             "heat": [0.1, 0.2, 0.3, 0.4]
         },
         "max_rank": 3,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Flawed Hornet Strike": {
         "base_damage": [0.1, 0.2, 0.3, 0.4],
         "max_rank": 3,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Flawed Incendiary Coat": {
         "damage_dist": {
             "heat": [0.1, 0.2, 0.3, 0.4]
         },
         "max_rank": 3,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Flawed Magazine Warp": {
         "magazine_capacity": [0.03, 0.06, 0.09, 0.12],
         "max_rank": 3,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Flawed Molten Impact": {
         "damage_dist": {
             "heat": [0.15, 0.3, 0.45, 0.6]
         },
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Flawed North Wind": {
         "damage_dist": {
             "cold": [0.15, 0.3, 0.45, 0.6]
         },
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Flawed Organ Shatter": {
         "crit_damage": [0.15, 0.3, 0.45, 0.6],
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Flawed Pathogen Rounds": {
         "damage_dist": {
             "toxin": [0.1, 0.2, 0.3, 0.4]
         },
         "max_rank": 3,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Flawed Pistol Gambit": {
         "crit_chance": [0.15, 0.3, 0.45, 0.6],
         "max_rank": 3,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Flawed Point Blank": {
         "base_damage": [0.1, 0.2, 0.3, 0.4],
         "max_rank": 3,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Flawed Pressure Point": {
         "base_damage": [0.2, 0.4, 0.6, 0.8],
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Flawed Quickdraw": {
         "reload_speed": [0.05, 0.1, 0.15, 0.2],
         "max_rank": 3,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Flawed Serration": {
         "base_damage": [0.1, 0.2, 0.3, 0.4],
         "max_rank": 3,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Flawed Shocking Touch": {
         "damage_dist": {
             "electricity": [0.15, 0.3, 0.45, 0.6]
         },
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Flawed Shotgun Barrage": {
         "fire_rate": [0.1, 0.2, 0.3, 0.4],
         "max_rank": 3,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Flawed Slip Magazine": {
         "magazine_capacity": [0.025, 0.05, 0.075, 0.1],
         "max_rank": 3,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Flawed Smite Grineer": {
         "damage_to_grinier": [0.05, 0.1, 0.15, 0.2],
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Flawed Speed Trigger": {
         "fire_rate": [0.05, 0.1, 0.15, 0.2],
         "conditional_fire_rate": [0.05, 0.1, 0.15, 0.2],
         "max_rank": 3,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Flawed Stormbringer": {
         "damage_dist": {
             "electricity": [0.1, 0.2, 0.3, 0.4]
         },
         "max_rank": 3,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Flawed Tactical Pump": {
         "reload_speed": [0.03, 0.06, 0.09, 0.12],
         "max_rank": 3,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Flawed Target Cracker": {
         "crit_damage": [0.075, 0.15, 0.225, 0.3],
         "max_rank": 3,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Flawed True Steel": {
         "crit_chance": [0.2, 0.4, 0.6, 0.8],
         "conditional_crit_chance": [0.2, 0.4, 0.6, 0.8],
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Flechette": {
         "damage_dist": {
             "puncture": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Focus Energy": {
         "damage_dist": {
             "electricity": [0.15, 0.3, 0.45, 0.6]
         },
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Focus Radon": {
         "damage_dist": {
             "radiation": [0.15, 0.3, 0.45, 0.6]
         },
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Frail Momentum": {
         "fire_rate": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
         "base_damage": [-0.025, -0.05, -0.075, -0.1, -0.125, -0.15],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Frigid Blast": {
         "damage_dist": {
@@ -615,7 +616,7 @@
         },
         "status_chance": [0.15, 0.3, 0.45, 0.6],
         "max_rank": 3,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Frostbite": {
         "damage_dist": {
@@ -623,95 +624,95 @@
         },
         "status_chance": [0.15, 0.3, 0.45, 0.6],
         "max_rank": 3,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Full Capacity": {
         "magazine_capacity": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "reload_speed": [-0.025, -0.05, -0.075, -0.1, -0.125, -0.15],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Full Contact": {
         "damage_dist": {
             "impact": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         },
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Fury": {
         "attack_speed": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Galvanized Acceleration": {
         "max_stacks": 2,
         "max_rank": 10,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Galvanized Aptitude": {
         "status_chance": [0.073, 0.145, 0.218, 0.291, 0.364, 0.436, 0.509, 0.582, 0.655, 0.727, 0.8],
         "max_stacks": 2,
         "max_rank": 10,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Galvanized Chamber": {
         "multishot": [0.073, 0.145, 0.218, 0.291, 0.364, 0.436, 0.509, 0.582, 0.655, 0.727, 0.8],
         "stacking_multishot": [0.027, 0.055, 0.082, 0.109, 0.136, 0.164, 0.191, 0.218, 0.245, 0.273, 0.3],
         "max_stacks": 5,
         "max_rank": 10,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Galvanized Crosshairs": {
         "conditional_crit_chance": [0.109, 0.218, 0.327, 0.436, 0.545, 0.655, 0.764, 0.873, 0.982, 1.091, 1.2],
         "stacking_crit_chance": [0.036, 0.073, 0.109, 0.145, 0.182, 0.218, 0.255, 0.291, 0.327, 0.364, 0.4],
         "max_stacks": 5,
         "max_rank": 10,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Galvanized Diffusion": {
         "multishot": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1],
         "stacking_multishot": [0.027, 0.055, 0.082, 0.109, 0.136, 0.164, 0.191, 0.218, 0.245, 0.273, 0.3],
         "max_stacks": 4,
         "max_rank": 10,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Galvanized Elementalist": {
         "status_damage": [0.073, 0.145, 0.218, 0.291, 0.364, 0.436, 0.509, 0.582, 0.655, 0.727, 0.8],
         "stacking_status_chance": [0.027, 0.055, 0.082, 0.109, 0.136, 0.164, 0.191, 0.218, 0.245, 0.273, 0.3],
         "max_stacks": 4,
         "max_rank": 10,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Galvanized Hell": {
         "multishot": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1],
         "stacking_multishot": [0.027, 0.055, 0.082, 0.109, 0.136, 0.164, 0.191, 0.218, 0.245, 0.273, 0.3],
         "max_stacks": 4,
         "max_rank": 10,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Galvanized Reflex": {
         "max_stacks": 4,
         "max_rank": 10,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Galvanized Savvy": {
         "status_chance": [0.073, 0.145, 0.218, 0.291, 0.364, 0.436, 0.509, 0.582, 0.655, 0.727, 0.8],
         "max_stacks": 2,
         "max_rank": 10,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Galvanized Scope": {
         "conditional_crit_chance": [0.109, 0.218, 0.327, 0.436, 0.545, 0.655, 0.764, 0.873, 0.982, 1.091, 1.2],
         "stacking_crit_chance": [0.036, 0.073, 0.109, 0.145, 0.182, 0.218, 0.255, 0.291, 0.327, 0.364, 0.4],
         "max_stacks": 5,
         "max_rank": 10,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Galvanized Shot": {
         "status_chance": [0.073, 0.145, 0.218, 0.291, 0.364, 0.436, 0.509, 0.582, 0.655, 0.727, 0.8],
         "max_stacks": 3,
         "max_rank": 10,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Galvanized Steel": {
         "crit_chance": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1],
@@ -719,64 +720,64 @@
         "stacking_crit_damage": [0.027, 0.055, 0.082, 0.109, 0.136, 0.164, 0.191, 0.218, 0.245, 0.273, 0.3],
         "max_stacks": 4,
         "max_rank": 10,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Gladiator Might": {
         "crit_damage": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Gladiator Vice": {
         "attack_speed": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Gunslinger": {
         "fire_rate": [0.12, 0.24, 0.36, 0.48, 0.6, 0.72],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Hammer Shot": {
         "crit_damage": [0.15, 0.3, 0.45, 0.6],
         "status_chance": [0.2, 0.4, 0.6, 0.8],
         "max_rank": 3,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Heated Charge": {
         "damage_dist": {
             "heat": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Heavy Caliber": {
         "base_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65],
         "max_rank": 10,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Heavy Trauma": {
         "damage_dist": {
             "impact": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Hell's Chamber": {
         "multishot": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Hellfire": {
         "damage_dist": {
             "heat": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Hemorrhage": {
         "fire_rate": [0.058, 0.117, 0.175, 0.233, 0.292, 0.35],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "High Voltage": {
         "damage_dist": {
@@ -784,38 +785,38 @@
         },
         "status_chance": [0.15, 0.3, 0.45, 0.6],
         "max_rank": 3,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Hollow Point": {
         "crit_damage": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         "base_damage": [-0.025, -0.05, -0.075, -0.1, -0.125, -0.15],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Hornet Strike": {
         "base_damage": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2],
         "max_rank": 10,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Hunter Munitions": {
         "hunter_munitions": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "primary"
     },
     "Hydraulic Barrel": {
         "magazine_capacity": [-0.05, -0.1, -0.15, -0.2],
         "max_rank": 3,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Hydraulic Chamber": {
         "magazine_capacity": [-0.025, -0.05, -0.075, -0.1],
         "max_rank": 3,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Hydraulic Crosshairs": {
         "conditional_crit_chance": [0.225, 0.45, 0.675, 0.9, 1.125, 1.35],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Ice Storm": {
         "magazine_capacity": [0.1, 0.2, 0.3, 0.4],
@@ -823,38 +824,38 @@
             "cold": [0.1, 0.2, 0.3, 0.4]
         },
         "max_rank": 3,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Impenetrable Offense": {
         "base_damage": [-0.025, -0.05, -0.075, -0.1],
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Incendiary Coat": {
         "damage_dist": {
             "heat": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Infected Clip": {
         "damage_dist": {
             "toxin": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Internal Bleeding": {
         "fire_rate": [0.058, 0.117, 0.175, 0.233, 0.292, 0.35],
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Jagged Edge": {
         "damage_dist": {
             "slash": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Jolt": {
         "damage_dist": {
@@ -862,7 +863,7 @@
         },
         "status_chance": [0.15, 0.3, 0.45, 0.6],
         "max_rank": 3,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Jugulus Barbs": {
         "damage_dist": {
@@ -870,7 +871,7 @@
         },
         "status_chance": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Jugulus Spines": {
         "damage_dist": {
@@ -878,54 +879,54 @@
         },
         "status_chance": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Kill Switch": {
         "conditional_reload_speed": [0.125, 0.25, 0.375, 0.5],
         "max_rank": 3,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Killing Blow": {
         "base_damage": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2],
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Laser Sight": {
         "conditional_crit_chance": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Lethal Torrent": {
         "fire_rate": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         "multishot": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Lie In Wait": {
         "fire_rate": [0.05, 0.1, 0.15, 0.2],
         "max_rank": 3,
-        "compatible_weapons": "sniper"
+        "compatibility_tag": "sniper rifle"
     },
     "Loaded Capacity": {
         "magazine_capacity": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "reload_speed": [-0.025, -0.05, -0.075, -0.1, -0.125, -0.15],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Loose Chamber": {
         "reload_speed": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Loose Magazine": {
         "reload_speed": [0.083, 0.167, 0.25, 0.333, 0.417, 0.5],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Magazine Warp": {
         "magazine_capacity": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Magnetic Capacity": {
         "damage_dist": {
@@ -933,7 +934,7 @@
         },
         "magazine_capacity": [0.1, 0.2, 0.3, 0.4],
         "max_rank": 3,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Magnetic Might": {
         "damage_dist": {
@@ -941,7 +942,7 @@
         },
         "crit_damage": [0.1, 0.2, 0.3, 0.4],
         "max_rank": 3,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Magnetic Rush": {
         "damage_dist": {
@@ -949,7 +950,7 @@
         },
         "attack_speed": [0.05, 0.1, 0.15, 0.2],
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Magnetic Strafe": {
         "damage_dist": {
@@ -957,29 +958,29 @@
         },
         "fire_rate": [0.1, 0.2, 0.3, 0.4],
         "max_rank": 3,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Magnetic Welt": {
         "fire_rate": [0.058, 0.117, 0.175, 0.233, 0.292, 0.35],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Magnum Force": {
         "base_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65],
         "max_rank": 10,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Maim": {
         "damage_dist": {
             "slash": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         },
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Maiming Strike": {
         "crit_chance": [0.25, 0.5, 0.75, 1.0, 1.25, 1.5],
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Malignant Force": {
         "damage_dist": {
@@ -987,102 +988,102 @@
         },
         "status_chance": [0.15, 0.3, 0.45, 0.6],
         "max_rank": 3,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Martial Fury": {
         "attack_speed": [0.05, 0.1, 0.15, 0.2],
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Melee Elementalist": {
         "status_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Melee Prowess": {
         "status_chance": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Merciless Gunfight": {
         "crit_damage": [0.075, 0.15, 0.225, 0.3, 0.375, 0.45],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Molten Impact": {
         "damage_dist": {
             "heat": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Motus Setup": {
         "conditional_status_chance": [0.25, 0.5, 0.75, 1.0],
         "max_rank": 3,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Nano-Applicator": {
         "conditional_status_chance": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "No Return": {
         "damage_dist": {
             "puncture": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "North Wind": {
         "damage_dist": {
             "cold": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Organ Shatter": {
         "crit_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Pathogen Rounds": {
         "damage_dist": {
             "toxin": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Piercing Caliber": {
         "damage_dist": {
             "puncture": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         },
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Piercing Hit": {
         "damage_dist": {
             "puncture": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Pistol Acuity": {
         "weakpoint_damage": [0.318, 0.636, 0.955, 1.273, 1.591, 1.909, 2.227, 2.545, 2.864, 3.182, 3.5],
         "crit_chance": [0.318, 0.636, 0.955, 1.273, 1.591, 1.909, 2.227, 2.545, 2.864, 3.182, 3.5],
         "multishot_lock": true,
         "max_rank": 10,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Pistol Elementalist": {
         "status_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
         "reload_speed": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Pistol Gambit": {
         "crit_chance": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Pistol Pestilence": {
         "damage_dist": {
@@ -1090,261 +1091,261 @@
         },
         "status_chance": [0.15, 0.3, 0.45, 0.6],
         "max_rank": 3,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Point Blank": {
         "base_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Point Strike": {
         "crit_chance": [0.25, 0.5, 0.75, 1.0, 1.25, 1.5],
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Pressure Point": {
         "base_damage": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2],
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Pressurized Magazine": {
         "conditional_fire_rate": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Primary Acuity": {
         "weakpoint_damage": [0.318, 0.636, 0.955, 1.273, 1.591, 1.909, 2.227, 2.545, 2.864, 3.182, 3.5],
         "crit_chance": [0.318, 0.636, 0.955, 1.273, 1.591, 1.909, 2.227, 2.545, 2.864, 3.182, 3.5],
         "multishot_lock": true,
         "max_rank": 10,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Primed Ammo Stock": {
         "magazine_capacity": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1],
         "max_rank": 10,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Primed Bane of Corpus": {
         "damage_to_corpus": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "max_rank": 10,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Primed Bane of Grineer": {
         "damage_to_grinier": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "max_rank": 10,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Primed Bane of Infested": {
         "damage_to_infested": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "max_rank": 10,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Primed Bane of Orokin": {
         "damage_to_orokin": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "max_rank": 10,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Primed Chamber": {
         "primed_chamber": [0.25, 0.5, 0.75, 1.0],
         "max_rank": 3,
-        "compatible_weapons": "sniper"
+        "compatibility_tag": "sniper rifle"
     },
     "Primed Charged Shell": {
         "damage_dist": {
             "electricity": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65]
         },
         "max_rank": 10,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Primed Chilling Grasp": {
         "damage_dist": {
             "cold": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65]
         },
         "max_rank": 10,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Primed Cleanse Corpus": {
         "damage_to_corpus": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "max_rank": 10,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Primed Cleanse Grineer": {
         "damage_to_grinier": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "max_rank": 10,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Primed Cleanse Infested": {
         "damage_to_infested": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "max_rank": 10,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Primed Cleanse Orokin": {
         "damage_to_orokin": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "max_rank": 10,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Primed Convulsion": {
         "damage_dist": {
             "electricity": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65]
         },
         "max_rank": 10,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Primed Cryo Rounds": {
         "damage_dist": {
             "cold": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65]
         },
         "max_rank": 10,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Primed Expel Corpus": {
         "damage_to_corpus": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "max_rank": 10,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Primed Expel Grineer": {
         "damage_to_grinier": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "max_rank": 10,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Primed Expel Infested": {
         "damage_to_infested": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "max_rank": 10,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Primed Expel Orokin": {
         "damage_to_orokin": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "max_rank": 10,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Primed Fast Hands": {
         "reload_speed": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "max_rank": 10,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Primed Fever Strike": {
         "damage_dist": {
             "toxin": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65]
         },
         "max_rank": 10,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Primed Fury": {
         "attack_speed": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "max_rank": 10,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Primed Heated Charge": {
         "damage_dist": {
             "heat": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65]
         },
         "max_rank": 10,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Primed Heavy Trauma": {
         "damage_dist": {
             "impact": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65]
         },
         "max_rank": 10,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Primed Magazine Warp": {
         "magazine_capacity": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "max_rank": 10,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Primed Pistol Gambit": {
         "crit_chance": [0.17, 0.34, 0.51, 0.68, 0.85, 1.02, 1.19, 1.36, 1.53, 1.7, 1.87],
         "max_rank": 10,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Primed Point Blank": {
         "base_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65],
         "max_rank": 10,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Primed Pressure Point": {
         "base_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65],
         "max_rank": 10,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Primed Quickdraw": {
         "reload_speed": [0.08, 0.16, 0.24, 0.32, 0.4, 0.48, 0.56, 0.64, 0.72, 0.8, 0.88],
         "max_rank": 10,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Primed Ravage": {
         "crit_damage": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1],
         "max_rank": 10,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Primed Shred": {
         "fire_rate": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "conditional_fire_rate": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "max_rank": 10,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Primed Slip Magazine": {
         "magazine_capacity": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "max_rank": 10,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Primed Smite Corpus": {
         "damage_to_corpus": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "max_rank": 10,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Primed Smite Grineer": {
         "damage_to_grinier": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "max_rank": 10,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Primed Smite Infested": {
         "damage_to_infested": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "max_rank": 10,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Primed Smite Orokin": {
         "damage_to_orokin": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "max_rank": 10,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Primed Tactical Pump": {
         "reload_speed": [0.091, 0.182, 0.273, 0.364, 0.455, 0.545, 0.636, 0.727, 0.818, 0.909, 1.0],
         "max_rank": 10,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Primed Target Cracker": {
         "crit_damage": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1],
         "max_rank": 10,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Proton Jet": {
         "crit_chance": [0.3, 0.6, 0.9, 1.2],
         "max_rank": 3,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Proton Snap": {
         "conditional_status_chance": [0.125, 0.25, 0.375, 0.5],
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Pummel": {
         "damage_dist": {
             "impact": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         },
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Quickdraw": {
         "reload_speed": [0.08, 0.16, 0.24, 0.32, 0.4, 0.48],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Quickening": {
         "attack_speed": [0.1, 0.2, 0.3, 0.4],
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Radiated Reload": {
         "damage_dist": {
@@ -1352,19 +1353,19 @@
         },
         "reload_speed": [0.1, 0.2, 0.3, 0.4],
         "max_rank": 3,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Ravage": {
         "crit_damage": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Razor Shot": {
         "damage_dist": {
             "slash": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Rending Strike": {
         "damage_dist": {
@@ -1372,22 +1373,22 @@
             "puncture": [0.2, 0.4, 0.6, 0.8]
         },
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Repeater Clip": {
         "conditional_fire_rate": [0.175, 0.35, 0.525, 0.7, 0.875, 1.05],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Rifle Aptitude": {
         "status_chance": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Rifle Elementalist": {
         "status_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Rime Rounds": {
         "damage_dist": {
@@ -1395,33 +1396,33 @@
         },
         "status_chance": [0.15, 0.3, 0.45, 0.6],
         "max_rank": 3,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Rupture": {
         "damage_dist": {
             "impact": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Sacrificial Pressure": {
         "base_damage": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1],
         "conditional_base_damage": [0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.175, 0.2, 0.225, 0.25, 0.275],
         "max_rank": 10,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Sacrificial Steel": {
         "crit_chance": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2],
         "conditional_crit_chance": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55],
         "max_rank": 10,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Sawtooth Clip": {
         "damage_dist": {
             "slash": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Saxum Spittle": {
         "damage_dist": {
@@ -1429,7 +1430,7 @@
         },
         "status_chance": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Saxum Thorax": {
         "damage_dist": {
@@ -1437,7 +1438,7 @@
         },
         "status_chance": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Scattering Inferno": {
         "damage_dist": {
@@ -1445,7 +1446,7 @@
         },
         "status_chance": [0.15, 0.3, 0.45, 0.6],
         "max_rank": 3,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Scorch": {
         "damage_dist": {
@@ -1453,45 +1454,45 @@
         },
         "status_chance": [0.15, 0.3, 0.45, 0.6],
         "max_rank": 3,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Secondary Wind": {
         "conditional_reload_speed": [0.125, 0.25, 0.375, 0.5],
         "max_rank": 3,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Seeking Fury": {
         "reload_speed": [0.025, 0.05, 0.075, 0.1, 0.125, 0.15],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Semi-Pistol Cannonade": {
         "fire_rate_lock": true,
         "base_damage": [0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
         "max_rank": 5,
-        "compatible_weapons": "semi-pistol"
+        "compatibility_tag": "semi-pistol"
     },
     "Semi-Rifle Cannonade": {
         "fire_rate_lock": true,
         "base_damage": [0.4, 0.8, 1.2, 1.6, 2.0, 2.4],
         "max_rank": 5,
-        "compatible_weapons": "semi-rifle"
+        "compatibility_tag": "semi-rifle"
     },
     "Semi-Shotgun Cannonade": {
         "fire_rate_lock": true,
         "base_damage": [0.4, 0.8, 1.2, 1.6, 2.0, 2.4],
         "max_rank": 5,
-        "compatible_weapons": "semi-shotgun"
+        "compatibility_tag": "semi-shotgun"
     },
     "Serration": {
         "base_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5, 1.65],
         "max_rank": 10,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Sharpened Bullets": {
         "conditional_crit_damage": [0.125, 0.25, 0.375, 0.5, 0.625, 0.75],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Shell Shock": {
         "damage_dist": {
@@ -1499,158 +1500,159 @@
         },
         "status_chance": [0.15, 0.3, 0.45, 0.6],
         "max_rank": 3,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Shocking Touch": {
         "damage_dist": {
             "electricity": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Shotgun Barrage": {
         "fire_rate": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Shotgun Elementalist": {
         "status_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
         "magazine_capacity": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Shotgun Savvy": {
         "status_chance": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Shrapnel Shot": {
         "conditional_crit_damage": [0.165, 0.33, 0.495, 0.66, 0.825, 0.99],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Shred": {
         "fire_rate": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "conditional_fire_rate": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Shredder": {
         "damage_dist": {
             "slash": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Slip Magazine": {
         "magazine_capacity": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Smite Corpus": {
         "damage_to_corpus": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Smite Grineer": {
         "damage_to_grinier": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Smite Infested": {
         "damage_to_infested": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Smite Orokin": {
         "damage_to_orokin": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Smite The Murmur": {
         "damage_to_murmur": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Spectral Serration": {
         "conditional_base_damage": [0.3, 0.6, 0.9, 1.2, 1.5, 1.8, 2.1, 2.4, 2.7, 3.0, 3.3],
         "max_rank": 10,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Speed Trigger": {
         "fire_rate": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         "conditional_fire_rate": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Split Chamber": {
         "multishot": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Spoiled Strike": {
         "base_damage": [0.25, 0.5, 0.75, 1.0],
         "attack_speed": [-0.05, -0.1, -0.15, -0.2],
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Stormbringer": {
         "damage_dist": {
             "electricity": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Strain Infection": {
-        "crit_damage": [0.05, 0.1, 0.15, 0.2],
+        "stacking_crit_damage": [0.05, 0.1, 0.15, 0.2],
+        "max_stacks": null,
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Stunning Speed": {
         "reload_speed": [0.1, 0.2, 0.3, 0.4],
         "status_chance": [0.075, 0.15, 0.225, 0.3],
         "max_rank": 3,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Sundering Strike": {
         "damage_dist": {
             "puncture": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9]
         },
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Sure Shot": {
         "status_chance": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Sweeping Serration": {
         "damage_dist": {
             "slash": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
         },
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Tactical Pump": {
         "reload_speed": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Tainted Clip": {
         "magazine_capacity": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         "reload_speed": [-0.05, -0.1, -0.15, -0.2, -0.25, -0.3],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Tainted Shell": {
         "fire_rate": [-0.05, -0.1, -0.15, -0.2, -0.25, -0.3, -0.35, -0.4, -0.45, -0.5, -0.55],
         "max_rank": 10,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Target Cracker": {
         "crit_damage": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         "max_rank": 5,
-        "compatible_weapons": "secondary"
+        "compatibility_tag": "secondary"
     },
     "Thermite Rounds": {
         "damage_dist": {
@@ -1658,7 +1660,7 @@
         },
         "status_chance": [0.15, 0.3, 0.45, 0.6],
         "max_rank": 3,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Toxic Barrage": {
         "damage_dist": {
@@ -1666,13 +1668,13 @@
         },
         "status_chance": [0.15, 0.3, 0.45, 0.6],
         "max_rank": 3,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "True Steel": {
         "crit_chance": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2],
         "conditional_crit_chance": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2],
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Vicious Frost": {
         "damage_dist": {
@@ -1680,48 +1682,48 @@
         },
         "status_chance": [0.15, 0.3, 0.45, 0.6],
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Vicious Spread": {
         "base_damage": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
         "max_rank": 5,
-        "compatible_weapons": "shotgun"
+        "compatibility_tag": "shotgun"
     },
     "Vigilante Armaments": {
         "multishot": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
         "vigilante_bonus": 0.05,
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "primary"
     },
     "Vigilante Fervor": {
         "fire_rate": [0.075, 0.15, 0.225, 0.3, 0.375, 0.45],
         "conditional_fire_rate": [0.075, 0.15, 0.225, 0.3, 0.375, 0.45],
         "vigilante_bonus": 0.05,
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "primary"
     },
     "Vigilante Offense": {
         "vigilante_bonus": 0.05,
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "primary"
     },
     "Vigilante Supplies": {
         "vigilante_bonus": 0.05,
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "primary"
     },
     "Vile Acceleration": {
         "fire_rate": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
         "conditional_fire_rate": [0.15, 0.3, 0.45, 0.6, 0.75, 0.9],
         "base_damage": [-0.025, -0.05, -0.075, -0.1, -0.125, -0.15],
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Vile Precision": {
         "fire_rate": [-0.06, -0.12, -0.18, -0.24, -0.3, -0.36],
         "conditional_fire_rate": [-0.06, -0.12, -0.18, -0.24, -0.3, -0.36],
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Virulent Scourge": {
         "damage_dist": {
@@ -1729,12 +1731,12 @@
         },
         "status_chance": [0.15, 0.3, 0.45, 0.6],
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Vital Sense": {
         "crit_damage": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2],
         "max_rank": 5,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     },
     "Volcanic Edge": {
         "damage_dist": {
@@ -1742,7 +1744,7 @@
         },
         "status_chance": [0.15, 0.3, 0.45, 0.6],
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Voltaic Strike": {
         "damage_dist": {
@@ -1750,12 +1752,13 @@
         },
         "status_chance": [0.15, 0.3, 0.45, 0.6],
         "max_rank": 3,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Weeping Wounds": {
-        "status_chance": [0.067, 0.133, 0.2, 0.267, 0.333, 0.4],
+        "stacking_status_chance": [0.067, 0.133, 0.2, 0.267, 0.333, 0.4],
+        "max_stacks": null,
         "max_rank": 5,
-        "compatible_weapons": "melee"
+        "compatibility_tag": "melee"
     },
     "Wildfire": {
         "magazine_capacity": [0.05, 0.1, 0.15, 0.2],
@@ -1763,6 +1766,6 @@
             "heat": [0.15, 0.3, 0.45, 0.6]
         },
         "max_rank": 3,
-        "compatible_weapons": "primary"
+        "compatibility_tag": "rifle"
     }
 }

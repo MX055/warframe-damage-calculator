@@ -9,7 +9,7 @@
         "crit_damage": 2,
         "attack_speed": 0.833,
         "status_chance": 0.1,
-        "weapon_type": ["Sword and Shield"]
+        "class_tags": ["melee", "sword and shield"]
     },
     "Amanata": {
         "damage_dist": {
@@ -20,7 +20,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.24,
-        "weapon_type": ["Polearm"]
+        "class_tags": ["melee", "polearm"]
     },
     "Amphis": {
         "damage_dist": {
@@ -32,7 +32,7 @@
         "crit_damage": 1.7,
         "attack_speed": 1.25,
         "status_chance": 0.21,
-        "weapon_type": ["Staff"]
+        "class_tags": ["melee", "staff"]
     },
     "Anku": {
         "damage_dist": {
@@ -44,7 +44,7 @@
         "crit_damage": 2,
         "attack_speed": 1.08,
         "status_chance": 0.1,
-        "weapon_type": ["Scythe"]
+        "class_tags": ["melee", "scythe"]
     },
     "Ankyros": {
         "damage_dist": {
@@ -56,7 +56,7 @@
         "crit_damage": 2,
         "attack_speed": 1.17,
         "status_chance": 0.1,
-        "weapon_type": ["Fist"]
+        "class_tags": ["melee", "fist"]
     },
     "Ankyros Prime": {
         "damage_dist": {
@@ -68,7 +68,7 @@
         "crit_damage": 2.4,
         "attack_speed": 1.25,
         "status_chance": 0.16,
-        "weapon_type": ["Fist"]
+        "class_tags": ["melee", "fist"]
     },
     "Arca Titron": {
         "damage_dist": {
@@ -79,7 +79,7 @@
         "crit_damage": 2,
         "attack_speed": 0.733,
         "status_chance": 0.38,
-        "weapon_type": ["Hammer"]
+        "class_tags": ["melee", "hammer"]
     },
     "Argo & Vel": {
         "damage_dist": {
@@ -90,7 +90,7 @@
         "crit_damage": 2.4,
         "attack_speed": 0.8,
         "status_chance": 0.24,
-        "weapon_type": ["Sword and Shield"]
+        "class_tags": ["melee", "sword and shield"]
     },
     "Arum Spinosa": {
         "damage_dist": {
@@ -102,7 +102,7 @@
         "crit_damage": 1.9,
         "attack_speed": 1.08,
         "status_chance": 0.37,
-        "weapon_type": ["Warfan"]
+        "class_tags": ["melee", "warfan"]
     },
     "Atterax": {
         "damage_dist": {
@@ -114,7 +114,7 @@
         "crit_damage": 3,
         "attack_speed": 0.917,
         "status_chance": 0.2,
-        "weapon_type": ["Whip"]
+        "class_tags": ["melee", "whip"]
     },
     "Azothane": {
         "damage_dist": {
@@ -126,7 +126,7 @@
         "crit_damage": 3,
         "attack_speed": 1.17,
         "status_chance": 0.22,
-        "weapon_type": ["Two-Handed Nikana"]
+        "class_tags": ["melee", "two-handed nikana"]
     },
     "Bo": {
         "damage_dist": {
@@ -137,7 +137,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.2,
-        "weapon_type": ["Staff"]
+        "class_tags": ["melee", "staff"]
     },
     "Bo Prime": {
         "damage_dist": {
@@ -148,7 +148,7 @@
         "crit_damage": 2.6,
         "attack_speed": 1.08,
         "status_chance": 0.32,
-        "weapon_type": ["Staff"]
+        "class_tags": ["melee", "staff"]
     },
     "Boltace": {
         "damage_dist": {
@@ -160,7 +160,7 @@
         "crit_damage": 1.5,
         "attack_speed": 0.917,
         "status_chance": 0.28,
-        "weapon_type": ["Tonfa"]
+        "class_tags": ["melee", "tonfa"]
     },
     "Broken Scepter": {
         "damage_dist": {
@@ -172,7 +172,7 @@
         "crit_damage": 2,
         "attack_speed": 1.25,
         "status_chance": 0.3,
-        "weapon_type": ["Staff"]
+        "class_tags": ["melee", "staff"]
     },
     "Broken War": {
         "damage_dist": {
@@ -184,7 +184,7 @@
         "crit_damage": 2.2,
         "attack_speed": 1,
         "status_chance": 0.2,
-        "weapon_type": ["Sword"]
+        "class_tags": ["melee", "sword"]
     },
     "Cadus": {
         "damage_dist": {
@@ -195,7 +195,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.25,
-        "weapon_type": ["Staff"]
+        "class_tags": ["melee", "staff"]
     },
     "Cassowar": {
         "damage_dist": {
@@ -207,7 +207,7 @@
         "crit_damage": 1.4,
         "attack_speed": 1.17,
         "status_chance": 0.28,
-        "weapon_type": ["Polearm"]
+        "class_tags": ["melee", "polearm"]
     },
     "Caustacyst": {
         "damage_dist": {
@@ -220,7 +220,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.37,
-        "weapon_type": ["Scythe"]
+        "class_tags": ["melee", "scythe"]
     },
     "Ceramic Dagger": {
         "damage_dist": {
@@ -231,7 +231,7 @@
         "crit_damage": 1.5,
         "attack_speed": 1,
         "status_chance": 0.2,
-        "weapon_type": ["Dagger"]
+        "class_tags": ["melee", "dagger"]
     },
     "Cerata": {
         "damage_dist": {
@@ -244,7 +244,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.3,
-        "weapon_type": ["Glaive"]
+        "class_tags": ["melee", "glaive"]
     },
     "Ceti Lacera": {
         "damage_dist": {
@@ -257,7 +257,7 @@
         "crit_damage": 2,
         "attack_speed": 1.08,
         "status_chance": 0.4,
-        "weapon_type": ["Blade and Whip"]
+        "class_tags": ["melee", "blade and whip"]
     },
     "Cobra & Crane": {
         "damage_dist": {
@@ -268,7 +268,7 @@
         "crit_damage": 1.5,
         "attack_speed": 0.917,
         "status_chance": 0.36,
-        "weapon_type": ["Sword and Shield"]
+        "class_tags": ["melee", "sword and shield"]
     },
     "Cobra & Crane Prime": {
         "damage_dist": {
@@ -279,7 +279,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.38,
-        "weapon_type": ["Sword and Shield"]
+        "class_tags": ["melee", "sword and shield"]
     },
     "Corufell": {
         "damage_dist": {
@@ -291,7 +291,7 @@
         "crit_damage": 2.4,
         "attack_speed": 1,
         "status_chance": 0.14,
-        "weapon_type": ["Heavy Scythe"]
+        "class_tags": ["melee", "heavy scythe"]
     },
     "Cronus": {
         "damage_dist": {
@@ -303,7 +303,7 @@
         "crit_damage": 1.5,
         "attack_speed": 0.917,
         "status_chance": 0.18,
-        "weapon_type": ["Sword"]
+        "class_tags": ["melee", "sword"]
     },
     "Dakra Prime": {
         "damage_dist": {
@@ -315,7 +315,7 @@
         "crit_damage": 2.4,
         "attack_speed": 1,
         "status_chance": 0.18,
-        "weapon_type": ["Sword"]
+        "class_tags": ["melee", "sword"]
     },
     "Dark Dagger": {
         "damage_dist": {
@@ -327,7 +327,7 @@
         "crit_damage": 1.5,
         "attack_speed": 0.917,
         "status_chance": 0.22,
-        "weapon_type": ["Dagger"]
+        "class_tags": ["melee", "dagger"]
     },
     "Dark Split-Sword (Dual Swords)": {
         "damage_dist": {
@@ -339,7 +339,7 @@
         "crit_damage": 2.5,
         "attack_speed": 1.17,
         "status_chance": 0.15,
-        "weapon_type": ["Dual Swords"]
+        "class_tags": ["melee", "dual swords"]
     },
     "Dark Split-Sword (Heavy Blade)": {
         "damage_dist": {
@@ -351,7 +351,7 @@
         "crit_damage": 2,
         "attack_speed": 0.917,
         "status_chance": 0.25,
-        "weapon_type": ["Heavy Blade"]
+        "class_tags": ["melee", "heavy blade"]
     },
     "Dark Sword": {
         "damage_dist": {
@@ -363,7 +363,7 @@
         "crit_damage": 1.5,
         "attack_speed": 0.833,
         "status_chance": 0.4,
-        "weapon_type": ["Sword"]
+        "class_tags": ["melee", "sword"]
     },
     "Desert Wind": {
         "damage_dist": {
@@ -373,7 +373,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.15,
-        "weapon_type": ["Exalted Weapon"]
+        "class_tags": ["melee", "exalted weapon"]
     },
     "Desert Wind Prime": {
         "damage_dist": {
@@ -383,7 +383,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.15,
-        "weapon_type": ["Exalted Weapon"]
+        "class_tags": ["melee", "exalted weapon"]
     },
     "Destreza": {
         "damage_dist": {
@@ -395,7 +395,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.14,
-        "weapon_type": ["Rapier"]
+        "class_tags": ["melee", "rapier"]
     },
     "Destreza Prime": {
         "damage_dist": {
@@ -407,7 +407,7 @@
         "crit_damage": 3,
         "attack_speed": 0.917,
         "status_chance": 0.2,
-        "weapon_type": ["Rapier"]
+        "class_tags": ["melee", "rapier"]
     },
     "Dex Dakra": {
         "damage_dist": {
@@ -419,7 +419,7 @@
         "crit_damage": 2,
         "attack_speed": 0.883,
         "status_chance": 0.24,
-        "weapon_type": ["Dual Swords"]
+        "class_tags": ["melee", "dual swords"]
     },
     "Dex Nikana": {
         "damage_dist": {
@@ -431,7 +431,7 @@
         "crit_damage": 2.6,
         "attack_speed": 1,
         "status_chance": 0.18,
-        "weapon_type": ["Nikana"]
+        "class_tags": ["melee", "nikana"]
     },
     "Diwata": {
         "damage_dist": {
@@ -443,7 +443,7 @@
         "crit_damage": 2,
         "attack_speed": 1.08,
         "status_chance": 0.1,
-        "weapon_type": ["Exalted Weapon"]
+        "class_tags": ["melee", "exalted weapon"]
     },
     "Diwata Prime": {
         "damage_dist": {
@@ -455,7 +455,7 @@
         "crit_damage": 2,
         "attack_speed": 1.08,
         "status_chance": 0.1,
-        "weapon_type": ["Exalted Weapon"]
+        "class_tags": ["melee", "exalted weapon"]
     },
     "Dorrclave": {
         "damage_dist": {
@@ -465,7 +465,7 @@
         "crit_damage": 2.2,
         "attack_speed": 0.833,
         "status_chance": 0.24,
-        "weapon_type": ["Blade and Whip"]
+        "class_tags": ["melee", "blade and whip"]
     },
     "Dragon Nikana": {
         "damage_dist": {
@@ -477,7 +477,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.22,
-        "weapon_type": ["Nikana"]
+        "class_tags": ["melee", "nikana"]
     },
     "Dual Cleavers": {
         "damage_dist": {
@@ -489,7 +489,7 @@
         "crit_damage": 3,
         "attack_speed": 0.833,
         "status_chance": 0.1,
-        "weapon_type": ["Dual Swords"]
+        "class_tags": ["melee", "dual swords"]
     },
     "Dual Ether": {
         "damage_dist": {
@@ -501,7 +501,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.28,
-        "weapon_type": ["Dual Swords"]
+        "class_tags": ["melee", "dual swords"]
     },
     "Dual Heat Swords": {
         "damage_dist": {
@@ -513,7 +513,7 @@
         "crit_damage": 1.5,
         "attack_speed": 0.917,
         "status_chance": 0.2,
-        "weapon_type": ["Dual Swords"]
+        "class_tags": ["melee", "dual swords"]
     },
     "Dual Ichor": {
         "damage_dist": {
@@ -526,7 +526,7 @@
         "crit_damage": 3,
         "attack_speed": 1.08,
         "status_chance": 0.15,
-        "weapon_type": ["Dual Swords"]
+        "class_tags": ["melee", "dual swords"]
     },
     "Dual Kamas": {
         "damage_dist": {
@@ -538,7 +538,7 @@
         "crit_damage": 1.5,
         "attack_speed": 1.17,
         "status_chance": 0.15,
-        "weapon_type": ["Dual Swords"]
+        "class_tags": ["melee", "dual swords"]
     },
     "Dual Kamas Prime": {
         "damage_dist": {
@@ -550,7 +550,7 @@
         "crit_damage": 2,
         "attack_speed": 1.17,
         "status_chance": 0.25,
-        "weapon_type": ["Dual Swords"]
+        "class_tags": ["melee", "dual swords"]
     },
     "Dual Keres": {
         "damage_dist": {
@@ -562,7 +562,7 @@
         "crit_damage": 2.6,
         "attack_speed": 1.25,
         "status_chance": 0.14,
-        "weapon_type": ["Dual Swords"]
+        "class_tags": ["melee", "dual swords"]
     },
     "Dual Keres Prime": {
         "damage_dist": {
@@ -574,7 +574,7 @@
         "crit_damage": 2.6,
         "attack_speed": 1.25,
         "status_chance": 0.24,
-        "weapon_type": ["Dual Swords"]
+        "class_tags": ["melee", "dual swords"]
     },
     "Dual Raza": {
         "damage_dist": {
@@ -586,7 +586,7 @@
         "crit_damage": 3,
         "attack_speed": 0.917,
         "status_chance": 0.1,
-        "weapon_type": ["Dual Swords"]
+        "class_tags": ["melee", "dual swords"]
     },
     "Dual Skana": {
         "damage_dist": {
@@ -598,7 +598,7 @@
         "crit_damage": 1.5,
         "attack_speed": 0.833,
         "status_chance": 0.16,
-        "weapon_type": ["Dual Swords"]
+        "class_tags": ["melee", "dual swords"]
     },
     "Dual Zoren": {
         "damage_dist": {
@@ -610,7 +610,7 @@
         "crit_damage": 3,
         "attack_speed": 1.17,
         "status_chance": 0.05,
-        "weapon_type": ["Dual Swords"]
+        "class_tags": ["melee", "dual swords"]
     },
     "Edun": {
         "damage_dist": {
@@ -622,7 +622,7 @@
         "crit_damage": 2.6,
         "attack_speed": 1,
         "status_chance": 0.2,
-        "weapon_type": ["Polearm"]
+        "class_tags": ["melee", "polearm"]
     },
     "Ekhein": {
         "damage_dist": {
@@ -632,7 +632,7 @@
         "crit_damage": 2.4,
         "attack_speed": 0.767,
         "status_chance": 0.15,
-        "weapon_type": ["Hammer"]
+        "class_tags": ["melee", "hammer"]
     },
     "Endura": {
         "damage_dist": {
@@ -644,7 +644,7 @@
         "crit_damage": 2,
         "attack_speed": 0.917,
         "status_chance": 0.36,
-        "weapon_type": ["Rapier"]
+        "class_tags": ["melee", "rapier"]
     },
     "Ether Daggers": {
         "damage_dist": {
@@ -656,7 +656,7 @@
         "crit_damage": 1.8,
         "attack_speed": 0.833,
         "status_chance": 0.3,
-        "weapon_type": ["Dual Daggers"]
+        "class_tags": ["melee", "dual daggers"]
     },
     "Ether Reaper": {
         "damage_dist": {
@@ -668,7 +668,7 @@
         "crit_damage": 2,
         "attack_speed": 1.08,
         "status_chance": 0.2,
-        "weapon_type": ["Scythe"]
+        "class_tags": ["melee", "scythe"]
     },
     "Ether Sword": {
         "damage_dist": {
@@ -680,7 +680,7 @@
         "crit_damage": 1.5,
         "attack_speed": 1,
         "status_chance": 0.34,
-        "weapon_type": ["Sword"]
+        "class_tags": ["melee", "sword"]
     },
     "Exalted Blade": {
         "damage_dist": {
@@ -692,7 +692,7 @@
         "crit_damage": 2,
         "attack_speed": 0.833,
         "status_chance": 0.15,
-        "weapon_type": ["Exalted Weapon"]
+        "class_tags": ["melee", "exalted weapon"]
     },
     "Exalted Prime Blade": {
         "damage_dist": {
@@ -704,7 +704,7 @@
         "crit_damage": 2,
         "attack_speed": 0.833,
         "status_chance": 0.15,
-        "weapon_type": ["Exalted Weapon"]
+        "class_tags": ["melee", "exalted weapon"]
     },
     "Exalted Umbra Blade": {
         "damage_dist": {
@@ -716,7 +716,7 @@
         "crit_damage": 2,
         "attack_speed": 0.833,
         "status_chance": 0.15,
-        "weapon_type": ["Exalted Weapon"]
+        "class_tags": ["melee", "exalted weapon"]
     },
     "Falcor": {
         "damage_dist": {
@@ -729,7 +729,7 @@
         "crit_damage": 1.6,
         "attack_speed": 0.833,
         "status_chance": 0.34,
-        "weapon_type": ["Glaive"]
+        "class_tags": ["melee", "glaive"]
     },
     "Fang": {
         "damage_dist": {
@@ -741,7 +741,7 @@
         "crit_damage": 1.5,
         "attack_speed": 0.917,
         "status_chance": 0.16,
-        "weapon_type": ["Dual Daggers"]
+        "class_tags": ["melee", "dual daggers"]
     },
     "Fang Prime": {
         "damage_dist": {
@@ -753,7 +753,7 @@
         "crit_damage": 2.6,
         "attack_speed": 1,
         "status_chance": 0.26,
-        "weapon_type": ["Dual Daggers"]
+        "class_tags": ["melee", "dual daggers"]
     },
     "Fragor": {
         "damage_dist": {
@@ -765,7 +765,7 @@
         "crit_damage": 2,
         "attack_speed": 0.833,
         "status_chance": 0.1,
-        "weapon_type": ["Hammer"]
+        "class_tags": ["melee", "hammer"]
     },
     "Fragor Prime": {
         "damage_dist": {
@@ -777,7 +777,7 @@
         "crit_damage": 2.5,
         "attack_speed": 0.8,
         "status_chance": 0.18,
-        "weapon_type": ["Hammer"]
+        "class_tags": ["melee", "hammer"]
     },
     "Furax": {
         "damage_dist": {
@@ -789,7 +789,7 @@
         "crit_damage": 2.3,
         "attack_speed": 1,
         "status_chance": 0.11,
-        "weapon_type": ["Fist"]
+        "class_tags": ["melee", "fist"]
     },
     "Furax Wraith": {
         "damage_dist": {
@@ -801,7 +801,7 @@
         "crit_damage": 2.7,
         "attack_speed": 1.08,
         "status_chance": 0.15,
-        "weapon_type": ["Fist"]
+        "class_tags": ["melee", "fist"]
     },
     "Galatine": {
         "damage_dist": {
@@ -813,7 +813,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.2,
-        "weapon_type": ["Heavy Blade"]
+        "class_tags": ["melee", "heavy blade"]
     },
     "Galatine Prime": {
         "damage_dist": {
@@ -825,7 +825,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.26,
-        "weapon_type": ["Heavy Blade"]
+        "class_tags": ["melee", "heavy blade"]
     },
     "Galvacord": {
         "damage_dist": {
@@ -838,7 +838,7 @@
         "crit_damage": 1.8,
         "attack_speed": 0.75,
         "status_chance": 0.3,
-        "weapon_type": ["Whip"]
+        "class_tags": ["melee", "whip"]
     },
     "Garuda Prime Talons": {
         "damage_dist": {
@@ -850,7 +850,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.36,
-        "weapon_type": ["Claws"]
+        "class_tags": ["melee", "claws"]
     },
     "Garuda Talons": {
         "damage_dist": {
@@ -862,7 +862,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.36,
-        "weapon_type": ["Claws"]
+        "class_tags": ["melee", "claws"]
     },
     "Gazal Machete": {
         "damage_dist": {
@@ -874,7 +874,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.3,
-        "weapon_type": ["Machete"]
+        "class_tags": ["melee", "machete"]
     },
     "Ghoulsaw": {
         "damage_dist": {
@@ -886,7 +886,7 @@
         "crit_damage": 1.9,
         "attack_speed": 1,
         "status_chance": 0.27,
-        "weapon_type": ["Assault Saw"]
+        "class_tags": ["melee", "assault saw"]
     },
     "Glaive": {
         "damage_dist": {
@@ -898,7 +898,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.12,
-        "weapon_type": ["Glaive"]
+        "class_tags": ["melee", "glaive"]
     },
     "Glaive Prime": {
         "damage_dist": {
@@ -910,7 +910,7 @@
         "crit_damage": 2,
         "attack_speed": 1.25,
         "status_chance": 0.3,
-        "weapon_type": ["Glaive"]
+        "class_tags": ["melee", "glaive"]
     },
     "Gram": {
         "damage_dist": {
@@ -922,7 +922,7 @@
         "crit_damage": 2,
         "attack_speed": 0.95,
         "status_chance": 0.15,
-        "weapon_type": ["Heavy Blade"]
+        "class_tags": ["melee", "heavy blade"]
     },
     "Gram Prime": {
         "damage_dist": {
@@ -934,7 +934,7 @@
         "crit_damage": 2.6,
         "attack_speed": 0.8,
         "status_chance": 0.32,
-        "weapon_type": ["Heavy Blade"]
+        "class_tags": ["melee", "heavy blade"]
     },
     "Guandao": {
         "damage_dist": {
@@ -946,7 +946,7 @@
         "crit_damage": 2.2,
         "attack_speed": 0.833,
         "status_chance": 0.04,
-        "weapon_type": ["Polearm"]
+        "class_tags": ["melee", "polearm"]
     },
     "Guandao Prime": {
         "damage_dist": {
@@ -958,7 +958,7 @@
         "crit_damage": 2.4,
         "attack_speed": 1,
         "status_chance": 0.2,
-        "weapon_type": ["Polearm"]
+        "class_tags": ["melee", "polearm"]
     },
     "Gunsen": {
         "damage_dist": {
@@ -970,7 +970,7 @@
         "crit_damage": 2,
         "attack_speed": 1.17,
         "status_chance": 0.28,
-        "weapon_type": ["Warfan"]
+        "class_tags": ["melee", "warfan"]
     },
     "Gunsen Prime": {
         "damage_dist": {
@@ -982,7 +982,7 @@
         "crit_damage": 2,
         "attack_speed": 1.17,
         "status_chance": 0.34,
-        "weapon_type": ["Warfan"]
+        "class_tags": ["melee", "warfan"]
     },
     "Halikar": {
         "damage_dist": {
@@ -994,7 +994,7 @@
         "crit_damage": 2,
         "attack_speed": 1.17,
         "status_chance": 0.29,
-        "weapon_type": ["Glaive"]
+        "class_tags": ["melee", "glaive"]
     },
     "Halikar Wraith": {
         "damage_dist": {
@@ -1006,7 +1006,7 @@
         "crit_damage": 2.3,
         "attack_speed": 1.17,
         "status_chance": 0.35,
-        "weapon_type": ["Glaive"]
+        "class_tags": ["melee", "glaive"]
     },
     "Harmony": {
         "damage_dist": {
@@ -1017,7 +1017,7 @@
         "crit_damage": 2.2,
         "attack_speed": 1.083,
         "status_chance": 0.36,
-        "weapon_type": ["Scythe"]
+        "class_tags": ["melee", "scythe"]
     },
     "Hate": {
         "damage_dist": {
@@ -1029,7 +1029,7 @@
         "crit_damage": 2.5,
         "attack_speed": 0.917,
         "status_chance": 0.2,
-        "weapon_type": ["Scythe"]
+        "class_tags": ["melee", "scythe"]
     },
     "Heat Dagger": {
         "damage_dist": {
@@ -1042,7 +1042,7 @@
         "crit_damage": 1.6,
         "attack_speed": 0.75,
         "status_chance": 0.14,
-        "weapon_type": ["Dagger"]
+        "class_tags": ["melee", "dagger"]
     },
     "Heat Sword": {
         "damage_dist": {
@@ -1054,7 +1054,7 @@
         "crit_damage": 1.5,
         "attack_speed": 0.917,
         "status_chance": 0.2,
-        "weapon_type": ["Sword"]
+        "class_tags": ["melee", "sword"]
     },
     "Heliocor": {
         "damage_dist": {
@@ -1066,7 +1066,7 @@
         "crit_damage": 2,
         "attack_speed": 0.833,
         "status_chance": 0.12,
-        "weapon_type": ["Hammer"]
+        "class_tags": ["melee", "hammer"]
     },
     "Hespar": {
         "damage_dist": {
@@ -1078,7 +1078,7 @@
         "crit_damage": 2.2,
         "attack_speed": 1,
         "status_chance": 0.28,
-        "weapon_type": ["Heavy Scythe"]
+        "class_tags": ["melee", "heavy scythe"]
     },
     "Hirudo": {
         "damage_dist": {
@@ -1090,7 +1090,7 @@
         "crit_damage": 3,
         "attack_speed": 1,
         "status_chance": 0.11,
-        "weapon_type": ["Sparring"]
+        "class_tags": ["melee", "sparring"]
     },
     "Innodem": {
         "damage_dist": {
@@ -1102,7 +1102,7 @@
         "crit_damage": 2,
         "attack_speed": 0.75,
         "status_chance": 0.22,
-        "weapon_type": ["Dagger"]
+        "class_tags": ["melee", "dagger"]
     },
     "Iron Staff": {
         "damage_dist": {
@@ -1113,7 +1113,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.3,
-        "weapon_type": ["Exalted Weapon"]
+        "class_tags": ["melee", "exalted weapon"]
     },
     "Iron Staff Prime": {
         "damage_dist": {
@@ -1124,7 +1124,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.3,
-        "weapon_type": ["Exalted Weapon"]
+        "class_tags": ["melee", "exalted weapon"]
     },
     "Jat Kittag": {
         "damage_dist": {
@@ -1136,7 +1136,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.25,
-        "weapon_type": ["Hammer"]
+        "class_tags": ["melee", "hammer"]
     },
     "Jat Kusar": {
         "damage_dist": {
@@ -1149,7 +1149,7 @@
         "crit_damage": 2.5,
         "attack_speed": 0.833,
         "status_chance": 0.19,
-        "weapon_type": ["Blade and Whip"]
+        "class_tags": ["melee", "blade and whip"]
     },
     "Jaw Sword": {
         "damage_dist": {
@@ -1161,7 +1161,7 @@
         "crit_damage": 1.5,
         "attack_speed": 0.917,
         "status_chance": 0.16,
-        "weapon_type": ["Sword"]
+        "class_tags": ["melee", "sword"]
     },
     "Kama": {
         "damage_dist": {
@@ -1173,7 +1173,7 @@
         "crit_damage": 1.8,
         "attack_speed": 1.17,
         "status_chance": 0.1,
-        "weapon_type": ["Machete"]
+        "class_tags": ["melee", "machete"]
     },
     "Karyst": {
         "damage_dist": {
@@ -1186,7 +1186,7 @@
         "crit_damage": 2,
         "attack_speed": 0.75,
         "status_chance": 0.26,
-        "weapon_type": ["Dagger"]
+        "class_tags": ["melee", "dagger"]
     },
     "Karyst Prime": {
         "damage_dist": {
@@ -1199,7 +1199,7 @@
         "crit_damage": 2.2,
         "attack_speed": 0.667,
         "status_chance": 0.3,
-        "weapon_type": ["Dagger"]
+        "class_tags": ["melee", "dagger"]
     },
     "Keratinos": {
         "damage_dist": {
@@ -1212,7 +1212,7 @@
         "crit_damage": 2.1,
         "attack_speed": 0.917,
         "status_chance": 0.29,
-        "weapon_type": ["Claws"]
+        "class_tags": ["melee", "claws"]
     },
     "Kesheg": {
         "damage_dist": {
@@ -1224,7 +1224,7 @@
         "crit_damage": 2.5,
         "attack_speed": 0.833,
         "status_chance": 0.23,
-        "weapon_type": ["Polearm"]
+        "class_tags": ["melee", "polearm"]
     },
     "Kestrel": {
         "damage_dist": {
@@ -1236,7 +1236,7 @@
         "crit_damage": 2,
         "attack_speed": 1.08,
         "status_chance": 0.1,
-        "weapon_type": ["Glaive"]
+        "class_tags": ["melee", "glaive"]
     },
     "Kogake": {
         "damage_dist": {
@@ -1248,7 +1248,7 @@
         "crit_damage": 2,
         "attack_speed": 0.917,
         "status_chance": 0.1,
-        "weapon_type": ["Sparring"]
+        "class_tags": ["melee", "sparring"]
     },
     "Kogake Prime": {
         "damage_dist": {
@@ -1260,7 +1260,7 @@
         "crit_damage": 1.8,
         "attack_speed": 0.917,
         "status_chance": 0.38,
-        "weapon_type": ["Sparring"]
+        "class_tags": ["melee", "sparring"]
     },
     "Korrudo": {
         "damage_dist": {
@@ -1272,7 +1272,7 @@
         "crit_damage": 2.5,
         "attack_speed": 0.833,
         "status_chance": 0.09,
-        "weapon_type": ["Sparring"]
+        "class_tags": ["melee", "sparring"]
     },
     "Korumm": {
         "damage_dist": {
@@ -1284,7 +1284,7 @@
         "crit_damage": 2.2,
         "attack_speed": 1,
         "status_chance": 0.3,
-        "weapon_type": ["Polearm"]
+        "class_tags": ["melee", "polearm"]
     },
     "Kreska": {
         "damage_dist": {
@@ -1297,7 +1297,7 @@
         "crit_damage": 2,
         "attack_speed": 0.917,
         "status_chance": 0.22,
-        "weapon_type": ["Machete"]
+        "class_tags": ["melee", "machete"]
     },
     "Krohkur": {
         "damage_dist": {
@@ -1309,7 +1309,7 @@
         "crit_damage": 2.3,
         "attack_speed": 0.833,
         "status_chance": 0.19,
-        "weapon_type": ["Sword"]
+        "class_tags": ["melee", "sword"]
     },
     "Kronen": {
         "damage_dist": {
@@ -1321,7 +1321,7 @@
         "crit_damage": 1.5,
         "attack_speed": 1.08,
         "status_chance": 0.2,
-        "weapon_type": ["Tonfa"]
+        "class_tags": ["melee", "tonfa"]
     },
     "Kronen Prime": {
         "damage_dist": {
@@ -1333,7 +1333,7 @@
         "crit_damage": 2,
         "attack_speed": 1.17,
         "status_chance": 0.34,
-        "weapon_type": ["Tonfa"]
+        "class_tags": ["melee", "tonfa"]
     },
     "Kuva Shildeg": {
         "damage_dist": {
@@ -1345,7 +1345,7 @@
         "crit_damage": 2.7,
         "attack_speed": 0.917,
         "status_chance": 0.27,
-        "weapon_type": ["Hammer"]
+        "class_tags": ["melee", "hammer"]
     },
     "Lacera": {
         "damage_dist": {
@@ -1358,7 +1358,7 @@
         "crit_damage": 2,
         "attack_speed": 0.917,
         "status_chance": 0.45,
-        "weapon_type": ["Blade and Whip"]
+        "class_tags": ["melee", "blade and whip"]
     },
     "Lecta": {
         "damage_dist": {
@@ -1370,7 +1370,7 @@
         "crit_damage": 1.5,
         "attack_speed": 1,
         "status_chance": 0.25,
-        "weapon_type": ["Whip"]
+        "class_tags": ["melee", "whip"]
     },
     "Lesion": {
         "damage_dist": {
@@ -1382,7 +1382,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.37,
-        "weapon_type": ["Polearm"]
+        "class_tags": ["melee", "polearm"]
     },
     "MK1-Bo": {
         "damage_dist": {
@@ -1393,7 +1393,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.1,
-        "weapon_type": ["Staff"]
+        "class_tags": ["melee", "staff"]
     },
     "MK1-Furax": {
         "damage_dist": {
@@ -1405,7 +1405,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.1,
-        "weapon_type": ["Fist"]
+        "class_tags": ["melee", "fist"]
     },
     "Machete": {
         "damage_dist": {
@@ -1417,7 +1417,7 @@
         "crit_damage": 1.5,
         "attack_speed": 0.917,
         "status_chance": 0.15,
-        "weapon_type": ["Machete"]
+        "class_tags": ["melee", "machete"]
     },
     "Machete Wraith": {
         "damage_dist": {
@@ -1429,7 +1429,7 @@
         "crit_damage": 2.1,
         "attack_speed": 1.08,
         "status_chance": 0.33,
-        "weapon_type": ["Machete"]
+        "class_tags": ["melee", "machete"]
     },
     "Magistar": {
         "damage_dist": {
@@ -1441,7 +1441,7 @@
         "crit_damage": 2,
         "attack_speed": 0.833,
         "status_chance": 0.1,
-        "weapon_type": ["Hammer"]
+        "class_tags": ["melee", "hammer"]
     },
     "Masseter": {
         "damage_dist": {
@@ -1452,7 +1452,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.28,
-        "weapon_type": ["Heavy Blade"]
+        "class_tags": ["melee", "heavy blade"]
     },
     "Masseter Prime": {
         "damage_dist": {
@@ -1463,7 +1463,7 @@
         "crit_damage": 2.2,
         "attack_speed": 1.083,
         "status_chance": 0.36,
-        "weapon_type": ["Heavy Blade"]
+        "class_tags": ["melee", "heavy blade"]
     },
     "Mios": {
         "damage_dist": {
@@ -1475,7 +1475,7 @@
         "crit_damage": 2,
         "attack_speed": 1.08,
         "status_chance": 0.25,
-        "weapon_type": ["Blade and Whip"]
+        "class_tags": ["melee", "blade and whip"]
     },
     "Mire": {
         "damage_dist": {
@@ -1488,7 +1488,7 @@
         "crit_damage": 1.5,
         "attack_speed": 1.08,
         "status_chance": 0.31,
-        "weapon_type": ["Sword"]
+        "class_tags": ["melee", "sword"]
     },
     "Nami Skyla": {
         "damage_dist": {
@@ -1500,7 +1500,7 @@
         "crit_damage": 1.5,
         "attack_speed": 0.917,
         "status_chance": 0.15,
-        "weapon_type": ["Dual Swords"]
+        "class_tags": ["melee", "dual swords"]
     },
     "Nami Skyla Prime": {
         "damage_dist": {
@@ -1512,7 +1512,7 @@
         "crit_damage": 2,
         "attack_speed": 1.33,
         "status_chance": 0.34,
-        "weapon_type": ["Dual Swords"]
+        "class_tags": ["melee", "dual swords"]
     },
     "Nami Solo": {
         "damage_dist": {
@@ -1524,7 +1524,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.25,
-        "weapon_type": ["Machete"]
+        "class_tags": ["melee", "machete"]
     },
     "Nepheri": {
         "damage_dist": {
@@ -1537,7 +1537,7 @@
         "crit_damage": 2.3,
         "attack_speed": 1,
         "status_chance": 0.33,
-        "weapon_type": ["Dual Daggers"]
+        "class_tags": ["melee", "dual daggers"]
     },
     "Nikana": {
         "damage_dist": {
@@ -1549,7 +1549,7 @@
         "crit_damage": 2,
         "attack_speed": 0.917,
         "status_chance": 0.16,
-        "weapon_type": ["Nikana"]
+        "class_tags": ["melee", "nikana"]
     },
     "Nikana Prime": {
         "damage_dist": {
@@ -1561,7 +1561,7 @@
         "crit_damage": 2.4,
         "attack_speed": 1.08,
         "status_chance": 0.28,
-        "weapon_type": ["Nikana"]
+        "class_tags": ["melee", "nikana"]
     },
     "Ninkondi": {
         "damage_dist": {
@@ -1572,7 +1572,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.35,
-        "weapon_type": ["Nunchaku"]
+        "class_tags": ["melee", "nunchaku"]
     },
     "Ninkondi Prime": {
         "damage_dist": {
@@ -1585,7 +1585,7 @@
         "crit_damage": 2.4,
         "attack_speed": 1,
         "status_chance": 0.36,
-        "weapon_type": ["Nunchaku"]
+        "class_tags": ["melee", "nunchaku"]
     },
     "Obex": {
         "damage_dist": {
@@ -1597,7 +1597,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.1,
-        "weapon_type": ["Sparring"]
+        "class_tags": ["melee", "sparring"]
     },
     "Ohma": {
         "damage_dist": {
@@ -1609,7 +1609,7 @@
         "crit_damage": 2,
         "attack_speed": 0.917,
         "status_chance": 0.3,
-        "weapon_type": ["Tonfa"]
+        "class_tags": ["melee", "tonfa"]
     },
     "Okina": {
         "damage_dist": {
@@ -1621,7 +1621,7 @@
         "crit_damage": 2,
         "attack_speed": 1.08,
         "status_chance": 0.2,
-        "weapon_type": ["Dual Daggers"]
+        "class_tags": ["melee", "dual daggers"]
     },
     "Okina Prime": {
         "damage_dist": {
@@ -1633,7 +1633,7 @@
         "crit_damage": 2.6,
         "attack_speed": 1.17,
         "status_chance": 0.24,
-        "weapon_type": ["Dual Daggers"]
+        "class_tags": ["melee", "dual daggers"]
     },
     "Orthos": {
         "damage_dist": {
@@ -1645,7 +1645,7 @@
         "crit_damage": 1.5,
         "attack_speed": 0.917,
         "status_chance": 0.18,
-        "weapon_type": ["Polearm"]
+        "class_tags": ["melee", "polearm"]
     },
     "Orthos Prime": {
         "damage_dist": {
@@ -1657,7 +1657,7 @@
         "crit_damage": 2.2,
         "attack_speed": 1.17,
         "status_chance": 0.36,
-        "weapon_type": ["Polearm"]
+        "class_tags": ["melee", "polearm"]
     },
     "Orvius": {
         "damage_dist": {
@@ -1669,7 +1669,7 @@
         "crit_damage": 2,
         "attack_speed": 0.75,
         "status_chance": 0.18,
-        "weapon_type": ["Glaive"]
+        "class_tags": ["melee", "glaive"]
     },
     "Pangolin Prime": {
         "damage_dist": {
@@ -1681,7 +1681,7 @@
         "crit_damage": 2.2,
         "attack_speed": 0.917,
         "status_chance": 0.3,
-        "weapon_type": ["Sword"]
+        "class_tags": ["melee", "sword"]
     },
     "Pangolin Sword": {
         "damage_dist": {
@@ -1693,7 +1693,7 @@
         "crit_damage": 1.5,
         "attack_speed": 0.917,
         "status_chance": 0.22,
-        "weapon_type": ["Sword"]
+        "class_tags": ["melee", "sword"]
     },
     "Paracesis": {
         "damage_dist": {
@@ -1705,7 +1705,7 @@
         "crit_damage": 2.6,
         "attack_speed": 0.917,
         "status_chance": 0.22,
-        "weapon_type": ["Heavy Blade"]
+        "class_tags": ["melee", "heavy blade"]
     },
     "Pathocyst": {
         "damage_dist": {
@@ -1718,7 +1718,7 @@
         "crit_damage": 2.1,
         "attack_speed": 0.667,
         "status_chance": 0.3,
-        "weapon_type": ["Glaive"]
+        "class_tags": ["melee", "glaive"]
     },
     "Pennant": {
         "damage_dist": {
@@ -1730,7 +1730,7 @@
         "crit_damage": 2.4,
         "attack_speed": 0.917,
         "status_chance": 0.1,
-        "weapon_type": ["Two-Handed Nikana"]
+        "class_tags": ["melee", "two-handed nikana"]
     },
     "Plasma Sword": {
         "damage_dist": {
@@ -1743,7 +1743,7 @@
         "crit_damage": 2,
         "attack_speed": 0.667,
         "status_chance": 0.18,
-        "weapon_type": ["Sword"]
+        "class_tags": ["melee", "sword"]
     },
     "Praedos": {
         "damage_dist": {
@@ -1755,7 +1755,7 @@
         "crit_damage": 2,
         "attack_speed": 1.17,
         "status_chance": 0.2,
-        "weapon_type": ["Tonfa"]
+        "class_tags": ["melee", "tonfa"]
     },
     "Prisma Dual Cleavers": {
         "damage_dist": {
@@ -1767,7 +1767,7 @@
         "crit_damage": 3,
         "attack_speed": 1,
         "status_chance": 0.25,
-        "weapon_type": ["Dual Swords"]
+        "class_tags": ["melee", "dual swords"]
     },
     "Prisma Machete": {
         "damage_dist": {
@@ -1779,7 +1779,7 @@
         "crit_damage": 1.9,
         "attack_speed": 0.917,
         "status_chance": 0.31,
-        "weapon_type": ["Machete"]
+        "class_tags": ["melee", "machete"]
     },
     "Prisma Obex": {
         "damage_dist": {
@@ -1791,7 +1791,7 @@
         "crit_damage": 2,
         "attack_speed": 1.33,
         "status_chance": 0.3,
-        "weapon_type": ["Sparring"]
+        "class_tags": ["melee", "sparring"]
     },
     "Prisma Ohma": {
         "damage_dist": {
@@ -1803,7 +1803,7 @@
         "crit_damage": 2.2,
         "attack_speed": 1,
         "status_chance": 0.2,
-        "weapon_type": ["Tonfa"]
+        "class_tags": ["melee", "tonfa"]
     },
     "Prisma Skana": {
         "damage_dist": {
@@ -1815,7 +1815,7 @@
         "crit_damage": 2.2,
         "attack_speed": 1,
         "status_chance": 0.16,
-        "weapon_type": ["Sword"]
+        "class_tags": ["melee", "sword"]
     },
     "Prova": {
         "damage_dist": {
@@ -1826,7 +1826,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.16,
-        "weapon_type": ["Machete"]
+        "class_tags": ["melee", "machete"]
     },
     "Prova Vandal": {
         "damage_dist": {
@@ -1837,7 +1837,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.32,
-        "weapon_type": ["Machete"]
+        "class_tags": ["melee", "machete"]
     },
     "Pulmonars": {
         "damage_dist": {
@@ -1848,7 +1848,7 @@
         "crit_damage": 2.3,
         "attack_speed": 0.917,
         "status_chance": 0.33,
-        "weapon_type": ["Nunchaku"]
+        "class_tags": ["melee", "nunchaku"]
     },
     "Pupacyst": {
         "damage_dist": {
@@ -1859,7 +1859,7 @@
         "crit_damage": 1.5,
         "attack_speed": 0.833,
         "status_chance": 0.27,
-        "weapon_type": ["Polearm"]
+        "class_tags": ["melee", "polearm"]
     },
     "Quassus": {
         "damage_dist": {
@@ -1871,7 +1871,7 @@
         "crit_damage": 2,
         "attack_speed": 0.833,
         "status_chance": 0.12,
-        "weapon_type": ["Warfan"]
+        "class_tags": ["melee", "warfan"]
     },
     "Quassus Prime": {
         "damage_dist": {
@@ -1883,7 +1883,7 @@
         "crit_damage": 2.5,
         "attack_speed": 0.833,
         "status_chance": 0.18,
-        "weapon_type": ["Warfan"]
+        "class_tags": ["melee", "warfan"]
     },
     "Rakta Dark Dagger": {
         "damage_dist": {
@@ -1895,7 +1895,7 @@
         "crit_damage": 1.8,
         "attack_speed": 1,
         "status_chance": 0.3,
-        "weapon_type": ["Dagger"]
+        "class_tags": ["melee", "dagger"]
     },
     "Reaper Prime": {
         "damage_dist": {
@@ -1907,7 +1907,7 @@
         "crit_damage": 2.5,
         "attack_speed": 1.08,
         "status_chance": 0.25,
-        "weapon_type": ["Scythe"]
+        "class_tags": ["melee", "scythe"]
     },
     "Redeemer": {
         "damage_dist": {
@@ -1919,7 +1919,7 @@
         "crit_damage": 1.8,
         "attack_speed": 0.833,
         "status_chance": 0.22,
-        "weapon_type": ["Gunblade"]
+        "class_tags": ["melee", "gunblade"]
     },
     "Redeemer Prime": {
         "damage_dist": {
@@ -1931,7 +1931,7 @@
         "crit_damage": 2.2,
         "attack_speed": 0.917,
         "status_chance": 0.3,
-        "weapon_type": ["Gunblade"]
+        "class_tags": ["melee", "gunblade"]
     },
     "Ripkas": {
         "damage_dist": {
@@ -1943,7 +1943,7 @@
         "crit_damage": 2,
         "attack_speed": 0.883,
         "status_chance": 0.15,
-        "weapon_type": ["Claws"]
+        "class_tags": ["melee", "claws"]
     },
     "Rumblejack": {
         "damage_dist": {
@@ -1954,7 +1954,7 @@
         "crit_damage": 1.8,
         "attack_speed": 0.67,
         "status_chance": 0.4,
-        "weapon_type": ["Dagger"]
+        "class_tags": ["melee", "dagger"]
     },
     "Ruvox": {
         "damage_dist": {
@@ -1964,7 +1964,7 @@
         "crit_damage": 2.2,
         "attack_speed": 1,
         "status_chance": 0.2,
-        "weapon_type": ["Fist"]
+        "class_tags": ["melee", "fist"]
     },
     "Sampotes": {
         "damage_dist": {
@@ -1976,7 +1976,7 @@
         "crit_damage": 3,
         "attack_speed": 0.833,
         "status_chance": 0.28,
-        "weapon_type": ["Hammer"]
+        "class_tags": ["melee", "hammer"]
     },
     "Sancti Magistar": {
         "damage_dist": {
@@ -1988,7 +1988,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.2,
-        "weapon_type": ["Hammer"]
+        "class_tags": ["melee", "hammer"]
     },
     "Sarofang": {
         "damage_dist": {
@@ -2000,7 +2000,7 @@
         "crit_damage": 2,
         "attack_speed": 1.17,
         "status_chance": 0.2,
-        "weapon_type": ["Heavy Blade"]
+        "class_tags": ["melee", "heavy blade"]
     },
     "Sarpa": {
         "damage_dist": {
@@ -2012,7 +2012,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.28,
-        "weapon_type": ["Gunblade"]
+        "class_tags": ["melee", "gunblade"]
     },
     "Scindo": {
         "damage_dist": {
@@ -2024,7 +2024,7 @@
         "crit_damage": 1.5,
         "attack_speed": 0.917,
         "status_chance": 0.1,
-        "weapon_type": ["Heavy Blade"]
+        "class_tags": ["melee", "heavy blade"]
     },
     "Scindo Prime": {
         "damage_dist": {
@@ -2036,7 +2036,7 @@
         "crit_damage": 2.4,
         "attack_speed": 0.967,
         "status_chance": 0.24,
-        "weapon_type": ["Heavy Blade"]
+        "class_tags": ["melee", "heavy blade"]
     },
     "Scoliac": {
         "damage_dist": {
@@ -2048,7 +2048,7 @@
         "crit_damage": 1.5,
         "attack_speed": 1.25,
         "status_chance": 0.29,
-        "weapon_type": ["Whip"]
+        "class_tags": ["melee", "whip"]
     },
     "Secura Lecta": {
         "damage_dist": {
@@ -2060,7 +2060,7 @@
         "crit_damage": 1.5,
         "attack_speed": 1.25,
         "status_chance": 0.3,
-        "weapon_type": ["Whip"]
+        "class_tags": ["melee", "whip"]
     },
     "Serro": {
         "damage_dist": {
@@ -2071,7 +2071,7 @@
         "crit_damage": 1.5,
         "attack_speed": 0.917,
         "status_chance": 0.26,
-        "weapon_type": ["Polearm"]
+        "class_tags": ["melee", "polearm"]
     },
     "Shadow Claws": {
         "damage_dist": {
@@ -2083,7 +2083,7 @@
         "crit_damage": 2.6,
         "attack_speed": 1,
         "status_chance": 0.24,
-        "weapon_type": ["Exalted Weapon"]
+        "class_tags": ["melee", "exalted weapon"]
     },
     "Shadow Claws Prime": {
         "damage_dist": {
@@ -2095,7 +2095,7 @@
         "crit_damage": 2.6,
         "attack_speed": 1,
         "status_chance": 0.24,
-        "weapon_type": ["Exalted Weapon"]
+        "class_tags": ["melee", "exalted weapon"]
     },
     "Shaku": {
         "damage_dist": {
@@ -2105,7 +2105,7 @@
         "crit_damage": 2,
         "attack_speed": 1.17,
         "status_chance": 0.34,
-        "weapon_type": ["Nunchaku"]
+        "class_tags": ["melee", "nunchaku"]
     },
     "Sheev": {
         "damage_dist": {
@@ -2117,7 +2117,7 @@
         "crit_damage": 2.1,
         "attack_speed": 0.667,
         "status_chance": 0.25,
-        "weapon_type": ["Dagger"]
+        "class_tags": ["melee", "dagger"]
     },
     "Sibear": {
         "damage_dist": {
@@ -2130,7 +2130,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.3,
-        "weapon_type": ["Hammer"]
+        "class_tags": ["melee", "hammer"]
     },
     "Sigma & Octantis": {
         "damage_dist": {
@@ -2142,7 +2142,7 @@
         "crit_damage": 2.2,
         "attack_speed": 1.08,
         "status_chance": 0.16,
-        "weapon_type": ["Sword and Shield"]
+        "class_tags": ["melee", "sword and shield"]
     },
     "Silva & Aegis": {
         "damage_dist": {
@@ -2152,7 +2152,7 @@
         "crit_damage": 1.5,
         "attack_speed": 1,
         "status_chance": 0.2,
-        "weapon_type": ["Sword and Shield"]
+        "class_tags": ["melee", "sword and shield"]
     },
     "Silva & Aegis Prime": {
         "damage_dist": {
@@ -2162,7 +2162,7 @@
         "crit_damage": 2,
         "attack_speed": 0.75,
         "status_chance": 0.3,
-        "weapon_type": ["Sword and Shield"]
+        "class_tags": ["melee", "sword and shield"]
     },
     "Skana": {
         "damage_dist": {
@@ -2174,7 +2174,7 @@
         "crit_damage": 1.5,
         "attack_speed": 0.833,
         "status_chance": 0.16,
-        "weapon_type": ["Sword"]
+        "class_tags": ["melee", "sword"]
     },
     "Skana Prime": {
         "damage_dist": {
@@ -2186,7 +2186,7 @@
         "crit_damage": 2.6,
         "attack_speed": 1,
         "status_chance": 0.26,
-        "weapon_type": ["Sword"]
+        "class_tags": ["melee", "sword"]
     },
     "Skiajati": {
         "damage_dist": {
@@ -2198,7 +2198,7 @@
         "crit_damage": 2.1,
         "attack_speed": 1.17,
         "status_chance": 0.3,
-        "weapon_type": ["Nikana"]
+        "class_tags": ["melee", "nikana"]
     },
     "Slaytra": {
         "damage_dist": {
@@ -2210,7 +2210,7 @@
         "crit_damage": 1.9,
         "attack_speed": 0.833,
         "status_chance": 0.35,
-        "weapon_type": ["Machete"]
+        "class_tags": ["melee", "machete"]
     },
     "Stropha": {
         "damage_dist": {
@@ -2222,7 +2222,7 @@
         "crit_damage": 2.4,
         "attack_speed": 1,
         "status_chance": 0.14,
-        "weapon_type": ["Gunblade"]
+        "class_tags": ["melee", "gunblade"]
     },
     "Sun & Moon": {
         "damage_dist": {
@@ -2234,7 +2234,7 @@
         "crit_damage": 2.4,
         "attack_speed": 1,
         "status_chance": 0.22,
-        "weapon_type": ["Dual Nikanas"]
+        "class_tags": ["melee", "dual nikanas"]
     },
     "Syam": {
         "damage_dist": {
@@ -2246,7 +2246,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.34,
-        "weapon_type": ["Nikana"]
+        "class_tags": ["melee", "nikana"]
     },
     "Sydon": {
         "damage_dist": {
@@ -2257,7 +2257,7 @@
         "crit_damage": 2,
         "attack_speed": 0.917,
         "status_chance": 0.25,
-        "weapon_type": ["Polearm"]
+        "class_tags": ["melee", "polearm"]
     },
     "Synoid Heliocor": {
         "damage_dist": {
@@ -2269,7 +2269,7 @@
         "crit_damage": 2,
         "attack_speed": 1.08,
         "status_chance": 0.4,
-        "weapon_type": ["Hammer"]
+        "class_tags": ["melee", "hammer"]
     },
     "Tatsu": {
         "damage_dist": {
@@ -2282,7 +2282,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.28,
-        "weapon_type": ["Two-Handed Nikana"]
+        "class_tags": ["melee", "two-handed nikana"]
     },
     "Tatsu Prime": {
         "damage_dist": {
@@ -2295,7 +2295,7 @@
         "crit_damage": 2.4,
         "attack_speed": 1.17,
         "status_chance": 0.3,
-        "weapon_type": ["Two-Handed Nikana"]
+        "class_tags": ["melee", "two-handed nikana"]
     },
     "Tekko": {
         "damage_dist": {
@@ -2307,7 +2307,7 @@
         "crit_damage": 2,
         "attack_speed": 0.917,
         "status_chance": 0.1,
-        "weapon_type": ["Fist"]
+        "class_tags": ["melee", "fist"]
     },
     "Tekko Prime": {
         "damage_dist": {
@@ -2319,7 +2319,7 @@
         "crit_damage": 2.4,
         "attack_speed": 1,
         "status_chance": 0.26,
-        "weapon_type": ["Fist"]
+        "class_tags": ["melee", "fist"]
     },
     "Telos Boltace": {
         "damage_dist": {
@@ -2331,7 +2331,7 @@
         "crit_damage": 2,
         "attack_speed": 1.08,
         "status_chance": 0.35,
-        "weapon_type": ["Tonfa"]
+        "class_tags": ["melee", "tonfa"]
     },
     "Tenet Agendus": {
         "damage_dist": {
@@ -2342,7 +2342,7 @@
         "crit_damage": 2,
         "attack_speed": 0.917,
         "status_chance": 0.28,
-        "weapon_type": ["Sword and Shield"]
+        "class_tags": ["melee", "sword and shield"]
     },
     "Tenet Exec": {
         "damage_dist": {
@@ -2353,7 +2353,7 @@
         "crit_damage": 2.4,
         "attack_speed": 1,
         "status_chance": 0.22,
-        "weapon_type": ["Heavy Blade"]
+        "class_tags": ["melee", "heavy blade"]
     },
     "Tenet Grigori": {
         "damage_dist": {
@@ -2365,7 +2365,7 @@
         "crit_damage": 1.6,
         "attack_speed": 1.08,
         "status_chance": 0.38,
-        "weapon_type": ["Scythe"]
+        "class_tags": ["melee", "scythe"]
     },
     "Tenet Livia": {
         "damage_dist": {
@@ -2377,7 +2377,7 @@
         "crit_damage": 2.2,
         "attack_speed": 1.08,
         "status_chance": 0.28,
-        "weapon_type": ["Two-Handed Nikana"]
+        "class_tags": ["melee", "two-handed nikana"]
     },
     "Tipedo": {
         "damage_dist": {
@@ -2389,7 +2389,7 @@
         "crit_damage": 2,
         "attack_speed": 1.33,
         "status_chance": 0.2,
-        "weapon_type": ["Staff"]
+        "class_tags": ["melee", "staff"]
     },
     "Tipedo Prime": {
         "damage_dist": {
@@ -2401,7 +2401,7 @@
         "crit_damage": 2.4,
         "attack_speed": 1.17,
         "status_chance": 0.24,
-        "weapon_type": ["Staff"]
+        "class_tags": ["melee", "staff"]
     },
     "Tonbo": {
         "damage_dist": {
@@ -2413,7 +2413,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.25,
-        "weapon_type": ["Polearm"]
+        "class_tags": ["melee", "polearm"]
     },
     "Twin Basolk": {
         "damage_dist": {
@@ -2426,7 +2426,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.4,
-        "weapon_type": ["Dual Swords"]
+        "class_tags": ["melee", "dual swords"]
     },
     "Twin Krohkur": {
         "damage_dist": {
@@ -2438,7 +2438,7 @@
         "crit_damage": 1.7,
         "attack_speed": 0.917,
         "status_chance": 0.33,
-        "weapon_type": ["Dual Swords"]
+        "class_tags": ["melee", "dual swords"]
     },
     "Valkyr Prime Talons": {
         "damage_dist": {
@@ -2450,7 +2450,7 @@
         "crit_damage": 2,
         "attack_speed": 1.5,
         "status_chance": 0.1,
-        "weapon_type": ["Exalted Weapon"]
+        "class_tags": ["melee", "exalted weapon"]
     },
     "Valkyr Talons": {
         "damage_dist": {
@@ -2462,7 +2462,7 @@
         "crit_damage": 2,
         "attack_speed": 1.5,
         "status_chance": 0.1,
-        "weapon_type": ["Exalted Weapon"]
+        "class_tags": ["melee", "exalted weapon"]
     },
     "Vastilok": {
         "damage_dist": {
@@ -2474,7 +2474,7 @@
         "crit_damage": 1.7,
         "attack_speed": 1,
         "status_chance": 0.31,
-        "weapon_type": ["Gunblade"]
+        "class_tags": ["melee", "gunblade"]
     },
     "Vaykor Sydon": {
         "damage_dist": {
@@ -2485,7 +2485,7 @@
         "crit_damage": 2.5,
         "attack_speed": 1.08,
         "status_chance": 0.33,
-        "weapon_type": ["Polearm"]
+        "class_tags": ["melee", "polearm"]
     },
     "Venato": {
         "damage_dist": {
@@ -2497,7 +2497,7 @@
         "crit_damage": 2.1,
         "attack_speed": 1.08,
         "status_chance": 0.24,
-        "weapon_type": ["Scythe"]
+        "class_tags": ["melee", "scythe"]
     },
     "Venka": {
         "damage_dist": {
@@ -2509,7 +2509,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.15,
-        "weapon_type": ["Claws"]
+        "class_tags": ["melee", "claws"]
     },
     "Venka Prime": {
         "damage_dist": {
@@ -2521,7 +2521,7 @@
         "crit_damage": 2.6,
         "attack_speed": 1.05,
         "status_chance": 0.24,
-        "weapon_type": ["Claws"]
+        "class_tags": ["melee", "claws"]
     },
     "Verdilac": {
         "damage_dist": {
@@ -2533,7 +2533,7 @@
         "crit_damage": 2.5,
         "attack_speed": 1,
         "status_chance": 0.21,
-        "weapon_type": ["Whip"]
+        "class_tags": ["melee", "whip"]
     },
     "Vericres": {
         "damage_dist": {
@@ -2545,7 +2545,7 @@
         "crit_damage": 2,
         "attack_speed": 1,
         "status_chance": 0.2,
-        "weapon_type": ["Warfan"]
+        "class_tags": ["melee", "warfan"]
     },
     "Vitrica": {
         "damage_dist": {
@@ -2557,7 +2557,7 @@
         "crit_damage": 2.3,
         "attack_speed": 0.833,
         "status_chance": 0.33,
-        "weapon_type": ["Heavy Blade"]
+        "class_tags": ["melee", "heavy blade"]
     },
     "Volnus": {
         "damage_dist": {
@@ -2569,7 +2569,7 @@
         "crit_damage": 1.6,
         "attack_speed": 1.2,
         "status_chance": 0.3,
-        "weapon_type": ["Hammer"]
+        "class_tags": ["melee", "hammer"]
     },
     "Volnus Prime": {
         "damage_dist": {
@@ -2581,7 +2581,7 @@
         "crit_damage": 1.8,
         "attack_speed": 1.2,
         "status_chance": 0.34,
-        "weapon_type": ["Hammer"]
+        "class_tags": ["melee", "hammer"]
     },
     "War": {
         "damage_dist": {
@@ -2593,7 +2593,7 @@
         "crit_damage": 2.6,
         "attack_speed": 0.917,
         "status_chance": 0.26,
-        "weapon_type": ["Heavy Blade"]
+        "class_tags": ["melee", "heavy blade"]
     },
     "Wolf Sledge": {
         "damage_dist": {
@@ -2605,7 +2605,7 @@
         "crit_damage": 1.9,
         "attack_speed": 1,
         "status_chance": 0.33,
-        "weapon_type": ["Hammer"]
+        "class_tags": ["melee", "hammer"]
     },
     "Xoris": {
         "damage_dist": {
@@ -2617,7 +2617,7 @@
         "crit_damage": 2.4,
         "attack_speed": 1.17,
         "status_chance": 0.18,
-        "weapon_type": ["Glaive"]
+        "class_tags": ["melee", "glaive"]
     },
     "Zenistar": {
         "damage_dist": {
@@ -2629,6 +2629,6 @@
         "crit_damage": 2,
         "attack_speed": 0.833,
         "status_chance": 0.3,
-        "weapon_type": ["Heavy Blade"]
+        "class_tags": ["melee", "heavy blade"]
     }
 }
