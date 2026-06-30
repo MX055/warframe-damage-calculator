@@ -1,567 +1,608 @@
 {
     "Acrid": {
-        "crit_chance": 0.05,
-        "crit_damage": 2,
         "damage_dist": {
             "toxin": 43
         },
+        "crit_chance": 0.05,
+        "crit_damage": 2,
         "fire_rate": 5,
         "status_chance": 0.1,
         "multishot": 1,
         "reload_speed": 1.2,
         "magazine_capacity": 15,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Aegrit": {
         "reload_speed": 1.3,
         "magazine_capacity": 2,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "thrown", "active-thrown"]
     },
     "Afuris": {
-        "crit_chance": 0.05,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 3,
             "puncture": 14,
             "slash": 3
         },
+        "crit_chance": 0.05,
+        "crit_damage": 2,
         "fire_rate": 12.5,
         "status_chance": 0.12,
         "multishot": 1,
         "reload_speed": 2,
         "magazine_capacity": 70,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "auto-dual pistols"]
     },
     "Afuris Prime": {
-        "crit_chance": 0.16,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 3.9,
             "puncture": 18.2,
             "slash": 3.9
         },
+        "crit_chance": 0.16,
+        "crit_damage": 2,
         "fire_rate": 12.5,
         "status_chance": 0.3,
         "multishot": 1,
         "reload_speed": 1.2,
         "magazine_capacity": 80,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "auto-dual pistols"]
     },
     "Akarius": {
-        "crit_chance": 0.06,
-        "crit_damage": 1.8,
         "damage_dist": {
             "impact": 68
         },
+        "crit_chance": 0.06,
+        "crit_damage": 1.8,
         "fire_rate": 4.33,
         "status_chance": 0.28,
         "multishot": 1,
         "reload_speed": 3.4,
         "magazine_capacity": 10,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "burst-dual pistols"]
     },
     "Akarius Prime": {
-        "crit_chance": 0.18,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 68
         },
+        "crit_chance": 0.18,
+        "crit_damage": 2,
         "fire_rate": 3.667,
         "status_chance": 0.34,
         "multishot": 1,
         "reload_speed": 2.4,
         "magazine_capacity": 8,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "burst-dual pistols"]
     },
     "Akbolto": {
-        "crit_chance": 0.16,
-        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 6.4,
             "puncture": 57.6
         },
+        "crit_chance": 0.16,
+        "crit_damage": 2.4,
         "fire_rate": 4.5,
         "status_chance": 0.022,
         "multishot": 1,
         "reload_speed": 2.6,
         "magazine_capacity": 30,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "semi-dual pistols"]
     },
     "Akbolto Prime": {
-        "crit_chance": 0.36,
-        "crit_damage": 2.8,
         "damage_dist": {
             "impact": 4.4,
             "puncture": 37.8,
             "slash": 1.8
         },
+        "crit_chance": 0.36,
+        "crit_damage": 2.8,
         "fire_rate": 5,
         "status_chance": 0.14,
         "multishot": 1,
         "reload_speed": 1.3,
         "magazine_capacity": 40,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "semi-dual pistols"]
     },
     "Akbronco": {
-        "crit_chance": 0.06,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 33.6,
             "puncture": 4.2,
             "slash": 4.2
         },
+        "crit_chance": 0.06,
+        "crit_damage": 2,
         "fire_rate": 5,
         "status_chance": 0.0314,
         "multishot": 7,
         "reload_speed": 2,
         "magazine_capacity": 4,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual shotguns", "semi-dual shotguns"]
     },
     "Akbronco Prime": {
-        "crit_chance": 0.06,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 40,
             "puncture": 5,
             "slash": 5
         },
+        "crit_chance": 0.06,
+        "crit_damage": 2,
         "fire_rate": 4.33,
         "status_chance": 0.1286,
         "multishot": 7,
         "reload_speed": 2.25,
         "magazine_capacity": 8,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual shotguns", "semi-dual shotguns"]
     },
     "Akjagara": {
-        "crit_chance": 0.06,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 5.4,
             "puncture": 5.4,
             "slash": 25.2
         },
+        "crit_chance": 0.06,
+        "crit_damage": 2,
         "fire_rate": 5,
         "status_chance": 0.28,
         "multishot": 1,
         "reload_speed": 2.25,
         "magazine_capacity": 36,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "burst-dual pistols"]
     },
     "Akjagara Prime": {
-        "crit_chance": 0.18,
-        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 3.8,
             "puncture": 3.8,
             "slash": 30.4
         },
+        "crit_chance": 0.18,
+        "crit_damage": 2.2,
         "fire_rate": 5,
         "status_chance": 0.32,
         "multishot": 1,
         "reload_speed": 1.4,
         "magazine_capacity": 40,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "burst-dual pistols"]
     },
     "Aklato": {
-        "crit_chance": 0.1,
-        "crit_damage": 1.8,
         "damage_dist": {
             "impact": 6,
             "puncture": 10,
             "slash": 24
         },
+        "crit_chance": 0.1,
+        "crit_damage": 1.8,
         "fire_rate": 5,
         "status_chance": 0.06,
         "multishot": 1,
         "reload_speed": 2.4,
         "magazine_capacity": 30,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "semi-dual pistols"]
     },
     "Aklex": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 13,
             "puncture": 104,
             "slash": 13
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "fire_rate": 1.58,
         "status_chance": 0.1,
         "multishot": 1,
         "reload_speed": 3,
         "magazine_capacity": 12,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "semi-dual pistols"]
     },
     "Aklex Prime": {
-        "crit_chance": 0.25,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 15,
             "puncture": 120,
             "slash": 15
         },
+        "crit_chance": 0.25,
+        "crit_damage": 2,
         "fire_rate": 2.67,
         "status_chance": 0.25,
         "multishot": 1,
         "reload_speed": 3,
         "magazine_capacity": 16,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "semi-dual pistols"]
     },
     "Akmagnus": {
-        "crit_chance": 0.22,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 44.1,
             "puncture": 26.95,
             "slash": 26.95
         },
+        "crit_chance": 0.22,
+        "crit_damage": 2,
         "fire_rate": 5,
         "status_chance": 0.22,
         "multishot": 1,
         "reload_speed": 3.2,
         "magazine_capacity": 16,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "semi-dual pistols"]
     },
     "Akmagnus Prime": {
-        "crit_chance": 0.28,
-        "crit_damage": 2.8,
         "damage_dist": {
             "impact": 44.1,
             "puncture": 26.95,
             "slash": 26.95
         },
+        "crit_chance": 0.28,
+        "crit_damage": 2.8,
         "fire_rate": 5.67,
         "status_chance": 0.28,
         "multishot": 1,
         "reload_speed": 2.8,
         "magazine_capacity": 16,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "semi-dual pistols"]
     },
     "Aksomati": {
-        "crit_chance": 0.24,
-        "crit_damage": 3,
         "damage_dist": {
             "impact": 1.8,
             "puncture": 7.2,
             "slash": 9
         },
+        "crit_chance": 0.24,
+        "crit_damage": 3,
         "fire_rate": 12.5,
         "status_chance": 0.08,
         "multishot": 1,
         "reload_speed": 1.4,
         "magazine_capacity": 70,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "auto-dual pistols"]
     },
     "Aksomati Prime": {
-        "crit_chance": 0.24,
-        "crit_damage": 3,
         "damage_dist": {
             "impact": 2,
             "puncture": 8,
             "slash": 10
         },
+        "crit_chance": 0.24,
+        "crit_damage": 3,
         "fire_rate": 13.33,
         "status_chance": 0.18,
         "multishot": 1,
         "reload_speed": 1.4,
         "magazine_capacity": 80,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "auto-dual pistols"]
     },
     "Akstiletto": {
-        "crit_chance": 0.18,
-        "crit_damage": 1.8,
         "damage_dist": {
             "impact": 16.8,
             "puncture": 2.8,
             "slash": 8.4
         },
+        "crit_chance": 0.18,
+        "crit_damage": 1.8,
         "fire_rate": 10,
         "status_chance": 0.18,
         "multishot": 1,
         "reload_speed": 1.1,
         "magazine_capacity": 28,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "auto-dual pistols"]
     },
     "Akstiletto Prime": {
-        "crit_chance": 0.15,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 21.6,
             "puncture": 3.6,
             "slash": 10.8
         },
+        "crit_chance": 0.15,
+        "crit_damage": 2,
         "fire_rate": 7.08,
         "status_chance": 0.3,
         "multishot": 1,
         "reload_speed": 1.1,
         "magazine_capacity": 40,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "auto-dual pistols"]
     },
     "Akvasto": {
-        "crit_chance": 0.16,
-        "crit_damage": 1.8,
         "damage_dist": {
             "impact": 22.5,
             "puncture": 22.5,
             "slash": 45
         },
+        "crit_chance": 0.16,
+        "crit_damage": 1.8,
         "fire_rate": 3.33,
         "status_chance": 0.12,
         "multishot": 1,
         "reload_speed": 1.6,
         "magazine_capacity": 12,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "semi-dual pistols"]
     },
     "Akvasto Prime": {
-        "crit_chance": 0.22,
-        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 16.5,
             "puncture": 16.5,
             "slash": 77
         },
+        "crit_chance": 0.22,
+        "crit_damage": 2.4,
         "fire_rate": 3.33,
         "status_chance": 0.22,
         "multishot": 1,
         "reload_speed": 1.4,
         "magazine_capacity": 12,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "semi-dual pistols"]
     },
     "Akzani": {
-        "crit_chance": 0.14,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 1.8,
             "puncture": 8.4,
             "slash": 1.8
         },
+        "crit_chance": 0.14,
+        "crit_damage": 2,
         "fire_rate": 20,
         "status_chance": 0.14,
         "multishot": 1,
         "reload_speed": 2,
         "magazine_capacity": 100,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "auto-dual pistols"]
     },
     "Angstrum": {
         "reload_speed": 2.5,
         "magazine_capacity": 3,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "charge-pistol"]
     },
     "Arca Scisco": {
-        "crit_chance": 0.18,
-        "crit_damage": 1.6,
         "damage_dist": {
             "puncture": 36,
             "slash": 24
         },
+        "crit_chance": 0.18,
+        "crit_damage": 1.6,
         "fire_rate": 4.667,
         "status_chance": 0.26,
         "multishot": 1,
         "reload_speed": 2.2,
         "magazine_capacity": 36,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Athodai": {
-        "crit_chance": 0.32,
-        "crit_damage": 2,
         "damage_dist": {
             "heat": 48,
             "puncture": 22
         },
+        "crit_chance": 0.32,
+        "crit_damage": 2,
         "fire_rate": 5,
         "status_chance": 0.08,
         "multishot": 1,
         "reload_speed": 2,
         "magazine_capacity": 24,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Atomos": {
-        "crit_chance": 0.15,
-        "crit_damage": 1.7,
         "damage_dist": {
             "heat": 29
         },
+        "crit_chance": 0.15,
+        "crit_damage": 1.7,
         "fire_rate": 8,
         "status_chance": 0.21,
         "multishot": 1,
         "reload_speed": 2,
         "magazine_capacity": 70,
-        "is_beam": true
+        "is_beam": true,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Azima": {
-        "crit_chance": 0.16,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 2,
             "puncture": 5,
             "slash": 13
         },
+        "crit_chance": 0.16,
+        "crit_damage": 2,
         "fire_rate": 10,
         "status_chance": 0.16,
         "multishot": 1,
         "reload_speed": 1.4,
         "magazine_capacity": 75,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Balefire Charger": {
-        "crit_chance": 0.05,
-        "crit_damage": 1.5,
         "damage_dist": {
             "electricity": 1500
         },
+        "crit_chance": 0.05,
+        "crit_damage": 1.5,
         "fire_rate": 0.833,
         "status_chance": 0.1,
         "multishot": 1,
         "reload_speed": 0,
         "magazine_capacity": 0,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "exalted weapon", "charge-exalted weapon"]
     },
     "Balefire Charger Prime": {
-        "crit_chance": 0.05,
-        "crit_damage": 1.5,
         "damage_dist": {
             "electricity": 1500
         },
+        "crit_chance": 0.05,
+        "crit_damage": 1.5,
         "fire_rate": 0.833,
         "status_chance": 0.1,
         "multishot": 1,
         "reload_speed": 0,
         "magazine_capacity": 0,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "exalted weapon", "charge-exalted weapon"]
     },
     "Ballistica": {
-        "crit_chance": 0.15,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 10,
             "puncture": 80,
             "slash": 10
         },
+        "crit_chance": 0.15,
+        "crit_damage": 1.5,
         "fire_rate": 3.33,
         "status_chance": 0.1,
         "multishot": 1,
         "reload_speed": 2,
         "magazine_capacity": 16,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "crossbow", "burst-crossbow"]
     },
     "Ballistica Prime": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 3.8,
             "puncture": 41.8,
             "slash": 30.4
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "fire_rate": 3.33,
         "status_chance": 0.15,
         "multishot": 4,
         "reload_speed": 1.2,
         "magazine_capacity": 32,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "crossbow", "charge-crossbow"]
     },
     "Bolto": {
-        "crit_chance": 0.16,
-        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 6.4,
             "puncture": 57.6
         },
+        "crit_chance": 0.16,
+        "crit_damage": 2.4,
         "fire_rate": 3.33,
         "status_chance": 0.022,
         "multishot": 1,
         "reload_speed": 1.3,
         "magazine_capacity": 15,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Brakk": {
-        "crit_chance": 0.17,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 9,
             "puncture": 5,
             "slash": 6
         },
+        "crit_chance": 0.17,
+        "crit_damage": 2,
         "fire_rate": 5,
         "status_chance": 0.051,
         "multishot": 10,
         "reload_speed": 1.05,
         "magazine_capacity": 5,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "shotgun sidearm", "semi-shotgun sidearm"]
     },
     "Bronco": {
-        "crit_chance": 0.06,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 33.6,
             "puncture": 4.2,
             "slash": 4.2
         },
+        "crit_chance": 0.06,
+        "crit_damage": 2,
         "fire_rate": 4,
         "status_chance": 0.0943,
         "multishot": 7,
         "reload_speed": 1.05,
         "magazine_capacity": 2,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "shotgun sidearm", "semi-shotgun sidearm"]
     },
     "Bronco Prime": {
-        "crit_chance": 0.06,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 40,
             "puncture": 5,
             "slash": 5
         },
+        "crit_chance": 0.06,
+        "crit_damage": 2,
         "fire_rate": 4.17,
         "status_chance": 0.1286,
         "multishot": 7,
         "reload_speed": 2,
         "magazine_capacity": 4,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "shotgun sidearm", "semi-shotgun sidearm"]
     },
     "Cantare": {
-        "crit_chance": 0.18,
-        "crit_damage": 2,
         "damage_dist": {
             "puncture": 27,
             "slash": 63
         },
+        "crit_chance": 0.18,
+        "crit_damage": 2,
         "fire_rate": 3.33,
         "status_chance": 0.22,
         "multishot": 1,
         "reload_speed": 1.2,
         "magazine_capacity": 6,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "thrown", "auto-thrown"]
     },
     "Castanas": {
         "reload_speed": 1,
         "magazine_capacity": 2,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "thrown", "active-thrown"]
     },
     "Catabolyst": {
         "reload_speed": 1.7,
         "magazine_capacity": 31,
-        "is_beam": true
+        "is_beam": true,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Cestra": {
-        "crit_chance": 0.06,
-        "crit_damage": 1.6,
         "damage_dist": {
             "impact": 5.2,
             "puncture": 20.8
         },
+        "crit_chance": 0.06,
+        "crit_damage": 1.6,
         "fire_rate": 8.33,
         "status_chance": 0.2,
         "multishot": 1,
         "reload_speed": 2,
         "magazine_capacity": 60,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Cyanex": {
-        "crit_chance": 0.08,
-        "crit_damage": 1.4,
         "damage_dist": {
             "impact": 50
         },
+        "crit_chance": 0.08,
+        "crit_damage": 1.4,
         "fire_rate": 4.67,
         "status_chance": 0.32,
         "multishot": 1,
@@ -570,342 +611,367 @@
         },
         "reload_speed": 2.2,
         "magazine_capacity": 11,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Cycron": {
-        "crit_chance": 0.12,
-        "crit_damage": 1.8,
         "damage_dist": {
             "puncture": 8,
             "radiation": 10,
             "slash": 5
         },
+        "crit_chance": 0.12,
+        "crit_damage": 1.8,
         "fire_rate": 12,
         "status_chance": 0.3,
         "multishot": 1,
         "reload_speed": 2,
         "magazine_capacity": 40,
-        "is_beam": true
+        "is_beam": true,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Despair": {
-        "crit_chance": 0.16,
-        "crit_damage": 1.6,
         "damage_dist": {
             "impact": 2.9,
             "puncture": 46.4,
             "slash": 8.7
         },
+        "crit_chance": 0.16,
+        "crit_damage": 1.6,
         "fire_rate": 3.33,
         "status_chance": 0.16,
         "multishot": 1,
         "reload_speed": 0.75,
         "magazine_capacity": 10,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "thrown", "auto-thrown"]
     },
     "Detron": {
-        "crit_chance": 0.04,
-        "crit_damage": 1.5,
         "damage_dist": {
             "radiation": 40
         },
+        "crit_chance": 0.04,
+        "crit_damage": 1.5,
         "fire_rate": 3.33,
         "status_chance": 0.1286,
         "multishot": 7,
         "reload_speed": 1.05,
         "magazine_capacity": 5,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "shotgun sidearm", "semi-shotgun sidearm"]
     },
     "Dex Furis": {
-        "crit_chance": 0.14,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 2.4,
             "puncture": 11.2,
             "slash": 2.4
         },
+        "crit_chance": 0.14,
+        "crit_damage": 2,
         "fire_rate": 20,
         "status_chance": 0.28,
         "multishot": 1,
         "reload_speed": 2,
         "magazine_capacity": 100,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "auto-dual pistols"]
     },
     "Dex Pixia": {
-        "crit_chance": 0.1,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 16,
             "puncture": 16,
             "slash": 128
         },
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "fire_rate": 5.83,
         "status_chance": 0.25,
         "multishot": 1,
         "reload_speed": 0.3,
         "magazine_capacity": 60,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "exalted weapon", "auto-exalted weapon"]
     },
     "Dex Pixia Prime": {
-        "crit_chance": 0.1,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 16,
             "puncture": 16,
             "slash": 128
         },
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "fire_rate": 5.83,
         "status_chance": 0.25,
         "multishot": 1,
         "reload_speed": 0.3,
         "magazine_capacity": 60,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "exalted weapon", "auto-exalted weapon"]
     },
     "Dual Cestra": {
-        "crit_chance": 0.06,
-        "crit_damage": 1.6,
         "damage_dist": {
             "impact": 5.2,
             "puncture": 20.8
         },
+        "crit_chance": 0.06,
+        "crit_damage": 1.6,
         "fire_rate": 18.75,
         "status_chance": 0.2,
         "multishot": 1,
         "reload_speed": 3.5,
         "magazine_capacity": 120,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "auto-dual pistols"]
     },
     "Dual Toxocyst": {
-        "crit_chance": 0.05,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 7.5,
             "puncture": 60,
             "slash": 7.5
         },
+        "crit_chance": 0.05,
+        "crit_damage": 2,
         "fire_rate": 1,
         "status_chance": 0.37,
         "multishot": 1,
         "reload_speed": 2.35,
         "magazine_capacity": 12,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "semi-dual pistols"]
     },
     "Embolist": {
-        "crit_chance": 0.03,
-        "crit_damage": 1.5,
         "damage_dist": {
             "toxin": 35
         },
+        "crit_chance": 0.03,
+        "crit_damage": 1.5,
         "fire_rate": 8,
         "status_chance": 0.41,
         "multishot": 1,
         "reload_speed": 1.3,
         "magazine_capacity": 33,
-        "is_beam": true
+        "is_beam": true,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Epitaph": {
-        "crit_chance": 0.48,
-        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 120,
             "puncture": 45,
             "slash": 135
         },
+        "crit_chance": 0.48,
+        "crit_damage": 2.6,
         "fire_rate": 1.5,
         "status_chance": 0.04,
         "multishot": 1,
         "reload_speed": 0.6,
         "magazine_capacity": 1,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Epitaph Prime": {
-        "crit_chance": 0.5,
-        "crit_damage": 3,
         "damage_dist": {
             "impact": 126,
             "puncture": 47.25,
             "slash": 141.75
         },
+        "crit_chance": 0.5,
+        "crit_damage": 3,
         "fire_rate": 1.75,
         "status_chance": 0.14,
         "multishot": 1,
         "reload_speed": 0.6,
         "magazine_capacity": 1,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Euphona Prime": {
-        "crit_chance": 0.02,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 4.4,
             "puncture": 17.6,
             "slash": 66
         },
+        "crit_chance": 0.02,
+        "crit_damage": 2,
         "fire_rate": 1.5,
         "status_chance": 0.09,
         "multishot": 10,
         "reload_speed": 2,
         "magazine_capacity": 5,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "shotgun sidearm", "semi-shotgun sidearm"]
     },
     "Furis": {
-        "crit_chance": 0.05,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 3,
             "puncture": 14,
             "slash": 3
         },
+        "crit_chance": 0.05,
+        "crit_damage": 2,
         "fire_rate": 10,
         "status_chance": 0.12,
         "multishot": 1,
         "reload_speed": 1.4,
         "magazine_capacity": 35,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Fusilai": {
-        "crit_chance": 0.23,
-        "crit_damage": 1.7,
         "damage_dist": {
             "puncture": 30.8,
             "slash": 46.2
         },
+        "crit_chance": 0.23,
+        "crit_damage": 1.7,
         "fire_rate": 2.83,
         "status_chance": 0.29,
         "multishot": 1,
         "reload_speed": 0.8,
         "magazine_capacity": 6,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "thrown", "auto-thrown"]
     },
     "Gammacor": {
-        "crit_chance": 0.08,
-        "crit_damage": 1.8,
         "damage_dist": {
             "magnetic": 16
         },
+        "crit_chance": 0.08,
+        "crit_damage": 1.8,
         "fire_rate": 12,
         "status_chance": 0.2,
         "multishot": 1,
         "reload_speed": 1.4,
         "magazine_capacity": 60,
-        "is_beam": true
+        "is_beam": true,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Glory": {
-        "crit_chance": 0.15,
-        "crit_damage": 2,
         "damage_dist": {
             "heat": 150
         },
+        "crit_chance": 0.15,
+        "crit_damage": 2,
         "fire_rate": 1.67,
         "status_chance": 0.2,
         "multishot": 1,
         "reload_speed": 0,
         "magazine_capacity": 0,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "exalted weapon", "auto-exalted weapon"]
     },
     "Grimoire": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "electricity": 100
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "fire_rate": 1.5,
         "status_chance": 0.26,
         "multishot": 1,
         "reload_speed": 0,
         "magazine_capacity": 0,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "tome", "auto-tome"]
     },
     "Hikou": {
-        "crit_chance": 0.04,
-        "crit_damage": 1.6,
         "damage_dist": {
             "impact": 2.6,
             "puncture": 15.6,
             "slash": 7.8
         },
+        "crit_chance": 0.04,
+        "crit_damage": 1.6,
         "fire_rate": 6.67,
         "status_chance": 0.1,
         "multishot": 1,
         "reload_speed": 0.75,
         "magazine_capacity": 20,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "thrown", "auto-thrown"]
     },
     "Hikou Prime": {
-        "crit_chance": 0.06,
-        "crit_damage": 1.8,
         "damage_dist": {
             "impact": 3.6,
             "puncture": 30.6,
             "slash": 1.8
         },
+        "crit_chance": 0.06,
+        "crit_damage": 1.8,
         "fire_rate": 5.83,
         "status_chance": 0.28,
         "multishot": 1,
         "reload_speed": 0.5,
         "magazine_capacity": 26,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "thrown", "auto-thrown"]
     },
     "Hystrix": {
         "reload_speed": 1.7,
         "magazine_capacity": 16,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Hystrix Prime": {
         "reload_speed": 1.6,
         "magazine_capacity": 16,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Knell": {
-        "crit_chance": 0.2,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 63,
             "puncture": 69,
             "slash": 18
         },
+        "crit_chance": 0.2,
+        "crit_damage": 1.5,
         "fire_rate": 4,
         "status_chance": 0.05,
         "multishot": 1,
         "reload_speed": 2,
         "magazine_capacity": 1,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Knell Prime": {
-        "crit_chance": 0.4,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 75.6,
             "puncture": 82.8,
             "slash": 21.6
         },
+        "crit_chance": 0.4,
+        "crit_damage": 2,
         "fire_rate": 5,
         "status_chance": 0.1,
         "multishot": 1,
         "reload_speed": 2,
         "magazine_capacity": 1,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Kohmak": {
-        "crit_chance": 0.11,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 6,
             "puncture": 6,
             "slash": 18
         },
+        "crit_chance": 0.11,
+        "crit_damage": 2,
         "fire_rate": 5,
         "status_chance": 0.138,
         "multishot": 5,
         "reload_speed": 2,
         "magazine_capacity": 40,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "shotgun sidearm", "auto-shotgun sidearm"]
     },
     "Kompressa": {
-        "crit_chance": 0.06,
-        "crit_damage": 1.8,
         "damage_dist": {
             "viral": 2
         },
+        "crit_chance": 0.06,
+        "crit_damage": 1.8,
         "fire_rate": 3.33,
         "status_chance": 0.3,
         "multishot": 4,
@@ -914,29 +980,31 @@
         },
         "reload_speed": 1.8,
         "magazine_capacity": 12,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Kraken": {
-        "crit_chance": 0.05,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 36.75,
             "puncture": 6.125,
             "slash": 6.125
         },
+        "crit_chance": 0.05,
+        "crit_damage": 2,
         "fire_rate": 2.83,
         "status_chance": 0.13,
         "multishot": 1,
         "reload_speed": 2.45,
         "magazine_capacity": 14,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "burst-pistol"]
     },
     "Kulstar": {
-        "crit_chance": 0.17,
-        "crit_damage": 2.3,
         "damage_dist": {
             "impact": 200
         },
+        "crit_chance": 0.17,
+        "crit_damage": 2.3,
         "fire_rate": 2,
         "status_chance": 0.19,
         "multishot": 1,
@@ -945,74 +1013,79 @@
         },
         "reload_speed": 2,
         "magazine_capacity": 3,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Kunai": {
-        "crit_chance": 0.08,
-        "crit_damage": 1.6,
         "damage_dist": {
             "impact": 4.6,
             "puncture": 34.5,
             "slash": 6.9
         },
+        "crit_chance": 0.08,
+        "crit_damage": 1.6,
         "fire_rate": 3.33,
         "status_chance": 0.08,
         "multishot": 1,
         "reload_speed": 0.75,
         "magazine_capacity": 10,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "thrown", "auto-thrown"]
     },
     "Kuva Brakk": {
-        "crit_chance": 0.29,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 6.8,
             "puncture": 3.8,
             "slash": 4.5
         },
+        "crit_chance": 0.29,
+        "crit_damage": 2,
         "fire_rate": 5,
         "status_chance": 0.111,
         "multishot": 10,
         "reload_speed": 1.1,
         "magazine_capacity": 11,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "shotgun sidearm", "semi-shotgun sidearm"]
     },
     "Kuva Kraken": {
-        "crit_chance": 0.21,
-        "crit_damage": 2.3,
         "damage_dist": {
             "impact": 32.25,
             "puncture": 5.375,
             "slash": 5.375
         },
+        "crit_chance": 0.21,
+        "crit_damage": 2.3,
         "fire_rate": 2.83,
         "status_chance": 0.29,
         "multishot": 1,
         "reload_speed": 1.5,
         "magazine_capacity": 21,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "burst-pistol"]
     },
     "Kuva Nukor": {
-        "crit_chance": 0.07,
-        "crit_damage": 5,
         "damage_dist": {
             "radiation": 21
         },
+        "crit_chance": 0.07,
+        "crit_damage": 5,
         "fire_rate": 10,
         "status_chance": 0.5,
         "multishot": 1,
         "reload_speed": 2,
         "magazine_capacity": 77,
-        "is_beam": true
+        "is_beam": true,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Kuva Seer": {
-        "crit_chance": 0.21,
-        "crit_damage": 1.9,
         "damage_dist": {
             "impact": 26.2,
             "puncture": 68.1,
             "slash": 36.7
         },
+        "crit_chance": 0.21,
+        "crit_damage": 1.9,
         "fire_rate": 2.5,
         "status_chance": 0.33,
         "multishot": 1,
@@ -1021,296 +1094,317 @@
         },
         "reload_speed": 2.3,
         "magazine_capacity": 9,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Kuva Twin Stubbas": {
-        "crit_chance": 0.23,
-        "crit_damage": 1.9,
         "damage_dist": {
             "impact": 11.6,
             "puncture": 2.7,
             "slash": 12.7
         },
+        "crit_chance": 0.23,
+        "crit_damage": 1.9,
         "fire_rate": 10,
         "status_chance": 0.31,
         "multishot": 1,
         "reload_speed": 2.7,
         "magazine_capacity": 114,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "auto-dual pistols"]
     },
     "Laetum": {
-        "crit_chance": 0.22,
-        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 64,
             "slash": 96
         },
+        "crit_chance": 0.22,
+        "crit_damage": 2.2,
         "fire_rate": 2.5,
         "status_chance": 0.22,
         "multishot": 1,
         "reload_speed": 2,
         "magazine_capacity": 12,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Lato": {
-        "crit_chance": 0.1,
-        "crit_damage": 1.8,
         "damage_dist": {
             "impact": 10,
             "puncture": 10,
             "slash": 20
         },
+        "crit_chance": 0.1,
+        "crit_damage": 1.8,
         "fire_rate": 4.5,
         "status_chance": 0.06,
         "multishot": 1,
         "reload_speed": 1,
         "magazine_capacity": 15,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Lato Prime": {
-        "crit_chance": 0.3,
-        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 6,
             "puncture": 12,
             "slash": 42
         },
+        "crit_chance": 0.3,
+        "crit_damage": 2.6,
         "fire_rate": 5,
         "status_chance": 0.2,
         "multishot": 1,
         "reload_speed": 1,
         "magazine_capacity": 20,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Lato Vandal": {
-        "crit_chance": 0.26,
-        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 6.9,
             "puncture": 11.5,
             "slash": 27.6
         },
+        "crit_chance": 0.26,
+        "crit_damage": 2.4,
         "fire_rate": 5,
         "status_chance": 0.1,
         "multishot": 1,
         "reload_speed": 1,
         "magazine_capacity": 15,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Lex": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 13,
             "puncture": 104,
             "slash": 13
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "fire_rate": 1.08,
         "status_chance": 0.1,
         "multishot": 1,
         "reload_speed": 2.35,
         "magazine_capacity": 6,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Lex Prime": {
-        "crit_chance": 0.25,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 18,
             "puncture": 144,
             "slash": 18
         },
+        "crit_chance": 0.25,
+        "crit_damage": 2,
         "fire_rate": 2.08,
         "status_chance": 0.25,
         "multishot": 1,
         "reload_speed": 2.35,
         "magazine_capacity": 8,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "MK1-Furis": {
-        "crit_chance": 0.05,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 1.95,
             "puncture": 9.1,
             "slash": 1.95
         },
+        "crit_chance": 0.05,
+        "crit_damage": 2,
         "fire_rate": 8.33,
         "status_chance": 0.01,
         "multishot": 1,
         "reload_speed": 1.4,
         "magazine_capacity": 35,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "MK1-Kunai": {
-        "crit_chance": 0.05,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 4,
             "puncture": 30,
             "slash": 6
         },
+        "crit_chance": 0.05,
+        "crit_damage": 2,
         "fire_rate": 3.33,
         "status_chance": 0.025,
         "multishot": 1,
         "reload_speed": 0.75,
         "magazine_capacity": 10,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "thrown", "auto-thrown"]
     },
     "Magnus": {
-        "crit_chance": 0.22,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 44.1,
             "puncture": 26.95,
             "slash": 26.95
         },
+        "crit_chance": 0.22,
+        "crit_damage": 2,
         "fire_rate": 4.33,
         "status_chance": 0.22,
         "multishot": 1,
         "reload_speed": 1.8,
         "magazine_capacity": 8,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Magnus Prime": {
-        "crit_chance": 0.28,
-        "crit_damage": 2.8,
         "damage_dist": {
             "impact": 44.1,
             "puncture": 26.95,
             "slash": 26.95
         },
+        "crit_chance": 0.28,
+        "crit_damage": 2.8,
         "fire_rate": 5,
         "status_chance": 0.28,
         "multishot": 1,
         "reload_speed": 1.6,
         "magazine_capacity": 8,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Mara Detron": {
-        "crit_chance": 0.08,
-        "crit_damage": 1.5,
         "damage_dist": {
             "radiation": 40
         },
+        "crit_chance": 0.08,
+        "crit_damage": 1.5,
         "fire_rate": 3.33,
         "status_chance": 0.1371,
         "multishot": 7,
         "reload_speed": 1.05,
         "magazine_capacity": 8,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "shotgun sidearm", "semi-shotgun sidearm"]
     },
     "Marelok": {
-        "crit_chance": 0.15,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 80,
             "puncture": 16,
             "slash": 64
         },
+        "crit_chance": 0.15,
+        "crit_damage": 1.5,
         "fire_rate": 2,
         "status_chance": 0.3,
         "multishot": 1,
         "reload_speed": 1.667,
         "magazine_capacity": 6,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Noctua": {
-        "crit_chance": 0.3,
-        "crit_damage": 2,
         "damage_dist": {
             "slash": 250
         },
+        "crit_chance": 0.3,
+        "crit_damage": 2,
         "fire_rate": 1.5,
         "status_chance": 0.25,
         "multishot": 1,
         "reload_speed": 0,
         "magazine_capacity": 0,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "exalted weapon", "auto-exalted weapon"]
     },
     "Nukor": {
-        "crit_chance": 0.03,
-        "crit_damage": 4,
         "damage_dist": {
             "radiation": 22
         },
+        "crit_chance": 0.03,
+        "crit_damage": 4,
         "fire_rate": 10,
         "status_chance": 0.29,
         "multishot": 1,
         "reload_speed": 2,
         "magazine_capacity": 50,
-        "is_beam": true
+        "is_beam": true,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Ocucor": {
-        "crit_chance": 0.16,
-        "crit_damage": 1.8,
         "damage_dist": {
             "puncture": 1,
             "radiation": 10
         },
+        "crit_chance": 0.16,
+        "crit_damage": 1.8,
         "fire_rate": 12,
         "status_chance": 0.24,
         "multishot": 1,
         "reload_speed": 1.6,
         "magazine_capacity": 60,
-        "is_beam": true
+        "is_beam": true,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Onos": {
-        "crit_chance": 0.26,
-        "crit_damage": 2.4,
         "damage_dist": {
             "puncture": 220
         },
+        "crit_chance": 0.26,
+        "crit_damage": 2.4,
         "fire_rate": 1.4,
         "status_chance": 0.22,
         "multishot": 1,
         "reload_speed": 2,
         "magazine_capacity": 20,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Pandero": {
-        "crit_chance": 0.3,
-        "crit_damage": 2.8,
         "damage_dist": {
             "impact": 18,
             "puncture": 18,
             "slash": 36
         },
+        "crit_chance": 0.3,
+        "crit_damage": 2.8,
         "fire_rate": 3,
         "status_chance": 0.1,
         "multishot": 1,
         "reload_speed": 1,
         "magazine_capacity": 8,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "burst-pistol"]
     },
     "Pandero Prime": {
-        "crit_chance": 0.3,
-        "crit_damage": 2.8,
         "damage_dist": {
             "impact": 26,
             "puncture": 26,
             "slash": 52
         },
+        "crit_chance": 0.3,
+        "crit_damage": 2.8,
         "fire_rate": 3,
         "status_chance": 0.24,
         "multishot": 1,
         "reload_speed": 1,
         "magazine_capacity": 8,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "burst-pistol"]
     },
     "Plinx": {
-        "crit_chance": 0.32,
-        "crit_damage": 3,
         "damage_dist": {
             "heat": 20,
             "puncture": 26
         },
+        "crit_chance": 0.32,
+        "crit_damage": 3,
         "fire_rate": 3.33,
         "status_chance": 0.04,
         "multishot": 1,
         "reload_speed": 1.3,
         "magazine_capacity": 10,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Pox": {
         "explosion_damage_dist": {
@@ -1318,152 +1412,164 @@
         },
         "reload_speed": 1,
         "magazine_capacity": 4,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "thrown", "auto-thrown"]
     },
     "Prisma Angstrum": {
         "reload_speed": 1.8,
         "magazine_capacity": 3,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "charge-pistol"]
     },
     "Prisma Twin Gremlins": {
-        "crit_chance": 0.23,
-        "crit_damage": 1.9,
         "damage_dist": {
             "impact": 2.97,
             "puncture": 12.69,
             "slash": 11.34
         },
+        "crit_chance": 0.23,
+        "crit_damage": 1.9,
         "fire_rate": 8.83,
         "status_chance": 0.23,
         "multishot": 1,
         "reload_speed": 0.9,
         "magazine_capacity": 70,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "auto-dual pistols"]
     },
     "Pyrana": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 2.2,
             "puncture": 2.2,
             "slash": 17.6
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "fire_rate": 4.17,
         "status_chance": 0.025,
         "multishot": 12,
         "reload_speed": 2,
         "magazine_capacity": 10,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "shotgun sidearm", "auto-shotgun sidearm"]
     },
     "Pyrana Prime": {
-        "crit_chance": 0.24,
-        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 1.92,
             "puncture": 1.92,
             "slash": 20.16
         },
+        "crit_chance": 0.24,
+        "crit_damage": 2.2,
         "fire_rate": 4,
         "status_chance": 0.036,
         "multishot": 10,
         "reload_speed": 1.6,
         "magazine_capacity": 12,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "shotgun sidearm", "auto-shotgun sidearm"]
     },
     "Quatz": {
-        "crit_chance": 0.13,
-        "crit_damage": 1.5,
         "damage_dist": {
             "electricity": 11,
             "impact": 9,
             "puncture": 2,
             "slash": 7
         },
+        "crit_chance": 0.13,
+        "crit_damage": 1.5,
         "fire_rate": 15,
         "status_chance": 0.27,
         "multishot": 1,
         "reload_speed": 2.7,
         "magazine_capacity": 72,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Rakta Ballistica": {
-        "crit_chance": 0.2,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 15,
             "puncture": 270,
             "slash": 15
         },
+        "crit_chance": 0.2,
+        "crit_damage": 1.5,
         "fire_rate": 3.33,
         "status_chance": 0.1,
         "multishot": 1,
         "reload_speed": 2,
         "magazine_capacity": 20,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "crossbow", "burst-crossbow"]
     },
     "Regulators": {
-        "crit_chance": 0.25,
-        "crit_damage": 3,
         "damage_dist": {
             "impact": 25,
             "puncture": 12.5,
             "slash": 12.5
         },
+        "crit_chance": 0.25,
+        "crit_damage": 3,
         "fire_rate": 14.8,
         "status_chance": 0.1,
         "multishot": 1,
         "reload_speed": 0,
         "magazine_capacity": 0,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "exalted weapon", "auto-exalted weapon"]
     },
     "Regulators Prime": {
-        "crit_chance": 0.25,
-        "crit_damage": 3,
         "damage_dist": {
             "impact": 25,
             "puncture": 12.5,
             "slash": 12.5
         },
+        "crit_chance": 0.25,
+        "crit_damage": 3,
         "fire_rate": 14.8,
         "status_chance": 0.1,
         "multishot": 1,
         "reload_speed": 0,
         "magazine_capacity": 0,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "exalted weapon", "auto-exalted weapon"]
     },
     "Sancti Castanas": {
         "reload_speed": 1,
         "magazine_capacity": 2,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "thrown", "active-thrown"]
     },
     "Secura Dual Cestra": {
-        "crit_chance": 0.16,
-        "crit_damage": 1.6,
         "damage_dist": {
             "impact": 5.6,
             "puncture": 22.4
         },
+        "crit_chance": 0.16,
+        "crit_damage": 1.6,
         "fire_rate": 12.5,
         "status_chance": 0.28,
         "multishot": 1,
         "reload_speed": 3.5,
         "magazine_capacity": 120,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "auto-dual pistols"]
     },
     "Seer": {
-        "crit_chance": 0.05,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 33.67,
             "puncture": 33.67,
             "slash": 33.67
         },
+        "crit_chance": 0.05,
+        "crit_damage": 1.5,
         "fire_rate": 2,
         "status_chance": 0.13,
         "multishot": 1,
         "reload_speed": 2.8,
         "magazine_capacity": 8,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Sepulcrum": {
         "explosion_damage_dist": {
@@ -1471,44 +1577,47 @@
         },
         "reload_speed": 4,
         "magazine_capacity": 90,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "burst-pistol"]
     },
     "Sicarus": {
-        "crit_chance": 0.16,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 21,
             "puncture": 4.5,
             "slash": 4.5
         },
+        "crit_chance": 0.16,
+        "crit_damage": 2,
         "fire_rate": 3.5,
         "status_chance": 0.06,
         "multishot": 1,
         "reload_speed": 2,
         "magazine_capacity": 15,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "burst-pistol"]
     },
     "Sicarus Prime": {
-        "crit_chance": 0.25,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 20,
             "puncture": 15,
             "slash": 15
         },
+        "crit_chance": 0.25,
+        "crit_damage": 2,
         "fire_rate": 5,
         "status_chance": 0.2,
         "multishot": 1,
         "reload_speed": 2,
         "magazine_capacity": 24,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "burst-pistol"]
     },
     "Sonicor": {
-        "crit_chance": 0,
-        "crit_damage": 1,
         "damage_dist": {
             "impact": 150
         },
+        "crit_chance": 0,
+        "crit_damage": 1,
         "fire_rate": 1.25,
         "status_chance": 0,
         "multishot": 1,
@@ -1517,177 +1626,192 @@
         },
         "reload_speed": 3,
         "magazine_capacity": 15,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Spectra": {
-        "crit_chance": 0.14,
-        "crit_damage": 2,
         "damage_dist": {
             "puncture": 7.56,
             "slash": 10.44
         },
+        "crit_chance": 0.14,
+        "crit_damage": 2,
         "fire_rate": 12,
         "status_chance": 0.22,
         "multishot": 1,
         "reload_speed": 1.8,
         "magazine_capacity": 60,
-        "is_beam": true
+        "is_beam": true,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Spectra Vandal": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "puncture": 9.24,
             "slash": 12.76
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "fire_rate": 12,
         "status_chance": 0.28,
         "multishot": 1,
         "reload_speed": 1.2,
         "magazine_capacity": 80,
-        "is_beam": true
+        "is_beam": true,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Spira": {
-        "crit_chance": 0.3,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 8.2,
             "puncture": 49.2,
             "slash": 24.6
         },
+        "crit_chance": 0.3,
+        "crit_damage": 2,
         "fire_rate": 2.5,
         "status_chance": 0.08,
         "multishot": 1,
         "reload_speed": 1,
         "magazine_capacity": 10,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "thrown", "auto-thrown"]
     },
     "Spira Prime": {
-        "crit_chance": 0.3,
-        "crit_damage": 3,
         "damage_dist": {
             "impact": 6,
             "puncture": 48,
             "slash": 6
         },
+        "crit_chance": 0.3,
+        "crit_damage": 3,
         "fire_rate": 3.33,
         "status_chance": 0.14,
         "multishot": 1,
         "reload_speed": 0.75,
         "magazine_capacity": 12,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "thrown", "auto-thrown"]
     },
     "Staticor": {
         "reload_speed": 1.5,
         "magazine_capacity": 48,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "thrown", "charge-thrown"]
     },
     "Stubba": {
-        "crit_chance": 0.23,
-        "crit_damage": 1.9,
         "damage_dist": {
             "impact": 14.19,
             "puncture": 3.3,
             "slash": 15.51
         },
+        "crit_chance": 0.23,
+        "crit_damage": 1.9,
         "fire_rate": 6.33,
         "status_chance": 0.13,
         "multishot": 1,
         "reload_speed": 1.3,
         "magazine_capacity": 57,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Stug": {
         "reload_speed": 2,
         "magazine_capacity": 20,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "charge-pistol"]
     },
     "Synoid Gammacor": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "magnetic": 20
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "fire_rate": 12,
         "status_chance": 0.28,
         "multishot": 1,
         "reload_speed": 1.8,
         "magazine_capacity": 80,
-        "is_beam": true
+        "is_beam": true,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Talons": {
         "reload_speed": 1,
         "magazine_capacity": 4,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "thrown", "active-thrown"]
     },
     "Telos Akbolto": {
-        "crit_chance": 0.13,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 7,
             "puncture": 63
         },
+        "crit_chance": 0.13,
+        "crit_damage": 2,
         "fire_rate": 5,
         "status_chance": 0.29,
         "multishot": 1,
         "reload_speed": 2,
         "magazine_capacity": 30,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "semi-dual pistols"]
     },
     "Tenet Cycron": {
-        "crit_chance": 0.2,
-        "crit_damage": 1.8,
         "damage_dist": {
             "heat": 22
         },
+        "crit_chance": 0.2,
+        "crit_damage": 1.8,
         "fire_rate": 12,
         "status_chance": 0.4,
         "multishot": 1,
         "reload_speed": 1.5,
         "magazine_capacity": 40,
-        "is_beam": true
+        "is_beam": true,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Tenet Detron": {
-        "crit_chance": 0.18,
-        "crit_damage": 2,
         "damage_dist": {
             "radiation": 26
         },
+        "crit_chance": 0.18,
+        "crit_damage": 2,
         "fire_rate": 3.33,
         "status_chance": 0.1,
         "multishot": 10,
         "reload_speed": 1.05,
         "magazine_capacity": 6,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "shotgun sidearm", "burst-shotgun sidearm"]
     },
     "Tenet Diplos": {
-        "crit_chance": 0.36,
-        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 11.2,
             "puncture": 9,
             "slash": 7.8
         },
+        "crit_chance": 0.36,
+        "crit_damage": 2.2,
         "fire_rate": 9.67,
         "status_chance": 0.14,
         "multishot": 1,
         "reload_speed": 2.8,
         "magazine_capacity": 92,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "auto-dual pistols"]
     },
     "Tenet Plinx": {
         "reload_speed": 1.3,
         "magazine_capacity": 10,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Tenet Spirex": {
-        "crit_chance": 0.26,
-        "crit_damage": 2.4,
         "damage_dist": {
             "heat": 60,
             "impact": 40,
             "puncture": 20
         },
+        "crit_chance": 0.26,
+        "crit_damage": 2.4,
         "fire_rate": 2.33,
         "status_chance": 0.4,
         "multishot": 1,
@@ -1696,288 +1820,308 @@
         },
         "reload_speed": 2.4,
         "magazine_capacity": 8,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Twin Grakatas": {
-        "crit_chance": 0.25,
-        "crit_damage": 2.7,
         "damage_dist": {
             "impact": 4,
             "puncture": 3.33,
             "slash": 2.67
         },
+        "crit_chance": 0.25,
+        "crit_damage": 2.7,
         "fire_rate": 20,
         "status_chance": 0.165,
         "multishot": 2,
         "reload_speed": 3,
         "magazine_capacity": 120,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "auto-dual pistols"]
     },
     "Twin Gremlins": {
-        "crit_chance": 0.15,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 12.33,
             "puncture": 12.33,
             "slash": 12.33
         },
+        "crit_chance": 0.15,
+        "crit_damage": 1.5,
         "fire_rate": 5,
         "status_chance": 0.15,
         "multishot": 1,
         "reload_speed": 1.1,
         "magazine_capacity": 30,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "auto-dual pistols"]
     },
     "Twin Kohmak": {
-        "crit_chance": 0.11,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 6,
             "puncture": 6,
             "slash": 18
         },
+        "crit_chance": 0.11,
+        "crit_damage": 2,
         "fire_rate": 6.67,
         "status_chance": 0.138,
         "multishot": 5,
         "reload_speed": 2.2,
         "magazine_capacity": 80,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual shotguns", "auto-dual shotguns"]
     },
     "Twin Rogga": {
-        "crit_chance": 0.1,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 18.8,
             "puncture": 23.5,
             "slash": 4.7
         },
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "fire_rate": 2.5,
         "status_chance": 0.066,
         "multishot": 15,
         "reload_speed": 1.5,
         "magazine_capacity": 2,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual shotguns", "semi-dual shotguns"]
     },
     "Twin Vipers": {
-        "crit_chance": 0.15,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 10.2,
             "puncture": 1.7,
             "slash": 5.1
         },
+        "crit_chance": 0.15,
+        "crit_damage": 1.5,
         "fire_rate": 25,
         "status_chance": 0.11,
         "multishot": 1,
         "reload_speed": 2,
         "magazine_capacity": 28,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "auto-dual pistols"]
     },
     "Twin Vipers Wraith": {
-        "crit_chance": 0.19,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 14.4,
             "puncture": 1.8,
             "slash": 1.8
         },
+        "crit_chance": 0.19,
+        "crit_damage": 2,
         "fire_rate": 25,
         "status_chance": 0.09,
         "multishot": 1,
         "reload_speed": 2,
         "magazine_capacity": 40,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "dual pistols", "auto-dual pistols"]
     },
     "Tysis": {
-        "crit_chance": 0.03,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 9,
             "puncture": 23,
             "slash": 17
         },
+        "crit_chance": 0.03,
+        "crit_damage": 1.5,
         "fire_rate": 2.5,
         "status_chance": 0.5,
         "multishot": 1,
         "reload_speed": 1.2,
         "magazine_capacity": 11,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Vasto": {
-        "crit_chance": 0.2,
-        "crit_damage": 1.8,
         "damage_dist": {
             "impact": 22.5,
             "puncture": 22.5,
             "slash": 45
         },
+        "crit_chance": 0.2,
+        "crit_damage": 1.8,
         "fire_rate": 2.5,
         "status_chance": 0.08,
         "multishot": 1,
         "reload_speed": 1,
         "magazine_capacity": 6,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Vasto Prime": {
-        "crit_chance": 0.22,
-        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 16.5,
             "puncture": 16.5,
             "slash": 77
         },
+        "crit_chance": 0.22,
+        "crit_damage": 2.4,
         "fire_rate": 2.5,
         "status_chance": 0.22,
         "multishot": 1,
         "reload_speed": 1,
         "magazine_capacity": 6,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Vaykor Marelok": {
-        "crit_chance": 0.2,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 96,
             "puncture": 16,
             "slash": 48
         },
+        "crit_chance": 0.2,
+        "crit_damage": 1.5,
         "fire_rate": 2,
         "status_chance": 0.35,
         "multishot": 1,
         "reload_speed": 1.667,
         "magazine_capacity": 10,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Velox": {
-        "crit_chance": 0.14,
-        "crit_damage": 1.8,
         "damage_dist": {
             "impact": 4.32,
             "puncture": 8.16,
             "slash": 11.52
         },
+        "crit_chance": 0.14,
+        "crit_damage": 1.8,
         "fire_rate": 15,
         "status_chance": 0.22,
         "multishot": 1,
         "reload_speed": 2.6,
         "magazine_capacity": 62,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Velox Prime": {
-        "crit_chance": 0.14,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 6.48,
             "puncture": 7.56,
             "slash": 12.96
         },
+        "crit_chance": 0.14,
+        "crit_damage": 2,
         "fire_rate": 17,
         "status_chance": 0.32,
         "multishot": 1,
         "reload_speed": 2.6,
         "magazine_capacity": 70,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Vesper 77": {
-        "crit_chance": 0.24,
-        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 72,
             "puncture": 108
         },
+        "crit_chance": 0.24,
+        "crit_damage": 2.6,
         "fire_rate": 2.08,
         "status_chance": 0.26,
         "multishot": 1,
         "reload_speed": 2.4,
         "magazine_capacity": 8,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Viper": {
-        "crit_chance": 0.15,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 10.2,
             "puncture": 1.7,
             "slash": 5.1
         },
+        "crit_chance": 0.15,
+        "crit_damage": 1.5,
         "fire_rate": 14.38,
         "status_chance": 0.11,
         "multishot": 1,
         "reload_speed": 0.7,
         "magazine_capacity": 14,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Viper Wraith": {
-        "crit_chance": 0.19,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 14.4,
             "puncture": 1.8,
             "slash": 1.8
         },
+        "crit_chance": 0.19,
+        "crit_damage": 2,
         "fire_rate": 14.38,
         "status_chance": 0.09,
         "multishot": 1,
         "reload_speed": 0.8,
         "magazine_capacity": 20,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "auto-pistol"]
     },
     "Zakti": {
         "reload_speed": 0.8,
         "magazine_capacity": 3,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Zakti Prime": {
-        "crit_chance": 0.08,
-        "crit_damage": 1.8,
         "damage_dist": {
             "impact": 12,
             "puncture": 18
         },
+        "crit_chance": 0.08,
+        "crit_damage": 1.8,
         "fire_rate": 5,
         "status_chance": 0.42,
         "multishot": 1,
         "reload_speed": 1,
         "magazine_capacity": 8,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     },
     "Zylok": {
-        "crit_chance": 0.08,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 44.8,
             "puncture": 16.8,
             "slash": 78.4
         },
+        "crit_chance": 0.08,
+        "crit_damage": 2,
         "fire_rate": 1.8,
         "status_chance": 0.26,
         "multishot": 1,
         "reload_speed": 1.2,
         "magazine_capacity": 8,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "duplex-pistol"]
     },
     "Zylok Prime": {
-        "crit_chance": 0.12,
-        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 63,
             "puncture": 21,
             "slash": 126
         },
+        "crit_chance": 0.12,
+        "crit_damage": 2.4,
         "fire_rate": 1.8,
         "status_chance": 0.36,
         "multishot": 1,
         "reload_speed": 1.2,
         "magazine_capacity": 12,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "duplex-pistol"]
     },
     "Zymos": {
-        "crit_chance": 0.05,
-        "crit_damage": 2.3,
         "damage_dist": {
             "impact": 9.2,
             "puncture": 13.8
         },
+        "crit_chance": 0.05,
+        "crit_damage": 2.3,
         "fire_rate": 1.33,
         "status_chance": 0.3,
         "multishot": 1,
@@ -1986,6 +2130,7 @@
         },
         "reload_speed": 3.2,
         "magazine_capacity": 17,
-        "is_beam": false
+        "is_beam": false,
+        "weapon_type": ["secondary", "pistol", "semi-pistol"]
     }
 }

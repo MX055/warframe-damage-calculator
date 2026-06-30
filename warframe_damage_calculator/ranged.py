@@ -5,7 +5,7 @@ from .dist import Dist
 from .weapon import Weapon
 
 class Ranged(Weapon):
-    def __init__(self, base: RangedState | None = None, *, damage_dist: Dist | None = None, forced_procs: Dist | None = None, explosion_damage_dist: Dist | None = None, explosion_forced_procs: Dist | None = None, crit_chance: float = 0.0, crit_damage: float = 0.0, status_chance: float = 0.0, weakpoint_damage: float = 3.0, fire_rate: float = 0.0, charge_time: float = 0.0, reload_speed: float = 0.0, magazine_capacity: int = 0, multishot: float = 0.0, is_beam: bool = False) -> None:
+    def __init__(self, damage_dist: Dist | None = None, forced_procs: Dist | None = None, explosion_damage_dist: Dist | None = None, explosion_forced_procs: Dist | None = None, crit_chance: float = 0.0, crit_damage: float = 0.0, status_chance: float = 0.0, weakpoint_damage: float = 3.0, fire_rate: float = 0.0, charge_time: float = 0.0, reload_speed: float = 0.0, magazine_capacity: int = 0, multishot: float = 0.0, is_beam: bool = False, *, base: RangedState | None = None) -> None:
         base_stats = base or RangedState(damage_dist=damage_dist or Dist(), forced_procs=forced_procs or Dist(), explosion_damage_dist=explosion_damage_dist or Dist(), explosion_forced_procs=explosion_forced_procs or Dist(), crit_chance=crit_chance, crit_damage=crit_damage, status_chance=status_chance, weakpoint_damage=weakpoint_damage, fire_rate=fire_rate, charge_time=charge_time, reload_speed=reload_speed, magazine_capacity=magazine_capacity, multishot=multishot, is_beam=is_beam)
         super().__init__(base=base_stats)
 

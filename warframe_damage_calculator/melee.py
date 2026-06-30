@@ -6,7 +6,7 @@ from .dist import Dist
 from .weapon import Weapon
 
 class Melee(Weapon):
-    def __init__(self, base: MeleeState | None = None, *, damage_dist: Dist | None = None, forced_procs: Dist | None = None, crit_chance: float = 0.0, crit_damage: float = 0.0, status_chance: float = 0.0, attack_speed: float = 0.0) -> None:
+    def __init__(self, damage_dist: Dist | None = None, forced_procs: Dist | None = None, crit_chance: float = 0.0, crit_damage: float = 0.0, status_chance: float = 0.0, attack_speed: float = 0.0, *, base: MeleeState | None = None) -> None:
         base_stats = base or MeleeState(damage_dist=damage_dist or Dist(), forced_procs=forced_procs or Dist(), crit_chance=crit_chance, crit_damage=crit_damage, status_chance=status_chance, attack_speed=attack_speed)
         super().__init__(base=base_stats)
 

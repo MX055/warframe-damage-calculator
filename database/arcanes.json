@@ -1,85 +1,125 @@
 {
     "Cascadia Accuracy": {
-        "crit_chance": [0.5, 1.0, 1.5, 2.0, 2.5, 3.0]
+        "crit_chance": [0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
+        "max_rank": 5,
+        "compatible_weapons": ["secondary"]
     },
     "Cascadia Flare": {
-        "base_damage": [0.02, 0.04, 0.06, 0.08, 0.1, 0.12]
+        "base_damage": [0.02, 0.04, 0.06, 0.08, 0.1, 0.12],
+        "max_rank": 5,
+        "compatible_weapons": ["secondary"]
     },
     "Cascadia Overcharge": {
-        "crit_chance": [0.5, 1.0, 1.5, 2.0, 2.5, 3.0]
+        "crit_chance": [0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
+        "max_rank": 5,
+        "compatible_weapons": ["secondary"]
     },
     "Conjunction Voltage": {
         "stack_reload_speed": [0.003, 0.005, 0.007, 0.01, 0.013, 0.015],
         "stack_multishot": [0.005, 0.01, 0.015, 0.02, 0.025, 0.03],
-        "max_stacks": 40
+        "max_stacks": 40,
+        "max_rank": 5,
+        "compatible_weapons": ["secondary"]
     },
     "Fractalized Reset": {
-        "reload_speed": [0.4, 0.8, 1.2, 1.6, 2.0, 2.4]
-    },
-    "Melee Animosity": {
-        "crit_chance": [0.07, 0.14, 0.21, 0.28, 0.35, 0.42]
+        "reload_speed": [0.4, 0.8, 1.2, 1.6, 2.0, 2.4],
+        "max_rank": 5,
+        "compatible_weapons": ["primary"]
     },
     "Melee Doughty": {
-        "status_chance": [0.017, 0.033, 0.05, 0.067, 0.083, 0.1]
+        "staking_crit_damage": [0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+        "max_stacks": null,
+        "max_rank": 5,
+        "compatible_weapons": ["melee"]
     },
     "Melee Duplicate": {
-        "melee_duplicate": [0.25, 0.4, 0.55, 0.7, 0.85, 1.0]
+        "melee_duplicate": [0.25, 0.4, 0.55, 0.7, 0.85, 1.0],
+        "max_rank": 5,
+        "compatible_weapons": ["melee"]
     },
     "Primary Blight": {
         "stack_crit_damage": [0.006, 0.012, 0.018, 0.024, 0.03, 0.036],
         "stack_multishot": [0.003, 0.006, 0.009, 0.012, 0.015, 0.018],
-        "max_stacks": 40
+        "max_stacks": 40,
+        "max_rank": 5,
+        "compatible_weapons": ["primary"]
     },
     "Primary Crux": {
         "stack_status_chance": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
-        "max_stacks": 10
+        "max_stacks": 10,
+        "max_rank": 5,
+        "compatible_weapons": ["primary"]
     },
     "Primary Deadhead": {
         "stack_base_damage": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2],
         "max_stacks": 3,
-        "weakpoint_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
+        "weakpoint_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
+        "max_rank": 5,
+        "compatible_weapons": ["primary"]
     },
     "Primary Dexterity": {
         "stack_base_damage": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
-        "max_stacks": 6
+        "max_stacks": 6,
+        "max_rank": 5,
+        "compatible_weapons": ["primary"]
     },
     "Primary Exhilarate": {
-        "max_stacks": 3
+        "max_stacks": 3,
+        "max_rank": 5,
+        "compatible_weapons": ["primary"]
     },
     "Primary Frostbite": {
         "stack_crit_damage": [0.005, 0.01, 0.015, 0.02, 0.025, 0.03],
         "stack_multishot": [0.004, 0.007, 0.011, 0.015, 0.019, 0.022],
-        "max_stacks": 40
+        "max_stacks": 40,
+        "max_rank": 5,
+        "compatible_weapons": ["primary"]
     },
     "Primary Merciless": {
         "stack_base_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_stacks": 12,
-        "reload_speed": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
+        "reload_speed": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
+        "max_rank": 5,
+        "compatible_weapons": ["primary"]
     },
     "Secondary Deadhead": {
         "stack_base_damage": [0.2, 0.4, 0.6, 0.8, 1.0, 1.2],
         "max_stacks": 3,
-        "weakpoint_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
+        "weakpoint_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
+        "max_rank": 5,
+        "compatible_weapons": ["secondary"]
     },
     "Secondary Dexterity": {
         "stack_base_damage": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
-        "max_stacks": 6
+        "max_stacks": 6,
+        "max_rank": 5,
+        "compatible_weapons": ["secondary"]
     },
     "Secondary Enervate": {
-        "secondary_enervate": [1, 2, 3, 4, 5, 6]
+        "secondary_enervate": [1, 2, 3, 4, 5, 6],
+        "max_rank": 5,
+        "compatible_weapons": ["secondary"]
     },
     "Secondary Kinship": {
-        "crit_chance": [0.033, 0.067, 0.1, 0.133, 0.167, 0.2]
+        "crit_chance": [0.033, 0.067, 0.1, 0.133, 0.167, 0.2],
+        "max_rank": 5,
+        "compatible_weapons": ["secondary"]
     },
     "Secondary Merciless": {
         "stack_base_damage": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
         "max_stacks": 12,
-        "reload_speed": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
+        "reload_speed": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
+        "max_rank": 5,
+        "compatible_weapons": ["secondary"]
     },
     "Secondary Outburst": {
-        "crit_damage": [0.033, 0.067, 0.1, 0.133, 0.167, 0.2]
+        "crit_damage": [0.033, 0.067, 0.1, 0.133, 0.167, 0.2],
+        "max_rank": 5,
+        "compatible_weapons": ["secondary"]
     },
     "Secondary Shiver": {
-        "base_damage": [0.075, 0.15, 0.225, 0.3, 0.375, 0.45]
+        "base_damage": [0.075, 0.15, 0.225, 0.3, 0.375, 0.45],
+        "max_rank": 5,
+        "compatible_weapons": ["secondary"]
     }
 }

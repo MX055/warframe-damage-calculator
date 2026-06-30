@@ -7,7 +7,7 @@ from .dist import Dist
 from .upgrade import Upgrade
 
 class Weapon:
-    def __init__(self, base: WeaponState | None = None, *, damage_dist: Dist | None = None, forced_procs: Dist | None = None, crit_chance: float = 0.0, crit_damage: float = 0.0, status_chance: float = 0.0) -> None:
+    def __init__(self, damage_dist: Dist | None = None, forced_procs: Dist | None = None, crit_chance: float = 0.0, crit_damage: float = 0.0, status_chance: float = 0.0, *, base: WeaponState | None = None) -> None:
         self.base = base or WeaponState(damage_dist=damage_dist or Dist(), forced_procs=forced_procs or Dist(), crit_chance=crit_chance, crit_damage=crit_damage, status_chance=status_chance)
         self.base.total_damage = self.base.damage_dist.total_damage
         self.moded = type(self.base)()

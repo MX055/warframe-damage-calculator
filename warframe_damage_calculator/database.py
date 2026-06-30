@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import difflib
 import json
 from pathlib import Path
+from warnings import warn
+import sys
 
 from .constants import UPGRADE_TABLES, WEAPON_TABLES
 from .states import MeleeState, PrimaryState, SecondaryState
@@ -18,21 +21,25 @@ class Database:
         self.tables = {table: json.loads((base_root / filename).read_text(encoding="utf-8")) for table, filename in filenames.items()}
 
     @staticmethod
-    def rank_value(value: object, rank: int | None) -> float:
-        if not value: return 0.0
-        if not isinstance(value, list): return float(value)
-        if rank is None: rank = len(value) - 1
-        return float(value[max(0, min(rank, len(value) - 1))])
-
-    @staticmethod
     def add(mapping: dict[str, float], key: str, value: float) -> None:
         mapping[key] = mapping.get(key, 0.0) + value
 
-    def find(self, tables: tuple[str], name: str) -> tuple[str, dict]:
+    def suggest(self, tables: tuple[str, ...], name: str, cutoff: float = 0.6) -> str | None:
+        choices = [candidate for table in tables for candidate in self.tables[table]]
+        lower_to_choice = {choice.lower(): choice for choice in choices}
+        matches = difflib.get_close_matches(name.lower(), list(lower_to_choice), n=1, cutoff=cutoff)
+        if not matches:
+            return None
+        return lower_to_choice[matches[0]]
+
+    def find(self, tables: tuple[str, ...], name: str) -> tuple[str, dict]:
         for table in tables:
             if (record := self.tables[table].get(name)) is not None:
                 return table, record
-        raise KeyError(f"Unknown object: {name}")
+        suggestion = self.suggest(tables, name)
+        if suggestion is None:
+            sys.exit(f"ERROR: '{name}' not found")
+        sys.exit(f"ERROR: '{name}' not found, did you mean '{suggestion}'?")
 
     def weapon(self, name: str) -> Melee | Primary | Secondary:
         table, record = self.find(WEAPON_TABLES, name)
@@ -48,24 +55,45 @@ class Database:
 
     def upgrade(self, name: str, rank: int | None = None, stacks: int | None = None, conditional: bool | None = None) -> Upgrade:
         _, record = self.find(UPGRADE_TABLES, name)
-        max_stacks = record.get("max_stacks", 1)
-        stack_count = max(0, min(max_stacks if stacks is None else stacks, max_stacks))
+        max_rank = record.get("max_rank", None)
+        max_stacks = record.get("max_stacks", None)
+        
+        if rank == None: rank = max_rank
+        elif rank < 0: raise ValueError(f"Rank should be greater than 0, got {rank}")
+        elif rank > max_rank: print(f"WARNING: Max rank exceded on {name}: Max rank is {max_rank}, got {rank}")
+
+        if stacks == None: stacks = max_stacks
+        elif stacks < 0: raise ValueError(f"Stacks should be greater than 0, got {stacks}")
+        elif stacks > max_stacks: print(f"WARNING: Max stacks exceded on {name}: Max stacks is {max_stacks}, got {stacks}")
+
+        if conditional == None: conditional = 1
+        elif isinstance(conditional, bool): conditional = int(conditional)
+
         damage_dist: dict[str, float] = {}
         stats: dict[str, float] = {}
 
         for key, value in record.items():
+            if key == "max_rank": continue
             if key == "max_stacks": continue
+            if key == "compatible_weapons": continue
             multiplier = 1
-            if key.startswith("stack_"):
-                multiplier = stack_count
-                key = key.removeprefix("stack_")
+            if key.startswith("stacking_"):
+                multiplier = stacks
+                key = key.removeprefix("stacking_")
             elif key.startswith("conditional_"):
-                if conditional is False: continue
+                multiplier = conditional
                 key = key.removeprefix("conditional_")
             if key == "damage_dist":
                 for damage_type, series in value.items():
-                    self.add(damage_dist, damage_type, multiplier * self.rank_value(series, rank))
-            else: self.add(stats, key, multiplier * self.rank_value(value, rank))
+                    rank_series = float(series[max(0, min(rank, len(series) - 1))])
+                    self.add(damage_dist, damage_type, multiplier * rank_series)
+            elif isinstance(value, list):
+                rank_value = float(value[max(0, min(rank, len(value) - 1))])
+                self.add(stats, key, multiplier * rank_value)
+            elif isinstance(value, bool):
+                stats[key] = bool(value)
+            else:
+                self.add(stats, key, multiplier * float(value))
 
         return Upgrade(damage_dist=Dist(**damage_dist), **stats)
 

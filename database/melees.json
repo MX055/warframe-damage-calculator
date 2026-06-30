@@ -1,2413 +1,2634 @@
 {
     "Ack & Brunt": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 14.9,
             "puncture": 14.9,
             "slash": 119.2
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "attack_speed": 0.833,
-        "status_chance": 0.1
+        "status_chance": 0.1,
+        "weapon_type": ["Sword and Shield"]
     },
     "Amanata": {
-        "crit_chance": 0.24,
-        "crit_damage": 2,
         "damage_dist": {
             "puncture": 37.8,
             "slash": 88.2
         },
+        "crit_chance": 0.24,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.24
+        "status_chance": 0.24,
+        "weapon_type": ["Polearm"]
     },
     "Amphis": {
-        "crit_chance": 0.13,
-        "crit_damage": 1.7,
         "damage_dist": {
             "impact": 91,
             "puncture": 19.5,
             "slash": 19.5
         },
+        "crit_chance": 0.13,
+        "crit_damage": 1.7,
         "attack_speed": 1.25,
-        "status_chance": 0.21
+        "status_chance": 0.21,
+        "weapon_type": ["Staff"]
     },
     "Anku": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 25.5,
             "puncture": 136,
             "slash": 8.5
         },
-        "attack_speed": 1.08,
-        "status_chance": 0.1
-    },
-    "Ankyros": {
         "crit_chance": 0.2,
         "crit_damage": 2,
+        "attack_speed": 1.08,
+        "status_chance": 0.1,
+        "weapon_type": ["Scythe"]
+    },
+    "Ankyros": {
         "damage_dist": {
             "impact": 63,
             "puncture": 13.5,
             "slash": 13.5
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "attack_speed": 1.17,
-        "status_chance": 0.1
+        "status_chance": 0.1,
+        "weapon_type": ["Fist"]
     },
     "Ankyros Prime": {
-        "crit_chance": 0.28,
-        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 89.6,
             "puncture": 19.2,
             "slash": 19.2
         },
+        "crit_chance": 0.28,
+        "crit_damage": 2.4,
         "attack_speed": 1.25,
-        "status_chance": 0.16
+        "status_chance": 0.16,
+        "weapon_type": ["Fist"]
     },
     "Arca Titron": {
-        "crit_chance": 0.24,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 234,
             "slash": 126
         },
+        "crit_chance": 0.24,
+        "crit_damage": 2,
         "attack_speed": 0.733,
-        "status_chance": 0.38
+        "status_chance": 0.38,
+        "weapon_type": ["Hammer"]
     },
     "Argo & Vel": {
-        "crit_chance": 0.32,
-        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 60,
             "slash": 240
         },
+        "crit_chance": 0.32,
+        "crit_damage": 2.4,
         "attack_speed": 0.8,
-        "status_chance": 0.24
+        "status_chance": 0.24,
+        "weapon_type": ["Sword and Shield"]
     },
     "Arum Spinosa": {
-        "crit_chance": 0.09,
-        "crit_damage": 1.9,
         "damage_dist": {
             "impact": 35.64,
             "puncture": 59.4,
             "slash": 201.96
         },
+        "crit_chance": 0.09,
+        "crit_damage": 1.9,
         "attack_speed": 1.08,
-        "status_chance": 0.37
+        "status_chance": 0.37,
+        "weapon_type": ["Warfan"]
     },
     "Atterax": {
-        "crit_chance": 0.25,
-        "crit_damage": 3,
         "damage_dist": {
             "impact": 6.45,
             "puncture": 6.45,
             "slash": 116.1
         },
+        "crit_chance": 0.25,
+        "crit_damage": 3,
         "attack_speed": 0.917,
-        "status_chance": 0.2
+        "status_chance": 0.2,
+        "weapon_type": ["Whip"]
     },
     "Azothane": {
-        "crit_chance": 0.34,
-        "crit_damage": 3,
         "damage_dist": {
             "impact": 51,
             "puncture": 34,
             "slash": 85
         },
+        "crit_chance": 0.34,
+        "crit_damage": 3,
         "attack_speed": 1.17,
-        "status_chance": 0.22
+        "status_chance": 0.22,
+        "weapon_type": ["Two-Handed Nikana"]
     },
     "Bo": {
-        "crit_chance": 0.125,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 126,
             "puncture": 14
         },
+        "crit_chance": 0.125,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.2
+        "status_chance": 0.2,
+        "weapon_type": ["Staff"]
     },
     "Bo Prime": {
-        "crit_chance": 0.24,
-        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 158.4,
             "puncture": 17.6
         },
+        "crit_chance": 0.24,
+        "crit_damage": 2.6,
         "attack_speed": 1.08,
-        "status_chance": 0.32
+        "status_chance": 0.32,
+        "weapon_type": ["Staff"]
     },
     "Boltace": {
-        "crit_chance": 0.06,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 17.6,
             "puncture": 140.8,
             "slash": 17.6
         },
+        "crit_chance": 0.06,
+        "crit_damage": 1.5,
         "attack_speed": 0.917,
-        "status_chance": 0.28
+        "status_chance": 0.28,
+        "weapon_type": ["Tonfa"]
     },
     "Broken Scepter": {
-        "crit_chance": 0.1,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 125.3,
             "puncture": 17.9,
             "slash": 35.8
         },
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "attack_speed": 1.25,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Staff"]
     },
     "Broken War": {
-        "crit_chance": 0.35,
-        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 18.7,
             "puncture": 18.7,
             "slash": 149.6
         },
+        "crit_chance": 0.35,
+        "crit_damage": 2.2,
         "attack_speed": 1,
-        "status_chance": 0.2
+        "status_chance": 0.2,
+        "weapon_type": ["Sword"]
     },
     "Cadus": {
-        "crit_chance": 0.15,
-        "crit_damage": 2,
         "damage_dist": {
             "electricity": 60,
             "impact": 70
         },
+        "crit_chance": 0.15,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.25
+        "status_chance": 0.25,
+        "weapon_type": ["Staff"]
     },
     "Cassowar": {
-        "crit_chance": 0.06,
-        "crit_damage": 1.4,
         "damage_dist": {
             "impact": 41.36,
             "puncture": 63.92,
             "slash": 82.72
         },
+        "crit_chance": 0.06,
+        "crit_damage": 1.4,
         "attack_speed": 1.17,
-        "status_chance": 0.28
+        "status_chance": 0.28,
+        "weapon_type": ["Polearm"]
     },
     "Caustacyst": {
-        "crit_chance": 0.09,
-        "crit_damage": 2,
         "damage_dist": {
             "corrosive": 103,
             "impact": 17,
             "puncture": 71,
             "slash": 69
         },
+        "crit_chance": 0.09,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.37
+        "status_chance": 0.37,
+        "weapon_type": ["Scythe"]
     },
     "Ceramic Dagger": {
-        "crit_chance": 0.1,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 14,
             "puncture": 126
         },
+        "crit_chance": 0.1,
+        "crit_damage": 1.5,
         "attack_speed": 1,
-        "status_chance": 0.2
+        "status_chance": 0.2,
+        "weapon_type": ["Dagger"]
     },
     "Cerata": {
-        "crit_chance": 0.15,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 19,
             "puncture": 36,
             "slash": 52,
             "toxin": 76
         },
+        "crit_chance": 0.15,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Glaive"]
     },
     "Ceti Lacera": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "electricity": 100,
             "impact": 12,
             "puncture": 38,
             "slash": 66
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "attack_speed": 1.08,
-        "status_chance": 0.4
+        "status_chance": 0.4,
+        "weapon_type": ["Blade and Whip"]
     },
     "Cobra & Crane": {
-        "crit_chance": 0.15,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 207.2,
             "puncture": 88.8
         },
+        "crit_chance": 0.15,
+        "crit_damage": 1.5,
         "attack_speed": 0.917,
-        "status_chance": 0.36
+        "status_chance": 0.36,
+        "weapon_type": ["Sword and Shield"]
     },
     "Cobra & Crane Prime": {
-        "crit_chance": 0.18,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 210,
             "puncture": 90
         },
+        "crit_chance": 0.18,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.38
+        "status_chance": 0.38,
+        "weapon_type": ["Sword and Shield"]
     },
     "Corufell": {
-        "crit_chance": 0.26,
-        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 96,
             "puncture": 68,
             "slash": 36
         },
+        "crit_chance": 0.26,
+        "crit_damage": 2.4,
         "attack_speed": 1,
-        "status_chance": 0.14
+        "status_chance": 0.14,
+        "weapon_type": ["Heavy Scythe"]
     },
     "Cronus": {
-        "crit_chance": 0.06,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 31.8,
             "puncture": 15.9,
             "slash": 58.3
         },
+        "crit_chance": 0.06,
+        "crit_damage": 1.5,
         "attack_speed": 0.917,
-        "status_chance": 0.18
+        "status_chance": 0.18,
+        "weapon_type": ["Sword"]
     },
     "Dakra Prime": {
-        "crit_chance": 0.36,
-        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 17,
             "puncture": 17,
             "slash": 136
         },
+        "crit_chance": 0.36,
+        "crit_damage": 2.4,
         "attack_speed": 1,
-        "status_chance": 0.18
+        "status_chance": 0.18,
+        "weapon_type": ["Sword"]
     },
     "Dark Dagger": {
-        "crit_chance": 0.08,
-        "crit_damage": 1.5,
         "damage_dist": {
             "puncture": 58,
             "radiation": 60,
             "slash": 36
         },
+        "crit_chance": 0.08,
+        "crit_damage": 1.5,
         "attack_speed": 0.917,
-        "status_chance": 0.22
+        "status_chance": 0.22,
+        "weapon_type": ["Dagger"]
     },
     "Dark Split-Sword (Dual Swords)": {
-        "crit_chance": 0.25,
-        "crit_damage": 2.5,
         "damage_dist": {
             "puncture": 56,
             "radiation": 32,
             "slash": 28
         },
+        "crit_chance": 0.25,
+        "crit_damage": 2.5,
         "attack_speed": 1.17,
-        "status_chance": 0.15
+        "status_chance": 0.15,
+        "weapon_type": ["Dual Swords"]
     },
     "Dark Split-Sword (Heavy Blade)": {
-        "crit_chance": 0.15,
-        "crit_damage": 2,
         "damage_dist": {
             "puncture": 78,
             "radiation": 100,
             "slash": 52
         },
+        "crit_chance": 0.15,
+        "crit_damage": 2,
         "attack_speed": 0.917,
-        "status_chance": 0.25
+        "status_chance": 0.25,
+        "weapon_type": ["Heavy Blade"]
     },
     "Dark Sword": {
-        "crit_chance": 0.05,
-        "crit_damage": 1.5,
         "damage_dist": {
             "puncture": 120,
             "radiation": 80,
             "slash": 60
         },
+        "crit_chance": 0.05,
+        "crit_damage": 1.5,
         "attack_speed": 0.833,
-        "status_chance": 0.4
+        "status_chance": 0.4,
+        "weapon_type": ["Sword"]
     },
     "Desert Wind": {
-        "crit_chance": 0.5,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 250
         },
+        "crit_chance": 0.5,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.15
+        "status_chance": 0.15,
+        "weapon_type": ["Exalted Weapon"]
     },
     "Desert Wind Prime": {
-        "crit_chance": 0.5,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 250
         },
+        "crit_chance": 0.5,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.15
+        "status_chance": 0.15,
+        "weapon_type": ["Exalted Weapon"]
     },
     "Destreza": {
-        "crit_chance": 0.28,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 3.95,
             "puncture": 134.3,
             "slash": 19.75
         },
+        "crit_chance": 0.28,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.14
+        "status_chance": 0.14,
+        "weapon_type": ["Rapier"]
     },
     "Destreza Prime": {
-        "crit_chance": 0.32,
-        "crit_damage": 3,
         "damage_dist": {
             "impact": 20.4,
             "puncture": 119,
             "slash": 30.6
         },
+        "crit_chance": 0.32,
+        "crit_damage": 3,
         "attack_speed": 0.917,
-        "status_chance": 0.2
+        "status_chance": 0.2,
+        "weapon_type": ["Rapier"]
     },
     "Dex Dakra": {
-        "crit_chance": 0.16,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 14.2,
             "puncture": 14.2,
             "slash": 113.6
         },
+        "crit_chance": 0.16,
+        "crit_damage": 2,
         "attack_speed": 0.883,
-        "status_chance": 0.24
+        "status_chance": 0.24,
+        "weapon_type": ["Dual Swords"]
     },
     "Dex Nikana": {
-        "crit_chance": 0.24,
-        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 16.8,
             "puncture": 25.2,
             "slash": 126
         },
+        "crit_chance": 0.24,
+        "crit_damage": 2.6,
         "attack_speed": 1,
-        "status_chance": 0.18
+        "status_chance": 0.18,
+        "weapon_type": ["Nikana"]
     },
     "Diwata": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 30,
             "puncture": 150,
             "slash": 20
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "attack_speed": 1.08,
-        "status_chance": 0.1
+        "status_chance": 0.1,
+        "weapon_type": ["Exalted Weapon"]
     },
     "Diwata Prime": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 30,
             "puncture": 150,
             "slash": 20
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "attack_speed": 1.08,
-        "status_chance": 0.1
+        "status_chance": 0.1,
+        "weapon_type": ["Exalted Weapon"]
     },
     "Dorrclave": {
-        "crit_chance": 0.26,
-        "crit_damage": 2.2,
         "damage_dist": {
             "slash": 222
         },
+        "crit_chance": 0.26,
+        "crit_damage": 2.2,
         "attack_speed": 0.833,
-        "status_chance": 0.24
+        "status_chance": 0.24,
+        "weapon_type": ["Blade and Whip"]
     },
     "Dragon Nikana": {
-        "crit_chance": 0.22,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 9.4,
             "puncture": 18.8,
             "slash": 159.8
         },
+        "crit_chance": 0.22,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.22
+        "status_chance": 0.22,
+        "weapon_type": ["Nikana"]
     },
     "Dual Cleavers": {
-        "crit_chance": 0.25,
-        "crit_damage": 3,
         "damage_dist": {
             "impact": 23.55,
             "puncture": 23.55,
             "slash": 109.9
         },
+        "crit_chance": 0.25,
+        "crit_damage": 3,
         "attack_speed": 0.833,
-        "status_chance": 0.1
+        "status_chance": 0.1,
+        "weapon_type": ["Dual Swords"]
     },
     "Dual Ether": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 27,
             "puncture": 27,
             "slash": 126
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.28
+        "status_chance": 0.28,
+        "weapon_type": ["Dual Swords"]
     },
     "Dual Heat Swords": {
-        "crit_chance": 0.05,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 22.05,
             "puncture": 22.05,
             "slash": 102.9
         },
+        "crit_chance": 0.05,
+        "crit_damage": 1.5,
         "attack_speed": 0.917,
-        "status_chance": 0.2
+        "status_chance": 0.2,
+        "weapon_type": ["Dual Swords"]
     },
     "Dual Ichor": {
-        "crit_chance": 0.25,
-        "crit_damage": 3,
         "damage_dist": {
             "impact": 19,
             "puncture": 11,
             "slash": 45,
             "toxin": 47
         },
+        "crit_chance": 0.25,
+        "crit_damage": 3,
         "attack_speed": 1.08,
-        "status_chance": 0.15
+        "status_chance": 0.15,
+        "weapon_type": ["Dual Swords"]
     },
     "Dual Kamas": {
-        "crit_chance": 0.1,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 4.8,
             "puncture": 9.6,
             "slash": 81.6
         },
+        "crit_chance": 0.1,
+        "crit_damage": 1.5,
         "attack_speed": 1.17,
-        "status_chance": 0.15
+        "status_chance": 0.15,
+        "weapon_type": ["Dual Swords"]
     },
     "Dual Kamas Prime": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 8,
             "puncture": 32,
             "slash": 120
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "attack_speed": 1.17,
-        "status_chance": 0.25
+        "status_chance": 0.25,
+        "weapon_type": ["Dual Swords"]
     },
     "Dual Keres": {
-        "crit_chance": 0.28,
-        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 13.8,
             "puncture": 34.5,
             "slash": 66.7
         },
+        "crit_chance": 0.28,
+        "crit_damage": 2.6,
         "attack_speed": 1.25,
-        "status_chance": 0.14
+        "status_chance": 0.14,
+        "weapon_type": ["Dual Swords"]
     },
     "Dual Keres Prime": {
-        "crit_chance": 0.32,
-        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 21.6,
             "puncture": 54,
             "slash": 104.4
         },
+        "crit_chance": 0.32,
+        "crit_damage": 2.6,
         "attack_speed": 1.25,
-        "status_chance": 0.24
+        "status_chance": 0.24,
+        "weapon_type": ["Dual Swords"]
     },
     "Dual Raza": {
-        "crit_chance": 0.25,
-        "crit_damage": 3,
         "damage_dist": {
             "impact": 11,
             "puncture": 33,
             "slash": 66
         },
+        "crit_chance": 0.25,
+        "crit_damage": 3,
         "attack_speed": 0.917,
-        "status_chance": 0.1
+        "status_chance": 0.1,
+        "weapon_type": ["Dual Swords"]
     },
     "Dual Skana": {
-        "crit_chance": 0.05,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 18,
             "puncture": 18,
             "slash": 84
         },
+        "crit_chance": 0.05,
+        "crit_damage": 1.5,
         "attack_speed": 0.833,
-        "status_chance": 0.16
+        "status_chance": 0.16,
+        "weapon_type": ["Dual Swords"]
     },
     "Dual Zoren": {
-        "crit_chance": 0.25,
-        "crit_damage": 3,
         "damage_dist": {
             "impact": 3.5,
             "puncture": 3.5,
             "slash": 63
         },
+        "crit_chance": 0.25,
+        "crit_damage": 3,
         "attack_speed": 1.17,
-        "status_chance": 0.05
+        "status_chance": 0.05,
+        "weapon_type": ["Dual Swords"]
     },
     "Edun": {
-        "crit_chance": 0.34,
-        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 44,
             "puncture": 66,
             "slash": 110
         },
+        "crit_chance": 0.34,
+        "crit_damage": 2.6,
         "attack_speed": 1,
-        "status_chance": 0.2
+        "status_chance": 0.2,
+        "weapon_type": ["Polearm"]
     },
     "Ekhein": {
-        "crit_chance": 0.3,
-        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 340
         },
+        "crit_chance": 0.3,
+        "crit_damage": 2.4,
         "attack_speed": 0.767,
-        "status_chance": 0.15
+        "status_chance": 0.15,
+        "weapon_type": ["Hammer"]
     },
     "Endura": {
-        "crit_chance": 0.1,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 10,
             "puncture": 140,
             "slash": 50
         },
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "attack_speed": 0.917,
-        "status_chance": 0.36
+        "status_chance": 0.36,
+        "weapon_type": ["Rapier"]
     },
     "Ether Daggers": {
-        "crit_chance": 0.1,
-        "crit_damage": 1.8,
         "damage_dist": {
             "impact": 33.6,
             "puncture": 33.6,
             "slash": 156.8
         },
+        "crit_chance": 0.1,
+        "crit_damage": 1.8,
         "attack_speed": 0.833,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Dual Daggers"]
     },
     "Ether Reaper": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 27,
             "puncture": 27,
             "slash": 126
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "attack_speed": 1.08,
-        "status_chance": 0.2
+        "status_chance": 0.2,
+        "weapon_type": ["Scythe"]
     },
     "Ether Sword": {
-        "crit_chance": 0.1,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 28.8,
             "puncture": 28.8,
             "slash": 134.4
         },
+        "crit_chance": 0.1,
+        "crit_damage": 1.5,
         "attack_speed": 1,
-        "status_chance": 0.34
+        "status_chance": 0.34,
+        "weapon_type": ["Sword"]
     },
     "Exalted Blade": {
-        "crit_chance": 0.15,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 37.5,
             "puncture": 37.5,
             "slash": 175
         },
+        "crit_chance": 0.15,
+        "crit_damage": 2,
         "attack_speed": 0.833,
-        "status_chance": 0.15
+        "status_chance": 0.15,
+        "weapon_type": ["Exalted Weapon"]
     },
     "Exalted Prime Blade": {
-        "crit_chance": 0.15,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 37.5,
             "puncture": 37.5,
             "slash": 175
         },
+        "crit_chance": 0.15,
+        "crit_damage": 2,
         "attack_speed": 0.833,
-        "status_chance": 0.15
+        "status_chance": 0.15,
+        "weapon_type": ["Exalted Weapon"]
     },
     "Exalted Umbra Blade": {
-        "crit_chance": 0.15,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 37.5,
             "puncture": 37.5,
             "slash": 175
         },
+        "crit_chance": 0.15,
+        "crit_damage": 2,
         "attack_speed": 0.833,
-        "status_chance": 0.15
+        "status_chance": 0.15,
+        "weapon_type": ["Exalted Weapon"]
     },
     "Falcor": {
-        "crit_chance": 0.12,
-        "crit_damage": 1.6,
         "damage_dist": {
             "electricity": 84,
             "impact": 36,
             "puncture": 18,
             "slash": 92
         },
+        "crit_chance": 0.12,
+        "crit_damage": 1.6,
         "attack_speed": 0.833,
-        "status_chance": 0.34
+        "status_chance": 0.34,
+        "weapon_type": ["Glaive"]
     },
     "Fang": {
-        "crit_chance": 0.08,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 16.2,
             "puncture": 75.6,
             "slash": 16.2
         },
+        "crit_chance": 0.08,
+        "crit_damage": 1.5,
         "attack_speed": 0.917,
-        "status_chance": 0.16
+        "status_chance": 0.16,
+        "weapon_type": ["Dual Daggers"]
     },
     "Fang Prime": {
-        "crit_chance": 0.26,
-        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 26.7,
             "puncture": 124.6,
             "slash": 26.7
         },
+        "crit_chance": 0.26,
+        "crit_damage": 2.6,
         "attack_speed": 1,
-        "status_chance": 0.26
+        "status_chance": 0.26,
+        "weapon_type": ["Dual Daggers"]
     },
     "Fragor": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 140,
             "puncture": 30,
             "slash": 30
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "attack_speed": 0.833,
-        "status_chance": 0.1
+        "status_chance": 0.1,
+        "weapon_type": ["Hammer"]
     },
     "Fragor Prime": {
-        "crit_chance": 0.4,
-        "crit_damage": 2.5,
         "damage_dist": {
             "impact": 189,
             "puncture": 40.5,
             "slash": 40.5
         },
+        "crit_chance": 0.4,
+        "crit_damage": 2.5,
         "attack_speed": 0.8,
-        "status_chance": 0.18
+        "status_chance": 0.18,
+        "weapon_type": ["Hammer"]
     },
     "Furax": {
-        "crit_chance": 0.25,
-        "crit_damage": 2.3,
         "damage_dist": {
             "impact": 94.5,
             "puncture": 20.3,
             "slash": 20.2
         },
+        "crit_chance": 0.25,
+        "crit_damage": 2.3,
         "attack_speed": 1,
-        "status_chance": 0.11
+        "status_chance": 0.11,
+        "weapon_type": ["Fist"]
     },
     "Furax Wraith": {
-        "crit_chance": 0.3,
-        "crit_damage": 2.7,
         "damage_dist": {
             "impact": 97.3,
             "puncture": 20.9,
             "slash": 20.8
         },
+        "crit_chance": 0.3,
+        "crit_damage": 2.7,
         "attack_speed": 1.08,
-        "status_chance": 0.15
+        "status_chance": 0.15,
+        "weapon_type": ["Fist"]
     },
     "Galatine": {
-        "crit_chance": 0.1,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 4.55,
             "puncture": 4.55,
             "slash": 172.9
         },
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.2
+        "status_chance": 0.2,
+        "weapon_type": ["Heavy Blade"]
     },
     "Galatine Prime": {
-        "crit_chance": 0.26,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 7,
             "puncture": 7,
             "slash": 266
         },
+        "crit_chance": 0.26,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.26
+        "status_chance": 0.26,
+        "weapon_type": ["Heavy Blade"]
     },
     "Galvacord": {
-        "crit_chance": 0.12,
-        "crit_damage": 1.8,
         "damage_dist": {
             "electricity": 96,
             "impact": 12,
             "puncture": 38,
             "slash": 64
         },
+        "crit_chance": 0.12,
+        "crit_damage": 1.8,
         "attack_speed": 0.75,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Whip"]
     },
     "Garuda Prime Talons": {
-        "crit_chance": 0.35,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 14,
             "puncture": 28,
             "slash": 238
         },
+        "crit_chance": 0.35,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.36
+        "status_chance": 0.36,
+        "weapon_type": ["Claws"]
     },
     "Garuda Talons": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 19.84,
             "puncture": 54.56,
             "slash": 173.6
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.36
+        "status_chance": 0.36,
+        "weapon_type": ["Claws"]
     },
     "Gazal Machete": {
-        "crit_chance": 0.1,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 17.8,
             "puncture": 26.7,
             "slash": 133.5
         },
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Machete"]
     },
     "Ghoulsaw": {
-        "crit_chance": 0.15,
-        "crit_damage": 1.9,
         "damage_dist": {
             "impact": 37.43,
             "puncture": 45.31,
             "slash": 114.26
         },
+        "crit_chance": 0.15,
+        "crit_damage": 1.9,
         "attack_speed": 1,
-        "status_chance": 0.27
+        "status_chance": 0.27,
+        "weapon_type": ["Assault Saw"]
     },
     "Glaive": {
-        "crit_chance": 0.12,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 15.75,
             "puncture": 15.75,
             "slash": 73.5
         },
+        "crit_chance": 0.12,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.12
+        "status_chance": 0.12,
+        "weapon_type": ["Glaive"]
     },
     "Glaive Prime": {
-        "crit_chance": 0.22,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 24.6,
             "puncture": 24.6,
             "slash": 114.8
         },
+        "crit_chance": 0.22,
+        "crit_damage": 2,
         "attack_speed": 1.25,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Glaive"]
     },
     "Gram": {
-        "crit_chance": 0.15,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 24,
             "puncture": 24,
             "slash": 112
         },
+        "crit_chance": 0.15,
+        "crit_damage": 2,
         "attack_speed": 0.95,
-        "status_chance": 0.15
+        "status_chance": 0.15,
+        "weapon_type": ["Heavy Blade"]
     },
     "Gram Prime": {
-        "crit_chance": 0.32,
-        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 60,
             "puncture": 15,
             "slash": 225
         },
+        "crit_chance": 0.32,
+        "crit_damage": 2.6,
         "attack_speed": 0.8,
-        "status_chance": 0.32
+        "status_chance": 0.32,
+        "weapon_type": ["Heavy Blade"]
     },
     "Guandao": {
-        "crit_chance": 0.28,
-        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 50.5,
             "puncture": 10.1,
             "slash": 141.4
         },
+        "crit_chance": 0.28,
+        "crit_damage": 2.2,
         "attack_speed": 0.833,
-        "status_chance": 0.04
+        "status_chance": 0.04,
+        "weapon_type": ["Polearm"]
     },
     "Guandao Prime": {
-        "crit_chance": 0.32,
-        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 60,
             "puncture": 12,
             "slash": 168
         },
+        "crit_chance": 0.32,
+        "crit_damage": 2.4,
         "attack_speed": 1,
-        "status_chance": 0.2
+        "status_chance": 0.2,
+        "weapon_type": ["Polearm"]
     },
     "Gunsen": {
-        "crit_chance": 0.16,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 12.8,
             "puncture": 19.2,
             "slash": 128
         },
+        "crit_chance": 0.16,
+        "crit_damage": 2,
         "attack_speed": 1.17,
-        "status_chance": 0.28
+        "status_chance": 0.28,
+        "weapon_type": ["Warfan"]
     },
     "Gunsen Prime": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 9,
             "puncture": 13.5,
             "slash": 202.5
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "attack_speed": 1.17,
-        "status_chance": 0.34
+        "status_chance": 0.34,
+        "weapon_type": ["Warfan"]
     },
     "Halikar": {
-        "crit_chance": 0.17,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 14.9,
             "puncture": 119.2,
             "slash": 14.9
         },
+        "crit_chance": 0.17,
+        "crit_damage": 2,
         "attack_speed": 1.17,
-        "status_chance": 0.29
+        "status_chance": 0.29,
+        "weapon_type": ["Glaive"]
     },
     "Halikar Wraith": {
-        "crit_chance": 0.19,
-        "crit_damage": 2.3,
         "damage_dist": {
             "impact": 22.5,
             "puncture": 180,
             "slash": 22.5
         },
+        "crit_chance": 0.19,
+        "crit_damage": 2.3,
         "attack_speed": 1.17,
-        "status_chance": 0.35
+        "status_chance": 0.35,
+        "weapon_type": ["Glaive"]
     },
     "Harmony": {
-        "crit_chance": 0.2,
-        "crit_damage": 2.2,
         "damage_dist": {
             "puncture": 168,
             "slash": 72
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2.2,
         "attack_speed": 1.083,
-        "status_chance": 0.36
+        "status_chance": 0.36,
+        "weapon_type": ["Scythe"]
     },
     "Hate": {
-        "crit_chance": 0.3,
-        "crit_damage": 2.5,
         "damage_dist": {
             "impact": 34.5,
             "puncture": 34.5,
             "slash": 161
         },
+        "crit_chance": 0.3,
+        "crit_damage": 2.5,
         "attack_speed": 0.917,
-        "status_chance": 0.2
+        "status_chance": 0.2,
+        "weapon_type": ["Scythe"]
     },
     "Heat Dagger": {
-        "crit_chance": 0.14,
-        "crit_damage": 1.6,
         "damage_dist": {
             "heat": 62,
             "impact": 14,
             "puncture": 76,
             "slash": 56
         },
+        "crit_chance": 0.14,
+        "crit_damage": 1.6,
         "attack_speed": 0.75,
-        "status_chance": 0.14
+        "status_chance": 0.14,
+        "weapon_type": ["Dagger"]
     },
     "Heat Sword": {
-        "crit_chance": 0.05,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 14.7,
             "puncture": 14.7,
             "slash": 117.6
         },
+        "crit_chance": 0.05,
+        "crit_damage": 1.5,
         "attack_speed": 0.917,
-        "status_chance": 0.2
+        "status_chance": 0.2,
+        "weapon_type": ["Sword"]
     },
     "Heliocor": {
-        "crit_chance": 0.38,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 238,
             "puncture": 28,
             "slash": 14
         },
+        "crit_chance": 0.38,
+        "crit_damage": 2,
         "attack_speed": 0.833,
-        "status_chance": 0.12
+        "status_chance": 0.12,
+        "weapon_type": ["Hammer"]
     },
     "Hespar": {
-        "crit_chance": 0.24,
-        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 112,
             "puncture": 33.6,
             "slash": 134.4
         },
+        "crit_chance": 0.24,
+        "crit_damage": 2.2,
         "attack_speed": 1,
-        "status_chance": 0.28
+        "status_chance": 0.28,
+        "weapon_type": ["Heavy Scythe"]
     },
     "Hirudo": {
-        "crit_chance": 0.3,
-        "crit_damage": 3,
         "damage_dist": {
             "impact": 19.5,
             "puncture": 104,
             "slash": 6.5
         },
+        "crit_chance": 0.3,
+        "crit_damage": 3,
         "attack_speed": 1,
-        "status_chance": 0.11
+        "status_chance": 0.11,
+        "weapon_type": ["Sparring"]
     },
     "Innodem": {
-        "crit_chance": 0.22,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 36,
             "puncture": 144,
             "slash": 180
         },
+        "crit_chance": 0.22,
+        "crit_damage": 2,
         "attack_speed": 0.75,
-        "status_chance": 0.22
+        "status_chance": 0.22,
+        "weapon_type": ["Dagger"]
     },
     "Iron Staff": {
-        "crit_chance": 0.25,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 204,
             "slash": 96
         },
+        "crit_chance": 0.25,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Exalted Weapon"]
     },
     "Iron Staff Prime": {
-        "crit_chance": 0.25,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 204,
             "slash": 96
         },
+        "crit_chance": 0.25,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Exalted Weapon"]
     },
     "Jat Kittag": {
-        "crit_chance": 0.15,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 160,
             "puncture": 30,
             "slash": 10
         },
+        "crit_chance": 0.15,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.25
+        "status_chance": 0.25,
+        "weapon_type": ["Hammer"]
     },
     "Jat Kusar": {
-        "crit_chance": 0.35,
-        "crit_damage": 2.5,
         "damage_dist": {
             "heat": 81,
             "impact": 79,
             "puncture": 13,
             "slash": 45
         },
+        "crit_chance": 0.35,
+        "crit_damage": 2.5,
         "attack_speed": 0.833,
-        "status_chance": 0.19
+        "status_chance": 0.19,
+        "weapon_type": ["Blade and Whip"]
     },
     "Jaw Sword": {
-        "crit_chance": 0.08,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 6,
             "puncture": 24,
             "slash": 90
         },
+        "crit_chance": 0.08,
+        "crit_damage": 1.5,
         "attack_speed": 0.917,
-        "status_chance": 0.16
+        "status_chance": 0.16,
+        "weapon_type": ["Sword"]
     },
     "Kama": {
-        "crit_chance": 0.12,
-        "crit_damage": 1.8,
         "damage_dist": {
             "impact": 13.5,
             "puncture": 13.5,
             "slash": 63
         },
+        "crit_chance": 0.12,
+        "crit_damage": 1.8,
         "attack_speed": 1.17,
-        "status_chance": 0.1
+        "status_chance": 0.1,
+        "weapon_type": ["Machete"]
     },
     "Karyst": {
-        "crit_chance": 0.1,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 30,
             "puncture": 84,
             "slash": 72,
             "toxin": 87
         },
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "attack_speed": 0.75,
-        "status_chance": 0.26
+        "status_chance": 0.26,
+        "weapon_type": ["Dagger"]
     },
     "Karyst Prime": {
-        "crit_chance": 0.24,
-        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 50,
             "puncture": 96,
             "slash": 102,
             "toxin": 96
         },
+        "crit_chance": 0.24,
+        "crit_damage": 2.2,
         "attack_speed": 0.667,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Dagger"]
     },
     "Keratinos": {
-        "crit_chance": 0.13,
-        "crit_damage": 2.1,
         "damage_dist": {
             "impact": 79,
             "puncture": 45,
             "slash": 87,
             "viral": 33
         },
+        "crit_chance": 0.13,
+        "crit_damage": 2.1,
         "attack_speed": 0.917,
-        "status_chance": 0.29
+        "status_chance": 0.29,
+        "weapon_type": ["Claws"]
     },
     "Kesheg": {
-        "crit_chance": 0.19,
-        "crit_damage": 2.5,
         "damage_dist": {
             "impact": 96.4,
             "puncture": 24.1,
             "slash": 120.5
         },
+        "crit_chance": 0.19,
+        "crit_damage": 2.5,
         "attack_speed": 0.833,
-        "status_chance": 0.23
+        "status_chance": 0.23,
+        "weapon_type": ["Polearm"]
     },
     "Kestrel": {
-        "crit_chance": 0.1,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 58.8,
             "puncture": 12.6,
             "slash": 12.6
         },
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "attack_speed": 1.08,
-        "status_chance": 0.1
+        "status_chance": 0.1,
+        "weapon_type": ["Glaive"]
     },
     "Kogake": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 84,
             "puncture": 18,
             "slash": 18
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "attack_speed": 0.917,
-        "status_chance": 0.1
+        "status_chance": 0.1,
+        "weapon_type": ["Sparring"]
     },
     "Kogake Prime": {
-        "crit_chance": 0.16,
-        "crit_damage": 1.8,
         "damage_dist": {
             "impact": 169.4,
             "puncture": 36.3,
             "slash": 36.3
         },
+        "crit_chance": 0.16,
+        "crit_damage": 1.8,
         "attack_speed": 0.917,
-        "status_chance": 0.38
+        "status_chance": 0.38,
+        "weapon_type": ["Sparring"]
     },
     "Korrudo": {
-        "crit_chance": 0.31,
-        "crit_damage": 2.5,
         "damage_dist": {
             "impact": 110.01,
             "puncture": 5.79,
             "slash": 77.2
         },
+        "crit_chance": 0.31,
+        "crit_damage": 2.5,
         "attack_speed": 0.833,
-        "status_chance": 0.09
+        "status_chance": 0.09,
+        "weapon_type": ["Sparring"]
     },
     "Korumm": {
-        "crit_chance": 0.24,
-        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 52,
             "puncture": 104,
             "slash": 104
         },
+        "crit_chance": 0.24,
+        "crit_damage": 2.2,
         "attack_speed": 1,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Polearm"]
     },
     "Kreska": {
-        "crit_chance": 0.14,
-        "crit_damage": 2,
         "damage_dist": {
             "heat": 100,
             "impact": 30,
             "puncture": 15,
             "slash": 45
         },
+        "crit_chance": 0.14,
+        "crit_damage": 2,
         "attack_speed": 0.917,
-        "status_chance": 0.22
+        "status_chance": 0.22,
+        "weapon_type": ["Machete"]
     },
     "Krohkur": {
-        "crit_chance": 0.29,
-        "crit_damage": 2.3,
         "damage_dist": {
             "impact": 26,
             "puncture": 39.1,
             "slash": 151.9
         },
+        "crit_chance": 0.29,
+        "crit_damage": 2.3,
         "attack_speed": 0.833,
-        "status_chance": 0.19
+        "status_chance": 0.19,
+        "weapon_type": ["Sword"]
     },
     "Kronen": {
-        "crit_chance": 0.1,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 13,
             "puncture": 13,
             "slash": 104
         },
+        "crit_chance": 0.1,
+        "crit_damage": 1.5,
         "attack_speed": 1.08,
-        "status_chance": 0.2
+        "status_chance": 0.2,
+        "weapon_type": ["Tonfa"]
     },
     "Kronen Prime": {
-        "crit_chance": 0.22,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 21.2,
             "puncture": 21.2,
             "slash": 169.6
         },
+        "crit_chance": 0.22,
+        "crit_damage": 2,
         "attack_speed": 1.17,
-        "status_chance": 0.34
+        "status_chance": 0.34,
+        "weapon_type": ["Tonfa"]
     },
     "Kuva Shildeg": {
-        "crit_chance": 0.31,
-        "crit_damage": 2.7,
         "damage_dist": {
             "impact": 75.8,
             "puncture": 100.5,
             "slash": 28.7
         },
+        "crit_chance": 0.31,
+        "crit_damage": 2.7,
         "attack_speed": 0.917,
-        "status_chance": 0.27
+        "status_chance": 0.27,
+        "weapon_type": ["Hammer"]
     },
     "Lacera": {
-        "crit_chance": 0.05,
-        "crit_damage": 2,
         "damage_dist": {
             "electricity": 100,
             "impact": 12,
             "puncture": 38,
             "slash": 66
         },
+        "crit_chance": 0.05,
+        "crit_damage": 2,
         "attack_speed": 0.917,
-        "status_chance": 0.45
+        "status_chance": 0.45,
+        "weapon_type": ["Blade and Whip"]
     },
     "Lecta": {
-        "crit_chance": 0.05,
-        "crit_damage": 1.5,
         "damage_dist": {
             "electricity": 56,
             "puncture": 20,
             "slash": 25
         },
+        "crit_chance": 0.05,
+        "crit_damage": 1.5,
         "attack_speed": 1,
-        "status_chance": 0.25
+        "status_chance": 0.25,
+        "weapon_type": ["Whip"]
     },
     "Lesion": {
-        "crit_chance": 0.15,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 47.4,
             "puncture": 11.85,
             "slash": 177.75
         },
+        "crit_chance": 0.15,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.37
+        "status_chance": 0.37,
+        "weapon_type": ["Polearm"]
     },
     "MK1-Bo": {
-        "crit_chance": 0.1,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 81,
             "puncture": 9
         },
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.1
+        "status_chance": 0.1,
+        "weapon_type": ["Staff"]
     },
     "MK1-Furax": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 63,
             "puncture": 13.5,
             "slash": 13.5
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.1
+        "status_chance": 0.1,
+        "weapon_type": ["Fist"]
     },
     "Machete": {
-        "crit_chance": 0.1,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 18,
             "puncture": 18,
             "slash": 84
         },
+        "crit_chance": 0.1,
+        "crit_damage": 1.5,
         "attack_speed": 0.917,
-        "status_chance": 0.15
+        "status_chance": 0.15,
+        "weapon_type": ["Machete"]
     },
     "Machete Wraith": {
-        "crit_chance": 0.19,
-        "crit_damage": 2.1,
         "damage_dist": {
             "impact": 31.65,
             "puncture": 31.65,
             "slash": 147.7
         },
+        "crit_chance": 0.19,
+        "crit_damage": 2.1,
         "attack_speed": 1.08,
-        "status_chance": 0.33
+        "status_chance": 0.33,
+        "weapon_type": ["Machete"]
     },
     "Magistar": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 168,
             "puncture": 31.5,
             "slash": 10.5
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "attack_speed": 0.833,
-        "status_chance": 0.1
+        "status_chance": 0.1,
+        "weapon_type": ["Hammer"]
     },
     "Masseter": {
-        "crit_chance": 0.24,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 134.96,
             "slash": 106.04
         },
+        "crit_chance": 0.24,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.28
+        "status_chance": 0.28,
+        "weapon_type": ["Heavy Blade"]
     },
     "Masseter Prime": {
-        "crit_chance": 0.26,
-        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 145.6,
             "slash": 114.4
         },
+        "crit_chance": 0.26,
+        "crit_damage": 2.2,
         "attack_speed": 1.083,
-        "status_chance": 0.36
+        "status_chance": 0.36,
+        "weapon_type": ["Heavy Blade"]
     },
     "Mios": {
-        "crit_chance": 0.19,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 53.1,
             "puncture": 44.25,
             "slash": 79.65
         },
+        "crit_chance": 0.19,
+        "crit_damage": 2,
         "attack_speed": 1.08,
-        "status_chance": 0.25
+        "status_chance": 0.25,
+        "weapon_type": ["Blade and Whip"]
     },
     "Mire": {
-        "crit_chance": 0.09,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 23,
             "puncture": 23,
             "slash": 47,
             "toxin": 65
         },
+        "crit_chance": 0.09,
+        "crit_damage": 1.5,
         "attack_speed": 1.08,
-        "status_chance": 0.31
+        "status_chance": 0.31,
+        "weapon_type": ["Sword"]
     },
     "Nami Skyla": {
-        "crit_chance": 0.1,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 18.75,
             "puncture": 18.75,
             "slash": 87.5
         },
+        "crit_chance": 0.1,
+        "crit_damage": 1.5,
         "attack_speed": 0.917,
-        "status_chance": 0.15
+        "status_chance": 0.15,
+        "weapon_type": ["Dual Swords"]
     },
     "Nami Skyla Prime": {
-        "crit_chance": 0.22,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 18,
             "puncture": 36,
             "slash": 126
         },
+        "crit_chance": 0.22,
+        "crit_damage": 2,
         "attack_speed": 1.33,
-        "status_chance": 0.34
+        "status_chance": 0.34,
+        "weapon_type": ["Dual Swords"]
     },
     "Nami Solo": {
-        "crit_chance": 0.15,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 25.8,
             "puncture": 25.8,
             "slash": 120.4
         },
+        "crit_chance": 0.15,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.25
+        "status_chance": 0.25,
+        "weapon_type": ["Machete"]
     },
     "Nepheri": {
-        "crit_chance": 0.21,
-        "crit_damage": 2.3,
         "damage_dist": {
             "heat": 92,
             "impact": 21,
             "puncture": 63,
             "slash": 85
         },
+        "crit_chance": 0.21,
+        "crit_damage": 2.3,
         "attack_speed": 1,
-        "status_chance": 0.33
+        "status_chance": 0.33,
+        "weapon_type": ["Dual Daggers"]
     },
     "Nikana": {
-        "crit_chance": 0.16,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 7.1,
             "puncture": 14.2,
             "slash": 120.7
         },
+        "crit_chance": 0.16,
+        "crit_damage": 2,
         "attack_speed": 0.917,
-        "status_chance": 0.16
+        "status_chance": 0.16,
+        "weapon_type": ["Nikana"]
     },
     "Nikana Prime": {
-        "crit_chance": 0.28,
-        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 9.9,
             "puncture": 9.9,
             "slash": 178.2
         },
+        "crit_chance": 0.28,
+        "crit_damage": 2.4,
         "attack_speed": 1.08,
-        "status_chance": 0.28
+        "status_chance": 0.28,
+        "weapon_type": ["Nikana"]
     },
     "Ninkondi": {
-        "crit_chance": 0.1,
-        "crit_damage": 2,
         "damage_dist": {
             "electricity": 100,
             "impact": 90
         },
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.35
+        "status_chance": 0.35,
+        "weapon_type": ["Nunchaku"]
     },
     "Ninkondi Prime": {
-        "crit_chance": 0.22,
-        "crit_damage": 2.4,
         "damage_dist": {
             "electricity": 90,
             "impact": 66,
             "puncture": 28,
             "slash": 50
         },
+        "crit_chance": 0.22,
+        "crit_damage": 2.4,
         "attack_speed": 1,
-        "status_chance": 0.36
+        "status_chance": 0.36,
+        "weapon_type": ["Nunchaku"]
     },
     "Obex": {
-        "crit_chance": 0.25,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 84,
             "puncture": 18,
             "slash": 18
         },
+        "crit_chance": 0.25,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.1
+        "status_chance": 0.1,
+        "weapon_type": ["Sparring"]
     },
     "Ohma": {
-        "crit_chance": 0.15,
-        "crit_damage": 2,
         "damage_dist": {
             "electricity": 110,
             "impact": 76,
             "slash": 38
         },
+        "crit_chance": 0.15,
+        "crit_damage": 2,
         "attack_speed": 0.917,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Tonfa"]
     },
     "Okina": {
-        "crit_chance": 0.16,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 7,
             "puncture": 63,
             "slash": 70
         },
+        "crit_chance": 0.16,
+        "crit_damage": 2,
         "attack_speed": 1.08,
-        "status_chance": 0.2
+        "status_chance": 0.2,
+        "weapon_type": ["Dual Daggers"]
     },
     "Okina Prime": {
-        "crit_chance": 0.3,
-        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 9.2,
             "puncture": 64.4,
             "slash": 110.4
         },
+        "crit_chance": 0.3,
+        "crit_damage": 2.6,
         "attack_speed": 1.17,
-        "status_chance": 0.24
+        "status_chance": 0.24,
+        "weapon_type": ["Dual Daggers"]
     },
     "Orthos": {
-        "crit_chance": 0.06,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 27.75,
             "puncture": 27.75,
             "slash": 129.5
         },
+        "crit_chance": 0.06,
+        "crit_damage": 1.5,
         "attack_speed": 0.917,
-        "status_chance": 0.18
+        "status_chance": 0.18,
+        "weapon_type": ["Polearm"]
     },
     "Orthos Prime": {
-        "crit_chance": 0.24,
-        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 35.1,
             "puncture": 35.1,
             "slash": 163.8
         },
+        "crit_chance": 0.24,
+        "crit_damage": 2.2,
         "attack_speed": 1.17,
-        "status_chance": 0.36
+        "status_chance": 0.36,
+        "weapon_type": ["Polearm"]
     },
     "Orvius": {
-        "crit_chance": 0.18,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 39,
             "puncture": 9.75,
             "slash": 146.25
         },
+        "crit_chance": 0.18,
+        "crit_damage": 2,
         "attack_speed": 0.75,
-        "status_chance": 0.18
+        "status_chance": 0.18,
+        "weapon_type": ["Glaive"]
     },
     "Pangolin Prime": {
-        "crit_chance": 0.26,
-        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 12.4,
             "puncture": 37.2,
             "slash": 198.4
         },
+        "crit_chance": 0.26,
+        "crit_damage": 2.2,
         "attack_speed": 0.917,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Sword"]
     },
     "Pangolin Sword": {
-        "crit_chance": 0.08,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 7.5,
             "puncture": 22.5,
             "slash": 120
         },
+        "crit_chance": 0.08,
+        "crit_damage": 1.5,
         "attack_speed": 0.917,
-        "status_chance": 0.22
+        "status_chance": 0.22,
+        "weapon_type": ["Sword"]
     },
     "Paracesis": {
-        "crit_chance": 0.31,
-        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 48.8,
             "puncture": 17.8,
             "slash": 155.4
         },
+        "crit_chance": 0.31,
+        "crit_damage": 2.6,
         "attack_speed": 0.917,
-        "status_chance": 0.22
+        "status_chance": 0.22,
+        "weapon_type": ["Heavy Blade"]
     },
     "Pathocyst": {
-        "crit_chance": 0.15,
-        "crit_damage": 2.1,
         "damage_dist": {
             "impact": 57,
             "puncture": 55,
             "slash": 61,
             "viral": 89
         },
+        "crit_chance": 0.15,
+        "crit_damage": 2.1,
         "attack_speed": 0.667,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Glaive"]
     },
     "Pennant": {
-        "crit_chance": 0.32,
-        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 20,
             "puncture": 140,
             "slash": 40
         },
+        "crit_chance": 0.32,
+        "crit_damage": 2.4,
         "attack_speed": 0.917,
-        "status_chance": 0.1
+        "status_chance": 0.1,
+        "weapon_type": ["Two-Handed Nikana"]
     },
     "Plasma Sword": {
-        "crit_chance": 0.18,
-        "crit_damage": 2,
         "damage_dist": {
             "electricity": 66,
             "impact": 34,
             "puncture": 12,
             "slash": 88
         },
+        "crit_chance": 0.18,
+        "crit_damage": 2,
         "attack_speed": 0.667,
-        "status_chance": 0.18
+        "status_chance": 0.18,
+        "weapon_type": ["Sword"]
     },
     "Praedos": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 20,
             "puncture": 20,
             "slash": 160
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "attack_speed": 1.17,
-        "status_chance": 0.2
+        "status_chance": 0.2,
+        "weapon_type": ["Tonfa"]
     },
     "Prisma Dual Cleavers": {
-        "crit_chance": 0.25,
-        "crit_damage": 3,
         "damage_dist": {
             "impact": 13.3,
             "puncture": 13.3,
             "slash": 106.4
         },
+        "crit_chance": 0.25,
+        "crit_damage": 3,
         "attack_speed": 1,
-        "status_chance": 0.25
+        "status_chance": 0.25,
+        "weapon_type": ["Dual Swords"]
     },
     "Prisma Machete": {
-        "crit_chance": 0.15,
-        "crit_damage": 1.9,
         "damage_dist": {
             "impact": 28.95,
             "puncture": 28.95,
             "slash": 135.1
         },
+        "crit_chance": 0.15,
+        "crit_damage": 1.9,
         "attack_speed": 0.917,
-        "status_chance": 0.31
+        "status_chance": 0.31,
+        "weapon_type": ["Machete"]
     },
     "Prisma Obex": {
-        "crit_chance": 0.25,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 105,
             "puncture": 22.5,
             "slash": 22.5
         },
+        "crit_chance": 0.25,
+        "crit_damage": 2,
         "attack_speed": 1.33,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Sparring"]
     },
     "Prisma Ohma": {
-        "crit_chance": 0.3,
-        "crit_damage": 2.2,
         "damage_dist": {
             "electricity": 124,
             "impact": 82,
             "slash": 44
         },
+        "crit_chance": 0.3,
+        "crit_damage": 2.2,
         "attack_speed": 1,
-        "status_chance": 0.2
+        "status_chance": 0.2,
+        "weapon_type": ["Tonfa"]
     },
     "Prisma Skana": {
-        "crit_chance": 0.28,
-        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 25.5,
             "puncture": 25.5,
             "slash": 119
         },
+        "crit_chance": 0.28,
+        "crit_damage": 2.2,
         "attack_speed": 1,
-        "status_chance": 0.16
+        "status_chance": 0.16,
+        "weapon_type": ["Sword"]
     },
     "Prova": {
-        "crit_chance": 0.14,
-        "crit_damage": 2,
         "damage_dist": {
             "electricity": 76,
             "impact": 52
         },
-        "attack_speed": 1,
-        "status_chance": 0.16
-    },
-    "Prova Vandal": {
         "crit_chance": 0.14,
         "crit_damage": 2,
+        "attack_speed": 1,
+        "status_chance": 0.16,
+        "weapon_type": ["Machete"]
+    },
+    "Prova Vandal": {
         "damage_dist": {
             "electricity": 118,
             "impact": 80
         },
+        "crit_chance": 0.14,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.32
+        "status_chance": 0.32,
+        "weapon_type": ["Machete"]
     },
     "Pulmonars": {
-        "crit_chance": 0.19,
-        "crit_damage": 2.3,
         "damage_dist": {
             "impact": 193,
             "viral": 97
         },
+        "crit_chance": 0.19,
+        "crit_damage": 2.3,
         "attack_speed": 0.917,
-        "status_chance": 0.33
+        "status_chance": 0.33,
+        "weapon_type": ["Nunchaku"]
     },
     "Pupacyst": {
-        "crit_chance": 0.13,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 139,
             "viral": 145
         },
+        "crit_chance": 0.13,
+        "crit_damage": 1.5,
         "attack_speed": 0.833,
-        "status_chance": 0.27
+        "status_chance": 0.27,
+        "weapon_type": ["Polearm"]
     },
     "Quassus": {
-        "crit_chance": 0.3,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 27.6,
             "puncture": 46,
             "slash": 156.4
         },
+        "crit_chance": 0.3,
+        "crit_damage": 2,
         "attack_speed": 0.833,
-        "status_chance": 0.12
+        "status_chance": 0.12,
+        "weapon_type": ["Warfan"]
     },
     "Quassus Prime": {
-        "crit_chance": 0.35,
-        "crit_damage": 2.5,
         "damage_dist": {
             "impact": 26,
             "puncture": 52,
             "slash": 182
         },
+        "crit_chance": 0.35,
+        "crit_damage": 2.5,
         "attack_speed": 0.833,
-        "status_chance": 0.18
+        "status_chance": 0.18,
+        "weapon_type": ["Warfan"]
     },
     "Rakta Dark Dagger": {
-        "crit_chance": 0.12,
-        "crit_damage": 1.8,
         "damage_dist": {
             "puncture": 88,
             "radiation": 96,
             "slash": 62
         },
+        "crit_chance": 0.12,
+        "crit_damage": 1.8,
         "attack_speed": 1,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Dagger"]
     },
     "Reaper Prime": {
-        "crit_chance": 0.35,
-        "crit_damage": 2.5,
         "damage_dist": {
             "impact": 30,
             "puncture": 30,
             "slash": 140
         },
+        "crit_chance": 0.35,
+        "crit_damage": 2.5,
         "attack_speed": 1.08,
-        "status_chance": 0.25
+        "status_chance": 0.25,
+        "weapon_type": ["Scythe"]
     },
     "Redeemer": {
-        "crit_chance": 0.1,
-        "crit_damage": 1.8,
         "damage_dist": {
             "impact": 18,
             "puncture": 36,
             "slash": 126
         },
+        "crit_chance": 0.1,
+        "crit_damage": 1.8,
         "attack_speed": 0.833,
-        "status_chance": 0.22
+        "status_chance": 0.22,
+        "weapon_type": ["Gunblade"]
     },
     "Redeemer Prime": {
-        "crit_chance": 0.24,
-        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 21.2,
             "puncture": 42.4,
             "slash": 148.4
         },
+        "crit_chance": 0.24,
+        "crit_damage": 2.2,
         "attack_speed": 0.917,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Gunblade"]
     },
     "Ripkas": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 8.65,
             "puncture": 17.3,
             "slash": 147.05
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "attack_speed": 0.883,
-        "status_chance": 0.15
+        "status_chance": 0.15,
+        "weapon_type": ["Claws"]
     },
     "Rumblejack": {
-        "crit_chance": 0.13,
-        "crit_damage": 1.8,
         "damage_dist": {
             "electricity": 180,
             "impact": 120
         },
+        "crit_chance": 0.13,
+        "crit_damage": 1.8,
         "attack_speed": 0.67,
-        "status_chance": 0.4
+        "status_chance": 0.4,
+        "weapon_type": ["Dagger"]
     },
     "Ruvox": {
-        "crit_chance": 0.26,
-        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 170
         },
+        "crit_chance": 0.26,
+        "crit_damage": 2.2,
         "attack_speed": 1,
-        "status_chance": 0.2
+        "status_chance": 0.2,
+        "weapon_type": ["Fist"]
     },
     "Sampotes": {
-        "crit_chance": 0.3,
-        "crit_damage": 3,
         "damage_dist": {
             "impact": 173.6,
             "puncture": 37.2,
             "slash": 37.2
         },
+        "crit_chance": 0.3,
+        "crit_damage": 3,
         "attack_speed": 0.833,
-        "status_chance": 0.28
+        "status_chance": 0.28,
+        "weapon_type": ["Hammer"]
     },
     "Sancti Magistar": {
-        "crit_chance": 0.3,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 192,
             "puncture": 36,
             "slash": 12
         },
+        "crit_chance": 0.3,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.2
+        "status_chance": 0.2,
+        "weapon_type": ["Hammer"]
     },
     "Sarofang": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 80,
             "puncture": 8,
             "slash": 112
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "attack_speed": 1.17,
-        "status_chance": 0.2
+        "status_chance": 0.2,
+        "weapon_type": ["Heavy Blade"]
     },
     "Sarpa": {
-        "crit_chance": 0.14,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 16,
             "puncture": 32,
             "slash": 112
         },
+        "crit_chance": 0.14,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.28
+        "status_chance": 0.28,
+        "weapon_type": ["Gunblade"]
     },
     "Scindo": {
-        "crit_chance": 0.15,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 20,
             "puncture": 20,
             "slash": 160
         },
+        "crit_chance": 0.15,
+        "crit_damage": 1.5,
         "attack_speed": 0.917,
-        "status_chance": 0.1
+        "status_chance": 0.1,
+        "weapon_type": ["Heavy Blade"]
     },
     "Scindo Prime": {
-        "crit_chance": 0.26,
-        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 25,
             "puncture": 25,
             "slash": 200
         },
+        "crit_chance": 0.26,
+        "crit_damage": 2.4,
         "attack_speed": 0.967,
-        "status_chance": 0.24
+        "status_chance": 0.24,
+        "weapon_type": ["Heavy Blade"]
     },
     "Scoliac": {
-        "crit_chance": 0.13,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 22.5,
             "puncture": 22.5,
             "slash": 105
         },
+        "crit_chance": 0.13,
+        "crit_damage": 1.5,
         "attack_speed": 1.25,
-        "status_chance": 0.29
+        "status_chance": 0.29,
+        "weapon_type": ["Whip"]
     },
     "Secura Lecta": {
-        "crit_chance": 0.15,
-        "crit_damage": 1.5,
         "damage_dist": {
             "electricity": 80,
             "puncture": 30,
             "slash": 66
         },
+        "crit_chance": 0.15,
+        "crit_damage": 1.5,
         "attack_speed": 1.25,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Whip"]
     },
     "Serro": {
-        "crit_chance": 0.08,
-        "crit_damage": 1.5,
         "damage_dist": {
             "electricity": 138,
             "slash": 96
         },
+        "crit_chance": 0.08,
+        "crit_damage": 1.5,
         "attack_speed": 0.917,
-        "status_chance": 0.26
+        "status_chance": 0.26,
+        "weapon_type": ["Polearm"]
     },
     "Shadow Claws": {
-        "crit_chance": 0.38,
-        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 75,
             "puncture": 50,
             "slash": 125
         },
+        "crit_chance": 0.38,
+        "crit_damage": 2.6,
         "attack_speed": 1,
-        "status_chance": 0.24
+        "status_chance": 0.24,
+        "weapon_type": ["Exalted Weapon"]
     },
     "Shadow Claws Prime": {
-        "crit_chance": 0.38,
-        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 75,
             "puncture": 50,
             "slash": 125
         },
+        "crit_chance": 0.38,
+        "crit_damage": 2.6,
         "attack_speed": 1,
-        "status_chance": 0.24
+        "status_chance": 0.24,
+        "weapon_type": ["Exalted Weapon"]
     },
     "Shaku": {
-        "crit_chance": 0.18,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 180
         },
+        "crit_chance": 0.18,
+        "crit_damage": 2,
         "attack_speed": 1.17,
-        "status_chance": 0.34
+        "status_chance": 0.34,
+        "weapon_type": ["Nunchaku"]
     },
     "Sheev": {
-        "crit_chance": 0.13,
-        "crit_damage": 2.1,
         "damage_dist": {
             "impact": 13.5,
             "puncture": 13.5,
             "slash": 243
         },
+        "crit_chance": 0.13,
+        "crit_damage": 2.1,
         "attack_speed": 0.667,
-        "status_chance": 0.25
+        "status_chance": 0.25,
+        "weapon_type": ["Dagger"]
     },
     "Sibear": {
-        "crit_chance": 0.15,
-        "crit_damage": 2,
         "damage_dist": {
             "cold": 130,
             "impact": 70,
             "puncture": 20,
             "slash": 50
         },
+        "crit_chance": 0.15,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Hammer"]
     },
     "Sigma & Octantis": {
-        "crit_chance": 0.28,
-        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 38.28,
             "puncture": 27.84,
             "slash": 107.88
         },
+        "crit_chance": 0.28,
+        "crit_damage": 2.2,
         "attack_speed": 1.08,
-        "status_chance": 0.16
+        "status_chance": 0.16,
+        "weapon_type": ["Sword and Shield"]
     },
     "Silva & Aegis": {
-        "crit_chance": 0.05,
-        "crit_damage": 1.5,
         "damage_dist": {
             "heat": 98
         },
+        "crit_chance": 0.05,
+        "crit_damage": 1.5,
         "attack_speed": 1,
-        "status_chance": 0.2
+        "status_chance": 0.2,
+        "weapon_type": ["Sword and Shield"]
     },
     "Silva & Aegis Prime": {
-        "crit_chance": 0.25,
-        "crit_damage": 2,
         "damage_dist": {
             "heat": 318
         },
+        "crit_chance": 0.25,
+        "crit_damage": 2,
         "attack_speed": 0.75,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Sword and Shield"]
     },
     "Skana": {
-        "crit_chance": 0.05,
-        "crit_damage": 1.5,
         "damage_dist": {
             "impact": 18,
             "puncture": 18,
             "slash": 84
         },
+        "crit_chance": 0.05,
+        "crit_damage": 1.5,
         "attack_speed": 0.833,
-        "status_chance": 0.16
+        "status_chance": 0.16,
+        "weapon_type": ["Sword"]
     },
     "Skana Prime": {
-        "crit_chance": 0.26,
-        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 31.5,
             "puncture": 31.5,
             "slash": 147
         },
+        "crit_chance": 0.26,
+        "crit_damage": 2.6,
         "attack_speed": 1,
-        "status_chance": 0.26
+        "status_chance": 0.26,
+        "weapon_type": ["Sword"]
     },
     "Skiajati": {
-        "crit_chance": 0.19,
-        "crit_damage": 2.1,
         "damage_dist": {
             "impact": 26.25,
             "puncture": 12.25,
             "slash": 136.5
         },
+        "crit_chance": 0.19,
+        "crit_damage": 2.1,
         "attack_speed": 1.17,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Nikana"]
     },
     "Slaytra": {
-        "crit_chance": 0.21,
-        "crit_damage": 1.9,
         "damage_dist": {
             "impact": 73.26,
             "puncture": 93.24,
             "slash": 166.5
         },
+        "crit_chance": 0.21,
+        "crit_damage": 1.9,
         "attack_speed": 0.833,
-        "status_chance": 0.35
+        "status_chance": 0.35,
+        "weapon_type": ["Machete"]
     },
     "Stropha": {
-        "crit_chance": 0.3,
-        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 61.6,
             "puncture": 74.8,
             "slash": 83.6
         },
+        "crit_chance": 0.3,
+        "crit_damage": 2.4,
         "attack_speed": 1,
-        "status_chance": 0.14
+        "status_chance": 0.14,
+        "weapon_type": ["Gunblade"]
     },
     "Sun & Moon": {
-        "crit_chance": 0.2,
-        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 38,
             "puncture": 45.6,
             "slash": 106.4
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2.4,
         "attack_speed": 1,
-        "status_chance": 0.22
+        "status_chance": 0.22,
+        "weapon_type": ["Dual Nikanas"]
     },
     "Syam": {
-        "crit_chance": 0.22,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 54,
             "puncture": 108,
             "slash": 108
         },
+        "crit_chance": 0.22,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.34
+        "status_chance": 0.34,
+        "weapon_type": ["Nikana"]
     },
     "Sydon": {
-        "crit_chance": 0.1,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 11.25,
             "puncture": 213.75
         },
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "attack_speed": 0.917,
-        "status_chance": 0.25
+        "status_chance": 0.25,
+        "weapon_type": ["Polearm"]
     },
     "Synoid Heliocor": {
-        "crit_chance": 0.16,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 238,
             "puncture": 28,
             "slash": 14
         },
-        "attack_speed": 1.08,
-        "status_chance": 0.4
-    },
-    "Tatsu": {
         "crit_chance": 0.16,
         "crit_damage": 2,
+        "attack_speed": 1.08,
+        "status_chance": 0.4,
+        "weapon_type": ["Hammer"]
+    },
+    "Tatsu": {
         "damage_dist": {
             "impact": 20,
             "puncture": 54,
             "radiation": 72,
             "slash": 68
         },
+        "crit_chance": 0.16,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.28
+        "status_chance": 0.28,
+        "weapon_type": ["Two-Handed Nikana"]
     },
     "Tatsu Prime": {
-        "crit_chance": 0.22,
-        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 20,
             "puncture": 54,
             "radiation": 80,
             "slash": 76
         },
+        "crit_chance": 0.22,
+        "crit_damage": 2.4,
         "attack_speed": 1.17,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Two-Handed Nikana"]
     },
     "Tekko": {
-        "crit_chance": 0.3,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 32,
             "puncture": 16,
             "slash": 112
         },
+        "crit_chance": 0.3,
+        "crit_damage": 2,
         "attack_speed": 0.917,
-        "status_chance": 0.1
+        "status_chance": 0.1,
+        "weapon_type": ["Fist"]
     },
     "Tekko Prime": {
-        "crit_chance": 0.3,
-        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 39.6,
             "puncture": 25.2,
             "slash": 115.2
         },
+        "crit_chance": 0.3,
+        "crit_damage": 2.4,
         "attack_speed": 1,
-        "status_chance": 0.26
+        "status_chance": 0.26,
+        "weapon_type": ["Fist"]
     },
     "Telos Boltace": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 21,
             "puncture": 178.5,
             "slash": 10.5
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "attack_speed": 1.08,
-        "status_chance": 0.35
+        "status_chance": 0.35,
+        "weapon_type": ["Tonfa"]
     },
     "Tenet Agendus": {
-        "crit_chance": 0.24,
-        "crit_damage": 2,
         "damage_dist": {
             "electricity": 140,
             "impact": 120
         },
+        "crit_chance": 0.24,
+        "crit_damage": 2,
         "attack_speed": 0.917,
-        "status_chance": 0.28
+        "status_chance": 0.28,
+        "weapon_type": ["Sword and Shield"]
     },
     "Tenet Exec": {
-        "crit_chance": 0.38,
-        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 102.6,
             "slash": 87.4
         },
+        "crit_chance": 0.38,
+        "crit_damage": 2.4,
         "attack_speed": 1,
-        "status_chance": 0.22
+        "status_chance": 0.22,
+        "weapon_type": ["Heavy Blade"]
     },
     "Tenet Grigori": {
-        "crit_chance": 0.24,
-        "crit_damage": 1.6,
         "damage_dist": {
             "impact": 9.1,
             "puncture": 82.1,
             "slash": 136.8
         },
+        "crit_chance": 0.24,
+        "crit_damage": 1.6,
         "attack_speed": 1.08,
-        "status_chance": 0.38
+        "status_chance": 0.38,
+        "weapon_type": ["Scythe"]
     },
     "Tenet Livia": {
-        "crit_chance": 0.28,
-        "crit_damage": 2.2,
         "damage_dist": {
             "impact": 9.9,
             "puncture": 9.9,
             "slash": 178.2
         },
+        "crit_chance": 0.28,
+        "crit_damage": 2.2,
         "attack_speed": 1.08,
-        "status_chance": 0.28
+        "status_chance": 0.28,
+        "weapon_type": ["Two-Handed Nikana"]
     },
     "Tipedo": {
-        "crit_chance": 0.2,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 12.4,
             "puncture": 12.4,
             "slash": 99.2
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2,
         "attack_speed": 1.33,
-        "status_chance": 0.2
+        "status_chance": 0.2,
+        "weapon_type": ["Staff"]
     },
     "Tipedo Prime": {
-        "crit_chance": 0.24,
-        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 17,
             "puncture": 17,
             "slash": 136
         },
+        "crit_chance": 0.24,
+        "crit_damage": 2.4,
         "attack_speed": 1.17,
-        "status_chance": 0.24
+        "status_chance": 0.24,
+        "weapon_type": ["Staff"]
     },
     "Tonbo": {
-        "crit_chance": 0.05,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 18.4,
             "puncture": 27.6,
             "slash": 138
         },
-        "attack_speed": 1,
-        "status_chance": 0.25
-    },
-    "Twin Basolk": {
         "crit_chance": 0.05,
         "crit_damage": 2,
+        "attack_speed": 1,
+        "status_chance": 0.25,
+        "weapon_type": ["Polearm"]
+    },
+    "Twin Basolk": {
         "damage_dist": {
             "heat": 85,
             "impact": 55,
             "puncture": 15,
             "slash": 55
         },
+        "crit_chance": 0.05,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.4
+        "status_chance": 0.4,
+        "weapon_type": ["Dual Swords"]
     },
     "Twin Krohkur": {
-        "crit_chance": 0.19,
-        "crit_damage": 1.7,
         "damage_dist": {
             "impact": 30,
             "puncture": 45,
             "slash": 175
         },
-        "attack_speed": 0.917,
-        "status_chance": 0.33
-    },
-    "Valkyr Prime Talons": {
-        "crit_chance": 0.5,
-        "crit_damage": 2,
-        "damage_dist": {
-            "impact": 83.3,
-            "puncture": 83.3,
-            "slash": 83.3
-        },
-        "attack_speed": 1.5,
-        "status_chance": 0.1
-    },
-    "Valkyr Talons": {
-        "crit_chance": 0.5,
-        "crit_damage": 2,
-        "damage_dist": {
-            "impact": 83.3,
-            "puncture": 83.3,
-            "slash": 83.3
-        },
-        "attack_speed": 1.5,
-        "status_chance": 0.1
-    },
-    "Vastilok": {
         "crit_chance": 0.19,
         "crit_damage": 1.7,
+        "attack_speed": 0.917,
+        "status_chance": 0.33,
+        "weapon_type": ["Dual Swords"]
+    },
+    "Valkyr Prime Talons": {
+        "damage_dist": {
+            "impact": 83.3,
+            "puncture": 83.3,
+            "slash": 83.3
+        },
+        "crit_chance": 0.5,
+        "crit_damage": 2,
+        "attack_speed": 1.5,
+        "status_chance": 0.1,
+        "weapon_type": ["Exalted Weapon"]
+    },
+    "Valkyr Talons": {
+        "damage_dist": {
+            "impact": 83.3,
+            "puncture": 83.3,
+            "slash": 83.3
+        },
+        "crit_chance": 0.5,
+        "crit_damage": 2,
+        "attack_speed": 1.5,
+        "status_chance": 0.1,
+        "weapon_type": ["Exalted Weapon"]
+    },
+    "Vastilok": {
         "damage_dist": {
             "impact": 19.53,
             "puncture": 25.11,
             "slash": 234.36
         },
+        "crit_chance": 0.19,
+        "crit_damage": 1.7,
         "attack_speed": 1,
-        "status_chance": 0.31
+        "status_chance": 0.31,
+        "weapon_type": ["Gunblade"]
     },
     "Vaykor Sydon": {
-        "crit_chance": 0.21,
-        "crit_damage": 2.5,
         "damage_dist": {
             "impact": 10.65,
             "puncture": 202.35
         },
+        "crit_chance": 0.21,
+        "crit_damage": 2.5,
         "attack_speed": 1.08,
-        "status_chance": 0.33
+        "status_chance": 0.33,
+        "weapon_type": ["Polearm"]
     },
     "Venato": {
-        "crit_chance": 0.27,
-        "crit_damage": 2.1,
         "damage_dist": {
             "impact": 33,
             "puncture": 110,
             "slash": 77
         },
+        "crit_chance": 0.27,
+        "crit_damage": 2.1,
         "attack_speed": 1.08,
-        "status_chance": 0.24
+        "status_chance": 0.24,
+        "weapon_type": ["Scythe"]
     },
     "Venka": {
-        "crit_chance": 0.15,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 7,
             "puncture": 35,
             "slash": 98
         },
+        "crit_chance": 0.15,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.15
+        "status_chance": 0.15,
+        "weapon_type": ["Claws"]
     },
     "Venka Prime": {
-        "crit_chance": 0.32,
-        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 9.4,
             "puncture": 37.6,
             "slash": 141
         },
+        "crit_chance": 0.32,
+        "crit_damage": 2.6,
         "attack_speed": 1.05,
-        "status_chance": 0.24
+        "status_chance": 0.24,
+        "weapon_type": ["Claws"]
     },
     "Verdilac": {
-        "crit_chance": 0.3,
-        "crit_damage": 2.5,
         "damage_dist": {
             "impact": 21.3,
             "puncture": 85.2,
             "slash": 106.5
         },
+        "crit_chance": 0.3,
+        "crit_damage": 2.5,
         "attack_speed": 1,
-        "status_chance": 0.21
+        "status_chance": 0.21,
+        "weapon_type": ["Whip"]
     },
     "Vericres": {
-        "crit_chance": 0.22,
-        "crit_damage": 2,
         "damage_dist": {
             "impact": 21.6,
             "puncture": 28.8,
             "slash": 129.6
         },
+        "crit_chance": 0.22,
+        "crit_damage": 2,
         "attack_speed": 1,
-        "status_chance": 0.2
+        "status_chance": 0.2,
+        "weapon_type": ["Warfan"]
     },
     "Vitrica": {
-        "crit_chance": 0.23,
-        "crit_damage": 2.3,
         "damage_dist": {
             "impact": 99.9,
             "puncture": 99.9,
             "slash": 133.2
         },
+        "crit_chance": 0.23,
+        "crit_damage": 2.3,
         "attack_speed": 0.833,
-        "status_chance": 0.33
+        "status_chance": 0.33,
+        "weapon_type": ["Heavy Blade"]
     },
     "Volnus": {
-        "crit_chance": 0.18,
-        "crit_damage": 1.6,
         "damage_dist": {
             "impact": 48.4,
             "puncture": 70.4,
             "slash": 101.2
         },
+        "crit_chance": 0.18,
+        "crit_damage": 1.6,
         "attack_speed": 1.2,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Hammer"]
     },
     "Volnus Prime": {
-        "crit_chance": 0.2,
-        "crit_damage": 1.8,
         "damage_dist": {
             "impact": 55,
             "puncture": 80,
             "slash": 115
         },
+        "crit_chance": 0.2,
+        "crit_damage": 1.8,
         "attack_speed": 1.2,
-        "status_chance": 0.34
+        "status_chance": 0.34,
+        "weapon_type": ["Hammer"]
     },
     "War": {
-        "crit_chance": 0.26,
-        "crit_damage": 2.6,
         "damage_dist": {
             "impact": 120,
             "puncture": 60,
             "slash": 70
         },
+        "crit_chance": 0.26,
+        "crit_damage": 2.6,
         "attack_speed": 0.917,
-        "status_chance": 0.26
+        "status_chance": 0.26,
+        "weapon_type": ["Heavy Blade"]
     },
     "Wolf Sledge": {
-        "crit_chance": 0.17,
-        "crit_damage": 1.9,
         "damage_dist": {
             "impact": 132.1,
             "puncture": 7.8,
             "slash": 119.1
         },
+        "crit_chance": 0.17,
+        "crit_damage": 1.9,
         "attack_speed": 1,
-        "status_chance": 0.33
+        "status_chance": 0.33,
+        "weapon_type": ["Hammer"]
     },
     "Xoris": {
-        "crit_chance": 0.2,
-        "crit_damage": 2.4,
         "damage_dist": {
             "impact": 24,
             "puncture": 40.8,
             "slash": 55.2
         },
+        "crit_chance": 0.2,
+        "crit_damage": 2.4,
         "attack_speed": 1.17,
-        "status_chance": 0.18
+        "status_chance": 0.18,
+        "weapon_type": ["Glaive"]
     },
     "Zenistar": {
-        "crit_chance": 0.1,
-        "crit_damage": 2,
         "damage_dist": {
             "heat": 150,
             "impact": 80,
             "slash": 68
         },
+        "crit_chance": 0.1,
+        "crit_damage": 2,
         "attack_speed": 0.833,
-        "status_chance": 0.3
+        "status_chance": 0.3,
+        "weapon_type": ["Heavy Blade"]
     }
 }
