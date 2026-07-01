@@ -13,7 +13,7 @@ The calculator is designed to provide fast, deterministic damage calculations wh
 - Beam Weapons
 - Weapons With Charge Time
 
-## Supported Wechanics
+## Supported Mechanics
 
 ### Damage
 - Physical Damage
