@@ -15,18 +15,18 @@ class Weapon[TWeaponState: WeaponState]:
         self.configure(Upgrade())
 
     def _compute_moded_stats(self) -> None:
-        self.moded.multiplicative_base_damage = 1 + self.config.multiplicative_base_damage
-        self.moded.base_damage = 1 + self.config.base_damage
+        self.moded.multiplicative_base_damage = max(1 + self.config.multiplicative_base_damage, 1)
+        self.moded.base_damage = max(1 + self.config.base_damage, 0)
         self.moded.damage_dist = self.moded.base_damage * self.base.damage_dist.apply(self.config.damage_dist).combine()
         self.moded.total_damage = self.moded.damage_dist.total_damage
-        self.moded.faction_damage = 1 + self.config.faction_damage
-        self.moded.flat_crit_chance = self.config.flat_crit_chance
-        self.moded.multiplicative_crit_chance = 1 + self.config.multiplicative_crit_chance
-        self.moded.crit_chance = self.base.crit_chance * (1 + self.config.crit_chance)
-        self.moded.flat_crit_damage = self.config.flat_crit_damage
-        self.moded.crit_damage = self.base.crit_damage * (1 + self.config.crit_damage)
-        self.moded.status_chance = self.base.status_chance * (1 + self.config.status_chance)
-        self.moded.status_damage = 1 + self.config.status_damage
+        self.moded.faction_damage = max(1 + self.config.faction_damage, 1)
+        self.moded.flat_crit_chance = max(self.config.flat_crit_chance, 0)
+        self.moded.multiplicative_crit_chance = max(1 + self.config.multiplicative_crit_chance, 1)
+        self.moded.crit_chance = max(self.base.crit_chance * (1 + self.config.crit_chance), 0)
+        self.moded.flat_crit_damage = max(self.config.flat_crit_damage, 0)
+        self.moded.crit_damage = max(self.base.crit_damage * (1 + self.config.crit_damage), 1)
+        self.moded.status_chance = max(self.base.status_chance * (1 + self.config.status_chance), 0)
+        self.moded.status_damage = max(1 + self.config.status_damage, 1)
 
     def _compute_effective_stats(self) -> None:
         self.effective.base_damage = self.moded.base_damage * self.moded.multiplicative_base_damage
