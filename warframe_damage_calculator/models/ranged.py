@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from ..mechanics.functions import true_round
 from ..mechanics.states import RangedState
 from .weapon import Weapon
 
@@ -21,7 +22,8 @@ class Ranged(Weapon):
         self.moded.fire_rate = self.base.fire_rate * (1 + self.config.fire_rate)
         self.moded.charge_time = self.base.charge_time / (1 + self.config.fire_rate)
         self.moded.reload_speed = self.base.reload_speed / (1 + self.config.reload_speed)
-        self.moded.magazine_capacity = round(self.base.magazine_capacity * (1 + self.config.magazine_capacity))
+        self.moded.magazine_capacity = true_round(self.base.magazine_capacity * (1 + self.config.magazine_capacity))
+        self.moded.ammo_efficiency = self.config.ammo_efficiency
         self.moded.multishot = self.base.multishot * (1 + self.config.multishot)
         self.moded.multiplicative_weakpoint_crit_chance = 1 + self.config.multiplicative_weakpoint_crit_chance
         self.moded.weakpoint_crit_chance = self.base.crit_chance * (1 + self.config.crit_chance + self.config.weakpoint_crit_chance)
@@ -43,7 +45,7 @@ class Ranged(Weapon):
     def average_fire_rate(self) -> float:
         if self.effective.magazine_capacity == 1:
             return 1 / self.effective.reload_speed
-        return self.effective.magazine_capacity / (self.effective.magazine_capacity * (1 / self.effective.fire_rate + self.effective.charge_time) + self.effective.reload_speed)
+        return (self.effective.magazine_capacity / (1 - self.effective.ammo_efficiency)) / ( self.effective.magazine_capacity / (1 - self.effective.ammo_efficiency) * (1 / self.effective.fire_rate + self.effective.charge_time) + self.effective.reload_speed)
 
     def weakpoint_crit_probability_for_tier(self, tier: int) -> float:
         return max(0, 1 - abs(self.effective.weakpoint_crit_chance - tier))

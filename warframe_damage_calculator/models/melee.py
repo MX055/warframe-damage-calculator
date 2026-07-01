@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from ..mechanics.constants import DOT_MULTIPLIERS
+from ..mechanics.functions import true_round
 from ..mechanics.states import MeleeState
 from ..mechanics.dist import dist
 from .weapon import Weapon
@@ -12,25 +13,31 @@ class Melee(Weapon):
 
     def _compute_moded_stats(self) -> None:
         super()._compute_moded_stats()
+        self.moded.melee_duplicate = self.config.melee_duplicate
+        self.moded.melee_doughty = self.config.melee_doughty
         self.moded.attack_speed = self.base.attack_speed * (1 + self.config.attack_speed)
-        self.moded.melee_duplicate = 1 + self.config.melee_duplicate
 
     def _compute_effective_stats(self) -> None:
         super()._compute_effective_stats()
-        self.effective.attack_speed = self.moded.attack_speed
         self.effective.melee_duplicate = self.moded.melee_duplicate
+        self.effective.melee_doughty = self.moded.melee_doughty
+        self.effective.attack_speed = self.moded.attack_speed
+        self.effective.crit_damage += self.melee_doughty_bonus()
+
+    def melee_doughty_bonus(self) -> float:
+        return true_round(10 * self.effective.damage_dist.weight("puncture") * self.effective.status_chance * self.effective.melee_doughty, 1)
     
-    def average_duplicate_multiplier(self) -> float:
-        return 1 + self.effective.melee_duplicate * self.crit_probability_for_tier(1) * (self.crit_probability_for_tier(1) * self.crit_multiplier_for_tier(1) + self.crit_probability_for_tier(2) * self.crit_multiplier_for_tier(2)) / self.average_crit_multiplier()
-    
+    def average_melee_duplicate_multiplier(self) -> float:
+        return 1 + self.effective.melee_duplicate * max(0, 1 - abs(self.effective.crit_chance - 1))
+
     def flat_dph(self) -> float:
-        return self.effective.total_damage * self.effective.faction_damage * self.average_crit_multiplier() * self.average_duplicate_multiplier()
+        return self.effective.total_damage * self.effective.faction_damage * self.average_crit_multiplier() * self.average_melee_duplicate_multiplier()
     
     def flat_dps(self) -> float:
         return self.effective.attack_speed * self.flat_dph()
     
     def flat_dotph(self) -> float:
-        return sum(mult * self.effective.damage_dist.get(dt) * self.effective.damage_dist.weight(dt) for dt, mult in DOT_MULTIPLIERS) * self.effective.status_chance * self.effective.status_damage * self.effective.faction_damage**2 * self.average_crit_multiplier() * self.average_duplicate_multiplier()
+        return sum(mult * self.effective.damage_dist.get(dt) * self.effective.damage_dist.weight(dt) for dt, mult in DOT_MULTIPLIERS) * self.effective.status_chance * self.effective.status_damage * self.effective.faction_damage**2 * self.average_crit_multiplier() * self.average_melee_duplicate_multiplier()
 
     def flat_dotps(self) -> float:
         return self.effective.attack_speed * self.flat_dotph()
