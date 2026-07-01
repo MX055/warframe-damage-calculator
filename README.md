@@ -123,7 +123,7 @@ def main():
     galvanized_hell_stacks = 4
     primary_merciless_satcks = 12
     
-    weapon = Primary(base_damage_dist=dist(impact=25.2, puncture=37.8, slash=27), base_fire_rate=1.42, base_reload_speed=3.00, base_magazine_capacity=20, base_multishot=6, base_crit_chance=0.30, base_crit_damage=2.80, base_status_chance=0.09)
+    weapon = Primary(damage_dist=dist(impact=25.2, puncture=37.8, slash=27), fire_rate=1.42, reload_speed=3.00, magazine_capacity=20, multishot=6, crit_chance=0.30, crit_damage=2.80, status_chance=0.09)
     mod1 = Upgrade(damage_dist=dist(impact=-0.886), crit_damage=0.855, multishot=1.126, crit_chance=0.887)
     mod2 = Upgrade(multishot=1.10 + 0.30*galvanized_hell_stacks)
     mod3 = Upgrade(base_damage=2.40)
