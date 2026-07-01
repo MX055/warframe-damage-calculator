@@ -4,88 +4,88 @@ A Python library for calculating Warframe weapon damage using average damage for
 
 The calculator is designed to provide fast, deterministic damage calculations while remaining easy to inspect and extend.
 
-## Supported weapons
+## Supported Weapons
 
-- Melee light attacks
-- Hitscan weapons
-- Explosive weapons
-- Projectile weapons
-- Beam weapons
-- Weapons with charge time
+- Melee Light Attacks
+- Hitscan Weapons
+- Explosive Weapons
+- Projectile Weapons
+- Beam Weapons
+- Weapons With Charge Time
 
-## Supported mechanics
+## Supported Wechanics
 
 ### Damage
-- Physical damage
-- Elemental damage and elemental combinations
-- Base damage
-- Multiplicative base damage
-- Faction damage
+- Physical Damage
+- Elemental Damage & Elemental Combinations
+- Base Damage
+- Multiplicative Base Damage
+- Faction Damage
 
-### Critical hits
-- Critical chance
-- Flat critical chance bonuses
-- Weakpoint critical chance
-- Multiplicative critical chance
-- Multiplicative weakpoint critical chance
-- Critical damage
-- Flat critical damage bonuses
-- Vigilante Set bonus
+### Critical Hits
+- Critical Chance
+- Flat Critical Chance Bonuses
+- Weakpoint Critical Chance
+- Multiplicative Critical Chance
+- Multiplicative Weakpoint Critical Chance
+- Critical Damage
+- Flat Critical Damage Bonuses
+- Vigilante Set Bonus
 
 ### Status
-- Status chance
-- Status damage
+- Status Chance
+- Status Damage
 - Hunter Munitions
-- Internal bleeding
-- Slash, Heat, Toxin, Electricity and Gas DoTs
-- Forced procs
+- Internal Bleeding
+- Slash, Heat, Toxin, Electricity & Gas DoTs
+- Forced Procs
 
-### Weapon stats
-- Attack speed
-- Fire rate
-- Multiplicative fire rate
-- Reload speed
-- Magazine capacity
+### Weapon Stats
+- Attack Speed
+- Fire Rate
+- Multiplicative Fire Rate
+- Reload Speed
+- Magazine Capacity
 - Multishot
 
-### Special mechanics
+### Special Mechanics
 - Primed Chamber / Charged Chamber
-- Secondary enervate
+- Secondary Enervate
 - Melee Duplicate
 
 ## Calculates
 
-- Effective fire rate
-- Expected status procs per shot
-- Direct damage per hit (DPH)
-- Direct damage per second (DPS)
-- Damage over time per hit (DOTPH)
-- Damage over time per second (DOTPS)
-- Total damage per hit
-- Total damage per second
+- Effective Fire Rate
+- Expected Status Procs / Shot
+- Direct Damage / Hit (DPH)
+- Direct Damage / Second (DPS)
+- Damage Over Time / Hit (DOTPH)
+- Damage over time / Second (DOTPS)
+- Total Damage / Hit (DPH + DOTPH)
+- Total Damage / Second (DPS + DOTPS)
 
 Body-shot and weakpoint calculations are reported separately where applicable.
 
-# Not currently supported
+# Not Currently Supported
 
-- Stance mods
-- Combo multiplier
-- Heavy attacks
-- Slam attacks
-- Some weapon-specific mechanics (e.g. Gotva Prime)
-- Elemental imbuements
-- Ammo efficiency
-- Secondary encumber
+- Stance Mods
+- Combo Multiplier
+- Heavy Attacks
+- Slam Attacks
+- Some Weapon-Specific Mechanics (e.g. Gotva Prime)
+- Elemental Imbuements
+- Ammo Efficiency
+- Secondary Encumber
 
 # Installation
 
-### Install directly from GitHub
+### Install Directly From GitHub
 
 ```bash
 pip install git+https://github.com/AAAA0001/warframe-damage-calculator.git
 ```
 
-### Verify the installation
+### Verify The Installation
 
 Open Python and run:
 
