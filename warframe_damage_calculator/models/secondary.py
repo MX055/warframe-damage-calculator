@@ -10,7 +10,7 @@ class Secondary(Ranged[SecondaryState]):
 
     def _compute_moded_stats(self) -> None:
         super()._compute_moded_stats()
-        self.moded.secondary_enervate = clamp(self.config.secondary_enervate, 1, 6)
+        self.moded.secondary_enervate = clamp(self.config.secondary_enervate, 0, 6)
 
     def _compute_effective_stats(self) -> None:
         super()._compute_effective_stats()

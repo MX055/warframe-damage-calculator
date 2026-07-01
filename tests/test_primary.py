@@ -26,11 +26,11 @@ class PrimaryTests(unittest.TestCase):
         self.assertAlmostEqual(weapon.flat_dps(), 994.4307692307693)
 
     def test_primary_dot_damage_formulas(self) -> None:
-        weapon = Primary(damage_dist=dist(impact=25, slash=75), forced_procs=dist(impact=1, slash=1), explosion_damage_dist=dist(heat=30), explosion_forced_procs=dist(cold=1), crit_chance=0.9, crit_damage=2.4, status_chance=1.0, magazine_capacity=8, multishot=2.0, is_beam=True)
+        weapon = Primary(damage_dist=dist(impact=25, slash=75), forced_procs=dist(impact=1, slash=1), explosion_damage_dist=dist(heat=30), explosion_forced_procs=dist(cold=1), crit_chance=0.9, crit_damage=2.4, status_chance=1.0, fire_rate=2.0, reload_speed=5.0, magazine_capacity=2, multishot=2.0, is_beam=True)
         weapon.configure(Upgrade(hunter_munitions=0.3, internal_bleeding=0.5, primed_chamber=0.4))
 
-        self.assertAlmostEqual(weapon.flat_dotph(), 5263.1082)
-        self.assertAlmostEqual(weapon.flat_dotps(), 4678.3184)
+        self.assertAlmostEqual(weapon.flat_dotph(), 6014.9808)
+        self.assertAlmostEqual(weapon.flat_dotps(), 2004.9936)
 
 
 if __name__ == "__main__":
