@@ -105,7 +105,7 @@ class Ranged[TWeaponState: RangedState](Weapon[TWeaponState]):
             f"{'TOTAL EXPLOSION DAMAGE:':<25} {f'{self.base.explosion_total_damage:.2f}':<7} -> {self.effective.explosion_total_damage:.2f}",
             "----------------------------------------------------------",
             f"{'AVERAGE FIRE RATE:':<25} {self.average_fire_rate():.2f}rps",
-            f"{'EXPECTED PROCS PER SHOT:':<25} {self.effective.status_chance:.2f}",
+            f"{'EXPECTED PROCS PER SHOT:':<25} {self.effective.status_chance * self.effective.multishot:.2f}",
             f"{'FLAT DPH | WEAKPOINT:':<25} {self.flat_dph():.2f} | {self.flat_weakpoint_dph():.2f}",
             f"{'FLAT DOTPH | WEAKPOINT:':<25} {self.flat_dotph():.2f} | {self.flat_weakpoint_dotph():.2f}",
             f"{'TOTAL DPH | WEAKPOINT:':<25} {self.total_dph():.2f} | {self.total_weakpoint_dph():.2f}",

@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field, fields
 
-from ..mechanics.addable import Addable
-from ..mechanics.dist import dist
+from ..mechanics import Addable, dist
 
 
 @dataclass
