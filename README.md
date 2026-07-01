@@ -75,7 +75,6 @@ Body-shot and weakpoint calculations are reported separately where applicable.
 - Slam Attacks
 - Some Weapon-Specific Mechanics (e.g. Gotva Prime)
 - Elemental Imbuements
-- Ammo Efficiency
 - Secondary Encumber
 
 # Installation
