@@ -89,7 +89,7 @@
 - [ ] Increase edge-case coverage.
 - [ ] Performance benchmarks.
 
-# Assumption Checklist
+# Assumptions
 
 - If **Hunter Munitions** and **Internal Bleeding** trigger simultaneously, only the higher-damage proc is applied. *(Source: Wiki)*
 - **Secondary Encumber** scales with total damage, status damage, faction damage, and critical damage. *(Source: None)*
