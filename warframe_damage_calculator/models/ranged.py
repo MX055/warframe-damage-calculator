@@ -1,15 +1,14 @@
 from __future__ import annotations
 
+from ..calculators import RangedCalculator
+from .. formatters import RangedFormatter
 from ..utils import true_round, clamp
 from .states import RangedState
 from .weapon import Weapon
 
 
-class Ranged[TWeaponState: RangedState](Weapon[TWeaponState]):
-    _calculator_class = None
-    _formatter_class = None
-
-    def __init__(self, base: TWeaponState) -> None:
+class Ranged[TRangedState: RangedState, TRangedCalculator: RangedCalculator, TRangedFormatter: RangedFormatter](Weapon[TRangedState, TRangedCalculator, TRangedFormatter]):
+    def __init__(self, base: TRangedState) -> None:
         super().__init__(base)
         self.base.explosion_total_damage = self.base.explosion_damage_dist.total_damage
 
@@ -21,6 +20,7 @@ class Ranged[TWeaponState: RangedState](Weapon[TWeaponState]):
         self.moded.multiplicative_fire_rate = max(1 + self.build.multiplicative_fire_rate, 1)
         self.moded.fire_rate = max(self.base.fire_rate * (1 + self.build.fire_rate), 0.05)
         self.moded.charge_time = self.base.charge_time / max(1 + self.build.fire_rate, 0.01)
+        self.moded.recharge_rate = self.base.recharge_rate * max(1 + self.build.reload_speed, 0.01)
         self.moded.reload_speed = self.base.reload_speed / max(1 + self.build.reload_speed, 0.01)
         self.moded.magazine_capacity = max(true_round(self.base.magazine_capacity * (1 + self.build.magazine_capacity)), 1)
         self.moded.ammo_efficiency = clamp(self.build.ammo_efficiency, 0, 1)
@@ -41,3 +41,4 @@ class Ranged[TWeaponState: RangedState](Weapon[TWeaponState]):
         self.effective.multishot = self.moded.multishot
         self.effective.weakpoint_crit_chance = self.moded.weakpoint_crit_chance * (self.moded.multiplicative_crit_chance + self.moded.multiplicative_weakpoint_crit_chance - 1) + self.moded.flat_crit_chance
         self.effective.internal_bleeding = self.moded.internal_bleeding
+

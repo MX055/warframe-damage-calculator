@@ -1,13 +1,22 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from .weapon_calculator import WeaponCalculator
+
+if TYPE_CHECKING:
+    from ..models import RangedState
+    from ..models import Ranged
 
 
 class RangedCalculator(WeaponCalculator):
+    def __init__(self, weapon: Ranged[RangedState]) -> None:
+        self.weapon: Ranged[RangedState] = weapon
 
     def average_fire_rate(self) -> float:
-        rounds_per_pag = self.weapon.effective.magazine_capacity * (2 if self.weapon.base.is_beam else 1) / (1 - self.weapon.effective.ammo_efficiency)
-        return rounds_per_pag / (rounds_per_pag * self.weapon.effective.charge_time + (rounds_per_pag - 1) / self.weapon.effective.fire_rate + self.weapon.effective.reload_speed)
+        reload_time = self.weapon.effective.reload_speed + (self.weapon.effective.magazine_capacity / self.weapon.effective.recharge_rate if self.weapon.base.is_battery else 0)
+        shots_per_pag = self.weapon.effective.magazine_capacity * (2 if self.weapon.base.is_beam else 1) / (1 - self.weapon.effective.ammo_efficiency)
+        return shots_per_pag / (shots_per_pag * self.weapon.effective.charge_time + (shots_per_pag - 1) / self.weapon.effective.fire_rate + reload_time)
 
     def average_procs_per_shot(self) -> float:
         return self.weapon.effective.status_chance * self.weapon.effective.multishot
@@ -54,6 +63,3 @@ class RangedCalculator(WeaponCalculator):
     
     def total_weakpoint_dps(self) -> float:
         return self.flat_weakpoint_dps() + self.flat_weakpoint_dotps()
-    
-    def flat_dotph_for(self, damage_dist, forced_procs, crit_chance: float, crit_multiplier: float, include_multishot: bool = True) -> float:
-        raise NotImplementedError

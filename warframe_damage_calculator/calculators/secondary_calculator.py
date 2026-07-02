@@ -1,10 +1,17 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from ..utils import DOT_MULTIPLIERS
 from .ranged_calculator import RangedCalculator
 
+if TYPE_CHECKING:
+    from ..models import Secondary
+
 
 class SecondaryCalculator(RangedCalculator):
+    def __init__(self, weapon: Secondary) -> None:
+        self.weapon: Secondary = weapon
 
     def calculate_secondary_enervate_bonus(self, initial_crit_chance: float) -> float:
         if self.weapon.effective.secondary_enervate <= 0:

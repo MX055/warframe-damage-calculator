@@ -1,10 +1,17 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from ..utils import DOT_MULTIPLIERS, true_round
 from .weapon_calculator import WeaponCalculator
 
+if TYPE_CHECKING:
+    from ..models import Melee
+
 
 class MeleeCalculator(WeaponCalculator):
+    def __init__(self, weapon: Melee) -> None:
+        self.weapon: Melee = weapon
 
     def melee_doughty_bonus(self) -> float:
         return true_round(10 * self.weapon.effective.damage_dist.weight("puncture") * self.weapon.effective.status_chance * self.weapon.effective.melee_doughty, 1)

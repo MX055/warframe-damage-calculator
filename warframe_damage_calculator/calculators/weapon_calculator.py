@@ -1,9 +1,14 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ..models.states import WeaponState
+    from ..models.weapon import Weapon
 
 class WeaponCalculator:
-    def __init__(self, weapon) -> None:
-        self.weapon = weapon
+    def __init__(self, weapon: Weapon[WeaponState]) -> None:
+        self.weapon: Weapon[WeaponState] = weapon
     
     def average_crit_multiplier(self) -> float:
         return 1 + self.weapon.effective.crit_chance * (self.weapon.effective.crit_damage - 1)

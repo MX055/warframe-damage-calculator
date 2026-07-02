@@ -2,21 +2,22 @@ from __future__ import annotations
 
 from typing import Self
 
+from ..calculators import WeaponCalculator
+from ..formatters import WeaponFormatter
 from .states import WeaponState
 from .upgrade import Upgrade
 from .build import Build
 
 
-class Weapon[TWeaponState: WeaponState]:
-    _calculator_class = None
-    _formatter_class = None
-
+class Weapon[TWeaponState: WeaponState, TCalculator: WeaponCalculator, TFormatter: WeaponFormatter]:
     def __init__(self, base: TWeaponState) -> None:
-        self.base = base
+        self.base: TWeaponState = base
+        self.moded: TWeaponState = type(base)()
+        self.effective: TWeaponState = type(base)()
+        self.calculate: TCalculator = self.calculator_class(self)
+        self.format: TFormatter = self.formatter_class(self)
         self.base.total_damage = self.base.damage_dist.total_damage
-        self.moded: TWeaponState = type(self.base)()
-        self.effective: TWeaponState = type(self.base)()
-        self.configure(Upgrade())
+        self.configure()
 
     def _compute_moded_stats(self) -> None:
         self.moded.multiplicative_base_damage = max(1 + self.build.multiplicative_base_damage, 1)
@@ -43,25 +44,13 @@ class Weapon[TWeaponState: WeaponState]:
         self.effective.status_damage = self.moded.status_damage
 
     def configure(self, *args: Build | Upgrade) -> Self:
-        if isinstance(args[0], Build) and len(args) == 1:
-            self.build = args[0]
-        elif all(isinstance(arg, Upgrade) for arg in args):
+        if all(isinstance(arg, Upgrade) for arg in args):
             self.build = Build(*args)
+        elif isinstance(args[0], Build) and len(args) == 1:
+            self.build = args[0]
         else:
             raise TypeError
         
         self._compute_moded_stats()
         self._compute_effective_stats()
         return self
-    
-    @property
-    def calculate(self):
-        if self._calculator_class is None:
-            raise NotImplementedError
-        return self._calculator_class(self)
-
-    @property
-    def format(self):
-        if self._formatter_class is None:
-            raise NotImplementedError
-        return self._formatter_class(self, self.calculate)

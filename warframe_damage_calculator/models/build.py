@@ -6,8 +6,6 @@ from .upgrade import Upgrade
 
 @dataclass(init=False)
 class Build(Upgrade):
-    upgrades: list[Upgrade] = field(default_factory=list)
-
     def __init__(self, *upgrades: Upgrade):
         self.upgrades = list(upgrades)
 

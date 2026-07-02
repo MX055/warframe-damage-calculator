@@ -1,10 +1,17 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from ..utils import DOT_MULTIPLIERS
 from .ranged_calculator import RangedCalculator
 
+if TYPE_CHECKING:
+    from ..models import Primary
+
 
 class PrimaryCalculator(RangedCalculator):
+    def __init__(self, weapon: Primary) -> None:
+        self.weapon: Primary = weapon
 
     def average_primed_chamber_multiplier(self) -> float:
         return 1 + self.weapon.effective.primed_chamber / self.weapon.effective.magazine_capacity
