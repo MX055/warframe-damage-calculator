@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from ..models import dist
+from .dist import dist
 
 
 @dataclass

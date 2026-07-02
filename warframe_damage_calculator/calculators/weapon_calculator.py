@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+
 class WeaponCalculator:
     def __init__(self, weapon) -> None:
         self.weapon = weapon

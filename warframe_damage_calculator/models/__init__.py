@@ -1,13 +1,13 @@
-from .dist import dist
-from .states import WeaponState, MeleeState, RangedState, PrimaryState, SecondaryState
-from .upgrade import Upgrade
 from .build import Build
-from .weapon import Weapon
-from .ranged import Ranged
+from .dist import dist
 from .melee import Melee
 from .primary import Primary
+from .ranged import Ranged
 from .secondary import Secondary
-
+from .states import (MeleeState, PrimaryState, RangedState, SecondaryState,
+                     WeaponState)
+from .upgrade import Upgrade
+from .weapon import Weapon
 
 __all__ = [
     "dist",

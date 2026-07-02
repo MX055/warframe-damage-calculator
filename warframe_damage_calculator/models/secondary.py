@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from ..calculators import SecondaryCalculator
 from ..formatters import SecondaryFormatter
-from .states import SecondaryState
-from .dist import dist
 from ..utils import clamp
+from .dist import dist
 from .ranged import Ranged
+from .states import SecondaryState
 
 
 class Secondary(Ranged[SecondaryState]):

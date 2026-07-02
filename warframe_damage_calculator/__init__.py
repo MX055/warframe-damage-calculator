@@ -1,6 +1,4 @@
-from .models import dist
-from .models import Upgrade, Build, Melee, Primary, Secondary
-
+from .models import Build, Melee, Primary, Secondary, Upgrade, dist
 
 __version__ = "0.2.0"
 

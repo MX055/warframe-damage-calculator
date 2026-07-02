@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from typing import Self
 
+from .build import Build
 from .states import WeaponState
 from .upgrade import Upgrade
-from .build import Build
 
 
 class Weapon[TWeaponState: WeaponState]:

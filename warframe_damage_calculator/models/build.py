@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field, fields
 
-from ..models import dist
+from .dist import dist
 from .upgrade import Upgrade
 
 

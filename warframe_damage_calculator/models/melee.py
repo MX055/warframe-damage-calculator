@@ -3,8 +3,8 @@ from __future__ import annotations
 from ..calculators import MeleeCalculator
 from ..formatters import MeleeFormatter
 from ..utils import clamp
-from .states import MeleeState
 from .dist import dist
+from .states import MeleeState
 from .weapon import Weapon
 
 
