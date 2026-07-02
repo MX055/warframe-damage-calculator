@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Iterator, Iterable
+from typing import Iterator, Iterable, Unpack
 from types import MappingProxyType
 
-from ..utils.constants import ELEMENTAL_TYPES, PHYSICAL_TYPES, ELEMENTAL_COMBINATIONS, DAMAGE_TYPE_ORDER
+from ..utils import ELEMENTAL_TYPES, PHYSICAL_TYPES, ELEMENTAL_COMBINATIONS, DAMAGE_TYPE_ORDER, DistArgs
 
 
 @dataclass(frozen=True, init=False)
@@ -12,7 +12,7 @@ class dist:
     _dist: dict[str, float] = field(default_factory=dict)
     _total_damage: float = 0.0
     
-    def __init__(self, **kwargs: float):
+    def __init__(self, **kwargs: Unpack[DistArgs]):
         sorted_items = dict(sorted(kwargs.items(), key=lambda item: DAMAGE_TYPE_ORDER.get(item[0], float("inf"))))
         object.__setattr__(self, '_dist', sorted_items)
         object.__setattr__(self, '_total_damage', sum(sorted_items.values()))
