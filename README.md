@@ -141,5 +141,5 @@ if __name__ == "__main__":
 ```
 # Development Progress
 
-See `checklist.md` for the current development checklist, assumptions, and remaining tasks.
+See `CHECKLIST.md` for the current development checklist, assumptions, and remaining tasks.
 
