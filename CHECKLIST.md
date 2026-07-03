@@ -53,7 +53,7 @@
 - [x] Ammo efficiency.
 - [x] Charge weapons.
 - [x] Battery weapons.
-- [ ] Burst-fire weapons.
+- [x] Burst-fire weapons.
 - [ ] Ammo consumption per shot
 
 ## Weapon Effects
