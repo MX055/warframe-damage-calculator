@@ -18,11 +18,11 @@ class SecondaryCalculator(RangedCalculator):
     
     @cached_property
     def average_secondary_enervate_bonus(self) -> float:
-        return self.average_secondary_enervate_bonus_for(self.weapon.moded.crit_chance * self.weapon.moded.multiplicative_crit_chance + self.weapon.moded.flat_crit_chance)
+        return self._average_secondary_enervate_bonus_for(self.weapon.moded.crit_chance * self.weapon.moded.multiplicative_crit_chance + self.weapon.moded.flat_crit_chance)
 
     @cached_property
     def average_weakpoint_secondary_enervate_bonus(self) -> float:
-        return self.average_secondary_enervate_bonus_for(self.weapon.moded.weakpoint_crit_chance * (self.weapon.moded.multiplicative_crit_chance + self.weapon.moded.multiplicative_weakpoint_crit_chance - 1) + self.weapon.moded.flat_crit_chance)
+        return self._average_secondary_enervate_bonus_for(self.weapon.moded.weakpoint_crit_chance * (self.weapon.moded.multiplicative_crit_chance + self.weapon.moded.multiplicative_weakpoint_crit_chance - 1) + self.weapon.moded.flat_crit_chance)
 
     @cached_property
     def average_crit_chance(self) -> float:
@@ -32,7 +32,7 @@ class SecondaryCalculator(RangedCalculator):
     def average_weakpoint_crit_chance(self) -> float:
         return self.weapon.effective.weakpoint_crit_chance + self.average_weakpoint_secondary_enervate_bonus
     
-    def average_secondary_enervate_bonus_for(self, crit_chance: float, max_stacks: int = 100) -> float:
+    def _average_secondary_enervate_bonus_for(self, crit_chance: float, max_stacks: int = 100) -> float:
         reset_after = self.weapon.effective.secondary_enervate
         if reset_after == 0:
             return 0.0
@@ -57,7 +57,7 @@ class SecondaryCalculator(RangedCalculator):
         stack_bonus = np.array([0.1 * s for s, _ in states])
         return float(pi @ stack_bonus)
 
-    def flat_dotph_for(self, damage_dist, forced_procs, crit_chance: float, crit_multiplier: float, include_multishot: bool = True) -> float: # Secondary Ecumber Calculations Need Testing In-Game
+    def _flat_dotph_for(self, damage_dist, forced_procs, crit_chance: float, crit_multiplier: float, include_multishot: bool = True) -> float: # Secondary Ecumber Calculations Need Testing In-Game
         if damage_dist.total_damage <= 0:
             return 0.0
         secondary_encumber_chance = 1 - (1 - self.weapon.effective.secondary_encumber * min(self.weapon.effective.status_chance, 1))**self.weapon.effective.multishot

@@ -52,14 +52,14 @@ class RangedCalculator(WeaponCalculator):
 
     @cached_property
     def flat_dotph(self) -> float:
-        direct_damage = self.flat_dotph_for(self.weapon.effective.damage_dist, self.weapon.base.forced_procs, self.weapon.effective.crit_chance, self.average_crit_multiplier)
-        explosion_damage = self.flat_dotph_for(self.weapon.effective.explosion_damage_dist, self.weapon.base.explosion_forced_procs, self.weapon.effective.crit_chance, self.average_crit_multiplier, include_multishot=False)
+        direct_damage = self._flat_dotph_for(self.weapon.effective.damage_dist, self.weapon.base.forced_procs, self.weapon.effective.crit_chance, self.average_crit_multiplier)
+        explosion_damage = self._flat_dotph_for(self.weapon.effective.explosion_damage_dist, self.weapon.base.explosion_forced_procs, self.weapon.effective.crit_chance, self.average_crit_multiplier, include_multishot=False)
         return direct_damage + explosion_damage
 
     @cached_property
     def flat_weakpoint_dotph(self) -> float:
-        direct_damage = self.flat_dotph_for(self.weapon.effective.damage_dist, self.weapon.base.forced_procs, self.weapon.effective.weakpoint_crit_chance, self.average_weakpoint_crit_multiplier)
-        explosion_damage = self.flat_dotph_for(self.weapon.effective.explosion_damage_dist, self.weapon.base.explosion_forced_procs, self.weapon.effective.crit_chance, self.average_crit_multiplier, include_multishot=False)
+        direct_damage = self._flat_dotph_for(self.weapon.effective.damage_dist, self.weapon.base.forced_procs, self.weapon.effective.weakpoint_crit_chance, self.average_weakpoint_crit_multiplier)
+        explosion_damage = self._flat_dotph_for(self.weapon.effective.explosion_damage_dist, self.weapon.base.explosion_forced_procs, self.weapon.effective.crit_chance, self.average_crit_multiplier, include_multishot=False)
         return direct_damage + explosion_damage
 
     @cached_property
@@ -78,5 +78,5 @@ class RangedCalculator(WeaponCalculator):
     def total_weakpoint_dps(self) -> float:
         return self.flat_weakpoint_dps + self.flat_weakpoint_dotps
     
-    def flat_dotph_for(self, damage_dist, forced_procs, crit_chance: float, crit_multiplier: float, include_multishot: bool = True) -> float:
+    def _flat_dotph_for(self, damage_dist, forced_procs, crit_chance: float, crit_multiplier: float, include_multishot: bool = True) -> float:
         return NotImplemented

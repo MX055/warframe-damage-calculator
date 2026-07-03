@@ -26,7 +26,7 @@ class PrimaryCalculator(RangedCalculator):
     def flat_weakpoint_dph(self) -> float:
         return super().flat_weakpoint_dph * self.average_primed_chamber_multiplier
     
-    def flat_dotph_for(self, damage_dist, forced_procs, crit_chance: float, crit_multiplier: float, include_multishot: bool = True) -> float:
+    def _flat_dotph_for(self, damage_dist, forced_procs, crit_chance: float, crit_multiplier: float, include_multishot: bool = True) -> float:
         if damage_dist.total_damage <= 0:
             return 0.0
         average_primed_chamber_multiplier = self.average_primed_chamber_multiplier
