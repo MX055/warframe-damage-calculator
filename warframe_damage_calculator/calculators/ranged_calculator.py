@@ -14,10 +14,8 @@ class RangedCalculator(WeaponCalculator):
         self.weapon: Ranged[RangedState] = weapon
 
     def average_fire_rate(self) -> float:
-        reload_time = self.weapon.effective.reload_speed + (self.weapon.effective.magazine_capacity / self.weapon.effective.recharge_rate if self.weapon.base.is_battery else 0)
-        shots_per_pag = self.weapon.effective.magazine_capacity * (2 if self.weapon.base.is_beam else 1) / (1 - self.weapon.effective.ammo_efficiency)
-        return shots_per_pag / (shots_per_pag * self.weapon.effective.charge_time + (shots_per_pag - 1) / self.weapon.effective.fire_rate + reload_time)
-
+        return self.weapon.effective.magazine_capacity / (self.weapon.effective.magazine_capacity / self.weapon.effective.burst_count * (self.weapon.effective.charge_time + (self.weapon.effective.burst_count - 1) * self.weapon.effective.burst_delay) + (self.weapon.effective.magazine_capacity / self.weapon.effective.burst_count - (1 - self.weapon.effective.ammo_efficiency)) / self.weapon.effective.fire_rate + (1 - self.weapon.effective.ammo_efficiency) * self.weapon.effective.reload_speed)
+    
     def average_procs_per_shot(self) -> float:
         return self.weapon.effective.status_chance * self.weapon.effective.multishot
     
@@ -28,7 +26,7 @@ class RangedCalculator(WeaponCalculator):
         return max(0, 1 - abs(self.weapon.effective.weakpoint_crit_chance - tier))
     
     def beam_dot_multiplier(self) -> float:
-        return self.weapon.effective.multishot if self.weapon.base.is_beam else 1
+        return self.weapon.effective.multishot if self.weapon.effective.is_beam else 1
     
     def flat_dph(self) -> float:
         return (self.weapon.effective.total_damage * self.weapon.effective.multishot + self.weapon.effective.explosion_total_damage) * self.weapon.effective.faction_damage * self.average_crit_multiplier()
