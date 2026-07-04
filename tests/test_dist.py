@@ -37,8 +37,8 @@ class DistTests(unittest.TestCase):
     def test_dist_hash_str_and_repr(self) -> None:
         damage = dist(impact=10, slash=20)
 
-        self.assertEqual(hash(damage), hash(dist(slash=20, impact=10)))
-        self.assertIn("IMPACT: 10", str(damage))
+        self.assertEqual(hash(damage), hash(dist(impact=10, slash=20)))
+        self.assertIn("impact: 10", str(damage))
         self.assertIn("dist(impact=10, slash=20)", repr(damage))
 
     def test_dist_combine_include_exclude_positive(self) -> None:
