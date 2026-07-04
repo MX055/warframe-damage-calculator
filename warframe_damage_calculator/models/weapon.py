@@ -12,9 +12,8 @@ class Weapon:
 
     def __init__(self, base: WeaponState):
         self.calculate = self.calculator_class(base)
-        self.format = self.formatter_class(base)
+        self.format = self.formatter_class(self.calculate)
 
     def configure(self, build: Build):
         self.calculate.configure(build)
-        self.format.configure(build)
         return self

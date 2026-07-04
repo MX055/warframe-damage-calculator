@@ -1,17 +1,13 @@
 from __future__ import annotations
 
-from typing import ClassVar
-
 from ..calculators import RangedCalculator
 from ..states.ranged import RangedState
 from .weapon_formatter import WeaponFormatter
 
 
 class RangedFormatter[TRangedState: RangedState](WeaponFormatter[TRangedState]):    
-    calculator_class: ClassVar[type[RangedCalculator[TRangedState]]] = RangedState
-
-    def __init__(self, base: TRangedState) -> None:
-        super().__init__(base)
+    def __init__(self, calculator: RangedCalculator[TRangedState]) -> None:
+        super().__init__(calculator)
 
     def summary(self) -> str:
         return "\n".join([

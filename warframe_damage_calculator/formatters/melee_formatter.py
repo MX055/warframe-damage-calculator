@@ -1,17 +1,13 @@
 from __future__ import annotations
 
-from typing import ClassVar
-
 from ..calculators import MeleeCalculator
 from ..states.melee import MeleeState
 from .weapon_formatter import WeaponFormatter
 
 
 class MeleeFormatter(WeaponFormatter[MeleeState]):
-    calculator_class: ClassVar[type[MeleeCalculator]] = MeleeCalculator
-
-    def __init__(self, base: MeleeState) -> None:
-        super().__init__(base)
+    def __init__(self, calculator: MeleeCalculator) -> None:
+        super().__init__(calculator)
 
     def summary(self) -> str:
         return "\n".join([
