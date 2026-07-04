@@ -1,15 +1,19 @@
 from __future__ import annotations
 
+from typing import Unpack
+
 from ..calculators import RangedCalculator
 from ..formatters import RangedFormatter
-from ..states.ranged_state import RangedState
+from ..states import RangedState
+from ..fields import RangedField
 from .weapon import Weapon
 
 
 class Ranged(Weapon):
+    state_class = RangedState
     calculator_class = RangedCalculator
     formatter_class = RangedFormatter
 
-    def __init__(self, base: RangedState) -> None:
-        super().__init__(base)
+    def __init__(self, **kwargs: Unpack[RangedField]) -> None:
+        super().__init__(**kwargs)
 

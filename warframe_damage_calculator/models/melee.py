@@ -10,10 +10,11 @@ from .weapon import Weapon
 
 
 class Melee(Weapon):
+    state_class = MeleeState
     calculator_class = MeleeCalculator
     formatter_class = MeleeFormatter
 
     def __init__(self,  **kwargs: Unpack[MeleeField]) -> None:
-        super().__init__(MeleeState(**kwargs))
+        super().__init__(**kwargs)
 
         

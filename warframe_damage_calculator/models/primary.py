@@ -10,11 +10,12 @@ from .ranged import Ranged
 
 
 class Primary(Ranged):
+    state_class = PrimaryState
     calculator_class = PrimaryCalculator
     formatter_class = PrimaryFormatter
 
     def __init__(self, **kwargs: Unpack[PrimaryField]) -> None:
-        super().__init__(PrimaryState(**kwargs))
+        super().__init__(**kwargs)
 
     
 
