@@ -13,24 +13,23 @@ from ..fields import DamageField
 class dist:
     """Represents an immutable damage distribution grouped by damage type.
 
-    Create one with keyword values such as ``dist(slash=80, heat=20)``. The
-    object stores supplied damage types in a consistent order and keeps their
-    sum in ``total_damage``.
+    Use one or more keyword arguments to create a ``dist`` object. ``dist`` 
+    stores ordered pairs of damage types and their values, and their sum in 
+    ``total_damage``.
 
     Missing damage types count as zero when read with ``get``. Operations
     such as adding, multiplying, filtering, or combining elements return a
     new ``dist`` instead of changing the existing one.
 
-    Used anywhere the calculator needs values split by damage type, including
-    base damage, elemental bonuses, and forced procs.
+    Stored values represent diferent things depending on context. They can 
+    either be flat damage values, percentage bonuses, or proc chances.
     """
     dist: Mapping[DamageType, float]
     total_damage: float
     
     def __init__(self, **kwargs: Unpack[DamageField]) -> None:
-        sorted_items = dict(sorted(kwargs.items(), key=lambda item: DAMAGE_TYPE_ORDER[item[0]]))
-        object.__setattr__(self, "dist", MappingProxyType(sorted_items))
-        object.__setattr__(self, 'total_damage', sum(sorted_items.values()))
+        object.__setattr__(self, "dist", MappingProxyType(kwargs))
+        object.__setattr__(self, 'total_damage', sum(kwargs.values()))
 
     def __add__(self, other: dist) -> dist:
         if isinstance(other, dist):
@@ -58,18 +57,10 @@ class dist:
         return hash(tuple(self.dist.items()))
 
     def __str__(self) -> str:
-        return ", ".join(f"{dt.upper()}: {d}" for dt, d in self)
+        return ", ".join(f"{dt}: {d}" for dt, d in self)
     
     def __repr__(self) -> str:
         return f"dist({', '.join(f'{dt}={d}' for dt, d in self)})"
-    
-    def combine(self) -> dist:
-        elements = list(self.include(ELEMENTAL_TYPES))
-        combined: dict[str, float] = dict()
-        for (dt1, d1), (dt2, d2) in zip(elements[::2], elements[1::2] + [("NONE", 0)]):
-            key = ELEMENTAL_COMBINATIONS.get(frozenset((dt1, dt2)), dt1)
-            combined[key] = d1 + d2
-        return (self.exclude(ELEMENTAL_TYPES) + dist(**combined)).positive()
     
     def include(self, other: Iterable[DamageType]) -> dist:
         if not isinstance(other, Iterable):
@@ -106,3 +97,16 @@ class dist:
         if not isinstance(other, dist):
             raise TypeError
         return dist(**{dt: self.get(dt) * (1 + other.get(dt)) if dt in PHYSICAL_TYPES else self.get(dt) + self.total_damage * other.get(dt) for dt in self.dist | other.dist})
+    
+    def combine(self) -> dist:
+        elements = list(self.include(ELEMENTAL_TYPES))
+        combined: dict[str, float] = dict()
+        for (dt1, d1), (dt2, d2) in zip(elements[::2], elements[1::2] + [("NONE", 0)]):
+            key = ELEMENTAL_COMBINATIONS.get(frozenset((dt1, dt2)), dt1)
+            combined[key] = d1 + d2
+        return (self.exclude(ELEMENTAL_TYPES) + dist(**combined)).positive()
+    
+    def sorted(self) -> dist:
+        return dist(**dict(sorted(self.dist.items(), key=lambda item: DAMAGE_TYPE_ORDER[item[0]])))
+    
+    

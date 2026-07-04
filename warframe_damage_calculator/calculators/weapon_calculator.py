@@ -29,7 +29,7 @@ class WeaponCalculator[TWeaponState: WeaponState]:
     def _compute_moded_stats(self) -> None:
         self.moded.multiplicative_base_damage = max(1 + self.build.multiplicative_base_damage, 1)
         self.moded.base_damage = max(1 + self.build.base_damage, 0)
-        self.moded.damage_dist = self.moded.base_damage * self.base.damage_dist.apply(self.build.damage_dist).combine()
+        self.moded.damage_dist = self.moded.base_damage * self.base.damage_dist.apply(self.build.damage_dist).combine().sorted()
         self.moded.total_damage = self.moded.damage_dist.total_damage
         self.moded.faction_damage = max(1 + self.build.faction_damage, 1)
         self.moded.flat_crit_chance = max(self.build.flat_crit_chance, 0)

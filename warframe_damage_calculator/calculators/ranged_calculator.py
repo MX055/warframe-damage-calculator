@@ -29,7 +29,7 @@ class RangedCalculator[TRangedState: RangedState](WeaponCalculator[TRangedState]
         super()._compute_moded_stats()
         self.moded.is_beam = self.base.is_beam
         self.moded.is_battery = self.base.is_battery
-        self.moded.explosion_damage_dist = self.moded.base_damage * self.base.explosion_damage_dist.apply(self.build.damage_dist).combine()
+        self.moded.explosion_damage_dist = self.moded.base_damage * self.base.explosion_damage_dist.apply(self.build.damage_dist).combine().sorted()
         self.moded.explosion_total_damage = self.moded.explosion_damage_dist.total_damage
         self.moded.weakpoint_damage = max(self.base.weakpoint_damage + self.build.weakpoint_damage, 1)
         self.moded.multiplicative_fire_rate = max(1 + self.build.multiplicative_fire_rate, 1)
