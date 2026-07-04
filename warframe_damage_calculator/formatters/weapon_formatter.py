@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 from ..calculators import WeaponCalculator
-from ..models.build import Build
-from ..states.weapon_state import WeaponState
+from ..states import WeaponState
 
 
 class WeaponFormatter[TWeaponState: WeaponState]:
