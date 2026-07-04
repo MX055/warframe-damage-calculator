@@ -1,7 +1,7 @@
 # Feature Checklist
 
 ## Documentation
-- [ ] Add docstrings.
+- [x] Add docstrings.
 
 ## Weapons
 - [x] Primary weapons.
