@@ -117,6 +117,37 @@ The Upgrade model currently supports:
 - melee_duplicate, melee_doughty
 - fire_rate_lock, multishot_lock
 
+## Assumptions
+
+- If **Hunter Munitions** and **Internal Bleeding** trigger simultaneously, only the higher-damage proc is applied. *(Source: Wiki)*
+- **Secondary Encumber** scales with total damage, status damage, faction damage, and critical damage. *(Source: None)*
+- **Secondary Encumber** can trigger **Hemorrhage** (*Internal Bleeding*). *(Source: None)*
+- **Secondary Encumber** can trigger at most once per shot. *(Source: Wiki)*
+- *burst daleay* is affected by *fire rate* *(Source: None)*
+- *burst delay* is not affected by negative *fire rate* *(Source: Wiki)*
+- *charge time* is affected by *fire rate* *(Source: Wiki)*
+- *recharge rate* is not affected by *reload speed* *(Source: Wiki)*
+- *beam weapons* only consume 0.5 ammo per tick *(Source: Wiki)*
+- Weapon firing cycles are assumed to work as follows. *(Source: Testing)*
+
+```text
+[ammo per shot] <-  (1 - [ammo efficiency]) / (2 if [is beam] else 1)
+[effective reload time] <- [reload time] + ([magazine capacity] / [recharge rate] if [is battery] else 0)
+[bullet count] <- [magazine capacity]
+
+repeat
+    wait [charge time] seconds
+    [bullet count] <- [bullet count] - [ammo per shot]
+    for i in range [burst count]:
+        wait [burst dalay] seconds
+        [bullet count] <- [bullet count] - [ammo per shot]
+    if [bullet count] = 0
+        wait [effective reload time] seconds
+        [bullet count] <- [magazine capacity]
+    else
+        wait 1 / [fire rate] seconds
+```
+
 ## Quick Example
 
 ```python
@@ -184,4 +215,4 @@ python -m unittest discover -s tests -q
 
 ## Development Notes
 
-See CHECKLIST.md for the detailed roadmap and assumptions used by the formulas.
+See CHECKLIST.md for the detailed roadmap.

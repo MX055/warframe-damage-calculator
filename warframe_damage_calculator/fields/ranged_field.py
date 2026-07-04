@@ -1,4 +1,4 @@
-from ..models.dist import dist
+from ..models import dist
 from .weapon_field import WeaponField
 
 

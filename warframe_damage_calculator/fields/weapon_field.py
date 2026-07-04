@@ -1,6 +1,6 @@
 from typing import TypedDict
 
-from ..models.dist import dist
+from ..models import dist
 
 
 class WeaponField(TypedDict, total=True):
