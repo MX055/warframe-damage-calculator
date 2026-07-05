@@ -132,23 +132,36 @@ The Upgrade model currently supports:
 - Weapon firing cycles are assumed to work as follows. *(Source: Testing)*
 
 ```text
-[ammo per shot] <-  (1 - [ammo efficiency]) / (2 if [is beam] else 1)
-[effective reload time] <- [reload time] + ([magazine capacity] / [recharge rate] if [is battery] else 0)
-[bullet count] <- [magazine capacity]
+[ammo cost] ← (1 - [ammo efficiency]) ÷ (IF [is beam] THEN 2 ELSE 1)
+[effective reload time] ← [reload time] + (IF [is battery] THEN [magazine capacity] / [recharge rate] ELSE 0)
+[magazine] ← [magazine capacity]
 
-repeat
-    wait [charge time] seconds
-    [hunter munitions] <- true if ⌈[bullet count]⌉ = [magazine capacity] else false
-    [bullet count] <- [bullet count] - [ammo per shot]
-    for i in range [burst count]:
-        wait [burst dalay] seconds
-        [hunter munitions] <- true if ceil([bullet count]) = [magazine capacity] else false
-        [bullet count] <- [bullet count] - [ammo per shot]
-    if [bullet count] = 0
-        wait [effective reload time] seconds
-        [bullet count] <- [magazine capacity]
-    else
-        wait 1 / [fire rate] seconds
+REPEAT
+    WAIT [charge time] seconds
+    [primed chamber is active] ← (⌈[magazine]⌉ = [magazine capacity])
+
+    SHOOT 1 round
+    [magazine] ← [magazine] - [ammo cost]
+
+    REPEAT [burst count] - 1 TIMES
+        WAIT [burst delay] seconds
+        [primed chamber is active] ← (⌈[magazine]⌉ = [magazine capacity])
+
+        SHOOT 1 round
+        [magazine] ← [magazine] - [ammo cost]
+
+        IF [magazine] ≤ 0 THEN
+            BREAK
+    END REPEAT
+
+    IF [magazine] ≤ 0 THEN
+        WAIT [effective reload time] seconds
+        [magazine] ← [magazine capacity]
+    ELSE
+        WAIT 1 ÷ [fire rate] seconds
+    END IF
+
+END REPEAT
 ```
 
 ## Quick Example
