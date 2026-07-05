@@ -195,45 +195,45 @@ weapon = Primary(...).configure(build)
 
 ### Weapons
 
--   ✅ Primary weapons
--   ✅ Secondary weapons
--   ✅ Melee light attacks
--   ✅ Beam weapons
--   ✅ Hitscan weapons
--   ✅ Charge weapons
--   ✅ Battery weapons
--   ✅ Burst-fire weapons
--   ⏳ Projectile falloff
+- [x] Primary weapons
+- [x] Secondary weapons
+- [x] Melee light attacks
+- [x] Beam weapons
+- [x] Hitscan weapons
+- [x] Charge weapons
+- [x] Battery weapons
+- [x] Burst-fire weapons
+- [ ] Projectile falloff
 
 ### Damage
 
--   ✅ Physical damage
--   ✅ Elemental damage
--   ✅ Combined elements
--   ✅ IPS weighting
--   ✅ Base, faction, and weakpoint damage
--   ✅ Critical calculations
--   ⏳ Enemy defenses and damage attenuation
+- [x] Physical damage
+- [x] Elemental damage
+- [x] Combined elements
+- [x] IPS weighting
+- [x] Base, faction, and weakpoint damage
+- [x] Critical calculations
+- [ ] Enemy defenses and damage attenuation
 
 ### Status
 
--   ✅ Expected status procs
--   ✅ Damage-over-time
--   ✅ Forced procs
--   ✅ Hunter Munitions
--   ✅ Hemorrhage
--   ✅ Secondary Encumber
--   ⏳ Viral, Corrosive, Heat, and Magnetic secondary effects
+- [x] Expected status procs
+- [x] Damage-over-time
+- [x] Forced procs
+- [x] Hunter Munitions
+- [x] Hemorrhage
+- [x] Secondary Encumber
+- [ ] Viral, Corrosive, Heat, and Magnetic secondary effects
 
 ### Calculations
 
--   ✅ Flat DPH / DPS
--   ✅ DoT DPH / DPS
--   ✅ Total DPH / DPS
--   ✅ Effective fire rate
--   ✅ Expected status procs per shot
--   ⏳ Time-to-kill
--   ⏳ Damage contribution breakdowns
+- [x] Flat DPH / DPS
+- [x] DoT DPH / DPS
+- [x] Total DPH / DPS
+- [x] Effective fire rate
+- [x] Expected status procs per shot
+- [ ] Time-to-kill
+- [ ] Damage contribution breakdowns
 
 ------------------------------------------------------------------------
 
