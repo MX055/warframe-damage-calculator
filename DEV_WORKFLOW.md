@@ -2,7 +2,7 @@
 
 ## Design Rules
 
-- Utils should contain constants or functions.
+- Utils should contain common constants or functions.
 - Weapon models should contain almost no logic.
 - Calculators perform all computations.
 - Formaters only format the output.
