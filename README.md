@@ -138,14 +138,14 @@ The Upgrade model currently supports:
 
 REPEAT
     WAIT [charge time] seconds
-    [primed chamber is active] ← (⌈[magazine]⌉ = [magazine capacity])
+    [primed chamber is active] ← ⌈[magazine]⌉ = [magazine capacity]
 
     SHOOT 1 round
     [magazine] ← [magazine] - [ammo cost]
 
     REPEAT [burst count] - 1 TIMES
         WAIT [burst delay] seconds
-        [primed chamber is active] ← (⌈[magazine]⌉ = [magazine capacity])
+        [primed chamber is active] ← ⌈[magazine]⌉ = [magazine capacity]
 
         SHOOT 1 round
         [magazine] ← [magazine] - [ammo cost]
