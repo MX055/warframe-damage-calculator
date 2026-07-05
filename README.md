@@ -1,137 +1,282 @@
-# Warframe Average Damage Calculator
+# Warframe Damage Calculator
 
-A Python library for deterministic Warframe weapon math using expected-value formulas (not Monte Carlo simulation).
+> Deterministic Warframe weapon damage calculations using expected-value
+> formulas.
 
-It is built around a base -> moded -> effective stat pipeline so you can inspect every stage of the calculation.
+**Warframe Damage Calculator** is a Python library for modeling Warframe
+weapon performance using deterministic mathematics rather than Monte
+Carlo simulation. Instead of simulating thousands of shots, the library
+computes the statistical average outcome of every attack, making it
+suitable for build optimization, theorycrafting, and external tooling.
 
-## Current Scope
+The project is built around a simple object-oriented API with reusable
+weapon definitions, upgrades, and builds.
 
-- Primary weapons
-- Secondary weapons
-- Melee light attacks
-- Hitscan-style ranged modeling
-- Beam weapons
-- Charge-time weapons
-- Battery reload behavior
-- Direct and explosive damage components on ranged weapons
+------------------------------------------------------------------------
 
-## Implemented Features
+## Features
 
-### Damage and Element Handling
+-   Deterministic expected-value calculations
+-   Primary, Secondary, and Melee weapon support
+-   Beam, battery, burst-fire, and charge weapon support
+-   Physical, elemental, and combined elemental damage
+-   Critical and status systems
+-   Hunter Munitions, Hemorrhage, Secondary Enervate, Secondary
+    Encumber, Melee Duplicate, Melee Doughty, Primed Chamber, and
+    Vigilante support
+-   Flat and damage-over-time calculations
+-   Small, Pythonic public API
 
-- Physical and elemental damage distributions
-- Elemental combinations (Blast, Corrosive, Gas, Magnetic, Radiation, Viral)
-- Positive-only distribution cleanup
-- IPS and elemental weighting support
-- Base damage and multiplicative base damage
-- Faction damage
-- Weakpoint damage multiplier support
+------------------------------------------------------------------------
 
-### Critical System
+## Requirements
 
-- Critical chance and critical damage
-- Flat critical chance and flat critical damage bonuses
-- Multiplicative critical chance
-- Weakpoint critical chance
-- Multiplicative weakpoint critical chance
-- Tier-aware crit helper methods (probability and multiplier)
+-   Python **3.12+**
 
-### Status and DoT System
+------------------------------------------------------------------------
 
-- Status chance and status damage
-- Expected procs-per-shot for ranged weapons
-- DoT support for Slash, Heat, Toxin, Electricity, and Gas
-- Forced proc distributions (main hit and explosion hit)
-- Hunter Munitions (Primary)
-- Internal Bleeding / Hemorrhage
-- Overlap handling between Hunter Munitions and Internal Bleeding expectations
-- Secondary Encumber expected-value contribution
+## Installation
 
-### Weapon Stat and Fire-Cycle Modeling
+``` bash
+pip install git+https://github.com/AAAA0001/warframe-damage-calculator.git
+```
 
-- Attack speed (melee)
-- Fire rate and multiplicative fire rate
-- Reload speed and battery recharge contribution
-- Magazine capacity
-- Ammo efficiency
-- Multishot
-- Burst count and burst delay fields in effective fire-cycle math
-- Charge time in effective fire-cycle math
+Development install:
 
-### Weapon-Specific Mechanics
+``` bash
+git clone https://github.com/AAAA0001/warframe-damage-calculator.git
+cd warframe-damage-calculator
+pip install -e .
+```
 
-- Primed Chamber / Charged Chamber average multiplier (Primary)
-- Vigilante set bonus applied to crit chance (Primary)
-- Secondary Enervate expected stack bonus (Secondary)
-- Secondary Encumber expected status package (Secondary)
-- Melee Duplicate expected multiplier (Melee)
-- Melee Doughty expected bonus helper (Melee)
+------------------------------------------------------------------------
 
-## What You Can Calculate
+## Quick Start
 
-### Shared Outputs
+``` python
+from warframe_damage_calculator import *
 
-- Average critical multiplier
-- Flat damage per hit (DPH)
-- Flat damage per second (DPS)
-- Damage-over-time per hit (DOTPH)
-- Damage-over-time per second (DOTPS)
-- Total damage per hit (DPH + DOTPH)
-- Total damage per second (DPS + DOTPS)
+weapon = Primary(
+    damage_dist=dist(slash=120),
+    fire_rate=5,
+    crit_chance=0.30,
+    crit_damage=2.0,
+)
 
-### Ranged Outputs
+build = Build(
+    Upgrade(base_damage=1.65),
+    Upgrade(multishot=1.20),
+    Upgrade(crit_chance=2.00),
+)
 
-- Average fire rate
-- Expected procs per shot
-- Weakpoint variants for DPH/DPS/DOTPH/DOTPS and totals
+weapon.configure(build)
+
+print(weapon.format.summary())
+```
+
+For more complete examples, see the `examples/` directory.
+
+------------------------------------------------------------------------
+
+## Design
+
+Every weapon follows the same pipeline:
+
+``` text
+Base weapon
+      │
+      ▼
+Build (mods, arcanes, buffs)
+      │
+      ▼
+Derived statistics
+      │
+      ▼
+Damage calculations
+      │
+      ▼
+Formatted output
+```
+
+The library separates responsibilities into models, calculators, and
+formatters so the same weapon definition can be reused with different
+builds.
+
+------------------------------------------------------------------------
 
 ## Public API
 
-Top-level imports:
-
-```python
-from warframe_damage_calculator import dist, Upgrade, Build, Melee, Primary, Secondary
+``` python
+from warframe_damage_calculator import (
+    dist,
+    Upgrade,
+    Build,
+    Primary,
+    Secondary,
+    Melee,
+)
 ```
 
-Weapon workflow:
+  Object        Description
+  ------------- -------------------------------------------
+  `dist`        Damage distribution.
+  `Upgrade`     A single modifier (mod, arcane, or buff).
+  `Build`       A collection of upgrades.
+  `Primary`     Primary weapon model.
+  `Secondary`   Secondary weapon model.
+  `Melee`       Melee weapon model.
 
-1. Create a weapon with base stats.
-2. Create one or more Upgrade instances.
-3. Apply them with weapon.configure(...).
-4. Read numeric outputs from weapon.calculate.
-5. Read formatted text from weapon.format.summary().
+Typical workflow:
+
+1.  Create a weapon.
+2.  Create one or more `Upgrade` objects.
+3.  Combine them into a `Build`.
+4.  Apply the build with `weapon.configure(build)`.
+5.  Read values from `weapon.calculate`.
+6.  Print results with `weapon.format.summary()`.
+
+Since `configure()` returns the weapon, the following is also valid:
+
+``` python
+weapon = Primary(...).configure(build)
+```
+
+------------------------------------------------------------------------
 
 ## Upgrade Fields
 
-The Upgrade model currently supports:
+### Damage
 
-- damage_dist
-- multiplicative_base_damage, base_damage, faction_damage, weakpoint_damage
-- attack_speed, multiplicative_fire_rate, fire_rate, reload_speed, magazine_capacity, ammo_efficiency, multishot
-- flat_crit_chance, multiplicative_crit_chance, crit_chance
-- multiplicative_weakpoint_crit_chance, weakpoint_crit_chance
-- flat_crit_damage, crit_damage
-- status_chance, status_damage
-- hunter_munitions, internal_bleeding, primed_chamber, vigilante_bonus
-- secondary_enervate, secondary_encumber
-- melee_duplicate, melee_doughty
-- fire_rate_lock, multishot_lock
+-   `damage_dist`
+-   `base_damage`
+-   `multiplicative_base_damage`
+-   `faction_damage`
+-   `weakpoint_damage`
+
+### Fire Control
+
+-   `attack_speed`
+-   `fire_rate`
+-   `multiplicative_fire_rate`
+-   `reload_speed`
+-   `magazine_capacity`
+-   `ammo_efficiency`
+-   `multishot`
+
+### Critical
+
+-   `crit_chance`
+-   `flat_crit_chance`
+-   `multiplicative_crit_chance`
+-   `weakpoint_crit_chance`
+-   `multiplicative_weakpoint_crit_chance`
+-   `crit_damage`
+-   `flat_crit_damage`
+
+### Status
+
+-   `status_chance`
+-   `status_damage`
+
+### Special Effects
+
+-   `hunter_munitions`
+-   `internal_bleeding`
+-   `primed_chamber`
+-   `vigilante_bonus`
+-   `secondary_enervate`
+-   `secondary_encumber`
+-   `melee_duplicate`
+-   `melee_doughty`
+
+------------------------------------------------------------------------
+
+## Supported Features
+
+### Weapons
+
+-   ✅ Primary weapons
+-   ✅ Secondary weapons
+-   ✅ Melee light attacks
+-   ✅ Beam weapons
+-   ✅ Hitscan weapons
+-   ✅ Charge weapons
+-   ✅ Battery weapons
+-   ✅ Burst-fire weapons
+-   ⏳ Projectile falloff
+
+### Damage
+
+-   ✅ Physical damage
+-   ✅ Elemental damage
+-   ✅ Combined elements
+-   ✅ IPS weighting
+-   ✅ Base, faction, and weakpoint damage
+-   ✅ Critical calculations
+-   ⏳ Enemy defenses and damage attenuation
+
+### Status
+
+-   ✅ Expected status procs
+-   ✅ Damage-over-time
+-   ✅ Forced procs
+-   ✅ Hunter Munitions
+-   ✅ Hemorrhage
+-   ✅ Secondary Encumber
+-   ⏳ Viral, Corrosive, Heat, and Magnetic secondary effects
+
+### Calculations
+
+-   ✅ Flat DPH / DPS
+-   ✅ DoT DPH / DPS
+-   ✅ Total DPH / DPS
+-   ✅ Effective fire rate
+-   ✅ Expected status procs per shot
+-   ⏳ Time-to-kill
+-   ⏳ Damage contribution breakdowns
+
+------------------------------------------------------------------------
+
+## Running Tests
+
+``` bash
+python -m unittest discover -s tests -q
+```
+
+------------------------------------------------------------------------
 
 ## Assumptions
 
-- Explosions from weapons dont benefit from *multiplicative base damage*
-- If **Hunter Munitions** and **Internal Bleeding** trigger simultaneously, only the higher-damage proc is applied. *(Source: Wiki)*
-- **Secondary Encumber** scales with total damage, status damage, faction damage, and critical damage. *(Source: None)*
-- **Secondary Encumber** can trigger **Hemorrhage** (*Internal Bleeding*). *(Source: None)*
-- **Secondary Encumber** can trigger at most once per shot. *(Source: Wiki)*
-- *burst daleay* is affected by *fire rate* *(Source: None)*
-- *burst delay* is not affected by negative *fire rate* *(Source: Wiki)*
-- *charge time* is affected by *fire rate* *(Source: Wiki)*
-- *recharge rate* is not affected by *reload speed* *(Source: Wiki)*
-- *beam weapons* only consume 0.5 ammo per tick *(Source: Wiki)*
-- Weapon firing cycles are assumed to work as follows. *(Source: Testing)*
+The library computes **expected values** rather than simulating
+individual shots. Results therefore represent the statistical long-term
+average and may not exactly match any single shot fired in-game.
 
-```text
+### Damage
+
+-   Explosive damage does **not** benefit from **multiplicative base
+    damage**.
+-   If **Hunter Munitions** and **Internal Bleeding (Hemorrhage)**
+    trigger simultaneously, only the higher-damage Slash proc is
+    counted. *(Wiki)*
+
+### Secondary Encumber
+
+-   Secondary Encumber scales with total damage, status damage, faction
+    damage, and critical damage.
+-   Secondary Encumber can trigger Hemorrhage.
+-   Secondary Encumber can trigger at most once per shot. *(Wiki)*
+
+### Fire Cycle
+
+-   Burst delay is affected by positive fire rate.
+-   Burst delay is not reduced by negative fire rate. *(Wiki)*
+-   Charge time scales with fire rate. *(Wiki)*
+-   Recharge rate is independent of reload speed. *(Wiki)*
+-   Beam weapons consume **0.5 ammo per tick**. *(Wiki)*
+
+The weapon firing cycle is modeled as follows:
+
+``` text
 [ammo cost] ← (1 - [ammo efficiency]) ÷ (IF [is beam] THEN 2 ELSE 1)
 [effective reload time] ← [reload time] + (IF [is battery] THEN [magazine capacity] / [recharge rate] ELSE 0)
 [magazine] ← [magazine capacity]
@@ -163,71 +308,12 @@ REPEAT
 END REPEAT
 ```
 
-## Quick Example
+------------------------------------------------------------------------
 
-```python
-from warframe_damage_calculator import *
+## Contributing
 
+Bug reports, feature requests, and pull requests are welcome.
 
-def main():
-    weapon = Primary(damage_dist=dist(impact=25.2, puncture=37.8, slash=27), fire_rate=1.42, reload_speed=3.00, magazine_capacity=20, multishot=6.00, crit_chance=0.30, crit_damage=2.80, status_chance=0.09)
-    mod1 = Upgrade(damage_dist=dist(impact=-0.886), crit_damage=0.855, multishot=1.126, crit_chance=0.887)
-    mod2 = Upgrade(multishot=1.10 + 0.30*4)
-    mod3 = Upgrade(base_damage=2.40)
-    mod4 = Upgrade(hunter_munitions=0.30)
-    mod5 = Upgrade(damage_dist=dist(cold=1.65))
-    mod6 = Upgrade(crit_damage=1.10)
-    mod7 = Upgrade(crit_chance=2.00)
-    mod8 = Upgrade(damage_dist=dist(toxin=0.60), status_chance=0.60)
-    mod9 = Upgrade(vigilante_bonus=0.05)
-    arcane = Upgrade(base_damage=0.30*12, reload_speed=0.30)
-    buffs = Upgrade(flat_crit_damage=1.20)
-    build = Build(mod1, mod2, mod3, mod4, mod5, mod6, mod7, mod8, mod9, arcane, buffs)
-    weapon.configure(build)
+## License
 
-    print(weapon.format.summary())
-
-if __name__ == "__main__":
-    main()
-```
-
-## Installation
-
-Install from GitHub:
-
-```bash
-pip install git+https://github.com/AAAA0001/warframe-damage-calculator.git
-```
-
-Verify:
-
-```python
-import warframe_damage_calculator
-print(warframe_damage_calculator.__version__)
-```
-
-Development install:
-
-```bash
-git clone https://github.com/AAAA0001/warframe-damage-calculator.git
-cd warframe-damage-calculator
-pip install -e .
-```
-
-## Running Tests
-
-```bash
-python -m unittest discover -s tests -q
-```
-
-## Not Implemented Yet
-
-- Heavy attacks, slam attacks, stances, and combo-counter driven melee behavior
-- Enemy defenses and health model (armor, shields, vulnerability, attenuation)
-- Proc-side effects such as Heat/Corrosive armor strip and Viral/Magnetic health-shield multipliers
-- TTK and contribution breakdown reporting
-- Build import/export utilities
-
-## Development Notes
-
-See CHECKLIST.md for the detailed roadmap.
+Released under the MIT License.
