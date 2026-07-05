@@ -138,7 +138,7 @@ The Upgrade model currently supports:
 
 repeat
     wait [charge time] seconds
-    [hunter munitions] <- true if ceil([bullet count]) = [magazine capacity] else false
+    [hunter munitions] <- true if ⌈[bullet count]⌉ = [magazine capacity] else false
     [bullet count] <- [bullet count] - [ammo per shot]
     for i in range [burst count]:
         wait [burst dalay] seconds
