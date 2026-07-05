@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from ..models.dist import dist
 from .weapon_state import WeaponState
@@ -20,8 +20,8 @@ class RangedState(WeaponState):
     """
     is_beam: bool = False
     is_battery: bool = False
-    explosion_damage_dist: dist = dist()
-    explosion_forced_procs: dist = dist()
+    explosion_damage_dist: dist = field(default_factory=dist)
+    explosion_forced_procs: dist = field(default_factory=dist)
     explosion_total_damage: float = 0.0
     multishot: float = 1.0
     multiplicative_fire_rate: float = 1.0

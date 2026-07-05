@@ -6,6 +6,7 @@ from ..calculators import WeaponCalculator
 from ..formatters import WeaponFormatter
 from ..fields import WeaponField
 from ..states import WeaponState
+from .upgrade import Upgrade
 from .build import Build
 
 
@@ -32,6 +33,10 @@ class Weapon:
         self.stats = self._calculator_class(base)
         self.format = self._formatter_class(self.stats)
 
-    def configure(self, build: Build):
-        self.stats._configure(build)
+    def configure(self, *args: Build | Upgrade):
+        if all(isinstance(arg, Upgrade) for arg in args): build = Build(*args)
+        elif isinstance(args[0], Build) and len(args) == 1: build = args[0]
+        else: raise TypeError
+        self.stats.build = build
+        self.stats.recompute()
         return self

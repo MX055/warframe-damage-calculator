@@ -20,17 +20,17 @@ class WeaponCalculator[TWeaponState: WeaponState]:
     weapon-family mechanics.
     """
     def __init__(self, base: TWeaponState) -> None:
-        self.base: TWeaponState = base
         self.build = Build()
+        self.base: TWeaponState = base
         self.moded: TWeaponState = type(base)()
         self.effective: TWeaponState = type(base)()
-        self._configure(self.build)
+        self.recompute()
 
     def _compute_moded_stats(self) -> None:
         self.moded.multiplicative_base_damage = max(1 + self.build.multiplicative_base_damage, 1)
         self.moded.base_damage = max(1 + self.build.base_damage, 0)
         self.moded.damage_dist = self.moded.base_damage * self.base.damage_dist.apply(self.build.damage_dist).combine().sorted()
-        self.moded.total_damage = self.moded.damage_dist.total_damage
+        self.moded.total_damage = self.moded.damage_dist.total_damage()
         self.moded.faction_damage = max(1 + self.build.faction_damage, 1)
         self.moded.flat_crit_chance = max(self.build.flat_crit_chance, 0)
         self.moded.multiplicative_crit_chance = max(1 + self.build.multiplicative_crit_chance, 1)
@@ -43,7 +43,7 @@ class WeaponCalculator[TWeaponState: WeaponState]:
     def _compute_effective_stats(self) -> None:
         self.effective.base_damage = self.moded.base_damage * self.moded.multiplicative_base_damage
         self.effective.damage_dist = self.moded.multiplicative_base_damage * self.moded.damage_dist
-        self.effective.total_damage = self.effective.damage_dist.total_damage
+        self.effective.total_damage = self.effective.damage_dist.total_damage()
         self.effective.faction_damage = self.moded.faction_damage
         self.effective.crit_chance = self.moded.crit_chance * self.moded.multiplicative_crit_chance + self.moded.flat_crit_chance
         self.effective.crit_damage = self.moded.crit_damage + self.moded.flat_crit_damage
@@ -56,8 +56,7 @@ class WeaponCalculator[TWeaponState: WeaponState]:
                 if isinstance(attr, cached_property):
                     self.__dict__.pop(name, None)
 
-    def _configure(self, build: Build) -> None:
-        self.build = build
+    def recompute(self) -> None:
         self._compute_moded_stats()
         self._compute_effective_stats()
         self._clear_cached_properties()

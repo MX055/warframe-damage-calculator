@@ -1,4 +1,4 @@
-from dataclasses import dataclass, fields
+from dataclasses import MISSING, dataclass, fields
 
 from .dist import dist
 from .upgrade import Upgrade
@@ -25,7 +25,10 @@ class Build(Upgrade):
         self.upgrades = list(upgrades)
 
         for stat in fields(Upgrade):
-            default_value = stat.default
+            if stat.default_factory is not MISSING:
+                default_value = stat.default_factory()
+            else:
+                default_value = stat.default
             values = [getattr(upgrade, stat.name) for upgrade in upgrades]
 
             if not values:

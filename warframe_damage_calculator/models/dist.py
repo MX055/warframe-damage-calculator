@@ -1,17 +1,13 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from typing import Iterator, Iterable, Unpack
-from types import MappingProxyType
-from collections.abc import Mapping
 
 from ..utils import PHYSICAL_TYPES, ELEMENTAL_TYPES, DAMAGE_TYPES, ELEMENTAL_COMBINATIONS, DAMAGE_TYPE_ORDER, DamageType
 from ..fields import DamageField
 
 
-@dataclass(frozen=True, init=False, slots=True)
 class dist:
-    """Represents an immutable damage distribution grouped by damage type.
+    """Represents a damage distribution.
 
     Use one or more keyword arguments to create a ``dist`` object. ``dist`` 
     stores ordered pairs of damage types and their values, and their sum in 
@@ -24,12 +20,9 @@ class dist:
     Stored values represent different things depending on context. They can 
     either be flat damage values, percentage bonuses, or proc chances.
     """
-    dist: Mapping[DamageType, float]
-    total_damage: float
     
     def __init__(self, **kwargs: Unpack[DamageField]) -> None:
-        object.__setattr__(self, "dist", MappingProxyType(kwargs))
-        object.__setattr__(self, 'total_damage', sum(kwargs.values()))
+        self.dist = kwargs
 
     def __add__(self, other: dist) -> dist:
         if isinstance(other, dist):
@@ -49,12 +42,14 @@ class dist:
         if isinstance(other, (int, float)):
             return dist(**{dt: other * d for dt, d in self})
         else: return NotImplemented
+
+    def __eq__(self, other: dist) -> bool:
+        if isinstance(other, dist):
+            return self.dist == other.dist
+        return False
     
     def __iter__(self) -> Iterator[tuple[DamageType, float]]:
         return iter(self.dist.items())
-    
-    def __hash__(self) -> int:
-        return hash(tuple(self.dist.items()))
 
     def __str__(self) -> str:
         return ", ".join(f"{dt}: {d}" for dt, d in self)
@@ -84,19 +79,23 @@ class dist:
             raise ValueError
         if not isinstance(dt, str):
             raise TypeError
-        return self.dist.get(dt, 0) 
+        return self.dist.get(dt, 0)
     
     def weight(self, dt: DamageType) -> float:
         if dt not in DAMAGE_TYPES:
             raise ValueError
         if not isinstance(dt, str):
             raise TypeError
-        return self.get(dt) / self.total_damage if self.total_damage else 0.0
+        total = self.total_damage()
+        return self.get(dt) / total if total else 0.0
+    
+    def total_damage(self):
+        return sum(self.dist.values())
     
     def apply(self, other: dist) -> dist:
         if not isinstance(other, dist):
             raise TypeError
-        return dist(**{dt: self.get(dt) * (1 + other.get(dt)) if dt in PHYSICAL_TYPES else self.get(dt) + self.total_damage * other.get(dt) for dt in self.dist | other.dist})
+        return dist(**{dt: self.get(dt) * (1 + other.get(dt)) if dt in PHYSICAL_TYPES else self.get(dt) + self.total_damage() * other.get(dt) for dt in self.dist | other.dist})
     
     def combine(self) -> dist:
         elements = list(self.include(ELEMENTAL_TYPES))

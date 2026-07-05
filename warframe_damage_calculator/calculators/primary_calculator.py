@@ -39,19 +39,19 @@ class PrimaryCalculator(RangedCalculator[PrimaryState]):
         self.effective.weakpoint_crit_chance += self.effective.vigilante_bonus
 
     def _flat_dotph_for(self, damage_dist: dist, forced_procs: dist, crit_chance: float, crit_multiplier: float, include_multishot: bool = True) -> float:
-        if damage_dist.total_damage <= 0:
+        if damage_dist.total_damage() <= 0:
             return 0.0
         average_primed_chamber_multiplier = self.average_primed_chamber_multiplier
         # Hunter munitions: bleed on crit
         hunter_munitions_expected_procs = self.effective.hunter_munitions * min(crit_chance, 1)
-        hunter_munitions_damage_per_proc = 2.1 * damage_dist.total_damage * max(self.effective.crit_damage, crit_multiplier) * self.effective.status_damage * self.effective.faction_damage ** 2 * average_primed_chamber_multiplier
+        hunter_munitions_damage_per_proc = 2.1 * damage_dist.total_damage() * max(self.effective.crit_damage, crit_multiplier) * self.effective.status_damage * self.effective.faction_damage ** 2 * average_primed_chamber_multiplier
         hunter_munitions_expected_damage = hunter_munitions_expected_procs * hunter_munitions_damage_per_proc
         # Overlap variables for proc calculation
         impact_internal_bleeding = (damage_dist.weight("impact") + forced_procs.get("impact")) * self.effective.internal_bleeding
         guaranteed_proc, fractional_proc = divmod(self.effective.status_chance, 1)
         # Internal bleeding: armor-ignoring bleed from impact
         internal_bleeding_expected_procs = impact_internal_bleeding * self.effective.status_chance
-        internal_bleeding_damage_per_proc = 2.1 * damage_dist.total_damage * crit_multiplier * self.effective.status_damage * self.effective.faction_damage ** 2 * average_primed_chamber_multiplier
+        internal_bleeding_damage_per_proc = 2.1 * damage_dist.total_damage() * crit_multiplier * self.effective.status_damage * self.effective.faction_damage ** 2 * average_primed_chamber_multiplier
         internal_bleeding_expected_damage = internal_bleeding_expected_procs * internal_bleeding_damage_per_proc
         # Avoid double-counting: probability both procs occur on same shot
         prob_at_least_one_internal_bleeding_proc = 1 - (1 - impact_internal_bleeding) ** guaranteed_proc * ((1 - fractional_proc) + fractional_proc * (1 - impact_internal_bleeding))

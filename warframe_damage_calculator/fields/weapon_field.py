@@ -3,7 +3,7 @@ from typing import TypedDict
 from ..models import dist
 
 
-class WeaponField(TypedDict, total=True):
+class WeaponField(TypedDict):
     """Keyword fields shared by every weapon.
 
     These are the basic values needed to create a weapon: its damage

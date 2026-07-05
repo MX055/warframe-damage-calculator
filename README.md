@@ -119,6 +119,7 @@ The Upgrade model currently supports:
 
 ## Assumptions
 
+- Explosions from weapons dont benefit from *multiplicative base damage*
 - If **Hunter Munitions** and **Internal Bleeding** trigger simultaneously, only the higher-damage proc is applied. *(Source: Wiki)*
 - **Secondary Encumber** scales with total damage, status damage, faction damage, and critical damage. *(Source: None)*
 - **Secondary Encumber** can trigger **Hemorrhage** (*Internal Bleeding*). *(Source: None)*

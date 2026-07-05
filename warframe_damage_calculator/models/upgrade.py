@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from .dist import dist
 
@@ -19,7 +19,7 @@ class Upgrade:
     ``Build`` combines multiple ``Upgrade`` objects before they are applied
     to a weapon.
     """
-    damage_dist: dist = dist()
+    damage_dist: dist = field(default_factory=dist)
     multiplicative_base_damage: float = 0.0
     base_damage: float = 0.0
     faction_damage: float = 0.0

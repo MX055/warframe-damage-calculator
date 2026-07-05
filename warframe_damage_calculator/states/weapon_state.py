@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from ..models import dist
 
@@ -17,8 +17,8 @@ class WeaponState:
     Specialized state classes add the extra fields needed by ranged, primary,
     secondary, and melee weapons.
     """
-    damage_dist: dist = dist()
-    forced_procs: dist = dist()
+    damage_dist: dist = field(default_factory=dist)
+    forced_procs: dist = field(default_factory=dist)
     total_damage: float = 0.0
     multiplicative_base_damage: float = 1.0
     base_damage: float = 0.0

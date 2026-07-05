@@ -10,7 +10,7 @@ class DistTests(unittest.TestCase):
         damage = dist(slash=30, impact=10)
 
         self.assertEqual(set(damage.dist.keys()), {"impact", "slash"})
-        self.assertEqual(damage.total_damage, 40)
+        self.assertEqual(damage.total_damage(), 40)
         self.assertEqual(damage.get("impact"), 10)
         self.assertEqual(damage.get("heat"), 0)
 
@@ -36,8 +36,7 @@ class DistTests(unittest.TestCase):
 
     def test_dist_hash_str_and_repr(self) -> None:
         damage = dist(impact=10, slash=20)
-
-        self.assertEqual(hash(damage), hash(dist(impact=10, slash=20)))
+        
         self.assertIn("impact: 10", str(damage))
         self.assertIn("dist(impact=10, slash=20)", repr(damage))
 
@@ -53,8 +52,8 @@ class DistTests(unittest.TestCase):
         physical = damage.exclude({"cold", "heat", "toxin"})
         positive = damage.positive()
 
-        self.assertEqual(elemental.total_damage, 35)
-        self.assertEqual(physical.total_damage, 10)
+        self.assertEqual(elemental.total_damage(), 35)
+        self.assertEqual(physical.total_damage(), 10)
         self.assertEqual(positive.get("toxin"), 0)
 
     def test_dist_weight_and_apply(self) -> None:
@@ -70,7 +69,7 @@ class DistTests(unittest.TestCase):
     def test_dist_weight_returns_zero_for_empty_distribution(self) -> None:
         damage = dist()
 
-        self.assertEqual(damage.total_damage, 0)
+        self.assertEqual(damage.total_damage(), 0)
         self.assertEqual(damage.weight("impact"), 0.0)
 
     def test_dist_combine_with_odd_element_count_keeps_unpaired_element(self) -> None:

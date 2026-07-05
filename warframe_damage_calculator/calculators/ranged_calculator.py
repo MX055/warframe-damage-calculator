@@ -23,14 +23,14 @@ class RangedCalculator[TRangedState: RangedState](WeaponCalculator[TRangedState]
     """
     def __init__(self, base: TRangedState) -> None:
         super().__init__(base)
-        self.base.explosion_total_damage = self.base.explosion_damage_dist.total_damage
+        self.base.explosion_total_damage = self.base.explosion_damage_dist.total_damage()
 
     def _compute_moded_stats(self) -> None:
         super()._compute_moded_stats()
         self.moded.is_beam = self.base.is_beam
         self.moded.is_battery = self.base.is_battery
         self.moded.explosion_damage_dist = self.moded.base_damage * self.base.explosion_damage_dist.apply(self.build.damage_dist).combine().sorted()
-        self.moded.explosion_total_damage = self.moded.explosion_damage_dist.total_damage
+        self.moded.explosion_total_damage = self.moded.explosion_damage_dist.total_damage()
         self.moded.weakpoint_damage = max(self.base.weakpoint_damage + self.build.weakpoint_damage, 1)
         self.moded.multiplicative_fire_rate = max(1 + self.build.multiplicative_fire_rate, 1)
         self.moded.fire_rate = max(self.base.fire_rate * (1 + self.build.fire_rate), 0.05)
@@ -51,7 +51,7 @@ class RangedCalculator[TRangedState: RangedState](WeaponCalculator[TRangedState]
         self.effective.is_beam = self.moded.is_beam
         self.effective.is_battery = self.moded.is_battery
         self.effective.explosion_damage_dist = self.moded.explosion_damage_dist
-        self.effective.explosion_total_damage = self.effective.explosion_damage_dist.total_damage
+        self.effective.explosion_total_damage = self.effective.explosion_damage_dist.total_damage()
         self.effective.weakpoint_damage = self.moded.weakpoint_damage
         self.effective.fire_rate = self.moded.fire_rate * self.moded.multiplicative_fire_rate
         self.effective.burst_count = self.moded.burst_count
