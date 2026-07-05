@@ -130,8 +130,8 @@ Typical workflow:
 
 1.  Create a weapon.
 2.  Create one or more `Upgrade` objects.
-3.  Combine them into a `Build`.
-4.  Apply the build with `weapon.configure(build)`.
+3.  Combine them into a `Build` (optional).
+4.  Apply the build with `weapon.configure(build)` or `weapon.configure(upgrade_1, upgrade_2, ...)`.
 5.  Read values from `weapon.calculate`.
 6.  Print results with `weapon.format.summary()`.
 
