@@ -21,10 +21,8 @@ class Ranged(Weapon):
 
     ``Primary`` and ``Secondary`` build on this class for their own mechanics.
     """
-    _state_class = RangedState
-    _calculator_class = RangedCalculator
-    _formatter_class = RangedFormatter
-
     def __init__(self, **kwargs: Unpack[RangedFields]) -> None:
-        super().__init__(**kwargs)
+        base = RangedState(**kwargs)
+        self.stats: RangedCalculator = RangedCalculator(base)
+        self.format: RangedFormatter = RangedFormatter(self.stats)
 

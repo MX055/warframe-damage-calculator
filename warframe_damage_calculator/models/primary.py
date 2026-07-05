@@ -20,14 +20,14 @@ class Primary(Ranged):
 
     Use this class when evaluating a primary weapon build.
     """
-    _state_class = PrimaryState
-    _calculator_class = PrimaryCalculator
-    _formatter_class = PrimaryFormatter
-
     def __init__(self, **kwargs: Unpack[PrimaryFields]) -> None:
-        super().__init__(**kwargs)
+        base = PrimaryState(**kwargs)
+        self.stats: PrimaryCalculator = PrimaryCalculator(base)
+        self.format: PrimaryFormatter = PrimaryFormatter(self.stats)
+    
+
+
 
     
 
-    
     

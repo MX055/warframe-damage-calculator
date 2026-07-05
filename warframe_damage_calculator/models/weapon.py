@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from typing import Unpack
+from typing import Self, Unpack
 
 from ..calculators import WeaponCalculator
-from ..formatters import WeaponFormatter
 from ..fields import WeaponFields
+from ..formatters import WeaponFormatter
 from ..states import WeaponState
 from .upgrade import Upgrade
 from .build import Build
@@ -24,16 +24,12 @@ class Weapon:
     Subclasses choose the state, calculator, and formatter used by each weapon
     family.
     """
-    _state_class = WeaponState
-    _calculator_class = WeaponCalculator
-    _formatter_class = WeaponFormatter
-
     def __init__(self, **kwargs: Unpack[WeaponFields]):
-        base = self._state_class(**kwargs)
-        self.stats = self._calculator_class(base)
-        self.format = self._formatter_class(self.stats)
+        base = WeaponState(**kwargs)
+        self.stats = WeaponCalculator(base)
+        self.format = WeaponFormatter(self.stats)
 
-    def configure(self, *args: Build | Upgrade):
+    def configure(self, *args: Build | Upgrade) -> Self:
         if all(isinstance(arg, Upgrade) for arg in args): build = Build(*args)
         elif isinstance(args[0], Build) and len(args) == 1: build = args[0]
         else: raise TypeError

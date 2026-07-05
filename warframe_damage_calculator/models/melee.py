@@ -20,11 +20,8 @@ class Melee(Weapon):
 
     Use this class when evaluating a melee weapon build.
     """
-    _state_class = MeleeState
-    _calculator_class = MeleeCalculator
-    _formatter_class = MeleeFormatter
-
     def __init__(self,  **kwargs: Unpack[MeleeFields]) -> None:
-        super().__init__(**kwargs)
-
+        base = MeleeState(**kwargs)
+        self.stats: MeleeCalculator = MeleeCalculator(base)
+        self.format: MeleeFormatter = MeleeFormatter(self.stats)
         

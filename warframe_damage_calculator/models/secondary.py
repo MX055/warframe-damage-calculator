@@ -20,9 +20,7 @@ class Secondary(Ranged):
 
     Use this class when evaluating a secondary weapon build.
     """
-    _state_class = SecondaryState
-    _calculator_class = SecondaryCalculator
-    _formatter_class = SecondaryFormatter
-
     def __init__(self, **kwargs: Unpack[SecondaryFields]) -> None:
-        super().__init__(**kwargs)
+        base = SecondaryState(**kwargs)
+        self.stats: SecondaryCalculator = SecondaryCalculator(base)
+        self.format: SecondaryFormatter = SecondaryFormatter(self.stats)
