@@ -1,6 +1,6 @@
 # Development Workflow
 
-# Design Rules
+## Design Rules
 
 - Utils should contain constants or functions.
 - Weapon models should contain almost no logic.
