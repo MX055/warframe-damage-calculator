@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "warframe-damage-calculator"
-dynamic = ["version"]
+dynamic = "0.3.1"
 description = "Average DPS/DPH calculator for Warframe weapons."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -35,6 +35,3 @@ classifiers = [
 
 [tool.setuptools.packages.find]
 include = ["warframe_damage_calculator*"]
-
-[tool.setuptools.dynamic]
-version = {attr = "warframe_damage_calculator.__version__"}
