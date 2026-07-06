@@ -78,6 +78,30 @@ For more complete examples, see the `examples/` directory.
 
 ------------------------------------------------------------------------
 
+## Web App (Streamlit)
+
+This project also includes an interactive Streamlit UI for experimenting
+with weapon base stats, mods, arcanes, and buffs without writing Python
+code.
+
+The app entry point is:
+
+`web/app.py`
+
+Run it from the repository root:
+
+``` bash
+py -m streamlit run web/app.py
+```
+
+If Streamlit is not installed in your environment:
+
+``` bash
+py -m pip install streamlit
+```
+
+------------------------------------------------------------------------
+
 ## Design
 
 Every weapon follows the same pipeline:
