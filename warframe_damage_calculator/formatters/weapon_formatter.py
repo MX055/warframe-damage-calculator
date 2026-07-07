@@ -24,6 +24,6 @@ class WeaponFormatter[TWeaponState: WeaponState]:
     
     def upgrades(self) -> str:
         contributions = self.calculator.upgrade_contributions
-        max_len = max(len(upgrade) for upgrade in contributions)
+        max_len = max(len(upgrade) for upgrade in contributions) if contributions else 0
         return "\n".join(f"{f'{upgrade}:':<{max_len + 1}} {dps:+.2f} | {self.calculator.upgrade_contribution_proportions[upgrade]:.2%}" for upgrade, dps in contributions.items())
 
