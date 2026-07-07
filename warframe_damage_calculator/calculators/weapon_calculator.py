@@ -90,7 +90,7 @@ class WeaponCalculator[TWeaponState: WeaponState]:
                 key = upgrade.name
             else:
                 category_counts[upgrade.category] = category_counts.get(upgrade.category, 0) + 1
-                key = f"{upgrade.category} #{category_counts[upgrade.category]}"
+                key = f"{upgrade.category} (slot {category_counts[upgrade.category]})"
             contributions[key] = total - self.total_dps
         self.build = full
         self.recompute()

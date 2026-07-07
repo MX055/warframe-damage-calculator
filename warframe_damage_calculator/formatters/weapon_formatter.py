@@ -23,5 +23,7 @@ class WeaponFormatter[TWeaponState: WeaponState]:
         raise NotImplementedError
     
     def upgrades(self) -> str:
-        return "\n".join(f"{f'{upgrade}:':<10} {dps:<+10.2f} | {self.calculator.upgrade_contribution_proportions[upgrade]:+.2%}" for upgrade, dps in self.calculator.upgrade_contributions.items())
+        contributions = self.calculator.upgrade_contributions
+        max_len = max(len(upgrade) for upgrade in contributions)
+        return "\n".join(f"{f'{upgrade}:':<{max_len + 1}} {dps:<+10.2f} | {self.calculator.upgrade_contribution_proportions[upgrade]:.2%}" for upgrade, dps in contributions.items())
 
