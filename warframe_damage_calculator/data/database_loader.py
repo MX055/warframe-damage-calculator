@@ -50,9 +50,9 @@ def normalized_key(name: str) -> str:
 def _database_dir() -> Path:
     package_dir = Path(__file__).resolve().parent
     candidates = (
-        package_dir / "database" / "generated",
-        package_dir.parent / "database" / "generated",
-        Path.cwd() / "database" / "generated",
+        package_dir / "database",
+        package_dir.parent.parent / "warframe_damage_calculator" / "data" / "database",
+        Path.cwd() / "warframe_damage_calculator" / "data" / "database",
     )
 
     filenames = ("mods.json", "arcanes.json", "primaries.json", "secondaries.json", "melees.json")

@@ -1,5 +1,5 @@
 from .models import dist, Upgrade, Build, Melee, Primary, Secondary
-from .database import load_mod, load_arcane, load_primary, load_secondary, load_melee
+from .data import load_mod, load_arcane, load_primary, load_secondary, load_melee
 
 __version__ = "0.4.0"
 

@@ -54,6 +54,5 @@ Desktop.ini
 # Helper scripts
 /_*.py
 
-# Raw extracted data
-/database/raw/
-/database/build_database.py
+# Raw data and builder
+/database_builder/
