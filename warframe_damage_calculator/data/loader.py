@@ -1040,4 +1040,8 @@ class WarframeDatabase:
         return True
 
 
-db = WarframeDatabase.from_files("weapons.json", "upgrades.json")
+DATA_DIR = Path(__file__).resolve().parent
+DEFAULT_WEAPONS_PATH = DATA_DIR / "weapons.json"
+DEFAULT_UPGRADES_PATH = DATA_DIR / "upgrades.json"
+
+db = WarframeDatabase.from_files(DEFAULT_WEAPONS_PATH, DEFAULT_UPGRADES_PATH)
