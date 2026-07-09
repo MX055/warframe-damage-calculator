@@ -17,6 +17,8 @@ class WeaponState:
     Specialized state classes add the extra fields needed by ranged, primary,
     secondary, and melee weapons.
     """
+    name: str | None = None
+    type: str | None = None
     damage_dist: dist = field(default_factory=dist)
     forced_procs: dist = field(default_factory=dist)
     total_damage: float = 0.0

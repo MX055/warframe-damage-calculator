@@ -1,0 +1,5005 @@
+{
+    "mods": {
+        "Accelerated Blast": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "fire_rate": 0.6,
+                "puncture": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Accelerated Isotope": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "fire_rate": 0.4,
+                "radiation": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Amalgam Barrel Diffusion": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "multishot": 1.095
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Barrel Diffusion",
+                "Galvanized Diffusion"
+            ],
+            "is_exilus": false
+        },
+        "Amalgam Daikyu Target Acquired": {
+            "compatibility": [
+                "daikyu"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "weakpoint_damage": 0.75
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Amalgam Javlok Magazine Warp": {
+            "compatibility": [
+                "javlok"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "magazine_capacity": 0.45
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Amalgam Organ Shatter": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_damage": 0.846
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Organ Shatter"
+            ],
+            "is_exilus": false
+        },
+        "Amalgam Ripkas True Steel": {
+            "compatibility": [
+                "ripkas"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_chance": 1.87
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Amalgam Serration": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 1.551
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Serration"
+            ],
+            "is_exilus": false
+        },
+        "Amalgam Shotgun Barrage": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "fire_rate": 0.846
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Shotgun Barrage"
+            ],
+            "is_exilus": false
+        },
+        "Amanata Pressure": {
+            "compatibility": [
+                "amanata"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 3.3
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Amar's Contempt": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 0.9,
+                "slash": 0.3
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Ammo Stock": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "magazine_capacity": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Primed Ammo Stock"
+            ],
+            "is_exilus": false
+        },
+        "Anemic Agility": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": -0.15,
+                "fire_rate": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Argon Scope": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "headshot",
+            "stats": {},
+            "conditionals": {
+                "crit_chance": 1.35
+            },
+            "stackables": {},
+            "incompatibility": [
+                "Galvanized Scope"
+            ],
+            "is_exilus": false
+        },
+        "Astral Slash": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "slash": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Atomic Fallout": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "magazine_capacity": 0.4,
+                "radiation": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Auger Strike": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "puncture": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Augur Pact": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Barrel Diffusion": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "multishot": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Amalgam Barrel Diffusion",
+                "Galvanized Diffusion"
+            ],
+            "is_exilus": false
+        },
+        "Berserker Fury": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": 2,
+            "condition": null,
+            "stats": {},
+            "conditionals": {},
+            "stackables": {
+                "attack_speed": 0.35
+            },
+            "incompatibility": [
+                "Fury",
+                "Primed Fury"
+            ],
+            "is_exilus": false
+        },
+        "Bhisaj-Bal": {
+            "compatibility": [
+                "paris prime"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "status_chance": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": true
+        },
+        "Biotic Rounds": {
+            "compatibility": [
+                "ax-52"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "headshot",
+            "stats": {},
+            "conditionals": {
+                "magnetic": 1.5,
+                "status_chance": 1.5,
+                "viral": 1.5
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Blade of Truth": {
+            "compatibility": [
+                "jaw sword"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 1.0
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Bladed Rounds": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "kill",
+            "stats": {},
+            "conditionals": {
+                "crit_damage": 1.2
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Blaze": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 0.6,
+                "heat": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Blazing Steel": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "heat": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Bleeding Edge": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_damage": 1.1
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Blood Rush": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": 11,
+            "condition": null,
+            "stats": {},
+            "conditionals": {},
+            "stackables": {
+                "crit_chance": 0.4
+            },
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Blunderbuss": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_chance": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Bore": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "puncture": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Boreal's Contempt": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 0.9,
+                "status_damage": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Breach Loader": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "puncture": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Bright Purity": {
+            "compatibility": [
+                "skana"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 1.0
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Burdened Magazine": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "magazine_capacity": 0.6,
+                "reload_speed": -0.18
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Buzz Kill": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "slash": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Carnis Mandible": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "slash": 0.9,
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Carnis Stinger": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "slash": 0.9,
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Catalyzer Link": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "status proc",
+            "stats": {},
+            "conditionals": {
+                "status_chance": 0.6
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Charged Chamber": {
+            "compatibility": [
+                "bow",
+                "rifle",
+                "sniper"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "primed_chamber": 0.4
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Primed Chamber"
+            ],
+            "is_exilus": false
+        },
+        "Charged Shell": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "electricity": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Primed Charged Shell"
+            ],
+            "is_exilus": false
+        },
+        "Chilling Grasp": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "cold": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Primed Chilling Grasp"
+            ],
+            "is_exilus": false
+        },
+        "Chilling Reload": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "cold": 0.6,
+                "reload_speed": 0.4
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Collision Force": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "impact": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Combat Reload": {
+            "compatibility": [
+                "tigris"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "headshot",
+            "stats": {},
+            "conditionals": {
+                "reload_speed": 1.2
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Concussion Rounds": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "impact": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Condition Overload": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {},
+            "conditionals": {},
+            "stackables": {
+                "base_damage": 0.8
+            },
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Condition's Perfection": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": "heavy attack",
+            "stats": {},
+            "conditionals": {
+                "status_chance": 1.0
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": true
+        },
+        "Conductive Blade": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "electricity": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Contagious Spread": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "toxin": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Convulsion": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "electricity": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Primed Convulsion"
+            ],
+            "is_exilus": false
+        },
+        "Crash Course": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "impact": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Creeping Bullseye": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_chance": 2.0,
+                "fire_rate": -0.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Critical Deceleration": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_chance": 2.0,
+                "fire_rate": -0.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Critical Delay": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_chance": 2.0,
+                "fire_rate": -0.4
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Critical Meltdown": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_chance": 0.6,
+                "radiation": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Cryo Coating": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "cold": 0.6,
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Cryo Rounds": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "cold": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Primed Cryo Rounds"
+            ],
+            "is_exilus": false
+        },
+        "Cutting Edge": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 1.1
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Damzav-Vati": {
+            "compatibility": [
+                "akbronco prime"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "viral": 2.4
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Deadly Sequence": {
+            "compatibility": [
+                "grinlok"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_chance": 2.0
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Deep Freeze": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "cold": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Depleted Reload": {
+            "compatibility": [
+                "bow",
+                "rifle",
+                "sniper"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "magazine_capacity": -0.6,
+                "reload_speed": 0.48
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Disruptor": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "impact": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Dizzying Rounds": {
+            "compatibility": [
+                "bronco"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "status_chance": 2.0
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Dreamer's Wrath": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": "heavy attack",
+            "stats": {},
+            "conditionals": {
+                "crit_damage": 0.48
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": true
+        },
+        "Drifting Contact": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "status_chance": 0.4
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Efficient Beams": {
+            "compatibility": [
+                "convectrix"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "status_chance": 1.5
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Embedded Catalyzer": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "status proc",
+            "stats": {},
+            "conditionals": {
+                "status_chance": 0.9
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Enduring Affliction": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {},
+            "conditionals": {
+                "status_chance": 1.0
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Entropy Burst": {
+            "compatibility": [
+                "supra"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "status_chance": 0.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Eroding Blight": {
+            "compatibility": [
+                "embolist"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "magazine_capacity": 2.0
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Eximus Advantage": {
+            "compatibility": [
+                "zylok"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "headshot",
+            "stats": {},
+            "conditionals": {
+                "base_damage": 6.0
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Fanged Fusillade": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "slash": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Fast Hands": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "reload_speed": 0.3
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Primed Fast Hands"
+            ],
+            "is_exilus": false
+        },
+        "Fever Strike": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "toxin": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Primed Fever Strike"
+            ],
+            "is_exilus": false
+        },
+        "Flechette": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "puncture": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Flux Overdrive": {
+            "compatibility": [
+                "flux rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "status_chance": 1.5
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Focus Energy": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "electricity": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Focus Radon": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "radiation": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Frail Momentum": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": -0.15,
+                "fire_rate": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Frigid Blast": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "cold": 0.6,
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Frostbite": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "cold": 0.6,
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Full Contact": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "impact": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Furor": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "attack_speed": 0.1
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Fury": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "attack_speed": 0.3
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Berserker Fury",
+                "Primed Fury"
+            ],
+            "is_exilus": false
+        },
+        "Galvanized Aptitude": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": 2,
+            "condition": null,
+            "stats": {
+                "status_chance": 0.8
+            },
+            "conditionals": {},
+            "stackables": {
+                "base_damage": 0.4
+            },
+            "incompatibility": [
+                "Rifle Aptitude"
+            ],
+            "is_exilus": false
+        },
+        "Galvanized Chamber": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": 5,
+            "condition": null,
+            "stats": {
+                "multishot": 0.8
+            },
+            "conditionals": {},
+            "stackables": {
+                "multishot": 0.3
+            },
+            "incompatibility": [
+                "Split Chamber"
+            ],
+            "is_exilus": false
+        },
+        "Galvanized Crosshairs": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": 5,
+            "condition": "headshot",
+            "stats": {},
+            "conditionals": {
+                "crit_chance": 1.2
+            },
+            "stackables": {
+                "crit_chance": 0.4
+            },
+            "incompatibility": [
+                "Hydraulic Crosshairs"
+            ],
+            "is_exilus": false
+        },
+        "Galvanized Diffusion": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": 4,
+            "condition": null,
+            "stats": {
+                "multishot": 1.1
+            },
+            "conditionals": {},
+            "stackables": {
+                "multishot": 0.3
+            },
+            "incompatibility": [
+                "Amalgam Barrel Diffusion",
+                "Barrel Diffusion"
+            ],
+            "is_exilus": false
+        },
+        "Galvanized Elementalist": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": 4,
+            "condition": null,
+            "stats": {
+                "status_damage": 0.8
+            },
+            "conditionals": {},
+            "stackables": {
+                "status_chance": 0.3
+            },
+            "incompatibility": [
+                "Melee Elementalist"
+            ],
+            "is_exilus": false
+        },
+        "Galvanized Hell": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": 4,
+            "condition": null,
+            "stats": {
+                "multishot": 1.1
+            },
+            "conditionals": {},
+            "stackables": {
+                "multishot": 0.3
+            },
+            "incompatibility": [
+                "Hell's Chamber"
+            ],
+            "is_exilus": false
+        },
+        "Galvanized Savvy": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": 2,
+            "condition": null,
+            "stats": {
+                "status_chance": 0.8
+            },
+            "conditionals": {},
+            "stackables": {
+                "base_damage": 0.4
+            },
+            "incompatibility": [
+                "Shotgun Savvy"
+            ],
+            "is_exilus": false
+        },
+        "Galvanized Scope": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": 5,
+            "condition": "headshot",
+            "stats": {},
+            "conditionals": {
+                "crit_chance": 1.2
+            },
+            "stackables": {
+                "crit_chance": 0.4
+            },
+            "incompatibility": [
+                "Argon Scope"
+            ],
+            "is_exilus": false
+        },
+        "Galvanized Shot": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": 3,
+            "condition": null,
+            "stats": {
+                "status_chance": 0.8
+            },
+            "conditionals": {},
+            "stackables": {
+                "base_damage": 0.4
+            },
+            "incompatibility": [
+                "Sure Shot"
+            ],
+            "is_exilus": false
+        },
+        "Galvanized Steel": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": 4,
+            "condition": null,
+            "stats": {
+                "crit_chance": 1.1
+            },
+            "conditionals": {},
+            "stackables": {
+                "crit_damage": 0.3
+            },
+            "incompatibility": [
+                "Sacrificial Steel",
+                "True Steel"
+            ],
+            "is_exilus": false
+        },
+        "Gilded Truth": {
+            "compatibility": [
+                "burston prime"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "fire_rate": 0.8
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Glacial Edge": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "cold": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Gladiator Might": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_damage": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Gladiator Vice": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "attack_speed": 0.3
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Gleaming Blight": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "status_chance": 1.0
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Gunslinger": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "fire_rate": 0.72
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Hammer Shot": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_damage": 0.6,
+                "status_chance": 0.8
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Heated Charge": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "heat": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Primed Heated Charge"
+            ],
+            "is_exilus": false
+        },
+        "Heavy Caliber": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 1.65
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Heavy Trauma": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "impact": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Primed Heavy Trauma"
+            ],
+            "is_exilus": false
+        },
+        "Hell's Chamber": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "multishot": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Galvanized Hell"
+            ],
+            "is_exilus": false
+        },
+        "Hellfire": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "heat": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Hemorrhage": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {},
+            "conditionals": {
+                "internal_bleeding": 0.35
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Higasa Serration": {
+            "compatibility": [
+                "higasa"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 4.5
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "High Voltage": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "electricity": 0.6,
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Hollow Point": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": -0.15,
+                "crit_damage": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Hornet Strike": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 2.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Hunter Munitions": {
+            "compatibility": [
+                "bow",
+                "primary",
+                "rifle",
+                "shotgun",
+                "sniper"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "hunter_munitions": 0.3
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Hunter's Bonesaw": {
+            "compatibility": [
+                "ripkas"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {},
+            "conditionals": {
+                "status_chance": 0.6
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Hydraulic Crosshairs": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "headshot",
+            "stats": {},
+            "conditionals": {
+                "crit_chance": 1.35
+            },
+            "stackables": {},
+            "incompatibility": [
+                "Galvanized Crosshairs"
+            ],
+            "is_exilus": false
+        },
+        "Ice Storm": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "cold": 0.4,
+                "magazine_capacity": 0.4
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Incendiary Coat": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "heat": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Infected Clip": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "toxin": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Infectious Injection": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "status_chance": 0.6,
+                "toxin": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Internal Bleeding": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {},
+            "conditionals": {
+                "internal_bleeding": 0.35
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Ion Infusion": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "electricity": 0.6,
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Jagged Edge": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "slash": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Jolt": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "electricity": 0.6,
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Jugulus Barbs": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "puncture": 0.9,
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Jugulus Spines": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "puncture": 0.9,
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Justice Blades": {
+            "compatibility": [
+                "dual cleavers"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 1.0
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Killing Blow": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {},
+            "conditionals": {
+                "base_damage": 1.2
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Laser Sight": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "headshot",
+            "stats": {},
+            "conditionals": {
+                "crit_chance": 1.2
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Leaded Gas": {
+            "compatibility": [
+                "vesper 77"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "headshot",
+            "stats": {},
+            "conditionals": {
+                "gas": 3.0,
+                "status_chance": 3.0
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Lethal Torrent": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "fire_rate": 0.6,
+                "multishot": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Magazine Warp": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "magazine_capacity": 0.3
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Primed Magazine Warp"
+            ],
+            "is_exilus": false
+        },
+        "Magnetic Capacity": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "magazine_capacity": 0.4,
+                "magnetic": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Magnetic Might": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_damage": 0.4,
+                "magnetic": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Magnetic Rush": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "attack_speed": 0.2,
+                "magnetic": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Magnetic Strafe": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "fire_rate": 0.4,
+                "magnetic": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Magnetized Core": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_damage": 0.4,
+                "magnetic": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Magnum Force": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 1.65
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Maim": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "slash": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Maiming Strike": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {},
+            "conditionals": {
+                "crit_chance": 3.0
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Malignant Force": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "status_chance": 0.6,
+                "toxin": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Master's Edge": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "heavy attack",
+            "stats": {},
+            "conditionals": {
+                "base_damage": 0.6
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": true
+        },
+        "Melee Elementalist": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "status_damage": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Galvanized Elementalist"
+            ],
+            "is_exilus": false
+        },
+        "Melee Prowess": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "status_chance": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Merciless Gunfight": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_damage": 0.45
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Metamorphic Magazine": {
+            "compatibility": [
+                "gorgon"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "magazine_capacity": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Meteor Crash": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "impact": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Meticulous Aim": {
+            "compatibility": [
+                "vulkar"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "weakpoint_damage": 1.05
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Molten Impact": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "heat": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Motus Setup": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {},
+            "conditionals": {
+                "crit_chance": 1.0,
+                "status_chance": 1.0
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Nano-Applicator": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "status proc",
+            "stats": {},
+            "conditionals": {
+                "status_chance": 0.9
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Napalm Grenades": {
+            "compatibility": [
+                "penta"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "status_chance": 0.3
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Nebula Bore": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "puncture": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Nira's Contempt": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 0.9,
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "No Return": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "puncture": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "North Wind": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "cold": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Organ Shatter": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_damage": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Amalgam Organ Shatter"
+            ],
+            "is_exilus": false
+        },
+        "Pain Points": {
+            "compatibility": [
+                "athodai"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": 10,
+            "condition": null,
+            "stats": {},
+            "conditionals": {},
+            "stackables": {
+                "weakpoint_damage": 0.6
+            },
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Pathogen Rounds": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "toxin": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Photon Overcharge": {
+            "compatibility": [
+                "glaxion"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_damage": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Piercing Caliber": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "puncture": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Piercing Hit": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "puncture": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Pistol Acuity": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "multiplicative_weakpoint_crit_chance": 3.498,
+                "multishot_lock": true,
+                "weakpoint_damage": 3.498
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Pistol Elementalist": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "reload_speed": 0.6,
+                "status_damage": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Pistol Gambit": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_chance": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Primed Pistol Gambit"
+            ],
+            "is_exilus": false
+        },
+        "Pistol Pestilence": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "status_chance": 0.6,
+                "toxin": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Point Blank": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Primed Point Blank"
+            ],
+            "is_exilus": false
+        },
+        "Point Strike": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_chance": 1.5
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Poisonous Sting": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "toxin": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Power Throw": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": 3,
+            "condition": null,
+            "stats": {},
+            "conditionals": {},
+            "stackables": {
+                "base_damage": 1.833
+            },
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Pressure Point": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Primed Pressure Point",
+                "Sacrificial Pressure"
+            ],
+            "is_exilus": false
+        },
+        "Pressurized Magazine": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "aim",
+            "stats": {},
+            "conditionals": {
+                "fire_rate": 0.9
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Primary Acuity": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "multiplicative_weakpoint_crit_chance": 3.498,
+                "multishot_lock": true,
+                "weakpoint_damage": 3.498
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Primed Ammo Stock": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "magazine_capacity": 1.1
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Ammo Stock"
+            ],
+            "is_exilus": false
+        },
+        "Primed Chamber": {
+            "compatibility": [
+                "bow",
+                "rifle",
+                "sniper"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "primed_chamber": 1.0
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Charged Chamber"
+            ],
+            "is_exilus": false
+        },
+        "Primed Charged Shell": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "electricity": 1.65
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Charged Shell"
+            ],
+            "is_exilus": false
+        },
+        "Primed Chilling Grasp": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "cold": 1.65
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Chilling Grasp"
+            ],
+            "is_exilus": false
+        },
+        "Primed Convulsion": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "electricity": 1.65
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Convulsion"
+            ],
+            "is_exilus": false
+        },
+        "Primed Cryo Rounds": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "cold": 1.65
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Cryo Rounds"
+            ],
+            "is_exilus": false
+        },
+        "Primed Fast Hands": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "reload_speed": 0.55
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Fast Hands"
+            ],
+            "is_exilus": false
+        },
+        "Primed Fever Strike": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "toxin": 1.65
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Fever Strike"
+            ],
+            "is_exilus": false
+        },
+        "Primed Fury": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "attack_speed": 0.55
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Berserker Fury",
+                "Fury"
+            ],
+            "is_exilus": false
+        },
+        "Primed Heated Charge": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "heat": 1.65
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Heated Charge"
+            ],
+            "is_exilus": false
+        },
+        "Primed Heavy Trauma": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "impact": 1.65
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Heavy Trauma"
+            ],
+            "is_exilus": false
+        },
+        "Primed Magazine Warp": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "magazine_capacity": 0.55
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Magazine Warp"
+            ],
+            "is_exilus": false
+        },
+        "Primed Pistol Gambit": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_chance": 1.87
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Pistol Gambit"
+            ],
+            "is_exilus": false
+        },
+        "Primed Point Blank": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 1.65
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Point Blank"
+            ],
+            "is_exilus": false
+        },
+        "Primed Pressure Point": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 1.65
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Pressure Point",
+                "Sacrificial Pressure"
+            ],
+            "is_exilus": false
+        },
+        "Primed Quickdraw": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "reload_speed": 0.88
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Quickdraw"
+            ],
+            "is_exilus": false
+        },
+        "Primed Ravage": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_damage": 1.1
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Ravage"
+            ],
+            "is_exilus": false
+        },
+        "Primed Shred": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "fire_rate": 1.1
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Shred"
+            ],
+            "is_exilus": false
+        },
+        "Primed Slip Magazine": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "magazine_capacity": 0.55
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Slip Magazine"
+            ],
+            "is_exilus": false
+        },
+        "Primed Tactical Pump": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "reload_speed": 1.0
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Tactical Pump"
+            ],
+            "is_exilus": false
+        },
+        "Primed Target Cracker": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_damage": 1.1
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Target Cracker"
+            ],
+            "is_exilus": false
+        },
+        "Proton Jet": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {},
+            "conditionals": {
+                "crit_chance": 1.2,
+                "status_chance": 1.2
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Proton Snap": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {},
+            "conditionals": {
+                "status_chance": 0.5,
+                "toxin": 1.0
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Pummel": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "impact": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Quickdraw": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "reload_speed": 0.48
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Primed Quickdraw"
+            ],
+            "is_exilus": false
+        },
+        "Quickening": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "attack_speed": 0.4
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Radiated Reload": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "radiation": 0.6,
+                "reload_speed": 0.4
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Ravage": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_damage": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Primed Ravage"
+            ],
+            "is_exilus": false
+        },
+        "Razor Shot": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "slash": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Rending Strike": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "puncture": 0.8,
+                "slash": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Repeater Clip": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "aim",
+            "stats": {},
+            "conditionals": {
+                "fire_rate": 1.05
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Rifle Aptitude": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "status_chance": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Galvanized Aptitude"
+            ],
+            "is_exilus": false
+        },
+        "Rifle Elementalist": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "status_damage": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Rime Rounds": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "cold": 0.6,
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Rupture": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "impact": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Sacrificial Pressure": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 1.1
+            },
+            "conditionals": {
+                "base_damage": 0.275
+            },
+            "stackables": {},
+            "incompatibility": [
+                "Pressure Point",
+                "Primed Pressure Point"
+            ],
+            "is_exilus": false
+        },
+        "Sacrificial Steel": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_chance": 2.2
+            },
+            "conditionals": {
+                "crit_chance": 0.55
+            },
+            "stackables": {},
+            "incompatibility": [
+                "Galvanized Steel",
+                "True Steel"
+            ],
+            "is_exilus": false
+        },
+        "Sawtooth Clip": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "slash": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Saxum Spittle": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "impact": 0.9,
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Saxum Thorax": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "impact": 0.9,
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Scattered Justice": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "multishot": 2.0
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Scattering Inferno": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "heat": 0.6,
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Scorch": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "heat": 0.6,
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Searing Steel": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "heat": 0.6,
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Seeking Fury": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "reload_speed": 0.15
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Semi-Pistol Cannonade": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": {
+                "trigger": [
+                    "semi"
+                ]
+            },
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 3.0,
+                "fire_rate_lock": true
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Semi-Rifle Cannonade": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": {
+                "trigger": [
+                    "semi"
+                ]
+            },
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 2.4,
+                "fire_rate_lock": true
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Semi-Shotgun Cannonade": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": {
+                "trigger": [
+                    "semi"
+                ]
+            },
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 2.4,
+                "fire_rate_lock": true
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Serration": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 1.65
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Amalgam Serration"
+            ],
+            "is_exilus": false
+        },
+        "Sharpened Bullets": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "kill",
+            "stats": {},
+            "conditionals": {
+                "crit_damage": 0.75
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Shattering Justice": {
+            "compatibility": [
+                "sobek"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "status_chance": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Shell Shock": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "electricity": 0.6,
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Shocking Touch": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "electricity": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Shotgun Barrage": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "fire_rate": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Amalgam Shotgun Barrage"
+            ],
+            "is_exilus": false
+        },
+        "Shotgun Elementalist": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "magazine_capacity": 0.6,
+                "status_damage": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Shotgun Savvy": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "status_chance": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Galvanized Savvy"
+            ],
+            "is_exilus": false
+        },
+        "Shrapnel Shot": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "kill",
+            "stats": {},
+            "conditionals": {
+                "crit_damage": 0.99
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Shred": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "fire_rate": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Primed Shred"
+            ],
+            "is_exilus": false
+        },
+        "Shredder": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "slash": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Slip Magazine": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "magazine_capacity": 0.3
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Primed Slip Magazine"
+            ],
+            "is_exilus": false
+        },
+        "Spectral Serration": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {},
+            "conditionals": {
+                "base_damage": 3.3
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Speed Trigger": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "fire_rate": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Split Chamber": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "multishot": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Galvanized Chamber"
+            ],
+            "is_exilus": false
+        },
+        "Split Flights": {
+            "compatibility": [
+                "bow"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": 4,
+            "condition": null,
+            "stats": {},
+            "conditionals": {},
+            "stackables": {
+                "multishot": 1.0
+            },
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Spoiled Strike": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "attack_speed": -0.2,
+                "base_damage": 1.0
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Spring-Loaded Chamber": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "aim",
+            "stats": {},
+            "conditionals": {
+                "fire_rate": 0.75
+            },
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Stinging Truth": {
+            "compatibility": [
+                "viper"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "magazine_capacity": 40.0
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Stockpiled Blight": {
+            "compatibility": [
+                "kunai"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "magazine_capacity": 2.0
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Stormbringer": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "electricity": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Stunning Speed": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "reload_speed": 0.4,
+                "status_chance": 0.3
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Sudden Impact": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Sundering Strike": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "puncture": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Sure Shot": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "status_chance": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Galvanized Shot"
+            ],
+            "is_exilus": false
+        },
+        "Sweeping Serration": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "slash": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Tactical Pump": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "reload_speed": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Primed Tactical Pump"
+            ],
+            "is_exilus": false
+        },
+        "Tainted Clip": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "magazine_capacity": 0.6,
+                "reload_speed": -0.3
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Tainted Mag": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "magazine_capacity": 0.66,
+                "reload_speed": -0.33
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Tainted Shell": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 10,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "fire_rate": -0.55
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Target Acquired": {
+            "compatibility": [
+                "bow",
+                "rifle",
+                "sniper"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "weakpoint_damage": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Target Cracker": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_damage": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Primed Target Cracker"
+            ],
+            "is_exilus": false
+        },
+        "Tempered Blade": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_chance": 1.5
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Thermite Rounds": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "heat": 0.6,
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Toxic Barrage": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "status_chance": 0.6,
+                "toxin": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Toxic Blight": {
+            "compatibility": [
+                "mire"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "toxin": 1.0
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "True Steel": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_chance": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [
+                "Galvanized Steel",
+                "Sacrificial Steel"
+            ],
+            "is_exilus": false
+        },
+        "Vicious Frost": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "cold": 0.6,
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Vicious Spread": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": 0.9
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Vigilante Armaments": {
+            "compatibility": [
+                "bow",
+                "primary",
+                "rifle",
+                "shotgun",
+                "sniper"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "multishot": 0.6,
+                "vigilante_bonus": 0.05
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Vigilante Fervor": {
+            "compatibility": [
+                "bow",
+                "primary",
+                "rifle",
+                "shotgun",
+                "sniper"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "fire_rate": 0.9,
+                "vigilante_bonus": 0.05
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Vigilante Offense": {
+            "compatibility": [
+                "bow",
+                "primary",
+                "rifle",
+                "shotgun",
+                "sniper"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "vigilante_bonus": 0.05
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Vigilante Supplies": {
+            "compatibility": [
+                "bow",
+                "primary",
+                "rifle",
+                "shotgun",
+                "sniper"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "vigilante_bonus": 0.05
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": true
+        },
+        "Vile Acceleration": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "base_damage": -0.15,
+                "fire_rate": 1.8
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Vile Precision": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "fire_rate": -0.72
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": true
+        },
+        "Virulent Scourge": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "status_chance": 0.6,
+                "toxin": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Vital Sense": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "crit_damage": 1.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Volcanic Edge": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "heat": 0.6,
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Voltaic Strike": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "electricity": 0.6,
+                "status_chance": 0.6
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Weeping Wounds": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": 11,
+            "condition": null,
+            "stats": {},
+            "conditionals": {},
+            "stackables": {
+                "status_chance": 0.4
+            },
+            "incompatibility": [],
+            "is_exilus": false
+        },
+        "Wildfire": {
+            "compatibility": [
+                "bow",
+                "rifle"
+            ],
+            "requirements": [],
+            "max_rank": 3,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {
+                "heat": 0.6,
+                "magazine_capacity": 0.2
+            },
+            "conditionals": {},
+            "stackables": {},
+            "incompatibility": [],
+            "is_exilus": false
+        }
+    },
+    "arcanes": {
+        "Cascadia Accuracy": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {},
+            "conditionals": {
+                "weakpoint_crit_chance": 3.0
+            },
+            "stackables": {}
+        },
+        "Cascadia Flare": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": 40,
+            "condition": null,
+            "stats": {},
+            "conditionals": {},
+            "stackables": {
+                "base_damage": 0.12
+            }
+        },
+        "Conjunction Voltage": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": 40,
+            "condition": null,
+            "stats": {},
+            "conditionals": {},
+            "stackables": {
+                "multishot": 0.03,
+                "reload_speed": 0.015
+            }
+        },
+        "Fractalized Reset": {
+            "compatibility": [
+                "bow",
+                "primary",
+                "rifle",
+                "shotgun",
+                "sniper"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "ability cast",
+            "stats": {},
+            "conditionals": {
+                "reload_speed": 2.4
+            },
+            "stackables": {}
+        },
+        "Melee Assimilation": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "kill",
+            "stats": {},
+            "conditionals": {
+                "base_damage": 1.5
+            },
+            "stackables": {}
+        },
+        "Melee Doughty": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "status proc",
+            "stats": {},
+            "conditionals": {
+                "melee_doughty": 2.0
+            },
+            "stackables": {}
+        },
+        "Melee Duplicate": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "critical hit",
+            "stats": {},
+            "conditionals": {
+                "melee_duplicate": 1.0
+            },
+            "stackables": {}
+        },
+        "Melee Exposure": {
+            "compatibility": [
+                "melee"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": 4,
+            "condition": null,
+            "stats": {},
+            "conditionals": {},
+            "stackables": {
+                "corrosive": 0.6
+            }
+        },
+        "Primary Blight": {
+            "compatibility": [
+                "bow",
+                "primary",
+                "rifle",
+                "shotgun",
+                "sniper"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": 40,
+            "condition": null,
+            "stats": {},
+            "conditionals": {},
+            "stackables": {
+                "crit_damage": 0.036,
+                "multishot": 0.018
+            }
+        },
+        "Primary Deadhead": {
+            "compatibility": [
+                "bow",
+                "primary",
+                "rifle",
+                "shotgun",
+                "sniper"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": 3,
+            "condition": null,
+            "stats": {
+                "weakpoint_damage": 0.3
+            },
+            "conditionals": {},
+            "stackables": {
+                "base_damage": 1.2
+            }
+        },
+        "Primary Dexterity": {
+            "compatibility": [
+                "bow",
+                "primary",
+                "rifle",
+                "shotgun",
+                "sniper"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": 6,
+            "condition": null,
+            "stats": {},
+            "conditionals": {},
+            "stackables": {
+                "base_damage": 0.6
+            }
+        },
+        "Primary Frostbite": {
+            "compatibility": [
+                "bow",
+                "primary",
+                "rifle",
+                "shotgun",
+                "sniper"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": 40,
+            "condition": null,
+            "stats": {},
+            "conditionals": {},
+            "stackables": {
+                "crit_damage": 0.03,
+                "multishot": 0.022
+            }
+        },
+        "Primary Merciless": {
+            "compatibility": [
+                "bow",
+                "primary",
+                "rifle",
+                "shotgun",
+                "sniper"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": 12,
+            "condition": null,
+            "stats": {
+                "reload_speed": 0.3
+            },
+            "conditionals": {},
+            "stackables": {
+                "base_damage": 0.3
+            }
+        },
+        "Secondary Deadhead": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": 3,
+            "condition": null,
+            "stats": {
+                "weakpoint_damage": 0.3
+            },
+            "conditionals": {},
+            "stackables": {
+                "base_damage": 1.2
+            }
+        },
+        "Secondary Dexterity": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": 6,
+            "condition": null,
+            "stats": {},
+            "conditionals": {},
+            "stackables": {
+                "base_damage": 0.6
+            }
+        },
+        "Secondary Encumber": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "status proc",
+            "stats": {},
+            "conditionals": {
+                "secondary_encumber": 0.24
+            },
+            "stackables": {}
+        },
+        "Secondary Enervate": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "hit",
+            "stats": {},
+            "conditionals": {
+                "flat_crit_chance": 0.3,
+                "secondary_enervate": 18.0
+            },
+            "stackables": {}
+        },
+        "Secondary Merciless": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": 12,
+            "condition": null,
+            "stats": {
+                "reload_speed": 0.3
+            },
+            "conditionals": {},
+            "stackables": {
+                "base_damage": 0.3
+            }
+        },
+        "Secondary Shiver": {
+            "compatibility": [
+                "pistol"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": null,
+            "stats": {},
+            "conditionals": {},
+            "stackables": {
+                "base_damage": 0.45
+            }
+        },
+        "Shotgun Vendetta": {
+            "compatibility": [
+                "shotgun"
+            ],
+            "requirements": [],
+            "max_rank": 5,
+            "max_stacks": null,
+            "condition": "kill",
+            "stats": {},
+            "conditionals": {
+                "multishot": 1.8,
+                "reload_speed": 0.75
+            },
+            "stackables": {}
+        }
+    }
+}

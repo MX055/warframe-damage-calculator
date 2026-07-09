@@ -18,6 +18,7 @@ class RangedState(WeaponState):
     ``PrimaryState`` and ``SecondaryState`` reuse these fields and add their
     own mechanics.
     """
+    trigger: str | None = None
     is_beam: bool = False
     is_battery: bool = False
     explosion_damage_dist: dist = field(default_factory=dist)

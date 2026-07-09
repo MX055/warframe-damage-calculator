@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from .dist import dist
 
 
-@dataclass
+@dataclass(eq=False)
 class Upgrade:
     """Represents a single upgrade that can modify weapon stats.
 

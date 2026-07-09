@@ -77,7 +77,6 @@ class WeaponCalculator[TWeaponState: WeaponState]:
     def total_dps(self) -> float:
         return self.flat_dps + self.flat_dotps
     
-    @cached_property
     def contribution(self, other: Upgrade) -> float:
         full = self.build
         total = self.total_dps
@@ -89,11 +88,13 @@ class WeaponCalculator[TWeaponState: WeaponState]:
         return contribution
     
     @cached_property
-    def contributions(self) -> dict[Upgrade, float]:
-        return {upgrade: self.contribution(upgrade) for upgrade in self.build}
+    def contribution_values(self) -> dict[Upgrade, float]:
+        if not all(upgrade.name for upgrade in self.build):
+            raise ValueError("All upgrades need to be named")
+        return {upgrade.name: self.contribution(upgrade) for upgrade in self.build}
     
     @cached_property
     def contribution_proportions(self) -> dict[Upgrade, float]:
-        total = sum(self.upgrade_contributions.values()) or 1
-        return {upgrade: contibution / total for upgrade, contibution in self.upgrade_contributions.items()}
+        total = sum(self.contribution_values.values()) or 1
+        return {name: contibution / total for name, contibution in self.contribution_values.items()}
         

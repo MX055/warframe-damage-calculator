@@ -14,6 +14,7 @@ class RangedFields(WeaponFields):
 
     ``PrimaryField`` and ``SecondaryField`` both reuse this ranged field set.
     """
+    trigger: str | None
     is_beam: bool
     is_battery: bool
     explosion_damage_dist: dist

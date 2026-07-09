@@ -15,6 +15,8 @@ class WeaponFields(TypedDict):
 
     Ranged and melee field classes extend this set with weapon-family inputs.
     """
+    name: str | None
+    type: str | None
     damage_dist: dist
     forced_procs: dist
     crit_chance: float
