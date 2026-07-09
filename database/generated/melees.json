@@ -1,0 +1,3199 @@
+{
+    "ack_brunt": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.2,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 14.9,
+            "puncture": 14.9,
+            "slash": 119.2
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "swordshield"
+    },
+    "amanata": {
+        "attack_speed": 1,
+        "crit_chance": 0.24,
+        "crit_damage": 2,
+        "damage_dist": {
+            "puncture": 37.8,
+            "slash": 88.2
+        },
+        "forced_procs": {},
+        "status_chance": 0.24,
+        "weapon_type": "polearm"
+    },
+    "amphis": {
+        "attack_speed": 1.25,
+        "crit_chance": 0.13,
+        "crit_damage": 1.7,
+        "damage_dist": {
+            "impact": 91,
+            "puncture": 19.5,
+            "slash": 19.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.21,
+        "weapon_type": "staff"
+    },
+    "anku": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.2,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 25.5,
+            "puncture": 136,
+            "slash": 8.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "scythes"
+    },
+    "ankyros": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.2,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 63,
+            "puncture": 13.5,
+            "slash": 13.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "fist"
+    },
+    "ankyros_prime": {
+        "attack_speed": 1.25,
+        "crit_chance": 0.28,
+        "crit_damage": 2.4,
+        "damage_dist": {
+            "impact": 89.6,
+            "puncture": 19.2,
+            "slash": 19.2
+        },
+        "forced_procs": {},
+        "status_chance": 0.16,
+        "weapon_type": "fist"
+    },
+    "arca_titron": {
+        "attack_speed": 0.733333,
+        "crit_chance": 0.24,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 234,
+            "slash": 126
+        },
+        "forced_procs": {},
+        "status_chance": 0.38,
+        "weapon_type": "hammer"
+    },
+    "argo_vel": {
+        "attack_speed": 0.8,
+        "crit_chance": 0.32,
+        "crit_damage": 2.4,
+        "damage_dist": {
+            "impact": 60,
+            "slash": 240
+        },
+        "forced_procs": {},
+        "status_chance": 0.24,
+        "weapon_type": "swordshield"
+    },
+    "arum_spinosa": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.09,
+        "crit_damage": 1.9,
+        "damage_dist": {
+            "impact": 35.64,
+            "puncture": 59.4,
+            "slash": 201.96
+        },
+        "forced_procs": {},
+        "status_chance": 0.37,
+        "weapon_type": "warfan"
+    },
+    "atterax": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.25,
+        "crit_damage": 3,
+        "damage_dist": {
+            "impact": 6.45,
+            "puncture": 6.45,
+            "slash": 116.1
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "whip"
+    },
+    "azothane": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.34,
+        "crit_damage": 3,
+        "damage_dist": {
+            "impact": 51,
+            "puncture": 34,
+            "slash": 85
+        },
+        "forced_procs": {},
+        "status_chance": 0.22,
+        "weapon_type": "bignikana"
+    },
+    "bo": {
+        "attack_speed": 1,
+        "crit_chance": 0.125,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 126,
+            "puncture": 14
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "staff"
+    },
+    "bo_prime": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.24,
+        "crit_damage": 2.6,
+        "damage_dist": {
+            "impact": 158.4,
+            "puncture": 17.6
+        },
+        "forced_procs": {},
+        "status_chance": 0.32,
+        "weapon_type": "staff"
+    },
+    "boltace": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.06,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 17.6,
+            "puncture": 140.8,
+            "slash": 17.6
+        },
+        "forced_procs": {},
+        "status_chance": 0.28,
+        "weapon_type": "tonfa"
+    },
+    "broken_scepter": {
+        "attack_speed": 1.25,
+        "crit_chance": 0.1,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 125.3,
+            "puncture": 17.9,
+            "slash": 35.8
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "staff"
+    },
+    "broken_war": {
+        "attack_speed": 1,
+        "crit_chance": 0.35,
+        "crit_damage": 2.2,
+        "damage_dist": {
+            "impact": 18.7,
+            "puncture": 18.7,
+            "slash": 149.6
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "sword"
+    },
+    "cadus": {
+        "attack_speed": 1,
+        "crit_chance": 0.15,
+        "crit_damage": 2,
+        "damage_dist": {
+            "electricity": 60,
+            "impact": 70
+        },
+        "forced_procs": {},
+        "status_chance": 0.25,
+        "weapon_type": "staff"
+    },
+    "cassowar": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.06,
+        "crit_damage": 1.4,
+        "damage_dist": {
+            "impact": 41.36,
+            "puncture": 63.92,
+            "slash": 82.72
+        },
+        "forced_procs": {},
+        "status_chance": 0.28,
+        "weapon_type": "polearm"
+    },
+    "caustacyst": {
+        "attack_speed": 1,
+        "crit_chance": 0.09,
+        "crit_damage": 2,
+        "damage_dist": {
+            "corrosive": 103,
+            "impact": 17,
+            "puncture": 71,
+            "slash": 69
+        },
+        "forced_procs": {},
+        "status_chance": 0.37,
+        "weapon_type": "scythes"
+    },
+    "ceramic_dagger": {
+        "attack_speed": 1,
+        "crit_chance": 0.1,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 14,
+            "puncture": 126
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "dagger"
+    },
+    "cerata": {
+        "attack_speed": 1,
+        "crit_chance": 0.15,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 19,
+            "puncture": 36,
+            "slash": 52,
+            "toxin": 76
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "glaive"
+    },
+    "ceti_lacera": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.2,
+        "crit_damage": 2,
+        "damage_dist": {
+            "electricity": 100,
+            "impact": 12,
+            "puncture": 38,
+            "slash": 66
+        },
+        "forced_procs": {},
+        "status_chance": 0.4,
+        "weapon_type": "bladewhip"
+    },
+    "claws": {
+        "attack_speed": 1,
+        "crit_chance": 0.15,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 1.75,
+            "puncture": 8.75,
+            "slash": 24.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.15,
+        "weapon_type": "melee"
+    },
+    "cobra_crane": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.15,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 207.2,
+            "puncture": 88.8
+        },
+        "forced_procs": {},
+        "status_chance": 0.36,
+        "weapon_type": "swordshield"
+    },
+    "cobra_crane_prime": {
+        "attack_speed": 1,
+        "crit_chance": 0.18,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 210,
+            "puncture": 90
+        },
+        "forced_procs": {},
+        "status_chance": 0.38,
+        "weapon_type": "swordshield"
+    },
+    "coda_caustacyst": {
+        "attack_speed": 1,
+        "crit_chance": 0.19,
+        "crit_damage": 2.3,
+        "damage_dist": {
+            "corrosive": 120,
+            "impact": 20,
+            "puncture": 75,
+            "slash": 70
+        },
+        "forced_procs": {},
+        "status_chance": 0.41,
+        "weapon_type": "scythes"
+    },
+    "coda_hirudo": {
+        "attack_speed": 1,
+        "crit_chance": 0.34,
+        "crit_damage": 3.1,
+        "damage_dist": {
+            "impact": 26.25,
+            "puncture": 140,
+            "slash": 8.75
+        },
+        "forced_procs": {},
+        "status_chance": 0.18,
+        "weapon_type": "sparring"
+    },
+    "coda_mire": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.18,
+        "crit_damage": 2.4,
+        "damage_dist": {
+            "impact": 45,
+            "puncture": 45,
+            "slash": 66,
+            "toxin": 79
+        },
+        "forced_procs": {},
+        "status_chance": 0.4,
+        "weapon_type": "sword"
+    },
+    "coda_motovore": {
+        "attack_speed": 1,
+        "crit_chance": 0.25,
+        "crit_damage": 2.3,
+        "damage_dist": {
+            "impact": 83.325,
+            "puncture": 83.325,
+            "slash": 83.35
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "hammer"
+    },
+    "coda_pathocyst": {
+        "attack_speed": 0.666667,
+        "crit_chance": 0.2,
+        "crit_damage": 2.3,
+        "damage_dist": {
+            "impact": 58,
+            "puncture": 55,
+            "slash": 65,
+            "viral": 92
+        },
+        "forced_procs": {},
+        "status_chance": 0.35,
+        "weapon_type": "glaive"
+    },
+    "corufell": {
+        "attack_speed": 1,
+        "crit_chance": 0.26,
+        "crit_damage": 2.4,
+        "damage_dist": {
+            "impact": 96,
+            "puncture": 68,
+            "slash": 36
+        },
+        "forced_procs": {},
+        "status_chance": 0.14,
+        "weapon_type": "melee"
+    },
+    "cronus": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.06,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 31.8,
+            "puncture": 15.9,
+            "slash": 58.3
+        },
+        "forced_procs": {},
+        "status_chance": 0.18,
+        "weapon_type": "sword"
+    },
+    "dakra_prime": {
+        "attack_speed": 1,
+        "crit_chance": 0.36,
+        "crit_damage": 2.4,
+        "damage_dist": {
+            "impact": 17,
+            "puncture": 17,
+            "slash": 136
+        },
+        "forced_procs": {},
+        "status_chance": 0.18,
+        "weapon_type": "sword"
+    },
+    "dark_dagger": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.05,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "radiation": 35
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "melee"
+    },
+    "dark_sword": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.05,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "puncture": 120,
+            "radiation": 80,
+            "slash": 60
+        },
+        "forced_procs": {},
+        "status_chance": 0.4,
+        "weapon_type": "sword"
+    },
+    "desert_wind": {
+        "attack_speed": 1,
+        "crit_chance": 0.35,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 250
+        },
+        "forced_procs": {},
+        "status_chance": 0.15,
+        "weapon_type": "melee"
+    },
+    "desert_wind_prime": {
+        "attack_speed": 1,
+        "crit_chance": 0.35,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 250
+        },
+        "forced_procs": {},
+        "status_chance": 0.15,
+        "weapon_type": "melee"
+    },
+    "destreza": {
+        "attack_speed": 1,
+        "crit_chance": 0.28,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 3.95,
+            "puncture": 134.3,
+            "slash": 19.75
+        },
+        "forced_procs": {},
+        "status_chance": 0.14,
+        "weapon_type": "rapier"
+    },
+    "destreza_prime": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.32,
+        "crit_damage": 3,
+        "damage_dist": {
+            "impact": 20.4,
+            "puncture": 119,
+            "slash": 30.6
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "rapier"
+    },
+    "dex_dakra": {
+        "attack_speed": 0.883333,
+        "crit_chance": 0.16,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 14.2,
+            "puncture": 14.2,
+            "slash": 113.6
+        },
+        "forced_procs": {},
+        "status_chance": 0.24,
+        "weapon_type": "dualsword"
+    },
+    "dex_nikana": {
+        "attack_speed": 1,
+        "crit_chance": 0.24,
+        "crit_damage": 2.6,
+        "damage_dist": {
+            "impact": 16.8,
+            "puncture": 25.2,
+            "slash": 126
+        },
+        "forced_procs": {},
+        "status_chance": 0.18,
+        "weapon_type": "nikana"
+    },
+    "diwata": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.2,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 52.5,
+            "puncture": 262.5,
+            "slash": 35
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "melee"
+    },
+    "diwata_prime": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.2,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 52.5,
+            "puncture": 262.5,
+            "slash": 35
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "melee"
+    },
+    "dorrclave": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.26,
+        "crit_damage": 2.2,
+        "damage_dist": {
+            "slash": 222
+        },
+        "forced_procs": {},
+        "status_chance": 0.24,
+        "weapon_type": "bladewhip"
+    },
+    "dragon_nikana": {
+        "attack_speed": 1,
+        "crit_chance": 0.22,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 9.4,
+            "puncture": 18.8,
+            "slash": 159.8
+        },
+        "forced_procs": {},
+        "status_chance": 0.22,
+        "weapon_type": "nikana"
+    },
+    "dual_cleavers": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.25,
+        "crit_damage": 3,
+        "damage_dist": {
+            "impact": 23.55,
+            "puncture": 23.55,
+            "slash": 109.9
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "dualsword"
+    },
+    "dual_ether": {
+        "attack_speed": 1,
+        "crit_chance": 0.2,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 27,
+            "puncture": 27,
+            "slash": 126
+        },
+        "forced_procs": {},
+        "status_chance": 0.28,
+        "weapon_type": "dualsword"
+    },
+    "dual_heat_swords": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.05,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 22.05,
+            "puncture": 22.05,
+            "slash": 102.9
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "dualsword"
+    },
+    "dual_ichor": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.25,
+        "crit_damage": 3,
+        "damage_dist": {
+            "impact": 19,
+            "puncture": 11,
+            "slash": 45,
+            "toxin": 47
+        },
+        "forced_procs": {},
+        "status_chance": 0.15,
+        "weapon_type": "dualsword"
+    },
+    "dual_kamas": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.1,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 4.8,
+            "puncture": 9.6,
+            "slash": 81.6
+        },
+        "forced_procs": {},
+        "status_chance": 0.15,
+        "weapon_type": "dualsword"
+    },
+    "dual_kamas_prime": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.2,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 8,
+            "puncture": 32,
+            "slash": 120
+        },
+        "forced_procs": {},
+        "status_chance": 0.25,
+        "weapon_type": "dualsword"
+    },
+    "dual_keres": {
+        "attack_speed": 1.25,
+        "crit_chance": 0.28,
+        "crit_damage": 2.6,
+        "damage_dist": {
+            "impact": 13.8,
+            "puncture": 34.5,
+            "slash": 66.7
+        },
+        "forced_procs": {},
+        "status_chance": 0.14,
+        "weapon_type": "dualsword"
+    },
+    "dual_keres_prime": {
+        "attack_speed": 1.25,
+        "crit_chance": 0.32,
+        "crit_damage": 2.6,
+        "damage_dist": {
+            "impact": 21.6,
+            "puncture": 54,
+            "slash": 104.4
+        },
+        "forced_procs": {},
+        "status_chance": 0.24,
+        "weapon_type": "dualsword"
+    },
+    "dual_raza": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.25,
+        "crit_damage": 3,
+        "damage_dist": {
+            "impact": 11,
+            "puncture": 33,
+            "slash": 66
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "dualsword"
+    },
+    "dual_skana": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.05,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 18,
+            "puncture": 18,
+            "slash": 84
+        },
+        "forced_procs": {},
+        "status_chance": 0.16,
+        "weapon_type": "dualsword"
+    },
+    "dual_viciss": {
+        "attack_speed": 1,
+        "crit_chance": 0.23,
+        "crit_damage": 2.1,
+        "damage_dist": {
+            "gas": 153,
+            "puncture": 51,
+            "slash": 51
+        },
+        "forced_procs": {},
+        "status_chance": 0.29,
+        "weapon_type": "dualsword"
+    },
+    "dual_zoren": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.25,
+        "crit_damage": 3,
+        "damage_dist": {
+            "impact": 3.5,
+            "puncture": 3.5,
+            "slash": 63
+        },
+        "forced_procs": {},
+        "status_chance": 0.05,
+        "weapon_type": "dualsword"
+    },
+    "dual_zoren_prime": {
+        "attack_speed": 1.25,
+        "crit_chance": 0.3,
+        "crit_damage": 3.2,
+        "damage_dist": {
+            "impact": 7,
+            "puncture": 7,
+            "slash": 126
+        },
+        "forced_procs": {},
+        "status_chance": 0.22,
+        "weapon_type": "dualsword"
+    },
+    "edun": {
+        "attack_speed": 1,
+        "crit_chance": 0.34,
+        "crit_damage": 2.6,
+        "damage_dist": {
+            "impact": 44,
+            "puncture": 66,
+            "slash": 110
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "polearm"
+    },
+    "ekhein": {
+        "attack_speed": 0.766667,
+        "crit_chance": 0.3,
+        "crit_damage": 2.4,
+        "damage_dist": {
+            "impact": 340
+        },
+        "forced_procs": {},
+        "status_chance": 0.15,
+        "weapon_type": "hammer"
+    },
+    "endura": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.1,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 10,
+            "puncture": 140,
+            "slash": 50
+        },
+        "forced_procs": {},
+        "status_chance": 0.36,
+        "weapon_type": "rapier"
+    },
+    "ether_daggers": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.1,
+        "crit_damage": 1.8,
+        "damage_dist": {
+            "impact": 33.6,
+            "puncture": 33.6,
+            "slash": 156.8
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "dualdagger"
+    },
+    "ether_reaper": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.2,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 27,
+            "puncture": 27,
+            "slash": 126
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "scythes"
+    },
+    "ether_sword": {
+        "attack_speed": 1,
+        "crit_chance": 0.1,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 28.8,
+            "puncture": 28.8,
+            "slash": 134.4
+        },
+        "forced_procs": {},
+        "status_chance": 0.34,
+        "weapon_type": "sword"
+    },
+    "exalted_blade": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.15,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 5.25,
+            "puncture": 5.25,
+            "slash": 24.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.15,
+        "weapon_type": "melee"
+    },
+    "exalted_prime_blade": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.15,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 5.25,
+            "puncture": 5.25,
+            "slash": 24.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.15,
+        "weapon_type": "melee"
+    },
+    "exalted_umbra_blade": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.15,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 5.25,
+            "puncture": 5.25,
+            "slash": 24.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.15,
+        "weapon_type": "melee"
+    },
+    "falcor": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.12,
+        "crit_damage": 1.6,
+        "damage_dist": {
+            "electricity": 84,
+            "impact": 36,
+            "puncture": 18,
+            "slash": 92
+        },
+        "forced_procs": {},
+        "status_chance": 0.34,
+        "weapon_type": "glaive"
+    },
+    "fang": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.08,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 16.2,
+            "puncture": 75.6,
+            "slash": 16.2
+        },
+        "forced_procs": {},
+        "status_chance": 0.16,
+        "weapon_type": "dualdagger"
+    },
+    "fang_prime": {
+        "attack_speed": 1,
+        "crit_chance": 0.26,
+        "crit_damage": 2.6,
+        "damage_dist": {
+            "impact": 26.7,
+            "puncture": 124.6,
+            "slash": 26.7
+        },
+        "forced_procs": {},
+        "status_chance": 0.26,
+        "weapon_type": "dualdagger"
+    },
+    "fragor": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.2,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 140,
+            "puncture": 30,
+            "slash": 30
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "hammer"
+    },
+    "fragor_prime": {
+        "attack_speed": 0.8,
+        "crit_chance": 0.4,
+        "crit_damage": 2.5,
+        "damage_dist": {
+            "impact": 189,
+            "puncture": 40.5,
+            "slash": 40.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.18,
+        "weapon_type": "hammer"
+    },
+    "furax": {
+        "attack_speed": 1,
+        "crit_chance": 0.25,
+        "crit_damage": 2.3,
+        "damage_dist": {
+            "impact": 94.5,
+            "puncture": 20.25,
+            "slash": 20.25
+        },
+        "forced_procs": {},
+        "status_chance": 0.11,
+        "weapon_type": "fist"
+    },
+    "furax_wraith": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.3,
+        "crit_damage": 2.7,
+        "damage_dist": {
+            "impact": 97.3,
+            "puncture": 20.85,
+            "slash": 20.85
+        },
+        "forced_procs": {},
+        "status_chance": 0.15,
+        "weapon_type": "fist"
+    },
+    "galariak_prime": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.19,
+        "crit_damage": 2.5,
+        "damage_dist": {
+            "impact": 30.5,
+            "puncture": 191.7,
+            "slash": 13.3
+        },
+        "forced_procs": {},
+        "status_chance": 0.32,
+        "weapon_type": "scythes"
+    },
+    "galatine": {
+        "attack_speed": 1,
+        "crit_chance": 0.1,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 4.55,
+            "puncture": 4.55,
+            "slash": 172.9
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "heavyblade"
+    },
+    "galatine_prime": {
+        "attack_speed": 1,
+        "crit_chance": 0.26,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 7,
+            "puncture": 7,
+            "slash": 266
+        },
+        "forced_procs": {},
+        "status_chance": 0.26,
+        "weapon_type": "heavyblade"
+    },
+    "galvacord": {
+        "attack_speed": 0.75,
+        "crit_chance": 0.12,
+        "crit_damage": 1.8,
+        "damage_dist": {
+            "electricity": 96,
+            "impact": 12,
+            "puncture": 38,
+            "slash": 64
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "whip"
+    },
+    "garuda_prime_talons": {
+        "attack_speed": 1,
+        "crit_chance": 0.35,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 14,
+            "puncture": 28,
+            "slash": 238
+        },
+        "forced_procs": {},
+        "status_chance": 0.36,
+        "weapon_type": "claw"
+    },
+    "garuda_talons": {
+        "attack_speed": 1,
+        "crit_chance": 0.2,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 19.84,
+            "puncture": 54.56,
+            "slash": 173.6
+        },
+        "forced_procs": {},
+        "status_chance": 0.36,
+        "weapon_type": "claw"
+    },
+    "gazal_machete": {
+        "attack_speed": 1,
+        "crit_chance": 0.1,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 17.8,
+            "puncture": 26.7,
+            "slash": 133.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "machete"
+    },
+    "ghoulsaw": {
+        "attack_speed": 1,
+        "crit_chance": 0.15,
+        "crit_damage": 1.9,
+        "damage_dist": {
+            "impact": 37.43,
+            "puncture": 45.31,
+            "slash": 114.26
+        },
+        "forced_procs": {},
+        "status_chance": 0.27,
+        "weapon_type": "melee"
+    },
+    "glaive": {
+        "attack_speed": 1,
+        "crit_chance": 0.12,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 15.75,
+            "puncture": 15.75,
+            "slash": 73.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.12,
+        "weapon_type": "glaive"
+    },
+    "glaive_prime": {
+        "attack_speed": 1.25,
+        "crit_chance": 0.22,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 24.6,
+            "puncture": 24.6,
+            "slash": 114.8
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "glaive"
+    },
+    "glaives": {
+        "attack_speed": 1,
+        "crit_chance": 0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 3.3333,
+            "puncture": 3.3333,
+            "slash": 3.3333
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "melee"
+    },
+    "gram": {
+        "attack_speed": 0.95,
+        "crit_chance": 0.15,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 24,
+            "puncture": 24,
+            "slash": 112
+        },
+        "forced_procs": {},
+        "status_chance": 0.15,
+        "weapon_type": "heavyblade"
+    },
+    "gram_prime": {
+        "attack_speed": 0.8,
+        "crit_chance": 0.32,
+        "crit_damage": 2.6,
+        "damage_dist": {
+            "impact": 60,
+            "puncture": 15,
+            "slash": 225
+        },
+        "forced_procs": {},
+        "status_chance": 0.32,
+        "weapon_type": "heavyblade"
+    },
+    "guandao": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.28,
+        "crit_damage": 2.2,
+        "damage_dist": {
+            "impact": 50.5,
+            "puncture": 10.1,
+            "slash": 141.4
+        },
+        "forced_procs": {},
+        "status_chance": 0.04,
+        "weapon_type": "polearm"
+    },
+    "guandao_prime": {
+        "attack_speed": 1,
+        "crit_chance": 0.32,
+        "crit_damage": 2.4,
+        "damage_dist": {
+            "impact": 60,
+            "puncture": 12,
+            "slash": 168
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "polearm"
+    },
+    "gunsen": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.16,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 12.8,
+            "puncture": 19.2,
+            "slash": 128
+        },
+        "forced_procs": {},
+        "status_chance": 0.28,
+        "weapon_type": "warfan"
+    },
+    "gunsen_prime": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.2,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 9,
+            "puncture": 13.5,
+            "slash": 202.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.34,
+        "weapon_type": "warfan"
+    },
+    "halikar": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.17,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 14.9,
+            "puncture": 119.2,
+            "slash": 14.9
+        },
+        "forced_procs": {},
+        "status_chance": 0.29,
+        "weapon_type": "glaive"
+    },
+    "halikar_wraith": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.19,
+        "crit_damage": 2.3,
+        "damage_dist": {
+            "impact": 22.5,
+            "puncture": 180,
+            "slash": 22.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.35,
+        "weapon_type": "glaive"
+    },
+    "harmony": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.2,
+        "crit_damage": 2.2,
+        "damage_dist": {
+            "puncture": 168,
+            "slash": 72
+        },
+        "forced_procs": {},
+        "status_chance": 0.36,
+        "weapon_type": "scythes"
+    },
+    "hate": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.3,
+        "crit_damage": 2.5,
+        "damage_dist": {
+            "impact": 34.5,
+            "puncture": 34.5,
+            "slash": 161
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "scythes"
+    },
+    "heat_dagger": {
+        "attack_speed": 0.75,
+        "crit_chance": 0.14,
+        "crit_damage": 1.6,
+        "damage_dist": {
+            "heat": 62,
+            "impact": 14,
+            "puncture": 76,
+            "slash": 56
+        },
+        "forced_procs": {},
+        "status_chance": 0.14,
+        "weapon_type": "dagger"
+    },
+    "heat_sword": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.05,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 14.7,
+            "puncture": 14.7,
+            "slash": 117.6
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "sword"
+    },
+    "heliocor": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.38,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 238,
+            "puncture": 28,
+            "slash": 14
+        },
+        "forced_procs": {},
+        "status_chance": 0.12,
+        "weapon_type": "hammer"
+    },
+    "hespar": {
+        "attack_speed": 1,
+        "crit_chance": 0.24,
+        "crit_damage": 2.2,
+        "damage_dist": {
+            "impact": 112,
+            "puncture": 33.6,
+            "slash": 134.4
+        },
+        "forced_procs": {},
+        "status_chance": 0.28,
+        "weapon_type": "melee"
+    },
+    "hirudo": {
+        "attack_speed": 1,
+        "crit_chance": 0.3,
+        "crit_damage": 3,
+        "damage_dist": {
+            "impact": 19.5,
+            "puncture": 104,
+            "slash": 6.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.11,
+        "weapon_type": "sparring"
+    },
+    "innodem": {
+        "attack_speed": 0.75,
+        "crit_chance": 0.22,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 36,
+            "puncture": 144,
+            "slash": 180
+        },
+        "forced_procs": {},
+        "status_chance": 0.22,
+        "weapon_type": "dagger"
+    },
+    "iron_staff": {
+        "attack_speed": 1,
+        "crit_chance": 0.25,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 204,
+            "slash": 96
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "melee"
+    },
+    "iron_staff_prime": {
+        "attack_speed": 1,
+        "crit_chance": 0.25,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 204,
+            "slash": 96
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "melee"
+    },
+    "jat_kittag": {
+        "attack_speed": 1,
+        "crit_chance": 0.15,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 160,
+            "puncture": 30,
+            "slash": 10
+        },
+        "forced_procs": {},
+        "status_chance": 0.25,
+        "weapon_type": "hammer"
+    },
+    "jat_kusar": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.35,
+        "crit_damage": 2.5,
+        "damage_dist": {
+            "heat": 81,
+            "impact": 79,
+            "puncture": 13,
+            "slash": 45
+        },
+        "forced_procs": {},
+        "status_chance": 0.19,
+        "weapon_type": "bladewhip"
+    },
+    "jaw_sword": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.08,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 6,
+            "puncture": 24,
+            "slash": 90
+        },
+        "forced_procs": {},
+        "status_chance": 0.16,
+        "weapon_type": "sword"
+    },
+    "kama": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.12,
+        "crit_damage": 1.8,
+        "damage_dist": {
+            "impact": 13.5,
+            "puncture": 13.5,
+            "slash": 63
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "machete"
+    },
+    "karyst": {
+        "attack_speed": 0.75,
+        "crit_chance": 0.1,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 30,
+            "puncture": 84,
+            "slash": 72,
+            "toxin": 87
+        },
+        "forced_procs": {},
+        "status_chance": 0.26,
+        "weapon_type": "dagger"
+    },
+    "karyst_prime": {
+        "attack_speed": 0.666667,
+        "crit_chance": 0.24,
+        "crit_damage": 2.2,
+        "damage_dist": {
+            "impact": 50,
+            "puncture": 96,
+            "slash": 102,
+            "toxin": 96
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "dagger"
+    },
+    "keratinos": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.13,
+        "crit_damage": 2.1,
+        "damage_dist": {
+            "impact": 79,
+            "puncture": 45,
+            "slash": 87,
+            "viral": 33
+        },
+        "forced_procs": {},
+        "status_chance": 0.29,
+        "weapon_type": "claw"
+    },
+    "kesheg": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.19,
+        "crit_damage": 2.5,
+        "damage_dist": {
+            "impact": 96.4,
+            "puncture": 24.1,
+            "slash": 120.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.23,
+        "weapon_type": "polearm"
+    },
+    "kestrel": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.1,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 58.8,
+            "puncture": 12.6,
+            "slash": 12.6
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "glaive"
+    },
+    "kestrel_prime": {
+        "attack_speed": 1.25,
+        "crit_chance": 0.2,
+        "crit_damage": 2.2,
+        "damage_dist": {
+            "impact": 157.5,
+            "puncture": 21,
+            "slash": 31.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.4,
+        "weapon_type": "glaive"
+    },
+    "kogake": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.2,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 84,
+            "puncture": 18,
+            "slash": 18
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "sparring"
+    },
+    "kogake_prime": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.16,
+        "crit_damage": 1.8,
+        "damage_dist": {
+            "impact": 169.4,
+            "puncture": 36.3,
+            "slash": 36.3
+        },
+        "forced_procs": {},
+        "status_chance": 0.38,
+        "weapon_type": "sparring"
+    },
+    "korrudo": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.31,
+        "crit_damage": 2.5,
+        "damage_dist": {
+            "impact": 110.01,
+            "puncture": 5.79,
+            "slash": 77.2
+        },
+        "forced_procs": {},
+        "status_chance": 0.09,
+        "weapon_type": "sparring"
+    },
+    "korumm": {
+        "attack_speed": 1,
+        "crit_chance": 0.21,
+        "crit_damage": 2.5,
+        "damage_dist": {
+            "impact": 10.65,
+            "puncture": 202.35
+        },
+        "forced_procs": {},
+        "status_chance": 0.33,
+        "weapon_type": "melee"
+    },
+    "kreska": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.14,
+        "crit_damage": 2,
+        "damage_dist": {
+            "heat": 100,
+            "impact": 30,
+            "puncture": 15,
+            "slash": 45
+        },
+        "forced_procs": {},
+        "status_chance": 0.22,
+        "weapon_type": "machete"
+    },
+    "krohkur": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.29,
+        "crit_damage": 2.3,
+        "damage_dist": {
+            "impact": 26.04,
+            "puncture": 39.06,
+            "slash": 151.9
+        },
+        "forced_procs": {},
+        "status_chance": 0.19,
+        "weapon_type": "sword"
+    },
+    "kronen": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.1,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 13,
+            "puncture": 13,
+            "slash": 104
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "tonfa"
+    },
+    "kronen_prime": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.22,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 21.2,
+            "puncture": 21.2,
+            "slash": 169.6
+        },
+        "forced_procs": {},
+        "status_chance": 0.34,
+        "weapon_type": "tonfa"
+    },
+    "kuva_ghoulsaw": {
+        "attack_speed": 1.2,
+        "crit_chance": 0.25,
+        "crit_damage": 2.1,
+        "damage_dist": {
+            "impact": 40.09,
+            "puncture": 48.53,
+            "slash": 122.38
+        },
+        "forced_procs": {},
+        "status_chance": 0.32,
+        "weapon_type": "melee"
+    },
+    "kuva_shildeg": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.31,
+        "crit_damage": 2.7,
+        "damage_dist": {
+            "impact": 75.85,
+            "puncture": 100.45,
+            "slash": 28.7
+        },
+        "forced_procs": {},
+        "status_chance": 0.27,
+        "weapon_type": "hammer"
+    },
+    "lacera": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.05,
+        "crit_damage": 2,
+        "damage_dist": {
+            "electricity": 100,
+            "impact": 12,
+            "puncture": 38,
+            "slash": 66
+        },
+        "forced_procs": {},
+        "status_chance": 0.45,
+        "weapon_type": "bladewhip"
+    },
+    "landslide_fists": {
+        "attack_speed": 1,
+        "crit_chance": 0,
+        "crit_damage": 2,
+        "damage_dist": {},
+        "forced_procs": {},
+        "status_chance": 0,
+        "weapon_type": "melee"
+    },
+    "landslide_fists_prime": {
+        "attack_speed": 1,
+        "crit_chance": 0,
+        "crit_damage": 2,
+        "damage_dist": {},
+        "forced_procs": {},
+        "status_chance": 0,
+        "weapon_type": "melee"
+    },
+    "lecta": {
+        "attack_speed": 1,
+        "crit_chance": 0.05,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "electricity": 56,
+            "puncture": 20,
+            "slash": 25
+        },
+        "forced_procs": {},
+        "status_chance": 0.25,
+        "weapon_type": "whip"
+    },
+    "lesion": {
+        "attack_speed": 1,
+        "crit_chance": 0.15,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 47.4,
+            "puncture": 11.85,
+            "slash": 177.75
+        },
+        "forced_procs": {},
+        "status_chance": 0.37,
+        "weapon_type": "polearm"
+    },
+    "machete": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.1,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 18,
+            "puncture": 18,
+            "slash": 84
+        },
+        "forced_procs": {},
+        "status_chance": 0.15,
+        "weapon_type": "machete"
+    },
+    "machete_wraith": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.19,
+        "crit_damage": 2.1,
+        "damage_dist": {
+            "impact": 31.65,
+            "puncture": 31.65,
+            "slash": 147.7
+        },
+        "forced_procs": {},
+        "status_chance": 0.33,
+        "weapon_type": "machete"
+    },
+    "magistar": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.2,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 168,
+            "puncture": 31.5,
+            "slash": 10.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "hammer"
+    },
+    "masseter": {
+        "attack_speed": 1,
+        "crit_chance": 0.24,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 134.96,
+            "slash": 106.04
+        },
+        "forced_procs": {},
+        "status_chance": 0.28,
+        "weapon_type": "heavyblade"
+    },
+    "masseter_prime": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.26,
+        "crit_damage": 2.2,
+        "damage_dist": {
+            "impact": 145.6,
+            "slash": 114.4
+        },
+        "forced_procs": {},
+        "status_chance": 0.36,
+        "weapon_type": "heavyblade"
+    },
+    "mios": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.19,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 53.1,
+            "puncture": 44.25,
+            "slash": 79.65
+        },
+        "forced_procs": {},
+        "status_chance": 0.25,
+        "weapon_type": "bladewhip"
+    },
+    "mire": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.09,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 23,
+            "puncture": 23,
+            "slash": 47,
+            "toxin": 65
+        },
+        "forced_procs": {},
+        "status_chance": 0.31,
+        "weapon_type": "sword"
+    },
+    "mk1_bo": {
+        "attack_speed": 1,
+        "crit_chance": 0.1,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 81,
+            "puncture": 9
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "staff"
+    },
+    "mk1_furax": {
+        "attack_speed": 1,
+        "crit_chance": 0.2,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 63,
+            "puncture": 13.5,
+            "slash": 13.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "fist"
+    },
+    "nami_skyla": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.1,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 18.75,
+            "puncture": 18.75,
+            "slash": 87.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.15,
+        "weapon_type": "dualsword"
+    },
+    "nami_skyla_prime": {
+        "attack_speed": 1.333333,
+        "crit_chance": 0.22,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 18,
+            "puncture": 36,
+            "slash": 126
+        },
+        "forced_procs": {},
+        "status_chance": 0.34,
+        "weapon_type": "dualsword"
+    },
+    "nami_solo": {
+        "attack_speed": 1,
+        "crit_chance": 0.15,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 25.8,
+            "puncture": 25.8,
+            "slash": 120.4
+        },
+        "forced_procs": {},
+        "status_chance": 0.25,
+        "weapon_type": "machete"
+    },
+    "nepheri": {
+        "attack_speed": 1,
+        "crit_chance": 0.16,
+        "crit_damage": 2,
+        "damage_dist": {
+            "heat": 20
+        },
+        "forced_procs": {},
+        "status_chance": 0.5,
+        "weapon_type": "melee"
+    },
+    "nikana": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.16,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 7.1,
+            "puncture": 14.2,
+            "slash": 120.7
+        },
+        "forced_procs": {},
+        "status_chance": 0.16,
+        "weapon_type": "nikana"
+    },
+    "nikana_prime": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.28,
+        "crit_damage": 2.4,
+        "damage_dist": {
+            "impact": 9.9,
+            "puncture": 9.9,
+            "slash": 178.2
+        },
+        "forced_procs": {},
+        "status_chance": 0.28,
+        "weapon_type": "nikana"
+    },
+    "ninkondi": {
+        "attack_speed": 1,
+        "crit_chance": 0.1,
+        "crit_damage": 2,
+        "damage_dist": {
+            "electricity": 100,
+            "impact": 90
+        },
+        "forced_procs": {},
+        "status_chance": 0.35,
+        "weapon_type": "nunchaku"
+    },
+    "ninkondi_prime": {
+        "attack_speed": 1,
+        "crit_chance": 0.22,
+        "crit_damage": 2.4,
+        "damage_dist": {
+            "electricity": 90,
+            "impact": 66,
+            "puncture": 28,
+            "slash": 50
+        },
+        "forced_procs": {},
+        "status_chance": 0.36,
+        "weapon_type": "nunchaku"
+    },
+    "obex": {
+        "attack_speed": 1,
+        "crit_chance": 0.25,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 84,
+            "puncture": 18,
+            "slash": 18
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "sparring"
+    },
+    "ohma": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.15,
+        "crit_damage": 2,
+        "damage_dist": {
+            "electricity": 110,
+            "impact": 76,
+            "slash": 38
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "tonfa"
+    },
+    "okina": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.16,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 7,
+            "puncture": 63,
+            "slash": 70
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "dualdagger"
+    },
+    "okina_prime": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.3,
+        "crit_damage": 2.6,
+        "damage_dist": {
+            "impact": 9.2,
+            "puncture": 64.4,
+            "slash": 110.4
+        },
+        "forced_procs": {},
+        "status_chance": 0.24,
+        "weapon_type": "dualdagger"
+    },
+    "orthos": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.06,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 27.75,
+            "puncture": 27.75,
+            "slash": 129.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.18,
+        "weapon_type": "polearm"
+    },
+    "orthos_prime": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.24,
+        "crit_damage": 2.2,
+        "damage_dist": {
+            "impact": 35.1,
+            "puncture": 35.1,
+            "slash": 163.8
+        },
+        "forced_procs": {},
+        "status_chance": 0.36,
+        "weapon_type": "polearm"
+    },
+    "orvius": {
+        "attack_speed": 0.75,
+        "crit_chance": 0.18,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 39,
+            "puncture": 9.75,
+            "slash": 146.25
+        },
+        "forced_procs": {},
+        "status_chance": 0.18,
+        "weapon_type": "glaive"
+    },
+    "pangolin_prime": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.26,
+        "crit_damage": 2.2,
+        "damage_dist": {
+            "impact": 12.4,
+            "puncture": 37.2,
+            "slash": 198.4
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "sword"
+    },
+    "pangolin_sword": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.08,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 7.5,
+            "puncture": 22.5,
+            "slash": 120
+        },
+        "forced_procs": {},
+        "status_chance": 0.22,
+        "weapon_type": "sword"
+    },
+    "paracesis": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.31,
+        "crit_damage": 2.6,
+        "damage_dist": {
+            "impact": 48.84,
+            "puncture": 17.76,
+            "slash": 155.4
+        },
+        "forced_procs": {},
+        "status_chance": 0.22,
+        "weapon_type": "heavyblade"
+    },
+    "pathocyst": {
+        "attack_speed": 0.666667,
+        "crit_chance": 0.15,
+        "crit_damage": 2.1,
+        "damage_dist": {
+            "impact": 57,
+            "puncture": 55,
+            "slash": 61,
+            "viral": 89
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "glaive"
+    },
+    "pennant": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.32,
+        "crit_damage": 2.4,
+        "damage_dist": {
+            "impact": 20,
+            "puncture": 140,
+            "slash": 40
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "bignikana"
+    },
+    "plasma_sword": {
+        "attack_speed": 0.666667,
+        "crit_chance": 0.18,
+        "crit_damage": 2,
+        "damage_dist": {
+            "electricity": 66,
+            "impact": 34,
+            "puncture": 12,
+            "slash": 88
+        },
+        "forced_procs": {},
+        "status_chance": 0.18,
+        "weapon_type": "sword"
+    },
+    "praedos": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.2,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 20,
+            "puncture": 20,
+            "slash": 160
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "tonfa"
+    },
+    "pride": {
+        "attack_speed": 1.2,
+        "crit_chance": 0.15,
+        "crit_damage": 2,
+        "damage_dist": {
+            "puncture": 125,
+            "slash": 125
+        },
+        "forced_procs": {},
+        "status_chance": 0.35,
+        "weapon_type": "melee"
+    },
+    "prisma_dual_cleavers": {
+        "attack_speed": 1,
+        "crit_chance": 0.25,
+        "crit_damage": 3,
+        "damage_dist": {
+            "impact": 13.3,
+            "puncture": 13.3,
+            "slash": 106.4
+        },
+        "forced_procs": {},
+        "status_chance": 0.25,
+        "weapon_type": "dualsword"
+    },
+    "prisma_machete": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.15,
+        "crit_damage": 1.9,
+        "damage_dist": {
+            "impact": 28.95,
+            "puncture": 28.95,
+            "slash": 135.1
+        },
+        "forced_procs": {},
+        "status_chance": 0.31,
+        "weapon_type": "machete"
+    },
+    "prisma_obex": {
+        "attack_speed": 1.333333,
+        "crit_chance": 0.25,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 105,
+            "puncture": 22.5,
+            "slash": 22.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "sparring"
+    },
+    "prisma_ohma": {
+        "attack_speed": 1,
+        "crit_chance": 0.3,
+        "crit_damage": 2.2,
+        "damage_dist": {
+            "electricity": 124,
+            "impact": 82,
+            "slash": 44
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "tonfa"
+    },
+    "prisma_skana": {
+        "attack_speed": 1,
+        "crit_chance": 0.28,
+        "crit_damage": 2.2,
+        "damage_dist": {
+            "impact": 25.5,
+            "puncture": 25.5,
+            "slash": 119
+        },
+        "forced_procs": {},
+        "status_chance": 0.16,
+        "weapon_type": "sword"
+    },
+    "prova": {
+        "attack_speed": 1,
+        "crit_chance": 0.14,
+        "crit_damage": 2,
+        "damage_dist": {
+            "electricity": 76,
+            "impact": 52
+        },
+        "forced_procs": {},
+        "status_chance": 0.16,
+        "weapon_type": "machete"
+    },
+    "prova_vandal": {
+        "attack_speed": 1,
+        "crit_chance": 0.14,
+        "crit_damage": 2,
+        "damage_dist": {
+            "electricity": 118,
+            "impact": 80
+        },
+        "forced_procs": {},
+        "status_chance": 0.32,
+        "weapon_type": "machete"
+    },
+    "pulmonars": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.19,
+        "crit_damage": 2.3,
+        "damage_dist": {
+            "impact": 193,
+            "viral": 97
+        },
+        "forced_procs": {},
+        "status_chance": 0.33,
+        "weapon_type": "nunchaku"
+    },
+    "pupacyst": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.13,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 139,
+            "viral": 145
+        },
+        "forced_procs": {},
+        "status_chance": 0.27,
+        "weapon_type": "polearm"
+    },
+    "quassus": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.3,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 27.6,
+            "puncture": 46,
+            "slash": 156.4
+        },
+        "forced_procs": {},
+        "status_chance": 0.12,
+        "weapon_type": "warfan"
+    },
+    "quassus_prime": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.35,
+        "crit_damage": 2.5,
+        "damage_dist": {
+            "impact": 26,
+            "puncture": 52,
+            "slash": 182
+        },
+        "forced_procs": {},
+        "status_chance": 0.18,
+        "weapon_type": "warfan"
+    },
+    "rakta_dark_dagger": {
+        "attack_speed": 1,
+        "crit_chance": 0.12,
+        "crit_damage": 1.8,
+        "damage_dist": {
+            "puncture": 88,
+            "radiation": 96,
+            "slash": 62
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "dagger"
+    },
+    "reaper_prime": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.35,
+        "crit_damage": 2.5,
+        "damage_dist": {
+            "impact": 30,
+            "puncture": 30,
+            "slash": 140
+        },
+        "forced_procs": {},
+        "status_chance": 0.25,
+        "weapon_type": "scythes"
+    },
+    "redeemer": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.1,
+        "crit_damage": 1.8,
+        "damage_dist": {
+            "impact": 18,
+            "puncture": 36,
+            "slash": 126
+        },
+        "forced_procs": {},
+        "status_chance": 0.22,
+        "weapon_type": "gunblade"
+    },
+    "redeemer_prime": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.24,
+        "crit_damage": 2.2,
+        "damage_dist": {
+            "impact": 21.2,
+            "puncture": 42.4,
+            "slash": 148.4
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "gunblade"
+    },
+    "ripkas": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.2,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 8.65,
+            "puncture": 17.3,
+            "slash": 147.05
+        },
+        "forced_procs": {},
+        "status_chance": 0.15,
+        "weapon_type": "claw"
+    },
+    "rumblejack": {
+        "attack_speed": 0.666667,
+        "crit_chance": 0.1,
+        "crit_damage": 1.6,
+        "damage_dist": {
+            "electricity": 40
+        },
+        "forced_procs": {},
+        "status_chance": 0.5,
+        "weapon_type": "melee"
+    },
+    "ruvox": {
+        "attack_speed": 1,
+        "crit_chance": 0.26,
+        "crit_damage": 2.2,
+        "damage_dist": {
+            "impact": 170
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "fist"
+    },
+    "sampotes": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.3,
+        "crit_damage": 3,
+        "damage_dist": {
+            "impact": 173.6,
+            "puncture": 37.2,
+            "slash": 37.2
+        },
+        "forced_procs": {},
+        "status_chance": 0.28,
+        "weapon_type": "hammer"
+    },
+    "sancti_magistar": {
+        "attack_speed": 1,
+        "crit_chance": 0.3,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 192,
+            "puncture": 36,
+            "slash": 12
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "hammer"
+    },
+    "sarofang": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.2,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 80,
+            "puncture": 8,
+            "slash": 112
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "heavyblade"
+    },
+    "sarofang_prime": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.3,
+        "crit_damage": 3,
+        "damage_dist": {
+            "impact": 66,
+            "puncture": 8.8,
+            "slash": 145.2
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "heavyblade"
+    },
+    "sarpa": {
+        "attack_speed": 1,
+        "crit_chance": 0.14,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 16,
+            "puncture": 32,
+            "slash": 112
+        },
+        "forced_procs": {},
+        "status_chance": 0.28,
+        "weapon_type": "gunblade"
+    },
+    "scindo": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.15,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 20,
+            "puncture": 20,
+            "slash": 160
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "heavyblade"
+    },
+    "scindo_prime": {
+        "attack_speed": 0.966667,
+        "crit_chance": 0.26,
+        "crit_damage": 2.4,
+        "damage_dist": {
+            "impact": 25,
+            "puncture": 25,
+            "slash": 200
+        },
+        "forced_procs": {},
+        "status_chance": 0.24,
+        "weapon_type": "heavyblade"
+    },
+    "scoliac": {
+        "attack_speed": 1.25,
+        "crit_chance": 0.13,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 22.5,
+            "puncture": 22.5,
+            "slash": 105
+        },
+        "forced_procs": {},
+        "status_chance": 0.29,
+        "weapon_type": "whip"
+    },
+    "secura_lecta": {
+        "attack_speed": 1.25,
+        "crit_chance": 0.15,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "electricity": 80,
+            "puncture": 30,
+            "slash": 66
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "whip"
+    },
+    "serro": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.08,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "electricity": 138,
+            "slash": 96
+        },
+        "forced_procs": {},
+        "status_chance": 0.26,
+        "weapon_type": "polearm"
+    },
+    "shadow_claws": {
+        "attack_speed": 1,
+        "crit_chance": 0.38,
+        "crit_damage": 2.6,
+        "damage_dist": {
+            "impact": 72,
+            "puncture": 48,
+            "slash": 120
+        },
+        "forced_procs": {},
+        "status_chance": 0.24,
+        "weapon_type": "melee"
+    },
+    "shadow_claws_prime": {
+        "attack_speed": 1,
+        "crit_chance": 0.38,
+        "crit_damage": 2.6,
+        "damage_dist": {
+            "impact": 72,
+            "puncture": 48,
+            "slash": 120
+        },
+        "forced_procs": {},
+        "status_chance": 0.24,
+        "weapon_type": "melee"
+    },
+    "shadow_clones": {
+        "attack_speed": 1,
+        "crit_chance": 0.25,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 3.33,
+            "puncture": 3.33,
+            "slash": 3.34
+        },
+        "forced_procs": {},
+        "status_chance": 0.25,
+        "weapon_type": "melee"
+    },
+    "shadow_clones_prime": {
+        "attack_speed": 1,
+        "crit_chance": 0.25,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 3.33,
+            "puncture": 3.33,
+            "slash": 3.34
+        },
+        "forced_procs": {},
+        "status_chance": 0.25,
+        "weapon_type": "melee"
+    },
+    "shaku": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.18,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 180
+        },
+        "forced_procs": {},
+        "status_chance": 0.34,
+        "weapon_type": "nunchaku"
+    },
+    "shattered_lash": {
+        "attack_speed": 1,
+        "crit_chance": 0,
+        "crit_damage": 2,
+        "damage_dist": {},
+        "forced_procs": {},
+        "status_chance": 0,
+        "weapon_type": "melee"
+    },
+    "shattered_lash_prime": {
+        "attack_speed": 1,
+        "crit_chance": 0,
+        "crit_damage": 2,
+        "damage_dist": {},
+        "forced_procs": {},
+        "status_chance": 0,
+        "weapon_type": "melee"
+    },
+    "sheev": {
+        "attack_speed": 0.666667,
+        "crit_chance": 0.13,
+        "crit_damage": 2.1,
+        "damage_dist": {
+            "impact": 13.5,
+            "puncture": 13.5,
+            "slash": 243
+        },
+        "forced_procs": {},
+        "status_chance": 0.25,
+        "weapon_type": "dagger"
+    },
+    "sibear": {
+        "attack_speed": 1,
+        "crit_chance": 0.15,
+        "crit_damage": 2,
+        "damage_dist": {
+            "cold": 130,
+            "impact": 70,
+            "puncture": 20,
+            "slash": 50
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "hammer"
+    },
+    "sigma_octantis": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.28,
+        "crit_damage": 2.2,
+        "damage_dist": {
+            "impact": 38.28,
+            "puncture": 27.84,
+            "slash": 107.88
+        },
+        "forced_procs": {},
+        "status_chance": 0.16,
+        "weapon_type": "swordshield"
+    },
+    "silva_aegis": {
+        "attack_speed": 1,
+        "crit_chance": 0.05,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "heat": 98
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "swordshield"
+    },
+    "silva_aegis_prime": {
+        "attack_speed": 0.75,
+        "crit_chance": 0.25,
+        "crit_damage": 2,
+        "damage_dist": {
+            "heat": 318
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "swordshield"
+    },
+    "skana": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.05,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 18,
+            "puncture": 18,
+            "slash": 84
+        },
+        "forced_procs": {},
+        "status_chance": 0.16,
+        "weapon_type": "sword"
+    },
+    "skana_prime": {
+        "attack_speed": 1,
+        "crit_chance": 0.26,
+        "crit_damage": 2.6,
+        "damage_dist": {
+            "impact": 31.5,
+            "puncture": 31.5,
+            "slash": 147
+        },
+        "forced_procs": {},
+        "status_chance": 0.26,
+        "weapon_type": "sword"
+    },
+    "skiajati": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.19,
+        "crit_damage": 2.1,
+        "damage_dist": {
+            "impact": 26.25,
+            "puncture": 12.25,
+            "slash": 136.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "nikana"
+    },
+    "slaytra": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.21,
+        "crit_damage": 1.9,
+        "damage_dist": {
+            "impact": 73.26,
+            "puncture": 93.24,
+            "slash": 166.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.35,
+        "weapon_type": "machete"
+    },
+    "spinnerex": {
+        "attack_speed": 1.36,
+        "crit_chance": 0.16,
+        "crit_damage": 2.4,
+        "damage_dist": {
+            "toxin": 168
+        },
+        "forced_procs": {},
+        "status_chance": 0.4,
+        "weapon_type": "whip"
+    },
+    "stropha": {
+        "attack_speed": 1,
+        "crit_chance": 0.3,
+        "crit_damage": 2.4,
+        "damage_dist": {
+            "impact": 61.6,
+            "puncture": 74.8,
+            "slash": 83.6
+        },
+        "forced_procs": {},
+        "status_chance": 0.14,
+        "weapon_type": "gunblade"
+    },
+    "sun_moon": {
+        "attack_speed": 1,
+        "crit_chance": 0.2,
+        "crit_damage": 2.4,
+        "damage_dist": {
+            "impact": 38,
+            "puncture": 45.6,
+            "slash": 106.4
+        },
+        "forced_procs": {},
+        "status_chance": 0.22,
+        "weapon_type": "melee"
+    },
+    "syam": {
+        "attack_speed": 1,
+        "crit_chance": 0.22,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 54,
+            "puncture": 108,
+            "slash": 108
+        },
+        "forced_procs": {},
+        "status_chance": 0.34,
+        "weapon_type": "nikana"
+    },
+    "sydon": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.1,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 11.25,
+            "puncture": 213.75
+        },
+        "forced_procs": {},
+        "status_chance": 0.25,
+        "weapon_type": "polearm"
+    },
+    "synoid_heliocor": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.16,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 238,
+            "puncture": 28,
+            "slash": 14
+        },
+        "forced_procs": {},
+        "status_chance": 0.4,
+        "weapon_type": "hammer"
+    },
+    "tak_lug": {
+        "attack_speed": 1,
+        "crit_chance": 0.21,
+        "crit_damage": 1.9,
+        "damage_dist": {
+            "impact": 39.4,
+            "slash": 157.6
+        },
+        "forced_procs": {},
+        "status_chance": 0.31,
+        "weapon_type": "swordshield"
+    },
+    "tatsu": {
+        "attack_speed": 1,
+        "crit_chance": 0.16,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 20,
+            "puncture": 54,
+            "radiation": 72,
+            "slash": 68
+        },
+        "forced_procs": {},
+        "status_chance": 0.28,
+        "weapon_type": "bignikana"
+    },
+    "tatsu_prime": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.22,
+        "crit_damage": 2.4,
+        "damage_dist": {
+            "impact": 20,
+            "puncture": 54,
+            "radiation": 80,
+            "slash": 76
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "bignikana"
+    },
+    "tekko": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.3,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 32,
+            "puncture": 16,
+            "slash": 112
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "fist"
+    },
+    "tekko_prime": {
+        "attack_speed": 1,
+        "crit_chance": 0.3,
+        "crit_damage": 2.4,
+        "damage_dist": {
+            "impact": 39.6,
+            "puncture": 25.2,
+            "slash": 115.2
+        },
+        "forced_procs": {},
+        "status_chance": 0.26,
+        "weapon_type": "fist"
+    },
+    "telos_boltace": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.2,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 21,
+            "puncture": 178.5,
+            "slash": 10.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.35,
+        "weapon_type": "tonfa"
+    },
+    "tenet_agendus": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.24,
+        "crit_damage": 2,
+        "damage_dist": {
+            "electricity": 140,
+            "impact": 120
+        },
+        "forced_procs": {},
+        "status_chance": 0.28,
+        "weapon_type": "swordshield"
+    },
+    "tenet_exec": {
+        "attack_speed": 1,
+        "crit_chance": 0.38,
+        "crit_damage": 2.4,
+        "damage_dist": {
+            "impact": 102.6,
+            "slash": 87.4
+        },
+        "forced_procs": {},
+        "status_chance": 0.22,
+        "weapon_type": "heavyblade"
+    },
+    "tenet_grigori": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.24,
+        "crit_damage": 1.6,
+        "damage_dist": {
+            "impact": 9.12,
+            "puncture": 82.08,
+            "slash": 136.8
+        },
+        "forced_procs": {},
+        "status_chance": 0.38,
+        "weapon_type": "scythes"
+    },
+    "tenet_livia": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.28,
+        "crit_damage": 2.2,
+        "damage_dist": {
+            "impact": 9.9,
+            "puncture": 9.9,
+            "slash": 178.2
+        },
+        "forced_procs": {},
+        "status_chance": 0.28,
+        "weapon_type": "bignikana"
+    },
+    "thalys": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.3,
+        "crit_damage": 2.2,
+        "damage_dist": {
+            "puncture": 90,
+            "slash": 210
+        },
+        "forced_procs": {},
+        "status_chance": 0.24,
+        "weapon_type": "melee"
+    },
+    "thrown_melee": {
+        "attack_speed": 1,
+        "crit_chance": 0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 3.3333,
+            "puncture": 3.3333,
+            "slash": 3.3333
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "melee"
+    },
+    "tipedo": {
+        "attack_speed": 1.333333,
+        "crit_chance": 0.2,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 12.4,
+            "puncture": 12.4,
+            "slash": 99.2
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "staff"
+    },
+    "tipedo_prime": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.24,
+        "crit_damage": 2.4,
+        "damage_dist": {
+            "impact": 17,
+            "puncture": 17,
+            "slash": 136
+        },
+        "forced_procs": {},
+        "status_chance": 0.24,
+        "weapon_type": "staff"
+    },
+    "tonbo": {
+        "attack_speed": 1,
+        "crit_chance": 0.05,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 18.4,
+            "puncture": 27.6,
+            "slash": 138
+        },
+        "forced_procs": {},
+        "status_chance": 0.25,
+        "weapon_type": "polearm"
+    },
+    "tonkkatt": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.23,
+        "crit_damage": 2.1,
+        "damage_dist": {
+            "puncture": 33,
+            "slash": 132
+        },
+        "forced_procs": {},
+        "status_chance": 0.21,
+        "weapon_type": "tonfa"
+    },
+    "twin_basolk": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0,
+        "crit_damage": 1,
+        "damage_dist": {
+            "gas": 30
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "melee"
+    },
+    "twin_krohkur": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.19,
+        "crit_damage": 1.7,
+        "damage_dist": {
+            "impact": 30,
+            "puncture": 45,
+            "slash": 175
+        },
+        "forced_procs": {},
+        "status_chance": 0.33,
+        "weapon_type": "dualsword"
+    },
+    "valkyr_prime_talons": {
+        "attack_speed": 1.5,
+        "crit_chance": 0.5,
+        "crit_damage": 2,
+        "damage_dist": {
+            "puncture": 62.5,
+            "slash": 187.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "melee"
+    },
+    "valkyr_talons": {
+        "attack_speed": 1.5,
+        "crit_chance": 0.5,
+        "crit_damage": 2,
+        "damage_dist": {
+            "puncture": 62.5,
+            "slash": 187.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "melee"
+    },
+    "vastilok": {
+        "attack_speed": 1,
+        "crit_chance": 0.19,
+        "crit_damage": 1.7,
+        "damage_dist": {
+            "impact": 19.53,
+            "puncture": 25.11,
+            "slash": 234.36
+        },
+        "forced_procs": {},
+        "status_chance": 0.31,
+        "weapon_type": "gunblade"
+    },
+    "vaykor_sydon": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.21,
+        "crit_damage": 2.5,
+        "damage_dist": {
+            "impact": 10.65,
+            "puncture": 202.35
+        },
+        "forced_procs": {},
+        "status_chance": 0.33,
+        "weapon_type": "polearm"
+    },
+    "venato": {
+        "attack_speed": 1.083333,
+        "crit_chance": 0.27,
+        "crit_damage": 2.1,
+        "damage_dist": {
+            "impact": 33,
+            "puncture": 110,
+            "slash": 77
+        },
+        "forced_procs": {},
+        "status_chance": 0.24,
+        "weapon_type": "scythes"
+    },
+    "venato_prime": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.34,
+        "crit_damage": 2.3,
+        "damage_dist": {
+            "impact": 36.75,
+            "puncture": 122.5,
+            "slash": 85.75
+        },
+        "forced_procs": {},
+        "status_chance": 0.32,
+        "weapon_type": "scythes"
+    },
+    "venka": {
+        "attack_speed": 1,
+        "crit_chance": 0.15,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 7,
+            "puncture": 35,
+            "slash": 98
+        },
+        "forced_procs": {},
+        "status_chance": 0.15,
+        "weapon_type": "claw"
+    },
+    "venka_prime": {
+        "attack_speed": 1.05,
+        "crit_chance": 0.32,
+        "crit_damage": 2.6,
+        "damage_dist": {
+            "impact": 9.4,
+            "puncture": 37.6,
+            "slash": 141
+        },
+        "forced_procs": {},
+        "status_chance": 0.24,
+        "weapon_type": "claw"
+    },
+    "verdilac": {
+        "attack_speed": 1,
+        "crit_chance": 0,
+        "crit_damage": 2,
+        "damage_dist": {
+            "slash": 12,
+            "toxin": 20
+        },
+        "forced_procs": {},
+        "status_chance": 0,
+        "weapon_type": "melee"
+    },
+    "vericres": {
+        "attack_speed": 1,
+        "crit_chance": 0.22,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 21.6,
+            "puncture": 28.8,
+            "slash": 129.6
+        },
+        "forced_procs": {},
+        "status_chance": 0.2,
+        "weapon_type": "warfan"
+    },
+    "vitrica": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.23,
+        "crit_damage": 2.3,
+        "damage_dist": {
+            "impact": 99.9,
+            "puncture": 99.9,
+            "slash": 133.2
+        },
+        "forced_procs": {},
+        "status_chance": 0.33,
+        "weapon_type": "heavyblade"
+    },
+    "volnus": {
+        "attack_speed": 1.2,
+        "crit_chance": 0.18,
+        "crit_damage": 1.6,
+        "damage_dist": {
+            "impact": 48.4,
+            "puncture": 70.4,
+            "slash": 101.2
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "hammer"
+    },
+    "volnus_prime": {
+        "attack_speed": 1.2,
+        "crit_chance": 0.2,
+        "crit_damage": 1.8,
+        "damage_dist": {
+            "impact": 55,
+            "puncture": 80,
+            "slash": 115
+        },
+        "forced_procs": {},
+        "status_chance": 0.34,
+        "weapon_type": "hammer"
+    },
+    "war": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.26,
+        "crit_damage": 2.6,
+        "damage_dist": {
+            "impact": 120,
+            "puncture": 60,
+            "slash": 70
+        },
+        "forced_procs": {},
+        "status_chance": 0.26,
+        "weapon_type": "heavyblade"
+    },
+    "war_prime": {
+        "attack_speed": 0.916667,
+        "crit_chance": 0.26,
+        "crit_damage": 3.2,
+        "damage_dist": {
+            "impact": 194.4,
+            "puncture": 32.4,
+            "slash": 43.2
+        },
+        "forced_procs": {},
+        "status_chance": 0.32,
+        "weapon_type": "heavyblade"
+    },
+    "whipclaw": {
+        "attack_speed": 1,
+        "crit_chance": 0.25,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 3.33,
+            "puncture": 3.33,
+            "slash": 3.34
+        },
+        "forced_procs": {},
+        "status_chance": 0.25,
+        "weapon_type": "melee"
+    },
+    "whipclaw_prime": {
+        "attack_speed": 1,
+        "crit_chance": 0.25,
+        "crit_damage": 2,
+        "damage_dist": {
+            "impact": 3.33,
+            "puncture": 3.33,
+            "slash": 3.34
+        },
+        "forced_procs": {},
+        "status_chance": 0.25,
+        "weapon_type": "melee"
+    },
+    "wolf_sledge": {
+        "attack_speed": 1,
+        "crit_chance": 0.17,
+        "crit_damage": 1.9,
+        "damage_dist": {
+            "impact": 132.09,
+            "puncture": 7.77,
+            "slash": 119.14
+        },
+        "forced_procs": {},
+        "status_chance": 0.33,
+        "weapon_type": "hammer"
+    },
+    "wrath": {
+        "attack_speed": 1.2,
+        "crit_chance": 0.3,
+        "crit_damage": 2,
+        "damage_dist": {
+            "puncture": 44,
+            "slash": 176
+        },
+        "forced_procs": {},
+        "status_chance": 0.15,
+        "weapon_type": "melee"
+    },
+    "xoris": {
+        "attack_speed": 1.166667,
+        "crit_chance": 0.2,
+        "crit_damage": 2.4,
+        "damage_dist": {
+            "impact": 24,
+            "puncture": 40.8,
+            "slash": 55.2
+        },
+        "forced_procs": {},
+        "status_chance": 0.18,
+        "weapon_type": "glaive"
+    },
+    "zaw": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.05,
+        "crit_damage": 1.5,
+        "damage_dist": {
+            "impact": 5.25,
+            "puncture": 5.25,
+            "slash": 24.5
+        },
+        "forced_procs": {},
+        "status_chance": 0.1,
+        "weapon_type": "melee"
+    },
+    "zenistar": {
+        "attack_speed": 0.833333,
+        "crit_chance": 0.1,
+        "crit_damage": 2,
+        "damage_dist": {
+            "heat": 150,
+            "impact": 80,
+            "slash": 68
+        },
+        "forced_procs": {},
+        "status_chance": 0.3,
+        "weapon_type": "heavyblade"
+    }
+}

@@ -1,0 +1,4372 @@
+{
+    "accelerated_blast": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "puncture": 0.6
+            },
+            "fire_rate": 0.6
+        }
+    },
+    "accelerated_isotope": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "radiation": 0.6
+            },
+            "fire_rate": 0.4
+        }
+    },
+    "acid_shells": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "corrosive": 450
+            }
+        }
+    },
+    "amalgam_barrel_diffusion": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "multishot": 1.095
+        }
+    },
+    "amalgam_daikyu_target_acquired": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "condition": "on headshot",
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "weakpoint_damage": 0.75
+        }
+    },
+    "amalgam_furax_body_count": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "attack_speed": 0.45,
+            "damage_dist": {
+                "blast": 6,
+                "impact": 6
+            }
+        }
+    },
+    "amalgam_javlok_magazine_warp": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "condition": "per combo multiplier",
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "magazine_capacity": 0.45
+        }
+    },
+    "amalgam_organ_shatter": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_damage": 0.846
+        }
+    },
+    "amalgam_ripkas_true_steel": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_chance": 3.7392,
+            "reload_speed": 0.198
+        }
+    },
+    "amalgam_serration": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "base_damage": 1.551
+        }
+    },
+    "amalgam_shotgun_barrage": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "fire_rate": 0.846
+        }
+    },
+    "amanata_pressure": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "base_damage": 3.3
+        }
+    },
+    "amar_s_contempt": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "base_damage": 0.9,
+            "damage_dist": {
+                "slash": 0.3
+            }
+        }
+    },
+    "ammo_stock": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "magazine_capacity": 0.6
+        }
+    },
+    "anemic_agility": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "base_damage": -0.15,
+            "fire_rate": 0.9
+        }
+    },
+    "argon_scope": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "condition": "on headshot",
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_chance": 1.35
+        }
+    },
+    "astral_slash": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "slash": 0.9
+            }
+        }
+    },
+    "atomic_fallout": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "radiation": 0.6
+            },
+            "magazine_capacity": 0.4
+        }
+    },
+    "auger_strike": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "puncture": 7.2
+            }
+        }
+    },
+    "augur_pact": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "base_damage": 0.9
+        }
+    },
+    "bane_of_corpus": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "faction_damage": 0.3
+        }
+    },
+    "bane_of_grineer": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "faction_damage": 0.3
+        }
+    },
+    "bane_of_infested": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "faction_damage": 0.3
+        }
+    },
+    "bane_of_orokin": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "faction_damage": 0.3
+        }
+    },
+    "bane_of_the_murmur": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "faction_damage": 0.3
+        }
+    },
+    "barrel_diffusion": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "multishot": 1.2
+        }
+    },
+    "berserker_fury": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "max_stacks": 2,
+        "stats": {
+            "stackable_attack_speed": 0.349998
+        }
+    },
+    "bhisaj_bal": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": true,
+        "max_rank": 5,
+        "stats": {
+            "status_chance": 0.9
+        }
+    },
+    "bite": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "crit_chance": 3.3,
+            "crit_damage": 2.2
+        }
+    },
+    "blade_of_truth": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "base_damage": 1
+        }
+    },
+    "bladed_rounds": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "condition": "on kill",
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_damage": 1.2
+        }
+    },
+    "blaze": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "base_damage": 0.6,
+            "damage_dist": {
+                "heat": 0.6
+            }
+        }
+    },
+    "blazing_steel": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "heat": 1.2
+            }
+        }
+    },
+    "bleeding_edge": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "crit_damage": 1.1
+        }
+    },
+    "blood_rush": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "max_stacks": 11,
+        "stats": {
+            "stackable_crit_chance": 0.4004
+        }
+    },
+    "blunderbuss": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_chance": 0.9
+        }
+    },
+    "bore": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "puncture": 1.2
+            }
+        }
+    },
+    "boreal_s_contempt": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "base_damage": 0.9,
+            "status_damage": 0.6
+        }
+    },
+    "brain_storm": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "condition": "on headshot",
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "ammo_efficiency": 1
+        }
+    },
+    "breach_loader": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "puncture": 1.2
+            }
+        }
+    },
+    "bright_purity": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "base_damage": 1
+        }
+    },
+    "brute_conditioning": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "base_damage": 3.85
+        }
+    },
+    "burdened_magazine": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "magazine_capacity": 0.6,
+            "reload_speed": -0.18
+        }
+    },
+    "burning_claws": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "damage_dist": {
+                "heat": 3.3
+            },
+            "status_chance": 3.3
+        }
+    },
+    "buzz_kill": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "slash": 7.2
+            }
+        }
+    },
+    "carnis_mandible": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "slash": 5.4
+            },
+            "status_chance": 0.6
+        }
+    },
+    "carnis_stinger": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "slash": 0.9
+            },
+            "status_chance": 0.6
+        }
+    },
+    "catalyzer_link": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "status_chance": 0.6
+        }
+    },
+    "charged_chamber": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "primed_chamber": 0.4
+        }
+    },
+    "charged_shell": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "electricity": 0.9
+            }
+        }
+    },
+    "chilling_claws": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "damage_dist": {
+                "cold": 3.3
+            },
+            "status_chance": 3.3
+        }
+    },
+    "chilling_grasp": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "cold": 0.9
+            }
+        }
+    },
+    "chilling_reload": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "cold": 0.6
+            },
+            "reload_speed": 0.4
+        }
+    },
+    "cleanse_corpus": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "faction_damage": 0.3
+        }
+    },
+    "cleanse_grineer": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "faction_damage": 0.3
+        }
+    },
+    "cleanse_infested": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "faction_damage": 0.3
+        }
+    },
+    "cleanse_orokin": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "faction_damage": 0.3
+        }
+    },
+    "cleanse_the_murmur": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "faction_damage": 0.3
+        }
+    },
+    "collision_force": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "impact": 7.2
+            }
+        }
+    },
+    "combat_reload": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "reload_speed": 1.2
+        }
+    },
+    "combo_fury": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "condition": "on kill",
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "magazine_capacity": 0.9996,
+            "reload_speed": 0.9996
+        }
+    },
+    "combustion_beam": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "blast": 600
+            }
+        }
+    },
+    "comet_rounds": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "impact": 0.2
+            }
+        }
+    },
+    "concussion_rounds": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "impact": 0.9
+            }
+        }
+    },
+    "condition_overload": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "condition": "per status type on target",
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "conditional_base_damage": 0.7998
+        }
+    },
+    "condition_s_perfection": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": true,
+        "max_rank": 3,
+        "stats": {
+            "conditional_status_chance": 1
+        }
+    },
+    "conductive_blade": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "electricity": 1.2
+            }
+        }
+    },
+    "contagious_spread": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "toxin": 0.9
+            }
+        }
+    },
+    "convulsion": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "electricity": 0.9
+            }
+        }
+    },
+    "counterweight": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "impact": 0.2
+            }
+        }
+    },
+    "crash_course": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "impact": 1.2
+            }
+        }
+    },
+    "crash_shot": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "impact": 0.2
+            }
+        }
+    },
+    "creeping_bullseye": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_chance": 1.99998,
+            "fire_rate": -0.19998
+        }
+    },
+    "critical_deceleration": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_chance": 1.99998,
+            "fire_rate": -0.1998
+        }
+    },
+    "critical_delay": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_chance": 1.99998,
+            "fire_rate": -0.3996
+        }
+    },
+    "critical_meltdown": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "crit_chance": 0.6,
+            "damage_dist": {
+                "radiation": 0.6
+            }
+        }
+    },
+    "cryo_coating": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "cold": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "cryo_rounds": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "cold": 0.9
+            }
+        }
+    },
+    "cull_the_weak": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "condition": "per status type on target",
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "conditional_base_damage": 0.6
+        }
+    },
+    "cutting_edge": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "base_damage": 1.1
+        }
+    },
+    "damzav_vati": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "viral": 2.4
+            }
+        }
+    },
+    "deadly_sequence": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "crit_chance": 2
+        }
+    },
+    "deep_freeze": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "cold": 0.9
+            }
+        }
+    },
+    "depleted_reload": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "magazine_capacity": -0.6,
+            "reload_speed": 0.48
+        }
+    },
+    "disabling_conditioning": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "base_damage": 3.85
+        }
+    },
+    "disruptor": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "impact": 0.9
+            }
+        }
+    },
+    "dizzying_rounds": {
+        "applicable_categories": [
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "status_chance": 2
+        }
+    },
+    "dreamer_s_wrath": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": true,
+        "max_rank": 3,
+        "stats": {
+            "crit_damage": 0.32
+        }
+    },
+    "drifting_contact": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "condition": "per combo multiplier",
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "status_chance": 0.4
+        }
+    },
+    "efficient_beams": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "status_chance": 1.5
+        }
+    },
+    "embedded_catalyzer": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "status_chance": 0.9
+        }
+    },
+    "emergent_aftermath": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "condition": "on kill",
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "reload_speed": 0.5
+        }
+    },
+    "enduring_affliction": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "conditional_status_chance": 0.99996
+        }
+    },
+    "entropy_burst": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "status_chance": 0.2
+        }
+    },
+    "eroding_blight": {
+        "applicable_categories": [
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "magazine_capacity": 2
+        }
+    },
+    "eximus_advantage": {
+        "applicable_categories": [
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "base_damage": 6
+        }
+    },
+    "expel_corpus": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "faction_damage": 0.3
+        }
+    },
+    "expel_grineer": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "faction_damage": 0.3
+        }
+    },
+    "expel_infested": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "faction_damage": 0.3
+        }
+    },
+    "expel_orokin": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "faction_damage": 0.3
+        }
+    },
+    "expel_the_murmur": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "faction_damage": 0.3
+        }
+    },
+    "explosive_demise": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "blast": 300
+            }
+        }
+    },
+    "fanged_fusillade": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "slash": 1.2
+            }
+        }
+    },
+    "fast_hands": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "reload_speed": 0.3
+        }
+    },
+    "feathered_arrows": {
+        "applicable_categories": [
+            "bow",
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "base_damage": -0.2
+        }
+    },
+    "fever_strike": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "toxin": 0.9
+            }
+        }
+    },
+    "final_tap": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "base_damage": 1
+        }
+    },
+    "flak_shot": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "slash": 0.2
+            }
+        }
+    },
+    "flame_gland": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "heat": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "flechette": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "puncture": 0.9
+            }
+        }
+    },
+    "flux_overdrive": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "conditional_status_chance": 1.5
+        }
+    },
+    "focus_energy": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "condition": "per combo multiplier",
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "electricity": 0.6
+            }
+        }
+    },
+    "focus_radon": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "condition": "per combo multiplier",
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "radiation": 0.6
+            }
+        }
+    },
+    "frail_momentum": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "base_damage": -0.15,
+            "fire_rate": 0.9
+        }
+    },
+    "frigid_blast": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "cold": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "frost_jaw": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "cold": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "frostbite": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "cold": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "full_capacity": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "magazine_capacity": 0.3,
+            "reload_speed": -0.15
+        }
+    },
+    "full_contact": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "impact": 1.2
+            }
+        }
+    },
+    "furor": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "attack_speed": 0.1
+        }
+    },
+    "fury": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "attack_speed": 0.3
+        }
+    },
+    "galvanized_aptitude": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "max_stacks": 2,
+        "stats": {
+            "stackable_base_damage": 0.400004,
+            "status_chance": 0.799997
+        }
+    },
+    "galvanized_chamber": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "max_stacks": 5,
+        "stats": {
+            "multishot": 0.80003,
+            "stackable_multishot": 0.29997
+        }
+    },
+    "galvanized_crosshairs": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "max_stacks": 5,
+        "stats": {
+            "crit_chance": 1.19999,
+            "stackable_crit_chance": 0.399993
+        }
+    },
+    "galvanized_diffusion": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "max_stacks": 4,
+        "stats": {
+            "multishot": 1.1,
+            "stackable_multishot": 0.300003
+        }
+    },
+    "galvanized_elementalist": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "max_stacks": 4,
+        "stats": {
+            "stackable_status_chance": 0.29997,
+            "status_damage": 0.79992
+        }
+    },
+    "galvanized_hell": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "max_stacks": 4,
+        "stats": {
+            "multishot": 1.1,
+            "stackable_multishot": 0.29997
+        }
+    },
+    "galvanized_savvy": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "max_stacks": 2,
+        "stats": {
+            "stackable_base_damage": 0.400004,
+            "status_chance": 0.80003
+        }
+    },
+    "galvanized_scope": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "max_stacks": 5,
+        "stats": {
+            "crit_chance": 1.2001,
+            "stackable_crit_chance": 0.39996
+        }
+    },
+    "galvanized_shot": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "max_stacks": 3,
+        "stats": {
+            "stackable_base_damage": 0.400004,
+            "status_chance": 0.799997
+        }
+    },
+    "galvanized_steel": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "max_stacks": 4,
+        "stats": {
+            "crit_chance": 2.2,
+            "stackable_crit_damage": 0.29997
+        }
+    },
+    "gilded_truth": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "fire_rate": 0.8
+        }
+    },
+    "glacial_edge": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "cold": 1.2
+            }
+        }
+    },
+    "gladiator_might": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_damage": 0.6
+        }
+    },
+    "gladiator_vice": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "attack_speed": 0.3
+        }
+    },
+    "gleaming_blight": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "status_chance": 1
+        }
+    },
+    "gorgon_frenzy": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "condition": "on kill",
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "fire_rate": 0.3
+        }
+    },
+    "gunslinger": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "fire_rate": 0.72
+        }
+    },
+    "hammer_shot": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "crit_damage": 0.6,
+            "status_chance": 0.8
+        }
+    },
+    "heated_charge": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "heat": 0.9
+            }
+        }
+    },
+    "heavy_caliber": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "base_damage": 1.65
+        }
+    },
+    "heavy_trauma": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "impact": 5.4
+            }
+        }
+    },
+    "hell_s_chamber": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "multishot": 1.2
+        }
+    },
+    "hellfire": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "heat": 0.9
+            }
+        }
+    },
+    "hemorrhage": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "internal_bleeding": 0.35
+        }
+    },
+    "higasa_serration": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "base_damage": 4.5
+        }
+    },
+    "high_voltage": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "electricity": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "hollow_point": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "base_damage": -0.15,
+            "crit_damage": 0.6
+        }
+    },
+    "hornet_strike": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "base_damage": 2.2
+        }
+    },
+    "hunter_munitions": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "hunter_munitions": 0.3
+        }
+    },
+    "hunter_s_bonesaw": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "status_chance": 0.6
+        }
+    },
+    "hydraulic_barrel": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "magazine_capacity": -0.2
+        }
+    },
+    "hydraulic_chamber": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "magazine_capacity": -0.1
+        }
+    },
+    "hydraulic_crosshairs": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "condition": "on headshot",
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_chance": 1.35
+        }
+    },
+    "hydraulic_gauge": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "magazine_capacity": -0.1
+        }
+    },
+    "ice_storm": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "cold": 0.4
+            },
+            "magazine_capacity": 0.4
+        }
+    },
+    "immunity_resistance": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "status_damage": 0.5
+        }
+    },
+    "impaler_munitions": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "puncture": 0.2
+            }
+        }
+    },
+    "impenetrable_offense": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "base_damage": -10
+        }
+    },
+    "incendiary_coat": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "heat": 0.9
+            }
+        }
+    },
+    "infected_clip": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "toxin": 0.9
+            }
+        }
+    },
+    "infectious_injection": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "toxin": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "internal_bleeding": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "internal_bleeding": 0.35
+        }
+    },
+    "ion_infusion": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "electricity": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "jagged_edge": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "slash": 5.4
+            }
+        }
+    },
+    "jolt": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "electricity": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "jugulus_barbs": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "puncture": 5.4
+            },
+            "status_chance": 0.6
+        }
+    },
+    "jugulus_spines": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "puncture": 0.9
+            },
+            "status_chance": 0.6
+        }
+    },
+    "justice_blades": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "base_damage": 1
+        }
+    },
+    "kill_switch": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "stackable_reload_speed": 0.5
+        }
+    },
+    "killing_blow": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "base_damage": 1.2
+        }
+    },
+    "laser_sight": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "condition": "on headshot",
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_chance": 1.2
+        }
+    },
+    "leaded_gas": {
+        "applicable_categories": [
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "gas": 3
+            },
+            "status_chance": 3
+        }
+    },
+    "lethal_torrent": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "fire_rate": 0.6,
+            "multishot": 0.6
+        }
+    },
+    "lie_in_wait": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "fire_rate": 0.2
+        }
+    },
+    "loaded_capacity": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "magazine_capacity": 0.3,
+            "reload_speed": -0.15
+        }
+    },
+    "loose_chamber": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "reload_speed": 0.3
+        }
+    },
+    "loose_hatch": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "reload_speed": 0.3
+        }
+    },
+    "loose_magazine": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "reload_speed": 0.5004
+        }
+    },
+    "magazine_warp": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "magazine_capacity": 0.3
+        }
+    },
+    "magnetic_capacity": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "magnetic": 0.6
+            },
+            "magazine_capacity": 0.4
+        }
+    },
+    "magnetic_claws": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "magnetic": 0.6
+            }
+        }
+    },
+    "magnetic_might": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "crit_damage": 0.4,
+            "damage_dist": {
+                "magnetic": 0.6
+            }
+        }
+    },
+    "magnetic_rush": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "attack_speed": 0.2,
+            "damage_dist": {
+                "magnetic": 0.6
+            }
+        }
+    },
+    "magnetic_strafe": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "magnetic": 0.6
+            },
+            "fire_rate": 0.4
+        }
+    },
+    "magnetic_welt": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "internal_bleeding": 0.35
+        }
+    },
+    "magnetized_core": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "crit_damage": 0.4,
+            "damage_dist": {
+                "magnetic": 0.6
+            }
+        }
+    },
+    "magnum_force": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "base_damage": 1.65
+        }
+    },
+    "maim": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "slash": 1.2
+            }
+        }
+    },
+    "maiming_strike": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_chance": 3
+        }
+    },
+    "malignant_force": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "toxin": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "mark_of_the_beast": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_chance": 1.2,
+            "status_chance": 1.2
+        }
+    },
+    "martial_fury": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "attack_speed": 0.2
+        }
+    },
+    "master_s_edge": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": true,
+        "max_rank": 5,
+        "stats": {
+            "base_damage": 0.6
+        }
+    },
+    "maul": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "base_damage": 3.3
+        }
+    },
+    "maximum_capacity": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "magazine_capacity": 0.3,
+            "reload_speed": -0.15
+        }
+    },
+    "measured_burst": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "base_damage": 0.3,
+            "fire_rate": -0.6
+        }
+    },
+    "melee_elementalist": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "status_damage": 0.9
+        }
+    },
+    "melee_prowess": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "status_chance": 0.9
+        }
+    },
+    "merciless_gunfight": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_damage": 0.45
+        }
+    },
+    "metamorphic_magazine": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "magazine_capacity": 0.9
+        }
+    },
+    "meteor_crash": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "impact": 0.9
+            }
+        }
+    },
+    "meteor_munitions": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "impact": 0.2
+            }
+        }
+    },
+    "meticulous_aim": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "condition": "on headshot",
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "weakpoint_damage": 0.6
+        }
+    },
+    "molten_impact": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "heat": 0.9
+            }
+        }
+    },
+    "motus_setup": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "crit_chance": 1,
+            "status_chance": 1
+        }
+    },
+    "nano_applicator": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "status_chance": 0.9
+        }
+    },
+    "napalm_grenades": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "status_chance": 0.3
+        }
+    },
+    "nebula_bore": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "puncture": 0.9
+            }
+        }
+    },
+    "nira_s_contempt": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "base_damage": 0.9,
+            "status_chance": 0.6
+        }
+    },
+    "no_return": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "puncture": 0.9
+            }
+        }
+    },
+    "north_wind": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "cold": 0.9
+            }
+        }
+    },
+    "organ_shatter": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_damage": 0.9
+        }
+    },
+    "pain_points": {
+        "applicable_categories": [
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "max_stacks": 10,
+        "stats": {
+            "stackable_weakpoint_damage": 0.6
+        }
+    },
+    "pathogen_rounds": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "toxin": 0.9
+            }
+        }
+    },
+    "photon_overcharge": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "condition": "on kill",
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_damage": 0.9
+        }
+    },
+    "piercing_caliber": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "puncture": 1.2
+            }
+        }
+    },
+    "piercing_hit": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "puncture": 0.9
+            }
+        }
+    },
+    "pistol_acuity": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "multishot_lock": true,
+            "weakpoint_crit_chance": 3.498,
+            "weakpoint_damage": 3.498
+        }
+    },
+    "pistol_elementalist": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "reload_speed": 0.6,
+            "status_damage": 0.9
+        }
+    },
+    "pistol_gambit": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_chance": 1.2
+        }
+    },
+    "pistol_pestilence": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "toxin": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "plan_b": {
+        "applicable_categories": [
+            "bow",
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "fire_rate": 0.2
+        }
+    },
+    "point_blank": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "base_damage": 0.9
+        }
+    },
+    "point_strike": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_chance": 1.5
+        }
+    },
+    "poisonous_sting": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "toxin": 1.2
+            }
+        }
+    },
+    "power_throw": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "max_stacks": 3,
+        "stats": {
+            "stackable_base_damage": 1.83337
+        }
+    },
+    "precision_conditioning": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "base_damage": 3.85
+        }
+    },
+    "pressure_point": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "base_damage": 1.2
+        }
+    },
+    "pressurized_magazine": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "fire_rate": 0.9
+        }
+    },
+    "primary_acuity": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "multishot_lock": true,
+            "weakpoint_crit_chance": 3.498,
+            "weakpoint_damage": 3.498
+        }
+    },
+    "primed_ammo_stock": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "magazine_capacity": 1.1
+        }
+    },
+    "primed_bane_of_corpus": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "faction_damage": 0.55
+        }
+    },
+    "primed_bane_of_grineer": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "faction_damage": 0.55
+        }
+    },
+    "primed_bane_of_infested": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "faction_damage": 0.55
+        }
+    },
+    "primed_bane_of_orokin": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "faction_damage": 0.55
+        }
+    },
+    "primed_bane_of_the_murmur": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "faction_damage": 0.55
+        }
+    },
+    "primed_chamber": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "primed_chamber": 1
+        }
+    },
+    "primed_charged_shell": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "damage_dist": {
+                "electricity": 1.65
+            }
+        }
+    },
+    "primed_chilling_grasp": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "damage_dist": {
+                "cold": 1.65
+            }
+        }
+    },
+    "primed_cleanse_corpus": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "faction_damage": 0.55
+        }
+    },
+    "primed_cleanse_grineer": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "faction_damage": 0.55
+        }
+    },
+    "primed_cleanse_infested": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "faction_damage": 0.55
+        }
+    },
+    "primed_cleanse_orokin": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "faction_damage": 0.55
+        }
+    },
+    "primed_cleanse_the_murmur": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "faction_damage": 0.55
+        }
+    },
+    "primed_convulsion": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "damage_dist": {
+                "electricity": 1.65
+            }
+        }
+    },
+    "primed_cryo_rounds": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "damage_dist": {
+                "cold": 1.65
+            }
+        }
+    },
+    "primed_expel_corpus": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "faction_damage": 0.55
+        }
+    },
+    "primed_expel_grineer": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "faction_damage": 0.55
+        }
+    },
+    "primed_expel_infested": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "faction_damage": 0.55
+        }
+    },
+    "primed_expel_orokin": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "faction_damage": 0.55
+        }
+    },
+    "primed_expel_the_murmur": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "faction_damage": 0.55
+        }
+    },
+    "primed_fast_hands": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "reload_speed": 0.55
+        }
+    },
+    "primed_fever_strike": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "damage_dist": {
+                "toxin": 1.65
+            }
+        }
+    },
+    "primed_fury": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "attack_speed": 0.55
+        }
+    },
+    "primed_heated_charge": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "damage_dist": {
+                "heat": 1.65
+            }
+        }
+    },
+    "primed_heavy_trauma": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "damage_dist": {
+                "impact": 9.9
+            }
+        }
+    },
+    "primed_magazine_warp": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "magazine_capacity": 0.55
+        }
+    },
+    "primed_pistol_gambit": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "crit_chance": 1.87
+        }
+    },
+    "primed_point_blank": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "base_damage": 1.65
+        }
+    },
+    "primed_pressure_point": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "base_damage": 1.65
+        }
+    },
+    "primed_quickdraw": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "reload_speed": 0.88
+        }
+    },
+    "primed_ravage": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "crit_damage": 1.1
+        }
+    },
+    "primed_shred": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "fire_rate": 1.1
+        }
+    },
+    "primed_slip_magazine": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "magazine_capacity": 0.55
+        }
+    },
+    "primed_smite_corpus": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "faction_damage": 0.55
+        }
+    },
+    "primed_smite_grineer": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "faction_damage": 0.55
+        }
+    },
+    "primed_smite_infested": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "faction_damage": 0.55
+        }
+    },
+    "primed_smite_orokin": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "faction_damage": 0.55
+        }
+    },
+    "primed_smite_the_murmur": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "faction_damage": 0.55
+        }
+    },
+    "primed_tactical_pump": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "reload_speed": 0.9999
+        }
+    },
+    "primed_target_cracker": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "crit_damage": 1.1
+        }
+    },
+    "proton_jet": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "crit_chance": 1.2,
+            "status_chance": 1.2
+        }
+    },
+    "proton_snap": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "toxin": 1
+            },
+            "status_chance": 0.5
+        }
+    },
+    "pummel": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "impact": 1.2
+            }
+        }
+    },
+    "quickdraw": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "reload_speed": 0.48
+        }
+    },
+    "quickening": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "condition": "per combo multiplier",
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "attack_speed": 0.4
+        }
+    },
+    "radiated_reload": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "radiation": 0.6
+            },
+            "reload_speed": 0.4
+        }
+    },
+    "radon_claws": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "crit_damage": 0.8,
+            "damage_dist": {
+                "radiation": 0.6
+            }
+        }
+    },
+    "ravage": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_damage": 0.6
+        }
+    },
+    "razor_munitions": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "slash": 0.2
+            }
+        }
+    },
+    "razor_shot": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "slash": 0.9
+            }
+        }
+    },
+    "rending_strike": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "puncture": 4.8,
+                "slash": 3.6
+            }
+        }
+    },
+    "repeater_clip": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "fire_rate": 1.05
+        }
+    },
+    "rifle_aptitude": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "status_chance": 0.9
+        }
+    },
+    "rifle_elementalist": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "status_damage": 0.9
+        }
+    },
+    "rime_rounds": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "cold": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "ripper_rounds": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "puncture": 0.2
+            }
+        }
+    },
+    "rupture": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "impact": 0.9
+            }
+        }
+    },
+    "sacrificial_pressure": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "base_damage": 1.1,
+            "faction_damage": 0.33
+        }
+    },
+    "sacrificial_steel": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "crit_chance": 4.4,
+            "faction_damage": 0.33
+        }
+    },
+    "sawtooth_clip": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "slash": 0.9
+            }
+        }
+    },
+    "saxum_spittle": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "impact": 0.9
+            },
+            "status_chance": 0.6
+        }
+    },
+    "saxum_thorax": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "impact": 5.4
+            },
+            "status_chance": 0.6
+        }
+    },
+    "scattered_justice": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "multishot": 2
+        }
+    },
+    "scattering_inferno": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "heat": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "scorch": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "heat": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "searing_steel": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "heat": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "secondary_wind": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "stackable_reload_speed": 0.5
+        }
+    },
+    "seeking_fury": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "reload_speed": 0.15
+        }
+    },
+    "semi_pistol_cannonade": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "base_damage": 3,
+            "fire_rate_lock": true
+        }
+    },
+    "semi_rifle_cannonade": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "base_damage": 2.4,
+            "fire_rate_lock": true
+        }
+    },
+    "semi_shotgun_cannonade": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "base_damage": 2.4,
+            "fire_rate_lock": true
+        }
+    },
+    "sepsis_claws": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "damage_dist": {
+                "toxin": 3.3
+            },
+            "status_chance": 3.3
+        }
+    },
+    "serrated_edges": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "puncture": 0.2
+            }
+        }
+    },
+    "serrated_rounds": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "slash": 0.2
+            }
+        }
+    },
+    "serration": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "base_damage": 1.65
+        }
+    },
+    "sharpened_blade": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "slash": 0.2
+            }
+        }
+    },
+    "sharpened_bullets": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "condition": "on kill",
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_damage": 0.75
+        }
+    },
+    "shattering_impact": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "impact": 6
+            }
+        }
+    },
+    "shattering_justice": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "status_chance": 0.9
+        }
+    },
+    "shell_shock": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "electricity": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "shock_collar": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "electricity": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "shocking_claws": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "damage_dist": {
+                "electricity": 3.3
+            },
+            "status_chance": 3.3
+        }
+    },
+    "shocking_touch": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "electricity": 0.9
+            }
+        }
+    },
+    "shotgun_barrage": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "fire_rate": 0.9
+        }
+    },
+    "shotgun_elementalist": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "magazine_capacity": 0.6,
+            "status_damage": 0.9
+        }
+    },
+    "shotgun_savvy": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "status_chance": 0.9
+        }
+    },
+    "shrapnel_rounds": {
+        "applicable_categories": [
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "base_damage": -3.96,
+            "multishot": 12
+        }
+    },
+    "shrapnel_shot": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "condition": "on kill",
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_damage": 0.99
+        }
+    },
+    "shred": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "fire_rate": 0.6
+        }
+    },
+    "shred_shot": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "puncture": 0.2
+            }
+        }
+    },
+    "shredder": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "slash": 0.9
+            }
+        }
+    },
+    "skull_shots": {
+        "applicable_categories": [
+            "secondary"
+        ],
+        "condition": "on headshot",
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "ammo_efficiency": 1
+        }
+    },
+    "slip_magazine": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "magazine_capacity": 0.3
+        }
+    },
+    "smite_corpus": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "faction_damage": 0.3
+        }
+    },
+    "smite_grineer": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "faction_damage": 0.3
+        }
+    },
+    "smite_infested": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "faction_damage": 0.3
+        }
+    },
+    "smite_orokin": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "faction_damage": 0.3
+        }
+    },
+    "smite_the_murmur": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "faction_damage": 0.3
+        }
+    },
+    "soaring_strike": {
+        "applicable_categories": [
+            "bow",
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "fire_rate": 0.5
+        }
+    },
+    "spectral_serration": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "base_damage": 3.3
+        }
+    },
+    "speed_trigger": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "fire_rate": 1.2
+        }
+    },
+    "split_chamber": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "multishot": 0.9
+        }
+    },
+    "split_flights": {
+        "applicable_categories": [
+            "bow",
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "max_stacks": 4,
+        "stats": {
+            "stackable_multishot": 1.00002
+        }
+    },
+    "spoiled_strike": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "attack_speed": -0.2,
+            "base_damage": 1
+        }
+    },
+    "spring_loaded_chamber": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "fire_rate": 0.75
+        }
+    },
+    "stinging_truth": {
+        "applicable_categories": [
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "magazine_capacity": 40
+        }
+    },
+    "stormbringer": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "electricity": 0.9
+            }
+        }
+    },
+    "stunning_speed": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "reload_speed": 0.4,
+            "status_chance": 0.3
+        }
+    },
+    "sudden_impact": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "status_chance": 0.6
+        }
+    },
+    "sudden_justice": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "fire_rate": 0.3
+        }
+    },
+    "sundering_strike": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "puncture": 5.4
+            }
+        }
+    },
+    "sure_shot": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "status_chance": 0.9
+        }
+    },
+    "sweeping_serration": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "slash": 1.2
+            }
+        }
+    },
+    "tactical_pump": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "reload_speed": 0.6
+        }
+    },
+    "tainted_clip": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "magazine_capacity": 0.6,
+            "reload_speed": -0.3
+        }
+    },
+    "tainted_mag": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "magazine_capacity": 0.66,
+            "reload_speed": -0.33
+        }
+    },
+    "tainted_shell": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 10,
+        "stats": {
+            "fire_rate": -0.55
+        }
+    },
+    "target_acquired": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "condition": "on headshot",
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "weakpoint_damage": 0.6
+        }
+    },
+    "target_cracker": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_damage": 0.6
+        }
+    },
+    "tempered_blade": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_chance": 1.5
+        }
+    },
+    "thermagnetic_shells": {
+        "applicable_categories": [
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "magnetic": 80
+            }
+        }
+    },
+    "thermite_rounds": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "heat": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "thundermiter": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "magazine_capacity": -0.6
+        }
+    },
+    "toxic_barrage": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "toxin": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "toxic_blight": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "toxin": 1
+            }
+        }
+    },
+    "triple_tap": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "base_damage": 0.4
+        }
+    },
+    "true_steel": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_chance": 2.4
+        }
+    },
+    "venom_teeth": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "toxin": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "vicious_frost": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "cold": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "vicious_spread": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "base_damage": 0.9
+        }
+    },
+    "vigilante_armaments": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "multishot": 0.6,
+            "vigilante_bonus": 0.05
+        }
+    },
+    "vigilante_fervor": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "fire_rate": 0.9,
+            "vigilante_bonus": 0.05
+        }
+    },
+    "vigilante_offense": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "vigilante_bonus": 0.05
+        }
+    },
+    "vigilante_supplies": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "is_exilus": true,
+        "max_rank": 5,
+        "stats": {
+            "vigilante_bonus": 0.05
+        }
+    },
+    "vile_acceleration": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "base_damage": -0.15,
+            "fire_rate": 1.8
+        }
+    },
+    "vile_precision": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": true,
+        "max_rank": 5,
+        "stats": {
+            "fire_rate": -0.72
+        }
+    },
+    "virulent_scourge": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "toxin": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "vital_sense": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "crit_damage": 1.2
+        }
+    },
+    "volcanic_edge": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "heat": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "voltaic_strike": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "electricity": 0.6
+            },
+            "status_chance": 0.6
+        }
+    },
+    "vulcan_blitz": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "damage_dist": {
+                "blast": 300
+            }
+        }
+    },
+    "weeping_wounds": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "max_stacks": 11,
+        "stats": {
+            "stackable_status_chance": 0.39996
+        }
+    },
+    "wildfire": {
+        "applicable_categories": [
+            "primary",
+            "rifle"
+        ],
+        "is_exilus": false,
+        "max_rank": 3,
+        "stats": {
+            "damage_dist": {
+                "heat": 0.6
+            },
+            "magazine_capacity": 0.2
+        }
+    },
+    "zazvat_kar": {
+        "applicable_categories": [
+            "secondary"
+        ],
+        "is_exilus": false,
+        "max_rank": 5,
+        "stats": {
+            "ammo_efficiency": 0.75
+        }
+    }
+}

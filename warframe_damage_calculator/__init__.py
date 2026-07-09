@@ -1,6 +1,7 @@
 from .models import dist, Upgrade, Build, Melee, Primary, Secondary
+from .database import load_mod, load_arcane, load_primary, load_secondary, load_melee
 
-__version__ = "0.3.1"
+__version__ = "0.4.0"
 
 __all__ = [
     "dist",
@@ -9,4 +10,9 @@ __all__ = [
     "Melee",
     "Primary",
     "Secondary",
+    "load_mod",
+    "load_arcane",
+    "load_primary",
+    "load_secondary",
+    "load_melee",
 ]

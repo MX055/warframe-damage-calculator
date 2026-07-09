@@ -40,6 +40,21 @@ class SecondaryTests(unittest.TestCase):
         self.assertAlmostEqual(calc.flat_dph, 2008.27986626)
         self.assertAlmostEqual(calc.flat_dps, 10261.58723555)
 
+    def test_ranged_fire_rate_lock_blocks_fire_rate_mods(self) -> None:
+        weapon = Secondary(damage_dist=dist(impact=100), fire_rate=4.0, burst_delay=0.2, charge_time=0.5, magazine_capacity=10)
+        weapon.configure(Build(Upgrade(fire_rate=0.5, multiplicative_fire_rate=0.5, fire_rate_lock=True)))
+        calc = weapon.stats
+
+        self.assertAlmostEqual(calc.effective.fire_rate, 4.0)
+        self.assertAlmostEqual(calc.effective.burst_delay, 0.2)
+        self.assertAlmostEqual(calc.effective.charge_time, 0.5)
+
+    def test_ranged_multishot_lock_blocks_multishot_mods(self) -> None:
+        weapon = Secondary(damage_dist=dist(impact=100), multishot=2.0, magazine_capacity=10)
+        weapon.configure(Build(Upgrade(multishot=1.5, multishot_lock=True)))
+
+        self.assertAlmostEqual(weapon.stats.effective.multishot, 2.0)
+
     def test_secondary_dot_damage_formulas(self) -> None:
         weapon = Secondary(damage_dist=dist(impact=30, slash=70), forced_procs=dist(impact=0.1, slash=0.1), explosion_damage_dist=dist(heat=18), explosion_forced_procs=dist(cold=0.25), crit_chance=0.5, crit_damage=2.0, status_chance=0.7, fire_rate=2.5, burst_count=3, burst_delay=0.04, charge_time=0.09, reload_speed=1.2, magazine_capacity=12, multishot=2.0, weakpoint_damage=2.5, is_beam=True)
         weapon.configure(Build(Upgrade(internal_bleeding=0.8, secondary_encumber=0.12, status_damage=0.25, multishot=0.2, crit_damage=0.3, faction_damage=0.15, secondary_enervate=2)))

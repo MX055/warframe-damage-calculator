@@ -1,0 +1,215 @@
+{
+    "cascadia_accuracy": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "max_rank": 5,
+        "stats": {
+            "weakpoint_crit_chance": 3
+        }
+    },
+    "cascadia_flare": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "max_rank": 5,
+        "max_stacks": 40,
+        "stats": {
+            "stackable_base_damage": 0.12
+        }
+    },
+    "cascadia_overcharge": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "max_rank": 5,
+        "stats": {
+            "flat_crit_chance": 3
+        }
+    },
+    "conjunction_voltage": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "max_rank": 5,
+        "max_stacks": 40,
+        "stats": {
+            "stackable_multishot": 0.03,
+            "stackable_reload_speed": 0.015
+        }
+    },
+    "fractalized_reset": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "max_rank": 5,
+        "stats": {
+            "reload_speed": 2.4
+        }
+    },
+    "melee_assimilation": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "max_rank": 5,
+        "stats": {
+            "base_damage": 1.5
+        }
+    },
+    "melee_doughty": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "max_rank": 5,
+        "stats": {
+            "melee_doughty": 1
+        }
+    },
+    "melee_duplicate": {
+        "applicable_categories": [
+            "melee"
+        ],
+        "max_rank": 5,
+        "stats": {
+            "melee_duplicate": 1
+        }
+    },
+    "primary_blight": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "max_rank": 5,
+        "max_stacks": 40,
+        "stats": {
+            "stackable_crit_damage": 0.036,
+            "stackable_multishot": 0.018
+        }
+    },
+    "primary_deadhead": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "condition": "max rank",
+        "max_rank": 5,
+        "max_stacks": 3,
+        "stats": {
+            "conditional_weakpoint_damage": 0.3,
+            "stackable_base_damage": 1.2
+        }
+    },
+    "primary_dexterity": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "max_rank": 5,
+        "max_stacks": 6,
+        "stats": {
+            "stackable_base_damage": 0.6
+        }
+    },
+    "primary_frostbite": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "max_rank": 5,
+        "max_stacks": 40,
+        "stats": {
+            "stackable_crit_damage": 0.03,
+            "stackable_multishot": 0.0225
+        }
+    },
+    "primary_merciless": {
+        "applicable_categories": [
+            "primary"
+        ],
+        "condition": "max rank",
+        "max_rank": 5,
+        "max_stacks": 12,
+        "stats": {
+            "conditional_reload_speed": 0.3,
+            "stackable_base_damage": 0.3
+        }
+    },
+    "secondary_deadhead": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "condition": "max rank",
+        "max_rank": 5,
+        "max_stacks": 3,
+        "stats": {
+            "conditional_weakpoint_damage": 0.3,
+            "stackable_base_damage": 1.2
+        }
+    },
+    "secondary_dexterity": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "max_rank": 5,
+        "max_stacks": 6,
+        "stats": {
+            "stackable_base_damage": 0.6
+        }
+    },
+    "secondary_encumber": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "max_rank": 5,
+        "stats": {
+            "secondary_encumber": 0.24
+        }
+    },
+    "secondary_enervate": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "max_rank": 5,
+        "stats": {
+            "secondary_enervate": 6
+        }
+    },
+    "secondary_merciless": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "condition": "max rank",
+        "max_rank": 5,
+        "max_stacks": 12,
+        "stats": {
+            "conditional_reload_speed": 0.3,
+            "stackable_base_damage": 0.3
+        }
+    },
+    "secondary_shiver": {
+        "applicable_categories": [
+            "pistol",
+            "secondary"
+        ],
+        "max_rank": 5,
+        "stats": {
+            "base_damage": 0.45
+        }
+    },
+    "shotgun_vendetta": {
+        "applicable_categories": [
+            "primary",
+            "shotgun"
+        ],
+        "max_rank": 5,
+        "stats": {
+            "multishot": 1.8,
+            "reload_speed": 0.75
+        }
+    }
+}
