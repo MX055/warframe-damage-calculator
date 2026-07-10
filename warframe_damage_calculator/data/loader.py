@@ -10,11 +10,7 @@ from .normalization import normalized_key
 from .paths import DEFAULT_UPGRADES_PATH, DEFAULT_WEAPONS_PATH, load_json
 
 
-class WarframeDatabase(
-    DatabaseAccessMixin,
-    DatabaseConstructionMixin,
-    DatabaseMatchingMixin,
-):
+class WarframeDatabase(DatabaseAccessMixin, DatabaseConstructionMixin, DatabaseMatchingMixin):
     def __init__(self, weapons: dict[str, Any], upgrades: dict[str, Any]) -> None:
         self.weapons = weapons
         self.upgrades = upgrades
@@ -31,11 +27,7 @@ class WarframeDatabase(
                 self._upgrade_index[normalized_key(name)] = (section, name)
 
     @classmethod
-    def from_files(
-        cls,
-        weapons_path: str | Path = DEFAULT_WEAPONS_PATH,
-        upgrades_path: str | Path = DEFAULT_UPGRADES_PATH,
-    ) -> "WarframeDatabase":
+    def from_files(cls, weapons_path: str | Path = DEFAULT_WEAPONS_PATH, upgrades_path: str | Path = DEFAULT_UPGRADES_PATH) -> "WarframeDatabase":
         return cls(load_json(weapons_path), load_json(upgrades_path))
 
     @classmethod

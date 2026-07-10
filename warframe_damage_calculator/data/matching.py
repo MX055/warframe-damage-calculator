@@ -48,25 +48,16 @@ class DatabaseMatchingMixin:
             return True
 
         compatibility = {normalized_slug(item) for item in upgrade.get("compatibility", [])}
-
-        # "secondary" is accepted as a query alias, even if the database stores
-        # secondary upgrades as pistol-compatible instead of using a "secondary" tag.
+        
         if "pistol" in requested and "pistol" in compatibility:
             return True
 
-        # "primary" should match upgrades compatible with any primary subtype.
         if "primary" in requested and compatibility & PRIMARY_TYPES:
             return True
 
         return bool(compatibility & requested)
 
-    def _upgrade_matches_weapon(
-        self,
-        upgrade: dict[str, Any],
-        weapon_name: str,
-        weapon: dict[str, Any],
-        weapon_section: str,
-    ) -> bool:
+    def _upgrade_matches_weapon(self, upgrade: dict[str, Any], weapon_name: str, weapon: dict[str, Any], weapon_section: str) -> bool:
         compatibility = {normalized_slug(item) for item in upgrade.get("compatibility", [])}
 
         weapon_name_key = normalized_slug(weapon_name)
@@ -81,11 +72,7 @@ class DatabaseMatchingMixin:
         else:
             weapon_family = ""
 
-        compatible = (
-            weapon_name_key in compatibility
-            or weapon_type in compatibility
-            or weapon_family in compatibility
-        )
+        compatible = weapon_name_key in compatibility or weapon_type in compatibility or weapon_family in compatibility
 
         if not compatible:
             return False
