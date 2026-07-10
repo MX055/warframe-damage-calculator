@@ -3,7 +3,7 @@
         "Acceltra": {
             "crit_chance": 0.32,
             "crit_damage": 2.8,
-            "status_chance": 0.22,
+            "status_chance": 0.06,
             "type": "rifle",
             "damage_dist": {
                 "impact": 26.0
@@ -24,15 +24,15 @@
             "is_battery": false,
             "trigger": "auto",
             "explosion_damage_dist": {
-                "puncture": 57.2,
-                "slash": 86.8
+                "puncture": 35.2,
+                "slash": 8.8
             },
             "explosion_forced_procs": {}
         },
         "Acceltra Prime": {
             "crit_chance": 0.34,
             "crit_damage": 3.0,
-            "status_chance": 0.22,
+            "status_chance": 0.18,
             "type": "rifle",
             "damage_dist": {
                 "impact": 44.0
@@ -53,8 +53,8 @@
             "is_battery": false,
             "trigger": "auto",
             "explosion_damage_dist": {
-                "puncture": 64.4,
-                "slash": 88.6
+                "puncture": 42.4,
+                "slash": 10.6
             },
             "explosion_forced_procs": {}
         },
@@ -92,7 +92,7 @@
         "Afentis": {
             "crit_chance": 0.26,
             "crit_damage": 2.2,
-            "status_chance": 0.3,
+            "status_chance": 0.24,
             "type": "rifle",
             "damage_dist": {
                 "impact": 20.0,
@@ -376,8 +376,8 @@
             "is_battery": false,
             "trigger": "auto",
             "explosion_damage_dist": {
-                "puncture": 64.0,
-                "slash": 156.0
+                "puncture": 42.0,
+                "slash": 78.0
             },
             "explosion_forced_procs": {}
         },
@@ -405,8 +405,8 @@
             "is_battery": false,
             "trigger": "auto",
             "explosion_damage_dist": {
-                "puncture": 71.0,
-                "slash": 169.0
+                "puncture": 49.0,
+                "slash": 91.0
             },
             "explosion_forced_procs": {}
         },
@@ -489,7 +489,7 @@
         "Battacor": {
             "crit_chance": 0.32,
             "crit_damage": 2.4,
-            "status_chance": 0.34,
+            "status_chance": 0.18,
             "type": "rifle",
             "damage_dist": {
                 "puncture": 24.0,
@@ -873,7 +873,7 @@
             "is_battery": false,
             "trigger": "unknown",
             "explosion_damage_dist": {
-                "blast": 700.0
+                "blast": 350.0
             },
             "explosion_forced_procs": {}
         },
@@ -1005,7 +1005,7 @@
         "Coda Bassocyst": {
             "crit_chance": 0.18,
             "crit_damage": 2.2,
-            "status_chance": 1.68,
+            "status_chance": 0.4,
             "type": "shotgun",
             "damage_dist": {
                 "blast": 789.0,
@@ -1504,7 +1504,7 @@
         "Felarx": {
             "crit_chance": 0.2,
             "crit_damage": 2.0,
-            "status_chance": 0.36,
+            "status_chance": 0.22,
             "type": "shotgun",
             "damage_dist": {
                 "impact": 38.0,
@@ -2007,7 +2007,7 @@
             "is_battery": false,
             "trigger": "charge",
             "explosion_damage_dist": {
-                "heat": 170.0
+                "heat": 120.0
             },
             "explosion_forced_procs": {
                 "impact": 1
@@ -2141,7 +2141,7 @@
             "is_battery": false,
             "trigger": "charge",
             "explosion_damage_dist": {
-                "blast": 1049.0
+                "blast": 896.0
             },
             "explosion_forced_procs": {}
         },
@@ -2334,7 +2334,7 @@
             "explosion_damage_dist": {
                 "puncture": 183.0,
                 "slash": 155.0,
-                "blast": 849.0
+                "blast": 349.0
             },
             "explosion_forced_procs": {}
         },
@@ -2414,7 +2414,7 @@
             "explosion_damage_dist": {
                 "puncture": 168.0,
                 "slash": 204.0,
-                "blast": 627.0
+                "blast": 302.0
             },
             "explosion_forced_procs": {}
         },
@@ -2440,7 +2440,7 @@
             "is_battery": false,
             "trigger": "semi",
             "explosion_damage_dist": {
-                "blast": 883.0
+                "blast": 723.0
             },
             "explosion_forced_procs": {}
         },
@@ -2549,7 +2549,7 @@
         "Lenz": {
             "crit_chance": 0.5,
             "crit_damage": 2.0,
-            "status_chance": 0.1,
+            "status_chance": 0.05,
             "type": "bow",
             "damage_dist": {
                 "impact": 50.0
@@ -2888,7 +2888,7 @@
             "is_battery": false,
             "trigger": "charge",
             "explosion_damage_dist": {
-                "blast": 1100.0
+                "blast": 600.0
             },
             "explosion_forced_procs": {}
         },
@@ -3096,7 +3096,7 @@
             "is_battery": false,
             "trigger": "unknown",
             "explosion_damage_dist": {
-                "blast": 700.0
+                "blast": 350.0
             },
             "explosion_forced_procs": {}
         },
@@ -3770,7 +3770,7 @@
             "is_battery": false,
             "trigger": "unknown",
             "explosion_damage_dist": {
-                "blast": 675.0
+                "blast": 300.0
             },
             "explosion_forced_procs": {}
         },
@@ -4757,7 +4757,7 @@
             "is_battery": false,
             "trigger": "semi",
             "explosion_damage_dist": {
-                "blast": 975.0
+                "blast": 650.0
             },
             "explosion_forced_procs": {}
         },
@@ -5061,7 +5061,7 @@
             "is_battery": false,
             "trigger": "semi",
             "explosion_damage_dist": {
-                "blast": 385.0
+                "blast": 225.0
             },
             "explosion_forced_procs": {}
         },
@@ -5199,7 +5199,7 @@
             "is_battery": false,
             "trigger": "unknown",
             "explosion_damage_dist": {
-                "blast": 1594.0
+                "blast": 797.0
             },
             "explosion_forced_procs": {}
         },
@@ -5310,7 +5310,7 @@
         "Akbolto": {
             "crit_chance": 0.16,
             "crit_damage": 2.4,
-            "status_chance": 0.1,
+            "status_chance": 0.022,
             "type": "pistol",
             "damage_dist": {
                 "impact": 6.4,
@@ -6028,7 +6028,7 @@
         "Bolto": {
             "crit_chance": 0.16,
             "crit_damage": 2.4,
-            "status_chance": 0.1,
+            "status_chance": 0.022,
             "type": "pistol",
             "damage_dist": {
                 "impact": 6.4,
@@ -6173,7 +6173,7 @@
             "is_battery": false,
             "trigger": "unknown",
             "explosion_damage_dist": {
-                "electricity": 320.0
+                "electricity": 160.0
             },
             "explosion_forced_procs": {
                 "electricity": 1
@@ -6346,7 +6346,7 @@
             "is_battery": false,
             "trigger": "auto",
             "explosion_damage_dist": {
-                "gas": 141.0
+                "gas": 41.0
             },
             "explosion_forced_procs": {}
         },
@@ -6689,7 +6689,7 @@
         "Euphona Prime": {
             "crit_chance": 0.3,
             "crit_damage": 2.5,
-            "status_chance": 0.1,
+            "status_chance": 0.02,
             "type": "pistol",
             "damage_dist": {
                 "impact": 292.5,
@@ -6918,7 +6918,7 @@
         "Hystrix": {
             "crit_chance": 0.24,
             "crit_damage": 2.2,
-            "status_chance": 0.3,
+            "status_chance": 0.1,
             "type": "pistol",
             "damage_dist": {
                 "impact": 2.16,
@@ -6949,7 +6949,7 @@
         "Hystrix Prime": {
             "crit_chance": 0.28,
             "crit_damage": 2.2,
-            "status_chance": 0.3,
+            "status_chance": 0.2,
             "type": "pistol",
             "damage_dist": {
                 "impact": 2.76,
@@ -7155,14 +7155,14 @@
             "is_battery": false,
             "trigger": "unknown",
             "explosion_damage_dist": {
-                "blast": 300.0
+                "blast": 390.0
             },
             "explosion_forced_procs": {}
         },
         "Kunai": {
             "crit_chance": 0.08,
             "crit_damage": 1.6,
-            "status_chance": 0.1,
+            "status_chance": 0.08,
             "type": "pistol",
             "damage_dist": {
                 "impact": 4.6,
@@ -7318,7 +7318,7 @@
         "Laetum": {
             "crit_chance": 0.22,
             "crit_damage": 2.2,
-            "status_chance": 0.25,
+            "status_chance": 0.22,
             "type": "pistol",
             "damage_dist": {
                 "impact": 64.0,
@@ -7601,7 +7601,7 @@
         "MK1-Kunai": {
             "crit_chance": 0.05,
             "crit_damage": 2.0,
-            "status_chance": 0.1,
+            "status_chance": 0.025,
             "type": "pistol",
             "damage_dist": {
                 "impact": 4.0,
@@ -8075,7 +8075,7 @@
             "is_battery": false,
             "trigger": "auto",
             "explosion_damage_dist": {
-                "blast": 96.0
+                "blast": 48.0
             },
             "explosion_forced_procs": {}
         },
@@ -8125,7 +8125,7 @@
             "is_battery": false,
             "trigger": "unknown",
             "explosion_damage_dist": {
-                "electricity": 600.0
+                "electricity": 300.0
             },
             "explosion_forced_procs": {
                 "electricity": 1
@@ -8309,7 +8309,7 @@
             "is_battery": false,
             "trigger": "semi",
             "explosion_damage_dist": {
-                "impact": 150.0
+                "impact": 50.0
             },
             "explosion_forced_procs": {
                 "impact": 1
@@ -8368,7 +8368,7 @@
         "Spira": {
             "crit_chance": 0.3,
             "crit_damage": 2.0,
-            "status_chance": 0.1,
+            "status_chance": 0.08,
             "type": "pistol",
             "damage_dist": {
                 "impact": 8.2,
@@ -8494,7 +8494,7 @@
         "Stug": {
             "crit_chance": 0.05,
             "crit_damage": 1.5,
-            "status_chance": 0.1,
+            "status_chance": 0.0,
             "type": "pistol",
             "damage_dist": {},
             "forced_procs": {},
@@ -8511,7 +8511,7 @@
             "is_battery": false,
             "trigger": "auto",
             "explosion_damage_dist": {
-                "corrosive": 150.0
+                "corrosive": 75.0
             },
             "explosion_forced_procs": {}
         },
@@ -8559,7 +8559,7 @@
             "is_battery": false,
             "trigger": "unknown",
             "explosion_damage_dist": {
-                "blast": 370.0
+                "blast": 120.0
             },
             "explosion_forced_procs": {
                 "puncture": 1
@@ -9265,7 +9265,7 @@
         "Zymos": {
             "crit_chance": 0.05,
             "crit_damage": 2.3,
-            "status_chance": 0.5,
+            "status_chance": 0.3,
             "type": "pistol",
             "damage_dist": {
                 "impact": 9.2,
@@ -9287,7 +9287,7 @@
             "is_battery": false,
             "trigger": "semi",
             "explosion_damage_dist": {
-                "toxin": 1014.0
+                "toxin": 61.0
             },
             "explosion_forced_procs": {}
         }
