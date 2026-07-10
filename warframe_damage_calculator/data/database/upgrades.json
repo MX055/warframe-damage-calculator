@@ -780,22 +780,6 @@
             "incompatibility": [],
             "is_exilus": false
         },
-        "Condition's Perfection": {
-            "compatibility": [
-                "melee"
-            ],
-            "requirements": {},
-            "max_rank": 3,
-            "max_stacks": null,
-            "condition": "heavy attack",
-            "stats": {},
-            "conditionals": {
-                "status_chance": 1.0
-            },
-            "stackables": {},
-            "incompatibility": [],
-            "is_exilus": true
-        },
         "Conductive Blade": {
             "compatibility": [
                 "melee"
@@ -1082,22 +1066,6 @@
             "stackables": {},
             "incompatibility": [],
             "is_exilus": false
-        },
-        "Dreamer's Wrath": {
-            "compatibility": [
-                "melee"
-            ],
-            "requirements": {},
-            "max_rank": 3,
-            "max_stacks": null,
-            "condition": "heavy attack",
-            "stats": {},
-            "conditionals": {
-                "crit_damage": 0.48
-            },
-            "stackables": {},
-            "incompatibility": [],
-            "is_exilus": true
         },
         "Drifting Contact": {
             "compatibility": [
@@ -2395,22 +2363,6 @@
             "stackables": {},
             "incompatibility": [],
             "is_exilus": false
-        },
-        "Master's Edge": {
-            "compatibility": [
-                "melee"
-            ],
-            "requirements": {},
-            "max_rank": 5,
-            "max_stacks": null,
-            "condition": "heavy attack",
-            "stats": {},
-            "conditionals": {
-                "base_damage": 0.6
-            },
-            "stackables": {},
-            "incompatibility": [],
-            "is_exilus": true
         },
         "Melee Elementalist": {
             "compatibility": [
