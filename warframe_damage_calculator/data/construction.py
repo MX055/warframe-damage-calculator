@@ -99,7 +99,6 @@ class DatabaseConstructionMixin:
         for bucket in buckets:
             for key, value in (bucket or {}).items():
                 if isinstance(value, bool):
-                    # Locks are effectively on/off flags.
                     merged[key] = bool(merged.get(key, False)) or value
                 elif isinstance(value, int | float) and isinstance(merged.get(key), int | float) and not isinstance(merged.get(key), bool):
                     merged[key] += value
