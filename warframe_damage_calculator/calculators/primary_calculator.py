@@ -26,7 +26,6 @@ class PrimaryCalculator(RangedCalculator[PrimaryState]):
 
     def _compute_moded_stats(self) -> None:
         super()._compute_moded_stats()
-        self.moded.fire_rate = max(self.base.fire_rate * (1 if self.build.fire_rate_lock else (1 + sum(upgrade.fire_rate * (2 if self.base.type == "bow" and upgrade.type == "mod" else 1) for upgrade in self.build))), 0.05)
         self.moded.hunter_munitions = clamp(self.build.hunter_munitions, 0, 0.3)
         self.moded.primed_chamber = clamp(self.build.primed_chamber, 0, 1.4)
         self.moded.vigilante_bonus = clamp(self.build.vigilante_bonus, 0, 0.3)
