@@ -6,7 +6,7 @@ from typing import Any
 
 from ..models import Upgrade, Primary, Secondary, Melee, dist
 from ..utils import DAMAGE_TYPES, COMMON_WEAPON_PAYLOAD_FIELDS, RANGED_WEAPON_PAYLOAD_FIELDS, MELEE_WEAPON_PAYLOAD_FIELDS, WEAPON_DIST_FIELDS
-from .normalization import normalized_slug
+from .normalization import as_list, normalized_slug
 
 
 class DatabaseConstructionMixin:
@@ -107,13 +107,49 @@ class DatabaseConstructionMixin:
 
         return merged
 
-    def _effective_upgrade_bucket(self, data: dict[str, Any], *, stacks: int | None, condition: bool) -> dict[str, Any]:
+    def _condition_context(self, type: str | None) -> set[str]:
+        if type is None:
+            return set()
+
+        normalizer = getattr(self, "_normalized_filter", None)
+        if normalizer is not None:
+            type = normalizer(type)
+
+        return {normalized_slug(type)} if type else set()
+
+    def _condition_matches(self, value: Any, *, type: str | None) -> bool:
+        labels = {normalized_slug(item) for item in as_list(value) if item}
+        if not labels:
+            return True
+
+        weapon_conditions = {"primary", "rifle", "bow", "shotgun", "sniper", "secondary", "pistol", "melee"}
+        weapon_labels = labels & weapon_conditions
+        if weapon_labels:
+            return bool(weapon_labels & self._condition_context(type))
+
+        # Non-weapon conditions such as kill, headshot, status proc, etc. are still
+        # controlled by the public condition=True/False toggle. Since this method is
+        # only called after that toggle passes, they match here.
+        return True
+
+    def _filtered_conditionals(self, data: dict[str, Any], *, type: str | None) -> dict[str, Any]:
+        conditionals = deepcopy(data.get("conditionals") or {})
+        conditions = data.get("conditions") or {}
+        legacy_condition = data.get("condition")
+
+        return {
+            key: value
+            for key, value in conditionals.items()
+            if self._condition_matches(conditions.get(key, legacy_condition), type=type)
+        }
+
+    def _effective_upgrade_bucket(self, data: dict[str, Any], *, stacks: int | None, condition: bool, type: str | None = None) -> dict[str, Any]:
         stack_count = self._resolve_stack_count(data, stacks)
 
         buckets: list[dict[str, Any]] = [deepcopy(data.get("stats") or {})]
 
         if condition:
-            buckets.append(deepcopy(data.get("conditionals") or {}))
+            buckets.append(self._filtered_conditionals(data, type=type))
 
         if stack_count:
             buckets.append(self._scale_stat_bucket(data.get("stackables") or {}, stack_count))
@@ -151,11 +187,12 @@ class DatabaseConstructionMixin:
             "max_rank": data.get("max_rank"),
             "max_stacks": data.get("max_stacks"),
             "condition": data.get("condition"),
+            "conditions": deepcopy(data.get("conditions") or {}),
             "is_exilus": bool(data.get("is_exilus", False)),
         }
 
-    def _prepare_upgrade_payload(self, data: dict[str, Any], *, section: str | None = None, stacks: int | None = None, condition: bool = True) -> dict[str, Any]:
-        bucket = self._effective_upgrade_bucket(data, stacks=stacks, condition=condition)
+    def _prepare_upgrade_payload(self, data: dict[str, Any], *, section: str | None = None, stacks: int | None = None, condition: bool = True, type: str | None = None) -> dict[str, Any]:
+        bucket = self._effective_upgrade_bucket(data, stacks=stacks, condition=condition, type=type)
         payload = self._prepare_upgrade_payload_from_bucket(bucket, section=section)
         payload.update(self._prepare_upgrade_metadata(data))
         return payload
@@ -164,8 +201,8 @@ class DatabaseConstructionMixin:
         payload = self._prepare_weapon_payload(section, name, data)
         return self._construct_object(self._weapon_model_class(section), name, payload)
 
-    def _make_upgrade_object(self, name: str, data: dict[str, Any], *, section: str | None = None, stacks: int | None = None, condition: bool = True) -> Upgrade:
-        payload = self._prepare_upgrade_payload(data, section=section, stacks=stacks, condition=condition)
+    def _make_upgrade_object(self, name: str, data: dict[str, Any], *, section: str | None = None, stacks: int | None = None, condition: bool = True, type: str | None = None) -> Upgrade:
+        payload = self._prepare_upgrade_payload(data, section=section, stacks=stacks, condition=condition, type=type)
         return self._construct_object(Upgrade, name, payload)
 
     def _make_upgrade_bucket_object(self, name: str, data: dict[str, Any], *, section: str | None = None, bucket: str = "stats", stacks: int | None = None) -> Upgrade:

@@ -11,10 +11,10 @@ class Upgrade:
     category: str | None = None
     compatibility: set[str] | None = None
     incompatibility: set[str] | None = None
-    requirements: dict[str, object] | None = None
+    conditions: dict[str, str] | None = None
+    requirements: dict[str, str] | None = None
     max_rank: int | None = None
     max_stacks: int | None = None
-    condition: str | None = None
     is_exilus: bool | None = None
 
     damage_dist: dist = field(default_factory=dist)

@@ -142,7 +142,7 @@ class DatabaseAccessMixin:
         if not self._upgrade_matches_filter(section, data, type):
             return None
 
-        upgrade = self._make_upgrade_object(real_name, data, section=section, stacks=stacks, condition=condition)
+        upgrade = self._make_upgrade_object(real_name, data, section=section, stacks=stacks, condition=condition, type=type)
         return self._scale_upgrade_for_rank(upgrade, data, rank)
 
     def _iter_matching_items(self, *, type: str | None, rank: int | None, stacks: int | None, condition: bool) -> Iterable[tuple[str, ArsenalItem]]:
@@ -154,7 +154,7 @@ class DatabaseAccessMixin:
         for section, entries in self.upgrades.items():
             for name, data in entries.items():
                 if self._upgrade_matches_filter(section, data, type):
-                    upgrade = self._make_upgrade_object(name, data, section=section, stacks=stacks, condition=condition)
+                    upgrade = self._make_upgrade_object(name, data, section=section, stacks=stacks, condition=condition, type=type)
                     yield name, self._scale_upgrade_for_rank(upgrade, data, rank)
 
     def _extract_attribute(self, item: ArsenalItem, attribute: str) -> ArsenalValue | None:

@@ -8,6 +8,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "fire_rate": 0.6,
                 "puncture": 0.6
@@ -25,6 +26,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "fire_rate": 0.4,
                 "radiation": 0.6
@@ -42,6 +44,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "multishot": 1.095
             },
@@ -61,6 +64,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "weakpoint_damage": 0.75
             },
@@ -77,6 +81,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "magazine_capacity": 0.45
             },
@@ -93,6 +98,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_damage": 0.846
             },
@@ -111,6 +117,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_chance": 1.87
             },
@@ -128,6 +135,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 1.551
             },
@@ -146,6 +154,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "fire_rate": 0.846
             },
@@ -164,6 +173,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 3.3
             },
@@ -180,6 +190,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 0.9,
                 "slash": 0.3
@@ -197,6 +208,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "magazine_capacity": 0.6
             },
@@ -215,6 +227,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": -0.15,
                 "fire_rate": 0.9
@@ -233,6 +246,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "headshot",
+            "conditions": {
+                "crit_chance": "headshot"
+            },
             "stats": {},
             "conditionals": {
                 "crit_chance": 1.35
@@ -251,6 +267,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "slash": 0.9
             },
@@ -267,6 +284,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "magazine_capacity": 0.4,
                 "radiation": 0.6
@@ -284,6 +302,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "puncture": 1.2
             },
@@ -300,6 +319,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 0.9
             },
@@ -316,6 +336,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "multishot": 1.2
             },
@@ -335,6 +356,7 @@
             "max_rank": 5,
             "max_stacks": 2,
             "condition": null,
+            "conditions": {},
             "stats": {},
             "conditionals": {},
             "stackables": {
@@ -354,6 +376,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_chance": 0.9
             },
@@ -370,6 +393,11 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "headshot",
+            "conditions": {
+                "magnetic": "headshot",
+                "status_chance": "headshot",
+                "viral": "headshot"
+            },
             "stats": {},
             "conditionals": {
                 "magnetic": 1.5,
@@ -388,6 +416,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 1.0
             },
@@ -405,6 +434,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "kill",
+            "conditions": {
+                "crit_damage": "kill"
+            },
             "stats": {},
             "conditionals": {
                 "crit_damage": 1.2
@@ -421,6 +453,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 0.6,
                 "heat": 0.6
@@ -438,6 +471,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "heat": 1.2
             },
@@ -454,6 +488,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_damage": 1.1
             },
@@ -470,6 +505,7 @@
             "max_rank": 10,
             "max_stacks": 11,
             "condition": null,
+            "conditions": {},
             "stats": {},
             "conditionals": {},
             "stackables": {
@@ -486,6 +522,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_chance": 0.9
             },
@@ -502,6 +539,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "puncture": 1.2
             },
@@ -518,6 +556,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 0.9,
                 "status_damage": 0.6
@@ -535,6 +574,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "puncture": 1.2
             },
@@ -551,6 +591,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 1.0
             },
@@ -567,6 +608,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "magazine_capacity": 0.6,
                 "reload_speed": -0.18
@@ -584,6 +626,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "slash": 1.2
             },
@@ -600,6 +643,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "slash": 0.9,
                 "status_chance": 0.6
@@ -617,6 +661,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "slash": 0.9,
                 "status_chance": 0.6
@@ -635,6 +680,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "status proc",
+            "conditions": {
+                "status_chance": "status proc"
+            },
             "stats": {},
             "conditionals": {
                 "status_chance": 0.6
@@ -653,6 +701,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "primed_chamber": 0.4
             },
@@ -671,6 +720,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "electricity": 0.9
             },
@@ -689,6 +739,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "cold": 0.9
             },
@@ -707,6 +758,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "cold": 0.6,
                 "reload_speed": 0.4
@@ -724,6 +776,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "impact": 1.2
             },
@@ -740,6 +793,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "headshot",
+            "conditions": {
+                "reload_speed": "headshot"
+            },
             "stats": {},
             "conditionals": {
                 "reload_speed": 1.2
@@ -756,6 +812,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "impact": 0.9
             },
@@ -772,6 +829,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {},
             "conditionals": {},
             "stackables": {
@@ -788,6 +846,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "electricity": 1.2
             },
@@ -804,6 +863,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "toxin": 0.9
             },
@@ -820,6 +880,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "electricity": 0.9
             },
@@ -839,6 +900,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "impact": 1.2
             },
@@ -855,6 +917,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_chance": 2.0,
                 "fire_rate": -0.2
@@ -872,6 +935,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_chance": 2.0,
                 "fire_rate": -0.2
@@ -890,11 +954,16 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {
+                "fire_rate": "bow"
+            },
             "stats": {
                 "crit_chance": 2.0,
                 "fire_rate": -0.2
             },
-            "conditionals": {},
+            "conditionals": {
+                "fire_rate": -0.2
+            },
             "stackables": {},
             "incompatibility": [],
             "is_exilus": false
@@ -907,6 +976,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_chance": 0.6,
                 "radiation": 0.6
@@ -924,6 +994,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "cold": 0.6,
                 "status_chance": 0.6
@@ -942,6 +1013,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "cold": 0.9
             },
@@ -960,6 +1032,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 1.1
             },
@@ -976,6 +1049,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "viral": 2.4
             },
@@ -992,6 +1066,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_chance": 2.0
             },
@@ -1008,6 +1083,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "cold": 0.9
             },
@@ -1026,6 +1102,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "magazine_capacity": -0.6,
                 "reload_speed": 0.48
@@ -1043,6 +1120,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "impact": 0.9
             },
@@ -1059,6 +1137,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_chance": 2.0
             },
@@ -1075,6 +1154,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_chance": 0.4
             },
@@ -1091,6 +1171,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_chance": 1.5
             },
@@ -1107,6 +1188,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "status proc",
+            "conditions": {
+                "status_chance": "status proc"
+            },
             "stats": {},
             "conditionals": {
                 "status_chance": 0.9
@@ -1123,6 +1207,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {
+                "status_chance": "status proc"
+            },
             "stats": {},
             "conditionals": {
                 "status_chance": 1.0
@@ -1139,6 +1226,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_chance": 0.2
             },
@@ -1155,6 +1243,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "magazine_capacity": 2.0
             },
@@ -1171,6 +1260,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "headshot",
+            "conditions": {
+                "base_damage": "headshot"
+            },
             "stats": {},
             "conditionals": {
                 "base_damage": 6.0
@@ -1188,6 +1280,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "slash": 1.2
             },
@@ -1205,6 +1298,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "reload_speed": 0.3
             },
@@ -1223,6 +1317,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "toxin": 0.9
             },
@@ -1241,6 +1336,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "puncture": 0.9
             },
@@ -1257,6 +1353,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_chance": 1.5
             },
@@ -1273,6 +1370,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "electricity": 0.6
             },
@@ -1289,6 +1387,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "radiation": 0.6
             },
@@ -1305,6 +1404,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": -0.15,
                 "fire_rate": 0.9
@@ -1322,6 +1422,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "cold": 0.6,
                 "status_chance": 0.6
@@ -1339,6 +1440,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "cold": 0.6,
                 "status_chance": 0.6
@@ -1356,6 +1458,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "impact": 1.2
             },
@@ -1372,6 +1475,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "attack_speed": 0.1
             },
@@ -1388,6 +1492,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "attack_speed": 0.3
             },
@@ -1408,6 +1513,7 @@
             "max_rank": 10,
             "max_stacks": 2,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_chance": 0.8
             },
@@ -1429,6 +1535,7 @@
             "max_rank": 10,
             "max_stacks": 5,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "multishot": 0.8
             },
@@ -1449,6 +1556,9 @@
             "max_rank": 10,
             "max_stacks": 5,
             "condition": "headshot",
+            "conditions": {
+                "crit_chance": "headshot"
+            },
             "stats": {},
             "conditionals": {
                 "crit_chance": 1.2
@@ -1469,6 +1579,7 @@
             "max_rank": 10,
             "max_stacks": 4,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "multishot": 1.1
             },
@@ -1490,6 +1601,7 @@
             "max_rank": 10,
             "max_stacks": 4,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_damage": 0.8
             },
@@ -1510,6 +1622,7 @@
             "max_rank": 10,
             "max_stacks": 4,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "multishot": 1.1
             },
@@ -1530,6 +1643,7 @@
             "max_rank": 10,
             "max_stacks": 2,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_chance": 0.8
             },
@@ -1551,6 +1665,9 @@
             "max_rank": 10,
             "max_stacks": 5,
             "condition": "headshot",
+            "conditions": {
+                "crit_chance": "headshot"
+            },
             "stats": {},
             "conditionals": {
                 "crit_chance": 1.2
@@ -1571,6 +1688,7 @@
             "max_rank": 10,
             "max_stacks": 3,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_chance": 0.8
             },
@@ -1591,6 +1709,7 @@
             "max_rank": 10,
             "max_stacks": 4,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_chance": 1.1
             },
@@ -1612,6 +1731,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "fire_rate": 0.8
             },
@@ -1628,6 +1748,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "cold": 1.2
             },
@@ -1644,6 +1765,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_damage": 0.6
             },
@@ -1660,6 +1782,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "attack_speed": 0.3
             },
@@ -1676,6 +1799,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_chance": 1.0
             },
@@ -1692,6 +1816,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "fire_rate": 0.72
             },
@@ -1709,6 +1834,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_damage": 0.6,
                 "status_chance": 0.8
@@ -1726,6 +1852,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "heat": 0.9
             },
@@ -1745,6 +1872,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 1.65
             },
@@ -1761,6 +1889,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "impact": 0.9
             },
@@ -1779,6 +1908,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "multishot": 1.2
             },
@@ -1798,6 +1928,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "heat": 0.9
             },
@@ -1814,6 +1945,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {
+                "internal_bleeding": "condition"
+            },
             "stats": {},
             "conditionals": {
                 "internal_bleeding": 0.35
@@ -1830,6 +1964,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 4.5
             },
@@ -1847,6 +1982,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "electricity": 0.6,
                 "status_chance": 0.6
@@ -1864,6 +2000,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": -0.15,
                 "crit_damage": 0.6
@@ -1881,6 +2018,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 2.2
             },
@@ -1901,6 +2039,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "hunter_munitions": 0.3
             },
@@ -1917,6 +2056,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {
+                "status_chance": "condition"
+            },
             "stats": {},
             "conditionals": {
                 "status_chance": 0.6
@@ -1933,6 +2075,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "headshot",
+            "conditions": {
+                "crit_chance": "headshot"
+            },
             "stats": {},
             "conditionals": {
                 "crit_chance": 1.35
@@ -1951,6 +2096,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "cold": 0.4,
                 "magazine_capacity": 0.4
@@ -1968,6 +2114,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "heat": 0.9
             },
@@ -1985,6 +2132,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "toxin": 0.9
             },
@@ -2001,6 +2149,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_chance": 0.6,
                 "toxin": 0.6
@@ -2019,6 +2168,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {
+                "internal_bleeding": "condition"
+            },
             "stats": {},
             "conditionals": {
                 "internal_bleeding": 0.35
@@ -2035,6 +2187,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "electricity": 0.6,
                 "status_chance": 0.6
@@ -2052,6 +2205,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "slash": 0.9
             },
@@ -2068,6 +2222,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "electricity": 0.6,
                 "status_chance": 0.6
@@ -2085,6 +2240,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "puncture": 0.9,
                 "status_chance": 0.6
@@ -2102,6 +2258,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "puncture": 0.9,
                 "status_chance": 0.6
@@ -2119,6 +2276,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 1.0
             },
@@ -2135,6 +2293,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {
+                "base_damage": "heavy attack"
+            },
             "stats": {},
             "conditionals": {
                 "base_damage": 1.2
@@ -2151,6 +2312,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "headshot",
+            "conditions": {
+                "crit_chance": "headshot"
+            },
             "stats": {},
             "conditionals": {
                 "crit_chance": 1.2
@@ -2167,6 +2331,10 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "headshot",
+            "conditions": {
+                "gas": "headshot",
+                "status_chance": "headshot"
+            },
             "stats": {},
             "conditionals": {
                 "gas": 3.0,
@@ -2184,6 +2352,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "fire_rate": 0.6,
                 "multishot": 0.6
@@ -2202,6 +2371,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "magazine_capacity": 0.3
             },
@@ -2221,6 +2391,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "magazine_capacity": 0.4,
                 "magnetic": 0.6
@@ -2238,6 +2409,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_damage": 0.4,
                 "magnetic": 0.6
@@ -2255,6 +2427,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "attack_speed": 0.2,
                 "magnetic": 0.6
@@ -2272,6 +2445,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "fire_rate": 0.4,
                 "magnetic": 0.6
@@ -2289,6 +2463,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_damage": 0.4,
                 "magnetic": 0.6
@@ -2306,6 +2481,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 1.65
             },
@@ -2322,6 +2498,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "slash": 1.2
             },
@@ -2338,6 +2515,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {
+                "crit_chance": "slide"
+            },
             "stats": {},
             "conditionals": {
                 "crit_chance": 3.0
@@ -2355,6 +2535,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_chance": 0.6,
                 "toxin": 0.6
@@ -2372,6 +2553,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_damage": 0.9
             },
@@ -2390,6 +2572,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_chance": 0.9
             },
@@ -2406,6 +2589,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_damage": 0.45
             },
@@ -2422,6 +2606,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "magazine_capacity": 0.9
             },
@@ -2438,6 +2623,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "impact": 0.9
             },
@@ -2454,6 +2640,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "weakpoint_damage": 1.05
             },
@@ -2470,6 +2657,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "heat": 0.9
             },
@@ -2486,6 +2674,10 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {
+                "crit_chance": "condition",
+                "status_chance": "condition"
+            },
             "stats": {},
             "conditionals": {
                 "crit_chance": 1.0,
@@ -2503,6 +2695,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "status proc",
+            "conditions": {
+                "status_chance": "status proc"
+            },
             "stats": {},
             "conditionals": {
                 "status_chance": 0.9
@@ -2519,6 +2714,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_chance": 0.3
             },
@@ -2535,6 +2731,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "puncture": 0.9
             },
@@ -2551,6 +2748,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 0.9,
                 "status_chance": 0.6
@@ -2568,6 +2766,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "puncture": 0.9
             },
@@ -2584,6 +2783,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "cold": 0.9
             },
@@ -2600,6 +2800,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_damage": 0.9
             },
@@ -2618,6 +2819,7 @@
             "max_rank": 5,
             "max_stacks": 10,
             "condition": null,
+            "conditions": {},
             "stats": {},
             "conditionals": {},
             "stackables": {
@@ -2634,6 +2836,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "toxin": 0.9
             },
@@ -2650,6 +2853,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_damage": 0.9
             },
@@ -2667,6 +2871,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "puncture": 1.2
             },
@@ -2684,6 +2889,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "puncture": 0.9
             },
@@ -2700,6 +2906,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "multiplicative_weakpoint_crit_chance": 3.498,
                 "multishot_lock": true,
@@ -2718,6 +2925,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "reload_speed": 0.6,
                 "status_damage": 0.9
@@ -2735,6 +2943,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_chance": 1.2
             },
@@ -2753,6 +2962,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_chance": 0.6,
                 "toxin": 0.6
@@ -2770,6 +2980,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 0.9
             },
@@ -2789,6 +3000,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_chance": 1.5
             },
@@ -2805,6 +3017,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "toxin": 1.2
             },
@@ -2821,6 +3034,7 @@
             "max_rank": 5,
             "max_stacks": 3,
             "condition": null,
+            "conditions": {},
             "stats": {},
             "conditionals": {},
             "stackables": {
@@ -2837,6 +3051,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 1.2
             },
@@ -2856,6 +3071,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "aim",
+            "conditions": {
+                "fire_rate": "aim"
+            },
             "stats": {},
             "conditionals": {
                 "fire_rate": 0.9
@@ -2873,6 +3091,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "multiplicative_weakpoint_crit_chance": 3.498,
                 "multishot_lock": true,
@@ -2891,6 +3110,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "magazine_capacity": 1.1
             },
@@ -2911,6 +3131,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "primed_chamber": 1.0
             },
@@ -2929,6 +3150,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "electricity": 1.65
             },
@@ -2947,6 +3169,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "cold": 1.65
             },
@@ -2965,6 +3188,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "electricity": 1.65
             },
@@ -2984,6 +3208,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "cold": 1.65
             },
@@ -3003,6 +3228,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "reload_speed": 0.55
             },
@@ -3021,6 +3247,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "toxin": 1.65
             },
@@ -3039,6 +3266,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "attack_speed": 0.55
             },
@@ -3058,6 +3286,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "heat": 1.65
             },
@@ -3076,6 +3305,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "impact": 1.65
             },
@@ -3095,6 +3325,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "magazine_capacity": 0.55
             },
@@ -3113,6 +3344,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_chance": 1.87
             },
@@ -3131,6 +3363,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 1.65
             },
@@ -3149,6 +3382,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 1.65
             },
@@ -3168,6 +3402,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "reload_speed": 0.88
             },
@@ -3186,6 +3421,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_damage": 1.1
             },
@@ -3205,10 +3441,15 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {
+                "fire_rate": "bow"
+            },
             "stats": {
                 "fire_rate": 0.55
             },
-            "conditionals": {},
+            "conditionals": {
+                "fire_rate": 0.55
+            },
             "stackables": {},
             "incompatibility": [
                 "Shred"
@@ -3223,6 +3464,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "magazine_capacity": 0.55
             },
@@ -3241,6 +3483,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "reload_speed": 1.0
             },
@@ -3259,6 +3502,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_damage": 1.1
             },
@@ -3278,6 +3522,10 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {
+                "crit_chance": "condition",
+                "status_chance": "condition"
+            },
             "stats": {},
             "conditionals": {
                 "crit_chance": 1.2,
@@ -3295,6 +3543,10 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {
+                "status_chance": "condition",
+                "toxin": "condition"
+            },
             "stats": {},
             "conditionals": {
                 "status_chance": 0.5,
@@ -3312,6 +3564,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "impact": 1.2
             },
@@ -3328,6 +3581,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "reload_speed": 0.48
             },
@@ -3346,6 +3600,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "attack_speed": 0.4
             },
@@ -3363,6 +3618,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "radiation": 0.6,
                 "reload_speed": 0.4
@@ -3380,6 +3636,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_damage": 0.6
             },
@@ -3398,6 +3655,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "slash": 0.9
             },
@@ -3414,6 +3672,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "puncture": 0.8,
                 "slash": 0.6
@@ -3431,6 +3690,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "aim",
+            "conditions": {
+                "fire_rate": "aim"
+            },
             "stats": {},
             "conditionals": {
                 "fire_rate": 1.05
@@ -3448,6 +3710,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_chance": 0.9
             },
@@ -3467,6 +3730,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_damage": 0.9
             },
@@ -3484,6 +3748,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "cold": 0.6,
                 "status_chance": 0.6
@@ -3502,6 +3767,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "impact": 0.9
             },
@@ -3518,6 +3784,9 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {
+                "base_damage": "sacrificial set"
+            },
             "stats": {
                 "base_damage": 1.1
             },
@@ -3539,6 +3808,9 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {
+                "crit_chance": "sacrificial set"
+            },
             "stats": {
                 "crit_chance": 2.2
             },
@@ -3561,6 +3833,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "slash": 0.9
             },
@@ -3577,6 +3850,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "impact": 0.9,
                 "status_chance": 0.6
@@ -3594,6 +3868,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "impact": 0.9,
                 "status_chance": 0.6
@@ -3611,6 +3886,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "multishot": 2.0
             },
@@ -3627,6 +3903,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "heat": 0.6,
                 "status_chance": 0.6
@@ -3644,6 +3921,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "heat": 0.6,
                 "status_chance": 0.6
@@ -3661,6 +3939,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "heat": 0.6,
                 "status_chance": 0.6
@@ -3678,6 +3957,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "reload_speed": 0.15
             },
@@ -3698,6 +3978,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 3.0,
                 "fire_rate_lock": true
@@ -3720,6 +4001,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 2.4,
                 "fire_rate_lock": true
@@ -3741,6 +4023,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 2.4,
                 "fire_rate_lock": true
@@ -3759,6 +4042,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 1.65
             },
@@ -3777,6 +4061,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "kill",
+            "conditions": {
+                "crit_damage": "kill"
+            },
             "stats": {},
             "conditionals": {
                 "crit_damage": 0.75
@@ -3793,6 +4080,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_chance": 0.9
             },
@@ -3809,6 +4097,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "electricity": 0.6,
                 "status_chance": 0.6
@@ -3826,6 +4115,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "electricity": 0.9
             },
@@ -3842,6 +4132,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "fire_rate": 0.9
             },
@@ -3860,6 +4151,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "magazine_capacity": 0.6,
                 "status_damage": 0.9
@@ -3877,6 +4169,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_chance": 0.9
             },
@@ -3895,6 +4188,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "kill",
+            "conditions": {
+                "crit_damage": "kill"
+            },
             "stats": {},
             "conditionals": {
                 "crit_damage": 0.99
@@ -3912,10 +4208,15 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {
+                "fire_rate": "bow"
+            },
             "stats": {
                 "fire_rate": 0.3
             },
-            "conditionals": {},
+            "conditionals": {
+                "fire_rate": 0.3
+            },
             "stackables": {},
             "incompatibility": [
                 "Primed Shred"
@@ -3930,6 +4231,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "slash": 0.9
             },
@@ -3946,6 +4248,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "magazine_capacity": 0.3
             },
@@ -3965,6 +4268,9 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {
+                "base_damage": "condition"
+            },
             "stats": {},
             "conditionals": {
                 "base_damage": 3.3
@@ -3982,10 +4288,15 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {
+                "fire_rate": "bow"
+            },
             "stats": {
                 "fire_rate": 0.6
             },
-            "conditionals": {},
+            "conditionals": {
+                "fire_rate": 0.6
+            },
             "stackables": {},
             "incompatibility": [],
             "is_exilus": false
@@ -3999,6 +4310,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "multishot": 0.9
             },
@@ -4017,6 +4329,7 @@
             "max_rank": 5,
             "max_stacks": 4,
             "condition": null,
+            "conditions": {},
             "stats": {},
             "conditionals": {},
             "stackables": {
@@ -4033,6 +4346,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "attack_speed": -0.2,
                 "base_damage": 1.0
@@ -4051,6 +4365,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "aim",
+            "conditions": {
+                "fire_rate": "aim"
+            },
             "stats": {},
             "conditionals": {
                 "fire_rate": 0.75
@@ -4067,6 +4384,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "magazine_capacity": 40.0
             },
@@ -4083,6 +4401,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "magazine_capacity": 2.0
             },
@@ -4100,6 +4419,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "electricity": 0.9
             },
@@ -4116,6 +4436,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "reload_speed": 0.4,
                 "status_chance": 0.3
@@ -4133,6 +4454,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_chance": 0.6
             },
@@ -4149,6 +4471,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "puncture": 0.9
             },
@@ -4165,6 +4488,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_chance": 0.9
             },
@@ -4183,6 +4507,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "slash": 1.2
             },
@@ -4199,6 +4524,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "reload_speed": 0.6
             },
@@ -4217,6 +4543,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "magazine_capacity": 0.6,
                 "reload_speed": -0.3
@@ -4235,6 +4562,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "magazine_capacity": 0.66,
                 "reload_speed": -0.33
@@ -4252,6 +4580,7 @@
             "max_rank": 10,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "fire_rate": -0.55
             },
@@ -4270,6 +4599,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "weakpoint_damage": 0.6
             },
@@ -4286,6 +4616,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_damage": 0.6
             },
@@ -4304,6 +4635,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_chance": 1.5
             },
@@ -4321,6 +4653,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "heat": 0.6,
                 "status_chance": 0.6
@@ -4338,6 +4671,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_chance": 0.6,
                 "toxin": 0.6
@@ -4355,6 +4689,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "toxin": 1.0
             },
@@ -4371,6 +4706,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_chance": 1.2
             },
@@ -4390,6 +4726,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "cold": 0.6,
                 "status_chance": 0.6
@@ -4407,6 +4744,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "base_damage": 0.9
             },
@@ -4427,6 +4765,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "multishot": 0.6,
                 "vigilante_bonus": 0.05
@@ -4448,11 +4787,16 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {
+                "fire_rate": "bow"
+            },
             "stats": {
                 "fire_rate": 0.45,
                 "vigilante_bonus": 0.05
             },
-            "conditionals": {},
+            "conditionals": {
+                "fire_rate": 0.45
+            },
             "stackables": {},
             "incompatibility": [],
             "is_exilus": false
@@ -4469,6 +4813,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "vigilante_bonus": 0.05
             },
@@ -4489,6 +4834,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "vigilante_bonus": 0.05
             },
@@ -4506,11 +4852,16 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {
+                "fire_rate": "bow"
+            },
             "stats": {
                 "base_damage": -0.15,
                 "fire_rate": 0.9
             },
-            "conditionals": {},
+            "conditionals": {
+                "fire_rate": 0.9
+            },
             "stackables": {},
             "incompatibility": [],
             "is_exilus": false
@@ -4524,10 +4875,15 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {
+                "fire_rate": "bow"
+            },
             "stats": {
                 "fire_rate": -0.36
             },
-            "conditionals": {},
+            "conditionals": {
+                "fire_rate": -0.36
+            },
             "stackables": {},
             "incompatibility": [],
             "is_exilus": true
@@ -4540,6 +4896,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "status_chance": 0.6,
                 "toxin": 0.6
@@ -4558,6 +4915,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "crit_damage": 1.2
             },
@@ -4574,6 +4932,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "heat": 0.6,
                 "status_chance": 0.6
@@ -4591,6 +4950,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "electricity": 0.6,
                 "status_chance": 0.6
@@ -4608,6 +4968,7 @@
             "max_rank": 5,
             "max_stacks": 11,
             "condition": null,
+            "conditions": {},
             "stats": {},
             "conditionals": {},
             "stackables": {
@@ -4625,6 +4986,7 @@
             "max_rank": 3,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "heat": 0.6,
                 "magazine_capacity": 0.2
@@ -4644,6 +5006,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {
+                "weakpoint_crit_chance": "headshot"
+            },
             "stats": {},
             "conditionals": {
                 "weakpoint_crit_chance": 3.0
@@ -4658,6 +5023,7 @@
             "max_rank": 5,
             "max_stacks": 40,
             "condition": null,
+            "conditions": {},
             "stats": {},
             "conditionals": {},
             "stackables": {
@@ -4672,6 +5038,7 @@
             "max_rank": 5,
             "max_stacks": 40,
             "condition": null,
+            "conditions": {},
             "stats": {},
             "conditionals": {},
             "stackables": {
@@ -4691,6 +5058,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "ability cast",
+            "conditions": {
+                "reload_speed": "ability cast"
+            },
             "stats": {},
             "conditionals": {
                 "reload_speed": 2.4
@@ -4705,6 +5075,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "kill",
+            "conditions": {
+                "base_damage": "kill"
+            },
             "stats": {},
             "conditionals": {
                 "base_damage": 1.5
@@ -4719,6 +5092,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "status proc",
+            "conditions": {
+                "melee_doughty": "condition"
+            },
             "stats": {},
             "conditionals": {
                 "melee_doughty": 2.0
@@ -4733,6 +5109,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "critical hit",
+            "conditions": {
+                "melee_duplicate": "critical hit"
+            },
             "stats": {},
             "conditionals": {
                 "melee_duplicate": 1.0
@@ -4747,6 +5126,7 @@
             "max_rank": 5,
             "max_stacks": 4,
             "condition": null,
+            "conditions": {},
             "stats": {},
             "conditionals": {},
             "stackables": {
@@ -4765,6 +5145,7 @@
             "max_rank": 5,
             "max_stacks": 40,
             "condition": null,
+            "conditions": {},
             "stats": {},
             "conditionals": {},
             "stackables": {
@@ -4784,6 +5165,7 @@
             "max_rank": 5,
             "max_stacks": 3,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "weakpoint_damage": 0.3
             },
@@ -4804,6 +5186,7 @@
             "max_rank": 5,
             "max_stacks": 6,
             "condition": null,
+            "conditions": {},
             "stats": {},
             "conditionals": {},
             "stackables": {
@@ -4822,6 +5205,7 @@
             "max_rank": 5,
             "max_stacks": 40,
             "condition": null,
+            "conditions": {},
             "stats": {},
             "conditionals": {},
             "stackables": {
@@ -4841,6 +5225,7 @@
             "max_rank": 5,
             "max_stacks": 12,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "reload_speed": 0.3
             },
@@ -4857,6 +5242,7 @@
             "max_rank": 5,
             "max_stacks": 3,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "weakpoint_damage": 0.3
             },
@@ -4873,6 +5259,7 @@
             "max_rank": 5,
             "max_stacks": 6,
             "condition": null,
+            "conditions": {},
             "stats": {},
             "conditionals": {},
             "stackables": {
@@ -4887,6 +5274,9 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "status proc",
+            "conditions": {
+                "secondary_encumber": "status proc"
+            },
             "stats": {},
             "conditionals": {
                 "secondary_encumber": 0.24
@@ -4901,6 +5291,10 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "hit",
+            "conditions": {
+                "flat_crit_chance": "critical hit",
+                "secondary_enervate": "critical hit"
+            },
             "stats": {},
             "conditionals": {
                 "flat_crit_chance": 0.3,
@@ -4916,6 +5310,7 @@
             "max_rank": 5,
             "max_stacks": 12,
             "condition": null,
+            "conditions": {},
             "stats": {
                 "reload_speed": 0.3
             },
@@ -4932,6 +5327,7 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": null,
+            "conditions": {},
             "stats": {},
             "conditionals": {},
             "stackables": {
@@ -4946,6 +5342,10 @@
             "max_rank": 5,
             "max_stacks": null,
             "condition": "kill",
+            "conditions": {
+                "multishot": "kill",
+                "reload_speed": "kill"
+            },
             "stats": {},
             "conditionals": {
                 "multishot": 1.8,
