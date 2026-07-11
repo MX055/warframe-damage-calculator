@@ -11,19 +11,6 @@ from .build import Build
 
 
 class Weapon:
-    """Represents the base interface shared by weapon models.
-
-    A weapon stores the starting stats passed to its constructor, creates the
-    calculator that evaluates those stats, and creates the formatter that
-    prints a readable summary.
-
-    Use ``stats`` to access calculated values and ``format`` to access text
-    output. Calling ``configure`` applies a ``Build`` and returns the same
-    weapon so calls can be chained.
-
-    Subclasses choose the state, calculator, and formatter used by each weapon
-    family.
-    """
     def __init__(self, **kwargs: Unpack[WeaponFields]):
         base = WeaponState(**kwargs)
         self.stats = WeaponCalculator(base)

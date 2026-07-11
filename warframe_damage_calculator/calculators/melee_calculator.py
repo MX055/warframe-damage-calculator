@@ -8,17 +8,6 @@ from .weapon_calculator import WeaponCalculator
 
 
 class MeleeCalculator(WeaponCalculator[MeleeState]):
-    """Calculator for melee weapons.
-
-    Extends the shared weapon calculations with melee-only build
-    effects.
-
-    Attack speed affects DPS, Melee Duplicate changes expected hit damage,
-    and Melee Doughty exposes a separate bonus based on puncture weight and
-    status chance.
-
-    Used by ``Melee`` after a ``Build`` is configured.
-    """
     def __init__(self, base: MeleeState) -> None:
         super().__init__(base)
 

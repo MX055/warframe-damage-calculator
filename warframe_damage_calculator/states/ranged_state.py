@@ -6,18 +6,6 @@ from .weapon_state import WeaponState
 
 @dataclass
 class RangedState(WeaponState):
-    """Represents stats used by ranged weapons.
-
-    Adds ranged-only values on top of ``WeaponState``, including fire rate,
-    reload speed, magazine size, multishot, weakpoint damage, beam and
-    battery settings, burst timing, charge time, and explosion damage.
-
-    ``RangedCalculator`` uses these fields when turning a ranged weapon and
-    its ``Build`` into final damage numbers.
-
-    ``PrimaryState`` and ``SecondaryState`` reuse these fields and add their
-    own mechanics.
-    """
     trigger: str | None = None
     is_beam: bool = False
     is_battery: bool = False

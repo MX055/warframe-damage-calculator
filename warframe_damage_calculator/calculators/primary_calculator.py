@@ -9,18 +9,6 @@ from .ranged_calculator import RangedCalculator
 
 
 class PrimaryCalculator(RangedCalculator[PrimaryState]):
-    """Calculator for primary weapons.
-
-    Extends the normal ranged calculations with primary-only build
-    effects.
-
-    Vigilante bonuses increase critical chance, Primed Chamber increases
-    expected damage, and Hunter Munitions adds expected slash damage from
-    critical hits. The calculator also accounts for overlap with Internal
-    Bleeding.
-
-    Used by ``Primary`` after a ``Build`` is configured.
-    """
     def __init__(self, base: PrimaryState) -> None:
         super().__init__(base)
 

@@ -7,20 +7,6 @@ from ..fields import DamageFields
 
 
 class dist:
-    """Represents a damage distribution.
-
-    Use one or more keyword arguments to create a ``dist`` object. ``dist`` 
-    stores ordered pairs of damage types and their values, and their sum in 
-    ``total_damage``.
-
-    Missing damage types count as zero when read with ``get``. Operations
-    such as adding, multiplying, filtering, or combining elements return a
-    new ``dist`` instead of changing the existing one.
-
-    Stored values represent different things depending on context. They can 
-    either be flat damage values, percentage bonuses, or proc chances.
-    """
-    
     def __init__(self, **kwargs: Unpack[DamageFields]) -> None:
         self.dist = kwargs
 

@@ -18,3 +18,5 @@ PRIMARY_TYPES = {"primary", "rifle", "bow", "shotgun", "sniper"}
 SECONDARY_TYPES = {"secondary", "pistol"}
 MELEE_TYPES = {"melee"}
 TYPE_ALIASES = {"primary": {"primary", "rifle", "bow", "shotgun", "sniper"}, "primaries": {"primary", "rifle", "bow", "shotgun", "sniper"}, "secondary": {"pistol"}, "secondaries": {"pistol"}, "pistol": {"pistol"}, "melee": {"melee"}, "melees": {"melee"}}
+
+UPGRADE_METADATA_FILEDS = {"name", "category", "compatibility", "incompatibility", "requirements", "max_rank", "max_stacks", "condition", "is_exilus"}

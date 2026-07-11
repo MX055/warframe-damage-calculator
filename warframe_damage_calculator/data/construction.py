@@ -142,9 +142,23 @@ class DatabaseConstructionMixin:
 
         return payload
 
+    def _prepare_upgrade_metadata(self, data: dict[str, Any]) -> dict[str, Any]:
+        """Convert database metadata into the types used by ``Upgrade``."""
+        return {
+            "compatibility": set(data.get("compatibility") or ()),
+            "incompatibility": set(data.get("incompatibility") or ()),
+            "requirements": deepcopy(data.get("requirements") or {}),
+            "max_rank": data.get("max_rank"),
+            "max_stacks": data.get("max_stacks"),
+            "condition": data.get("condition"),
+            "is_exilus": bool(data.get("is_exilus", False)),
+        }
+
     def _prepare_upgrade_payload(self, data: dict[str, Any], *, section: str | None = None, stacks: int | None = None, condition: bool = True) -> dict[str, Any]:
         bucket = self._effective_upgrade_bucket(data, stacks=stacks, condition=condition)
-        return self._prepare_upgrade_payload_from_bucket(bucket, section=section)
+        payload = self._prepare_upgrade_payload_from_bucket(bucket, section=section)
+        payload.update(self._prepare_upgrade_metadata(data))
+        return payload
 
     def _make_weapon_object(self, section: str, name: str, data: dict[str, Any]) -> Primary | Secondary | Melee:
         payload = self._prepare_weapon_payload(section, name, data)
@@ -162,6 +176,7 @@ class DatabaseConstructionMixin:
             raw_bucket = self._scale_stat_bucket(raw_bucket, scale)
 
         payload = self._prepare_upgrade_payload_from_bucket(raw_bucket, section=section)
+        payload.update(self._prepare_upgrade_metadata(data))
         return self._construct_object(Upgrade, name, payload)
 
     def _construct_object(self, cls: type, name: str, data: dict[str, Any]) -> Any:

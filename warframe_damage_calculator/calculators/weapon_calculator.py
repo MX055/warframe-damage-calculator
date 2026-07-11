@@ -7,18 +7,6 @@ from ..models import Build, Upgrade
 
 
 class WeaponCalculator[TWeaponState: WeaponState]:
-    """Base calculator for weapon stats.
-
-    Takes a weapon's base stats and a ``Build`` and prepares the
-    common stats used by every weapon type.
-
-    Keeps three versions of the stats: ``base`` for the original weapon,
-    ``moded`` for stats after normal build bonuses, and ``effective`` for the
-    final values used by damage calculations.
-
-    Specialized calculators add hit damage, damage over time, and
-    weapon-family mechanics.
-    """
     def __init__(self, base: TWeaponState) -> None:
         self.build = Build()
         self.base: TWeaponState = base

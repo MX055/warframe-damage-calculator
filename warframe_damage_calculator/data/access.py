@@ -4,6 +4,7 @@ from dataclasses import fields, replace
 from typing import Any, Iterable
 
 from ..models import Melee, Primary, Secondary, Upgrade, dist
+from ..models.upgrade import METADATA
 from .normalization import as_list, normalized_key, normalized_slug
 
 
@@ -103,7 +104,7 @@ class DatabaseAccessMixin:
         scaled = replace(upgrade, damage_dist=upgrade.damage_dist * multiplier)
 
         for field in fields(Upgrade):
-            if field.name in {"name", "category", "damage_dist"}:
+            if field.name in METADATA or field.name == "damage_dist":
                 continue
 
             value = getattr(scaled, field.name)

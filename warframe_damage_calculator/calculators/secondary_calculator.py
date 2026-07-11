@@ -9,17 +9,6 @@ from .ranged_calculator import RangedCalculator
 
 
 class SecondaryCalculator(RangedCalculator[SecondaryState]):
-    """Calculator for secondary weapons.
-
-    Extends the normal ranged calculations with secondary-only build
-    effects.
-
-    Secondary Enervate increases average critical chance based on its stack
-    behavior. Secondary Encumber adds expected damage over time and extra
-    status-proc interactions.
-
-    Used by ``Secondary`` after a ``Build`` is configured.
-    """
     def __init__(self, base: SecondaryState) -> None:
         super().__init__(base)
 
