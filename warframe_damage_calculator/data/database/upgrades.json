@@ -392,11 +392,11 @@
             "requirements": {},
             "max_rank": 5,
             "max_stacks": null,
-            "condition": "headshot",
+            "condition": "headshot kill",
             "conditions": {
-                "magnetic": "headshot",
-                "status_chance": "headshot",
-                "viral": "headshot"
+                "magnetic": "headshot kill",
+                "status_chance": "headshot kill",
+                "viral": "headshot kill"
             },
             "stats": {},
             "conditionals": {
@@ -679,9 +679,9 @@
             "requirements": {},
             "max_rank": 5,
             "max_stacks": null,
-            "condition": "status proc",
+            "condition": "ability cast",
             "conditions": {
-                "status_chance": "status proc"
+                "status_chance": "ability cast"
             },
             "stats": {},
             "conditionals": {
@@ -1187,9 +1187,9 @@
             "requirements": {},
             "max_rank": 5,
             "max_stacks": null,
-            "condition": "status proc",
+            "condition": "ability cast",
             "conditions": {
-                "status_chance": "status proc"
+                "status_chance": "ability cast"
             },
             "stats": {},
             "conditionals": {
@@ -1208,7 +1208,7 @@
             "max_stacks": null,
             "condition": null,
             "conditions": {
-                "status_chance": "status proc"
+                "status_chance": "lifted enemy"
             },
             "stats": {},
             "conditionals": {
@@ -1259,9 +1259,9 @@
             "requirements": {},
             "max_rank": 5,
             "max_stacks": null,
-            "condition": "headshot",
+            "condition": "headshot on eximus",
             "conditions": {
-                "base_damage": "headshot"
+                "base_damage": "headshot on eximus"
             },
             "stats": {},
             "conditionals": {
@@ -1946,7 +1946,7 @@
             "max_stacks": null,
             "condition": null,
             "conditions": {
-                "internal_bleeding": "condition"
+                "internal_bleeding": "impact proc"
             },
             "stats": {},
             "conditionals": {
@@ -2057,7 +2057,7 @@
             "max_stacks": null,
             "condition": null,
             "conditions": {
-                "status_chance": "condition"
+                "status_chance": "downed enemy"
             },
             "stats": {},
             "conditionals": {
@@ -2169,7 +2169,7 @@
             "max_stacks": null,
             "condition": null,
             "conditions": {
-                "internal_bleeding": "condition"
+                "internal_bleeding": "impact proc"
             },
             "stats": {},
             "conditionals": {
@@ -2673,10 +2673,10 @@
             "requirements": {},
             "max_rank": 3,
             "max_stacks": null,
-            "condition": null,
+            "condition": "land after bullet jump",
             "conditions": {
-                "crit_chance": "condition",
-                "status_chance": "condition"
+                "crit_chance": "land after bullet jump",
+                "status_chance": "land after bullet jump"
             },
             "stats": {},
             "conditionals": {
@@ -2694,9 +2694,9 @@
             "requirements": {},
             "max_rank": 5,
             "max_stacks": null,
-            "condition": "status proc",
+            "condition": "ability cast",
             "conditions": {
-                "status_chance": "status proc"
+                "status_chance": "ability cast"
             },
             "stats": {},
             "conditionals": {
@@ -3521,10 +3521,10 @@
             "requirements": {},
             "max_rank": 3,
             "max_stacks": null,
-            "condition": null,
+            "condition": "wall latch",
             "conditions": {
-                "crit_chance": "condition",
-                "status_chance": "condition"
+                "crit_chance": "wall latch",
+                "status_chance": "wall latch"
             },
             "stats": {},
             "conditionals": {
@@ -3542,10 +3542,10 @@
             "requirements": {},
             "max_rank": 3,
             "max_stacks": null,
-            "condition": null,
+            "condition": "wall latch",
             "conditions": {
-                "status_chance": "condition",
-                "toxin": "condition"
+                "status_chance": "wall latch",
+                "toxin": "wall latch"
             },
             "stats": {},
             "conditionals": {
@@ -4267,9 +4267,9 @@
             "requirements": {},
             "max_rank": 10,
             "max_stacks": null,
-            "condition": null,
+            "condition": "invisible",
             "conditions": {
-                "base_damage": "condition"
+                "base_damage": "invisible"
             },
             "stats": {},
             "conditionals": {
@@ -5005,9 +5005,9 @@
             "requirements": {},
             "max_rank": 5,
             "max_stacks": null,
-            "condition": null,
+            "condition": "roll",
             "conditions": {
-                "weakpoint_crit_chance": "headshot"
+                "weakpoint_crit_chance": "roll"
             },
             "stats": {},
             "conditionals": {
@@ -5074,9 +5074,9 @@
             "requirements": {},
             "max_rank": 5,
             "max_stacks": null,
-            "condition": "kill",
+            "condition": "shield break",
             "conditions": {
-                "base_damage": "kill"
+                "base_damage": "shield break"
             },
             "stats": {},
             "conditionals": {
@@ -5091,9 +5091,9 @@
             "requirements": {},
             "max_rank": 5,
             "max_stacks": null,
-            "condition": "status proc",
+            "condition": "puncture proc",
             "conditions": {
-                "melee_doughty": "condition"
+                "melee_doughty": "puncture proc"
             },
             "stats": {},
             "conditionals": {
@@ -5292,8 +5292,8 @@
             "max_stacks": null,
             "condition": "hit",
             "conditions": {
-                "flat_crit_chance": "critical hit",
-                "secondary_enervate": "critical hit"
+                "flat_crit_chance": "hit",
+                "secondary_enervate": "hit"
             },
             "stats": {},
             "conditionals": {
