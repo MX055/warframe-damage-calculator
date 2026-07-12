@@ -17,6 +17,6 @@ COMMON_WEAPON_PAYLOAD_FIELDS = {"name", "type", "damage_dist", "forced_procs", "
 RANGED_WEAPON_PAYLOAD_FIELDS = COMMON_WEAPON_PAYLOAD_FIELDS | {"explosion_damage_dist", "explosion_forced_procs", "multishot", "fire_rate", "reload_speed", "magazine_capacity", "weakpoint_damage", "recharge_rate", "charge_time", "burst_count", "burst_delay", "is_beam", "is_battery"}
 MELEE_WEAPON_PAYLOAD_FIELDS = COMMON_WEAPON_PAYLOAD_FIELDS | {"attack_speed"}
 PRIMARY_TYPES = {"primary", "rifle", "bow", "shotgun", "sniper"}
-SECONDARY_TYPES = {"secondary", "pistol"}
+SECONDARY_TYPES = {"pistol"}
 MELEE_TYPES = {"melee"}
 TYPE_ALIASES = {"primary": {"primary", "rifle", "bow", "shotgun", "sniper"}, "primaries": {"primary", "rifle", "bow", "shotgun", "sniper"}, "secondary": {"pistol"}, "secondaries": {"pistol"}, "pistol": {"pistol"}, "melee": {"melee"}, "melees": {"melee"}}
