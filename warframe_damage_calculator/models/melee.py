@@ -6,12 +6,11 @@ from ..calculators import MeleeCalculator
 from ..formatters import MeleeFormatter
 from ..fields import MeleeFields
 from ..states import MeleeState
-from .weapon import Weapon, _state_kwargs
+from .weapon import Weapon
 
 
 class Melee(Weapon):
-    def __init__(self,  **kwargs: Unpack[MeleeFields]) -> None:
-        base = MeleeState(**_state_kwargs(kwargs))
-        self.stats: MeleeCalculator = MeleeCalculator(base)
+    def __init__(self, **weapon_fields: Unpack[MeleeFields]) -> None:
+        base_state = self._create_state(MeleeState, weapon_fields)
+        self.stats: MeleeCalculator = MeleeCalculator(base_state)
         self.format: MeleeFormatter = MeleeFormatter(self.stats)
-        

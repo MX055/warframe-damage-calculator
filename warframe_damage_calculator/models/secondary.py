@@ -7,11 +7,10 @@ from ..formatters import SecondaryFormatter
 from ..fields import SecondaryFields
 from ..states import SecondaryState
 from .ranged import Ranged
-from .weapon import _state_kwargs
 
 
 class Secondary(Ranged):
-    def __init__(self, **kwargs: Unpack[SecondaryFields]) -> None:
-        base = SecondaryState(**_state_kwargs(kwargs, ranged=True))
-        self.stats: SecondaryCalculator = SecondaryCalculator(base)
+    def __init__(self, **weapon_fields: Unpack[SecondaryFields]) -> None:
+        base_state = self._create_state(SecondaryState, weapon_fields)
+        self.stats: SecondaryCalculator = SecondaryCalculator(base_state)
         self.format: SecondaryFormatter = SecondaryFormatter(self.stats)

@@ -6,12 +6,12 @@ from ..calculators import RangedCalculator
 from ..formatters import RangedFormatter
 from ..fields import RangedFields
 from ..states import RangedState
-from .weapon import Weapon, _state_kwargs
+from .weapon import Weapon
 
 
 class Ranged(Weapon):
-    def __init__(self, **kwargs: Unpack[RangedFields]) -> None:
-        base = RangedState(**_state_kwargs(kwargs, ranged=True))
-        self.stats: RangedCalculator = RangedCalculator(base)
+    def __init__(self, **weapon_fields: Unpack[RangedFields]) -> None:
+        base_state = self._create_state(RangedState, weapon_fields)
+        self.stats: RangedCalculator = RangedCalculator(base_state)
         self.format: RangedFormatter = RangedFormatter(self.stats)
 
