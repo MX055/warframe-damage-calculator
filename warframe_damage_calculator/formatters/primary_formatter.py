@@ -6,12 +6,5 @@ from .ranged_formatter import RangedFormatter
 
 
 class PrimaryFormatter(RangedFormatter[PrimaryState]):
-    """Formatter for primary weapon stats.
-
-    Primary weapons use the same summary layout as other ranged weapons.
-
-    Connects ``RangedFormatter`` to ``PrimaryCalculator`` so ``Primary``
-    models can expose formatted output through ``format``.
-    """
     def __init__(self, calculator: PrimaryCalculator) -> None:
         super().__init__(calculator)

@@ -6,16 +6,6 @@ from .weapon_formatter import WeaponFormatter
 
 
 class MeleeFormatter(WeaponFormatter[MeleeState]):
-    """Formatter for melee weapon stats.
-
-    Builds the text shown for melee weapons, including attack speed, critical
-    stats, status stats, damage types, total damage, and DPS values.
-
-    The summary shows base values next to effective values so users can see
-    what changed after applying a ``Build``.
-
-    Used by ``Melee`` to display configured melee weapon results.
-    """
     def __init__(self, calculator: MeleeCalculator) -> None:
         super().__init__(calculator)
 

@@ -6,17 +6,6 @@ from .weapon_formatter import WeaponFormatter
 
 
 class RangedFormatter[TRangedState: RangedState](WeaponFormatter[TRangedState]):
-    """Base formatter for ranged weapon stats.
-
-    Builds the text shown for ranged weapons, including fire rate, reload
-    speed, magazine size, multishot, critical stats, status stats, damage
-    types, explosions, and DPS values.
-
-    The summary shows base values next to effective values so users can see
-    what changed after applying a ``Build``.
-
-    ``PrimaryFormatter`` and ``SecondaryFormatter`` reuse this summary layout.
-    """
     def __init__(self, calculator: RangedCalculator[TRangedState]) -> None:
         super().__init__(calculator)
 
