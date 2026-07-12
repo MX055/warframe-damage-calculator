@@ -60,7 +60,7 @@ class UpgradeResolver:
         elif isinstance(current, (int, float)) and isinstance(value, (int, float)):
             target[stat] = current + value
         else:
-            raise TypeError(f"Cannot merge values for upgrade stat {stat!r}")
+            raise TypeError
 
     def resolve(self, weapon: WeaponState, build: Build) -> Build:
         resolved_upgrades = []
