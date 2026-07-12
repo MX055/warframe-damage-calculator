@@ -5,7 +5,7 @@ from typing import Any
 
 from ..models import Upgrade, Primary, Secondary, Melee, dist
 from ..utils import DAMAGE_TYPES, COMMON_WEAPON_PAYLOAD_FIELDS, RANGED_WEAPON_PAYLOAD_FIELDS, MELEE_WEAPON_PAYLOAD_FIELDS, WEAPON_DIST_FIELDS
-from .normalization import as_list, normalized_slug
+from .normalization import normalized_slug
 
 
 class DatabaseConstructionMixin:
@@ -64,119 +64,6 @@ class DatabaseConstructionMixin:
 
         return payload
 
-    def _resolve_stack_count(self, data: dict[str, Any], stacks: int | None) -> int:
-        """Use max_stacks by default, otherwise use the explicit stack count."""
-        if stacks is None:
-            stacks = data.get("max_stacks") or 0
-
-        try:
-            stack_count = int(stacks)
-        except (TypeError, ValueError) as exc:
-            raise ValueError(f"stacks must be an int or None, got {stacks!r}") from exc
-
-        if stack_count < 0:
-            raise ValueError("stacks must be >= 0")
-
-        return stack_count
-
-    def _scale_stat_bucket(self, bucket: dict[str, Any], multiplier: int | float) -> dict[str, Any]:
-        scaled: dict[str, Any] = {}
-
-        for key, value in (bucket or {}).items():
-            if isinstance(value, bool):
-                scaled[key] = value
-            elif isinstance(value, int | float):
-                scaled[key] = value * multiplier
-            else:
-                scaled[key] = value
-
-        return scaled
-
-    def _merge_stat_buckets(self, *buckets: dict[str, Any]) -> dict[str, Any]:
-        merged: dict[str, Any] = {}
-
-        for bucket in buckets:
-            for key, value in (bucket or {}).items():
-                if isinstance(value, bool):
-                    merged[key] = bool(merged.get(key, False)) or value
-                elif isinstance(value, int | float) and isinstance(merged.get(key), int | float) and not isinstance(merged.get(key), bool):
-                    merged[key] += value
-                else:
-                    merged[key] = value
-
-        return merged
-
-    def _condition_context(self, type: str | None) -> set[str]:
-        if type is None:
-            return set()
-
-        normalizer = getattr(self, "_normalized_filter", None)
-        if normalizer is not None:
-            type = normalizer(type)
-
-        return {normalized_slug(type)} if type else set()
-
-    def _condition_matches(self, value: Any, *, type: str | None) -> bool:
-        labels = {normalized_slug(item) for item in as_list(value) if item}
-        if not labels:
-            return True
-
-        weapon_conditions = {"primary", "rifle", "bow", "shotgun", "sniper", "secondary", "pistol", "melee"}
-        weapon_labels = labels & weapon_conditions
-        if weapon_labels:
-            return bool(weapon_labels & self._condition_context(type))
-
-        # Non-weapon conditions such as kill, headshot, status proc, etc. are still
-        # controlled by the public condition=True/False toggle. Since this method is
-        # only called after that toggle passes, they match here.
-        return True
-
-    def _filtered_conditionals(self, data: dict[str, Any], *, type: str | None) -> dict[str, Any]:
-        conditionals = deepcopy(data.get("conditionals") or {})
-        conditions = data.get("conditions") or {}
-        legacy_condition = data.get("condition")
-
-        return {
-            key: value
-            for key, value in conditionals.items()
-            if self._condition_matches(conditions.get(key, legacy_condition), type=type)
-        }
-
-    def _effective_upgrade_bucket(self, data: dict[str, Any], *, stacks: int | None, condition: bool, type: str | None = None) -> dict[str, Any]:
-        stack_count = self._resolve_stack_count(data, stacks)
-
-        buckets: list[dict[str, Any]] = [deepcopy(data.get("stats") or {})]
-
-        if condition:
-            buckets.append(self._filtered_conditionals(data, type=type))
-
-        if stack_count:
-            buckets.append(self._scale_stat_bucket(data.get("stackables") or {}, stack_count))
-
-        return self._merge_stat_buckets(*buckets)
-
-    def _prepare_upgrade_payload_from_bucket(self, bucket_data: dict[str, Any], *, section: str | None = None) -> dict[str, Any]:
-        source = deepcopy(bucket_data or {})
-        payload: dict[str, Any] = {}
-        damage_values: dict[str, Any] = {}
-
-        for key, value in source.items():
-            stat_key = normalized_slug(key)
-
-            if stat_key in DAMAGE_TYPES:
-                damage_values[stat_key] = value
-            else:
-                payload[stat_key] = value
-
-        payload["damage_dist"] = self._make_dist_object(damage_values)
-
-        if section == "mods":
-            payload.setdefault("category", "mod")
-        elif section == "arcanes":
-            payload.setdefault("category", "arcane")
-
-        return payload
-
     def _prepare_upgrade_metadata(self, data: dict[str, Any]) -> dict[str, Any]:
         """Convert database metadata into the types used by ``Upgrade``."""
         return {
@@ -188,29 +75,43 @@ class DatabaseConstructionMixin:
             "is_exilus": bool(data.get("is_exilus", False)),
         }
 
-    def _prepare_upgrade_payload(self, data: dict[str, Any], *, section: str | None = None, stacks: int | None = None, condition: bool = True, type: str | None = None) -> dict[str, Any]:
-        bucket = self._effective_upgrade_bucket(data, stacks=stacks, condition=condition, type=type)
-        payload = self._prepare_upgrade_payload_from_bucket(bucket, section=section)
-        payload.update(self._prepare_upgrade_metadata(data))
+    def _prepare_upgrade_payload(self, data: dict[str, Any], *, section: str | None = None) -> dict[str, Any]:
+        conditions = data.get("conditions") or {}
+        fallback_condition = data.get("condition") or "condition"
+        payload = self._prepare_upgrade_metadata(data)
+        payload.update({
+            "stats": deepcopy(data.get("stats") or {}),
+            "conditional_stats": {
+                stat: (value, conditions.get(stat, fallback_condition))
+                for stat, value in (data.get("conditionals") or {}).items()
+            },
+            "stacking_stats": {
+                stat: (value, conditions.get(stat, data.get("condition") or "stacks"))
+                for stat, value in (data.get("stackables") or {}).items()
+            },
+        })
+        if section == "mods":
+            payload["category"] = "mod"
+        elif section == "arcanes":
+            payload["category"] = "arcane"
         return payload
 
     def _make_weapon_object(self, section: str, name: str, data: dict[str, Any]) -> Primary | Secondary | Melee:
         payload = self._prepare_weapon_payload(section, name, data)
         return self._construct_object(self._weapon_model_class(section), name, payload)
 
-    def _make_upgrade_object(self, name: str, data: dict[str, Any], *, section: str | None = None, stacks: int | None = None, condition: bool = True, type: str | None = None) -> Upgrade:
-        payload = self._prepare_upgrade_payload(data, section=section, stacks=stacks, condition=condition, type=type)
+    def _make_upgrade_object(self, name: str, data: dict[str, Any], *, section: str | None = None) -> Upgrade:
+        payload = self._prepare_upgrade_payload(data, section=section)
         return self._construct_object(Upgrade, name, payload)
 
-    def _make_upgrade_bucket_object(self, name: str, data: dict[str, Any], *, section: str | None = None, bucket: str = "stats", stacks: int | None = None) -> Upgrade:
+    def _make_upgrade_bucket_object(self, name: str, data: dict[str, Any], *, section: str | None = None, bucket: str = "stats") -> Upgrade:
         raw_bucket = deepcopy(data.get(bucket) or {})
-
-        if bucket == "stackables":
-            scale = 1 if stacks is None else self._resolve_stack_count(data, stacks)
-            raw_bucket = self._scale_stat_bucket(raw_bucket, scale)
-
-        payload = self._prepare_upgrade_payload_from_bucket(raw_bucket, section=section)
-        payload.update(self._prepare_upgrade_metadata(data))
+        payload = self._prepare_upgrade_metadata(data)
+        payload["stats"] = raw_bucket
+        if section == "mods":
+            payload["category"] = "mod"
+        elif section == "arcanes":
+            payload["category"] = "arcane"
         return self._construct_object(Upgrade, name, payload)
 
     def _construct_object(self, cls: type, name: str, data: dict[str, Any]) -> Any:

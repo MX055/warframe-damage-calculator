@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-from dataclasses import fields, replace
+from dataclasses import replace
 from typing import Any, Iterable
 
-from ..utils import UPGRADE_METADATA_FIELDS
 from ..models import Melee, Primary, Secondary, Upgrade, dist
 from .normalization import as_list, normalized_key, normalized_slug
 
@@ -101,22 +100,19 @@ class DatabaseAccessMixin:
         if multiplier == 1:
             return upgrade
 
-        scaled = replace(upgrade, damage_dist=upgrade.damage_dist * multiplier)
-
-        for field in fields(Upgrade):
-            if field.name in UPGRADE_METADATA_FIELDS or field.name == "damage_dist":
-                continue
-
-            value = getattr(scaled, field.name)
-
+        def scale(value: Any) -> Any:
             if isinstance(value, bool):
-                continue
-            if isinstance(value, int):
-                setattr(scaled, field.name, round(value * multiplier))
-            elif isinstance(value, float):
-                setattr(scaled, field.name, value * multiplier)
+                return value
+            if isinstance(value, (int, float, dist)):
+                return value * multiplier
+            return value
 
-        return scaled
+        return replace(
+            upgrade,
+            stats={key: scale(value) for key, value in upgrade.stats.items()},
+            conditional_stats={key: (scale(value), condition) for key, (value, condition) in upgrade.conditional_stats.items()},
+            stacking_stats={key: (scale(value), condition) for key, (value, condition) in upgrade.stacking_stats.items()},
+        )
 
     def _make_matching_weapon(self, name: str, *, type: str | None) -> Weapon | None:
         found = self._find_weapon(name)
@@ -131,7 +127,7 @@ class DatabaseAccessMixin:
 
         return self._make_weapon_object(section, real_name, data)
 
-    def _make_matching_upgrade(self, name: str, *, type: str | None, rank: int | None, stacks: int | None, condition: bool) -> Upgrade | None:
+    def _make_matching_upgrade(self, name: str, *, type: str | None, rank: int | None) -> Upgrade | None:
         found = self._find_upgrade(name)
         if found is None:
             return None
@@ -142,10 +138,10 @@ class DatabaseAccessMixin:
         if not self._upgrade_matches_filter(section, data, type):
             return None
 
-        upgrade = self._make_upgrade_object(real_name, data, section=section, stacks=stacks, condition=condition, type=type)
+        upgrade = self._make_upgrade_object(real_name, data, section=section)
         return self._scale_upgrade_for_rank(upgrade, data, rank)
 
-    def _iter_matching_items(self, *, type: str | None, rank: int | None, stacks: int | None, condition: bool) -> Iterable[tuple[str, ArsenalItem]]:
+    def _iter_matching_items(self, *, type: str | None, rank: int | None) -> Iterable[tuple[str, ArsenalItem]]:
         for section, entries in self.weapons.items():
             for name, data in entries.items():
                 if self._weapon_matches_filter(section, data, type):
@@ -154,7 +150,7 @@ class DatabaseAccessMixin:
         for section, entries in self.upgrades.items():
             for name, data in entries.items():
                 if self._upgrade_matches_filter(section, data, type):
-                    upgrade = self._make_upgrade_object(name, data, section=section, stacks=stacks, condition=condition, type=type)
+                    upgrade = self._make_upgrade_object(name, data, section=section)
                     yield name, self._scale_upgrade_for_rank(upgrade, data, rank)
 
     def _extract_attribute(self, item: ArsenalItem, attribute: str) -> ArsenalValue | None:
@@ -184,9 +180,7 @@ class DatabaseAccessMixin:
             return item
         return self._extract_attribute(item, attribute)
 
-    def get(self, name: str | None = None, *, type: str | None = None, rank: int | None = None, stacks: int | None = None, condition: bool | None = None, atribute: str | None = None) -> ArsenalItem | ArsenalValue | dict[str, ArsenalItem | ArsenalValue | None] | list[str] | None:
-        condition_enabled = True if condition is None else condition
-
+    def get(self, name: str | None = None, *, type: str | None = None, rank: int | None = None, atribute: str | None = None) -> ArsenalItem | ArsenalValue | dict[str, ArsenalItem | ArsenalValue | None] | list[str] | None:
         if name is not None:
             matches: list[ArsenalItem] = []
 
@@ -194,7 +188,7 @@ class DatabaseAccessMixin:
             if weapon is not None:
                 matches.append(weapon)
 
-            upgrade = self._make_matching_upgrade(name, type=type, rank=rank, stacks=stacks, condition=condition_enabled)
+            upgrade = self._make_matching_upgrade(name, type=type, rank=rank)
             if upgrade is not None:
                 matches.append(upgrade)
 
@@ -206,7 +200,7 @@ class DatabaseAccessMixin:
 
             return self._apply_attribute(matches[0], atribute)
 
-        items = dict(sorted(self._iter_matching_items(type=type, rank=rank, stacks=stacks, condition=condition_enabled), key=lambda item: normalized_key(item[0])))
+        items = dict(sorted(self._iter_matching_items(type=type, rank=rank), key=lambda item: normalized_key(item[0])))
 
         if atribute is None:
             return items

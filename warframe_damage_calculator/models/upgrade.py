@@ -1,49 +1,31 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import TypeAlias
 
 from .dist import dist
 
 
+StatValue: TypeAlias = float | int | bool | dist
+ConditionalStat: TypeAlias = tuple[StatValue, str]
+
+
 @dataclass(eq=False)
 class Upgrade:
+    """Data-only definition of an upgrade and its three stat buckets."""
+
     name: str | None = None
     category: str | None = None
-    compatibility: set[str] | None = None
-    incompatibility: set[str] | None = None
-    requirements: dict[str, str] | None = None
+    compatibility: set[str] = field(default_factory=set)
+    incompatibility: set[str] = field(default_factory=set)
+    requirements: dict[str, object] = field(default_factory=dict)
     max_rank: int | None = None
     max_stacks: int | None = None
-    is_exilus: bool | None = None
+    is_exilus: bool = False
 
-    damage_dist: dist = field(default_factory=dist)
-    multiplicative_base_damage: float = 0.0
-    base_damage: float = 0.0
-    faction_damage: float = 0.0
-    weakpoint_damage: float = 0.0
-    attack_speed: float = 0.0
-    multiplicative_fire_rate: float = 0.0
-    fire_rate: float = 0.0
-    reload_speed: float = 0.0
-    magazine_capacity: float = 0.0
-    ammo_efficiency: float = 0.0
-    multishot: float = 0.0
-    flat_crit_chance: float = 0.0
-    multiplicative_crit_chance: float = 0.0
-    crit_chance: float = 0.0
-    multiplicative_weakpoint_crit_chance: float = 0.0
-    weakpoint_crit_chance: float = 0.0
-    flat_crit_damage: float = 0.0
-    crit_damage: float = 0.0
-    status_chance: float = 0.0
-    status_damage: float = 0.0
-    hunter_munitions: float = 0.0
-    internal_bleeding: float = 0.0
-    primed_chamber: float = 0.0
-    vigilante_bonus: float = 0.0
-    secondary_enervate: int = 0
-    secondary_encumber: float = 0.0
-    melee_duplicate: float = 0.0
-    melee_doughty: float = 0.0
-    fire_rate_lock: bool = False
-    multishot_lock: bool = False
+    stats: dict[str, StatValue] = field(default_factory=dict)
+    conditional_stats: dict[str, ConditionalStat] = field(default_factory=dict)
+    stacking_stats: dict[str, ConditionalStat] = field(default_factory=dict)
+
+
+__all__ = ["Upgrade", "StatValue", "ConditionalStat"]

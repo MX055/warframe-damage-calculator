@@ -3,30 +3,43 @@ from __future__ import annotations
 from functools import cached_property
 
 from ..states import WeaponState
-from ..models import Build, Upgrade
+from ..models import Build, Upgrade, dist
+from .upgrade_resolver import UpgradeResolver
 
 
 class WeaponCalculator[TWeaponState: WeaponState]:
     def __init__(self, base: TWeaponState) -> None:
         self.build = Build()
+        self.context: dict[str, bool | int] | None = None
+        self.resolved_stats: dict[str, float | int | bool | dist] = {}
+        self._resolver = UpgradeResolver()
         self.base: TWeaponState = base
         self.moded: TWeaponState = type(base)()
         self.effective: TWeaponState = type(base)()
         self.recompute()
 
+    def set_build(self, build: Build, context: dict[str, bool | int] | None = None) -> None:
+        self.build = build
+        self.context = None if context is None else dict(context)
+        self.resolved_stats = self._resolver.resolve(self.base, build, self.context)
+        self.recompute()
+
+    def _upgrade(self, stat: str, default: float | int | bool | dist = 0) -> float | int | bool | dist:
+        return self.resolved_stats.get(stat, default)
+
     def _compute_moded_stats(self) -> None:
-        self.moded.multiplicative_base_damage = max(1 + self.build.multiplicative_base_damage, 1)
-        self.moded.base_damage = max(1 + self.build.base_damage, 0)
-        self.moded.damage_dist = self.moded.base_damage * self.base.damage_dist.apply(self.build.damage_dist).combine().sorted()
+        self.moded.multiplicative_base_damage = max(1 + self._upgrade("multiplicative_base_damage"), 1)
+        self.moded.base_damage = max(1 + self._upgrade("base_damage"), 0)
+        self.moded.damage_dist = self.moded.base_damage * self.base.damage_dist.apply(self._upgrade("damage_dist", dist())).combine().sorted()
         self.moded.total_damage = self.moded.damage_dist.total_damage()
-        self.moded.faction_damage = max(1 + self.build.faction_damage, 1)
-        self.moded.flat_crit_chance = max(self.build.flat_crit_chance, 0)
-        self.moded.multiplicative_crit_chance = max(1 + self.build.multiplicative_crit_chance, 1)
-        self.moded.crit_chance = max(self.base.crit_chance * (1 + self.build.crit_chance), 0)
-        self.moded.flat_crit_damage = max(self.build.flat_crit_damage, 0)
-        self.moded.crit_damage = max(self.base.crit_damage * (1 + self.build.crit_damage), 1)
-        self.moded.status_chance = max(self.base.status_chance * (1 + self.build.status_chance), 0)
-        self.moded.status_damage = max(1 + self.build.status_damage, 1)
+        self.moded.faction_damage = max(1 + self._upgrade("faction_damage"), 1)
+        self.moded.flat_crit_chance = max(self._upgrade("flat_crit_chance"), 0)
+        self.moded.multiplicative_crit_chance = max(1 + self._upgrade("multiplicative_crit_chance"), 1)
+        self.moded.crit_chance = max(self.base.crit_chance * (1 + self._upgrade("crit_chance")), 0)
+        self.moded.flat_crit_damage = max(self._upgrade("flat_crit_damage"), 0)
+        self.moded.crit_damage = max(self.base.crit_damage * (1 + self._upgrade("crit_damage")), 1)
+        self.moded.status_chance = max(self.base.status_chance * (1 + self._upgrade("status_chance")), 0)
+        self.moded.status_damage = max(1 + self._upgrade("status_damage"), 1)
 
     def _compute_effective_stats(self) -> None:
         self.effective.base_damage = self.moded.base_damage * self.moded.multiplicative_base_damage
@@ -67,12 +80,11 @@ class WeaponCalculator[TWeaponState: WeaponState]:
     
     def contribution(self, other: Upgrade) -> float:
         full = self.build
+        full_context = self.context
         total = self.total_dps
-        self.build = full - other
-        self.recompute()
+        self.set_build(full - other, full_context)
         contribution = total - self.total_dps
-        self.build = full
-        self.recompute()
+        self.set_build(full, full_context)
         return contribution
     
     @cached_property

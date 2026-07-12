@@ -13,9 +13,9 @@ class MeleeCalculator(WeaponCalculator[MeleeState]):
 
     def _compute_moded_stats(self) -> None:
         super()._compute_moded_stats()
-        self.moded.attack_speed = max(self.base.attack_speed * (1 + self.build.attack_speed), 0)
-        self.moded.melee_duplicate = clamp(self.build.melee_duplicate, 0, 1)
-        self.moded.melee_doughty = clamp(self.build.melee_doughty, 0, 1)
+        self.moded.attack_speed = max(self.base.attack_speed * (1 + self._upgrade("attack_speed")), 0)
+        self.moded.melee_duplicate = clamp(self._upgrade("melee_duplicate"), 0, 1)
+        self.moded.melee_doughty = clamp(self._upgrade("melee_doughty"), 0, 1)
 
     def _compute_effective_stats(self) -> None:
         super()._compute_effective_stats()

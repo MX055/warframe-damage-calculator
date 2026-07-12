@@ -161,6 +161,40 @@ weapon = Primary(...).configure(build)
 
 ## Upgrade Fields
 
+Upgrades store modifiers in three dictionaries. Conditional and stacking
+entries use a `(value, condition)` tuple:
+
+```python
+upgrade = Upgrade(
+    name="Example Arcane",
+    max_stacks=3,
+    stats={"reload_speed": 0.3},
+    conditional_stats={"crit_chance": (0.5, "headshot")},
+    stacking_stats={"base_damage": (0.3, "kill")},
+)
+```
+
+Weapon and build conditions such as `bow` and `sacrificial set` resolve
+automatically. Combat conditions and stack counts are supplied when the build
+is configured:
+
+```python
+context = {
+    "headshot": True,
+    "kill": 3,
+}
+
+weapon.configure(build, context=context)
+```
+
+When `context` is omitted, conditional stats default to active and stacking
+stats use their upgrade's `max_stacks`. Pass `context={}` to disable all manual
+conditions and use zero stacks while retaining automatic weapon/build
+conditions.
+
+The `Upgrade` and `Build` models only store data. Condition matching, stack
+limits, and bucket merging are handled by `UpgradeResolver`.
+
 ### Damage
 
 -   `damage_dist`

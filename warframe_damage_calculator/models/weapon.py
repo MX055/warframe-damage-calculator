@@ -16,10 +16,9 @@ class Weapon:
         self.stats = WeaponCalculator(base)
         self.format = WeaponFormatter(self.stats)
 
-    def configure(self, *args: Build | Upgrade) -> Self:
+    def configure(self, *args: Build | Upgrade, context: dict[str, bool | int] | None = None) -> Self:
         if all(type(arg) is Upgrade for arg in args): build = Build(*args)
         elif isinstance(args[0], Build) and len(args) == 1: build = args[0]
         else: raise TypeError
-        self.stats.build = build
-        self.stats.recompute()
+        self.stats.set_build(build, context)
         return self
