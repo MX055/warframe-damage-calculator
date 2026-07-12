@@ -8,8 +8,6 @@ from .upgrade import Upgrade
 
 @dataclass(init=False)
 class Build:
-    """Data-only ordered collection of upgrades."""
-
     upgrades: list[Upgrade] = field(default_factory=list)
 
     def __init__(self, *upgrades: Upgrade) -> None:

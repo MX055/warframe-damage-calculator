@@ -12,8 +12,6 @@ ConditionalStat: TypeAlias = tuple[StatValue, str]
 
 @dataclass(eq=False)
 class Upgrade:
-    """Data-only definition of an upgrade and its three stat buckets."""
-
     name: str | None = None
     category: str | None = None
     compatibility: set[str] = field(default_factory=set)
