@@ -26,6 +26,3 @@ class Upgrade:
     stats: dict[str, StatValue] = field(default_factory=dict)
     conditional_stats: dict[str, ConditionalStat] = field(default_factory=dict)
     stacking_stats: dict[str, ConditionalStat] = field(default_factory=dict)
-
-
-__all__ = ["Upgrade", "StatValue", "ConditionalStat"]

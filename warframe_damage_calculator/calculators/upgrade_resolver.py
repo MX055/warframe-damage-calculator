@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-from ..models.build import Build
-from ..models.dist import dist
-from ..models.upgrade import StatValue
-from ..states.weapon_state import WeaponState
+from ..models import dist, Build, StatValue
+from ..states import WeaponState
 from ..utils import DAMAGE_TYPES
 
 
