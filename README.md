@@ -58,13 +58,14 @@ from warframe_damage_calculator import Build, Primary, Upgrade, arsenal
 
 weapon = arsenal.get("Corinth Prime", type="primary")
 multishot = arsenal.get("Galvanized Hell", type="mod")
-cold = arsenal.get("Primed Chilling Grasp", type="mod", rank=3)
+cold = arsenal.get("Primed Chilling Grasp", type="mod")
 
 assert isinstance(weapon, Primary)
 assert isinstance(multishot, Upgrade)
 assert isinstance(cold, Upgrade)
 
 multishot.context["kill"] = 4
+cold.context["rank"] = 3
 weapon.configure(Build(multishot, cold))
 print(weapon.format.summary())
 ```
@@ -80,7 +81,8 @@ main entry point is `arsenal.get()`:
 
 ```python
 weapon = arsenal.get("Acceltra Prime", type="primary")
-mod = arsenal.get("Critical Delay", type="mod", rank=5)
+mod = arsenal.get("Critical Delay", type="mod")
+mod.context["rank"] = 5
 shotgun_names = arsenal.get(type="shotgun", attribute="name")
 crit_values = arsenal.get(type="mod", attribute="crit_chance")
 ```
@@ -98,7 +100,7 @@ The JSON schema mirrors the model API:
 - Weapon damage fields: `damage` and `explosion_damage`.
 - Upgrade buckets: `stats`, `conditional_stats`, and `stacking_stats`.
 - Conditional entries are stored as `[value, condition]`.
-- Rank-gated passive effects use `rank_locked_stats` with `[value, required_rank]`; the loader resolves them into `Upgrade.stats` only after that rank is reached.
+- Rank-gated passive effects use `rank_locked_stats` with `[value, required_rank]`; the resolver activates them from `upgrade.context["rank"]`.
 
 ------------------------------------------------------------------------
 

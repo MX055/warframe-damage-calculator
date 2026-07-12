@@ -80,7 +80,6 @@ class WarframeDatabase:
         name: str,
         *,
         type: str | None = None,
-        rank: int | None = None,
         attribute: None = None,
     ) -> ArsenalItem | None: ...
 
@@ -90,7 +89,6 @@ class WarframeDatabase:
         name: str,
         *,
         type: str | None = None,
-        rank: int | None = None,
         attribute: str,
     ) -> ArsenalValue | None: ...
 
@@ -100,7 +98,6 @@ class WarframeDatabase:
         name: None = None,
         *,
         type: str | None = None,
-        rank: int | None = None,
         attribute: Literal["name"],
     ) -> list[str]: ...
 
@@ -110,7 +107,6 @@ class WarframeDatabase:
         name: None = None,
         *,
         type: str | None = None,
-        rank: int | None = None,
         attribute: str | None = None,
     ) -> dict[str, ArsenalItem | ArsenalValue | None]: ...
 
@@ -119,7 +115,6 @@ class WarframeDatabase:
         name: str | None = None,
         *,
         type: str | None = None,
-        rank: int | None = None,
         attribute: str | None = None,
     ) -> ArsenalItem | ArsenalValue | dict[str, ArsenalItem | ArsenalValue | None] | list[str] | None:
         if name is not None:
@@ -137,7 +132,7 @@ class WarframeDatabase:
                     "Pass a more specific type."
                 )
 
-            item = self._factory.create(matches[0], rank=rank)
+            item = self._factory.create(matches[0])
             return self._apply_attribute(item, attribute)
 
         entries = sorted(
@@ -150,7 +145,7 @@ class WarframeDatabase:
 
         result: dict[str, ArsenalItem | ArsenalValue | None] = {}
         for entry in entries:
-            item = self._factory.create(entry, rank=rank)
+            item = self._factory.create(entry)
             result[entry.name] = self._apply_attribute(item, attribute)
         return result
 

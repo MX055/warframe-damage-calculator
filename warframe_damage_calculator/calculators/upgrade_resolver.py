@@ -42,6 +42,10 @@ class UpgradeResolver:
         return bool(context.get(condition, default))
 
     @staticmethod
+    def _scale(value: Value, multiplier: float) -> Value:
+        return value if isinstance(value, bool) else value * multiplier
+
+    @staticmethod
     def _merge(target: dict[str, Value], stat: str, value: Value) -> None:
         if stat in DAMAGE_TYPES:
             value = dist(**{stat: value})
@@ -65,19 +69,22 @@ class UpgradeResolver:
             use_defaults = not any(self._key(key) != "rank" for key in upgrade.context)
             context = self._resolve_context(upgrade, weapon, build)
             resolved: dict[str, Value] = {}
-            for stat, value in upgrade.stats.items():
-                self._merge(resolved, stat, value)
-
             rank = context.get("rank", 0)
             if isinstance(rank, bool) or not isinstance(rank, int) or rank < 0:
-                raise ValueError
+                raise ValueError(f"Invalid rank for {upgrade.name or 'upgrade'!r}: {rank!r}")
+            if upgrade.max_rank is not None:
+                rank = min(rank, upgrade.max_rank)
+                context["rank"] = rank
+            multiplier = 1.0 if upgrade.max_rank in {None, 0} else (rank + 1) / (upgrade.max_rank + 1)
+            for stat, value in upgrade.stats.items():
+                self._merge(resolved, stat, self._scale(value, multiplier))
             for stat, (value, required_rank) in upgrade.rank_locked_stats.items():
                 if rank >= required_rank:
                     self._merge(resolved, stat, value)
 
             for stat, (value, condition) in upgrade.conditional_stats.items():
                 if self._condition_active(condition, context, use_defaults):
-                    self._merge(resolved, stat, value)
+                    self._merge(resolved, stat, self._scale(value, multiplier))
 
             for stat, (value, condition) in upgrade.stacking_stats.items():
                 stack_count = context.get(self._key(condition), (upgrade.max_stacks or 0) if use_defaults else 0)
@@ -86,7 +93,7 @@ class UpgradeResolver:
                 if upgrade.max_stacks is not None:
                     stack_count = min(stack_count, upgrade.max_stacks)
                 if stack_count:
-                    self._merge(resolved, stat, value * stack_count)
+                    self._merge(resolved, stat, self._scale(value, multiplier) * stack_count)
 
             resolved_upgrades.append(replace(upgrade, context=context, stats=resolved, rank_locked_stats={}, conditional_stats={}, stacking_stats={}))
 
