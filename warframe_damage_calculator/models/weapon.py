@@ -23,10 +23,7 @@ class Weapon:
     @staticmethod
     def _create_state(state_class: type[TState], weapon_fields: dict[str, Any]) -> TState:
         state_fields = dict(weapon_fields)
-        for public_name, state_name in (("damage", "damage_dist"), ("explosion_damage", "explosion_damage_dist")):
-            if public_name in state_fields:
-                state_fields[state_name] = state_fields.pop(public_name)
-        for field_name in ("damage_dist", "forced_procs", "explosion_damage_dist", "explosion_forced_procs"):
+        for field_name in ("damage", "forced_procs", "explosion_damage", "explosion_forced_procs"):
             if field_name in state_fields:
                 state_fields[field_name] = dist(state_fields[field_name])
         return state_class(**state_fields)

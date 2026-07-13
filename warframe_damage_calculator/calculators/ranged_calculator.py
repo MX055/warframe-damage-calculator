@@ -11,14 +11,14 @@ from .weapon_calculator import WeaponCalculator
 class RangedCalculator[TRangedState: RangedState](WeaponCalculator[TRangedState]):
     def __init__(self, base: TRangedState) -> None:
         super().__init__(base)
-        self.base.explosion_total_damage = self.base.explosion_damage_dist.total_damage()
+        self.base.explosion_total_damage = self.base.explosion_damage.total_damage()
 
     def _compute_moded_stats(self) -> None:
         super()._compute_moded_stats()
         self.moded.is_beam = self.base.is_beam
         self.moded.is_battery = self.base.is_battery
-        self.moded.explosion_damage_dist = self.moded.base_damage * self.base.explosion_damage_dist.apply(self._upgrade("damage_dist", dist())).combine().sorted()
-        self.moded.explosion_total_damage = self.moded.explosion_damage_dist.total_damage()
+        self.moded.explosion_damage = self.moded.base_damage * self.base.explosion_damage.apply(self._upgrade("damage_dist", dist())).combine().sorted()
+        self.moded.explosion_total_damage = self.moded.explosion_damage.total_damage()
         self.moded.weakpoint_damage = max(self.base.weakpoint_damage + self._upgrade("weakpoint_damage"), 1)
         self.moded.multiplicative_fire_rate = 1 if self._upgrade("fire_rate_lock", False) else max(1 + self._upgrade("multiplicative_fire_rate"), 1)
         self.moded.fire_rate = max(self.base.fire_rate * (1 if self._upgrade("fire_rate_lock", False) else (1 + self._upgrade("fire_rate"))), 0.05)
@@ -38,8 +38,8 @@ class RangedCalculator[TRangedState: RangedState](WeaponCalculator[TRangedState]
         super()._compute_effective_stats()
         self.effective.is_beam = self.moded.is_beam
         self.effective.is_battery = self.moded.is_battery
-        self.effective.explosion_damage_dist = self.moded.explosion_damage_dist
-        self.effective.explosion_total_damage = self.effective.explosion_damage_dist.total_damage()
+        self.effective.explosion_damage = self.moded.explosion_damage
+        self.effective.explosion_total_damage = self.effective.explosion_damage.total_damage()
         self.effective.weakpoint_damage = self.moded.weakpoint_damage
         self.effective.fire_rate = self.moded.fire_rate * self.moded.multiplicative_fire_rate
         self.effective.burst_count = self.moded.burst_count
@@ -97,14 +97,14 @@ class RangedCalculator[TRangedState: RangedState](WeaponCalculator[TRangedState]
 
     @cached_property
     def flat_dotph(self) -> float:
-        direct_damage = self._flat_dotph_for(self.effective.damage_dist, self.base.forced_procs, self.effective.crit_chance, self.average_crit_multiplier)
-        explosion_damage = self._flat_dotph_for(self.effective.explosion_damage_dist, self.base.explosion_forced_procs, self.effective.crit_chance, self.average_crit_multiplier, include_multishot=False)
+        direct_damage = self._flat_dotph_for(self.effective.damage, self.base.forced_procs, self.effective.crit_chance, self.average_crit_multiplier)
+        explosion_damage = self._flat_dotph_for(self.effective.explosion_damage, self.base.explosion_forced_procs, self.effective.crit_chance, self.average_crit_multiplier, include_multishot=False)
         return direct_damage + explosion_damage
 
     @cached_property
     def flat_weakpoint_dotph(self) -> float:
-        direct_damage = self._flat_dotph_for(self.effective.damage_dist, self.base.forced_procs, self.effective.weakpoint_crit_chance, self.average_weakpoint_crit_multiplier)
-        explosion_damage = self._flat_dotph_for(self.effective.explosion_damage_dist, self.base.explosion_forced_procs, self.effective.crit_chance, self.average_crit_multiplier, include_multishot=False)
+        direct_damage = self._flat_dotph_for(self.effective.damage, self.base.forced_procs, self.effective.weakpoint_crit_chance, self.average_weakpoint_crit_multiplier)
+        explosion_damage = self._flat_dotph_for(self.effective.explosion_damage, self.base.explosion_forced_procs, self.effective.crit_chance, self.average_crit_multiplier, include_multishot=False)
         return direct_damage + explosion_damage
 
     @cached_property

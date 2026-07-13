@@ -7,7 +7,7 @@ from ..models.dist import dist
 class WeaponState:
     name: str | None = None
     type: str | None = None
-    damage_dist: dist = field(default_factory=dist)
+    damage: dist = field(default_factory=dist)
     forced_procs: dist = field(default_factory=dist)
     total_damage: float = 0.0
     multiplicative_base_damage: float = 1.0

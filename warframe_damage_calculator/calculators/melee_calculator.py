@@ -25,7 +25,7 @@ class MeleeCalculator(WeaponCalculator[MeleeState]):
 
     @cached_property
     def melee_doughty_bonus(self) -> float:
-        return true_round(10 * self.effective.damage_dist.weight("puncture") * self.effective.status_chance * self.effective.melee_doughty, 1)
+        return true_round(10 * self.effective.damage.weight("puncture") * self.effective.status_chance * self.effective.melee_doughty, 1)
 
     @cached_property
     def average_melee_duplicate_multiplier(self) -> float:
@@ -41,7 +41,7 @@ class MeleeCalculator(WeaponCalculator[MeleeState]):
 
     @cached_property
     def flat_dotph(self) -> float:
-        return sum(mult * self.effective.damage_dist.get(dt) * self.effective.damage_dist.weight(dt) for dt, mult in DOT_MULTIPLIERS) * self.effective.status_chance * self.effective.status_damage * self.effective.faction_damage ** 2 * self.average_crit_multiplier * self.average_melee_duplicate_multiplier
+        return sum(mult * self.effective.damage.get(dt) * self.effective.damage.weight(dt) for dt, mult in DOT_MULTIPLIERS) * self.effective.status_chance * self.effective.status_damage * self.effective.faction_damage ** 2 * self.average_crit_multiplier * self.average_melee_duplicate_multiplier
 
     @cached_property
     def flat_dotps(self) -> float:

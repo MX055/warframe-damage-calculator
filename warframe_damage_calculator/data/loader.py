@@ -185,7 +185,6 @@ class WarframeDatabase:
     @staticmethod
     def _extract_attribute(item: ArsenalItem, attribute: str) -> ArsenalValue | None:
         key = normalize_identifier(attribute)
-        key = _ATTRIBUTE_ALIASES.get(key, key)
 
         if key == "name":
             if isinstance(item, Upgrade):
@@ -193,6 +192,7 @@ class WarframeDatabase:
             return item.stats.base.name
 
         if isinstance(item, Upgrade):
+            key = _ATTRIBUTE_ALIASES.get(key, key)
             if hasattr(item, key):
                 return getattr(item, key)
             if key in item.stats:

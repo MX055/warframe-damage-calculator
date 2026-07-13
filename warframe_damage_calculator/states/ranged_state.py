@@ -9,7 +9,7 @@ class RangedState(WeaponState):
     trigger: str | None = None
     is_beam: bool = False
     is_battery: bool = False
-    explosion_damage_dist: dist = field(default_factory=dist)
+    explosion_damage: dist = field(default_factory=dist)
     explosion_forced_procs: dist = field(default_factory=dist)
     explosion_total_damage: float = 0.0
     multishot: float = 1.0
