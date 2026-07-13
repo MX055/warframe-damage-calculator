@@ -99,6 +99,16 @@ The JSON schema mirrors the model API:
 - Weapon damage fields: `damage` and `explosion_damage`.
 - Upgrade buckets: `stats`, `conditional_stats`, and `stacking_stats`.
 - Conditional entries are stored as `[value, condition]`.
+
+------------------------------------------------------------------------
+
+## Tests
+
+Run the regression suite with:
+
+```powershell
+python tests/test_all.py
+```
 - Rank-gated passive effects use `rank_locked_stats` with `[value, required_rank]`; the resolver activates them from `upgrade.context["rank"]`.
 
 ------------------------------------------------------------------------
