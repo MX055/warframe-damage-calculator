@@ -10,8 +10,6 @@ def _restore_record(fields: dict[str, Any]) -> "Record":
 
 
 class Record:
-    """Named values initialized with keyword arguments and accessed as attributes."""
-
     __slots__ = ("dict",)
 
     def __init__(self, **fields: Any) -> None:
