@@ -2,7 +2,7 @@ from .weapon_formatter import WeaponFormatter
 
 
 class RangedFormatter(WeaponFormatter):
-    def summary(self):
+    def summary(self) -> str:
         base = self.calculator.base
         effective = self.calculator.effective
         return "\n".join([

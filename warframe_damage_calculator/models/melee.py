@@ -9,8 +9,8 @@ from .weapon import Weapon
 
 
 class Melee(Weapon):
-    def __init__(self, data: Mapping[str, Any] | None = None):
+    def __init__(self, data: Mapping[str, Any] | None = None) -> None:
         self.data = Data({"stats": {}, "context": {}} | dict(data or {}))
         self.build = Build()
-        self.calculator = MeleeCalculator(self.stats, self.context)
+        self.calculator = MeleeCalculator(self.data.stats, self.data.context)
         self.format = MeleeFormatter(self.calculator)

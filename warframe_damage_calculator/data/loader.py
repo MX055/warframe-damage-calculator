@@ -1,6 +1,8 @@
 from pathlib import Path
+from collections.abc import Iterator, Mapping
+from typing import Any, Self
 
-from ..models import Upgrade
+from ..models import Upgrade, Weapon
 from .construction import DatabaseFactory
 from .matching import entry_matches
 from .normalization import normalize_identifier, normalize_name
@@ -9,7 +11,7 @@ from .schema import DatabaseEntry
 
 
 class WarframeDatabase:
-    def __init__(self, weapons, upgrades):
+    def __init__(self, weapons: dict[str, Any], upgrades: dict[str, Any]) -> None:
         self.weapons = weapons
         self.upgrades = upgrades
         self._factory = DatabaseFactory()
@@ -17,15 +19,15 @@ class WarframeDatabase:
         self._name_index = {normalize_name(entry.name): entry for entry in self._entries}
 
     @classmethod
-    def from_files(cls, weapons_path=DEFAULT_WEAPONS_PATH, upgrades_path=DEFAULT_UPGRADES_PATH):
+    def from_files(cls, weapons_path: str | Path = DEFAULT_WEAPONS_PATH, upgrades_path: str | Path = DEFAULT_UPGRADES_PATH) -> Self:
         return cls(load_json(weapons_path), load_json(upgrades_path))
 
     @classmethod
-    def from_folder(cls, folder):
+    def from_folder(cls, folder: str | Path) -> Self:
         folder = Path(folder)
         return cls.from_files(folder / "weapons.json", folder / "upgrades.json")
 
-    def get(self, name=None, *, type=None, context=None, attribute=None):
+    def get(self, name: str | None = None, *, type: str | None = None, context: Mapping[str, Any] | None = None, attribute: str | None = None) -> Any:
         if name is not None:
             entry = self._name_index.get(normalize_name(name))
             if entry is None or not entry_matches(entry, type):
@@ -39,13 +41,13 @@ class WarframeDatabase:
 
         return {entry.name: self._apply_attribute(self._create(entry, context), attribute) for entry in entries}
 
-    def _create(self, entry, context):
+    def _create(self, entry: DatabaseEntry, context: Mapping[str, Any] | None) -> Weapon | Upgrade:
         item = self._factory.create(entry)
         if context is not None:
             item.context.update(context)
         return item
 
-    def _iter_database_entries(self):
+    def _iter_database_entries(self) -> Iterator[DatabaseEntry]:
         for category, entries in self.weapons.items():
             for name, data in entries.items():
                 yield DatabaseEntry(category=category, name=name, data=data)
@@ -54,13 +56,13 @@ class WarframeDatabase:
                 yield DatabaseEntry(category=category, name=name, data=data)
 
     @classmethod
-    def _apply_attribute(cls, item, attribute):
+    def _apply_attribute(cls, item: Weapon | Upgrade, attribute: str | None) -> Any:
         if attribute is None:
             return item
         return cls._extract_attribute(item, attribute)
 
     @staticmethod
-    def _extract_attribute(item, attribute):
+    def _extract_attribute(item: Weapon | Upgrade, attribute: str) -> Any:
         key = normalize_identifier(attribute)
 
         if key == "name":

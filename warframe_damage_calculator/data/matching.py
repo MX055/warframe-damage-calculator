@@ -1,4 +1,7 @@
+from typing import Any
+
 from .normalization import as_list, normalize_identifier
+from .schema import DatabaseEntry
 
 
 PRIMARY_TYPES = frozenset({"primary", "rifle", "bow", "shotgun", "sniper"})
@@ -24,25 +27,25 @@ _TYPE_ALIASES = {
 }
 
 
-def normalize_filter(value):
+def normalize_filter(value: Any) -> str | None:
     if value is None:
         return None
     key = normalize_identifier(value)
     return _FILTER_ALIASES.get(key, key)
 
 
-def expand_type_filter(value):
+def expand_type_filter(value: Any) -> set[str]:
     if value is None:
         return set()
     key = normalize_identifier(value)
     return set(_TYPE_ALIASES.get(key, {key}))
 
 
-def _normalized_values(value):
+def _normalized_values(value: Any) -> set[str]:
     return {normalize_identifier(item) for item in as_list(value)}
 
 
-def _requirements_match_type(requirements, requested):
+def _requirements_match_type(requirements: dict[str, Any], requested: set[str]) -> bool:
     for key, value in requirements.items():
         if normalize_identifier(key) in requested:
             return True
@@ -51,7 +54,7 @@ def _requirements_match_type(requirements, requested):
     return False
 
 
-def weapon_matches(entry, item_type):
+def weapon_matches(entry: DatabaseEntry, item_type: str | None) -> bool:
     item_type = normalize_filter(item_type)
     if item_type is None or item_type == "weapon":
         return True
@@ -68,7 +71,7 @@ def weapon_matches(entry, item_type):
     return weapon_type in requested or trigger in requested
 
 
-def upgrade_matches(entry, item_type):
+def upgrade_matches(entry: DatabaseEntry, item_type: str | None) -> bool:
     item_type = normalize_filter(item_type)
     if item_type is None or item_type == "upgrade":
         return True
@@ -92,7 +95,7 @@ def upgrade_matches(entry, item_type):
     return bool(compatibility & requested) or _requirements_match_type(requirements, requested)
 
 
-def entry_matches(entry, item_type):
+def entry_matches(entry: DatabaseEntry, item_type: str | None) -> bool:
     if entry.is_weapon:
         return weapon_matches(entry, item_type)
     return upgrade_matches(entry, item_type)

@@ -1,8 +1,11 @@
+from ..calculators import WeaponCalculator
+
+
 class WeaponFormatter:
-    def __init__(self, calculator):
+    def __init__(self, calculator: WeaponCalculator) -> None:
         self.calculator = calculator
 
-    def upgrades(self):
+    def upgrades(self) -> str:
         contributions = self.calculator.contribution_proportions()
         if not contributions: return ""
         max_len = max(len(name) for name in contributions)

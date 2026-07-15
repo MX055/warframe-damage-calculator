@@ -1,6 +1,7 @@
 from functools import cached_property
 
 from ..utils import DOT_MULTIPLIERS, clamp
+from ..models import Dist
 from .ranged_calculator import RangedCalculator
 
 
@@ -8,14 +9,14 @@ class PrimaryCalculator(RangedCalculator):
     DEFAULT_STATS = RangedCalculator.DEFAULT_STATS
     CALCULATED_STATS = RangedCalculator.CALCULATED_STATS | {"hunter_munitions": 0.0, "primed_chamber": 0.0, "vigilante_bonus": 0.0}
 
-    def _compute_moded_stats(self):
+    def _compute_moded_stats(self) -> None:
         super()._compute_moded_stats()
         self.moded.fire_rate = max(self.base.fire_rate * (1 if self.build.get("fire_rate_lock", False) else (1 + self.build.get("fire_rate"))), 0.05)
         self.moded.hunter_munitions = clamp(self.build.get("hunter_munitions"), 0, 0.3)
         self.moded.primed_chamber = clamp(self.build.get("primed_chamber"), 0, 1.4)
         self.moded.vigilante_bonus = clamp(self.build.get("vigilante_bonus"), 0, 0.3)
 
-    def _compute_effective_stats(self):
+    def _compute_effective_stats(self) -> None:
         super()._compute_effective_stats()
         self.effective.hunter_munitions = self.moded.hunter_munitions
         self.effective.primed_chamber = self.moded.primed_chamber
@@ -23,7 +24,7 @@ class PrimaryCalculator(RangedCalculator):
         self.effective.crit_chance += self.effective.vigilante_bonus
         self.effective.weakpoint_crit_chance += self.effective.vigilante_bonus
 
-    def _flat_dotph_for(self, damage, forced_procs, crit_chance, crit_multiplier, include_multishot=True):
+    def _flat_dotph_for(self, damage: Dist, forced_procs: Dist, crit_chance: float, crit_multiplier: float, include_multishot: bool = True) -> float:
         if damage.total_damage() <= 0:
             return 0.0
         average_primed_chamber_multiplier = self.average_primed_chamber_multiplier
@@ -49,13 +50,13 @@ class PrimaryCalculator(RangedCalculator):
         return (dot_damage_per_bullet + extra_slash_damage_per_bullet + forced_dot_damage_per_bullet) * (self.effective.multishot * self.beam_dot_multiplier if include_multishot else 1)
 
     @cached_property
-    def average_primed_chamber_multiplier(self):
+    def average_primed_chamber_multiplier(self) -> float:
         return 1 + self.effective.primed_chamber / self.effective.magazine_capacity
 
     @cached_property
-    def flat_dph(self):
+    def flat_dph(self) -> float:
         return super().flat_dph * self.average_primed_chamber_multiplier
 
     @cached_property
-    def flat_weakpoint_dph(self):
+    def flat_weakpoint_dph(self) -> float:
         return super().flat_weakpoint_dph * self.average_primed_chamber_multiplier

@@ -1,7 +1,9 @@
 from collections.abc import Mapping
+from typing import Any
 
 from ..models.data import Data
 from ..models.dist import Dist
+from ..models.upgrade import Upgrade
 from ..utils import DAMAGE_TYPES
 
 
@@ -9,32 +11,32 @@ class UpgradeCalculator:
     AUTOMATIC = {"primary", "rifle", "bow", "shotgun", "sniper", "secondary", "pistol", "melee", "sacrificial set"}
     METADATA = {"name", "category", "type", "trigger", "is beam", "is battery", "compatibility", "incompatibility", "requirements", "max rank", "max stacks", "stacks", "is exilus", "rank", "weapon"}
 
-    def __init__(self, upgrade):
+    def __init__(self, upgrade: Upgrade) -> None:
         self.upgrade = upgrade
         self.context = self._data(upgrade.context)
 
     @staticmethod
-    def _key(value): return " ".join(str(value).casefold().replace("_", " ").replace("-", " ").split())
+    def _key(value: Any) -> str: return " ".join(str(value).casefold().replace("_", " ").replace("-", " ").split())
     @classmethod
-    def _data(cls, data): return Data({cls._key(key): value for key, value in (data or {}).items()})
+    def _data(cls, data: Mapping[str, Any] | None) -> Data: return Data({cls._key(key): value for key, value in (data or {}).items()})
 
-    def _count(self, value, field):
+    def _count(self, value: Any, field: str) -> int:
         if isinstance(value, bool) or not isinstance(value, int) or value < 0:
             raise ValueError(f"{field} on {self.upgrade.context.name or '<unnamed upgrade>'!r} must be a non-negative integer")
         return value
 
     @classmethod
-    def _scale(cls, value, multiplier):
+    def _scale(cls, value: Any, multiplier: float) -> Any:
         return {key: cls._scale(item, multiplier) for key, item in value.items()} if isinstance(value, Mapping) else value if isinstance(value, bool) else value * multiplier
 
     @staticmethod
-    def _add(stats, stat, value):
+    def _add(stats: Data, stat: str, value: Any) -> None:
         if stat in DAMAGE_TYPES: stat, value = "damage", Dist({stat: value})
         elif stat == "damage" and not isinstance(value, Dist): value = Dist(value)
         current = stats.get(stat)
         stats[stat] = value if current is None else current or value if isinstance(value, bool) else current + value
 
-    def resolve(self):
+    def resolve(self) -> dict[str, Data]:
         maximums = [self.context.get(key) for key in ("max rank", "max stacks")]
         max_rank, max_stacks = (None if value is None else self._count(value, field) for value, field in zip(maximums, ("max rank", "max stacks")))
         rank = self._count(self.context.get("rank", max_rank or 0), "rank")

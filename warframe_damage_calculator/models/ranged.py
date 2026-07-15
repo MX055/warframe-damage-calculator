@@ -9,8 +9,8 @@ from .weapon import Weapon
 
 
 class Ranged(Weapon):
-     def __init__(self, data: Mapping[str, Any] | None = None):
+    def __init__(self, data: Mapping[str, Any] | None = None) -> None:
         self.data = Data({"stats": {}, "context": {}} | dict(data or {}))
         self.build = Build()
-        self.calculator = RangedCalculator(self.stats, self.context)
+        self.calculator = RangedCalculator(self.data.stats, self.data.context)
         self.format = RangedFormatter(self.calculator)
