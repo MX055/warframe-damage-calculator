@@ -12,13 +12,5 @@ class Upgrade:
     def copy(self) -> Upgrade:
         return Upgrade(self.data)
 
-    @property
-    def stats(self) -> Data:
-        return self.data.stats
-
-    @property
-    def context(self) -> Data:
-        return self.data.context
-
     def resolve(self) -> Upgrade:
         return Upgrade(UpgradeCalculator(self.data).resolve())
