@@ -2,7 +2,8 @@ from pathlib import Path
 from collections.abc import Iterator, Mapping
 from typing import Any, Self
 
-from ..models import Upgrade, Weapon
+from ..models.upgrade import Upgrade
+from ..models.weapon import Weapon
 from .construction import DatabaseFactory
 from .matching import entry_matches
 from .normalization import normalize_identifier, normalize_name

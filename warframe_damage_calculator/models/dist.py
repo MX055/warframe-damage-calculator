@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 from typing import Iterable
 
-from ..utils import DAMAGE_TYPE_ORDER, ELEMENTAL_COMBINATIONS, ELEMENTAL_TYPES, PHYSICAL_TYPES, Number, DamageType
+from ..utils.constants import DAMAGE_TYPE_ORDER, ELEMENTAL_COMBINATIONS, ELEMENTAL_TYPES, PHYSICAL_TYPES
+from ..utils.types import DamageType, Number
 
 
 class Dist:

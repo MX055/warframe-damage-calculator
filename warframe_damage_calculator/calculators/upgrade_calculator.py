@@ -3,7 +3,7 @@ from typing import Any
 
 from ..models.data import Data
 from ..models.dist import Dist
-from ..utils import DAMAGE_TYPES
+from ..utils.constants import DAMAGE_TYPES
 
 
 class UpgradeCalculator:

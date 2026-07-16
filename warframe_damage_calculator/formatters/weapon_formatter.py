@@ -1,8 +1,8 @@
-from ..calculators import WeaponCalculator
+from typing import Any
 
 
 class WeaponFormatter:
-    def __init__(self, calculator: WeaponCalculator) -> None:
+    def __init__(self, calculator: Any) -> None:
         self.calculator = calculator
 
     def upgrades(self) -> str:

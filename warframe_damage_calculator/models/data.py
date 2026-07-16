@@ -1,4 +1,6 @@
-from ..utils import JsonScalar, JsonValue
+from __future__ import annotations
+
+from ..utils.types import JsonScalar, JsonValue
 from .dist import Dist
 
 type DataValue = JsonScalar | Data | Dist | list[DataValue]

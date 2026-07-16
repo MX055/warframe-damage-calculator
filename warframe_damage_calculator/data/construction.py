@@ -1,4 +1,8 @@
-from ..models import Melee, Primary, Secondary, Upgrade, Weapon
+from ..models.melee import Melee
+from ..models.primary import Primary
+from ..models.secondary import Secondary
+from ..models.upgrade import Upgrade
+from ..models.weapon import Weapon
 from .schema import DatabaseEntry
 
 

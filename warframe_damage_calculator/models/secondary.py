@@ -1,8 +1,8 @@
 from collections.abc import Mapping
 from typing import Any
 
-from ..calculators import SecondaryCalculator
-from ..formatters import SecondaryFormatter
+from ..calculators.secondary_calculator import SecondaryCalculator
+from ..formatters.secondary_formatter import SecondaryFormatter
 from .build import Build
 from .data import Data
 from .ranged import Ranged

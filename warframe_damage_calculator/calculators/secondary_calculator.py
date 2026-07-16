@@ -1,7 +1,8 @@
 from functools import cached_property
 
-from ..utils import DOT_MULTIPLIERS, clamp
-from ..models import Dist
+from ..utils.constants import DOT_MULTIPLIERS
+from ..utils.functions import clamp
+from ..models.dist import Dist
 from .ranged_calculator import RangedCalculator
 
 

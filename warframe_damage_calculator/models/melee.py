@@ -1,8 +1,8 @@
 from collections.abc import Mapping
 from typing import Any
 
-from ..calculators import MeleeCalculator
-from ..formatters import MeleeFormatter
+from ..calculators.melee_calculator import MeleeCalculator
+from ..formatters.melee_formatter import MeleeFormatter
 from .build import Build
 from .data import Data
 from .weapon import Weapon

@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 from collections.abc import Iterator
 
-from ..utils import JsonScalar
+from ..utils.types import JsonScalar
 from .data import Data, DataValue
 from .upgrade import Upgrade
 

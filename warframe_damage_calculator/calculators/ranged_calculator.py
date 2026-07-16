@@ -1,7 +1,7 @@
 from functools import cached_property
 
-from ..utils import true_round, clamp
-from ..models import Dist
+from ..utils.functions import clamp, true_round
+from ..models.dist import Dist
 from .weapon_calculator import WeaponCalculator
 
 

@@ -2,7 +2,11 @@ from functools import cached_property
 from collections.abc import Mapping
 from typing import Any
 
-from ..models import Data, Dist, Upgrade, Build
+from ..models.build import Build
+from ..models.data import Data
+from ..models.dist import Dist
+from ..models.upgrade import Upgrade
+from .upgrade_calculator import UpgradeCalculator
 
 
 class WeaponCalculator:
@@ -11,6 +15,7 @@ class WeaponCalculator:
 
     def __init__(self, data: Data) -> None:
         self.data = data
+        self.context = data.context
         self.build = Build()
         self.base = self._new_stats(data.stats)
         self.moded = self._new_stats()
@@ -61,7 +66,18 @@ class WeaponCalculator:
         self._clear_cached_properties()
 
     def set_build(self, build: Build) -> None:
-        self.build = Build(*(upgrade.resolve(self.context, build) for upgrade in build))
+        names = {UpgradeCalculator._key(upgrade.context.get("name", "")) for upgrade in build.upgrades}
+        context = Data(self.context)
+        weapon = UpgradeCalculator._key(context.get("type") or context.get("weapon") or "")
+        types = {weapon, UpgradeCalculator._key(context.get("category") or "")} - {""}
+        if weapon == "bow":
+            types.add("rifle")
+        context.update({key: key in types for key in UpgradeCalculator.AUTOMATIC - {"sacrificial set"}})
+        context.weapon = weapon
+        context["sacrificial set"] = {"sacrificial pressure", "sacrificial steel"}.issubset(names)
+        for upgrade in build.upgrades:
+            upgrade.data.context = context | upgrade.context
+        self.build = Build(*(upgrade.resolve() for upgrade in build.upgrades))
         self.recompute()
 
     def contribution(self, upgrade: Upgrade) -> float:

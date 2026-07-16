@@ -1,6 +1,7 @@
 from functools import cached_property
 
-from ..utils import DOT_MULTIPLIERS, true_round, clamp
+from ..utils.constants import DOT_MULTIPLIERS
+from ..utils.functions import clamp, true_round
 from .weapon_calculator import WeaponCalculator
 
 
