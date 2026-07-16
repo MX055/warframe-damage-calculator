@@ -6,7 +6,6 @@ from ..models.data import Data
 from ..models.dist import Dist
 from ..models.upgrade import Upgrade
 from ..models.build import Build
-from .upgrade_calculator import UpgradeCalculator
 
 
 class WeaponCalculator:
@@ -82,13 +81,10 @@ class WeaponCalculator:
         self._clear_cached_properties()
 
     def set_build(self, build: Build) -> None:
-        upgrades = list(build)
-        for upgrade in upgrades:
-            upgrade.context = UpgradeCalculator(upgrade, self.context, upgrades).context
-        self.build = Build(*(Upgrade(upgrade).resolve() for upgrade in upgrades))
+        self.build = Build(*(upgrade.resolve(weapon=self.data, build=build.data) for upgrade in build))
         self.recompute()
 
-    def contribution(self, upgrade: Upgrade | Data) -> float:
+    def contribution(self, upgrade: Upgrade) -> float:
         full = self.build
         full_dps = self.total_dps
         self.build = self.build - upgrade
@@ -99,7 +95,7 @@ class WeaponCalculator:
         return contribution
 
     def contribution_values(self) -> dict[str, float]:
-        return {str(upgrade.context.name): self.contribution(upgrade) for upgrade in self.build}
+        return {str(upgrade.data.context.name): self.contribution(upgrade) for upgrade in self.build}
 
     def contribution_proportions(self) -> dict[str, float]:
         contributions = self.contribution_values()

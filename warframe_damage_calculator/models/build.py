@@ -12,24 +12,23 @@ class Build:
             raise TypeError("Build only accepts Upgrade instances")
         self.data = Data({"upgrades": [upgrade.data for upgrade in upgrades]})
 
-    def __iter__(self) -> Iterator[Data]:
-        return iter(self.data.upgrades)
+    def __iter__(self) -> Iterator[Upgrade]:
+        return (Upgrade(data) for data in self.data.upgrades)
     
     def __add__(self, other: Build | Upgrade) -> Build:
-        upgrades = [Upgrade(data) for data in self]
-        return Build(*upgrades, other) if isinstance(other, Upgrade) else Build(*upgrades, *(Upgrade(data) for data in other))
+        return Build(*self, other) if isinstance(other, Upgrade) else Build(*self, *other)
     
     def __radd__(self, other: Upgrade) -> Build:
-        return Build(other, *(Upgrade(data) for data in self))
+        return Build(other, *self)
 
-    def __sub__(self, other: Build | Upgrade | Data) -> Build:
-        excluded = [other.data if isinstance(other, Upgrade) else other] if isinstance(other, (Upgrade, Data)) else list(other)
-        return Build(*(Upgrade(data) for data in self if all(data is not item for item in excluded)))
+    def __sub__(self, other: Build | Upgrade) -> Build:
+        excluded = [other.data] if isinstance(other, Upgrade) else [upgrade.data for upgrade in other]
+        return Build(*(upgrade for upgrade in self if all(upgrade.data is not item for item in excluded)))
     
     def aggregate(self) -> Data:
         stats = Data()
         for upgrade in self:
-            for stat, value in upgrade.stats.items():
+            for stat, value in upgrade.data.stats.items():
                 current = stats.get(stat)
                 stats[stat] = value if current is None else current or value if isinstance(value, bool) else current + value
         return stats

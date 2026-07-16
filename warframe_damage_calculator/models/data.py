@@ -15,9 +15,9 @@ class Data(dict[str, DataValue]):
 
     @classmethod
     def _convert(cls, key: str, value: JsonValue | DataValue) -> DataValue:
+        if isinstance(value, Data): return value
         if isinstance(value, dict): return cls._distribution(value) if key in DISTRIBUTIONS else cls(value)
         if isinstance(value, list): return [cls._convert(key, item) for item in value]
-        if isinstance(value, Data): return value
         return value
 
     @classmethod
