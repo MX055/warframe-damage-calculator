@@ -18,6 +18,7 @@ class UpgradeCalculator:
 
     @staticmethod
     def _key(value: Any) -> str: return " ".join(str(value).casefold().replace("_", " ").replace("-", " ").split())
+    
     @classmethod
     def _data(cls, data: Mapping[str, Any] | None) -> Data: return Data({cls._key(key): value for key, value in (data or {}).items()})
 
