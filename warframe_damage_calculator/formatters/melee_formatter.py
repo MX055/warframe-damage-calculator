@@ -11,7 +11,7 @@ class MeleeFormatter(WeaponFormatter):
             f"{'CRIT DAMAGE:':<14} {f'{base.crit_damage:.2f}x':<6} -> {effective.crit_damage:.2f}x",
             f"{'STATUS CHANCE:':<14} {f'{base.status_chance:.2%}':<6} -> {effective.status_chance:.2%}",
             f"{'STATUS DAMAGE:':<14} {'1.00x':<6} -> {effective.status_damage:.2f}x",
-            *(f"{f'{dt.upper()}:':<14} {f'{base.damage.get(dt):.2f}':<6} -> {effective.damage.get(dt):.2f}" for dt in effective.damage),
+            *(f"{f'{dt.upper()}:':<14} {f'{base.damage.get(dt, 0):.2f}':<6} -> {effective.damage.get(dt):.2f}" for dt in effective.damage),
             f"{'TOTAL DAMAGE:':<14} {f'{base.total_damage:.2f}':<6} -> {effective.total_damage:.2f}",
             "-------------------------------------",
             f"{'FLAT DPH:':<14} {self.calculator.flat_dph:.2f}",
