@@ -1,14 +1,25 @@
 from pathlib import Path
 from collections.abc import Iterator, Mapping
-from typing import Any, Self
+from typing import Any, Literal, overload, Self
 
 from ..models.upgrade import Upgrade
 from ..models.weapon import Weapon
+from ..models.primary import Primary
+from ..models.secondary import Secondary
+from ..models.melee import Melee
 from .construction import DatabaseFactory
 from .matching import entry_matches
 from .normalization import normalize_identifier, normalize_name
 from .paths import DEFAULT_UPGRADES_PATH, DEFAULT_WEAPONS_PATH, load_json
 from .schema import DatabaseEntry
+
+type DatabaseItem = Weapon | Upgrade
+type WeaponItem = Primary | Secondary | Melee
+type PrimaryFilter = Literal["primary", "primaries", "rifle", "bow", "shotgun", "sniper"]
+type SecondaryFilter = Literal["secondary", "secondaries", "pistol", "pistols"]
+type MeleeFilter = Literal["melee", "melees"]
+type WeaponFilter = Literal["weapon", "weapons"]
+type UpgradeFilter = Literal["upgrade", "upgrades", "mod", "mods", "arcane", "arcanes"]
 
 
 class WarframeDatabase:
@@ -27,8 +38,32 @@ class WarframeDatabase:
     def from_folder(cls, folder: str | Path) -> Self:
         folder = Path(folder)
         return cls.from_files(folder / "weapons.json", folder / "upgrades.json")
+    
+    @overload
+    def get(self, name: str) -> WeaponItem | None: ...
 
-    def get(self, name: str | None = None, *, type: str | None = None, context: Mapping[str, Any] | None = None, attribute: str | None = None) -> Any:
+    @overload
+    def get(self, name: str) -> Upgrade | None: ...
+
+    @overload
+    def get(self, name: str, *, type: WeaponFilter, context: Mapping[str, Any] | None = None, attribute: None = None) -> WeaponItem | None: ...
+
+    @overload
+    def get(self, name: str, *, type: UpgradeFilter, context: Mapping[str, Any] | None = None, attribute: None = None) -> Upgrade | None: ...
+
+    @overload
+    def get(self, name: None = None, *, type: str | None = None, context: Mapping[str, Any] | None = None, attribute: Literal["name"]) -> list[str]: ...
+
+    @overload
+    def get(self, name: None = None, *, type: WeaponFilter, context: Mapping[str, Any] | None = None, attribute: None = None) -> dict[str, WeaponItem]: ...
+
+    @overload
+    def get(self, name: None = None, *, type: UpgradeFilter, context: Mapping[str, Any] | None = None, attribute: None = None) -> dict[str, Upgrade]: ...
+
+    @overload
+    def get(self, name: None = None, *, type: str | None = None, context: Mapping[str, Any] | None = None, attribute: str) -> list[str] | dict[str, object | None]: ...
+
+    def get(self, name: str | None = None, *, type: str | None = None, context: Mapping[str, Any] | None = None, attribute: str | None = None) -> DatabaseItem | None | list[str] | dict[str, DatabaseItem] | dict[str, object | None]:
         if name is not None:
             entry = self._name_index.get(normalize_name(name))
             if entry is None or not entry_matches(entry, type):
@@ -42,7 +77,7 @@ class WarframeDatabase:
 
         return {entry.name: self._apply_attribute(self._create(entry, context), attribute) for entry in entries}
 
-    def _create(self, entry: DatabaseEntry, context: Mapping[str, Any] | None) -> Weapon | Upgrade:
+    def _create(self, entry: DatabaseEntry, context: Mapping[str, Any] | None) -> DatabaseItem:
         item = self._factory.create(entry)
         if context is not None:
             item.data.context.update(context)
@@ -57,13 +92,13 @@ class WarframeDatabase:
                 yield DatabaseEntry(category=category, name=name, data=data)
 
     @classmethod
-    def _apply_attribute(cls, item: Weapon | Upgrade, attribute: str | None) -> Any:
+    def _apply_attribute(cls, item: DatabaseItem, attribute: str | None) -> object | None:
         if attribute is None:
             return item
         return cls._extract_attribute(item, attribute)
 
     @staticmethod
-    def _extract_attribute(item: Weapon | Upgrade, attribute: str) -> Any:
+    def _extract_attribute(item: DatabaseItem, attribute: str) -> object | None:
         key = normalize_identifier(attribute)
 
         if key == "name":

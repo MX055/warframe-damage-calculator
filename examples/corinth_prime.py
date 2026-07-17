@@ -1,4 +1,4 @@
-from warframe_damage_calculator import Build, Upgrade, arsenal
+from warframe_damage_calculator import Build, Upgrade, arsenal, Primary
 
 
 def main() -> None:
@@ -14,7 +14,8 @@ def main() -> None:
     exilus = arsenal.get("Vigilante Supplies")
     arcane = arsenal.get("Primary Merciless")
     buff = Upgrade({"context": {"name": "Buff"}, "stats": {"flat_crit_damage": 1.2}})
-    weapon.configure(Build(mod1, mod2, mod3, mod4, mod5, mod6, mod7, mod8, exilus, arcane, buff))
+    build = Build(mod1, mod2, mod3, mod4, mod5, mod6, mod7, mod8, exilus, arcane, buff)
+    weapon.configure(build)
 
     print(weapon.format.summary())
     
