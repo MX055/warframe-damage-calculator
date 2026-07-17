@@ -10,12 +10,11 @@ class MeleeCalculator(WeaponCalculator):
     DEFAULT_STATS = WeaponCalculator.DEFAULT_STATS | {"attack_speed": 1.0, "melee_doughty": 0.0, "melee_duplicate": 0.0}
     DEFAULT_BUILD = WeaponCalculator.DEFAULT_BUILD | {"attack_speed": 0.0, "melee_duplicate": 0.0, "melee_doughty": 0.0}
 
-    def _compute_moded_stats(self) -> Data:
-        resolved_build = super()._compute_moded_stats()
+    def _compute_moded_stats(self, resolved_build: Data) -> None:
+        super()._compute_moded_stats(resolved_build)
         self.moded.attack_speed = max(self.base.attack_speed * (1 + resolved_build.attack_speed), 0)
         self.moded.melee_duplicate = clamp(resolved_build.melee_duplicate, 0, 1)
         self.moded.melee_doughty = clamp(resolved_build.melee_doughty, 0, 1)
-        return resolved_build
 
     def _compute_effective_stats(self) -> None:
         super()._compute_effective_stats()

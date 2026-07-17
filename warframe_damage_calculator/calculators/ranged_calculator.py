@@ -18,8 +18,8 @@ class RangedCalculator(WeaponCalculator):
         values.explosion_total_damage = values.explosion_damage.total_damage()
         return values
 
-    def _compute_moded_stats(self) -> Data:
-        resolved_build = super()._compute_moded_stats()
+    def _compute_moded_stats(self, resolved_build: Data) -> None:
+        super()._compute_moded_stats(resolved_build)
         self.moded.explosion_damage = self.moded.base_damage * self.base.explosion_damage.apply(resolved_build.damage).combine().sorted()
         self.moded.explosion_total_damage = self.moded.explosion_damage.total_damage()
         self.moded.weakpoint_damage = max(self.base.weakpoint_damage + resolved_build.weakpoint_damage, 1)
@@ -36,7 +36,6 @@ class RangedCalculator(WeaponCalculator):
         self.moded.multiplicative_weakpoint_crit_chance = max(1 + resolved_build.multiplicative_weakpoint_crit_chance, 1)
         self.moded.weakpoint_crit_chance = max(self.base.crit_chance * (1 + resolved_build.crit_chance + resolved_build.weakpoint_crit_chance), 0)
         self.moded.internal_bleeding = max(resolved_build.internal_bleeding * (2 if self.moded.fire_rate * self.moded.multiplicative_fire_rate < 2.5 else 1), 0)
-        return resolved_build
 
     def _compute_effective_stats(self) -> None:
         super()._compute_effective_stats()
@@ -72,7 +71,7 @@ class RangedCalculator(WeaponCalculator):
 
     @cached_property
     def average_weakpoint_crit_multiplier(self) -> float:
-        return 1 + self.effective.weakpoint_crit_chance * (self.effective.crit_damage - 1)
+        return 1 + self.average_weakpoint_crit_chance * (self.effective.crit_damage - 1)
     
     @cached_property
     def beam_dot_multiplier(self) -> float:

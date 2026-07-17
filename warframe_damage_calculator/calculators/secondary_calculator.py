@@ -11,11 +11,10 @@ class SecondaryCalculator(RangedCalculator):
     DEFAULT_STATS = RangedCalculator.DEFAULT_STATS | {"secondary_enervate": 0, "secondary_encumber": 0.0}
     DEFAULT_BUILD = RangedCalculator.DEFAULT_BUILD | {"secondary_enervate": 0, "secondary_encumber": 0.0}
 
-    def _compute_moded_stats(self) -> Data:
-        resolved_build = super()._compute_moded_stats()
+    def _compute_moded_stats(self, resolved_build: Data) -> None:
+        super()._compute_moded_stats(resolved_build)
         self.moded.secondary_enervate = clamp(resolved_build.secondary_enervate, 0, 6)
         self.moded.secondary_encumber = clamp(resolved_build.secondary_encumber, 0, 0.24)
-        return resolved_build
 
     def _compute_effective_stats(self) -> None:
         super()._compute_effective_stats()

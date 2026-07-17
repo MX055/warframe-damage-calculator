@@ -27,8 +27,7 @@ class WeaponCalculator:
         values.total_damage = values.damage.total_damage()
         return values
     
-    def _compute_moded_stats(self) -> Data:
-        resolved_build = self.DEFAULT_BUILD | self.build.resolve(self.data).aggregate()
+    def _compute_moded_stats(self, resolved_build: Data) -> None:
         self.moded.multiplicative_base_damage = max(1 + resolved_build.multiplicative_base_damage, 1)
         self.moded.base_damage = max(1 + resolved_build.base_damage, 0)
         self.moded.damage = self.moded.base_damage * self.base.damage.apply(resolved_build.damage).combine().sorted()
@@ -41,7 +40,6 @@ class WeaponCalculator:
         self.moded.crit_damage = max(self.base.crit_damage * (1 + resolved_build.crit_damage), 1)
         self.moded.status_chance = max(self.base.status_chance * (1 + resolved_build.status_chance), 0)
         self.moded.status_damage = max(1 + resolved_build.status_damage, 1)
-        return resolved_build
 
     def _compute_effective_stats(self) -> None:
         self.effective.base_damage = self.moded.base_damage * self.moded.multiplicative_base_damage
@@ -80,7 +78,8 @@ class WeaponCalculator:
         self.recompute()
 
     def recompute(self) -> None:
-        self._compute_moded_stats()
+        resolved_build = self.DEFAULT_BUILD | self.build.resolve(self.data).aggregate()
+        self._compute_moded_stats(resolved_build)
         self._compute_effective_stats()
         self._clear_cached_properties()
 

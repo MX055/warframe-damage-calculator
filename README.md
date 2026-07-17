@@ -31,7 +31,7 @@ weapon definitions, upgrades, and builds.
 
 ## Requirements
 
--   Python **3.12+**
+-   Python **3.14+**
 
 ------------------------------------------------------------------------
 
