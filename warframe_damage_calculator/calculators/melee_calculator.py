@@ -3,6 +3,7 @@ from functools import cached_property
 from ..utils.constants import DOT_MULTIPLIERS
 from ..utils.functions import clamp, true_round
 from ..models.data import Data
+from ..models.dist import Dist
 from .weapon_calculator import WeaponCalculator
 
 
@@ -24,7 +25,7 @@ class MeleeCalculator(WeaponCalculator):
 
     @cached_property
     def melee_doughty_bonus(self) -> float:
-        return true_round(10 * self.effective.damage.weight("puncture") * self.effective.status_chance * self.effective.melee_doughty, 1)
+        return true_round(10 * Dist(self.effective.damage).weight("puncture") * self.effective.status_chance * self.effective.melee_doughty, 1)
 
     @cached_property
     def average_melee_duplicate_multiplier(self) -> float:
@@ -40,7 +41,8 @@ class MeleeCalculator(WeaponCalculator):
 
     @cached_property
     def flat_dotph(self) -> float:
-        return sum(mult * self.effective.damage.get(dt) * self.effective.damage.weight(dt) for dt, mult in DOT_MULTIPLIERS) * self.effective.status_chance * self.effective.status_damage * self.effective.faction_damage ** 2 * self.average_crit_multiplier * self.average_melee_duplicate_multiplier
+        damage = Dist(self.effective.damage)
+        return sum(mult * damage.get(dt) * damage.weight(dt) for dt, mult in DOT_MULTIPLIERS) * self.effective.status_chance * self.effective.status_damage * self.effective.faction_damage ** 2 * self.average_crit_multiplier * self.average_melee_duplicate_multiplier
 
     @cached_property
     def flat_dotps(self) -> float:

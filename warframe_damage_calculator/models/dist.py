@@ -2,11 +2,12 @@ from typing import Iterable
 
 from ..utils.constants import DAMAGE_TYPE_ORDER, ELEMENTAL_COMBINATIONS, ELEMENTAL_TYPES, PHYSICAL_TYPES
 from ..utils.types import DamageType, Number
+from .data import Data
 
 
 class Dist:
     def __init__(self, data: dict[DamageType, Number] | None = None) -> None:
-        self.data = data or {}
+        self.data = Data(data)
 
     def __iter__(self) -> Iterable:
         return iter(self.data.items())

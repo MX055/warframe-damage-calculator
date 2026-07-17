@@ -3,6 +3,7 @@ from typing import get_args
 import pytest
 
 from warframe_damage_calculator import Build, Data, Primary, Upgrade, arsenal
+from warframe_damage_calculator.calculators.weapon_calculator import WeaponCalculator
 from warframe_damage_calculator.models.dist import Dist
 from warframe_damage_calculator.utils.types import DamageType
 
@@ -18,13 +19,23 @@ def test_data_copy_is_independent():
     original = Data({"nested": {"items": [{"value": 1}]}, "damage": {"impact": 2}})
     copied = original.copy()
     copied.nested["items"][0].value = 3
-    copied.damage.data["impact"] = 4
+    copied.damage.impact = 4
     assert original.nested["items"][0].value == 1
-    assert original.damage.get("impact") == 2
+    assert original.damage.impact == 2
+
+
+def test_calculator_normalizes_damage_distributions():
+    stats = {field: {"impact": 1} for field in ("damage", "forced_procs", "explosion_damage", "explosion_forced_procs")}
+    data = Data({"stats": stats, "context": {}})
+    calculator = WeaponCalculator(data)
+    assert all(isinstance(calculator.base[field], Data) for field in stats)
+    assert all(isinstance(data.stats[field], Data) for field in stats)
+    assert isinstance(Upgrade({"stats": {"heat": 1}}).resolve().data.stats.damage, Data)
 
 
 def test_dist_filters_accept_generators():
     damage = Dist({"impact": 1, "puncture": 2, "slash": 3})
+    assert isinstance(damage.data, Data)
     assert damage.include(item for item in ("impact", "slash")) == Dist({"impact": 1, "slash": 3})
     assert damage.exclude(item for item in ("impact", "slash")) == Dist({"puncture": 2})
 

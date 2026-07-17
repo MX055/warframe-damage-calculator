@@ -1,5 +1,4 @@
 from functools import cached_property
-from collections.abc import Mapping
 from typing import Any
 
 from ..models.data import Data
@@ -9,8 +8,8 @@ from ..models.build import Build
 
 
 class WeaponCalculator:
-    DEFAULT_STATS = Data({"damage": Dist(), "forced_procs": Dist(), "crit_chance": 0.0, "crit_damage": 1.0, "status_chance": 0.0, "total_damage": 0.0, "multiplicative_base_damage": 1.0, "base_damage": 0.0, "faction_damage": 1.0, "flat_crit_chance": 0.0, "multiplicative_crit_chance": 1.0, "flat_crit_damage": 0.0, "status_damage": 1.0})
-    DEFAULT_BUILD = Data({"damage": Dist(), "multiplicative_base_damage": 0.0, "base_damage": 0.0, "faction_damage": 0.0, "flat_crit_chance": 0.0, "multiplicative_crit_chance": 0.0, "crit_chance": 0.0, "flat_crit_damage": 0.0, "crit_damage": 0.0, "status_chance": 0.0, "status_damage": 0.0})
+    DEFAULT_STATS = Data({"damage": {}, "forced_procs": {}, "crit_chance": 0.0, "crit_damage": 1.0, "status_chance": 0.0, "total_damage": 0.0, "multiplicative_base_damage": 1.0, "base_damage": 0.0, "faction_damage": 1.0, "flat_crit_chance": 0.0, "multiplicative_crit_chance": 1.0, "flat_crit_damage": 0.0, "status_damage": 1.0})
+    DEFAULT_BUILD = Data({"damage": {}, "multiplicative_base_damage": 0.0, "base_damage": 0.0, "faction_damage": 0.0, "flat_crit_chance": 0.0, "multiplicative_crit_chance": 0.0, "crit_chance": 0.0, "flat_crit_damage": 0.0, "crit_damage": 0.0, "status_chance": 0.0, "status_damage": 0.0})
 
     def __init__(self, data: Data) -> None:
         self.data = data
@@ -22,16 +21,17 @@ class WeaponCalculator:
         self.recompute()
 
     @classmethod
-    def _new_stats(cls, stats: Mapping[str, Any] | None = None) -> Data:
+    def _new_stats(cls, stats: dict[str, Any] | None = None) -> Data:
         values = cls.DEFAULT_STATS | Data(stats)
-        values.total_damage = values.damage.total_damage()
+        values.total_damage = Dist(values.damage).total_damage()
         return values
     
     def _compute_moded_stats(self, resolved_build: Data) -> None:
         self.moded.multiplicative_base_damage = max(1 + resolved_build.multiplicative_base_damage, 1)
         self.moded.base_damage = max(1 + resolved_build.base_damage, 0)
-        self.moded.damage = self.moded.base_damage * self.base.damage.apply(resolved_build.damage).combine().sorted()
-        self.moded.total_damage = self.moded.damage.total_damage()
+        damage = self.moded.base_damage * Dist(self.base.damage).apply(Dist(resolved_build.damage)).combine().sorted()
+        self.moded.damage = damage.data
+        self.moded.total_damage = damage.total_damage()
         self.moded.faction_damage = max(1 + resolved_build.faction_damage, 1)
         self.moded.flat_crit_chance = max(resolved_build.flat_crit_chance, 0)
         self.moded.multiplicative_crit_chance = max(1 + resolved_build.multiplicative_crit_chance, 1)
@@ -43,8 +43,9 @@ class WeaponCalculator:
 
     def _compute_effective_stats(self) -> None:
         self.effective.base_damage = self.moded.base_damage * self.moded.multiplicative_base_damage
-        self.effective.damage = self.moded.multiplicative_base_damage * self.moded.damage
-        self.effective.total_damage = self.effective.damage.total_damage()
+        damage = self.moded.multiplicative_base_damage * Dist(self.moded.damage)
+        self.effective.damage = damage.data
+        self.effective.total_damage = damage.total_damage()
         self.effective.faction_damage = self.moded.faction_damage
         self.effective.crit_chance = self.moded.crit_chance * self.moded.multiplicative_crit_chance + self.moded.flat_crit_chance
         self.effective.crit_damage = self.moded.crit_damage + self.moded.flat_crit_damage

@@ -1,5 +1,5 @@
 from pathlib import Path
-from collections.abc import Iterator, Mapping
+from collections.abc import Iterator
 from typing import Any, Literal, overload, Self
 
 from ..models.upgrade import Upgrade
@@ -46,24 +46,24 @@ class WarframeDatabase:
     def get(self, name: str) -> Upgrade | None: ...
 
     @overload
-    def get(self, name: str, *, type: WeaponFilter, context: Mapping[str, Any] | None = None, attribute: None = None) -> WeaponItem | None: ...
+    def get(self, name: str, *, type: WeaponFilter, context: dict[str, Any] | None = None, attribute: None = None) -> WeaponItem | None: ...
 
     @overload
-    def get(self, name: str, *, type: UpgradeFilter, context: Mapping[str, Any] | None = None, attribute: None = None) -> Upgrade | None: ...
+    def get(self, name: str, *, type: UpgradeFilter, context: dict[str, Any] | None = None, attribute: None = None) -> Upgrade | None: ...
 
     @overload
-    def get(self, name: None = None, *, type: str | None = None, context: Mapping[str, Any] | None = None, attribute: Literal["name"]) -> list[str]: ...
+    def get(self, name: None = None, *, type: str | None = None, context: dict[str, Any] | None = None, attribute: Literal["name"]) -> list[str]: ...
 
     @overload
-    def get(self, name: None = None, *, type: WeaponFilter, context: Mapping[str, Any] | None = None, attribute: None = None) -> dict[str, WeaponItem]: ...
+    def get(self, name: None = None, *, type: WeaponFilter, context: dict[str, Any] | None = None, attribute: None = None) -> dict[str, WeaponItem]: ...
 
     @overload
-    def get(self, name: None = None, *, type: UpgradeFilter, context: Mapping[str, Any] | None = None, attribute: None = None) -> dict[str, Upgrade]: ...
+    def get(self, name: None = None, *, type: UpgradeFilter, context: dict[str, Any] | None = None, attribute: None = None) -> dict[str, Upgrade]: ...
 
     @overload
-    def get(self, name: None = None, *, type: str | None = None, context: Mapping[str, Any] | None = None, attribute: str) -> list[str] | dict[str, object | None]: ...
+    def get(self, name: None = None, *, type: str | None = None, context: dict[str, Any] | None = None, attribute: str) -> list[str] | dict[str, object | None]: ...
 
-    def get(self, name: str | None = None, *, type: str | None = None, context: Mapping[str, Any] | None = None, attribute: str | None = None) -> DatabaseItem | None | list[str] | dict[str, DatabaseItem] | dict[str, object | None]:
+    def get(self, name: str | None = None, *, type: str | None = None, context: dict[str, Any] | None = None, attribute: str | None = None) -> DatabaseItem | None | list[str] | dict[str, DatabaseItem] | dict[str, object | None]:
         if name is not None:
             entry = self._name_index.get(normalize_name(name))
             if entry is None or not entry_matches(entry, type):
@@ -77,7 +77,7 @@ class WarframeDatabase:
 
         return {entry.name: self._apply_attribute(self._create(entry, context), attribute) for entry in entries}
 
-    def _create(self, entry: DatabaseEntry, context: Mapping[str, Any] | None) -> DatabaseItem:
+    def _create(self, entry: DatabaseEntry, context: dict[str, Any] | None) -> DatabaseItem:
         item = self._factory.create(entry)
         if context is not None:
             item.data.context.update(context)

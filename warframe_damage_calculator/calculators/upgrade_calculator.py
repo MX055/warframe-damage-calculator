@@ -1,9 +1,7 @@
-from collections.abc import Mapping
 from typing import Any
 
 from ..utils.constants import DAMAGE_TYPES
 from ..models.data import Data
-from ..models.dist import Dist
 
 
 class UpgradeCalculator:
@@ -21,7 +19,7 @@ class UpgradeCalculator:
         return " ".join(str(value).casefold().replace("_", " ").replace("-", " ").split())
     
     @classmethod
-    def _data(cls, data: Mapping[str, Any] | None) -> Data:
+    def _data(cls, data: dict[str, Any] | None) -> Data:
         return Data({cls._key(key): value for key, value in (data or {}).items()})
 
     def _context(self) -> Data:
@@ -42,14 +40,16 @@ class UpgradeCalculator:
 
     @classmethod
     def _scale(cls, value: Any, multiplier: float) -> Any:
-        return {key: cls._scale(item, multiplier) for key, item in value.items()} if isinstance(value, Mapping) else value if isinstance(value, bool) else value * multiplier
+        return {key: cls._scale(item, multiplier) for key, item in value.items()} if isinstance(value, dict) else value if isinstance(value, bool) else value * multiplier
 
     @staticmethod
     def _add(stats: Data, stat: str, value: Any) -> None:
-        if stat in DAMAGE_TYPES: stat, value = "damage", Dist({stat: value})
-        elif stat == "damage" and not isinstance(value, Dist): value = Dist(value)
+        if stat in DAMAGE_TYPES: stat, value = "damage", {stat: value}
         current = stats.get(stat)
-        stats[stat] = value if current is None else current or value if isinstance(value, bool) else current + value
+        if current is None: stats[stat] = value
+        elif isinstance(value, bool): stats[stat] = current or value
+        elif isinstance(current, dict) and isinstance(value, dict): stats[stat] = {key: current.get(key, 0) + value.get(key, 0) for key in current.keys() | value.keys()}
+        else: stats[stat] = current + value
 
     def resolve(self) -> dict[str, Data]:
         maximums = [self.context.get(key) for key in ("max rank", "max stacks")]
@@ -64,7 +64,7 @@ class UpgradeCalculator:
             for raw in effects if isinstance(effects, list) else [effects]:
                 effect = raw if isinstance(raw, Data) and "value" in raw else Data({"value": raw})
                 value, condition = effect.value, effect.get("when")
-                if isinstance(condition, Mapping) and condition.get("rank") is not None:
+                if isinstance(condition, dict) and condition.get("rank") is not None:
                     if rank >= self._count(condition["rank"], "required rank"): self._add(stats, stat, value)
                 elif effect.get("stacking", False):
                     condition = self._key(condition)
