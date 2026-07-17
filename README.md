@@ -313,8 +313,9 @@ model explicitly.
 
 #### Weapon and build context
 
-`weapon.configure()` adds automatic context fields directly to the supplied
-upgrades. A bow is also treated as a rifle for compatibility conditions:
+Calculators keep the configured upgrades unchanged and apply automatic weapon
+and build context when calculations run. A bow is also treated as a rifle for
+compatibility conditions:
 
 ```python
 bow = arsenal.get("Paris Prime")
@@ -326,9 +327,10 @@ rifle_bonus = Upgrade(
 )
 
 bow.configure(rifle_bonus)
-print(rifle_bonus.data.context.weapon)  # "bow"
-print(rifle_bonus.data.context.bow)     # True
-print(rifle_bonus.data.context.rifle)   # True
+resolved = rifle_bonus.resolve(weapon=bow.data, build=bow.build.data)
+print(resolved.data.context.weapon)  # "bow"
+print(resolved.data.context.bow)     # True
+print(resolved.data.context.rifle)   # True
 ```
 
 Build-wide conditions can depend on upgrade names. Equipping both Sacrificial
@@ -340,15 +342,16 @@ pressure = arsenal.get("Sacrificial Pressure")
 steel = arsenal.get("Sacrificial Steel")
 
 melee.configure(pressure, steel)
-print(pressure.data.context["sacrificial set"])  # True
-print(steel.data.context["sacrificial set"])     # True
+for upgrade in melee.build:
+    resolved = upgrade.resolve(weapon=melee.data, build=melee.build.data)
+    print(resolved.data.context["sacrificial set"])  # True
 ```
 
-When a weapon is configured, its calculator adds shared weapon and build values
-directly to each existing upgrade context. These include normalized weapon-type
+During calculation, shared weapon and build values are applied to each upgrade
+without modifying its stored context. These include normalized weapon-type
 flags, the weapon type, and the `sacrificial set` condition. Rank-locked stats
-use `upgrade.data.context.rank`; it defaults to `max_rank`, or zero when the upgrade
-has no maximum rank.
+use `upgrade.data.context.rank`; it defaults to `max_rank`, or zero when the
+upgrade has no maximum rank.
 
 The `Upgrade` and `Build` models store data. Condition matching, rank scaling,
 stack limits, and effect merging are handled by `UpgradeCalculator` when

@@ -2,7 +2,7 @@ from functools import cached_property
 from collections.abc import Mapping
 from typing import Any
 
-from ..models.data import Data
+from ..models.data import Data, DataValue
 from ..models.dist import Dist
 from ..models.upgrade import Upgrade
 from ..models.build import Build
@@ -28,20 +28,23 @@ class WeaponCalculator:
         if "explosion_damage" in values:
             values.explosion_total_damage = values.explosion_damage.total_damage()
         return values
+    
+    def _get(self, stat: str, default: DataValue = 0) -> DataValue:
+        return self._build_stats.get(stat, default)
 
     def _compute_moded_stats(self) -> None:
-        self.moded.multiplicative_base_damage = max(1 + self.build.get("multiplicative_base_damage"), 1)
-        self.moded.base_damage = max(1 + self.build.get("base_damage"), 0)
-        self.moded.damage = self.moded.base_damage * self.base.damage.apply(self.build.get("damage", Dist())).combine().sorted()
+        self.moded.multiplicative_base_damage = max(1 + self._get("multiplicative_base_damage"), 1)
+        self.moded.base_damage = max(1 + self._get("base_damage"), 0)
+        self.moded.damage = self.moded.base_damage * self.base.damage.apply(self._get("damage", Dist())).combine().sorted()
         self.moded.total_damage = self.moded.damage.total_damage()
-        self.moded.faction_damage = max(1 + self.build.get("faction_damage"), 1)
-        self.moded.flat_crit_chance = max(self.build.get("flat_crit_chance"), 0)
-        self.moded.multiplicative_crit_chance = max(1 + self.build.get("multiplicative_crit_chance"), 1)
-        self.moded.crit_chance = max(self.base.crit_chance * (1 + self.build.get("crit_chance")), 0)
-        self.moded.flat_crit_damage = max(self.build.get("flat_crit_damage"), 0)
-        self.moded.crit_damage = max(self.base.crit_damage * (1 + self.build.get("crit_damage")), 1)
-        self.moded.status_chance = max(self.base.status_chance * (1 + self.build.get("status_chance")), 0)
-        self.moded.status_damage = max(1 + self.build.get("status_damage"), 1)
+        self.moded.faction_damage = max(1 + self._get("faction_damage"), 1)
+        self.moded.flat_crit_chance = max(self._get("flat_crit_chance"), 0)
+        self.moded.multiplicative_crit_chance = max(1 + self._get("multiplicative_crit_chance"), 1)
+        self.moded.crit_chance = max(self.base.crit_chance * (1 + self._get("crit_chance")), 0)
+        self.moded.flat_crit_damage = max(self._get("flat_crit_damage"), 0)
+        self.moded.crit_damage = max(self.base.crit_damage * (1 + self._get("crit_damage")), 1)
+        self.moded.status_chance = max(self.base.status_chance * (1 + self._get("status_chance")), 0)
+        self.moded.status_damage = max(1 + self._get("status_damage"), 1)
 
     def _compute_effective_stats(self) -> None:
         self.effective.base_damage = self.moded.base_damage * self.moded.multiplicative_base_damage
@@ -76,23 +79,27 @@ class WeaponCalculator:
         return self.flat_dps + self.flat_dotps
 
     def recompute(self) -> None:
+        resolved = Build(*(upgrade.resolve(weapon=self.data, build=self.build.data) for upgrade in self.build))
+        self._build_stats = resolved.aggregate()
         self._compute_moded_stats()
         self._compute_effective_stats()
         self._clear_cached_properties()
 
     def set_build(self, build: Build) -> None:
-        self.build = Build(*(upgrade.resolve(weapon=self.data, build=build.data) for upgrade in build))
+        self.build = build
         self.recompute()
 
     def contribution(self, upgrade: Upgrade) -> float:
         full = self.build
+        reduced = full - upgrade
+        if len(reduced.data.upgrades) == len(full.data.upgrades):
+            return 0.0
         full_dps = self.total_dps
-        self.build = self.build - upgrade
-        self.recompute()
-        contribution = full_dps - self.total_dps
-        self.build = full
-        self.recompute()
-        return contribution
+        try:
+            self.set_build(reduced)
+            return full_dps - self.total_dps
+        finally:
+            self.set_build(full)
 
     def contribution_values(self) -> dict[str, float]:
         return {str(upgrade.data.context.name): self.contribution(upgrade) for upgrade in self.build}

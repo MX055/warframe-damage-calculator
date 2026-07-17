@@ -20,9 +20,12 @@ class Build:
         return Build(other, *self)
 
     def __sub__(self, other: Build | Upgrade) -> Build:
-        excluded = [other.data] if isinstance(other, Upgrade) else [upgrade.data for upgrade in other]
-        return Build(*(upgrade for upgrade in self if all(upgrade.data is not item for item in excluded)))
-    
+        upgrades = list(self.data.upgrades)
+        for excluded in (other,) if isinstance(other, Upgrade) else other:
+            if (index := next((i for i, data in enumerate(upgrades) if data is excluded.data), None)) is not None:
+                upgrades.pop(index)
+        return Build(*(Upgrade(data) for data in upgrades))
+        
     def aggregate(self) -> Data:
         stats = Data()
         for upgrade in self:

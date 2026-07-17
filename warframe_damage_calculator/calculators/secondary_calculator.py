@@ -12,8 +12,8 @@ class SecondaryCalculator(RangedCalculator):
 
     def _compute_moded_stats(self) -> None:
         super()._compute_moded_stats()
-        self.moded.secondary_enervate = clamp(self.build.get("secondary_enervate"), 0, 6)
-        self.moded.secondary_encumber = clamp(self.build.get("secondary_encumber"), 0, 0.24)
+        self.moded.secondary_enervate = clamp(self._get("secondary_enervate"), 0, 6)
+        self.moded.secondary_encumber = clamp(self._get("secondary_encumber"), 0, 0.24)
 
     def _compute_effective_stats(self) -> None:
         super()._compute_effective_stats()
