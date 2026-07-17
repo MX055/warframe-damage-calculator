@@ -25,8 +25,6 @@ class WeaponCalculator:
     def _new_stats(cls, stats: Mapping[str, Any] | None = None) -> Data:
         values = cls.DEFAULT_STATS | cls.CALCULATED_STATS | Data(stats)
         values.total_damage = values.damage.total_damage()
-        if "explosion_damage" in values:
-            values.explosion_total_damage = values.explosion_damage.total_damage()
         return values
     
     def _get(self, stat: str, default: DataValue = 0) -> DataValue:

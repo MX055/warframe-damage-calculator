@@ -1,6 +1,9 @@
 from functools import cached_property
+from collections.abc import Mapping
+from typing import Any
 
 from ..utils.functions import clamp, true_round
+from ..models.data import Data
 from ..models.dist import Dist
 from .weapon_calculator import WeaponCalculator
 
@@ -8,6 +11,12 @@ from .weapon_calculator import WeaponCalculator
 class RangedCalculator(WeaponCalculator):
     DEFAULT_STATS = WeaponCalculator.DEFAULT_STATS | {"explosion_damage": Dist(), "explosion_forced_procs": Dist(), "multishot": 1.0, "fire_rate": 0.05, "burst_count": 1, "burst_delay": 0.0, "charge_time": 0.0, "reload_speed": 0.0, "recharge_rate": 0.0, "magazine_capacity": 1, "weakpoint_damage": 3.0}
     CALCULATED_STATS = WeaponCalculator.CALCULATED_STATS | {"explosion_total_damage": 0.0, "multiplicative_fire_rate": 1.0, "ammo_efficiency": 0.0, "multiplicative_weakpoint_crit_chance": 1.0, "weakpoint_crit_chance": 0.0, "internal_bleeding": 0.0}
+
+    @classmethod
+    def _new_stats(cls, stats: Mapping[str, Any] | None = None) -> Data:
+        values = super()._new_stats(stats)
+        values.explosion_total_damage = values.explosion_damage.total_damage()
+        return values
 
     def _compute_moded_stats(self) -> None:
         super()._compute_moded_stats()
