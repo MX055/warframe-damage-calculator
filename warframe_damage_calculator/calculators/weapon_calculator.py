@@ -2,7 +2,7 @@ from functools import cached_property
 from collections.abc import Mapping
 from typing import Any
 
-from ..models.data import Data, DataValue
+from ..models.data import Data
 from ..models.dist import Dist
 from ..models.upgrade import Upgrade
 from ..models.build import Build
@@ -11,6 +11,7 @@ from ..models.build import Build
 class WeaponCalculator:
     DEFAULT_STATS = Data({"damage": Dist(), "forced_procs": Dist(), "crit_chance": 0.0, "crit_damage": 1.0, "status_chance": 0.0})
     CALCULATED_STATS = Data({"total_damage": 0.0, "multiplicative_base_damage": 1.0, "base_damage": 0.0, "faction_damage": 1.0, "flat_crit_chance": 0.0, "multiplicative_crit_chance": 1.0, "flat_crit_damage": 0.0, "status_damage": 1.0})
+    DEFAULT_BUILD = Data({"damage": Dist(), "multiplicative_base_damage": 0.0, "base_damage": 0.0, "faction_damage": 0.0, "flat_crit_chance": 0.0, "multiplicative_crit_chance": 0.0, "crit_chance": 0.0, "flat_crit_damage": 0.0, "crit_damage": 0.0, "status_chance": 0.0, "status_damage": 0.0})
 
     def __init__(self, data: Data) -> None:
         self.data = data
@@ -21,9 +22,6 @@ class WeaponCalculator:
         self.effective = self._new_stats()
         self.recompute()
 
-    def _get(self, stat: str, default: DataValue = 0) -> DataValue:
-        return self._build_stats.get(stat, default)
-
     @classmethod
     def _new_stats(cls, stats: Mapping[str, Any] | None = None) -> Data:
         values = cls.DEFAULT_STATS | cls.CALCULATED_STATS | Data(stats)
@@ -31,18 +29,19 @@ class WeaponCalculator:
         return values
     
     def _compute_moded_stats(self) -> None:
-        self.moded.multiplicative_base_damage = max(1 + self._get("multiplicative_base_damage"), 1)
-        self.moded.base_damage = max(1 + self._get("base_damage"), 0)
-        self.moded.damage = self.moded.base_damage * self.base.damage.apply(self._get("damage", Dist())).combine().sorted()
+        resolved_build = self.DEFAULT_BUILD | self.build.resolve(self.data).aggregate()
+        self.moded.multiplicative_base_damage = max(1 + resolved_build.multiplicative_base_damage, 1)
+        self.moded.base_damage = max(1 + resolved_build.base_damage, 0)
+        self.moded.damage = self.moded.base_damage * self.base.damage.apply(resolved_build.damage).combine().sorted()
         self.moded.total_damage = self.moded.damage.total_damage()
-        self.moded.faction_damage = max(1 + self._get("faction_damage"), 1)
-        self.moded.flat_crit_chance = max(self._get("flat_crit_chance"), 0)
-        self.moded.multiplicative_crit_chance = max(1 + self._get("multiplicative_crit_chance"), 1)
-        self.moded.crit_chance = max(self.base.crit_chance * (1 + self._get("crit_chance")), 0)
-        self.moded.flat_crit_damage = max(self._get("flat_crit_damage"), 0)
-        self.moded.crit_damage = max(self.base.crit_damage * (1 + self._get("crit_damage")), 1)
-        self.moded.status_chance = max(self.base.status_chance * (1 + self._get("status_chance")), 0)
-        self.moded.status_damage = max(1 + self._get("status_damage"), 1)
+        self.moded.faction_damage = max(1 + resolved_build.faction_damage, 1)
+        self.moded.flat_crit_chance = max(resolved_build.flat_crit_chance, 0)
+        self.moded.multiplicative_crit_chance = max(1 + resolved_build.multiplicative_crit_chance, 1)
+        self.moded.crit_chance = max(self.base.crit_chance * (1 + resolved_build.crit_chance), 0)
+        self.moded.flat_crit_damage = max(resolved_build.flat_crit_damage, 0)
+        self.moded.crit_damage = max(self.base.crit_damage * (1 + resolved_build.crit_damage), 1)
+        self.moded.status_chance = max(self.base.status_chance * (1 + resolved_build.status_chance), 0)
+        self.moded.status_damage = max(1 + resolved_build.status_damage, 1)
 
     def _compute_effective_stats(self) -> None:
         self.effective.base_damage = self.moded.base_damage * self.moded.multiplicative_base_damage
@@ -81,8 +80,6 @@ class WeaponCalculator:
         self.recompute()
 
     def recompute(self) -> None:
-        resolved = Build(*(upgrade.resolve(weapon=self.data, build=self.build.data) for upgrade in self.build))
-        self._build_stats = resolved.aggregate()
         self._compute_moded_stats()
         self._compute_effective_stats()
         self._clear_cached_properties()

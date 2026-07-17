@@ -327,7 +327,7 @@ rifle_bonus = Upgrade(
 )
 
 bow.configure(rifle_bonus)
-resolved = rifle_bonus.resolve(weapon=bow.data, build=bow.build.data)
+resolved = rifle_bonus.resolve(build=bow.build.data, weapon=bow.data)
 print(resolved.data.context.weapon)  # "bow"
 print(resolved.data.context.bow)     # True
 print(resolved.data.context.rifle)   # True
@@ -343,7 +343,7 @@ steel = arsenal.get("Sacrificial Steel")
 
 melee.configure(pressure, steel)
 for upgrade in melee.build:
-    resolved = upgrade.resolve(weapon=melee.data, build=melee.build.data)
+    resolved = upgrade.resolve(build=melee.build.data, weapon=melee.data)
     print(resolved.data.context["sacrificial set"])  # True
 ```
 

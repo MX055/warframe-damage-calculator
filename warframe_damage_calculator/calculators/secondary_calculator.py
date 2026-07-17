@@ -9,11 +9,13 @@ from .ranged_calculator import RangedCalculator
 class SecondaryCalculator(RangedCalculator):
     DEFAULT_STATS = RangedCalculator.DEFAULT_STATS
     CALCULATED_STATS = RangedCalculator.CALCULATED_STATS | {"secondary_enervate": 0, "secondary_encumber": 0.0}
+    DEFAULT_BUILD = RangedCalculator.DEFAULT_BUILD | {"secondary_enervate": 0, "secondary_encumber": 0.0}
 
     def _compute_moded_stats(self) -> None:
         super()._compute_moded_stats()
-        self.moded.secondary_enervate = clamp(self._get("secondary_enervate"), 0, 6)
-        self.moded.secondary_encumber = clamp(self._get("secondary_encumber"), 0, 0.24)
+        resolved_build = self.DEFAULT_BUILD | self.build.resolve(self.data).aggregate()
+        self.moded.secondary_enervate = clamp(resolved_build.secondary_enervate, 0, 6)
+        self.moded.secondary_encumber = clamp(resolved_build.secondary_encumber, 0, 0.24)
 
     def _compute_effective_stats(self) -> None:
         super()._compute_effective_stats()

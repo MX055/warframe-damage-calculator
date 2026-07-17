@@ -14,5 +14,5 @@ class Upgrade:
     def copy(self) -> Upgrade:
         return Upgrade(deepcopy(self.data))
 
-    def resolve(self, weapon: Data | None = None, build: Data | None = None) -> Upgrade:
-        return Upgrade(UpgradeCalculator(upgrade=self.data, weapon=weapon, build=build).resolve())
+    def resolve(self, build: Data | None = None, weapon: Data | None = None) -> Upgrade:
+        return Upgrade(UpgradeCalculator(upgrade=self.data, build=build, weapon=weapon).resolve())

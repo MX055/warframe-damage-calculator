@@ -10,10 +10,10 @@ class UpgradeCalculator:
     AUTOMATIC = {"primary", "rifle", "bow", "shotgun", "sniper", "secondary", "pistol", "melee", "sacrificial set"}
     METADATA = {"name", "category", "type", "trigger", "is beam", "is battery", "compatibility", "incompatibility", "requirements", "max rank", "max stacks", "stacks", "is exilus", "rank", "weapon"}
 
-    def __init__(self, upgrade: Data, weapon: Data | None = None, build: Data | None = None) -> None:
+    def __init__(self, upgrade: Data, build: Data | None = None, weapon: Data | None = None) -> None:
         self.upgrade = upgrade
-        self.weapon = weapon or Data()
         self.build = build or Data({"upgrades": []})
+        self.weapon = weapon or Data()
         self.context = self._context()
 
     @staticmethod

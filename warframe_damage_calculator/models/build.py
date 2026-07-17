@@ -22,6 +22,9 @@ class Build:
     def __sub__(self, other: Build | Upgrade) -> Build:
         excluded = [other.data] if isinstance(other, Upgrade) else other.data.upgrades
         return Build(*(Upgrade(data) for data in self.data.upgrades if data not in excluded))
+
+    def resolve(self, weapon: Data | None = None) -> Build:
+        return Build(*(upgrade.resolve(build=self.data, weapon=weapon) for upgrade in self))
         
     def aggregate(self) -> Data:
         stats = Data()
