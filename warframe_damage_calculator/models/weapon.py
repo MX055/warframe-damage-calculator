@@ -15,10 +15,11 @@ class Weapon:
     formatter_type = WeaponFormatter
 
     def __init__(self, data: Mapping[str, JsonValue] | None = None) -> None:
+        self.build = Build()
         self.data = self.data_type(data)
         self.stats = self.calculator_type(self)
         self.format = self.formatter_type(self)
-        self.build = Build()
+        
 
     @overload
     def configure(self, build: Build, /) -> Self: ...
