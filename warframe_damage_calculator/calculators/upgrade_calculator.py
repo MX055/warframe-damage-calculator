@@ -12,7 +12,6 @@ class UpgradeCalculator:
 
     def __init__(self, upgrade: Data) -> None:
         self.data = upgrade
-        self.context = Data()
         self.static = Data()
         self.conditional = Data()
         self.stacking = Data()
@@ -69,20 +68,20 @@ class UpgradeCalculator:
     def resolve(self, weapon: Data | object | None = None, build: Data | object | None = None) -> dict[str, Data]:
         weapon_data = getattr(weapon, "data", weapon) or Data()
         build_data = getattr(build, "data", build) or Data({"upgrades": []})
-        self.context = self._context(weapon_data, build_data)
+        context = self._context(weapon_data, build_data)
         self.static = Data()
         self.conditional = Data()
         self.stacking = Data()
         self.rank_locked = Data()
         self.total = Data()
-        maximums = [self.context.get(key) for key in ("max rank", "max stacks")]
+        maximums = [context.get(key) for key in ("max rank", "max stacks")]
         max_rank, max_stacks = (None if value is None else self._count(value, field) for value, field in zip(maximums, ("max rank", "max stacks")))
-        rank = self._count(self.context.get("rank", max_rank or 0), "rank")
+        rank = self._count(context.get("rank", max_rank or 0), "rank")
         rank = min(rank, max_rank) if max_rank is not None else rank
         multiplier = 1 if max_rank in {None, 0} else (rank + 1) / (max_rank + 1)
         if any(isinstance(raw, dict) and raw.get("at_rank") is not None for effects in self.data.stats.values() for raw in (effects if isinstance(effects, list) else [effects])):
             multiplier = 1
-        defaults = set(self.context) <= self.AUTOMATIC | self.METADATA
+        defaults = set(context) <= self.AUTOMATIC | self.METADATA
         for stat, effects in self.data.stats.items():
             for raw in effects if isinstance(effects, list) else [effects]:
                 effect = raw if isinstance(raw, Data) and "value" in raw else Data({"value": raw})
@@ -95,18 +94,18 @@ class UpgradeCalculator:
                         self._record(self.rank_locked, stat, value)
                 elif effect.get("stacking", effect.get("stacks", False)):
                     condition = self._key(condition)
-                    stacks = self._count(self.context.get(condition, self.context.get("stacks", (max_stacks or 0) if defaults else 0)), condition)
+                    stacks = self._count(context.get(condition, context.get("stacks", (max_stacks or 0) if defaults else 0)), condition)
                     stacks = min(stacks, max_stacks) if max_stacks is not None else stacks
                     if stacks:
                         value = self._scale(value, multiplier)
                         value = value if isinstance(value, bool) else value * stacks
                         self._record(self.stacking, stat, value)
-                elif condition is None or self.context.get(self._key(condition), self._key(condition) not in self.AUTOMATIC):
+                elif condition is None or context.get(self._key(condition), self._key(condition) not in self.AUTOMATIC):
                     value = self._scale(value, multiplier)
                     bucket = self.static if condition is None else self.conditional
                     self._record(bucket, stat, value)
 
-        self.context.rank = rank
+        context.rank = rank
         for bucket in (self.static, self.conditional, self.stacking, self.rank_locked, self.total):
             self._combine_damage(bucket)
-        return {"stats": self.total, "context": self.context}
+        return {"stats": self.total, "context": context}

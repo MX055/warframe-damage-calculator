@@ -54,6 +54,6 @@ Desktop.ini
 # Helper scripts
 /_*.py
 
-# Raw data and generated reports; keep the database builder itself tracked.
+# Local database builder and generated data
 /database_builder/
 /.wiki_weapon_cache/

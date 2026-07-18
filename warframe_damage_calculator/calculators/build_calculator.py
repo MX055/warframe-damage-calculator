@@ -11,7 +11,6 @@ class BuildCalculator:
 
     def __init__(self, build: Data) -> None:
         self.data = build
-        self.context = Data()
         self.static = Data()
         self.conditional = Data()
         self.stacking = Data()
@@ -40,7 +39,6 @@ class BuildCalculator:
 
     def resolve(self, weapon: Data | object | None = None) -> dict[str, Data]:
         weapon_data = getattr(weapon, "data", weapon) or Data()
-        self.context = Data()
         for bucket in self.BUCKETS:
             setattr(self, bucket, Data())
 
@@ -54,4 +52,4 @@ class BuildCalculator:
 
         for bucket in self.BUCKETS:
             self._combine_damage(getattr(self, bucket))
-        return {"stats": self.total, "context": self.context}
+        return {"stats": self.total, "context": Data()}

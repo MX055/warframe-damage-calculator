@@ -330,10 +330,10 @@ rifle_bonus = Upgrade(
 )
 
 bow.configure(rifle_bonus)
-rifle_bonus.stats.resolve(build=bow.build, weapon=bow)
-print(rifle_bonus.stats.context.weapon)  # "bow"
-print(rifle_bonus.stats.context.bow)     # True
-print(rifle_bonus.stats.context.rifle)   # True
+resolved = rifle_bonus.stats.resolve(build=bow.build, weapon=bow)
+print(resolved["context"].weapon)  # "bow"
+print(resolved["context"].bow)     # True
+print(resolved["context"].rifle)   # True
 ```
 
 Build-wide conditions can depend on upgrade names. Equipping both Sacrificial
@@ -346,8 +346,8 @@ steel = arsenal.get("Sacrificial Steel")
 
 melee.configure(pressure, steel)
 for upgrade in melee.build:
-    upgrade.stats.resolve(build=melee.build, weapon=melee)
-    print(upgrade.stats.context["sacrificial set"])  # True
+    resolved = upgrade.stats.resolve(build=melee.build, weapon=melee)
+    print(resolved["context"]["sacrificial set"])  # True
 ```
 
 During calculation, shared weapon and build values are applied to each upgrade

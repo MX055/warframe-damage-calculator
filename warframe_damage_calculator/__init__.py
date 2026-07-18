@@ -6,6 +6,6 @@ from .models.primary import Primary
 from .models.secondary import Secondary
 from .data.loader import arsenal
 
-__version__ = "0.6.0"
+__version__ = "0.7.0"
 
 __all__ = ["Data", "Upgrade", "Build", "Melee", "Primary", "Secondary", "arsenal"]
