@@ -58,10 +58,20 @@ class Data(dict[str, DataValue]):
 
 
 class DefaultData(Data):
-    DEFAULTS: ClassVar[Mapping[str, DataValue]] = {}
+    _defaults: ClassVar[dict[str, DataValue]] = {}
+
+    def __init_subclass__(cls) -> None:
+        super().__init_subclass__()
+        defaults = dict(getattr(cls.__base__, "_defaults", {}))
+        for field, annotation in cls.__annotations__.items():
+            if field.startswith("_") or get_origin(annotation) is ClassVar or field not in cls.__dict__:
+                continue
+            defaults[field] = cls.__dict__[field]
+            delattr(cls, field)
+        cls._defaults = defaults
 
     def __init__(self, data: Mapping[str, DataValue] | None = None) -> None:
-        super().__init__(self.DEFAULTS | dict(data or {}))
+        super().__init__(deepcopy(self._defaults) | dict(data or {}))
 
 
 class ModelData(Data):
@@ -70,63 +80,53 @@ class ModelData(Data):
 
 
 class WeaponContext(DefaultData):
-    DEFAULTS = {"category": "Weapon", "type": "", "name": ""}
-
-    name: str
-    category: str
-    type: str
+    name: str = ""
+    category: str = "Weapon"
+    type: str = ""
 
 
 class RangedContext(WeaponContext):
-    DEFAULTS = WeaponContext.DEFAULTS | {"trigger": "", "is_beam": False, "is_battery": False}
-
-    trigger: str
-    is_beam: bool
-    is_battery: bool
+    trigger: str = ""
+    is_beam: bool = False
+    is_battery: bool = False
 
 
 class PrimaryContext(RangedContext):
-    DEFAULTS = RangedContext.DEFAULTS | {"category": "Primary"}
+    category: str = "Primary"
 
 
 class SecondaryContext(RangedContext):
-    DEFAULTS = RangedContext.DEFAULTS | {"category": "Secondary"}
+    category: str = "Secondary"
 
 
 class MeleeContext(WeaponContext):
-    pass
+    category: str = "Melee"
 
 
 class WeaponInputStats(DefaultData):
-    DEFAULTS = {"damage": {}, "forced_procs": {}, "crit_chance": 0.0, "crit_damage": 1.0, "status_chance": 0.0}
-
-    damage: Dist
-    forced_procs: Dist
-    crit_chance: Number
-    crit_damage: Number
-    status_chance: Number
+    damage: Dist = Dist()
+    forced_procs: Dist = Dist()
+    crit_chance: Number = 0.0
+    crit_damage: Number = 1.0
+    status_chance: Number = 0.0
 
 
 class RangedInputStats(WeaponInputStats):
-    DEFAULTS = WeaponInputStats.DEFAULTS | {"explosion_damage": {}, "explosion_forced_procs": {}, "multishot": 1.0, "fire_rate": 0.05, "burst_count": 1, "burst_delay": 0.0, "charge_time": 0.0, "reload_speed": 0.0, "recharge_rate": 0.0, "magazine_capacity": 1, "weakpoint_damage": 3.0}
-
-    explosion_damage: Dist
-    explosion_forced_procs: Dist
-    burst_count: int
-    burst_delay: Number
-    charge_time: Number
-    fire_rate: Number
-    magazine_capacity: Number
-    multishot: Number
-    recharge_rate: Number
-    reload_speed: Number
-    weakpoint_damage: Number
+    explosion_damage: Dist = Dist()
+    explosion_forced_procs: Dist = Dist()
+    burst_count: int = 1
+    burst_delay: Number = 0.0
+    charge_time: Number = 0.0
+    fire_rate: Number = 0.05
+    magazine_capacity: Number = 1
+    multishot: Number = 1.0
+    recharge_rate: Number = 0.0
+    reload_speed: Number = 0.0
+    weakpoint_damage: Number = 3.0
 
 
 class MeleeInputStats(WeaponInputStats):
-    DEFAULTS = WeaponInputStats.DEFAULTS | {"attack_speed": 1.0}
-
-    attack_speed: Number
+    attack_speed: Number = 1.0
 
 
 class WeaponData(ModelData):
@@ -221,19 +221,17 @@ class WeaponAverageStats(Data):
 
 
 class UpgradeContext(DefaultData):
-    DEFAULTS = {"category": "Upgrade", "type": "", "name": "", "compatibility": [], "incompatibility": [], "requirements": {}, "max_rank": None, "max_stacks": None, "is_exilus": False}
-
-    name: str
-    category: str
-    type: str
-    compatibility: list[str]
-    incompatibility: list[str]
-    requirements: Mapping[str, JsonValue]
-    max_rank: int | None
-    max_stacks: int | None
+    name: str = ""
+    category: str = "Upgrade"
+    type: str = ""
+    compatibility: list[str] = []
+    incompatibility: list[str] = []
+    requirements: Mapping[str, JsonValue] = {}
+    max_rank: int | None = None
+    max_stacks: int | None = None
     rank: int
     stacks: int
-    is_exilus: bool
+    is_exilus: bool = False
     weapon: str
     primary: bool
     rifle: bool

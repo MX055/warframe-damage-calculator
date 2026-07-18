@@ -1,10 +1,10 @@
-from typing import get_args
+from typing import ClassVar, get_args
 
 import pytest
 import warframe_damage_calculator as package
 
 from warframe_damage_calculator import Build, Data, Melee, Primary, Secondary, Upgrade, arsenal
-from warframe_damage_calculator.models.data import BuildData, MeleeContext, MeleeInputStats, PrimaryContext, RangedInputStats, ResolvedStatValues, SecondaryContext, UpgradeContext, UpgradeData, UpgradeStatValues, WeaponAverageStats, WeaponCalculatedStats, WeaponContext, WeaponData, WeaponInputStats
+from warframe_damage_calculator.models.data import BuildData, DefaultData, MeleeContext, MeleeInputStats, PrimaryContext, RangedInputStats, ResolvedStatValues, SecondaryContext, UpgradeContext, UpgradeData, UpgradeStatValues, WeaponAverageStats, WeaponCalculatedStats, WeaponContext, WeaponData, WeaponInputStats
 from warframe_damage_calculator.models.dist import Dist
 from warframe_damage_calculator.models.weapon import Weapon
 from warframe_damage_calculator.utils.types import DamageType
@@ -35,7 +35,6 @@ def test_default_distributions_are_independent():
 
     assert first_weapon.data.stats.damage is not second_weapon.data.stats.damage
     assert second_weapon.data.stats.damage == Dist()
-    assert type(first_weapon.data.stats).DEFAULTS["damage"] == {}
     assert first_upgrade.stats.total.damage is not second_upgrade.stats.total.damage
     assert second_upgrade.stats.total.damage == Dist()
     first_upgrade.data.context.compatibility.append("rifle")
@@ -49,6 +48,46 @@ def test_data_copy_is_independent():
     copied.damage.impact = 4
     assert original.nested["items"][0].value == 1
     assert original.damage.impact == 2
+
+
+def test_inline_default_data_behavior():
+    class Parent(DefaultData):
+        inherited: str = "parent"
+        mutable: list[int] = []
+        absent: int
+        ignored: ClassVar[str] = "class value"
+        _internal: str = "internal"
+
+    class Child(Parent):
+        inherited: str = "child"
+        damage: Dist = Dist({"impact": 1})
+
+    first = Child({"inherited": "supplied"})
+    second = Child()
+
+    assert first.inherited == "supplied"
+    assert second.inherited == "child"
+    assert first.mutable == []
+    assert "absent" not in first
+    with pytest.raises(AttributeError):
+        _ = first.absent
+    assert "inherited" not in Child.__dict__
+    assert Child.ignored == "class value"
+    assert Child._internal == "internal"
+
+    first.mutable.append(1)
+    first.damage.data["impact"] = 2
+    assert second.mutable == []
+    assert second.damage == Dist({"impact": 1})
+
+    context = UpgradeContext({"name": "Serration"})
+    assert context.name == "Serration"
+    assert context.category == "Upgrade"
+    assert context.compatibility == []
+    assert context.max_rank is None
+    assert "rank" not in context
+    with pytest.raises(AttributeError):
+        _ = context.rank
 
 
 def test_typed_data_subclasses_preserve_nested_and_copy_types():
@@ -221,8 +260,8 @@ def test_model_data_is_public():
     damage = Dist({"impact": 1})
 
     assert all(hasattr(item, "data") for item in (weapon, upgrade, build, damage))
-    assert weapon.data.context == PrimaryContext.DEFAULTS
-    assert upgrade.data.context == UpgradeContext.DEFAULTS
+    assert weapon.data.context == PrimaryContext()
+    assert upgrade.data.context == UpgradeContext()
     assert weapon.stats.weapon is weapon
     assert upgrade.stats.upgrade is upgrade
     assert build.stats.build is build
