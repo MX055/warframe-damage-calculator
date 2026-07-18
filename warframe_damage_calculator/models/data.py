@@ -262,10 +262,7 @@ class UpgradeData(Data):
 
     def __init__(self, data: Mapping[str, DataValue] | None = None) -> None:
         values = dict(data or {})
-        super().__init__(values | {
-            "stats": self.DEFAULT_STATS | values.get("stats", {}),
-            "context": self.DEFAULT_CONTEXT | values.get("context", {}),
-        })
+        super().__init__(values | {"stats": self.DEFAULT_STATS | values.get("stats", {}), "context": self.DEFAULT_CONTEXT | values.get("context", {})})
 
 
 class ResolvedStatValues(Data):
