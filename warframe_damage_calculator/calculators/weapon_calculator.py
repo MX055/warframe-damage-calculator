@@ -57,7 +57,7 @@ class WeaponCalculator:
 
     def recompute(self) -> None:
         self.weapon.build.stats.resolve(self.weapon.data)
-        self.weapon.build.stats.total = self.DEFAULT_BUILD | self.weapon.build.stats.total
+        self.weapon.build.stats.total = self.DEFAULT_BUILD.copy() | self.weapon.build.stats.total
         self._compute_moded_stats()
         self._compute_effective_stats()
         self._compute_average_stats()

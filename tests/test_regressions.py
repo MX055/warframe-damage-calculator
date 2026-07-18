@@ -66,6 +66,43 @@ def test_negative_physical_damage_modifier_is_applied_before_filtering():
     assert weapon.stats.effective.damage == Dist({"impact": 50})
 
 
+def test_explosion_summary_iterates_damage_type_keys():
+    weapon = Primary({"stats": {"damage": {"impact": 1}, "explosion_damage": {"heat": 10}}})
+
+    summary = weapon.format.summary()
+
+    assert "HEAT:" in summary
+    assert "10.00" in summary
+
+
+def test_multi_element_damage_order_is_deterministic_across_resolvers():
+    combined = Upgrade({"stats": {
+        "damage": [{"cold": 1}, {"toxin": 2}, {"heat": 3}],
+        "elements": [{"cold": 1}, {"toxin": 2}, {"heat": 3}],
+    }})
+    separate = Build(
+        Upgrade({"stats": {"cold": 1, "elements": {"cold": 1}}}),
+        Upgrade({"stats": {"toxin": 2, "elements": {"toxin": 2}}}),
+        Upgrade({"stats": {"heat": 3, "elements": {"heat": 3}}}),
+    )
+
+    assert list(combined.stats.total.damage.data) == ["cold", "toxin", "heat"]
+    assert list(combined.stats.total.elements) == ["cold", "toxin", "heat"]
+    assert list(separate.stats.total.damage.data) == ["cold", "toxin", "heat"]
+    assert list(separate.stats.total.elements) == ["cold", "toxin", "heat"]
+
+
+def test_weapon_default_builds_are_independent():
+    first = Primary()
+    second = Primary()
+
+    first.build.stats.total.damage.data["heat"] = 1
+
+    assert first.build.stats.total.damage is not second.build.stats.total.damage
+    assert second.build.stats.total.damage == Dist()
+    assert first.stats.DEFAULT_BUILD.damage == Dist()
+
+
 def test_upgrade_resolver_can_be_reused_with_different_contexts():
     upgrade = Upgrade({"stats": {"base_damage": {"value": 1, "when": "primary"}}})
 

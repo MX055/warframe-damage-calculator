@@ -53,7 +53,7 @@ class UpgradeCalculator:
         current = stats.get(stat)
         if current is None: stats[stat] = value
         elif isinstance(value, bool): stats[stat] = current or value
-        elif isinstance(current, dict) and isinstance(value, dict): stats[stat] = {key: current.get(key, 0) + value.get(key, 0) for key in current.keys() | value.keys()}
+        elif isinstance(current, dict) and isinstance(value, dict): stats[stat] = {key: current.get(key, 0) + value.get(key, 0) for key in current | value}
         else: stats[stat] = current + value
 
     @staticmethod
