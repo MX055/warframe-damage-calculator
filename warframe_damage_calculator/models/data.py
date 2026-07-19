@@ -137,12 +137,7 @@ class Data(MutableMapping[str, DataValue]):
         return deepcopy(self)
 
     def with_defaults(self) -> dict[str, DataValue]:
-        """Return explicit values plus readable declared defaults."""
-        values = {
-            key: self[key]
-            for key in self._defaults
-            if key not in self._suppressed_defaults
-        }
+        values = {key: self[key] for key in self._defaults if key not in self._suppressed_defaults}
         values.update(self._values)
         return values
 
