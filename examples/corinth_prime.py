@@ -1,8 +1,8 @@
-from warframe_damage_calculator import Build, Upgrade, arsenal, Primary
+from warframe_damage_calculator import Build, Upgrade, arsenal
 
 
 def main() -> None:
-    weapon: Primary = arsenal.get("Corinth Prime")
+    weapon = arsenal.get("Corinth Prime")
     mod1 = Upgrade({"context": {"name": "Riven"}, "stats": {"impact": -0.886, "crit_damage": 0.855, "multishot": 1.126, "crit_chance": 0.887}})
     mod2 = arsenal.get("Galvanized Hell")
     mod3 = arsenal.get("Semi-Shotgun Cannonade")
