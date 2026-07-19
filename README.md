@@ -573,7 +573,7 @@ Use `with_defaults()` for a detached, dense snapshot:
 
 ```python
 snapshot = weapon.data.stats.with_defaults()
-snapshot["damage"].data["impact"] = 100
+snapshot.damage.get("impact") = 100
 
 # The original model is unchanged.
 print(weapon.data.stats.damage.total_damage())  # 0
