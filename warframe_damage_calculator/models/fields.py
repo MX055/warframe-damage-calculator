@@ -11,13 +11,13 @@ class ModelData(Data):
 
 
 class WeaponContext(Data):
-    name: str = ""
     category: str = "Weapon"
-    type: str = ""
+    type: str | None = None
+    name: str | None = None
 
 
 class RangedContext(WeaponContext):
-    trigger: str = ""
+    trigger: str | None = None
     is_beam: bool = False
     is_battery: bool = False
 
@@ -152,9 +152,9 @@ class WeaponAverageStats(Data):
 
 
 class UpgradeContext(Data):
-    name: str = ""
     category: str = "Upgrade"
-    type: str = ""
+    type: str | None = None
+    name: str | None = None
     compatibility: list[str] = []
     incompatibility: list[str] = []
     requirements: Mapping[str, JsonValue] = {}
