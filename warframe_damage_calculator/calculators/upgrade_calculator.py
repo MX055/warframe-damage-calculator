@@ -101,6 +101,7 @@ class UpgradeCalculator:
                 effect = raw if isinstance(raw, Data) and "value" in raw else Data({"value": raw})
                 value, condition = effect.value, effect.get("when")
                 required_upgrade = effect.get("when_equipped")
+                stacks_on = effect.get("stacks_on")
                 if required_upgrade is not None and not self._equipped(context, required_upgrade):
                     continue
                 required_rank = effect.get("at_rank")
@@ -110,8 +111,8 @@ class UpgradeCalculator:
                     if rank >= self._count(required_rank, "required rank"):
                         bucket = self.modular if required_upgrade is not None else self.rank_locked
                         self._record(bucket, stat, value)
-                elif effect.get("stacking", effect.get("stacks", False)):
-                    condition = self._key(condition)
+                elif stacks_on is not None:
+                    condition = self._key(stacks_on)
                     stacks_value = context.upgrade.get("stacks")
                     fallback = ((max_stacks or 0) if defaults else 0) if stacks_value is None else stacks_value
                     stacks = self._count(self._value(context.upgrade, condition, fallback), condition)

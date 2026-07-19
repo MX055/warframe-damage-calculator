@@ -370,8 +370,7 @@
             "stats": {
                 "attack_speed": {
                     "value": 0.35,
-                    "when": "kill",
-                    "stacking": true
+                    "stacks_on": "kill"
                 }
             }
         },
@@ -527,8 +526,7 @@
             "stats": {
                 "crit_chance": {
                     "value": 0.4,
-                    "when": "stacks",
-                    "stacking": true
+                    "stacks_on": "stacks"
                 }
             }
         },
@@ -858,8 +856,7 @@
             "stats": {
                 "base_damage": {
                     "value": 0.8,
-                    "when": "status proc",
-                    "stacking": true
+                    "stacks_on": "status proc"
                 }
             }
         },
@@ -1559,8 +1556,7 @@
             "stats": {
                 "base_damage": {
                     "value": 0.4,
-                    "when": "kill",
-                    "stacking": true
+                    "stacks_on": "kill"
                 },
                 "status_chance": 0.8
             }
@@ -1587,8 +1583,7 @@
                     0.8,
                     {
                         "value": 0.3,
-                        "when": "kill",
-                        "stacking": true
+                        "stacks_on": "kill"
                     }
                 ]
             }
@@ -1616,8 +1611,7 @@
                     },
                     {
                         "value": 0.4,
-                        "when": "headshot",
-                        "stacking": true
+                        "stacks_on": "headshot"
                     }
                 ]
             }
@@ -1643,8 +1637,7 @@
                     1.1,
                     {
                         "value": 0.3,
-                        "when": "kill",
-                        "stacking": true
+                        "stacks_on": "kill"
                     }
                 ]
             }
@@ -1667,8 +1660,7 @@
             "stats": {
                 "status_chance": {
                     "value": 0.3,
-                    "when": "kill",
-                    "stacking": true
+                    "stacks_on": "kill"
                 },
                 "status_damage": 0.8
             }
@@ -1693,8 +1685,7 @@
                     1.1,
                     {
                         "value": 0.3,
-                        "when": "kill",
-                        "stacking": true
+                        "stacks_on": "kill"
                     }
                 ]
             }
@@ -1717,8 +1708,7 @@
             "stats": {
                 "base_damage": {
                     "value": 0.4,
-                    "when": "kill",
-                    "stacking": true
+                    "stacks_on": "kill"
                 },
                 "status_chance": 0.8
             }
@@ -1748,8 +1738,7 @@
                     },
                     {
                         "value": 0.4,
-                        "when": "headshot",
-                        "stacking": true
+                        "stacks_on": "headshot"
                     }
                 ]
             }
@@ -1772,8 +1761,7 @@
             "stats": {
                 "base_damage": {
                     "value": 0.4,
-                    "when": "kill",
-                    "stacking": true
+                    "stacks_on": "kill"
                 },
                 "status_chance": 0.8
             }
@@ -1798,8 +1786,7 @@
                 "crit_chance": 1.1,
                 "crit_damage": {
                     "value": 0.3,
-                    "when": "kill",
-                    "stacking": true
+                    "stacks_on": "kill"
                 }
             }
         },
@@ -2924,8 +2911,7 @@
             "stats": {
                 "weakpoint_damage": {
                     "value": 0.6,
-                    "when": "headshot",
-                    "stacking": true
+                    "stacks_on": "headshot"
                 }
             }
         },
@@ -3146,8 +3132,7 @@
             "stats": {
                 "base_damage": {
                     "value": 1.833,
-                    "when": "stacks",
-                    "stacking": true
+                    "stacks_on": "stacks"
                 }
             }
         },
@@ -4484,8 +4469,7 @@
             "stats": {
                 "multishot": {
                     "value": 1.0,
-                    "when": "hit",
-                    "stacking": true
+                    "stacks_on": "hit"
                 }
             }
         },
@@ -5141,8 +5125,7 @@
             "stats": {
                 "status_chance": {
                     "value": 0.4,
-                    "when": "stacks",
-                    "stacking": true
+                    "stacks_on": "stacks"
                 }
             }
         },
@@ -5204,8 +5187,7 @@
             "stats": {
                 "base_damage": {
                     "value": 0.12,
-                    "when": "heat proc",
-                    "stacking": true
+                    "stacks_on": "heat proc"
                 }
             }
         },
@@ -5225,13 +5207,11 @@
             "stats": {
                 "multishot": {
                     "value": 0.03,
-                    "when": "electricity proc",
-                    "stacking": true
+                    "stacks_on": "electricity proc"
                 },
                 "reload_speed": {
                     "value": 0.015,
-                    "when": "electricity proc",
-                    "stacking": true
+                    "stacks_on": "electricity proc"
                 }
             }
         },
@@ -5329,8 +5309,7 @@
             "stats": {
                 "corrosive": {
                     "value": 0.6,
-                    "when": "ability cast",
-                    "stacking": true
+                    "stacks_on": "ability cast"
                 }
             }
         },
@@ -5354,13 +5333,11 @@
             "stats": {
                 "crit_damage": {
                     "value": 0.036,
-                    "when": "toxin proc",
-                    "stacking": true
+                    "stacks_on": "toxin proc"
                 },
                 "multishot": {
                     "value": 0.018,
-                    "when": "toxin proc",
-                    "stacking": true
+                    "stacks_on": "toxin proc"
                 }
             }
         },
@@ -5384,8 +5361,7 @@
             "stats": {
                 "base_damage": {
                     "value": 1.2,
-                    "when": "headshot kill",
-                    "stacking": true
+                    "stacks_on": "headshot kill"
                 },
                 "weakpoint_damage": {
                     "value": 0.3,
@@ -5413,8 +5389,7 @@
             "stats": {
                 "base_damage": {
                     "value": 0.6,
-                    "when": "kill",
-                    "stacking": true
+                    "stacks_on": "kill"
                 }
             }
         },
@@ -5438,13 +5413,11 @@
             "stats": {
                 "crit_damage": {
                     "value": 0.03,
-                    "when": "cold proc",
-                    "stacking": true
+                    "stacks_on": "cold proc"
                 },
                 "multishot": {
                     "value": 0.022,
-                    "when": "cold proc",
-                    "stacking": true
+                    "stacks_on": "cold proc"
                 }
             }
         },
@@ -5468,8 +5441,7 @@
             "stats": {
                 "base_damage": {
                     "value": 0.3,
-                    "when": "kill",
-                    "stacking": true
+                    "stacks_on": "kill"
                 },
                 "reload_speed": {
                     "value": 0.3,
@@ -5493,8 +5465,7 @@
             "stats": {
                 "base_damage": {
                     "value": 1.2,
-                    "when": "headshot kill",
-                    "stacking": true
+                    "stacks_on": "headshot kill"
                 },
                 "weakpoint_damage": {
                     "value": 0.3,
@@ -5518,8 +5489,7 @@
             "stats": {
                 "base_damage": {
                     "value": 0.6,
-                    "when": "kill",
-                    "stacking": true
+                    "stacks_on": "kill"
                 }
             }
         },
@@ -5573,8 +5543,7 @@
             "stats": {
                 "base_damage": {
                     "value": 0.3,
-                    "when": "kill",
-                    "stacking": true
+                    "stacks_on": "kill"
                 },
                 "reload_speed": {
                     "value": 0.3,
@@ -5598,8 +5567,7 @@
             "stats": {
                 "base_damage": {
                     "value": 0.45,
-                    "when": "cold proc",
-                    "stacking": true
+                    "stacks_on": "cold proc"
                 }
             }
         },

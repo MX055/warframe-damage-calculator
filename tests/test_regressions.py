@@ -469,7 +469,7 @@ def test_upgrade_resolver_returns_none():
 
 
 def test_upgrade_resolver_exposes_resolved_effect_buckets():
-    upgrade = Upgrade({"stats": {"base_damage": [1, {"value": 2, "when": "kill"}, {"value": 3, "when": "hit", "stacking": True}]}, "context": {"kill": True, "hit": 2}})
+    upgrade = Upgrade({"stats": {"base_damage": [1, {"value": 2, "when": "kill"}, {"value": 3, "stacks_on": "hit"}]}, "context": {"kill": True, "hit": 2}})
 
     upgrade.stats.resolve()
 
@@ -500,7 +500,7 @@ def test_model_data_is_public():
 
 def test_requested_calculator_api():
     weapon = Primary({"stats": {"damage": {"impact": 100, "slash": 50}, "crit_chance": 0.3, "crit_damage": 2.2, "status_chance": 0.3, "multishot": 6, "fire_rate": 3.0, "reload_speed": 1.5, "magazine_capacity": 20}, "context": {"name": "Example Weapon", "type": "shotgun", "trigger": "semi"}})
-    mod1 = Upgrade({"stats": {"base_damage": 1.6, "multishot": [0.6, {"value": 1.2, "when": "kill"}], "status_chance": {"value": 0.3, "when": "headshot", "stacks": True}}, "context": {"name": "Mod 1", "type": "mod", "max_stacks": 6, "headshot": 5}})
+    mod1 = Upgrade({"stats": {"base_damage": 1.6, "multishot": [0.6, {"value": 1.2, "when": "kill"}], "status_chance": {"value": 0.3, "stacks_on": "headshot"}}, "context": {"name": "Mod 1", "type": "mod", "max_stacks": 6, "headshot": 5}})
     mod2 = Upgrade({"stats": {"damage": [{"heat": 1.2}, {"value": {"cold": 1.2}, "at_rank": 6}]}, "context": {"name": "Mod 2", "type": "mod", "max_rank": 10, "rank": 8}})
     build = Build(mod1, mod2)
 

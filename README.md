@@ -346,11 +346,7 @@ upgrade = Upgrade(
             "base_damage": [
                 0.30,
                 {"value": 0.20, "when": "headshot"},
-                {
-                    "value": 0.10,
-                    "when": "kill",
-                    "stacking": True,
-                },
+                {"value": 0.10, "stacks_on": "kill"},
                 {"value": 0.25, "at_rank": 5},
                 {"value": 0.15, "when_equipped": "Partner"},
             ],
@@ -375,8 +371,6 @@ print(upgrade.stats.stacking.base_damage)     # 0.20
 print(upgrade.stats.rank_locked.base_damage)  # 0.25
 print(upgrade.stats.total.base_damage)        # 1.10
 ```
-
-The equivalent stacking marker `"stacks": True` is also accepted.
 
 ### Changing runtime conditions
 
@@ -666,7 +660,7 @@ An upgrade stat accepts these forms:
 |---|---|---|
 | Static | `"base_damage": 1.65` | Always active. |
 | Conditional | `{"value": 0.3, "when": "headshot"}` | Active when the named condition is truthy. |
-| Stacking | `{"value": 0.1, "when": "kill", "stacking": True}` | Multiplied by the named stack count. |
+| Stacking | `{"value": 0.1, "stacks_on": "kill"}` | Multiplied by the named stack count. |
 | Rank-locked | `{"value": 0.3, "at_rank": 5}` | Added at full value once the required rank is reached. |
 | Equipped requirement | `{"value": 0.55, "when_equipped": "Partner"}` | Active when the named upgrade is in the same build. |
 | Multiple effects | `[1.0, {...}, {...}]` | Resolves every listed effect independently. |
@@ -709,8 +703,7 @@ upgrade = Upgrade(
         "stats": {
             "crit_chance": {
                 "value": 0.1,
-                "when": "kill",
-                "stacking": True,
+                "stacks_on": "kill",
             }
         },
         "context": {
