@@ -67,7 +67,7 @@ class Data(MutableMapping[str, DataValue]):
         return len(self._values)
 
     def __repr__(self) -> str:
-        return repr(self._values)
+        return repr(self.with_defaults())
 
     def __deepcopy__(self, memo: dict[int, object]) -> Self:
         copied = type(self).__new__(type(self))

@@ -1,16 +1,16 @@
 from typing import Any
 
-from ..models.fields import WeaponAverageStats, WeaponCalculatedStats
+from ..models.fields import AverageStats, CalculatedStats
 from ..models.upgrade import Upgrade
 
 
 class WeaponCalculator:
     def __init__(self, weapon: Any) -> None:
         self.weapon = weapon
-        self.base = WeaponCalculatedStats(self.weapon.data.stats.with_defaults())
-        self.modded = WeaponCalculatedStats()
-        self.effective = WeaponCalculatedStats()
-        self.average = WeaponAverageStats()
+        self.base = CalculatedStats(self.weapon.data.stats.with_defaults())
+        self.modded = CalculatedStats()
+        self.effective = CalculatedStats()
+        self.average = AverageStats()
         self.recompute()
     
     def _compute_modded_stats(self) -> None:

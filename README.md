@@ -344,8 +344,9 @@ resolvers automatically.
 
 ### Automatic context
 
-During weapon calculation, the resolver supplies automatic weapon and build
-conditions without changing the stored upgrade context. Examples include:
+During weapon calculation, the resolver evaluates weapon conditions directly
+from the weapon category and type without adding boolean fields to either
+context. Examples include:
 
 - `primary`, `secondary`, and `melee`
 - `rifle`, `bow`, `shotgun`, `sniper`, and `pistol`

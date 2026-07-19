@@ -17,10 +17,9 @@ class Weapon:
     def __init__(self, data: Mapping[str, JsonValue] | None = None) -> None:
         self.build = Build()
         self.data = self.data_type(data)
-        self.data.context.category = self.__class__.__name__
         self.stats = self.calculator_type(self)
         self.format = self.formatter_type(self)
-        
+
     @overload
     def configure(self, build: Build, /) -> Self: ...
 

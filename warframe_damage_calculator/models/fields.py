@@ -5,10 +5,50 @@ from .data import Data
 from .dist import Dist
 
 
-class ModelData(Data):
-    stats: Data = {}
-    context: Data = {}
+# ========================================================================
+# Weapons
+# ========================================================================
 
+# ------------------------------------------------------------------------
+# Input Stats
+# ------------------------------------------------------------------------
+
+class WeaponStats(Data):
+    damage: Dist = Dist()
+    forced_procs: Dist = Dist()
+    crit_chance: Number = 0.0
+    crit_damage: Number = 1.0
+    status_chance: Number = 0.0
+
+
+class RangedStats(WeaponStats):
+    explosion_damage: Dist = Dist()
+    explosion_forced_procs: Dist = Dist()
+    burst_count: int = 1
+    burst_delay: Number = 0.0
+    charge_time: Number = 0.0
+    fire_rate: Number = 0.05
+    magazine_capacity: Number = 1
+    multishot: Number = 1.0
+    recharge_rate: Number = 0.0
+    reload_speed: Number = 0.0
+    weakpoint_damage: Number = 3.0
+
+
+class MeleeStats(WeaponStats):
+    attack_speed: Number = 1.0
+
+
+class PrimaryStats(RangedStats):
+    pass
+
+
+class SecondaryStats(RangedStats):
+    pass
+
+# ------------------------------------------------------------------------
+# Context
+# ------------------------------------------------------------------------
 
 class WeaponContext(Data):
     category: str = "Weapon"
@@ -17,6 +57,7 @@ class WeaponContext(Data):
 
 
 class RangedContext(WeaponContext):
+    category: str = "Ranged"
     trigger: str | None = None
     is_beam: bool = False
     is_battery: bool = False
@@ -33,59 +74,39 @@ class SecondaryContext(RangedContext):
 class MeleeContext(WeaponContext):
     category: str = "Melee"
 
+# ------------------------------------------------------------------------
+# Data
+# ------------------------------------------------------------------------
 
-class WeaponInputStats(Data):
-    damage: Dist = Dist()
-    forced_procs: Dist = Dist()
-    crit_chance: Number = 0.0
-    crit_damage: Number = 1.0
-    status_chance: Number = 0.0
-
-
-class RangedInputStats(WeaponInputStats):
-    explosion_damage: Dist = Dist()
-    explosion_forced_procs: Dist = Dist()
-    burst_count: int = 1
-    burst_delay: Number = 0.0
-    charge_time: Number = 0.0
-    fire_rate: Number = 0.05
-    magazine_capacity: Number = 1
-    multishot: Number = 1.0
-    recharge_rate: Number = 0.0
-    reload_speed: Number = 0.0
-    weakpoint_damage: Number = 3.0
-
-
-class MeleeInputStats(WeaponInputStats):
-    attack_speed: Number = 1.0
-
-
-class WeaponData(ModelData):
-    stats: WeaponInputStats
-    context: WeaponContext
+class WeaponData(Data):
+    stats: WeaponStats = {}
+    context: WeaponContext = {}
 
 
 class RangedData(WeaponData):
-    stats: RangedInputStats
+    stats: RangedStats
     context: RangedContext
 
 
 class MeleeData(WeaponData):
-    stats: MeleeInputStats
+    stats: MeleeStats
     context: MeleeContext
 
 
 class PrimaryData(RangedData):
-    stats: RangedInputStats
+    stats: PrimaryStats
     context: PrimaryContext
 
 
 class SecondaryData(RangedData):
-    stats: RangedInputStats
+    stats: SecondaryStats
     context: SecondaryContext
 
+# ------------------------------------------------------------------------
+# Output Satats
+# ------------------------------------------------------------------------
 
-class WeaponCalculatedStats(Data):
+class CalculatedStats(Data):
     damage: Dist
     forced_procs: Dist
     explosion_damage: Dist
@@ -124,7 +145,7 @@ class WeaponCalculatedStats(Data):
     secondary_encumber: Number
 
 
-class WeaponAverageStats(Data):
+class AverageStats(Data):
     crit_chance: Number
     crit_multiplier: Number
     weakpoint_crit_chance: Number
@@ -150,31 +171,15 @@ class WeaponAverageStats(Data):
     secondary_enervate_bonus: Number
     weakpoint_secondary_enervate_bonus: Number
 
+# ========================================================================
+# Upgrades, Builds & Setups
+# ========================================================================
 
-class UpgradeContext(Data):
-    category: str = "Upgrade"
-    type: str | None = None
-    name: str | None = None
-    compatibility: list[str] = []
-    incompatibility: list[str] = []
-    requirements: Mapping[str, JsonValue] = {}
-    max_rank: int | None = None
-    max_stacks: int | None = None
-    rank: int
-    stacks: int
-    is_exilus: bool = False
-    weapon: str
-    primary: bool
-    rifle: bool
-    bow: bool
-    shotgun: bool
-    sniper: bool
-    secondary: bool
-    pistol: bool
-    melee: bool
+# ------------------------------------------------------------------------
+# Input Stats
+# ------------------------------------------------------------------------
 
-
-class UpgradeStatValues(Data):
+class UpgradeStats(Data):
     ammo_efficiency: JsonValue
     attack_speed: JsonValue
     base_damage: JsonValue
@@ -220,13 +225,52 @@ class UpgradeStatValues(Data):
     weakpoint_crit_chance: JsonValue
     weakpoint_damage: JsonValue
 
+# ------------------------------------------------------------------------
+# Context
+# ------------------------------------------------------------------------
 
-class UpgradeData(ModelData):
-    stats: UpgradeStatValues
-    context: UpgradeContext
+class UpgradeContext(Data):
+    category: str = "Upgrade"
+    type: str | None = None
+    name: str | None = None
+    compatibility: list[str] = []
+    incompatibility: list[str] = []
+    requirements: Mapping[str, JsonValue] = {}
+    max_rank: int | None = None
+    max_stacks: int | None = None
+    rank: int | None = None
+    stacks: int | None = None
+    is_exilus: bool = False
+    weapon: str | None = None
 
 
-class ResolvedStatValues(Data):
+class BuildContext(Data):
+    sacrificial_set: bool = False
+
+
+class SetupContext(Data):
+    weapon: WeaponContext = {}
+    build: BuildContext = {}
+    upgrade: UpgradeContext = {}
+
+# ------------------------------------------------------------------------
+# Data
+# ------------------------------------------------------------------------
+
+class UpgradeData(Data):
+    stats: UpgradeStats = {}
+    context: UpgradeContext = {}
+
+
+class BuildData(Data):
+    upgrades: list[UpgradeData]
+    context: BuildContext = {}
+
+# ------------------------------------------------------------------------
+# Output Stats
+# ------------------------------------------------------------------------
+
+class ResolvedStat(Data):
     damage: Dist = Dist()
     elements: Data = Data()
     ammo_efficiency: Number = 0.0
@@ -259,7 +303,3 @@ class ResolvedStatValues(Data):
     vigilante_bonus: Number = 0.0
     weakpoint_crit_chance: Number = 0.0
     weakpoint_damage: Number = 0.0
-
-
-class BuildData(Data):
-    upgrades: list[UpgradeData]

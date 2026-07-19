@@ -4,8 +4,9 @@ from typing import ClassVar, get_args
 import pytest
 import warframe_damage_calculator as package
 
-from warframe_damage_calculator import Build, Data, Melee, Primary, Secondary, Upgrade, arsenal
-from warframe_damage_calculator.models.fields import BuildData, MeleeContext, MeleeInputStats, PrimaryContext, RangedInputStats, ResolvedStatValues, SecondaryContext, UpgradeContext, UpgradeData, UpgradeStatValues, WeaponAverageStats, WeaponCalculatedStats, WeaponContext, WeaponData, WeaponInputStats
+from warframe_damage_calculator import Build, Melee, Primary, Secondary, Upgrade, arsenal
+from warframe_damage_calculator.models.data import Data
+from warframe_damage_calculator.models.fields import BuildContext, BuildData, MeleeContext, MeleeStats, PrimaryContext, PrimaryStats, RangedStats, ResolvedStat, SecondaryContext, SecondaryStats, SetupContext, UpgradeContext, UpgradeData, UpgradeStats, AverageStats, CalculatedStats, WeaponContext, WeaponData, WeaponStats
 from warframe_damage_calculator.models.dist import Dist
 from warframe_damage_calculator.models.weapon import Weapon
 from warframe_damage_calculator.data.loader import WarframeDatabase
@@ -71,12 +72,12 @@ def test_data_copy_is_independent():
 
 
 def test_mutable_defaults_survive_reconstruction_and_mapping_unions():
-    stats = RangedInputStats()
+    stats = RangedStats()
     assert "damage" not in stats
     stats.damage.data["impact"] = 10
     assert "damage" in stats
 
-    reconstructed = RangedInputStats(stats)
+    reconstructed = RangedStats(stats)
     assert reconstructed.damage == Dist({"impact": 10})
 
     context = UpgradeContext()
@@ -100,7 +101,7 @@ def test_mutable_defaults_survive_reconstruction_and_mapping_unions():
 
 
 def test_with_defaults_returns_a_detached_snapshot():
-    stats = RangedInputStats()
+    stats = RangedStats()
     values = stats.with_defaults()
 
     assert dict(stats) == {}
@@ -118,6 +119,16 @@ def test_with_defaults_returns_a_detached_snapshot():
 
     values["damage"].data["slash"] = 30
     assert stats.damage == Dist({"slash": 20})
+
+
+def test_data_repr_always_includes_defaults_without_promoting_them():
+    stats = RangedStats()
+
+    rendered = repr(stats)
+
+    assert "'damage':" in rendered
+    assert "'multishot': 1.0" in rendered
+    assert dict(stats) == {}
 
 
 def test_data_is_a_custom_mutable_mapping():
@@ -187,11 +198,10 @@ def test_inline_default_data_behavior():
     assert context.compatibility == []
     assert context.max_rank is None
     assert "rank" not in context
-    with pytest.raises(AttributeError):
-        _ = context.rank
+    assert context.rank is None
 
-    resolved = ResolvedStatValues({"base_damage": 1})
-    other = ResolvedStatValues()
+    resolved = ResolvedStat({"base_damage": 1})
+    other = ResolvedStat()
     assert dict(resolved) == {"base_damage": 1}
     assert dict(other) == {}
     assert resolved.base_damage == 1
@@ -202,7 +212,7 @@ def test_inline_default_data_behavior():
     assert isinstance(resolved.elements, Data)
     assert resolved.damage is not other.damage
     assert resolved.elements is not other.elements
-    assert all(hasattr(other, field) for field in ResolvedStatValues._fields)
+    assert all(hasattr(other, field) for field in ResolvedStat._fields)
 
     dense = second.with_defaults()
     assert dense["inherited"] == "child"
@@ -216,24 +226,25 @@ def test_typed_data_subclasses_preserve_nested_and_copy_types():
     build = Build(upgrade)
 
     assert isinstance(weapon.data, WeaponData)
-    assert isinstance(weapon.data.stats, WeaponInputStats)
+    assert isinstance(weapon.data.stats, WeaponStats)
     assert isinstance(weapon.data.stats.damage, Dist)
     assert weapon.data.stats.multishot == 1
     assert isinstance(weapon.data.context, WeaponContext)
-    assert isinstance(weapon.stats.base, WeaponCalculatedStats)
-    assert isinstance(weapon.stats.modded, WeaponCalculatedStats)
-    assert isinstance(weapon.stats.effective, WeaponCalculatedStats)
-    assert isinstance(weapon.stats.average, WeaponAverageStats)
+    assert isinstance(weapon.stats.base, CalculatedStats)
+    assert isinstance(weapon.stats.modded, CalculatedStats)
+    assert isinstance(weapon.stats.effective, CalculatedStats)
+    assert isinstance(weapon.stats.average, AverageStats)
     assert isinstance(upgrade.data, UpgradeData)
-    assert isinstance(upgrade.data.stats, UpgradeStatValues)
+    assert isinstance(upgrade.data.stats, UpgradeStats)
     assert isinstance(upgrade.data.context, UpgradeContext)
-    assert isinstance(upgrade.stats.total, ResolvedStatValues)
-    assert isinstance(upgrade.stats.static, ResolvedStatValues)
+    assert isinstance(upgrade.stats.total, ResolvedStat)
+    assert isinstance(upgrade.stats.static, ResolvedStat)
     assert upgrade.stats.total.crit_chance == 0
     assert isinstance(build.data, BuildData)
+    assert isinstance(build.data.context, BuildContext)
     assert isinstance(build.data.upgrades[0], UpgradeData)
-    assert isinstance(build.stats.total, ResolvedStatValues)
-    assert isinstance(build.stats.static, ResolvedStatValues)
+    assert isinstance(build.stats.total, ResolvedStat)
+    assert isinstance(build.stats.static, ResolvedStat)
     assert build.stats.total.crit_chance == 0
 
     weapon.data.stats.damage = {"impact": 2}
@@ -244,7 +255,7 @@ def test_typed_data_subclasses_preserve_nested_and_copy_types():
     assert isinstance(weapon.data.copy(), WeaponData)
     assert isinstance(weapon.data | {"context": {"is_beam": False}}, WeaponData)
     assert isinstance({"context": {"is_beam": False}} | weapon.data, WeaponData)
-    assert isinstance(weapon.data.copy().stats, WeaponInputStats)
+    assert isinstance(weapon.data.copy().stats, WeaponStats)
 
 
 def test_weapon_input_defaults_and_category_types():
@@ -252,11 +263,11 @@ def test_weapon_input_defaults_and_category_types():
     secondary = Secondary()
     melee = Melee()
 
-    assert type(primary.data.stats) is RangedInputStats
+    assert type(primary.data.stats) is PrimaryStats
     assert type(primary.data.context) is PrimaryContext
-    assert type(secondary.data.stats) is RangedInputStats
+    assert type(secondary.data.stats) is SecondaryStats
     assert type(secondary.data.context) is SecondaryContext
-    assert type(melee.data.stats) is MeleeInputStats
+    assert type(melee.data.stats) is MeleeStats
     assert type(melee.data.context) is MeleeContext
     assert primary.data.stats.crit_chance == 0.4
     assert primary.data.context.is_beam is True
@@ -299,6 +310,23 @@ def test_build_aggregation():
     )
     assert build.stats.total.base_damage == 0.75
     assert build.stats.total.fire_rate_lock is True
+
+
+def test_build_context_tracks_upgrade_mutations():
+    build = Build()
+    pressure = Upgrade({"context": {"name": "Sacrificial Pressure"}})
+    steel = Upgrade({"context": {"name": "Sacrificial Steel"}})
+
+    assert build.data.context.sacrificial_set is False
+
+    build.data.upgrades.append(pressure.data)
+    build.data.upgrades.append(steel.data)
+    build.stats.resolve()
+    assert build.data.context.sacrificial_set is True
+
+    build.data.upgrades.pop()
+    build.stats.resolve()
+    assert build.data.context.sacrificial_set is False
 
 
 def test_build_resolver_returns_none():
@@ -364,9 +392,19 @@ def test_weapon_default_builds_are_independent():
 
 
 def test_upgrade_resolver_can_be_reused_with_different_contexts():
-    upgrade = Upgrade({"stats": {"base_damage": {"value": 1, "when": "primary"}}})
+    upgrade = Upgrade({"stats": {"base_damage": {"value": 1, "when": "primary"}}, "context": {"category": "mod"}})
 
-    upgrade.stats.resolve(weapon=Data({"context": {"type": "primary"}}))
+    primary = Data({"context": {"category": "primary", "type": "rifle"}})
+    context = upgrade.stats._context(primary, Data({"upgrades": []}))
+    assert isinstance(context, SetupContext)
+    assert isinstance(context.weapon, WeaponContext)
+    assert isinstance(context.build, BuildContext)
+    assert isinstance(context.upgrade, UpgradeContext)
+    assert context.weapon.category == "primary"
+    assert context.upgrade.category == "mod"
+    assert not ({"primary", "rifle", "bow", "shotgun", "sniper", "secondary", "pistol", "melee"} & set(context))
+
+    upgrade.stats.resolve(weapon=primary)
     assert upgrade.stats.total.base_damage == 1
     upgrade.stats.resolve(weapon=Data({"context": {"type": "melee"}}))
     assert upgrade.stats.total.base_damage == 0

@@ -3,7 +3,7 @@ from typing import Any
 
 from ..models.data import Data
 from ..models.dist import Dist
-from ..models.fields import ResolvedStatValues
+from ..models.fields import ResolvedStat
 from ..models.upgrade import Upgrade
 from ..utils.constants import DAMAGE_TYPES
 
@@ -13,11 +13,11 @@ class BuildCalculator:
 
     def __init__(self, build: Any) -> None:
         self.build = build
-        self.static = ResolvedStatValues()
-        self.conditional = ResolvedStatValues()
-        self.stacking = ResolvedStatValues()
-        self.rank_locked = ResolvedStatValues()
-        self.total = ResolvedStatValues()
+        self.static = ResolvedStat()
+        self.conditional = ResolvedStat()
+        self.stacking = ResolvedStat()
+        self.rank_locked = ResolvedStat()
+        self.total = ResolvedStat()
         self.resolve()
 
     @staticmethod
@@ -38,8 +38,10 @@ class BuildCalculator:
 
     def resolve(self, weapon: Data | object | None = None) -> None:
         weapon_data = getattr(weapon, "data", weapon) or Data()
+        names = {" ".join(str(upgrade.context.get("name", "")).casefold().split()) for upgrade in self.build.data.get("upgrades", [])}
+        self.build.data.context.sacrificial_set = {"sacrificial pressure", "sacrificial steel"}.issubset(names)
         for bucket in self.BUCKETS:
-            setattr(self, bucket, ResolvedStatValues())
+            setattr(self, bucket, ResolvedStat())
 
         for upgrade_data in self.build.data.get("upgrades", []):
             calculator = Upgrade(upgrade_data).stats
