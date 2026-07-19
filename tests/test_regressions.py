@@ -1,5 +1,5 @@
 from collections.abc import MutableMapping
-from typing import ClassVar, get_args
+from typing import ClassVar, assert_type, get_args
 
 import pytest
 import warframe_damage_calculator as package
@@ -27,6 +27,13 @@ def test_loader_context_and_attributes():
     assert arsenal.get("Corinth Prime", attribute="is_beam") is False
     assert arsenal.get("Corinth Prime", attribute="missing") is None
     assert regular.stats.effective.ammo_efficiency == 0
+
+
+def test_bundled_literal_names_have_specific_types():
+    assert_type(arsenal.get("Corinth Prime"), Primary)
+    assert_type(arsenal.get("Kuva Nukor"), Secondary)
+    assert_type(arsenal.get("Prisma Skana"), Melee)
+    assert_type(arsenal.get("Serration"), Upgrade)
 
 
 def test_bundled_stacking_upgrades_use_default_and_explicit_stack_counts():

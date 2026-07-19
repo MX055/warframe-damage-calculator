@@ -462,6 +462,10 @@ Names are normalized for lookup by trimming whitespace, collapsing repeated
 whitespace, and ignoring case. A missing name, or a name rejected by the optional `type` filter,
 returns `None`.
 
+Exact bundled name literals are typed by database category, so editors infer
+`Primary`, `Secondary`, `Melee`, or `Upgrade` directly. Dynamic strings and
+custom `WarframeDatabase` instances retain the general union return type.
+
 `context` is merged into a fresh copy of the database entry, so separate calls
 do not modify the bundled data.
 

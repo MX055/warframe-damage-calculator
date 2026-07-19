@@ -9,6 +9,7 @@ from ..models.primary import Primary
 from ..models.secondary import Secondary
 from ..models.upgrade import Upgrade
 from ..models.weapon import Weapon
+from .bundled_names import MeleeName, PrimaryName, SecondaryName, UpgradeName
 from .construction import DatabaseFactory
 from .matching import entry_matches
 from .normalization import normalize_identifier, normalize_name
@@ -64,6 +65,12 @@ class WarframeDatabase:
     def from_folder(cls, folder: str | Path) -> Self:
         folder = Path(folder)
         return cls.from_files(folder / "weapons.json", folder / "upgrades.json")
+
+    @overload
+    def get(self, name: str, *, type: WeaponFilter, context: Mapping[str, Any] | None = ..., attribute: None = ...) -> WeaponItem | None: ...
+
+    @overload
+    def get(self, name: str, *, type: UpgradeFilter, context: Mapping[str, Any] | None = ..., attribute: None = ...) -> Upgrade | None: ...
 
     @overload
     def get(self, name: str, *, type: str | None = ..., context: Mapping[str, Any] | None = ..., attribute: None = ...) -> DatabaseItem | None: ...
@@ -157,5 +164,42 @@ class WarframeDatabase:
             return getattr(item, key)
         return None
 
+class _BundledDatabase(WarframeDatabase):
+    @overload
+    def get(self, name: PrimaryName, *, context: Mapping[str, Any] | None = ..., attribute: None = ...) -> Primary: ...
 
-arsenal = WarframeDatabase.from_files()
+    @overload
+    def get(self, name: SecondaryName, *, context: Mapping[str, Any] | None = ..., attribute: None = ...) -> Secondary: ...
+
+    @overload
+    def get(self, name: MeleeName, *, context: Mapping[str, Any] | None = ..., attribute: None = ...) -> Melee: ...
+
+    @overload
+    def get(self, name: UpgradeName, *, context: Mapping[str, Any] | None = ..., attribute: None = ...) -> Upgrade: ...
+
+    @overload
+    def get(self, name: str, *, type: WeaponFilter, context: Mapping[str, Any] | None = ..., attribute: None = ...) -> WeaponItem | None: ...
+
+    @overload
+    def get(self, name: str, *, type: UpgradeFilter, context: Mapping[str, Any] | None = ..., attribute: None = ...) -> Upgrade | None: ...
+
+    @overload
+    def get(self, name: str, *, type: str | None = ..., context: Mapping[str, Any] | None = ..., attribute: None = ...) -> DatabaseItem | None: ...
+
+    @overload
+    def get(self, name: str, *, type: str | None = ..., context: Mapping[str, Any] | None = ..., attribute: str) -> object | None: ...
+
+    @overload
+    def get(self, name: None = ..., *, type: str | None = ..., context: Mapping[str, Any] | None = ..., attribute: Literal["name"]) -> list[str]: ...
+
+    @overload
+    def get(self, name: None = ..., *, type: str | None = ..., context: Mapping[str, Any] | None = ..., attribute: str) -> list[str] | dict[str, object | None]: ...
+
+    @overload
+    def get(self, name: None = ..., *, type: str | None = ..., context: Mapping[str, Any] | None = ..., attribute: None = ...) -> dict[str, DatabaseItem]: ...
+
+    def get(self, name: str | None = None, *, type: str | None = None, context: Mapping[str, Any] | None = None, attribute: str | None = None) -> DatabaseItem | None | list[str] | dict[str, DatabaseItem] | dict[str, object | None]:
+        return super().get(name, type=type, context=context, attribute=attribute)
+
+
+arsenal = _BundledDatabase.from_files()
