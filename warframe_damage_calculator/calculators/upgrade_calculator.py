@@ -78,6 +78,45 @@ class UpgradeCalculator:
         self._add(bucket, stat, value)
         self._add(self.total, stat, value)
 
+    @staticmethod
+    def _required_rank(effect: Data) -> Any:
+        required_rank = effect.get("at_rank")
+        condition = effect.get("when")
+        return condition.get("rank") if required_rank is None and isinstance(condition, Mapping) else required_rank
+
+    def _compute_static_stats(self, stat: str, value: Any, multiplier: float) -> None:
+        self._record(self.static, stat, self._scale(value, multiplier))
+
+    def _compute_conditional_stats(self, context: SetupContext, stat: str, value: Any, condition: Any, multiplier: float) -> None:
+        if self._condition(context, condition):
+            self._record(self.conditional, stat, self._scale(value, multiplier))
+
+    def _compute_rank_locked_stats(self, bucket: ResolvedStat, stat: str, value: Any, required_rank: Any, rank: int) -> None:
+        if rank >= self._count(required_rank, "required rank"):
+            self._record(bucket, stat, value)
+
+    def _compute_stacking_stats(self, context: SetupContext, bucket: ResolvedStat, stat: str, value: Any, stacks_on: Any, max_stacks: int | None, multiplier: float, defaults: bool) -> None:
+        condition = self._key(stacks_on)
+        stacks_value = context.upgrade.get("stacks")
+        fallback = ((max_stacks or 0) if defaults else 0) if stacks_value is None else stacks_value
+        stacks = self._count(self._value(context.upgrade, condition, fallback), condition)
+        stacks = min(stacks, max_stacks) if max_stacks is not None else stacks
+        if stacks:
+            value = self._scale(value, multiplier)
+            self._record(bucket, stat, value if isinstance(value, bool) else value * stacks)
+
+    def _compute_modular_stats(self, context: SetupContext, stat: str, effect: Data, rank: int, max_stacks: int | None, multiplier: float, defaults: bool) -> None:
+        if not self._equipped(context, effect.when_equipped):
+            return
+        condition = effect.get("when")
+        required_rank = self._required_rank(effect)
+        if required_rank is not None:
+            self._compute_rank_locked_stats(self.modular, stat, effect.value, required_rank, rank)
+        elif effect.get("stacks_on") is not None:
+            self._compute_stacking_stats(context, self.modular, stat, effect.value, effect.stacks_on, max_stacks, multiplier, defaults)
+        elif condition is None or self._condition(context, condition):
+            self._record(self.modular, stat, self._scale(effect.value, multiplier))
+
     def resolve(self, weapon: Data | object | None = None, build: Data | object | None = None) -> None:
         weapon_data = getattr(weapon, "data", weapon) or Data()
         build_data = getattr(build, "data", build) or Data({"upgrades": []})
@@ -100,30 +139,15 @@ class UpgradeCalculator:
         for stat, effects in self.upgrade.data.stats.items():
             for raw in effects if isinstance(effects, list) else [effects]:
                 effect = raw if isinstance(raw, Data) and "value" in raw else Data({"value": raw})
-                value, condition = effect.value, effect.get("when")
-                required_upgrade = effect.get("when_equipped")
-                stacks_on = effect.get("stacks_on")
-                if required_upgrade is not None and not self._equipped(context, required_upgrade):
-                    continue
-                required_rank = effect.get("at_rank")
-                if required_rank is None and isinstance(condition, Mapping):
-                    required_rank = condition.get("rank")
-                if required_rank is not None:
-                    if rank >= self._count(required_rank, "required rank"):
-                        bucket = self.modular if required_upgrade is not None else self.rank_locked
-                        self._record(bucket, stat, value)
-                elif stacks_on is not None:
-                    condition = self._key(stacks_on)
-                    stacks_value = context.upgrade.get("stacks")
-                    fallback = ((max_stacks or 0) if defaults else 0) if stacks_value is None else stacks_value
-                    stacks = self._count(self._value(context.upgrade, condition, fallback), condition)
-                    stacks = min(stacks, max_stacks) if max_stacks is not None else stacks
-                    if stacks:
-                        value = self._scale(value, multiplier)
-                        value = value if isinstance(value, bool) else value * stacks
-                        bucket = self.modular if required_upgrade is not None else self.stacking
-                        self._record(bucket, stat, value)
-                elif condition is None or self._condition(context, condition):
-                    value = self._scale(value, multiplier)
-                    bucket = self.modular if required_upgrade is not None else self.static if condition is None else self.conditional
-                    self._record(bucket, stat, value)
+                condition = effect.get("when")
+                required_rank = self._required_rank(effect)
+                if effect.get("when_equipped") is not None:
+                    self._compute_modular_stats(context, stat, effect, rank, max_stacks, multiplier, defaults)
+                elif required_rank is not None:
+                    self._compute_rank_locked_stats(self.rank_locked, stat, effect.value, required_rank, rank)
+                elif effect.get("stacks_on") is not None:
+                    self._compute_stacking_stats(context, self.stacking, stat, effect.value, effect.stacks_on, max_stacks, multiplier, defaults)
+                elif condition is None:
+                    self._compute_static_stats(stat, effect.value, multiplier)
+                else:
+                    self._compute_conditional_stats(context, stat, effect.value, condition, multiplier)
