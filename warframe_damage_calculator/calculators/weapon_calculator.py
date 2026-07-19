@@ -1,6 +1,6 @@
 from typing import Any
 
-from ..models.data import WeaponAverageStats, WeaponCalculatedStats
+from ..models.fields import WeaponAverageStats, WeaponCalculatedStats
 from ..models.upgrade import Upgrade
 
 

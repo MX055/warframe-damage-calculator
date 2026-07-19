@@ -2,7 +2,7 @@ from collections.abc import Iterator, Mapping, MutableMapping
 from copy import deepcopy
 from typing import ClassVar, Self, get_args, get_origin
 
-from ..utils.types import DataValue, JsonValue, Number
+from ..utils.types import DataValue
 from .dist import Dist
 
 
@@ -39,7 +39,11 @@ class Data(MutableMapping[str, DataValue]):
             raise KeyError(key)
         if key not in self._default_values:
             default = deepcopy(self._defaults[key])
-            self._default_values[key] = self._convert_field(key, default)
+            default = self._convert_field(key, default)
+            if self._is_mutable(default):
+                self._values[key] = default
+                return default
+            self._default_values[key] = default
         return self._default_values[key]
 
     def __setitem__(self, key: str, value: DataValue) -> None:
@@ -81,6 +85,10 @@ class Data(MutableMapping[str, DataValue]):
         if isinstance(value, Mapping): return Data(value)
         if isinstance(value, list): return [Data._convert(item) for item in value]
         return value
+
+    @staticmethod
+    def _is_mutable(value: DataValue) -> bool:
+        return isinstance(value, (Data, Dist, list, dict, set))
 
     @staticmethod
     def _convert_items(values: list[DataValue], item_type: object) -> list[DataValue]:
@@ -125,10 +133,17 @@ class Data(MutableMapping[str, DataValue]):
         return key in self._values
 
     def __or__(self, other: Mapping[str, DataValue]) -> Self:
-        return type(self)(dict(self) | dict(other))
+        merged = self.copy()
+        merged.update(other)
+        return merged
 
     def __ror__(self, other: Mapping[str, DataValue]) -> Self:
-        return type(self)(dict(other) | dict(self))
+        merged = self.copy()
+        explicit = merged._values
+        object.__setattr__(merged, "_values", {})
+        merged.update(other)
+        merged.update(explicit)
+        return merged
 
     def update(self, data: Mapping[str, DataValue], /) -> None:
         for key, value in data.items(): self[key] = value
@@ -137,267 +152,10 @@ class Data(MutableMapping[str, DataValue]):
         return deepcopy(self)
 
     def with_defaults(self) -> dict[str, DataValue]:
-        values = {key: self[key] for key in self._defaults if key not in self._suppressed_defaults}
-        values.update(self._values)
+        values = {
+            key: self._convert_field(key, deepcopy(default))
+            for key, default in self._defaults.items()
+            if key not in self._suppressed_defaults
+        }
+        values.update(deepcopy(self._values))
         return values
-
-class ModelData(Data):
-    stats: Data = {}
-    context: Data = {}
-
-
-class WeaponContext(Data):
-    name: str = ""
-    category: str = "Weapon"
-    type: str = ""
-
-
-class RangedContext(WeaponContext):
-    trigger: str = ""
-    is_beam: bool = False
-    is_battery: bool = False
-
-
-class PrimaryContext(RangedContext):
-    category: str = "Primary"
-
-
-class SecondaryContext(RangedContext):
-    category: str = "Secondary"
-
-
-class MeleeContext(WeaponContext):
-    category: str = "Melee"
-
-
-class WeaponInputStats(Data):
-    damage: Dist = Dist()
-    forced_procs: Dist = Dist()
-    crit_chance: Number = 0.0
-    crit_damage: Number = 1.0
-    status_chance: Number = 0.0
-
-
-class RangedInputStats(WeaponInputStats):
-    explosion_damage: Dist = Dist()
-    explosion_forced_procs: Dist = Dist()
-    burst_count: int = 1
-    burst_delay: Number = 0.0
-    charge_time: Number = 0.0
-    fire_rate: Number = 0.05
-    magazine_capacity: Number = 1
-    multishot: Number = 1.0
-    recharge_rate: Number = 0.0
-    reload_speed: Number = 0.0
-    weakpoint_damage: Number = 3.0
-
-
-class MeleeInputStats(WeaponInputStats):
-    attack_speed: Number = 1.0
-
-
-class WeaponData(ModelData):
-    stats: WeaponInputStats
-    context: WeaponContext
-
-
-class RangedData(WeaponData):
-    stats: RangedInputStats
-    context: RangedContext
-
-
-class MeleeData(WeaponData):
-    stats: MeleeInputStats
-    context: MeleeContext
-
-
-class PrimaryData(RangedData):
-    stats: RangedInputStats
-    context: PrimaryContext
-
-
-class SecondaryData(RangedData):
-    stats: RangedInputStats
-    context: SecondaryContext
-
-
-class WeaponCalculatedStats(Data):
-    damage: Dist
-    forced_procs: Dist
-    explosion_damage: Dist
-    explosion_forced_procs: Dist
-    multiplicative_base_damage: Number
-    base_damage: Number
-    faction_damage: Number
-    flat_crit_chance: Number
-    multiplicative_crit_chance: Number
-    crit_chance: Number
-    flat_crit_damage: Number
-    crit_damage: Number
-    status_chance: Number
-    status_damage: Number
-    attack_speed: Number
-    melee_duplicate: Number
-    melee_doughty: Number
-    multishot: Number
-    fire_rate: Number
-    multiplicative_fire_rate: Number
-    burst_count: int
-    burst_delay: Number
-    charge_time: Number
-    reload_speed: Number
-    recharge_rate: Number
-    ammo_efficiency: Number
-    magazine_capacity: Number
-    weakpoint_damage: Number
-    multiplicative_weakpoint_crit_chance: Number
-    weakpoint_crit_chance: Number
-    internal_bleeding: Number
-    hunter_munitions: Number
-    primed_chamber: Number
-    vigilante_bonus: Number
-    secondary_enervate: Number
-    secondary_encumber: Number
-
-
-class WeaponAverageStats(Data):
-    crit_chance: Number
-    crit_multiplier: Number
-    weakpoint_crit_chance: Number
-    weakpoint_crit_multiplier: Number
-    fire_rate: Number
-    procs_per_shot: Number
-    beam_dot_multiplier: Number
-    flat_dph: Number
-    flat_weakpoint_dph: Number
-    flat_dps: Number
-    flat_weakpoint_dps: Number
-    flat_dotph: Number
-    flat_weakpoint_dotph: Number
-    flat_dotps: Number
-    flat_weakpoint_dotps: Number
-    total_dph: Number
-    total_weakpoint_dph: Number
-    total_dps: Number
-    total_weakpoint_dps: Number
-    melee_doughty_bonus: Number
-    melee_duplicate_multiplier: Number
-    primed_chamber_multiplier: Number
-    secondary_enervate_bonus: Number
-    weakpoint_secondary_enervate_bonus: Number
-
-
-class UpgradeContext(Data):
-    name: str = ""
-    category: str = "Upgrade"
-    type: str = ""
-    compatibility: list[str] = []
-    incompatibility: list[str] = []
-    requirements: Mapping[str, JsonValue] = {}
-    max_rank: int | None = None
-    max_stacks: int | None = None
-    rank: int
-    stacks: int
-    is_exilus: bool = False
-    weapon: str
-    primary: bool
-    rifle: bool
-    bow: bool
-    shotgun: bool
-    sniper: bool
-    secondary: bool
-    pistol: bool
-    melee: bool
-
-
-class UpgradeStatValues(Data):
-    ammo_efficiency: JsonValue
-    attack_speed: JsonValue
-    base_damage: JsonValue
-    cold: JsonValue
-    corrosive: JsonValue
-    crit_chance: JsonValue
-    crit_damage: JsonValue
-    damage: JsonValue
-    electricity: JsonValue
-    elements: JsonValue
-    enabled: JsonValue
-    faction_damage: JsonValue
-    fire_rate: JsonValue
-    fire_rate_lock: JsonValue
-    flat_crit_chance: JsonValue
-    flat_crit_damage: JsonValue
-    gas: JsonValue
-    heat: JsonValue
-    hunter_munitions: JsonValue
-    impact: JsonValue
-    internal_bleeding: JsonValue
-    magazine_capacity: JsonValue
-    magnetic: JsonValue
-    melee_doughty: JsonValue
-    melee_duplicate: JsonValue
-    multiplicative_base_damage: JsonValue
-    multiplicative_crit_chance: JsonValue
-    multiplicative_fire_rate: JsonValue
-    multiplicative_weakpoint_crit_chance: JsonValue
-    multishot: JsonValue
-    multishot_lock: JsonValue
-    primed_chamber: JsonValue
-    puncture: JsonValue
-    radiation: JsonValue
-    reload_speed: JsonValue
-    secondary_encumber: JsonValue
-    secondary_enervate: JsonValue
-    slash: JsonValue
-    status_chance: JsonValue
-    status_damage: JsonValue
-    toxin: JsonValue
-    vigilante_bonus: JsonValue
-    viral: JsonValue
-    weakpoint_crit_chance: JsonValue
-    weakpoint_damage: JsonValue
-
-
-class UpgradeData(ModelData):
-    stats: UpgradeStatValues
-    context: UpgradeContext
-
-
-class ResolvedStatValues(Data):
-    damage: Dist = Dist()
-    elements: Data = Data()
-    ammo_efficiency: Number = 0.0
-    attack_speed: Number = 0.0
-    base_damage: Number = 0.0
-    crit_chance: Number = 0.0
-    crit_damage: Number = 0.0
-    enabled: bool = False
-    faction_damage: Number = 0.0
-    fire_rate: Number = 0.0
-    fire_rate_lock: bool = False
-    flat_crit_chance: Number = 0.0
-    flat_crit_damage: Number = 0.0
-    hunter_munitions: Number = 0.0
-    internal_bleeding: Number = 0.0
-    magazine_capacity: Number = 0.0
-    melee_doughty: Number = 0.0
-    melee_duplicate: Number = 0.0
-    multiplicative_base_damage: Number = 0.0
-    multiplicative_crit_chance: Number = 0.0
-    multiplicative_fire_rate: Number = 0.0
-    multiplicative_weakpoint_crit_chance: Number = 0.0
-    multishot: Number = 0.0
-    multishot_lock: bool = False
-    primed_chamber: Number = 0.0
-    reload_speed: Number = 0.0
-    secondary_encumber: Number = 0.0
-    secondary_enervate: Number = 0.0
-    status_chance: Number = 0.0
-    status_damage: Number = 0.0
-    vigilante_bonus: Number = 0.0
-    weakpoint_crit_chance: Number = 0.0
-    weakpoint_damage: Number = 0.0
-
-
-class BuildData(Data):
-    upgrades: list[UpgradeData]

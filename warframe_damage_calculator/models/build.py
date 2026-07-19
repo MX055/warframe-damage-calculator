@@ -2,7 +2,7 @@ from collections.abc import Iterator
 from typing import Self
 
 from ..calculators.build_calculator import BuildCalculator
-from .data import BuildData
+from .fields import BuildData
 from .upgrade import Upgrade
 
 

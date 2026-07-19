@@ -2,7 +2,7 @@ from collections.abc import Mapping
 
 from ..calculators.upgrade_calculator import UpgradeCalculator
 from ..utils.types import JsonValue
-from .data import UpgradeData
+from .fields import UpgradeData
 
 
 class Upgrade:

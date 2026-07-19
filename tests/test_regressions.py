@@ -5,7 +5,7 @@ import pytest
 import warframe_damage_calculator as package
 
 from warframe_damage_calculator import Build, Data, Melee, Primary, Secondary, Upgrade, arsenal
-from warframe_damage_calculator.models.data import BuildData, MeleeContext, MeleeInputStats, PrimaryContext, RangedInputStats, ResolvedStatValues, SecondaryContext, UpgradeContext, UpgradeData, UpgradeStatValues, WeaponAverageStats, WeaponCalculatedStats, WeaponContext, WeaponData, WeaponInputStats
+from warframe_damage_calculator.models.fields import BuildData, MeleeContext, MeleeInputStats, PrimaryContext, RangedInputStats, ResolvedStatValues, SecondaryContext, UpgradeContext, UpgradeData, UpgradeStatValues, WeaponAverageStats, WeaponCalculatedStats, WeaponContext, WeaponData, WeaponInputStats
 from warframe_damage_calculator.models.dist import Dist
 from warframe_damage_calculator.models.weapon import Weapon
 from warframe_damage_calculator.data.loader import WarframeDatabase
@@ -68,6 +68,56 @@ def test_data_copy_is_independent():
     copied.damage.impact = 4
     assert original.nested["items"][0].value == 1
     assert original.damage.impact == 2
+
+
+def test_mutable_defaults_survive_reconstruction_and_mapping_unions():
+    stats = RangedInputStats()
+    assert "damage" not in stats
+    stats.damage.data["impact"] = 10
+    assert "damage" in stats
+
+    reconstructed = RangedInputStats(stats)
+    assert reconstructed.damage == Dist({"impact": 10})
+
+    context = UpgradeContext()
+    assert "compatibility" not in context
+    context.compatibility.append("rifle")
+    assert "compatibility" in context
+
+    merged = context | {"name": "Serration"}
+    reverse_merged = {"name": "Serration"} | context
+    assert merged.compatibility == ["rifle"]
+    assert reverse_merged.compatibility == ["rifle"]
+
+    merged.compatibility.append("sniper")
+    reverse_merged.compatibility.append("shotgun")
+    assert context.compatibility == ["rifle"]
+
+    suppressed = UpgradeContext()
+    del suppressed.compatibility
+    assert not hasattr(suppressed | {"name": "Mod"}, "compatibility")
+    assert not hasattr({"name": "Mod"} | suppressed, "compatibility")
+
+
+def test_with_defaults_returns_a_detached_snapshot():
+    stats = RangedInputStats()
+    values = stats.with_defaults()
+
+    assert dict(stats) == {}
+    values["damage"].data["impact"] = 10
+    assert stats.damage == Dist()
+
+    stats.crit_chance = 0.5
+    stats.damage = {"slash": 20}
+    del stats.forced_procs
+    values = stats.with_defaults()
+
+    assert values["crit_chance"] == 0.5
+    assert values["damage"] == Dist({"slash": 20})
+    assert "forced_procs" not in values
+
+    values["damage"].data["slash"] = 30
+    assert stats.damage == Dist({"slash": 20})
 
 
 def test_data_is_a_custom_mutable_mapping():
@@ -146,7 +196,6 @@ def test_inline_default_data_behavior():
     assert dict(other) == {}
     assert resolved.base_damage == 1
     assert resolved.crit_chance == 0.0
-    assert resolved.enabled is False
     assert resolved.fire_rate_lock is False
     assert resolved.multishot_lock is False
     assert isinstance(resolved.damage, Dist)
@@ -245,11 +294,11 @@ def test_dist_filters_accept_generators():
 
 def test_build_aggregation():
     build = Build(
-        Upgrade({"stats": {"base_damage": 0.5, "enabled": False}}),
-        Upgrade({"stats": {"base_damage": 0.25, "enabled": True}}),
+        Upgrade({"stats": {"base_damage": 0.5, "fire_rate_lock": False}}),
+        Upgrade({"stats": {"base_damage": 0.25, "fire_rate_lock": True}}),
     )
     assert build.stats.total.base_damage == 0.75
-    assert build.stats.total.enabled is True
+    assert build.stats.total.fire_rate_lock is True
 
 
 def test_build_resolver_returns_none():

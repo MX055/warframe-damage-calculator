@@ -1,6 +1,6 @@
 from ..calculators.secondary_calculator import SecondaryCalculator
 from ..formatters.secondary_formatter import SecondaryFormatter
-from .data import SecondaryData
+from .fields import SecondaryData
 from .ranged import Ranged
 
 

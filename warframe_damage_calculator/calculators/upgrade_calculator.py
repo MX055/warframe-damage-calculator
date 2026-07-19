@@ -2,8 +2,9 @@ from collections.abc import Mapping
 from typing import Any
 
 from ..utils.constants import DAMAGE_TYPES
-from ..models.data import Data, ResolvedStatValues
+from ..models.data import Data
 from ..models.dist import Dist
+from ..models.fields import ResolvedStatValues
 
 
 class UpgradeCalculator:
