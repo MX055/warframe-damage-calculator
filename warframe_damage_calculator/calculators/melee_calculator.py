@@ -6,9 +6,10 @@ from .weapon_calculator import WeaponCalculator
 class MeleeCalculator(WeaponCalculator):
     def _compute_modded_stats(self) -> None:
         super()._compute_modded_stats()
-        self.modded.attack_speed = max(self.base.attack_speed * (1 + self.weapon.build.stats.total.attack_speed), 0)
-        self.modded.melee_duplicate = clamp(self.weapon.build.stats.total.melee_duplicate, 0, 1)
-        self.modded.melee_doughty = clamp(self.weapon.build.stats.total.melee_doughty, 0, 1)
+        build = self.resolved_build.stats.total
+        self.modded.attack_speed = max(self.base.attack_speed * (1 + build.attack_speed), 0)
+        self.modded.melee_duplicate = clamp(build.melee_duplicate, 0, 1)
+        self.modded.melee_doughty = clamp(build.melee_doughty, 0, 1)
 
     def _compute_effective_stats(self) -> None:
         super()._compute_effective_stats()

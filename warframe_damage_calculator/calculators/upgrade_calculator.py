@@ -1,7 +1,7 @@
 from collections.abc import Mapping
 from typing import Any
 
-from ..data.matching import MELEE_TYPES, PRIMARY_TYPES, SECONDARY_TYPES
+from ..loader.matching import MELEE_TYPES, PRIMARY_TYPES, SECONDARY_TYPES
 from ..utils.constants import DAMAGE_TYPES
 from ..models.data import Data
 from ..models.dist import Dist
@@ -27,10 +27,18 @@ class UpgradeCalculator:
         return " ".join(str(value).casefold().replace("_", " ").replace("-", " ").split())
     
     def _context(self, weapon_data: Data, build_data: Data) -> SetupContext:
+        entry = self.upgrade.data.entry
         return SetupContext({
             "weapon": weapon_data.get("context", {}),
             "build": BuildContext(build_data.get("context", {})),
-            "upgrade": self.upgrade.data.context,
+            "upgrade": {
+                "name": self.upgrade.data.name,
+                "type": entry.type,
+                "max_rank": entry.max_rank,
+                "compatibility": entry.compatibility,
+                "incompatibility": entry.incompatibility,
+                **self.upgrade.data.runtime.with_defaults(),
+            },
         })
 
     def _value(self, context: Data, key: Any, default: Any = None) -> Any:
@@ -45,14 +53,14 @@ class UpgradeCalculator:
         condition = self._key(condition)
         if condition in self.WEAPON_TYPES:
             weapon = self._key(context.weapon.get("type") or "")
-            types = {weapon, self._key(context.weapon.get("category") or "")} - {""}
+            types = {weapon, self._key(context.weapon.get("subtype") or ""), self._key(context.weapon.get("category") or "")} - {""}
             if weapon == "bow": types.add("rifle")
             return condition in types
         return bool(self._value(context.upgrade, condition, True))
 
     def _count(self, value: Any, field: str) -> int:
         if isinstance(value, bool) or not isinstance(value, int) or value < 0:
-            raise ValueError(f"{field} on {self.upgrade.data.context.name or '<unnamed upgrade>'!r} must be a non-negative integer")
+            raise ValueError(f"{field} on {self.upgrade.data.name or '<unnamed upgrade>'!r} must be a non-negative integer")
         return value
 
     @classmethod
@@ -64,6 +72,13 @@ class UpgradeCalculator:
         if stat in DAMAGE_TYPES: stat, value = "damage", {stat: value}
         current = stats.get(stat)
         if stat == "damage": stats[stat] = Dist(current) + Dist(value)
+        elif stat == "condition_overload":
+            current = current or {}
+            maximums = {current.get("max_stacks", 0), value.get("max_stacks", 0)}
+            stats[stat] = {
+                "value": current.get("value", 0) + value.get("value", 0),
+                "max_stacks": "inf" if "inf" in maximums else max(maximums),
+            }
         elif current is None: stats[stat] = value
         elif isinstance(value, bool): stats[stat] = current or value
         elif isinstance(current, Mapping) and isinstance(value, Mapping): stats[stat] = {key: current.get(key, 0) + value.get(key, 0) for key in dict(current) | dict(value)}
@@ -75,9 +90,21 @@ class UpgradeCalculator:
 
     @staticmethod
     def _required_rank(effect: Data) -> Any:
-        required_rank = effect.get("at_rank")
-        condition = effect.get("when")
-        return condition.get("rank") if required_rank is None and isinstance(condition, Mapping) else required_rank
+        return effect.get("rank")
+
+    @staticmethod
+    def _effects(raw: Any) -> list[Data]:
+        values = raw if isinstance(raw, list) else [raw]
+        effects: list[Data] = []
+        for value in values:
+            if isinstance(value, Mapping):
+                effect = value if isinstance(value, Data) else Data(value)
+                if "value" not in effect:
+                    raise ValueError("stat effect records require a value")
+            else:
+                effect = Data({"value": value})
+            effects.append(effect)
+        return effects
 
     def _compute_static_stats(self, stat: str, value: Any, multiplier: float) -> None:
         self._record(self.static, stat, self._scale(value, multiplier))
@@ -99,13 +126,13 @@ class UpgradeCalculator:
             self._record(bucket, stat, value if isinstance(value, bool) else value * stacks)
 
     def _compute_modular_stats(self, context: SetupContext, stat: str, effect: Data, rank: int, max_stacks: int | None, multiplier: float, defaults: bool) -> None:
-        required = effect.when_equipped if isinstance(effect.when_equipped, list) else [effect.when_equipped]
+        required = effect.equipped if isinstance(effect.equipped, list) else [effect.equipped]
         equipped = {self._key(name) for name in context.build.equipped}
         if not all(self._key(name) in equipped for name in required): return
         condition = effect.get("when")
         required_rank = self._required_rank(effect)
         if required_rank is not None: self._compute_rank_locked_stats(self.modular, stat, effect.value, required_rank, rank)
-        elif effect.get("stacks_on") is not None: self._compute_stacking_stats(context, self.modular, stat, effect.value, effect.stacks_on, max_stacks, multiplier, defaults)
+        elif effect.get("stacks") is not None: self._compute_stacking_stats(context, self.modular, stat, effect.value, effect.stacks.get("when", "stacks"), effect.stacks.get("max", max_stacks), multiplier, defaults)
         elif condition is None or self._condition(context, condition): self._record(self.modular, stat, self._scale(effect.value, multiplier))
 
     def resolve(self, weapon: Data | object | None = None, build: Data | object | None = None) -> None:
@@ -124,16 +151,22 @@ class UpgradeCalculator:
         rank = self._count((max_rank or 0) if rank_value is None else rank_value, "rank")
         rank = min(rank, max_rank) if max_rank is not None else rank
         multiplier = 1 if max_rank in {None, 0} else (rank + 1) / (max_rank + 1)
-        if any(isinstance(raw, Mapping) and raw.get("at_rank") is not None for effects in self.upgrade.data.stats.values() for raw in (effects if isinstance(effects, list) else [effects])):
+        if any(effect.get("rank") is not None for raw in self.upgrade.data.entry.stats.values() for effect in self._effects(raw)):
             multiplier = 1
         defaults = {self._key(key) for key in context.upgrade} <= self.METADATA
-        for stat, effects in self.upgrade.data.stats.items():
-            for raw in effects if isinstance(effects, list) else [effects]:
-                effect = raw if isinstance(raw, Data) and "value" in raw else Data({"value": raw})
+        for stat, raw in self.upgrade.data.entry.stats.items():
+            for effect in self._effects(raw):
+                if stat == "condition_overload":
+                    maximum = effect.get("stacks", {}).get("max")
+                    max_statuses = "inf" if maximum is None else maximum
+                    if max_statuses != "inf":
+                        max_statuses = self._count(max_statuses, "condition overload max stacks")
+                    self._record(self.static, stat, {"value": self._scale(effect.value, multiplier), "max_stacks": max_statuses})
+                    continue
                 condition = effect.get("when")
                 required_rank = self._required_rank(effect)
-                if effect.get("when_equipped") is not None: self._compute_modular_stats(context, stat, effect, rank, max_stacks, multiplier, defaults)
+                if effect.get("equipped") is not None: self._compute_modular_stats(context, stat, effect, rank, max_stacks, multiplier, defaults)
                 elif required_rank is not None: self._compute_rank_locked_stats(self.rank_locked, stat, effect.value, required_rank, rank)
-                elif effect.get("stacks_on") is not None: self._compute_stacking_stats(context, self.stacking, stat, effect.value, effect.stacks_on, max_stacks, multiplier, defaults)
+                elif effect.get("stacks") is not None: self._compute_stacking_stats(context, self.stacking, stat, effect.value, effect.stacks.get("when", "stacks"), effect.stacks.get("max", max_stacks), multiplier, defaults)
                 elif condition is None: self._compute_static_stats(stat, effect.value, multiplier)
                 else: self._compute_conditional_stats(context, stat, effect.value, condition, multiplier)

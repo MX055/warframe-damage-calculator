@@ -1,0 +1,21 @@
+from ..models.upgrade import Upgrade
+from ..models.weapon import Weapon
+from ..models.melee import Melee
+from ..models.primary import Primary
+from ..models.secondary import Secondary
+from .schema import DatabaseEntry
+
+
+class DatabaseFactory:
+    models = {"primary": Primary, "secondary": Secondary, "melee": Melee, "mod": Upgrade, "arcane": Upgrade}
+
+    def create(self, entry: DatabaseEntry, context: dict | None = None) -> Weapon | Upgrade:
+        model = self.models[entry.category]({entry.name: entry.data})
+        if context:
+            if isinstance(model, Upgrade):
+                model.data.runtime.update(context)
+                model.stats.resolve()
+            else:
+                model.data.entry.update(context)
+                model.stats.recompute()
+        return model

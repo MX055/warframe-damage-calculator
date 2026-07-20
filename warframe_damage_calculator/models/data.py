@@ -1,4 +1,4 @@
-from collections.abc import Iterator, Mapping, MutableMapping
+from collections.abc import ItemsView, Iterator, KeysView, Mapping, MutableMapping, ValuesView
 from copy import deepcopy
 from typing import ClassVar, Self, get_args, get_origin
 
@@ -131,6 +131,15 @@ class Data(MutableMapping[str, DataValue]):
 
     def __contains__(self, key: object) -> bool:
         return key in self._values
+
+    def keys(self) -> KeysView[str]:
+        return self._values.keys()
+
+    def values(self) -> ValuesView[DataValue]:
+        return self._values.values()
+
+    def items(self) -> ItemsView[str, DataValue]:
+        return self._values.items()
 
     def __or__(self, other: Mapping[str, DataValue]) -> Self:
         merged = self.copy()

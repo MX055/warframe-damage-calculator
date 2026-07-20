@@ -28,6 +28,13 @@ class BuildCalculator:
         current = stats.get(stat)
         if stat == "damage":
             stats[stat] = Dist(current) + Dist(value)
+        elif stat == "condition_overload":
+            current = current or {}
+            maximums = {current.get("max_stacks", 0), value.get("max_stacks", 0)}
+            stats[stat] = {
+                "value": current.get("value", 0) + value.get("value", 0),
+                "max_stacks": "inf" if "inf" in maximums else max(maximums),
+            }
         elif current is None:
             stats[stat] = value
         elif isinstance(value, bool):
@@ -39,12 +46,12 @@ class BuildCalculator:
 
     def resolve(self, weapon: Data | object | None = None) -> None:
         weapon_data = getattr(weapon, "data", weapon) or Data()
-        self.build.data.context.equipped = [" ".join(str(upgrade.context.get("name", "")).casefold().split()) for upgrade in self.build.data.get("upgrades", [])]
+        self.build.data.context.equipped = [" ".join(str(upgrade.data.name or "").casefold().split()) for upgrade in self.build.upgrades]
         for bucket in self.BUCKETS:
             setattr(self, bucket, ResolvedStat())
 
-        for upgrade_data in self.build.data.get("upgrades", []):
-            calculator = Upgrade(upgrade_data).stats
+        for upgrade in self.build.upgrades:
+            calculator = upgrade.stats
             calculator.resolve(weapon_data, self.build)
             for bucket in self.BUCKETS:
                 target = getattr(self, bucket)

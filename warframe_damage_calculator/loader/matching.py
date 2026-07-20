@@ -68,8 +68,9 @@ def weapon_matches(entry: DatabaseEntry, item_type: str | None) -> bool:
     requested = expand_type_filter(item_type)
     context = entry.data.get("context", entry.data)
     weapon_type = normalize_identifier(context.get("type"))
+    weapon_subtype = normalize_identifier(context.get("subtype"))
     trigger = normalize_identifier(context.get("trigger"))
-    return weapon_type in requested or trigger in requested
+    return weapon_type in requested or weapon_subtype in requested or trigger in requested
 
 
 def upgrade_matches(entry: DatabaseEntry, item_type: str | None) -> bool:
@@ -83,13 +84,22 @@ def upgrade_matches(entry: DatabaseEntry, item_type: str | None) -> bool:
 
     requested = expand_type_filter(item_type)
     context = entry.data.get("context", entry.data)
-    compatibility = _normalized_values(context.get("compatibility"))
+    raw_compatibility = context.get("compatibility", {})
+    if isinstance(raw_compatibility, Mapping):
+        compatibility = {
+            normalize_identifier(value)
+            for key, values in raw_compatibility.items()
+            if key not in {"aoe", "exilus"}
+            for value in as_list(values)
+        } | entry.match_types
+    else:
+        compatibility = _normalized_values(raw_compatibility)
 
-    if item_type == "primary" and compatibility & PRIMARY_TYPES:
+    if item_type == "primary" and ("primary" in entry.match_types or compatibility & PRIMARY_TYPES):
         return True
-    if item_type == "secondary" and compatibility & SECONDARY_TYPES:
+    if item_type == "secondary" and ("secondary" in entry.match_types or compatibility & SECONDARY_TYPES):
         return True
-    if item_type == "melee" and compatibility & MELEE_TYPES:
+    if item_type == "melee" and ("melee" in entry.match_types or compatibility & MELEE_TYPES):
         return True
 
     requirements = context.get("requirements") or {}

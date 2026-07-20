@@ -7,8 +7,9 @@ from .ranged_calculator import RangedCalculator
 class SecondaryCalculator(RangedCalculator):
     def _compute_modded_stats(self) -> None:
         super()._compute_modded_stats()
-        self.modded.secondary_enervate = clamp(self.weapon.build.stats.total.secondary_enervate, 0, 6)
-        self.modded.secondary_encumber = clamp(self.weapon.build.stats.total.secondary_encumber, 0, 0.24)
+        build = self.resolved_build.stats.total
+        self.modded.secondary_enervate = clamp(build.secondary_enervate, 0, 6)
+        self.modded.secondary_encumber = clamp(build.secondary_encumber, 0, 0.24)
 
     def _compute_effective_stats(self) -> None:
         super()._compute_effective_stats()
@@ -25,12 +26,14 @@ class SecondaryCalculator(RangedCalculator):
         self.average.weakpoint_crit_chance = self.effective.weakpoint_crit_chance + weakpoint_secondary_enervate_bonus
         self.average.crit_multiplier = 1 + self.average.crit_chance * (self.effective.crit_damage - 1)
         self.average.weakpoint_crit_multiplier = 1 + self.average.weakpoint_crit_chance * (self.effective.crit_damage - 1)
-        self.average.flat_dph = (self.effective.damage.total_damage() * self.effective.multishot + self.effective.explosion_damage.total_damage()) * self.effective.faction_damage * self.average.crit_multiplier
-        self.average.flat_weakpoint_dph = (self.effective.damage.total_damage() * self.effective.multishot * self.effective.weakpoint_damage * self.average.weakpoint_crit_multiplier + self.effective.explosion_damage.total_damage() * self.average.crit_multiplier) * self.effective.faction_damage
+        related_flat = sum(state.damage.total_damage() * state.multishot * state.faction_damage * (1 + state.crit_chance * (state.crit_damage - 1)) for state in self.related.values())
+        related_weakpoint = sum(state.damage.total_damage() * state.multishot * state.faction_damage * state.weakpoint_damage * (1 + state.weakpoint_crit_chance * (state.crit_damage - 1)) for state in self.related.values())
+        self.average.flat_dph = self.effective.damage.total_damage() * self.effective.multishot * self.effective.faction_damage * self.average.crit_multiplier + related_flat
+        self.average.flat_weakpoint_dph = self.effective.damage.total_damage() * self.effective.multishot * self.effective.weakpoint_damage * self.average.weakpoint_crit_multiplier * self.effective.faction_damage + related_weakpoint
         self.average.flat_dps = self.average.fire_rate * self.average.flat_dph
         self.average.flat_weakpoint_dps = self.average.fire_rate * self.average.flat_weakpoint_dph
-        self.average.flat_dotph = self._flat_dotph_for(self.effective.damage, self.base.forced_procs, self.average.crit_chance, self.average.crit_multiplier) + self._flat_dotph_for(self.effective.explosion_damage, self.base.explosion_forced_procs, self.average.crit_chance, self.average.crit_multiplier, include_multishot=False)
-        self.average.flat_weakpoint_dotph = self._flat_dotph_for(self.effective.damage, self.base.forced_procs, self.average.weakpoint_crit_chance, self.average.weakpoint_crit_multiplier) + self._flat_dotph_for(self.effective.explosion_damage, self.base.explosion_forced_procs, self.average.crit_chance, self.average.crit_multiplier, include_multishot=False)
+        self.average.flat_dotph = self._flat_dotph_for(self.effective.damage, self.base.forced_procs, self.average.crit_chance, self.average.crit_multiplier) + self.related_dot
+        self.average.flat_weakpoint_dotph = self._flat_dotph_for(self.effective.damage, self.base.forced_procs, self.average.weakpoint_crit_chance, self.average.weakpoint_crit_multiplier) + self.related_dot
         self.average.flat_dotps = self.average.fire_rate * self.average.flat_dotph
         self.average.flat_weakpoint_dotps = self.average.fire_rate * self.average.flat_weakpoint_dotph
         self.average.total_dph = self.average.flat_dph + self.average.flat_dotph

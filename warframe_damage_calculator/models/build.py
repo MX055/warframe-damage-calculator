@@ -8,14 +8,15 @@ from .upgrade import Upgrade
 
 class Build:
     def __init__(self, *upgrades: Upgrade) -> None:
-        self.data = BuildData({"upgrades": [upgrade.data.copy() for upgrade in upgrades]})
+        self.upgrades = [self._copy_upgrade(upgrade) for upgrade in upgrades]
+        self.data = BuildData({"upgrades": [upgrade.data.copy() for upgrade in self.upgrades]})
         self.stats = BuildCalculator(self)
 
     def __iter__(self) -> Iterator[Upgrade]:
-        return (Upgrade(data) for data in self.data.upgrades)
+        return (self._copy_upgrade(upgrade) for upgrade in self.upgrades)
 
     def __len__(self) -> int:
-        return len(self.data.upgrades)
+        return len(self.upgrades)
 
     def __add__(self, other: Self | Upgrade) -> Self:
         return Build(*self, other) if isinstance(other, Upgrade) else Build(*self, *other)
@@ -24,5 +25,16 @@ class Build:
         return Build(other, *self)
 
     def __sub__(self, other: Self | Upgrade) -> Self:
-        excluded = [other.data] if isinstance(other, Upgrade) else [upgrade.data for upgrade in other]
-        return Build(*(upgrade for upgrade in self if upgrade.data not in excluded))
+        excluded = [other] if isinstance(other, Upgrade) else list(other)
+        names = {str(upgrade.data.name).casefold() for upgrade in excluded}
+        return Build(*(upgrade for upgrade in self if str(upgrade.data.name).casefold() not in names))
+    
+    def copy(self) -> Self:
+        return type(self)(*self)
+
+    @staticmethod
+    def _copy_upgrade(upgrade: Upgrade) -> Upgrade:
+        copied = Upgrade(upgrade.data)
+        copied.data.runtime.update(upgrade.data.runtime.with_defaults())
+        copied.stats.resolve()
+        return copied

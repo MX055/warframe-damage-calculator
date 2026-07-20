@@ -7,5 +7,5 @@ from .fields import UpgradeData
 
 class Upgrade:
     def __init__(self, data: Mapping[str, JsonValue] | None = None) -> None:
-        self.data = UpgradeData(data)
+        self.data = UpgradeData(data or {})
         self.stats = UpgradeCalculator(self)

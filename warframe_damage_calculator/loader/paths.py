@@ -4,9 +4,7 @@ from typing import Any
 
 
 DATA_DIR = Path(__file__).resolve().parent
-DATABASE_DIR = DATA_DIR / "database"
-DEFAULT_WEAPONS_PATH = DATABASE_DIR / "weapons.json"
-DEFAULT_UPGRADES_PATH = DATABASE_DIR / "upgrades.json"
+DEFAULT_DATABASE_PATH = DATA_DIR.parents[1] / "database" / "database.json"
 
 
 def load_json(path: str | Path) -> dict[str, Any]:

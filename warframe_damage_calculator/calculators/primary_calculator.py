@@ -7,9 +7,10 @@ from .ranged_calculator import RangedCalculator
 class PrimaryCalculator(RangedCalculator):
     def _compute_modded_stats(self) -> None:
         super()._compute_modded_stats()
-        self.modded.hunter_munitions = clamp(self.weapon.build.stats.total.hunter_munitions, 0, 0.3)
-        self.modded.primed_chamber = clamp(self.weapon.build.stats.total.primed_chamber, 0, 1.4)
-        self.modded.vigilante_bonus = clamp(self.weapon.build.stats.total.vigilante_bonus, 0, 0.3)
+        build = self.resolved_build.stats.total
+        self.modded.hunter_munitions = clamp(build.hunter_munitions, 0, 0.3)
+        self.modded.primed_chamber = clamp(build.primed_chamber, 0, 1.4)
+        self.modded.vigilante_bonus = clamp(build.vigilante_bonus, 0, 0.3)
 
     def _compute_effective_stats(self) -> None:
         super()._compute_effective_stats()

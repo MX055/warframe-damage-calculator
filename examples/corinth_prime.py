@@ -1,9 +1,22 @@
-from warframe_damage_calculator import Build, Upgrade, arsenal
+from warframe_damage_calculator import Build, Upgrade, Primary, arsenal
 
 
 def main() -> None:
-    weapon = arsenal.get("Corinth Prime")
-    mod1 = Upgrade({"context": {"name": "Riven"}, "stats": {"impact": -0.886, "crit_damage": 0.855, "multishot": 1.126, "crit_chance": 0.887}})
+    weapon = Primary({
+        "Corinth Prime": {
+            "type": "primary",
+            "subtype": "shotgun",
+            "disposition": 1,
+            "ammo": {"reload_time": 3, "magazine_size": 20},
+            "attacks": {
+                "buckshot": {"trigger": "semi", "delivery": "hitscan", "stats": {"damage": {"impact": 25.2, "puncture": 37.8, "slash": 27}, "falloff": {"end_range": 36, "final_multiplier": 0.35556, "start_range": 18}, "crit_chance": 0.3, "crit_damage": 2.8, "status_chance": 0.09, "multishot": 6, "fire_rate": 1.42, "co_factor": 1.0, "co_effect": "adds"}},
+                "air_burst_projectile": {"trigger": "semi", "delivery": "projectile", "children": ["air_burst_explosion"], "stats": {"ammo_cost": 4, "damage": {"impact": 100}, "forced_procs": {"impact": 1}, "crit_chance": 0.04, "crit_damage": 1.6, "status_chance": 0.5, "fire_rate": 0.67, "co_factor": 1.0, "co_effect": "adds"}},
+                "air_burst_explosion": {"trigger": "semi", "delivery": "projectile", "aoe": True, "stats": {"ammo_cost": 4, "damage": {"blast": 2200}, "falloff": {"end_range": 9.8, "final_multiplier": 0.1, "start_range": 0}, "crit_chance": 0.04, "crit_damage": 1.6, "status_chance": 0.5, "fire_rate": 0.67, "co_factor": 1.0, "co_effect": "adds"}}
+            }
+        }
+    })
+
+    mod1 = Upgrade({"Riven": {"type": "mod",  "max_rank": 0,  "compatibility": {"names": ["Corinth Prime"]},  "stats": {"impact": -0.886, "crit_damage": 0.855, "multishot": 1.126, "crit_chance": 0.887}}})
     mod2 = arsenal.get("Galvanized Hell")
     mod3 = arsenal.get("Semi-Shotgun Cannonade")
     mod4 = arsenal.get("Hunter Munitions")
@@ -13,7 +26,7 @@ def main() -> None:
     mod8 = arsenal.get("Toxic Barrage")
     exilus = arsenal.get("Vigilante Supplies")
     arcane = arsenal.get("Primary Merciless")
-    buff = Upgrade({"context": {"name": "Buff"}, "stats": {"flat_crit_damage": 1.2}})
+    buff = Upgrade({"Buff": {"type": "buff",  "stats": {"flat_crit_damage": 1.2}}})
     build = Build(mod1, mod2, mod3, mod4, mod5, mod6, mod7, mod8, exilus, arcane, buff)
     weapon.configure(build)
 
