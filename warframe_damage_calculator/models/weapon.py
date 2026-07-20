@@ -16,8 +16,8 @@ class Weapon:
 
     def __init__(self, data: Mapping[str, JsonValue] | None = None) -> None:
         self.data = self.data_type(data or {})
-        self.mode = next(iter(self.data.entry.attacks.values()))
         self.build = Build()
+        self.mode = next(iter(self.data.entry.attacks.values()))
         self.evolutions: dict[str, int] = {}
         self.stats = self.calculator_type(self)
         self.format = self.formatter_type(self)
