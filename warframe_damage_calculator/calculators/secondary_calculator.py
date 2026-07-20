@@ -7,7 +7,8 @@ from .ranged_calculator import RangedCalculator
 class SecondaryCalculator(RangedCalculator):
     def _compute_modded_stats(self) -> None:
         super()._compute_modded_stats()
-        build = self.resolved_build.stats.total
+        build = self.build.stats.total
+        
         self.modded.secondary_enervate = clamp(build.secondary_enervate, 0, 6)
         self.modded.secondary_encumber = clamp(build.secondary_encumber, 0, 0.24)
 
@@ -20,14 +21,15 @@ class SecondaryCalculator(RangedCalculator):
         super()._compute_average_stats()
         secondary_enervate_bonus = self._average_secondary_enervate_bonus_for(self.modded.crit_chance * self.modded.multiplicative_crit_chance + self.modded.flat_crit_chance)
         weakpoint_secondary_enervate_bonus = self._average_secondary_enervate_bonus_for(self.modded.weakpoint_crit_chance * (self.modded.multiplicative_crit_chance + self.modded.multiplicative_weakpoint_crit_chance - 1) + self.modded.flat_crit_chance)
+        related_flat = sum(state.damage.total_damage() * state.multishot * state.faction_damage * (1 + state.crit_chance * (state.crit_damage - 1)) for state in self.related.values())
+        related_weakpoint = sum(state.damage.total_damage() * state.multishot * state.faction_damage * state.weakpoint_damage * (1 + state.weakpoint_crit_chance * (state.crit_damage - 1)) for state in self.related.values())
+
         self.average.secondary_enervate_bonus = secondary_enervate_bonus
         self.average.weakpoint_secondary_enervate_bonus = weakpoint_secondary_enervate_bonus
         self.average.crit_chance = self.effective.crit_chance + secondary_enervate_bonus
         self.average.weakpoint_crit_chance = self.effective.weakpoint_crit_chance + weakpoint_secondary_enervate_bonus
         self.average.crit_multiplier = 1 + self.average.crit_chance * (self.effective.crit_damage - 1)
         self.average.weakpoint_crit_multiplier = 1 + self.average.weakpoint_crit_chance * (self.effective.crit_damage - 1)
-        related_flat = sum(state.damage.total_damage() * state.multishot * state.faction_damage * (1 + state.crit_chance * (state.crit_damage - 1)) for state in self.related.values())
-        related_weakpoint = sum(state.damage.total_damage() * state.multishot * state.faction_damage * state.weakpoint_damage * (1 + state.weakpoint_crit_chance * (state.crit_damage - 1)) for state in self.related.values())
         self.average.flat_dph = self.effective.damage.total_damage() * self.effective.multishot * self.effective.faction_damage * self.average.crit_multiplier + related_flat
         self.average.flat_weakpoint_dph = self.effective.damage.total_damage() * self.effective.multishot * self.effective.weakpoint_damage * self.average.weakpoint_crit_multiplier * self.effective.faction_damage + related_weakpoint
         self.average.flat_dps = self.average.fire_rate * self.average.flat_dph

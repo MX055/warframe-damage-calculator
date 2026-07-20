@@ -9,7 +9,7 @@ from ..models.upgrade import Upgrade
 class WeaponCalculator:
     def __init__(self, weapon: Any) -> None:
         self.weapon = weapon
-        self.resolved_build = Build()
+        self.build = Build()
         self.base = CalculatedStats()
         self.modded = CalculatedStats()
         self.effective = CalculatedStats()
@@ -24,13 +24,14 @@ class WeaponCalculator:
         return float(condition_overload.value) * stacks * co_factor
 
     def _compute_modded_stats(self) -> None:
-        build = self.resolved_build.stats.total
+        build = self.build.stats.total
         damage = self.base.damage.apply(build.damage).combine().sorted()
-        co_bonus = self._condition_overload_bonus(build, damage, self.base.forced_procs, self.weapon.mode.stats.co_factor)
-        self.modded.multiplicative_base_damage = max(1 + build.multiplicative_base_damage + (co_bonus if self.weapon.mode.stats.co_effect == "multiplies" else 0), 1)
-        self.modded.base_damage = max(1 + build.base_damage + (co_bonus if self.weapon.mode.stats.co_effect != "multiplies" else 0), 0)
-        self.modded.damage = self.modded.base_damage * damage
         faction_damage = max(build.corpus_damage, build.grineer_damage, build.infested_damage, build.orokin_damage, build.murmur_damage, build.sentient_damage)
+        co_bonus = self._condition_overload_bonus(build, damage, self.base.forced_procs, self.weapon.mode.stats.co_factor)
+
+        self.modded.multiplicative_base_damage = max(1 + build.multiplicative_base_damage + (co_bonus if self.weapon.mode.stats.co_effect == "multiplies" else 0), 1)
+        self.modded.base_damage = max(1 + build.base_damage + (co_bonus if self.weapon.mode.stats.co_effect == "adds" else 0), 0)
+        self.modded.damage = self.modded.base_damage * damage
         self.modded.faction_damage = max(1 + faction_damage, 1)
         self.modded.flat_crit_chance = max(build.flat_crit_chance, 0)
         self.modded.multiplicative_crit_chance = max(1 + build.multiplicative_crit_chance, 1)
@@ -71,7 +72,7 @@ class WeaponCalculator:
             )
             for evolution, perk in self.weapon.evolutions.items()
         )
-        self.resolved_build = Build(*self.weapon.build, *evolutions)
+        self.build = Build(*self.weapon.build, *evolutions)
         entry = self.weapon.data.entry
         context = {
             "name": self.weapon.data.name,
@@ -81,7 +82,7 @@ class WeaponCalculator:
             "projectile": self.weapon.mode.get("delivery"),
             "aoe": self.weapon.mode.get("aoe", False),
         }
-        self.resolved_build.stats.resolve({"context": context})
+        self.build.stats.resolve({"context": context})
         self._compute_modded_stats()
         self._compute_effective_stats()
         self._compute_average_stats()
