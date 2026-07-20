@@ -7,7 +7,7 @@ from .weapon_calculator import AttackBucket
 class PrimaryCalculator(RangedCalculator):
     def _compute_modded_stats(self, bucket: AttackBucket) -> None:
         super()._compute_modded_stats(bucket)
-        build, modded = bucket.build.stats.total, bucket.modded
+        build, modded = bucket.build, bucket.modded
 
         modded.hunter_munitions = clamp(build.hunter_munitions, 0, 0.3)
         modded.primed_chamber = clamp(build.primed_chamber, 0, 1.4)

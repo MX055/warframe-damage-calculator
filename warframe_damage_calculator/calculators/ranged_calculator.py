@@ -1,11 +1,11 @@
-from .weapon_calculator import AttackBucket, WeaponCalculator
 from ..utils.functions import clamp, true_round
+from .weapon_calculator import AttackBucket, WeaponCalculator
 
 
 class RangedCalculator(WeaponCalculator):
     def _compute_modded_stats(self, bucket: AttackBucket) -> None:
         super()._compute_modded_stats(bucket)
-        build, base, modded = bucket.build.stats.total, bucket.base, bucket.modded
+        build, base, modded = bucket.build, bucket.base, bucket.modded
 
         modded.weakpoint_damage = max(base.weakpoint_damage + build.weakpoint_damage, 1)
         modded.multiplicative_fire_rate = 1 if build.fire_rate_lock else max(1 + build.multiplicative_fire_rate, 1)
@@ -26,7 +26,7 @@ class RangedCalculator(WeaponCalculator):
         super()._compute_effective_stats(bucket)
         modded, effective = bucket.modded, bucket.effective
         is_battery = "recharge_delay" in self.weapon.data.entry.ammo
-        is_beam = any(attack.get("delivery") == "beam" for attack in self.weapon.data.entry.attacks.values())
+        is_beam = bucket.attack.delivery == "beam"
 
         effective.weakpoint_damage = modded.weakpoint_damage
         effective.fire_rate = modded.fire_rate * modded.multiplicative_fire_rate
@@ -44,13 +44,12 @@ class RangedCalculator(WeaponCalculator):
     def _compute_average_stats(self, bucket: AttackBucket) -> None:
         super()._compute_average_stats(bucket)
         effective, average = bucket.effective, bucket.average
-        is_beam = any(attack.get("delivery") == "beam" for attack in self.weapon.data.entry.attacks.values())
 
         average.weakpoint_crit_chance = effective.weakpoint_crit_chance
-        average.fire_rate = self._attacks_per_second(bucket)
-        average.procs_per_shot = effective.status_chance * effective.multishot
         average.weakpoint_crit_multiplier = 1 + average.weakpoint_crit_chance * (effective.crit_damage - 1)
-        average.beam_dot_multiplier = effective.multishot if is_beam else 1
+        average.fire_rate = self._effective_fire_rate(bucket)
+        average.procs_per_shot = effective.status_chance * effective.multishot
+        average.beam_dot_multiplier = effective.multishot if bucket.attack.delivery == "beam" else 1
         average.flat_dph = effective.damage.total_damage() * effective.multishot * effective.faction_damage * average.crit_multiplier
         average.flat_weakpoint_dph = effective.damage.total_damage() * effective.multishot * effective.weakpoint_damage * average.weakpoint_crit_multiplier * effective.faction_damage
         average.flat_dps = average.fire_rate * average.flat_dph

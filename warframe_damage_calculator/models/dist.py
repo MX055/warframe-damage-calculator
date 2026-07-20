@@ -6,8 +6,11 @@ from ..utils.types import DamageType, Number
 
 
 class Dist:
-    def __init__(self, data: Mapping[DamageType, Number] | Self | None = None) -> None:
-        self.data = dict(data.data if isinstance(data, Dist) else data or {})
+    def __init__(self, data: Mapping[DamageType, Number] | Self | None = None, /, **values: Number) -> None:
+        from .fields import DistData
+
+        self.data = DistData(data.data if isinstance(data, Dist) else data or {})
+        self.data.update(values)
 
     def __iter__(self) -> Iterator[tuple[DamageType, Number]]:
         return iter(self.data.items())

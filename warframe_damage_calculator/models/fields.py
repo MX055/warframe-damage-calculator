@@ -1,8 +1,27 @@
 from collections.abc import Mapping
 
-from ..utils.types import JsonValue, Number
+from ..utils.types import DamageType, JsonValue, Number
 from .data import Data
 from .dist import Dist
+
+
+class DistData(Data):
+    impact: Number
+    puncture: Number
+    slash: Number
+    blast: Number
+    corrosive: Number
+    gas: Number
+    magnetic: Number
+    radiation: Number
+    viral: Number
+    cold: Number
+    electricity: Number
+    heat: Number
+    toxin: Number
+    void: Number
+    tau: Number
+    true: Number
 
 
 # ========================================================================
@@ -184,8 +203,8 @@ class SecondaryData(RangedData):
 # ------------------------------------------------------------------------
 
 class CalculatedStats(Data):
-    damage: Dist
-    forced_procs: Dist
+    damage: Dist = Dist()
+    forced_procs: Dist = Dist()
     multiplicative_base_damage: Number
     base_damage: Number
     faction_damage: Number

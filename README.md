@@ -365,14 +365,14 @@ weapon = Primary(
 weapon.set_mode("Projectile")
 
 print(weapon.stats.parent.effective.damage)
-print(weapon.stats.related[0].damage)
+print(weapon.stats.parent.children[0].effective.damage)
 print(weapon.stats.average.total_dps)
 ```
 
 For ranged weapons, selected attacks may name child attacks through `children`.
-Their direct and DoT contributions are calculated automatically and exposed in
-`weapon.stats.related` and `weapon.stats.related_base`. Both are ordered lists;
-the corresponding display labels are available through `weapon.stats.related_names`.
+Their complete calculations are exposed through
+`weapon.stats.parent.children`, including each child's name, base, modded,
+effective, average, and descendant states.
 
 ### Constructing a melee weapon
 
@@ -854,9 +854,7 @@ Each weapon exposes:
 | `weapon.stats.average` | Combined parent-and-descendant DPH, DoT, and DPS using the parent's attack rate. |
 
 Each item in `weapon.stats.parent.children` is calculated through the same
-base, modded, effective, and average pipeline. The existing
-`weapon.stats.related_base` and `weapon.stats.related` lists remain available
-for direct child attacks, in the same order as `weapon.stats.parent.children`.
+base, modded, effective, and average pipeline.
 
 ```python
 average = weapon.stats.average

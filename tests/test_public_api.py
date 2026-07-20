@@ -1,10 +1,13 @@
 import unittest
+from types import MappingProxyType
 from typing import get_args
 
 from warframe_damage_calculator import Build, Primary, Upgrade, Weapon, arsenal
+from warframe_damage_calculator.calculators.weapon_calculator import AttackBucket
 from warframe_damage_calculator.loader.bundled_names import MeleeName, PrimaryName, SecondaryName, UpgradeName
 from warframe_damage_calculator.models.data import Data
-from warframe_damage_calculator.models.fields import Attack, Attacks, Evolutions
+from warframe_damage_calculator.models.dist import Dist
+from warframe_damage_calculator.models.fields import Attack, Attacks, CalculatedStats, DistData, Evolutions, ResolvedStat
 
 
 def galvanized_build() -> Build:
@@ -14,12 +17,93 @@ def galvanized_build() -> Build:
     )
 
 
+class DataDefaults(Data):
+    children: list[Data] = []
+    stats: CalculatedStats = CalculatedStats()
+    label: str = "base"
+
+
+class OverriddenDataDefaults(DataDefaults):
+    children: list[Data] = [Data({"source": "override"})]
+    label: str = "child"
+
+
 class PublicApiTests(unittest.TestCase):
+    def test_data_accepts_generic_mappings_keywords_and_converts_assignments(self):
+        source = MappingProxyType({"nested": {"value": 1}})
+        data = Data(source, extra={"value": 2})
+
+        self.assertIsInstance(data.nested, Data)
+        self.assertIsInstance(data.extra, Data)
+        self.assertIs(type(data.nested), Data)
+        self.assertIs(type(data.extra), Data)
+        data["item"] = {"value": 3}
+        data.attribute = {"value": 4}
+        self.assertIs(type(data.item), Data)
+        self.assertIs(type(data.attribute), Data)
+
+    def test_data_preserves_existing_subclasses_and_concrete_copy_type(self):
+        stats = CalculatedStats()
+        wrapped = Data({"stats": stats})
+        original = OverriddenDataDefaults()
+        copied = original.copy()
+
+        self.assertIs(wrapped.stats, stats)
+        self.assertIs(type(copied), OverriddenDataDefaults)
+        self.assertIsNot(copied.children, original.children)
+        self.assertIsNot(copied.children[0], original.children[0])
+        self.assertIsNot(copied.stats, original.stats)
+
+    def test_distribution_fields_use_dist_data(self):
+        attack = Attack({"stats": {"damage": {"impact": 10}, "forced_procs": {"slash": 1}}})
+        resolved = ResolvedStat()
+
+        for distribution in (attack.stats.damage, attack.stats.forced_procs, CalculatedStats().damage, resolved.damage):
+            self.assertIs(type(distribution), Dist)
+            self.assertIs(type(distribution.data), DistData)
+
+    def test_mutable_inherited_and_overridden_defaults_are_independent(self):
+        first = OverriddenDataDefaults()
+        second = OverriddenDataDefaults()
+
+        first.children.append(Data({"source": "first"}))
+        first.stats.damage = Dist(impact=100)
+        self.assertEqual(first.label, "child")
+        self.assertEqual(second.label, "child")
+        self.assertEqual(len(second.children), 1)
+        self.assertNotEqual(second.stats.damage, first.stats.damage)
+        self.assertIsNot(first.children, second.children)
+        self.assertIsNot(first.children[0], second.children[0])
+        self.assertIsNot(first.stats, second.stats)
+
+    def test_data_satisfies_mutable_mapping_deletion_iteration_and_length(self):
+        data = Data({"first": 1, "second": 2})
+
+        self.assertEqual(len(data), 2)
+        self.assertEqual(list(iter(data)), ["first", "second"])
+        del data["first"]
+        self.assertEqual(len(data), 1)
+        self.assertNotIn("first", data)
+
+    def test_attack_bucket_defaults_and_copy_are_independent(self):
+        first = AttackBucket()
+        second = AttackBucket()
+
+        first.children.append(AttackBucket())
+        first.base.damage = Dist(impact=100)
+        copied = first.copy()
+        self.assertEqual(second.children, [])
+        self.assertNotEqual(second.base.damage, first.base.damage)
+        self.assertIsInstance(first.build, ResolvedStat)
+        self.assertIs(type(copied), AttackBucket)
+        self.assertIsNot(copied.children, first.children)
+        self.assertIsNot(copied.children[0], first.children[0])
+
     def test_generic_weapon_uses_the_shared_calculation_pipeline(self):
         weapon = Weapon({"Test Weapon": {"type": "test", "attacks": {"normal": {"stats": {"damage": {"impact": 10}}}}}})
 
         self.assertEqual(weapon.stats.parent.effective.damage.total_damage(), 10)
-        self.assertEqual(weapon.stats.related, [])
+        self.assertEqual(weapon.stats.parent.children, [])
 
     def test_data_mapping_views_match_explicit_values(self):
         data = Data({"first": 1})
@@ -69,6 +153,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertIsInstance(weapon.data.entry.attacks, Attacks)
         self.assertTrue(all(isinstance(attack, Attack) for attack in weapon.data.entry.attacks.values()))
         self.assertFalse(hasattr(weapon, "context"))
+        self.assertFalse(hasattr(weapon, "mode_name"))
         self.assertTrue(hasattr(weapon, "stats"))
         self.assertFalse(hasattr(weapon, "attacks"))
         for attribute in ("base", "modded", "effective"):
@@ -88,8 +173,8 @@ class PublicApiTests(unittest.TestCase):
         self.assertIs(weapon.set_mode("Air Burst Projectile"), weapon)
         self.assertEqual(weapon.mode.children, ["air_burst_explosion"])
         self.assertEqual(weapon.stats.parent.base.damage.total_damage(), 100)
-        self.assertEqual(weapon.stats.related[0].damage.total_damage(), 2200)
-        self.assertEqual(weapon.stats.related_names, ["Air Burst Explosion"])
+        self.assertEqual(weapon.stats.parent.children[0].effective.damage.total_damage(), 2200)
+        self.assertEqual(weapon.stats.parent.children[0].name, "air_burst_explosion")
 
     def test_mode_specific_stats_and_global_ranged_stats(self):
         weapon = arsenal.get("Corinth Prime").set_mode("Buckshot")
@@ -114,8 +199,8 @@ class PublicApiTests(unittest.TestCase):
         related.stats.fire_rate = 2
 
         self.assertNotEqual(
-            weapon.stats._attacks_per_second(weapon.stats.parent),
-            weapon.stats._attacks_per_second(weapon.stats.parent.children[0]),
+            weapon.stats._effective_fire_rate(weapon.stats.parent),
+            weapon.stats._effective_fire_rate(weapon.stats.parent.children[0]),
         )
 
     def test_selected_and_child_attacks_use_independent_buckets(self):
@@ -126,8 +211,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertIs(parent.attack, weapon.mode)
         self.assertIsNot(parent.average, weapon.stats.average)
         self.assertIs(child.attack, weapon.data.entry.attacks.air_burst_explosion)
-        self.assertIs(child.base, weapon.stats.related_base[0])
-        self.assertIs(child.effective, weapon.stats.related[0])
+        self.assertEqual(child.name, "air_burst_explosion")
         self.assertNotEqual(parent.base.damage, child.base.damage)
         self.assertIsNot(parent.average, child.average)
 
@@ -136,9 +220,9 @@ class PublicApiTests(unittest.TestCase):
             "type": "primary",
             "ammo": {"magazine_size": 10, "reload_time": 1},
             "attacks": {
-                "parent": {"children": ["child"], "stats": {"damage": {"impact": 10}, "fire_rate": 2}},
-                "child": {"children": ["grandchild"], "stats": {"damage": {"impact": 20}, "fire_rate": 5, "crit_chance": 0.5, "crit_damage": 2}},
-                "grandchild": {"stats": {"damage": {"impact": 30}, "fire_rate": 9, "status_chance": 0.75}},
+                "parent": {"children": ["child"], "stats": {"damage": {"slash": 10}, "fire_rate": 2}},
+                "child": {"children": ["grandchild"], "stats": {"damage": {"slash": 20}, "fire_rate": 5, "crit_chance": 0.5, "crit_damage": 2, "status_chance": 0.5}},
+                "grandchild": {"stats": {"damage": {"slash": 30}, "fire_rate": 9, "status_chance": 0.75}},
             },
         }})
         parent = weapon.stats.parent
@@ -151,9 +235,40 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(weapon.stats.average.flat_dph, expected_dph)
         self.assertAlmostEqual(
             weapon.stats.average.flat_dps,
-            weapon.stats._attacks_per_second(parent) * expected_dph,
+            weapon.stats._effective_fire_rate(parent) * expected_dph,
         )
         self.assertNotEqual(weapon.stats.average.flat_dps, sum(bucket.average.flat_dps for bucket in (parent, child, grandchild)))
+        expected_dotph = sum(bucket.average.flat_dotph for bucket in (parent, child, grandchild))
+        self.assertGreater(expected_dotph, 0)
+        self.assertAlmostEqual(weapon.stats.average.flat_dotph, expected_dotph)
+        self.assertAlmostEqual(weapon.stats.average.total_dph, expected_dph + expected_dotph)
+        self.assertAlmostEqual(weapon.stats.average.flat_dotps, weapon.stats._effective_fire_rate(parent) * expected_dotph)
+
+    def test_attack_relationship_cycles_are_detected_by_name(self):
+        with self.assertRaisesRegex(ValueError, "cyclic attack relationship detected: parent"):
+            Primary({"Cycle": {
+                "type": "primary",
+                "attacks": {
+                    "parent": {"children": ["child"], "stats": {"damage": {"impact": 10}}},
+                    "child": {"children": ["parent"], "stats": {"damage": {"impact": 20}}},
+                },
+            }})
+
+    def test_beam_behavior_is_local_to_each_attack_bucket(self):
+        weapon = Primary({"Mixed Delivery": {
+            "type": "primary",
+            "attacks": {
+                "parent": {"delivery": "hitscan", "children": ["child"], "stats": {"damage": {"impact": 10}, "multishot": 2}},
+                "child": {"delivery": "beam", "stats": {"damage": {"heat": 20}, "multishot": 3}},
+            },
+        }})
+        parent = weapon.stats.parent
+        child = parent.children[0]
+
+        self.assertEqual(parent.average.beam_dot_multiplier, 1)
+        self.assertEqual(child.average.beam_dot_multiplier, child.effective.multishot)
+        self.assertEqual(parent.effective.ammo_efficiency, 0)
+        self.assertEqual(child.effective.ammo_efficiency, 0.5)
 
     def test_multiple_child_attacks_are_combined_once(self):
         weapon = Primary({"Multiple Children": {
@@ -171,8 +286,7 @@ class PublicApiTests(unittest.TestCase):
     def test_melee_weapons_include_related_attacks(self):
         weapon = arsenal.get("Ceramic Dagger").set_mode("Spectral Dagger")
 
-        self.assertEqual(weapon.stats.related_names, ["Spectral Dagger Explosion"])
-        self.assertIs(weapon.stats.related[0], weapon.stats.parent.children[0].effective)
+        self.assertEqual(weapon.stats.parent.children[0].name, "spectral_dagger_explosion")
         self.assertGreater(weapon.stats.average.flat_dph, weapon.stats.parent.effective.damage.total_damage())
 
     def test_melee_duplicate_increases_condition_overload_status_acquisition(self):

@@ -7,7 +7,7 @@ from .weapon_calculator import AttackBucket
 class SecondaryCalculator(RangedCalculator):
     def _compute_modded_stats(self, bucket: AttackBucket) -> None:
         super()._compute_modded_stats(bucket)
-        build, modded = bucket.build.stats.total, bucket.modded
+        build, modded = bucket.build, bucket.modded
 
         modded.secondary_enervate = clamp(build.secondary_enervate, 0, 6)
         modded.secondary_encumber = clamp(build.secondary_encumber, 0, 0.24)

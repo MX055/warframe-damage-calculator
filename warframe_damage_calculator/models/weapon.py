@@ -30,7 +30,7 @@ class Weapon:
 
     def set_mode(self, name: str) -> Self:
         key = "_".join(name.casefold().replace("-", " ").split())
-        self.mode = self.data.entry.attacks.get(key)
+        self.mode = self.data.entry.attacks[key]
         self.stats.recompute()
         return self
 

@@ -5,7 +5,7 @@ from .weapon_calculator import AttackBucket, WeaponCalculator
 class MeleeCalculator(WeaponCalculator):
     def _compute_modded_stats(self, bucket: AttackBucket) -> None:
         super()._compute_modded_stats(bucket)
-        build, base, modded = bucket.build.stats.total, bucket.base, bucket.modded
+        build, base, modded = bucket.build, bucket.base, bucket.modded
 
         modded.attack_speed = max(base.attack_speed * (1 + build.attack_speed), 0)
         modded.melee_duplicate = clamp(build.melee_duplicate, 0, 1)

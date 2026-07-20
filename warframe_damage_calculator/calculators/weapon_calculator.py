@@ -1,9 +1,9 @@
-from dataclasses import dataclass, field
 from math import expm1, log1p
 from typing import TYPE_CHECKING
 
 from ..models.build import Build
-from ..models.fields import Attack, AverageStats, CalculatedStats
+from ..models.data import Data
+from ..models.fields import Attack, AverageStats, CalculatedStats, ResolvedStat
 from ..models.upgrade import Upgrade
 from ..utils.constants import DOT_MULTIPLIERS
 
@@ -11,20 +11,18 @@ if TYPE_CHECKING:
     from ..models.weapon import Weapon
 
 
-@dataclass
-class AttackBucket:
-    attack: Attack
-    build: Build = field(default_factory=Build)
-    base: CalculatedStats = field(default_factory=CalculatedStats)
-    modded: CalculatedStats = field(default_factory=CalculatedStats)
-    effective: CalculatedStats = field(default_factory=CalculatedStats)
-    average: AverageStats = field(default_factory=AverageStats)
-    children: list[AttackBucket] = field(default_factory=list)
+class AttackBucket(Data):
+    name: str = ""
+    attack: Attack = Attack()
+    build: ResolvedStat = ResolvedStat()
+    base: CalculatedStats = CalculatedStats()
+    modded: CalculatedStats = CalculatedStats()
+    effective: CalculatedStats = CalculatedStats()
+    average: AverageStats = AverageStats()
+    children: list["AttackBucket"] = []
 
 
 class WeaponCalculator:
-    _DAMAGE_PER_HIT_FIELDS = ("flat_dph", "flat_weakpoint_dph", "flat_dotph", "flat_weakpoint_dotph", "total_dph", "total_weakpoint_dph")
-
     def __init__(self, weapon: "Weapon") -> None:
         self.weapon = weapon
         self.recompute()
@@ -36,7 +34,7 @@ class WeaponCalculator:
         bucket.base = CalculatedStats(self.weapon.mode_stats_type(stats).with_defaults())
 
     def _compute_modded_stats(self, bucket: AttackBucket) -> None:
-        build, base, modded = bucket.build.stats.total, bucket.base, bucket.modded
+        build, base, modded = bucket.build, bucket.base, bucket.modded
         damage = base.damage.apply(build.damage).combine().sorted()
         faction_damage = max(build.corpus_damage, build.grineer_damage, build.infested_damage, build.orokin_damage, build.murmur_damage, build.sentient_damage)
 
@@ -69,7 +67,7 @@ class WeaponCalculator:
         average.crit_multiplier = 1 + average.crit_chance * (effective.crit_damage - 1)
 
     def _average_condition_overload_bonus(self, bucket: AttackBucket) -> float:
-        build, stats = bucket.build.stats.total, bucket.attack.stats
+        build, stats = bucket.build, bucket.attack.stats
         damage = stats.damage.apply(build.damage).combine().sorted()
         guaranteed, fractional = divmod(max(stats.status_chance * (1 + build.status_chance), 0), 1)
         guaranteed_hits, fractional_hit = divmod(max(self._status_hits(bucket), 0), 1)
@@ -82,7 +80,7 @@ class WeaponCalculator:
 
         condition_overload = build.condition_overload
         maximum = len(probabilities) if condition_overload.max_stacks == "inf" else int(condition_overload.max_stacks)
-        attack_rate = self._attacks_per_second(bucket)
+        attack_rate = self._effective_fire_rate(bucket)
         if maximum <= 0 or attack_rate <= 0:
             return 0.0
         attempts, distribution = attack_rate * 5, [1.0] + [0.0] * maximum
@@ -97,29 +95,26 @@ class WeaponCalculator:
         return float(condition_overload.value) * stats.co_factor * expected
 
     def _status_hits(self, bucket: AttackBucket) -> float:
-        hits = max(bucket.modded.get("multishot", bucket.attack.stats.multishot), 1)
-        duplicate = bucket.modded.get("melee_duplicate", 0)
-        return hits + duplicate * max(0, 1 - abs(self._crit_chance(bucket) - 1))
+        build, stats, modded = bucket.build, bucket.attack.stats, bucket.modded
+        hits = max(modded.get("multishot", stats.multishot), 1)
+        duplicate = modded.get("melee_duplicate", 0)
+        crit_chance = max(stats.crit_chance * (1 + build.crit_chance) * modded.multiplicative_crit_chance + modded.flat_crit_chance, 0)
+        return hits + duplicate * max(0, 1 - abs(crit_chance - 1))
 
-    @staticmethod
-    def _crit_chance(bucket: AttackBucket) -> float:
-        build, stats, modded = bucket.build.stats.total, bucket.attack.stats, bucket.modded
-        return max(stats.crit_chance * (1 + build.crit_chance) * modded.multiplicative_crit_chance + modded.flat_crit_chance, 0)
-
-    def _attacks_per_second(self, bucket: AttackBucket) -> float:
+    def _effective_fire_rate(self, bucket: AttackBucket) -> float:
         stats, base, modded = bucket.attack.stats, bucket.base, bucket.modded
         if "attack_speed" in modded:
             return max(stats.fire_rate * modded.attack_speed / (base.attack_speed or 1), 0)
         if "magazine_capacity" not in modded:
             return max(stats.fire_rate, 0)
 
-        build = bucket.build.stats.total
+        build = bucket.build
         speed = 1 if build.fire_rate_lock else max(1 + build.fire_rate, 0.01)
         fire_rate = max(stats.fire_rate * speed, 0.05) * modded.multiplicative_fire_rate
         burst_count = max(stats.burst_count, 1)
         bursts = modded.magazine_capacity / burst_count
         is_battery = "recharge_delay" in self.weapon.data.entry.ammo
-        is_beam = any(attack.get("delivery") == "beam" for attack in self.weapon.data.entry.attacks.values())
+        is_beam = bucket.attack.delivery == "beam"
         reload_speed = modded.reload_speed + (0 if not is_battery else float("inf") if modded.recharge_rate <= 0 else modded.magazine_capacity / modded.recharge_rate)
         ammo_efficiency = 1 - (1 - modded.ammo_efficiency) / (2 if is_beam else 1)
         ammo_spent = 1 - ammo_efficiency
@@ -137,86 +132,64 @@ class WeaponCalculator:
         hits = effective.get("multishot", self._status_hits(bucket)) * average.get("beam_dot_multiplier", 1)
         return (regular + forced) * effective.status_damage * effective.faction_damage ** 2 * crit_multiplier * hits
 
-    def _resolved_build(self, attack: Attack) -> Build:
+    def _compute_attack(self, name: str, attack: Attack, ancestors: frozenset[str] | None = None) -> AttackBucket:
+        ancestors = frozenset() if ancestors is None else ancestors
+        if name in ancestors:
+            raise ValueError(f"cyclic attack relationship detected: {name}")
+
         evolutions = (Upgrade({f"{tier} perk {perk}": {"type": "evolution", "max_rank": 0, "compatibility": {"types": []}, "stats": self.weapon.data.entry.evolutions[tier.removeprefix("evolution_")][str(perk)].get("stats", {})}}) for tier, perk in self.weapon.evolutions.items())
         build = Build(*self.weapon.build, *evolutions)
         entry = self.weapon.data.entry
-        build.stats.resolve({"context": {"name": self.weapon.data.name, "type": entry.type, "subtype": entry.subtype, "trigger": attack.get("trigger"), "projectile": attack.get("delivery"), "aoe": attack.get("aoe", False)}})
-        return build
+        build.stats.resolve({"context": {"name": self.weapon.data.name, "type": entry.type, "subtype": entry.subtype, "trigger": attack.trigger, "projectile": attack.delivery, "aoe": attack.aoe}})
 
-    def _apply_condition_overload(self, bucket: AttackBucket) -> None:
+        bucket = AttackBucket(name=name, attack=attack, build=build.stats.total.copy())
+        self._compute_base_stats(bucket)
+        self._compute_modded_stats(bucket)
+
         bonus = self._average_condition_overload_bonus(bucket)
         if bucket.attack.stats.co_effect == "multiplies":
             bucket.modded.multiplicative_base_damage = max(bucket.modded.multiplicative_base_damage + bonus, 1)
         else:
             bucket.modded.base_damage = max(bucket.modded.base_damage + bonus, 0)
-        damage = bucket.base.damage.apply(bucket.build.stats.total.damage).combine().sorted()
+        damage = bucket.base.damage.apply(bucket.build.damage).combine().sorted()
         bucket.modded.damage = bucket.modded.base_damage * damage
 
-    def _get_child_attacks(self, bucket: AttackBucket) -> list[Attack]:
-        attacks = self.weapon.data.entry.attacks
-        return [attacks[name] for name in bucket.attack.children if name in attacks]
-
-    def _compute_attack(self, attack: Attack, ancestors: set[int] | None = None) -> AttackBucket:
-        ancestors = ancestors or set()
-        if id(attack) in ancestors:
-            raise ValueError("attack children cannot contain a cycle")
-
-        bucket = AttackBucket(attack)
-        bucket.build = self._resolved_build(attack)
-        self._compute_base_stats(bucket)
-        self._compute_modded_stats(bucket)
-        self._apply_condition_overload(bucket)
         self._compute_effective_stats(bucket)
         self._compute_average_stats(bucket)
-        bucket.children = [self._compute_attack(child, ancestors | {id(attack)}) for child in self._get_child_attacks(bucket)]
+
+        attacks = self.weapon.data.entry.attacks
+        next_ancestors = ancestors | {name}
+        bucket.children = [self._compute_attack(child, attacks[child], next_ancestors) for child in bucket.attack.children if child in attacks]
         return bucket
 
-    @staticmethod
-    def _descendants(bucket: AttackBucket) -> list[AttackBucket]:
-        descendants = [bucket]
-        for child in bucket.children:
-            descendants.extend(WeaponCalculator._descendants(child))
-        return descendants
-
-    def _combine_average_stats(self, parent: AttackBucket) -> AverageStats:
-        combined = parent.average.copy()
-        buckets = self._descendants(parent)
-        for field_name in self._DAMAGE_PER_HIT_FIELDS:
-            if any(field_name in bucket.average for bucket in buckets):
-                combined[field_name] = sum(bucket.average.get(field_name, 0) for bucket in buckets)
-
-        attack_rate = self._attacks_per_second(parent)
-        for dph_name, dps_name in (
-            ("flat_dph", "flat_dps"),
-            ("flat_weakpoint_dph", "flat_weakpoint_dps"),
-            ("flat_dotph", "flat_dotps"),
-            ("flat_weakpoint_dotph", "flat_weakpoint_dotps"),
-            ("total_dph", "total_dps"),
-            ("total_weakpoint_dph", "total_weakpoint_dps"),
-        ):
-            if dph_name in combined:
-                combined[dps_name] = attack_rate * combined[dph_name]
-        return combined
-
-    def _named_children(self, bucket: AttackBucket) -> dict[str, AttackBucket]:
-        children = {id(child.attack): child for child in bucket.children}
-        named: dict[str, AttackBucket] = {}
-        for name in bucket.attack.children:
-            attack = self.weapon.data.entry.attacks.get(name)
-            child = None if attack is None else children.get(id(attack))
-            if child is not None:
-                named[name.replace("_", " ").title()] = child
-        return named
-
     def recompute(self) -> None:
-        self.parent = self._compute_attack(self.weapon.mode)
-        self.build = self.parent.build
-        self.average = self._combine_average_stats(self.parent)
-        named_children = self._named_children(self.parent)
-        self.related_names = list(named_children)
-        self.related_base = [bucket.base for bucket in named_children.values()]
-        self.related = [bucket.effective for bucket in named_children.values()]
+        name = next(name for name, attack in self.weapon.data.entry.attacks.items() if attack is self.weapon.mode)
+        self.parent = self._compute_attack(name, self.weapon.mode)
+
+        def attacks(bucket: AttackBucket):
+            yield bucket
+            for child in bucket.children:
+                yield from attacks(child)
+
+        buckets = list(attacks(self.parent))
+        combined = self.parent.average.copy()
+        combined.flat_dph = sum(bucket.average.get("flat_dph", 0) for bucket in buckets)
+        combined.flat_dotph = sum(bucket.average.get("flat_dotph", 0) for bucket in buckets)
+        combined.total_dph = combined.flat_dph + combined.flat_dotph
+
+        attack_rate = self._effective_fire_rate(self.parent)
+        combined.flat_dps = combined.flat_dph * attack_rate
+        combined.flat_dotps = combined.flat_dotph * attack_rate
+        combined.total_dps = combined.total_dph * attack_rate
+
+        if any("flat_weakpoint_dph" in bucket.average for bucket in buckets):
+            combined.flat_weakpoint_dph = sum(bucket.average.get("flat_weakpoint_dph", 0) for bucket in buckets)
+            combined.flat_weakpoint_dotph = sum(bucket.average.get("flat_weakpoint_dotph", 0) for bucket in buckets)
+            combined.total_weakpoint_dph = combined.flat_weakpoint_dph + combined.flat_weakpoint_dotph
+            combined.flat_weakpoint_dps = combined.flat_weakpoint_dph * attack_rate
+            combined.flat_weakpoint_dotps = combined.flat_weakpoint_dotph * attack_rate
+            combined.total_weakpoint_dps = combined.total_weakpoint_dph * attack_rate
+        self.average = combined
 
     def contribution(self, upgrade: Upgrade) -> float:
         full = self.weapon.build
