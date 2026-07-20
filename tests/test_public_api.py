@@ -135,6 +135,15 @@ class PublicApiTests(unittest.TestCase):
         self.assertFalse(hasattr(build, "data"))
         self.assertTrue(build.upgrades)
 
+    def test_upgrade_copy_preserves_runtime_without_sharing_data(self):
+        upgrade = arsenal.get("Galvanized Chamber", context={"stacks": 3})
+        copied = upgrade.copy()
+
+        self.assertEqual(copied.data.runtime.stacks, 3)
+        self.assertIsNot(copied.data.entry, upgrade.data.entry)
+        copied.data.entry.stats.multishot = 99
+        self.assertNotEqual(copied.data.entry.stats.multishot, upgrade.data.entry.stats.multishot)
+
     def test_configure_and_set_mode_are_order_independent(self):
         build = galvanized_build()
         first = arsenal.get("Corinth Prime").configure(build).set_mode("Air Burst Projectile")

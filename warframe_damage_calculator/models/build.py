@@ -7,11 +7,11 @@ from .upgrade import Upgrade
 
 class Build:
     def __init__(self, *upgrades: Upgrade) -> None:
-        self.upgrades = [self._copy_upgrade(upgrade) for upgrade in upgrades]
+        self.upgrades = [upgrade.copy() for upgrade in upgrades]
         self.stats = BuildCalculator(self)
 
     def __iter__(self) -> Iterator[Upgrade]:
-        return (self._copy_upgrade(upgrade) for upgrade in self.upgrades)
+        return (upgrade.copy() for upgrade in self.upgrades)
 
     def __len__(self) -> int:
         return len(self.upgrades)
@@ -29,10 +29,3 @@ class Build:
     
     def copy(self) -> Self:
         return type(self)(*self)
-
-    @staticmethod
-    def _copy_upgrade(upgrade: Upgrade) -> Upgrade:
-        copied = Upgrade(upgrade.data)
-        copied.data.runtime.update(upgrade.data.runtime.with_defaults())
-        copied.stats.resolve()
-        return copied
