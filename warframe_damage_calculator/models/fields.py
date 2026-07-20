@@ -1,6 +1,6 @@
 from collections.abc import Mapping
 
-from ..utils.types import DamageType, JsonValue, Number
+from ..utils.types import JsonValue, Number
 from .data import Data
 from .dist import Dist
 
@@ -435,7 +435,6 @@ class ResolvedStat(Data):
 
 
 class AttackBucket(Data):
-    name: str = ""
     attack: Attack = Attack()
     build: ResolvedStat = ResolvedStat()
     base: CalculatedStats = CalculatedStats()

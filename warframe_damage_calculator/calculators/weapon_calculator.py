@@ -127,7 +127,7 @@ class WeaponCalculator:
         entry = self.weapon.data.entry
         build.stats.resolve({"context": {"name": self.weapon.data.name, "type": entry.type, "subtype": entry.subtype, "trigger": attack.trigger, "projectile": attack.delivery, "aoe": attack.aoe}})
 
-        bucket = AttackBucket(name=name, attack=attack, build=build.stats.total.copy())
+        bucket = AttackBucket(attack=attack, build=build.stats.total.copy())
         self._compute_base_stats(bucket)
         self._compute_modded_stats(bucket)
 
@@ -150,6 +150,7 @@ class WeaponCalculator:
     def recompute(self) -> None:
         name = next(name for name, attack in self.weapon.data.entry.attacks.items() if attack is self.weapon.mode)
         self.parent = self._compute_attack(name, self.weapon.mode)
+        self.child = self.parent.children
 
         def attacks(bucket: AttackBucket):
             yield bucket

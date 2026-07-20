@@ -365,13 +365,13 @@ weapon = Primary(
 weapon.set_mode("Projectile")
 
 print(weapon.stats.parent.effective.damage)
-print(weapon.stats.parent.children[0].effective.damage)
+print(weapon.stats.child[0].effective.damage)
 print(weapon.stats.average.total_dps)
 ```
 
 For ranged weapons, selected attacks may name child attacks through `children`.
 Their complete calculations are exposed through
-`weapon.stats.parent.children`, including each child's name, base, modded,
+`weapon.stats.child`, including each child's base, modded,
 effective, average, and descendant states.
 
 ### Constructing a melee weapon
@@ -846,14 +846,15 @@ Each weapon exposes:
 
 | Bucket | Description |
 |---|---|
-| `weapon.stats.parent` | Complete calculation bucket for the selected attack, including recursive `children`. |
+| `weapon.stats.parent` | Complete calculation bucket for the selected attack. |
 | `weapon.stats.parent.base` | Dense normalized stats for the selected attack. |
 | `weapon.stats.parent.modded` | Intermediate additive, multiplicative, and locked values. |
 | `weapon.stats.parent.effective` | Final stats used by expected-value calculations. |
 | `weapon.stats.parent.average` | Expected values for the selected attack by itself. |
+| `weapon.stats.child` | Related attack buckets calculated with the selected attack. |
 | `weapon.stats.average` | Combined parent-and-descendant DPH, DoT, and DPS using the parent's attack rate. |
 
-Each item in `weapon.stats.parent.children` is calculated through the same
+Each item in `weapon.stats.child` is calculated through the same
 base, modded, effective, and average pipeline.
 
 ```python

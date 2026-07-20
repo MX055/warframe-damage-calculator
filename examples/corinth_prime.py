@@ -18,6 +18,7 @@ def main() -> None:
     weapon.configure(build)
 
     print(weapon.format.summary())
+    print(weapon.stats.parent)
     
 
 if __name__ == "__main__":

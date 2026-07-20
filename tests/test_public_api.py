@@ -102,7 +102,7 @@ class PublicApiTests(unittest.TestCase):
         weapon = Weapon({"Test Weapon": {"type": "test", "attacks": {"normal": {"stats": {"damage": {"impact": 10}}}}}})
 
         self.assertEqual(weapon.stats.parent.effective.damage.total_damage(), 10)
-        self.assertEqual(weapon.stats.parent.children, [])
+        self.assertEqual(weapon.stats.child, [])
 
     def test_data_mapping_views_match_explicit_values(self):
         data = Data({"first": 1})
@@ -172,8 +172,8 @@ class PublicApiTests(unittest.TestCase):
         self.assertIs(weapon.set_mode("Air Burst Projectile"), weapon)
         self.assertEqual(weapon.mode.children, ["air_burst_explosion"])
         self.assertEqual(weapon.stats.parent.base.damage.total_damage(), 100)
-        self.assertEqual(weapon.stats.parent.children[0].effective.damage.total_damage(), 2200)
-        self.assertEqual(weapon.stats.parent.children[0].name, "air_burst_explosion")
+        self.assertEqual(weapon.stats.child[0].effective.damage.total_damage(), 2200)
+        self.assertIs(weapon.stats.child[0].attack, weapon.data.entry.attacks.air_burst_explosion)
 
     def test_mode_specific_stats_and_global_ranged_stats(self):
         weapon = arsenal.get("Corinth Prime").set_mode("Buckshot")
@@ -199,18 +199,17 @@ class PublicApiTests(unittest.TestCase):
 
         self.assertNotEqual(
             weapon.stats._effective_fire_rate(weapon.stats.parent),
-            weapon.stats._effective_fire_rate(weapon.stats.parent.children[0]),
+            weapon.stats._effective_fire_rate(weapon.stats.child[0]),
         )
 
     def test_selected_and_child_attacks_use_independent_buckets(self):
         weapon = arsenal.get("Corinth Prime").set_mode("Air Burst Projectile")
         parent = weapon.stats.parent
-        child = parent.children[0]
+        child = weapon.stats.child[0]
 
         self.assertIs(parent.attack, weapon.mode)
         self.assertIsNot(parent.average, weapon.stats.average)
         self.assertIs(child.attack, weapon.data.entry.attacks.air_burst_explosion)
-        self.assertEqual(child.name, "air_burst_explosion")
         self.assertNotEqual(parent.base.damage, child.base.damage)
         self.assertIsNot(parent.average, child.average)
 
@@ -225,7 +224,7 @@ class PublicApiTests(unittest.TestCase):
             },
         }})
         parent = weapon.stats.parent
-        child = parent.children[0]
+        child = weapon.stats.child[0]
         grandchild = child.children[0]
 
         self.assertNotEqual(parent.effective.crit_chance, child.effective.crit_chance)
@@ -262,7 +261,7 @@ class PublicApiTests(unittest.TestCase):
             },
         }})
         parent = weapon.stats.parent
-        child = parent.children[0]
+        child = weapon.stats.child[0]
 
         self.assertEqual(parent.average.beam_dot_multiplier, 1)
         self.assertEqual(child.average.beam_dot_multiplier, child.effective.multishot)
@@ -279,13 +278,13 @@ class PublicApiTests(unittest.TestCase):
             },
         }})
 
-        self.assertEqual(len(weapon.stats.parent.children), 2)
+        self.assertEqual(len(weapon.stats.child), 2)
         self.assertAlmostEqual(weapon.stats.average.flat_dph, 60)
 
     def test_melee_weapons_include_related_attacks(self):
         weapon = arsenal.get("Ceramic Dagger").set_mode("Spectral Dagger")
 
-        self.assertEqual(weapon.stats.parent.children[0].name, "spectral_dagger_explosion")
+        self.assertIs(weapon.stats.child[0].attack, weapon.data.entry.attacks.spectral_dagger_explosion)
         self.assertGreater(weapon.stats.average.flat_dph, weapon.stats.parent.effective.damage.total_damage())
 
     def test_melee_duplicate_increases_condition_overload_status_acquisition(self):
@@ -509,7 +508,7 @@ class PublicApiTests(unittest.TestCase):
             },
         }}).configure(Build(condition_overload))
         parent = weapon.stats.parent
-        child = parent.children[0]
+        child = weapon.stats.child[0]
 
         self.assertEqual(weapon.stats._average_condition_overload_bonus(parent), 0)
         self.assertGreater(weapon.stats._average_condition_overload_bonus(child), 0)

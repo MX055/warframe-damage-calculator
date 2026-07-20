@@ -7,7 +7,7 @@ class MeleeFormatter(WeaponFormatter):
         effective = self.weapon.stats.parent.effective
         average = self.weapon.stats.average
         return "\n".join([
-            f"{self.weapon.data.name} - {self.weapon.stats.parent.name.replace('_', ' ').title()}",
+            f"{self.weapon.data.name} - {self._attack_name(self.weapon.mode).replace('_', ' ').title()}",
             "-------------------------------------",
             f"{'ATTACK SPEED:':<14} {f'{base.attack_speed:.2f}x':<6} -> {effective.attack_speed:.2f}x",
             f"{'CRIT CHANCE:':<14} {f'{base.crit_chance:.2%}':<6} -> {effective.crit_chance:.2%}",

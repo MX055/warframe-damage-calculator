@@ -7,8 +7,8 @@ class RangedFormatter(WeaponFormatter):
         effective = self.weapon.stats.parent.effective
         average = self.weapon.stats.average
         related_rows = []
-        for child in self.weapon.stats.parent.children:
-            name = child.name.replace("_", " ").title()
+        for child in self.weapon.stats.child:
+            name = self._attack_name(child.attack).replace("_", " ").title()
             related_base, related = child.base, child.effective
             damage_types = dict.fromkeys((*related_base.damage.data, *related.damage.data))
             related_rows.extend((f"{name} {damage_type.upper()}:", related_base.damage.get(damage_type), related.damage.get(damage_type)) for damage_type in damage_types)
@@ -17,7 +17,7 @@ class RangedFormatter(WeaponFormatter):
         label_width = max((25, *(len(label) for label, _, _ in related_rows)))
         divider = "-" * (label_width + 33)
         return "\n".join([
-            f"{self.weapon.data.name} - {self.weapon.stats.parent.name.replace('_', ' ').title()}",
+            f"{self.weapon.data.name} - {self._attack_name(self.weapon.mode).replace('_', ' ').title()}",
             divider,
             f"{'FIRE RATE:':<{label_width}} {f'{base.fire_rate:.2f}rps':<7} -> {effective.fire_rate:.2f}rps",
             f"{'RELOAD SPEED:':<{label_width}} {f'{base.reload_speed:.2f}s':<7} -> {effective.reload_speed:.2f}s",
