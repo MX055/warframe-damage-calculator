@@ -131,16 +131,7 @@ class Data(MutableMapping[str, DataValue]):
 
     def __contains__(self, key: object) -> bool:
         return key in self._values
-
-    def keys(self) -> KeysView[str]:
-        return self._values.keys()
-
-    def values(self) -> ValuesView[DataValue]:
-        return self._values.values()
-
-    def items(self) -> ItemsView[str, DataValue]:
-        return self._values.items()
-
+    
     def __or__(self, other: Mapping[str, DataValue]) -> Self:
         merged = self.copy()
         merged.update(other)
@@ -153,6 +144,15 @@ class Data(MutableMapping[str, DataValue]):
         merged.update(other)
         merged.update(explicit)
         return merged
+
+    def keys(self) -> KeysView[str]:
+        return self._values.keys()
+
+    def values(self) -> ValuesView[DataValue]:
+        return self._values.values()
+
+    def items(self) -> ItemsView[str, DataValue]:
+        return self._values.items()
 
     def update(self, data: Mapping[str, DataValue], /) -> None:
         for key, value in data.items(): self[key] = value
