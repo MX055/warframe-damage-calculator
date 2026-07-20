@@ -1,73 +1,103 @@
 # Warframe Damage Calculator
 
-> Deterministic, expected-value damage calculations for Warframe weapons.
+> Deterministic expected-value damage calculations for Warframe weapons.
 
-**Warframe Damage Calculator** is a Python library for comparing weapon builds
-without Monte Carlo simulation. It combines a weapon definition with mods,
-arcanes, buffs, and other upgrades, then calculates the long-run average damage
-of each attack and the average DPS of the complete fire cycle.
+**Warframe Damage Calculator** is a Python library for constructing Warframe
+weapons and upgrades, combining them into builds, and calculating average damage
+per hit and DPS without Monte Carlo simulation.
+
+Version **0.8.0** introduces a new canonical model layout built around the
+single-file database schema. Weapons now contain named attack modes, global ammo
+data, related child attacks, and optional Incarnon evolutions. Upgrades use the
+same named-entry construction style and keep runtime rank, condition, and stack
+values separate from their permanent database data.
 
 The project is currently **alpha software**. It is useful for theorycrafting,
-build comparison, testing custom mechanics, and powering external tools, but it
-is not a complete simulation of Warframe combat.
+build comparison, custom mechanics, database tooling, and external calculator
+front ends, but it is not a complete simulation of Warframe combat.
+
+---
+
+## v0.8.0 Highlights
+
+- One canonical database file: `database/database.json`
+- New database-shaped constructors for weapons and upgrades
+- Multiple named attack modes per weapon
+- Runtime attack switching with `weapon.set_mode()`
+- Automatic calculation of related child attacks, such as projectiles and their explosions
+- Global weapon data separated from attack-specific stats
+- Incarnon evolution selection with `weapon.set_evolutions()`
+- Attack-specific Condition Overload factors and additive or multiplicative behavior
+- Separate faction-damage stats for Corpus, Grineer, Infested, Murmur, Orokin, and Sentient
+- `Weapon` added to the package-root public API
+- Literal-typed bundled names for better editor inference from `arsenal.get()`
+- A single canonical `Build.upgrades` collection
+- Detached build and upgrade copies through `Upgrade.copy()` and `Build.copy()`
+- Updated ranged summaries that include related attack damage
+- A current database containing 656 weapons, 2,234 attack definitions, 763 upgrades, and 92 weapons with evolution data
 
 ---
 
 ## Features
 
-### Weapon and damage modeling
+### Weapon modeling
 
-- Primary, Secondary, and Melee weapon models
-- Direct-hit and radial explosion damage
+- `Primary`, `Secondary`, and `Melee` weapon models
+- Multiple attacks per weapon, including normal fire, alternate fire, charged attacks, Incarnon forms, slam attacks, and other database-defined modes
+- Direct attacks and linked child attacks such as radial explosions
+- Hitscan, projectile, beam, melee, and area-of-effect metadata
 - Physical, elemental, combined elemental, Void, and Tau damage
 - Ordered elemental combination
 - Critical chance, critical damage, status chance, and forced procs
+- Native and modded multishot
 - Weakpoint damage and weakpoint critical chance
-- Expected flat damage, DoT damage, DPH, and DPS
-- Native multishot and modded multishot
-- Beam, battery, burst-fire, charge-weapon, magazine, reload, and ammo-efficiency calculations
+- Burst, charge, magazine, reload, battery, ammo-efficiency, and fire-rate calculations
+- Beam-specific multishot and ammo behavior
 - Fire-rate and multishot locks
+- Incarnon evolution selection
+- Attack-specific Condition Overload scaling
 
 ### Upgrade resolution
 
 - Static effects
 - Conditional effects
-- Stacking effects with independent stack conditions
+- Stacking effects with named stack conditions
 - Proportional rank scaling
 - Rank-locked effects
-- Effects that require another equipped upgrade
-- Automatic weapon-category conditions such as `primary`, `shotgun`, or `bow`
+- Effects that require other equipped upgrades
+- Scalar, record, and mixed-list stat syntax
+- Automatic weapon-category conditions during build resolution
 - Separate `static`, `conditional`, `modular`, `stacking`, `rank_locked`, and `total` result buckets
+- Runtime rank, condition, and stack values that do not modify the canonical upgrade entry
 
 ### Special mechanics
 
+- Condition Overload and Galvanized status-type damage
 - Hunter Munitions
 - Internal Bleeding and Hemorrhage
-- Primed Chamber
+- Primed Chamber and Charged Chamber
 - Vigilante set bonus
 - Secondary Enervate
 - Secondary Encumber
 - Melee Duplicate
 - Melee Doughty bonus calculation
-- Sacrificial set equipped bonuses
+- Sacrificial equipped-set bonuses
+- Faction damage with the largest applicable faction bonus used by the calculator
 
 ### Data and API
 
-- Bundled weapon, mod, and arcane database
+- Single-file weapon, upgrade, and Riven-stat database
 - Normalized name lookup
-- Weapon, upgrade, compatibility, and trigger filters
+- Weapon, upgrade, category, subtype, and compatibility filters
 - Attribute-only database queries
-- Custom database files and folders
+- Custom single-file databases
+- Fresh model construction on every database lookup
 - Build composition with `+` and `-`
 - Upgrade contribution estimates
 - Human-readable ranged and melee summaries
-- Typed, sparse, mutable model data with attribute access and detached copies
-- Damage-distribution helpers for totals, weights, filtering, arithmetic, and combination
-
-Not currently modeled: enemy defenses, armor, health types, damage attenuation,
-time-to-kill, non-DoT status effects, projectile falloff, headshot eligibility,
-melee stance timing, combo counters, heavy attacks, slam attacks, and
-frame-by-frame firing behavior.
+- Typed, sparse, mutable nested data with attribute access
+- Detached deep copies of model data
+- Damage-distribution helpers for totals, weights, filtering, arithmetic, and elemental combination
 
 ---
 
@@ -77,7 +107,31 @@ frame-by-frame firing behavior.
 
 ---
 
+## Public API
+
+The package root exports the primary model and loader objects:
+
+```python
+from warframe_damage_calculator import (
+    Build,
+    Melee,
+    Primary,
+    Secondary,
+    Upgrade,
+    Weapon,
+    arsenal,
+)
+```
+
+`Primary`, `Secondary`, and `Melee` inherit from `Weapon`. `Data`, `Dist`, the
+calculator classes, and `WarframeDatabase` remain available from their internal
+modules for advanced use, but they are not package-root exports.
+
+---
+
 ## Installation
+
+Install directly from GitHub:
 
 ```bash
 pip install git+https://github.com/MX055/warframe-damage-calculator.git
@@ -101,492 +155,600 @@ from warframe_damage_calculator import Build, Primary, Upgrade, arsenal
 weapon = arsenal.get("Corinth Prime")
 assert isinstance(weapon, Primary)
 
-upgrades = [
-    arsenal.get("Galvanized Hell", context={"kill": 4}),
+build = Build(
+    arsenal.get("Galvanized Hell", context={"stacks": 4}),
     arsenal.get("Primed Chilling Grasp"),
     arsenal.get("Critical Deceleration"),
-]
-assert all(isinstance(upgrade, Upgrade) for upgrade in upgrades)
+)
 
-weapon.configure(Build(*upgrades))
+weapon.configure(build)
 
 print(weapon.format.summary())
-print(f"Average DPS: {weapon.stats.average.total_dps:.2f}")
+print(f"Average DPS:   {weapon.stats.average.total_dps:.2f}")
 print(f"Weakpoint DPS: {weapon.stats.average.total_weakpoint_dps:.2f}")
 ```
 
-Database upgrades resolve at maximum rank by default. Runtime conditions and
-stack counts are passed through `context`; here, Galvanized Hell is evaluated at
-four kill stacks.
-
-For a larger shotgun build, see `examples/corinth_prime.py`.
+Database upgrades resolve at maximum rank and, where applicable, maximum stacks
+by default. Pass runtime values through `context` to override that behavior.
 
 ---
 
-## More Examples
+## Core Workflow
 
-### Primary build with stacking effects
+### Load a weapon and inspect its attacks
 
 ```python
-from warframe_damage_calculator import Build, Primary, Upgrade, arsenal
+from warframe_damage_calculator import Primary, arsenal
 
 weapon = arsenal.get("Corinth Prime")
-galvanized_hell = arsenal.get("Galvanized Hell", context={"kill": 4})
-merciless = arsenal.get("Primary Merciless", context={"kill": 12})
-hunter_munitions = arsenal.get("Hunter Munitions")
-critical_delay = arsenal.get("Critical Deceleration")
-
 assert isinstance(weapon, Primary)
-assert all(
-    isinstance(item, Upgrade)
-    for item in (galvanized_hell, merciless, hunter_munitions, critical_delay)
-)
+
+print(weapon.data.name)
+print(list(weapon.data.entry.attacks))
+print(weapon.mode.stats.damage)
+```
+
+The first attack in the weapon entry is selected by default.
+
+### Select another attack mode
+
+```python
+weapon.set_mode("Air Burst Projectile")
+
+print(weapon.mode.trigger)
+print(weapon.mode.delivery)
+print(weapon.mode.children)
+```
+
+Mode names are normalized, so spaces, hyphens, case, and underscore-separated
+identifiers can refer to the same attack. An unknown mode raises `ValueError`
+and lists the available attacks.
+
+### Configure a build
+
+```python
+from warframe_damage_calculator import Build, arsenal
 
 build = Build(
-    galvanized_hell,
-    merciless,
-    hunter_munitions,
-    critical_delay,
+    arsenal.get("Galvanized Hell", context={"stacks": 4}),
+    arsenal.get("Primary Merciless", context={"stacks": 12}),
+    arsenal.get("Hunter Munitions"),
 )
+
 weapon.configure(build)
+```
 
-print("Resolved build stats:")
-print(weapon.build.stats.total)
-print()
+`configure()` accepts one `Build`, or no argument to clear the active build:
+
+```python
+weapon.configure()
+```
+
+It returns the weapon, so calls can be chained:
+
+```python
+weapon = (
+    arsenal.get("Corinth Prime")
+    .set_mode("Air Burst Projectile")
+    .configure(build)
+)
+```
+
+### Select Incarnon evolutions
+
+```python
+weapon = arsenal.get("Telos Boltor")
+weapon.set_evolutions(evolution_2=1, evolution_3=2)
+weapon.set_mode("Incarnon Form")
+
+print(weapon.evolutions)
+print(weapon.stats.effective.damage.total_damage())
+```
+
+Selections are validated against the weapon's evolution tiers and perks. Each
+selected evolution is converted into an internal upgrade and included when the
+weapon is recomputed.
+
+### Read results
+
+```python
+print(weapon.stats.base)
+print(weapon.stats.modded)
+print(weapon.stats.effective)
+print(weapon.stats.average)
+
+print(weapon.stats.average.total_dph)
+print(weapon.stats.average.total_dps)
 print(weapon.format.summary())
 ```
 
-The build resolver evaluates each upgrade against both the weapon and the other
-upgrades in the build. This activates automatic type conditions, manual runtime
-conditions, stack counts, rank locks, and equipped-set effects before the weapon
-is recalculated.
+---
 
-### Secondary special mechanics
+## New Model Construction
 
-```python
-from warframe_damage_calculator import Build, Secondary, Upgrade, arsenal
+Version 0.8.0 constructors use the same named-entry shape as the database. A
+model receives a mapping whose top-level key is the model name and whose value
+is its canonical entry.
 
-weapon = arsenal.get("Kuva Nukor")
-encumber = arsenal.get("Secondary Encumber")
-
-assert isinstance(weapon, Secondary)
-assert isinstance(encumber, Upgrade)
-
-weapon.configure(Build(encumber))
-
-average = weapon.stats.average
-print(f"Expected procs per attack: {average.procs_per_shot:.2f}")
-print(f"Expected DoT per attack:   {average.flat_dotph:.2f}")
-print(f"Total DPS:                 {average.total_dps:.2f}")
-```
-
-Secondary Enervate is configured in the same way. Its per-hit critical-chance
-state and reset behavior are handled automatically:
+### Constructing a ranged weapon
 
 ```python
-enervate = arsenal.get("Secondary Enervate")
-assert isinstance(enervate, Upgrade)
-weapon.configure(enervate)
-
-print(weapon.stats.average.secondary_enervate_bonus)
-print(weapon.stats.average.weakpoint_secondary_enervate_bonus)
-```
-
-### Melee build and equipped-set bonuses
-
-```python
-from warframe_damage_calculator import Build, Melee, Upgrade, arsenal
-
-weapon = arsenal.get("Prisma Skana")
-pressure = arsenal.get("Sacrificial Pressure")
-steel = arsenal.get("Sacrificial Steel")
-duplicate = arsenal.get("Melee Duplicate")
-
-assert isinstance(weapon, Melee)
-assert all(isinstance(item, Upgrade) for item in (pressure, steel, duplicate))
-
-weapon.configure(Build(pressure, steel, duplicate))
-
-print(weapon.build.stats.modular)
-print(f"Duplicate multiplier: {weapon.stats.average.melee_duplicate_multiplier:.3f}x")
-print(weapon.format.summary())
-```
-
-Sacrificial Pressure and Sacrificial Steel detect each other through their
-`when_equipped` effects.
-
-### Build composition and comparison
-
-`Build` objects are iterable, have a length, and support non-mutating addition
-and subtraction:
-
-```python
-from warframe_damage_calculator import Build, Upgrade, arsenal
-
-serration = arsenal.get("Serration")
-critical_delay = arsenal.get("Critical Delay")
-assert isinstance(serration, Upgrade)
-assert isinstance(critical_delay, Upgrade)
-
-base_build = Build(serration)
-crit_build = base_build + critical_delay
-restored_build = crit_build - critical_delay
-
-print(len(base_build))       # 1
-print(len(crit_build))       # 2
-print(len(restored_build))   # 1
-
-for upgrade in crit_build:
-    print(upgrade.data.context.name)
-```
-
-A build copies each upgrade's data when it is created, so later mutations to the
-original `Upgrade` do not silently change an existing build.
-
-### Upgrade contribution estimates
-
-```python
-from warframe_damage_calculator import Build, Primary, Upgrade, arsenal
-
-weapon = arsenal.get("Acceltra Prime")
-serration = arsenal.get("Serration")
-critical_delay = arsenal.get("Critical Delay")
-
-assert isinstance(weapon, Primary)
-assert isinstance(serration, Upgrade)
-assert isinstance(critical_delay, Upgrade)
-
-weapon.configure(Build(serration, critical_delay))
-
-print(weapon.stats.contribution_values())
-print(weapon.stats.contribution_proportions())
-print(weapon.format.upgrades())
-```
-
-A contribution is calculated by removing one upgrade, recomputing the weapon,
-and subtracting the reduced build's DPS from the full build's DPS. These are
-marginal estimates: interactions between upgrades mean the proportions are not
-independent multipliers and do not necessarily add intuitive value in every
-build.
-
-### Creating a weapon and upgrade manually
-
-Weapon and upgrade constructors accept nested mappings with `stats` and
-`context` sections:
-
-```python
-from warframe_damage_calculator import Primary, Upgrade
+from warframe_damage_calculator import Primary
 
 weapon = Primary(
     {
-        "stats": {
-            "damage": {
-                "impact": 20,
-                "puncture": 30,
-                "slash": 50,
+        "Example Rifle": {
+            "type": "primary",
+            "subtype": "rifle",
+            "disposition": 1.0,
+            "ammo": {
+                "reload_time": 2.2,
+                "magazine_size": 30,
             },
-            "forced_procs": {"slash": 1},
-            "explosion_damage": {"heat": 100},
-            "explosion_forced_procs": {"heat": 1},
-            "crit_chance": 0.30,
-            "crit_damage": 2.2,
-            "status_chance": 0.25,
-            "multishot": 1,
-            "fire_rate": 3.0,
-            "reload_speed": 2.0,
-            "magazine_capacity": 20,
-            "burst_count": 1,
-            "burst_delay": 0.0,
-            "charge_time": 0.0,
-            "recharge_rate": 0.0,
-            "weakpoint_damage": 3.0,
-        },
-        "context": {
-            "name": "Example Weapon",
-            "type": "rifle",
-            "trigger": "semi",
-            "is_beam": False,
-            "is_battery": False,
-        },
+            "attacks": {
+                "normal_attack": {
+                    "trigger": "auto",
+                    "delivery": "hitscan",
+                    "stats": {
+                        "damage": {
+                            "impact": 20,
+                            "puncture": 30,
+                            "slash": 50,
+                        },
+                        "forced_procs": {"slash": 1},
+                        "crit_chance": 0.30,
+                        "crit_damage": 2.2,
+                        "status_chance": 0.25,
+                        "multishot": 1,
+                        "fire_rate": 6.0,
+                    },
+                }
+            },
+        }
     }
 )
+
+print(weapon.data.name)                  # Example Rifle
+print(weapon.data.entry.type)            # primary
+print(weapon.data.entry.ammo.reload_time)
+print(weapon.mode.stats.crit_chance)
+```
+
+Weapon-wide fields belong directly to the named entry. Attack-specific fields
+belong inside each attack's `stats` mapping.
+
+### Multiple attacks and related child attacks
+
+```python
+from warframe_damage_calculator import Primary
+
+weapon = Primary(
+    {
+        "Example Launcher": {
+            "type": "primary",
+            "subtype": "rifle",
+            "ammo": {
+                "reload_time": 2.5,
+                "magazine_size": 6,
+            },
+            "attacks": {
+                "projectile": {
+                    "trigger": "semi",
+                    "delivery": "projectile",
+                    "children": ["explosion"],
+                    "stats": {
+                        "damage": {"impact": 100},
+                        "crit_chance": 0.20,
+                        "crit_damage": 2.0,
+                        "status_chance": 0.20,
+                        "fire_rate": 1.0,
+                    },
+                },
+                "explosion": {
+                    "trigger": "semi",
+                    "delivery": "projectile",
+                    "aoe": True,
+                    "stats": {
+                        "damage": {"blast": 500},
+                        "forced_procs": {"impact": 1},
+                        "crit_chance": 0.20,
+                        "crit_damage": 2.0,
+                        "status_chance": 0.20,
+                        "fire_rate": 1.0,
+                    },
+                },
+            },
+        }
+    }
+)
+
+weapon.set_mode("Projectile")
+
+print(weapon.stats.effective.damage)
+print(weapon.stats.related["Explosion"].damage)
+print(weapon.stats.average.total_dps)
+```
+
+For ranged weapons, selected attacks may name child attacks through `children`.
+Their direct and DoT contributions are calculated automatically and exposed in
+`weapon.stats.related` and `weapon.stats.related_base`.
+
+### Constructing a melee weapon
+
+```python
+from warframe_damage_calculator import Melee
+
+weapon = Melee(
+    {
+        "Example Sword": {
+            "type": "melee",
+            "subtype": "sword",
+            "attacks": {
+                "normal_attack": {
+                    "trigger": "melee",
+                    "delivery": "melee",
+                    "stats": {
+                        "damage": {
+                            "impact": 10,
+                            "puncture": 10,
+                            "slash": 80,
+                        },
+                        "crit_chance": 0.20,
+                        "crit_damage": 2.0,
+                        "status_chance": 0.30,
+                        "fire_rate": 1.0,
+                    },
+                }
+            },
+        }
+    }
+)
+
+print(weapon.stats.base.attack_speed)
+print(weapon.stats.average.total_dps)
+```
+
+For melee attacks, the selected attack's `fire_rate` is used as the base attack
+speed.
+
+### Constructing an upgrade
+
+```python
+from warframe_damage_calculator import Upgrade
 
 upgrade = Upgrade(
     {
-        "stats": {
-            "base_damage": 1.65,
-            "crit_chance": 2.0,
-            "fire_rate": -0.2,
-            "heat": 0.9,
-        },
-        "context": {
-            "name": "Example Mod",
+        "Example Mod": {
             "type": "mod",
-        },
+            "max_rank": 10,
+            "compatibility": {
+                "types": ["primary"],
+                "subtypes": ["rifle"],
+                "exilus": False,
+            },
+            "incompatibility": ["Conflicting Mod"],
+            "stats": {
+                "base_damage": 1.65,
+                "crit_chance": 2.0,
+                "fire_rate": -0.20,
+                "heat": 0.90,
+            },
+        }
     }
 )
 
-weapon.configure(upgrade)
-print(weapon.format.summary())
+print(upgrade.data.name)
+print(upgrade.data.entry.stats.base_damage)
+print(upgrade.stats.total.base_damage)
 ```
 
-Ranged `reload_speed` values represent reload time in seconds despite the field
-name. Upgrade `reload_speed` values are additive reload-speed modifiers.
+The canonical entry contains persistent metadata and stat effects. Runtime
+values are stored separately in `upgrade.data.runtime`.
 
-### One upgrade with every effect form
+### Upgrade effect forms
 
-A stat may contain one effect or a list of effects:
+A stat may be a scalar, one effect record, or a list containing any mixture of
+the two:
 
 ```python
 from warframe_damage_calculator import Build, Upgrade
 
 upgrade = Upgrade(
     {
-        "stats": {
-            "base_damage": [
-                0.30,
-                {"value": 0.20, "when": "headshot"},
-                {"value": 0.10, "stacks_on": "kill"},
-                {"value": 0.25, "at_rank": 5},
-                {"value": 0.15, "when_equipped": "Partner"},
-            ],
-        },
-        "context": {
-            "name": "Example Arcane",
+        "Example Arcane": {
+            "type": "arcane",
             "max_rank": 5,
-            "rank": 5,
-            "max_stacks": 3,
-            "headshot": True,
-            "kill": 2,
-        },
+            "stats": {
+                "base_damage": [
+                    0.30,
+                    {"value": 0.20, "when": "headshot"},
+                    {"value": 0.10, "stacks": {"when": "kill", "max": 3}},
+                    {"value": 0.25, "rank": 5},
+                    {"value": 0.15, "equipped": ["Partner"]},
+                ]
+            },
+        }
     }
 )
-partner = Upgrade({"context": {"name": "Partner"}})
-upgrade.stats.resolve(build=Build(upgrade, partner))
 
-print(upgrade.stats.static.base_damage)       # 0.30
-print(upgrade.stats.conditional.base_damage)  # 0.20
-print(upgrade.stats.modular.base_damage)      # 0.15
-print(upgrade.stats.stacking.base_damage)     # 0.20
-print(upgrade.stats.rank_locked.base_damage)  # 0.25
-print(upgrade.stats.total.base_damage)        # 1.10
+partner = Upgrade({"Partner": {"type": "buff", "stats": {}}})
+
+upgrade.data.runtime.update(
+    {
+        "rank": 5,
+        "headshot": True,
+        "kill": 2,
+    }
+)
+
+build = Build(upgrade, partner)
+resolved = build.upgrades[0]
+
+print(resolved.stats.static.base_damage)       # 0.30
+print(resolved.stats.conditional.base_damage)  # 0.20
+print(resolved.stats.stacking.base_damage)     # 0.20
+print(resolved.stats.rank_locked.base_damage)  # 0.25
+print(resolved.stats.modular.base_damage)      # 0.15
+print(resolved.stats.total.base_damage)        # 1.10
 ```
 
-### Changing runtime conditions
+| Form | Example | Behavior |
+|---|---|---|
+| Scalar | `"base_damage": 1.65` | Always active. |
+| Static record | `{"value": 1.65}` | Always active. |
+| Conditional | `{"value": 0.3, "when": "headshot"}` | Active when the named runtime condition is truthy. |
+| Stacking | `{"value": 0.1, "stacks": {"when": "kill", "max": 3}}` | Multiplied by the named stack count. |
+| Rank-locked | `{"value": 0.3, "rank": 5}` | Added at full value when the current rank reaches 5. |
+| Equipped | `{"value": 0.55, "equipped": ["Partner"]}` | Active when every named upgrade is equipped. |
+| Mixed list | `[1.0, {...}, {...}]` | Resolves each effect independently. |
 
-The simplest approach is to request a fresh database copy with new context:
+Boolean effects aggregate with logical OR. Numeric effects add together.
+Damage-type effects aggregate into a single ordered damage distribution.
+
+### Runtime rank, conditions, and stacks
+
+The loader accepts runtime overrides through `context`:
 
 ```python
-inactive = arsenal.get("Galvanized Hell", context={"kill": 0})
-active = arsenal.get("Galvanized Hell", context={"kill": 4})
+inactive = arsenal.get("Galvanized Hell", context={"stacks": 0})
+active = arsenal.get("Galvanized Hell", context={"stacks": 4})
+partial_rank = arsenal.get("Serration", context={"rank": 4})
 ```
 
-For a manually created upgrade, update its context and resolve it again:
+For a manually constructed upgrade:
 
 ```python
-upgrade.data.context.kill = 3
+upgrade.data.runtime.rank = 5
+upgrade.data.runtime.kill = 3
+upgrade.data.runtime.headshot = True
 upgrade.stats.resolve()
-print(upgrade.stats.total)
 ```
 
-When an upgrade is already inside a build, update the matching item in
-`build.upgrades` and call `build.stats.resolve()`. Calling `weapon.configure(build)` or
-`weapon.stats.recompute()` then refreshes the weapon outputs.
+Ranks are zero-based. Ordinary effects scale by:
+
+```text
+(rank + 1) / (max_rank + 1)
+```
+
+Omitted ranks default to `max_rank`. Omitted stack counts generally resolve to
+the effect's maximum for an untouched database upgrade. Supplying runtime
+context lets callers explicitly disable or limit those values.
+
+An upgrade containing a rank-locked effect currently skips proportional scaling
+for its other effects. This matches the database representation used by the
+current resolver.
+
+### Copying upgrades
+
+```python
+copied = upgrade.copy()
+```
+
+`Upgrade.copy()` creates a detached upgrade, preserves its runtime values, and
+resolves the copied stats. `Build` uses this method whenever it accepts or
+iterates over upgrades.
 
 ---
 
-## Public API
-
-The package root exports:
+## Builds
 
 ```python
-from warframe_damage_calculator import (
-    Upgrade,
-    Build,
-    Melee,
-    Primary,
-    Secondary,
-    arsenal,
-)
+from warframe_damage_calculator import Build, arsenal
+
+serration = arsenal.get("Serration")
+critical_delay = arsenal.get("Critical Delay")
+
+base_build = Build(serration)
+crit_build = base_build + critical_delay
+restored_build = crit_build - critical_delay
+copied_build = crit_build.copy()
+
+print(len(base_build))       # 1
+print(len(crit_build))       # 2
+print(len(restored_build))   # 1
 ```
 
-| Object | Purpose |
-|---|---|
-| `Upgrade` | One mod, arcane, buff, set bonus, or other stat modifier. |
-| `Build` | A copied collection of upgrades with resolved aggregate stats. |
-| `Primary` | Primary ranged-weapon model. |
-| `Secondary` | Secondary ranged-weapon model. |
-| `Melee` | Melee light-attack model. |
-| `arsenal` | Bundled weapon and upgrade database. |
+`Build` is iterable and supports non-mutating addition and subtraction.
+Subtraction matches upgrades by case-insensitive name.
 
-`Data` and `Dist` are implementation types rather than package-root exports.
-They are still visible through public model attributes such as `weapon.data`,
-`weapon.stats.effective`, and `weapon.stats.effective.damage`.
-
-A typical workflow is:
-
-1. Load or create a weapon.
-2. Load or create upgrades.
-3. Set their rank, conditions, and stacks.
-4. Create a `Build`, or pass upgrades directly to the weapon.
-5. Read calculated values from `weapon.stats` or formatted text from
-   `weapon.format`.
-
-`configure()` returns the weapon, so chaining is supported:
+A build owns detached copies of its upgrades. Iterating over a build also yields
+copies. The canonical mutable collection is `build.upgrades`:
 
 ```python
-weapon = Primary({...}).configure(upgrade_1, upgrade_2)
+build.upgrades[0].data.runtime.stacks = 0
+build.stats.resolve()
 ```
 
-It accepts exactly one `Build`, any number of `Upgrade` objects, or no arguments
-to clear the build. Mixing a `Build` and individual upgrades in the same call
-raises `TypeError`.
+`weapon.configure(build)` copies the build again, so later changes to the
+original build do not silently modify the configured weapon.
 
 ---
 
 ## Database Loader
 
-The bundled database entry point is `arsenal.get()`.
+The package-level database entry point is `arsenal`.
 
 ### Named lookups
 
 ```python
-weapon = arsenal.get("Acceltra Prime")
-mod = arsenal.get("Critical Delay")
-ranked_mod = arsenal.get("Critical Delay", context={"rank": 3})
-base_crit = arsenal.get("Acceltra Prime", attribute="crit_chance")
+from warframe_damage_calculator import Melee, Primary, Secondary, Upgrade, arsenal
+
+primary = arsenal.get("Corinth Prime")
+secondary = arsenal.get("Kuva Nukor")
+melee = arsenal.get("Prisma Skana")
+upgrade = arsenal.get("Critical Delay")
+
+assert isinstance(primary, Primary)
+assert isinstance(secondary, Secondary)
+assert isinstance(melee, Melee)
+assert isinstance(upgrade, Upgrade)
 ```
 
-Names are normalized for lookup by trimming whitespace, collapsing repeated
-whitespace, and ignoring case. A missing name, or a name rejected by the optional `type` filter,
-returns `None`.
+Names are normalized by trimming whitespace, collapsing repeated whitespace,
+and ignoring case. Missing names return `None`.
 
-Exact bundled name literals are typed by database category, so editors infer
-`Primary`, `Secondary`, `Melee`, or `Upgrade` directly. Dynamic strings and
-custom `WarframeDatabase` instances retain the general union return type.
+Every lookup returns a fresh model. Mutating one result does not modify the
+canonical database or a later lookup.
 
-`context` is merged into a fresh copy of the database entry, so separate calls
-do not modify the bundled data.
+Exact bundled name literals are typed by category, allowing editors and type
+checkers to infer `Primary`, `Secondary`, `Melee`, or `Upgrade` directly.
 
-### Listing entries
+### Listing and filtering
 
 When `name` is omitted, `get()` returns a dictionary keyed by item name:
 
 ```python
 all_items = arsenal.get()
 weapons = arsenal.get(type="weapon")
+upgrades = arsenal.get(type="upgrade")
 mods = arsenal.get(type="mod")
 arcanes = arsenal.get(type="arcane")
-weapon_names = arsenal.get(type="weapon", attribute="name")
+primaries_and_compatible_upgrades = arsenal.get(type="primary")
+shotguns_and_compatible_upgrades = arsenal.get(type="shotgun")
 ```
 
-`attribute="name"` returns a sorted list of names without constructing every
-model. Other attributes return a dictionary of extracted values:
+Category filters such as `weapon`, `upgrade`, `mod`, and `arcane` return only
+that database category. Weapon-family filters such as `primary`, `secondary`,
+`melee`, `rifle`, `shotgun`, `bow`, `sniper`, and `pistol` may return both
+weapons and upgrades compatible with that family.
+
+Common plural aliases such as `weapons`, `mods`, and `arcanes` are accepted.
+
+### Attribute-only queries
 
 ```python
+weapon_names = arsenal.get(type="weapon", attribute="name")
+base_crit = arsenal.get("Corinth Prime", attribute="crit_chance")
 weapon_crits = arsenal.get(type="weapon", attribute="crit_chance")
-shotgun_triggers = arsenal.get(type="shotgun", attribute="trigger")
+shotgun_subtypes = arsenal.get(type="shotgun", attribute="subtype")
 ```
 
-### Type filters
+`attribute="name"` returns a sorted list when no item name is supplied. Other
+attributes return one extracted value or a dictionary of values.
 
-The `type` argument is a broad, single matcher rather than a composable query:
-
-- `weapon`, `upgrade`, `mod`, and `arcane` select database categories.
-- `primary`, `secondary`, and `melee` match weapons in that category **and**
-  upgrades compatible with it.
-- `rifle`, `shotgun`, `bow`, `sniper`, and `pistol` match relevant weapons and
-  compatible upgrades.
-- Trigger names such as `semi` match weapons with that trigger and upgrades
-  whose requirements reference it.
-- Common plurals such as `weapons`, `mods`, and `arcanes` are accepted.
-
-For example, `arsenal.get(type="shotgun")` contains shotgun weapons as well as
-shotgun-compatible mods and arcanes. Use `type="weapon"`, `type="mod"`, or
-`type="arcane"` when only one database category is wanted.
-
-The loader does not currently combine filters such as “shotgun weapons only” in
-one call.
+For weapons, attribute lookup checks the canonical entry, ammo data, calculated
+base and effective states, the selected attack, and its stats. For upgrades, it
+checks runtime values and canonical upgrade stats.
 
 ### Custom databases
 
-Advanced callers can construct a database from their own JSON files:
-
 ```python
-from warframe_damage_calculator.data.loader import WarframeDatabase
+from warframe_damage_calculator.loader.loader import WarframeDatabase
 
-custom = WarframeDatabase.from_files(
-    "data/weapons.json",
-    "data/upgrades.json",
-)
+custom = WarframeDatabase.from_file("data/database.json")
 
-# Equivalent folder layout:
-# data/weapons.json
-# data/upgrades.json
+# Equivalent when the folder contains database.json:
 custom = WarframeDatabase.from_folder("data")
 ```
 
-The custom files use the same grouped schema as the bundled database.
+The file uses the same top-level schema as the bundled database:
+
+```json
+{
+  "schema_version": 1,
+  "weapons": {},
+  "upgrades": {},
+  "riven_stats": {}
+}
+```
+
+Raw Riven stat ranges remain available through the database object:
+
+```python
+rifle_riven_stats = arsenal.riven_stats["rifle"]
+print(rifle_riven_stats["crit_chance"])
+```
 
 ---
 
-## Model Data
+## Model Data Layout
 
-Every model exposes its input data publicly:
+### Weapon data
 
 ```python
-weapon.data.stats
-weapon.data.context
-upgrade.data.stats
-upgrade.data.context
-build.upgrades
+weapon.data.name
+weapon.data.entry
+weapon.data.entry.type
+weapon.data.entry.subtype
+weapon.data.entry.disposition
+weapon.data.entry.ammo
+weapon.data.entry.attacks
+weapon.data.entry.evolutions
+weapon.mode
+weapon.mode.stats
 ```
 
-Nested mappings are converted to typed data objects, so fields support both
+`weapon.data` contains one named entry. `weapon.data.entry` is a convenience
+property for that entry, and `weapon.mode` points to the currently selected
+attack.
+
+### Upgrade data
+
+```python
+upgrade.data.name
+upgrade.data.entry
+upgrade.data.entry.type
+upgrade.data.entry.max_rank
+upgrade.data.entry.compatibility
+upgrade.data.entry.incompatibility
+upgrade.data.entry.stats
+upgrade.data.runtime
+```
+
+Permanent database data and runtime resolution values are intentionally
+separate.
+
+### Sparse typed data
+
+Nested mappings are converted to typed `Data` subclasses and support both
 mapping and attribute access:
 
 ```python
-print(weapon.data.stats.crit_chance)
-print(weapon.data.context.name)
+print(weapon.data.entry.ammo.magazine_size)
+print(weapon.mode.stats.crit_chance)
 
-weapon.data.stats.crit_chance = 0.40
-weapon.data.context.is_beam = True
+weapon.mode.stats.crit_chance = 0.40
 ```
 
-### Sparse defaults
-
-Typed data remains sparse. Defaults are readable without being inserted into
-normal iteration:
+Defaults are readable without appearing in normal iteration:
 
 ```python
-weapon = Primary()
-
-print(weapon.data.stats.multishot)  # 1.0
-print(dict(weapon.data.stats))      # {}
+stats = weapon.mode.stats
+print(stats.multishot)  # default: 1.0
+print(dict(stats))      # only explicitly stored fields
 ```
 
-Use `with_defaults()` for a detached, dense snapshot:
+Use `with_defaults()` for a detached dense dictionary and `copy()` for a deep
+copy:
 
 ```python
-snapshot = weapon.data.stats.with_defaults()
-snapshot["crit_chance"] = 2
-
-# The original model is unchanged.
-print(weapon.data.stats.crit_chance)  # 0
+snapshot = weapon.mode.stats.with_defaults()
+copied_data = weapon.data.copy()
 ```
 
-`copy()` performs a deep copy, including nested data, lists, and damage
-distributions. Mapping unions preserve the typed data subclass:
+### Damage distributions
 
-```python
-copied = weapon.data.copy()
-updated = weapon.data | {"context": {"name": "Copy"}}
-```
-
-### Damage-distribution helpers
-
-Calculated damage fields expose distribution methods without requiring a
-package-root `Dist` import:
+Damage and forced-proc fields are converted to `Dist` objects:
 
 ```python
 damage = weapon.stats.effective.damage
@@ -599,8 +761,8 @@ print(dict(damage.positive()))
 print(dict(damage.sorted()))
 ```
 
-Distributions also support addition, scalar multiplication, elemental
-combination, and application of a modifier distribution:
+Distributions support addition, scalar multiplication, modifier application,
+and elemental combination:
 
 ```python
 combined = damage.combine()
@@ -610,200 +772,112 @@ merged = damage + combined
 
 ---
 
-## Weapon Input Fields
+## Weapon Entry Reference
 
-### Shared fields
+### Weapon-wide fields
 
 | Field | Default | Meaning |
 |---|---:|---|
-| `damage` | empty | Direct-hit damage distribution. |
-| `forced_procs` | empty | Guaranteed direct-hit proc counts by damage type. |
+| `type` | `None` | `primary`, `secondary`, `melee`, or a supported database category such as `archgun`. |
+| `subtype` | `None` | Weapon family such as `rifle`, `shotgun`, `bow`, `pistol`, or a melee class. |
+| `disposition` | `0.0` | Riven disposition metadata. |
+| `ammo` | empty | Global reload, magazine, battery, and Incarnon ammo data. |
+| `attacks` | empty | Named attack definitions. The first attack is the default mode. |
+| `evolutions` | empty | Incarnon evolution tiers and perks. |
+
+Common ranged ammo fields:
+
+| Field | Default | Meaning |
+|---|---:|---|
+| `reload_time` | `0.0` | Base reload duration in seconds. |
+| `magazine_size` | `1` | Base magazine size. |
+| `recharge_rate` | `0.0` | Battery recharge units per second. |
+| `recharge_delay` | absent | Marks a battery weapon and preserves its delay metadata. |
+| `incarnon_charges` | `0` | Incarnon charge capacity metadata. |
+| `incarnon_recharge_count` | `0` | Incarnon recharge-count metadata. |
+
+### Attack fields
+
+| Field | Default | Meaning |
+|---|---:|---|
+| `trigger` | `None` | Trigger class such as `semi`, `auto`, `charge`, or `melee`. |
+| `delivery` | `None` | Delivery class such as `hitscan`, `projectile`, `beam`, or `melee`. |
+| `aoe` | `False` | Whether the attack is radial or area-of-effect. |
+| `children` | empty | Related attacks calculated with the selected ranged attack. |
+| `stats` | empty | Attack-specific combat stats. |
+
+Common attack stats:
+
+| Field | Default | Meaning |
+|---|---:|---|
+| `ammo_cost` | `1` | Attack ammo-cost metadata; not currently applied to fire-cycle math. |
+| `punch_through` | `0.0` | Punch-through metadata. |
+| `damage` | empty | Damage distribution. |
+| `forced_procs` | empty | Guaranteed proc counts by damage or status type. |
+| `falloff` | empty | Falloff metadata; currently stored but not applied to calculations. |
 | `crit_chance` | `0.0` | Base critical chance. |
 | `crit_damage` | `1.0` | Base critical multiplier. |
 | `status_chance` | `0.0` | Base status chance per projectile. |
-
-### Ranged fields
-
-| Field | Default | Meaning |
-|---|---:|---|
-| `explosion_damage` | empty | Radial damage distribution. |
-| `explosion_forced_procs` | empty | Guaranteed radial proc counts. |
 | `multishot` | `1.0` | Native projectiles per attack. |
-| `fire_rate` | `0.05` | Base attacks per second. |
-| `reload_speed` | `0.0` | Reload duration in seconds. |
-| `magazine_capacity` | `1` | Base magazine size. |
+| `fire_rate` | `0.05` | Attacks per second, or melee attack speed. |
 | `burst_count` | `1` | Attacks in each burst. |
 | `burst_delay` | `0.0` | Delay between burst attacks. |
-| `charge_time` | `0.0` | Charge duration per attack or burst. |
-| `recharge_rate` | `0.0` | Battery recharge units per second. |
-| `weakpoint_damage` | `3.0` | Base weakpoint multiplier. |
-
-Ranged context fields include `name`, `type`, `trigger`, `is_beam`, and
-`is_battery`.
-
-### Melee fields
-
-| Field | Default | Meaning |
-|---|---:|---|
-| `attack_speed` | `1.0` | Relative light-attack rate. |
-
-Melee input currently models one abstract light attack rather than a stance
-sequence.
+| `charge_time` | `0.0` | Charge duration. |
+| `co_factor` | `1.0` | Attack-specific Condition Overload factor. |
+| `co_effect` | `"adds"` | Whether Condition Overload adds to or multiplies base damage. |
 
 ---
 
-## Upgrades, Ranks, Conditions, and Stacks
+## Reading Calculated Results
 
-### Effect forms
-
-An upgrade stat accepts these forms:
-
-| Form | Example | Behavior |
-|---|---|---|
-| Static | `"base_damage": 1.65` | Always active. |
-| Conditional | `{"value": 0.3, "when": "headshot"}` | Active when the named condition is truthy. |
-| Stacking | `{"value": 0.1, "stacks_on": "kill"}` | Multiplied by the named stack count. |
-| Rank-locked | `{"value": 0.3, "at_rank": 5}` | Added at full value once the required rank is reached. |
-| Equipped requirement | `{"value": 0.55, "when_equipped": "Partner"}` | Active when the named upgrade is in the same build. |
-| Multiple effects | `[1.0, {...}, {...}]` | Resolves every listed effect independently. |
-
-Boolean effects aggregate with logical OR. Numeric values add together.
-Damage-type fields aggregate into one ordered damage distribution.
-
-### Rank scaling
-
-Ranks are zero-based. An upgrade with `max_rank = 10` has ranks `0` through
-`10`. If `rank` is omitted, the resolver uses `max_rank`; an upgrade without a
-maximum rank defaults to rank `0`.
-
-```python
-serration = arsenal.get("Serration", context={"rank": 4})
-assert isinstance(serration, Upgrade)
-print(serration.stats.total.base_damage)  # 0.75
-```
-
-Ordinary effects use proportional scaling:
-
-```text
-(rank + 1) / (max_rank + 1)
-```
-
-Rank-locked effects are included at full value once `rank >= at_rank`.
-
-The current resolver treats an upgrade containing any rank-locked effect as a
-special case and does not proportionally scale its other effects. This matches
-the current database representation but matters when creating custom upgrades.
-
-### Stack resolution
-
-Stack counts must be non-negative integers and are capped by `max_stacks`.
-The named condition is used first; the generic `stacks` field is the fallback:
-
-```python
-upgrade = Upgrade(
-    {
-        "stats": {
-            "crit_chance": {
-                "value": 0.1,
-                "stacks_on": "kill",
-            }
-        },
-        "context": {
-            "max_stacks": 5,
-            "kill": 3,
-        },
-    }
-)
-
-print(upgrade.stats.stacking.crit_chance)  # 0.3
-```
-
-For predictable results, explicitly provide every runtime condition and stack
-count that matters. A manual non-stacking condition defaults to active when it
-is omitted. A stacking condition may default to `max_stacks` only while the
-upgrade context contains database metadata alone; otherwise its fallback is
-zero.
-
-### Automatic weapon conditions
-
-During weapon calculation, upgrade conditions can match the configured weapon
-automatically:
-
-- `primary`, `secondary`, and `melee`
-- `rifle`, `bow`, `shotgun`, `sniper`, and `pistol`
-- the normalized weapon type
-- `when_equipped` requirements from the active build
-
-A bow also satisfies the `rifle` condition.
-
-### Build validation
-
-Compatibility, incompatibility, requirements, slot count, duplicate upgrades,
-and Exilus restrictions are database metadata only. `Build` does **not**
-currently validate legal loadouts. Applications and user interfaces must
-enforce those rules themselves.
-
----
-
-## Reading Results
-
-Each configured weapon exposes:
+Each weapon exposes:
 
 | Attribute | Description |
 |---|---|
-| `weapon.data` | Original weapon input and context. |
-| `weapon.build` | Active build. |
-| `weapon.stats` | Weapon calculator and all calculated states. |
+| `weapon.data` | Canonical named weapon entry. |
+| `weapon.mode` | Selected attack. |
+| `weapon.evolutions` | Selected Incarnon perks. |
+| `weapon.build` | Detached active build. |
+| `weapon.stats` | Calculator and calculated states. |
 | `weapon.format` | Text formatter. |
 
 ### Weapon state buckets
 
 | Bucket | Description |
 |---|---|
-| `weapon.stats.base` | Dense, normalized weapon input. |
-| `weapon.stats.modded` | Intermediate additive and locked values. |
-| `weapon.stats.effective` | Final values used by expected-damage calculations. |
-| `weapon.stats.average` | Expected-value outputs. |
+| `weapon.stats.base` | Dense normalized stats for the selected attack. |
+| `weapon.stats.modded` | Intermediate additive, multiplicative, and locked values. |
+| `weapon.stats.effective` | Final stats used by expected-value calculations. |
+| `weapon.stats.average` | Expected DPH, DoT, DPS, and mechanic-specific outputs. |
 
-```python
-print(weapon.stats.base.damage)
-print(weapon.stats.modded.crit_chance)
-print(weapon.stats.effective.fire_rate)
-print(weapon.stats.average.total_dps)
-```
-
-### Common average outputs
+Ranged calculators additionally expose `weapon.stats.related_base` and
+`weapon.stats.related` for the selected attack's child attacks.
 
 ```python
 average = weapon.stats.average
 
-average.crit_chance
-average.crit_multiplier
-average.flat_dph
-average.flat_dotph
-average.total_dph
-average.flat_dps
-average.flat_dotps
-average.total_dps
+print(average.crit_chance)
+print(average.crit_multiplier)
+print(average.flat_dph)
+print(average.flat_dotph)
+print(average.total_dph)
+print(average.flat_dps)
+print(average.flat_dotps)
+print(average.total_dps)
 ```
 
-### Ranged outputs
+Ranged models also expose weakpoint versions, effective fire rate, expected
+procs per shot, and beam behavior:
 
 ```python
-average.fire_rate
-average.procs_per_shot
-average.beam_dot_multiplier
-average.weakpoint_crit_chance
-average.weakpoint_crit_multiplier
-average.flat_weakpoint_dph
-average.flat_weakpoint_dotph
-average.total_weakpoint_dph
-average.flat_weakpoint_dps
-average.flat_weakpoint_dotps
-average.total_weakpoint_dps
+print(average.fire_rate)
+print(average.procs_per_shot)
+print(average.weakpoint_crit_chance)
+print(average.total_weakpoint_dph)
+print(average.total_weakpoint_dps)
 ```
 
-### Mechanic-specific outputs
+Mechanic-specific outputs include:
 
 | Model | Output |
 |---|---|
@@ -831,6 +905,25 @@ build.stats.rank_locked
 build.stats.total
 ```
 
+### Contribution estimates
+
+```python
+weapon = arsenal.get("Acceltra Prime").configure(
+    Build(
+        arsenal.get("Serration"),
+        arsenal.get("Critical Delay"),
+    )
+)
+
+print(weapon.stats.contribution_values())
+print(weapon.stats.contribution_proportions())
+print(weapon.format.upgrades())
+```
+
+Each contribution is the full build's DPS minus the DPS after removing that
+upgrade. These are marginal estimates, so interactions between upgrades mean
+the proportions are not independent multipliers.
+
 ### Formatters
 
 ```python
@@ -838,18 +931,19 @@ print(weapon.format.summary())
 print(weapon.format.upgrades())
 ```
 
-Ranged summaries include base and effective fire-cycle stats, direct and radial
-damage, weakpoint values, expected procs, DPH, DoT, and DPS. Melee summaries
-include attack speed and expected damage per abstract light attack.
+Ranged summaries include the selected attack, global fire-cycle stats, direct
+and related attack damage, weakpoint values, expected procs, DPH, DoT, and DPS.
+Melee summaries include attack speed and expected damage for the selected
+attack.
 
 ---
 
 ## Supported Upgrade Stats
 
-Unknown fields can still be stored and resolved, but only fields consumed by a
-weapon calculator change weapon results.
+Unknown fields can be stored and resolved, but only fields consumed by a weapon
+calculator change calculated results.
 
-### Damage
+### Damage and faction stats
 
 - Damage types: `impact`, `puncture`, `slash`, `cold`, `electricity`, `heat`,
   `toxin`, `blast`, `corrosive`, `gas`, `magnetic`, `radiation`, `viral`,
@@ -857,14 +951,19 @@ weapon calculator change weapon results.
 - `damage`
 - `base_damage`
 - `multiplicative_base_damage`
-- `faction_damage`
+- `condition_overload`
+- `corpus_damage`
+- `grineer_damage`
+- `infested_damage`
+- `murmur_damage`
+- `orokin_damage`
+- `sentient_damage`
 - `weakpoint_damage`
 - `multishot`
 - `multishot_lock`
 
-`elements` is available as a resolver bucket for preserving elemental metadata,
-but it is not currently read by the weapon damage calculator. Use damage-type
-fields or `damage` to modify weapon damage.
+When multiple faction stats are present, the calculator uses the largest one.
+Faction damage is applied twice to modeled DoT damage.
 
 ### Fire control
 
@@ -899,84 +998,88 @@ fields or `damage` to modify weapon damage.
 - `melee_duplicate`
 - `melee_doughty`
 
-`melee_doughty` calculates and exposes
-`weapon.stats.average.melee_doughty_bonus`, but that bonus is not yet applied to
-DPH or DPS.
+`elements` is preserved by the resolver but is not read directly by the weapon
+calculator. Use individual damage-type fields or `damage` to modify the damage
+distribution.
 
-Upgrades do not currently add forced procs directly; forced procs come from the
-weapon's `forced_procs` and `explosion_forced_procs` input fields.
+`melee_doughty` exposes `weapon.stats.average.melee_doughty_bonus`; that bonus is
+not yet applied to DPH or DPS.
 
 ---
 
 ## Calculation Scope and Assumptions
 
-The library computes expected values rather than simulating individual attacks.
-Results represent a long-run statistical average and may not match any one shot
-in game.
+The library computes long-run expected values rather than simulating individual
+shots, projectiles, or animation frames.
 
-### Damage, critical hits, and DoT
+### Damage, critical hits, status, and DoT
 
-- Elemental combination order follows the order in which elemental upgrade
-  entries are aggregated.
-- DoT values represent the expected total damage of the modeled proc duration,
-  using multipliers of `2.1` for Slash and `3.0` for Heat, Toxin, Electricity,
-  and Gas.
-- Faction damage is applied twice to DoT calculations.
-- Radial explosion damage is added once per attack. It does not receive
-  multishot, weakpoint damage, or multiplicative base damage in the current
-  model.
-- Native status chance is treated per projectile; expected procs per attack are
-  `status_chance * multishot`.
+- Elemental combination follows the order in which elemental upgrade effects are aggregated.
+- DoT values represent expected total proc damage using a multiplier of `2.1` for Slash and `3.0` for Heat, Toxin, Electricity, and Gas.
+- Native status chance is treated per projectile.
 - Forced proc counts are added independently of ordinary status weighting.
-- If Hunter Munitions and Internal Bleeding produce Slash on the same attack,
-  the overlap is removed once, leaving the higher of the two proc damages.
+- Faction damage is applied twice to modeled DoT.
+- Related ranged attacks are included automatically when the selected attack lists them as children.
+- Falloff, punch through, and several other database fields are currently metadata only.
+
+### Condition Overload
+
+- Condition Overload counts unique damage types plus positive forced-proc types on the attack.
+- The effect may be capped by the upgrade's structured `max_stacks` value.
+- Each attack may scale the bonus with `co_factor`.
+- `co_effect="adds"` adds the bonus to additive base damage.
+- `co_effect="multiplies"` adds the bonus to multiplicative base damage.
+- Child attacks resolve their own Condition Overload factor and effect.
 
 ### Primary mechanics
 
 - Hunter Munitions is modeled as an expected Slash proc chance on critical hits.
 - Internal Bleeding doubles its modeled chance below `2.5` effective fire rate.
-- Primed Chamber is averaged as one boosted attack per magazine and also affects
-  the modeled DoT produced by that attack.
-- `vigilante_bonus` is applied as an expected critical-chance tier bonus, capped
-  at `0.30`.
+- Primed Chamber is averaged across the magazine and also affects modeled DoT from the boosted attack.
+- Vigilante bonus is represented as an expected critical-tier bonus capped at `0.30`.
 
 ### Secondary mechanics
 
 - Secondary Encumber is modeled as triggering at most once per attack.
 - Its chance accounts for status chance and multishot.
-- Its expected DoT scales with total damage, critical damage, status damage, and
-  faction damage.
-- It can contribute an Impact proc to Internal Bleeding/Hemorrhage.
-- Secondary Enervate uses an expected-value state calculation and exposes its
-  average normal-hit and weakpoint bonuses separately.
+- It contributes expected DoT and may add an Impact source for Internal Bleeding or Hemorrhage.
+- Secondary Enervate uses an expected-state calculation and exposes separate normal-hit and weakpoint bonuses.
 
 ### Fire cycle
 
-- Positive additive fire rate reduces burst delay; negative additive fire rate
-  does not increase it.
-- Charge time scales with fire rate.
+- Charge time and burst timing are included in average fire rate.
 - `fire_rate_lock` ignores additive and multiplicative fire-rate upgrades.
-- `multishot_lock` ignores modded multishot while preserving native multishot.
-- Beam weapons use a baseline ammo cost of `0.5` per modeled shot/tick and apply
-  their beam multishot behavior to DoT.
-- Battery recharge time is `magazine_capacity / recharge_rate` and is added to
-  the regular reload-time component. Reload-speed modifiers do not change the
-  recharge rate itself.
+- `multishot_lock` preserves native multishot but ignores upgrade multishot.
+- Beam weapons apply beam-specific ammo-efficiency and DoT multishot behavior.
+- Battery recharge time is based on magazine capacity and recharge rate.
 - Magazine capacity uses Warframe-style true rounding and never falls below one.
-- Effective fire rate is a closed-form average over charge time, burst delay,
-  firing time, ammo efficiency, magazine capacity, and reload/recharge time.
-  It is not a frame-by-frame simulation.
+- Average fire rate is a closed-form fire-cycle calculation, not a frame-by-frame simulation.
 
 ### Melee
 
-Melee DPS is calculated as expected damage per light attack multiplied by
-`attack_speed`. Stance animations, combo timing, follow-through, range, and
-multi-hit attack sequences are not modeled, so melee DPS should be treated as a
-relative comparison rather than literal in-game DPS.
+Melee DPS is calculated as expected damage per selected attack multiplied by its
+attack speed. Stance animation timing, combo counters, follow-through, range,
+and multi-hit stance sequences are not modeled, so melee DPS is best treated as
+a relative comparison.
 
-Melee Duplicate is represented by an expected extra-hit multiplier around the
-100% critical-chance region. Melee Doughty currently exposes only its calculated
-bonus and does not modify damage outputs.
+---
+
+## Current Limitations
+
+The calculator does not currently model:
+
+- Enemy armor, shields, health types, resistances, or damage attenuation
+- Time-to-kill
+- Most non-DoT status effects
+- Projectile travel time or falloff application
+- Headshot eligibility or enemy-specific weakpoint rules
+- Melee stance animation timing and combo progression
+- Heavy-attack wind-up, slam timing, and multi-hit sequences as complete gameplay cycles
+- Frame abilities and weapon-specific scripted mechanics unless represented by upgrade stats
+- Loadout legality, duplicate slots, Exilus restrictions, or incompatibility enforcement
+
+Compatibility and incompatibility fields are metadata. Applications using the
+library must enforce legal loadouts themselves.
 
 ---
 
