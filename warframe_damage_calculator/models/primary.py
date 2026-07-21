@@ -8,7 +8,7 @@ class Primary(Ranged):
     data: PrimaryData
     stats: PrimaryCalculator
     format: PrimaryFormatter
-    
+
     data_type = PrimaryData
     calculator_type = PrimaryCalculator
     formatter_type = PrimaryFormatter

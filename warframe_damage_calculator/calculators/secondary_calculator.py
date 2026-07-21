@@ -1,29 +1,29 @@
+from ..models.fields import AttackResult
 from ..utils.constants import DOT_MULTIPLIERS
 from ..utils.functions import clamp
-from ..models.fields import AttackBucket
 from .ranged_calculator import RangedCalculator
 
 
 class SecondaryCalculator(RangedCalculator):
-    def _compute_modded_stats(self, bucket: AttackBucket) -> None:
-        super()._compute_modded_stats(bucket)
-        build, modded = bucket.build, bucket.modded
+    def _compute_modded_stats(self, result: AttackResult) -> None:
+        super()._compute_modded_stats(result)
+        build, modded = result.build, result.modded
 
         modded.secondary_enervate = clamp(build.secondary_enervate, 0, 6)
         modded.secondary_encumber = clamp(build.secondary_encumber, 0, 0.24)
 
-    def _compute_effective_stats(self, bucket: AttackBucket) -> None:
-        super()._compute_effective_stats(bucket)
-        modded, effective = bucket.modded, bucket.effective
+    def _compute_effective_stats(self, result: AttackResult) -> None:
+        super()._compute_effective_stats(result)
+        modded, effective = result.modded, result.effective
 
         effective.secondary_enervate = modded.secondary_enervate
         effective.secondary_encumber = modded.secondary_encumber
 
-    def _compute_average_stats(self, bucket: AttackBucket) -> None:
-        super()._compute_average_stats(bucket)
-        modded, effective, average = bucket.modded, bucket.effective, bucket.average
-        secondary_enervate_bonus = self._average_secondary_enervate_bonus(modded.crit_chance * modded.multiplicative_crit_chance + modded.flat_crit_chance, bucket)
-        weakpoint_secondary_enervate_bonus = self._average_secondary_enervate_bonus(modded.weakpoint_crit_chance * (modded.multiplicative_crit_chance + modded.multiplicative_weakpoint_crit_chance - 1) + modded.flat_crit_chance, bucket)
+    def _compute_average_stats(self, result: AttackResult) -> None:
+        super()._compute_average_stats(result)
+        modded, effective, average = result.modded, result.effective, result.average
+        secondary_enervate_bonus = self._average_secondary_enervate_bonus(modded.crit_chance * modded.multiplicative_crit_chance + modded.flat_crit_chance, result)
+        weakpoint_secondary_enervate_bonus = self._average_secondary_enervate_bonus(modded.weakpoint_crit_chance * (modded.multiplicative_crit_chance + modded.multiplicative_weakpoint_crit_chance - 1) + modded.flat_crit_chance, result)
 
         average.secondary_enervate_bonus = secondary_enervate_bonus
         average.weakpoint_secondary_enervate_bonus = weakpoint_secondary_enervate_bonus
@@ -35,8 +35,8 @@ class SecondaryCalculator(RangedCalculator):
         average.flat_weakpoint_dph = effective.damage.total_damage() * effective.multishot * effective.weakpoint_damage * average.weakpoint_crit_multiplier * effective.faction_damage
         average.flat_dps = average.fire_rate * average.flat_dph
         average.flat_weakpoint_dps = average.fire_rate * average.flat_weakpoint_dph
-        average.flat_dotph = self._flat_dotph(bucket)
-        average.flat_weakpoint_dotph = self._flat_dotph(bucket, weakpoint=True)
+        average.flat_dotph = self._flat_dotph(result)
+        average.flat_weakpoint_dotph = self._flat_dotph(result, weakpoint=True)
         average.flat_dotps = average.fire_rate * average.flat_dotph
         average.flat_weakpoint_dotps = average.fire_rate * average.flat_weakpoint_dotph
         average.total_dph = average.flat_dph + average.flat_dotph
@@ -45,8 +45,8 @@ class SecondaryCalculator(RangedCalculator):
         average.total_weakpoint_dps = average.flat_weakpoint_dps + average.flat_weakpoint_dotps
 
     @staticmethod
-    def _average_secondary_enervate_bonus(crit_chance: float, bucket: AttackBucket, max_stacks: int = 500) -> float:
-        rate = bucket.effective.secondary_enervate
+    def _average_secondary_enervate_bonus(crit_chance: float, result: AttackResult, max_stacks: int = 500) -> float:
+        rate = result.effective.secondary_enervate
         if rate == 0:
             return 0.0
         length = [[0.0] * rate for _ in range(max_stacks + 1)]
@@ -74,9 +74,9 @@ class SecondaryCalculator(RangedCalculator):
 
         return 0.1 * accumulated[0][0] / length[0][0]
 
-    def _flat_dotph(self, bucket: AttackBucket, *, weakpoint: bool = False) -> float:  # Secondary Encumber calculations need testing in-game
-        damage, forced_procs = bucket.effective.damage, bucket.base.forced_procs
-        effective, average = bucket.effective, bucket.average
+    def _flat_dotph(self, result: AttackResult, *, weakpoint: bool = False) -> float:  # Secondary Encumber calculations need testing in-game
+        damage, forced_procs = result.effective.damage, result.base.forced_procs
+        effective, average = result.effective, result.average
         if damage.total_damage() <= 0:
             return 0.0
         crit_multiplier = average.weakpoint_crit_multiplier if weakpoint else average.crit_multiplier

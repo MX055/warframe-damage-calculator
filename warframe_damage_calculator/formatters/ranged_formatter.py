@@ -3,12 +3,12 @@ from .weapon_formatter import WeaponFormatter
 
 class RangedFormatter(WeaponFormatter):
     def summary(self) -> str:
-        base = self.weapon.stats.parent.base
-        effective = self.weapon.stats.parent.effective
-        average = self.weapon.stats.average
+        base = self.weapon.stats.base
+        effective = self.weapon.stats.effective
+        average = self.weapon.stats.combined
         related_rows = []
-        for child in self.weapon.stats.child:
-            name = self._attack_name(child.attack).replace("_", " ").title()
+        for child in self.weapon.stats.children.values():
+            name = child.name.replace("_", " ").title()
             related_base, related = child.base, child.effective
             damage_types = dict.fromkeys((*related_base.damage.data, *related.damage.data))
             related_rows.extend((f"{name} {damage_type.upper()}:", related_base.damage.get(damage_type), related.damage.get(damage_type)) for damage_type in damage_types)
@@ -17,7 +17,7 @@ class RangedFormatter(WeaponFormatter):
         label_width = max((25, *(len(label) for label, _, _ in related_rows)))
         divider = "-" * (label_width + 33)
         return "\n".join([
-            f"{self.weapon.data.name} - {self._attack_name(self.weapon.mode).replace('_', ' ').title()}",
+            f"{self.weapon.data.name} - {self.weapon.stats.name.replace('_', ' ').title()}",
             divider,
             f"{'FIRE RATE:':<{label_width}} {f'{base.fire_rate:.2f}rps':<7} -> {effective.fire_rate:.2f}rps",
             f"{'RELOAD SPEED:':<{label_width}} {f'{base.reload_speed:.2f}s':<7} -> {effective.reload_speed:.2f}s",
@@ -32,7 +32,7 @@ class RangedFormatter(WeaponFormatter):
             *(f"{label:<{label_width}} {f'{base_damage:.2f}':<7} -> {effective_damage:.2f}" for label, base_damage, effective_damage in related_rows),
             divider,
             f"{'AVERAGE FIRE RATE:':<{label_width}} {average.fire_rate:.2f}rps",
-            f"{'EXPECTED PROCS PER SHOT:':<{label_width}} {average.procs_per_shot:.2f}",
+            f"{'EXPECTED PROCS PER SHOT:':<{label_width}} {self.weapon.stats.average.procs_per_shot:.2f}",
             f"{'FLAT DPH | WEAKPOINT:':<{label_width}} {average.flat_dph:.2f} | {average.flat_weakpoint_dph:.2f}",
             f"{'FLAT DOTPH | WEAKPOINT:':<{label_width}} {average.flat_dotph:.2f} | {average.flat_weakpoint_dotph:.2f}",
             f"{'TOTAL DPH | WEAKPOINT:':<{label_width}} {average.total_dph:.2f} | {average.total_weakpoint_dph:.2f}",

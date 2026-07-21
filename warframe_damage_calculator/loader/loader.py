@@ -87,23 +87,23 @@ class WarframeDatabase:
         return self._factory.create(entry, dict(context or {}))
 
     def _iter_entries(self) -> Iterator[DatabaseEntry]:
-        for name, raw in self.weapons.items():
+        for raw in self.weapons.values():
             database_category = normalize_identifier(raw.get("type"))
             category = "primary" if database_category == "archgun" else database_category
             if category in {"primary", "secondary", "melee"}:
-                yield DatabaseEntry(category, name, raw)
+                yield DatabaseEntry(category, raw)
 
-        for name, raw in self.upgrades.items():
+        for raw in self.upgrades.values():
             category = normalize_identifier(raw.get("type"))
             if category in {"mod", "arcane"}:
                 compatibility = raw.get("compatibility", {})
                 match_types = {normalize_identifier(item) for item in compatibility.get("types", [])}
                 subtypes = {normalize_identifier(item) for item in compatibility.get("subtypes", [])}
                 names = {normalize_name(item) for item in compatibility.get("names", [])}
-                for weapon_name, weapon in self.weapons.items():
-                    if normalize_identifier(weapon.get("subtype")) in subtypes or normalize_name(weapon_name) in names:
+                for weapon in self.weapons.values():
+                    if normalize_identifier(weapon.get("subtype")) in subtypes or normalize_name(weapon.get("name")) in names:
                         match_types.add("primary" if weapon.get("type") == "archgun" else normalize_identifier(weapon.get("type")))
-                yield DatabaseEntry(category, name, raw, match_types)
+                yield DatabaseEntry(category, raw, match_types)
 
     @staticmethod
     def _attribute(item: DatabaseItem, attribute: str | None) -> object:
@@ -112,12 +112,12 @@ class WarframeDatabase:
         key = normalize_identifier(attribute)
         if key == "name":
             return item.data.name
-        contexts = (item.data.runtime, item.data.entry.stats) if isinstance(item, Upgrade) else (item.data.entry, item.data.entry.ammo)
+        contexts = (item.data.runtime, item.data.stats) if isinstance(item, Upgrade) else (item.data, item.data.ammo)
         for data in contexts:
             if key in data:
                 return data[key]
         if isinstance(item, Weapon):
-            for state in (item.stats.parent.base, item.stats.parent.effective):
+            for state in (item.stats.base, item.stats.effective):
                 if key in state:
                     return state[key]
             if key in item.mode:

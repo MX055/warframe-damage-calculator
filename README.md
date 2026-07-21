@@ -7,10 +7,11 @@ weapons and upgrades, combining them into builds, and calculating average damage
 per hit and DPS without Monte Carlo simulation.
 
 Version **0.8.0** introduces a new canonical model layout built around the
-single-file database schema. Weapons now contain named attack modes, global ammo
-data, related child attacks, and optional Incarnon evolutions. Upgrades use the
-same named-entry construction style and keep runtime rank, condition, and stack
-values separate from their permanent database data.
+single-file database schema. Weapons expose flat data (`name`, `type`, `ammo`,
+`attacks`, `evolutions`), named attack modes, related attacks, and optional
+Incarnon evolutions. Upgrades use the same flat construction style and keep
+runtime rank, condition, and stack values separate from their permanent database
+data. The arsenal and database store `name` on each weapon and upgrade entry.
 
 The project is currently **alpha software**. It is useful for theorycrafting,
 build comparison, custom mechanics, database tooling, and external calculator
@@ -21,10 +22,12 @@ front ends, but it is not a complete simulation of Warframe combat.
 ## v0.8.0 Highlights
 
 - One canonical database file: `database/database.json`
-- New database-shaped constructors for weapons and upgrades
+- Flat constructors for weapons and upgrades (`name` is a field on the model data)
 - Multiple named attack modes per weapon
 - Runtime attack switching with `weapon.set_mode()`
-- Automatic calculation of related child attacks, such as projectiles and their explosions
+- Automatic calculation of related attacks, such as projectiles and their explosions
+- Named related-attack results under `weapon.stats.children`
+- Selected-attack results on `weapon.stats`, with aggregate DPS on `weapon.stats.combined`
 - Global weapon data separated from attack-specific stats
 - Incarnon evolution selection with `weapon.set_evolutions()`
 - Attack-specific Condition Overload factors and additive or multiplicative behavior
@@ -44,7 +47,7 @@ front ends, but it is not a complete simulation of Warframe combat.
 
 - `Primary`, `Secondary`, and `Melee` weapon models
 - Multiple attacks per weapon, including normal fire, alternate fire, charged attacks, Incarnon forms, slam attacks, and other database-defined modes
-- Direct attacks and linked child attacks such as radial explosions
+- Direct attacks and linked related attacks such as radial explosions
 - Hitscan, projectile, beam, melee, and area-of-effect metadata
 - Physical, elemental, combined elemental, Void, and Tau damage
 - Ordered elemental combination
@@ -68,7 +71,7 @@ front ends, but it is not a complete simulation of Warframe combat.
 - Scalar, record, and mixed-list stat syntax
 - Automatic weapon-category conditions during build resolution
 - Separate `static`, `conditional`, `modular`, `stacking`, `rank_locked`, and `total` result buckets
-- Runtime rank, condition, and stack values that do not modify the canonical upgrade entry
+- Runtime rank, condition, and stack values that do not modify the canonical upgrade data
 
 ### Special mechanics
 
@@ -164,9 +167,12 @@ build = Build(
 weapon.configure(build)
 
 print(weapon.format.summary())
-print(f"Average DPS:   {weapon.stats.average.total_dps:.2f}")
-print(f"Weakpoint DPS: {weapon.stats.average.total_weakpoint_dps:.2f}")
+print(f"Average DPS:   {weapon.stats.combined.total_dps:.2f}")
+print(f"Weakpoint DPS: {weapon.stats.combined.total_weakpoint_dps:.2f}")
 ```
+
+`weapon.stats` is the selected attack result. Use `weapon.stats.combined` for
+aggregate DPH and DPS that include related attacks.
 
 Database upgrades resolve at maximum rank and, where applicable, maximum stacks
 by default. Pass runtime values through `context` to override that behavior.
@@ -184,11 +190,11 @@ weapon = arsenal.get("Corinth Prime")
 assert isinstance(weapon, Primary)
 
 print(weapon.data.name)
-print(list(weapon.data.entry.attacks))
+print(list(weapon.data.attacks))
 print(weapon.mode.stats.damage)
 ```
 
-The first attack in the weapon entry is selected by default.
+The first attack in the weapon data is selected by default.
 
 ### Select another attack mode
 
@@ -242,7 +248,7 @@ weapon.set_evolutions(evolution_2=1, evolution_3=2)
 weapon.set_mode("Incarnon Form")
 
 print(weapon.evolutions)
-print(weapon.stats.parent.effective.damage.total_damage())
+print(weapon.stats.effective.damage.total_damage())
 ```
 
 Selections are validated against the weapon's evolution tiers and perks. Each
@@ -252,13 +258,14 @@ weapon is recomputed.
 ### Read results
 
 ```python
-print(weapon.stats.parent.base)
-print(weapon.stats.parent.modded)
-print(weapon.stats.parent.effective)
+print(weapon.stats.base)
+print(weapon.stats.modded)
+print(weapon.stats.effective)
 print(weapon.stats.average)
+print(weapon.stats.combined)
 
-print(weapon.stats.average.total_dph)
-print(weapon.stats.average.total_dps)
+print(weapon.stats.combined.total_dph)
+print(weapon.stats.combined.total_dps)
 print(weapon.format.summary())
 ```
 
@@ -266,9 +273,8 @@ print(weapon.format.summary())
 
 ## New Model Construction
 
-Version 0.8.0 constructors use the same named-entry shape as the database. A
-model receives a mapping whose top-level key is the model name and whose value
-is its canonical entry.
+Version 0.8.0 constructors take a flat mapping: `name` and the other canonical
+fields live at the top level. Database entries include the same `name` field.
 
 ### Constructing a ranged weapon
 
@@ -277,102 +283,100 @@ from warframe_damage_calculator import Primary
 
 weapon = Primary(
     {
-        "Example Rifle": {
-            "type": "primary",
-            "subtype": "rifle",
-            "disposition": 1.0,
-            "ammo": {
-                "reload_time": 2.2,
-                "magazine_size": 30,
-            },
-            "attacks": {
-                "normal_attack": {
-                    "trigger": "auto",
-                    "delivery": "hitscan",
-                    "stats": {
-                        "damage": {
-                            "impact": 20,
-                            "puncture": 30,
-                            "slash": 50,
-                        },
-                        "forced_procs": {"slash": 1},
-                        "crit_chance": 0.30,
-                        "crit_damage": 2.2,
-                        "status_chance": 0.25,
-                        "multishot": 1,
-                        "fire_rate": 6.0,
+        "name": "Example Rifle",
+        "type": "primary",
+        "subtype": "rifle",
+        "disposition": 1.0,
+        "ammo": {
+            "reload_time": 2.2,
+            "magazine_size": 30,
+        },
+        "attacks": {
+            "normal_attack": {
+                "trigger": "auto",
+                "delivery": "hitscan",
+                "stats": {
+                    "damage": {
+                        "impact": 20,
+                        "puncture": 30,
+                        "slash": 50,
                     },
-                }
-            },
-        }
+                    "forced_procs": {"slash": 1},
+                    "crit_chance": 0.30,
+                    "crit_damage": 2.2,
+                    "status_chance": 0.25,
+                    "multishot": 1,
+                    "fire_rate": 6.0,
+                },
+            }
+        },
     }
 )
 
 print(weapon.data.name)                  # Example Rifle
-print(weapon.data.entry.type)            # primary
-print(weapon.data.entry.ammo.reload_time)
+print(weapon.data.type)                  # primary
+print(weapon.data.ammo.reload_time)
 print(weapon.mode.stats.crit_chance)
 ```
 
-Weapon-wide fields belong directly to the named entry. Attack-specific fields
+Weapon-wide fields belong directly on `weapon.data`. Attack-specific fields
 belong inside each attack's `stats` mapping.
 
-### Multiple attacks and related child attacks
+### Multiple attacks and related attacks
 
 ```python
 from warframe_damage_calculator import Primary
 
 weapon = Primary(
     {
-        "Example Launcher": {
-            "type": "primary",
-            "subtype": "rifle",
-            "ammo": {
-                "reload_time": 2.5,
-                "magazine_size": 6,
-            },
-            "attacks": {
-                "projectile": {
-                    "trigger": "semi",
-                    "delivery": "projectile",
-                    "children": ["explosion"],
-                    "stats": {
-                        "damage": {"impact": 100},
-                        "crit_chance": 0.20,
-                        "crit_damage": 2.0,
-                        "status_chance": 0.20,
-                        "fire_rate": 1.0,
-                    },
-                },
-                "explosion": {
-                    "trigger": "semi",
-                    "delivery": "projectile",
-                    "aoe": True,
-                    "stats": {
-                        "damage": {"blast": 500},
-                        "forced_procs": {"impact": 1},
-                        "crit_chance": 0.20,
-                        "crit_damage": 2.0,
-                        "status_chance": 0.20,
-                        "fire_rate": 1.0,
-                    },
+        "name": "Example Launcher",
+        "type": "primary",
+        "subtype": "rifle",
+        "ammo": {
+            "reload_time": 2.5,
+            "magazine_size": 6,
+        },
+        "attacks": {
+            "projectile": {
+                "trigger": "semi",
+                "delivery": "projectile",
+                "children": ["explosion"],
+                "stats": {
+                    "damage": {"impact": 100},
+                    "crit_chance": 0.20,
+                    "crit_damage": 2.0,
+                    "status_chance": 0.20,
+                    "fire_rate": 1.0,
                 },
             },
-        }
+            "explosion": {
+                "trigger": "semi",
+                "delivery": "projectile",
+                "aoe": True,
+                "stats": {
+                    "damage": {"blast": 500},
+                    "forced_procs": {"impact": 1},
+                    "crit_chance": 0.20,
+                    "crit_damage": 2.0,
+                    "status_chance": 0.20,
+                    "fire_rate": 1.0,
+                },
+            },
+        },
     }
 )
 
 weapon.set_mode("Projectile")
 
-print(weapon.stats.parent.effective.damage)
-print(weapon.stats.child[0].effective.damage)
-print(weapon.stats.average.total_dps)
+print(weapon.stats.effective.damage)
+print(weapon.stats.children.explosion.effective.damage)
+print(weapon.stats.combined.total_dps)
 ```
 
-For ranged weapons, selected attacks may name child attacks through `children`.
-Their complete calculations are exposed through
-`weapon.stats.child`, including each child's base, modded,
-effective, average, and descendant states.
+For ranged weapons, selected attacks may name related attacks through
+`children`. Their complete calculations are exposed through the named map
+`weapon.stats.children`, including each related attack's base, modded,
+effective, average, combined, and descendant states.
 
 ### Constructing a melee weapon
 
@@ -381,32 +385,31 @@ from warframe_damage_calculator import Melee
 
 weapon = Melee(
     {
-        "Example Sword": {
-            "type": "melee",
-            "subtype": "sword",
-            "attacks": {
-                "normal_attack": {
-                    "trigger": "melee",
-                    "delivery": "melee",
-                    "stats": {
-                        "damage": {
-                            "impact": 10,
-                            "puncture": 10,
-                            "slash": 80,
-                        },
-                        "crit_chance": 0.20,
-                        "crit_damage": 2.0,
-                        "status_chance": 0.30,
-                        "fire_rate": 1.0,
+        "name": "Example Sword",
+        "type": "melee",
+        "subtype": "sword",
+        "attacks": {
+            "normal_attack": {
+                "trigger": "melee",
+                "delivery": "melee",
+                "stats": {
+                    "damage": {
+                        "impact": 10,
+                        "puncture": 10,
+                        "slash": 80,
                     },
-                }
-            },
-        }
+                    "crit_chance": 0.20,
+                    "crit_damage": 2.0,
+                    "status_chance": 0.30,
+                    "fire_rate": 1.0,
+                },
+            }
+        },
     }
 )
 
-print(weapon.stats.parent.base.attack_speed)
-print(weapon.stats.average.total_dps)
+print(weapon.stats.base.attack_speed)
+print(weapon.stats.combined.total_dps)
 ```
 
 For melee attacks, the selected attack's `fire_rate` is used as the base attack
@@ -419,31 +422,30 @@ from warframe_damage_calculator import Upgrade
 
 upgrade = Upgrade(
     {
-        "Example Mod": {
-            "type": "mod",
-            "max_rank": 10,
-            "compatibility": {
-                "types": ["primary"],
-                "subtypes": ["rifle"],
-                "exilus": False,
-            },
-            "incompatibility": ["Conflicting Mod"],
-            "stats": {
-                "base_damage": 1.65,
-                "crit_chance": 2.0,
-                "fire_rate": -0.20,
-                "heat": 0.90,
-            },
-        }
+        "name": "Example Mod",
+        "type": "mod",
+        "max_rank": 10,
+        "compatibility": {
+            "types": ["primary"],
+            "subtypes": ["rifle"],
+            "exilus": False,
+        },
+        "incompatibility": ["Conflicting Mod"],
+        "stats": {
+            "base_damage": 1.65,
+            "crit_chance": 2.0,
+            "fire_rate": -0.20,
+            "heat": 0.90,
+        },
     }
 )
 
 print(upgrade.data.name)
-print(upgrade.data.entry.stats.base_damage)
+print(upgrade.data.stats.base_damage)
 print(upgrade.stats.total.base_damage)
 ```
 
-The canonical entry contains persistent metadata and stat effects. Runtime
+The canonical data contains persistent metadata and stat effects. Runtime
 values are stored separately in `upgrade.data.runtime`.
 
 ### Upgrade effect forms
@@ -456,23 +458,22 @@ from warframe_damage_calculator import Build, Upgrade
 
 upgrade = Upgrade(
     {
-        "Example Arcane": {
-            "type": "arcane",
-            "max_rank": 5,
-            "stats": {
-                "base_damage": [
-                    0.30,
-                    {"value": 0.20, "when": "headshot"},
-                    {"value": 0.10, "stacks": {"when": "kill", "max": 3}},
-                    {"value": 0.25, "rank": 5},
-                    {"value": 0.15, "equipped": ["Partner"]},
-                ]
-            },
-        }
+        "name": "Example Arcane",
+        "type": "arcane",
+        "max_rank": 5,
+        "stats": {
+            "base_damage": [
+                0.30,
+                {"value": 0.20, "when": "headshot"},
+                {"value": 0.10, "stacks": {"when": "kill", "max": 3}},
+                {"value": 0.25, "rank": 5},
+                {"value": 0.15, "equipped": ["Partner"]},
+            ]
+        },
     }
 )
 
-partner = Upgrade({"Partner": {"type": "buff", "stats": {}}})
+partner = Upgrade({"name": "Partner", "type": "buff", "stats": {}})
 
 upgrade.data.runtime.update(
     {
@@ -647,7 +648,7 @@ shotgun_subtypes = arsenal.get(type="shotgun", attribute="subtype")
 `attribute="name"` returns a sorted list when no item name is supplied. Other
 attributes return one extracted value or a dictionary of values.
 
-For weapons, attribute lookup checks the canonical entry, ammo data, calculated
+For weapons, attribute lookup checks the flat weapon data, ammo data, calculated
 base and effective states, the selected attack, and its stats. For upgrades, it
 checks runtime values and canonical upgrade stats.
 
@@ -667,8 +668,20 @@ The file uses the same top-level schema as the bundled database:
 ```json
 {
   "schema_version": 1,
-  "weapons": {},
-  "upgrades": {},
+  "weapons": {
+    "Example Rifle": {
+      "name": "Example Rifle",
+      "type": "primary",
+      "attacks": {}
+    }
+  },
+  "upgrades": {
+    "Example Mod": {
+      "name": "Example Mod",
+      "type": "mod",
+      "stats": {}
+    }
+  },
   "riven_stats": {}
 }
 ```
@@ -688,31 +701,28 @@ print(rifle_riven_stats["crit_chance"])
 
 ```python
 weapon.data.name
-weapon.data.entry
-weapon.data.entry.type
-weapon.data.entry.subtype
-weapon.data.entry.disposition
-weapon.data.entry.ammo
-weapon.data.entry.attacks
-weapon.data.entry.evolutions
+weapon.data.type
+weapon.data.subtype
+weapon.data.disposition
+weapon.data.ammo
+weapon.data.attacks
+weapon.data.evolutions
 weapon.mode
 weapon.mode.stats
 ```
 
-`weapon.data` contains one named entry. `weapon.data.entry` is a convenience
-property for that entry, and `weapon.mode` points to the currently selected
-attack.
+`weapon.data` is the flat weapon definition. `weapon.mode` points to the
+currently selected attack.
 
 ### Upgrade data
 
 ```python
 upgrade.data.name
-upgrade.data.entry
-upgrade.data.entry.type
-upgrade.data.entry.max_rank
-upgrade.data.entry.compatibility
-upgrade.data.entry.incompatibility
-upgrade.data.entry.stats
+upgrade.data.type
+upgrade.data.max_rank
+upgrade.data.compatibility
+upgrade.data.incompatibility
+upgrade.data.stats
 upgrade.data.runtime
 ```
 
@@ -725,7 +735,7 @@ Nested mappings are converted to typed `Data` subclasses and support both
 mapping and attribute access:
 
 ```python
-print(weapon.data.entry.ammo.magazine_size)
+print(weapon.data.ammo.magazine_size)
 print(weapon.mode.stats.crit_chance)
 
 weapon.mode.stats.crit_chance = 0.40
@@ -752,7 +762,7 @@ copied_data = weapon.data.copy()
 Damage and forced-proc fields are converted to `Dist` objects:
 
 ```python
-damage = weapon.stats.parent.effective.damage
+damage = weapon.stats.effective.damage
 
 print(damage.total_damage())
 print(damage.weight("slash"))
@@ -773,7 +783,7 @@ merged = damage + combined
 
 ---
 
-## Weapon Entry Reference
+## Weapon Data Reference
 
 ### Weapon-wide fields
 
@@ -835,30 +845,33 @@ Each weapon exposes:
 
 | Attribute | Description |
 |---|---|
-| `weapon.data` | Canonical named weapon entry. |
+| `weapon.data` | Flat weapon definition (`name`, `type`, `ammo`, `attacks`, `evolutions`). |
 | `weapon.mode` | Selected attack. |
 | `weapon.evolutions` | Selected Incarnon perks. |
 | `weapon.build` | Detached active build. |
-| `weapon.stats` | Calculator and calculated states. |
+| `weapon.stats` | Selected attack calculator/result (`base`, `modded`, `effective`, `average`, `combined`, `children`). |
 | `weapon.format` | Text formatter. |
 
 ### Weapon state buckets
 
-| Bucket | Description |
+| Path | Description |
 |---|---|
-| `weapon.stats.parent` | Complete calculation bucket for the selected attack. |
-| `weapon.stats.parent.base` | Dense normalized stats for the selected attack. |
-| `weapon.stats.parent.modded` | Intermediate additive, multiplicative, and locked values. |
-| `weapon.stats.parent.effective` | Final stats used by expected-value calculations. |
-| `weapon.stats.parent.average` | Expected values for the selected attack by itself. |
-| `weapon.stats.child` | Related attack buckets calculated with the selected attack. |
-| `weapon.stats.average` | Combined parent-and-descendant DPH, DoT, and DPS using the parent's attack rate. |
+| `weapon.data` | Flat weapon definition (`name`, `type`, `ammo`, `attacks`, `evolutions`). |
+| `weapon.stats` | Selected attack result (`AttackResult`). |
+| `weapon.stats.base` / `modded` / `effective` / `average` | Selected attack layers. |
+| `weapon.stats.combined` | Aggregate average including descendants. |
+| `weapon.stats.children` | Named map of related `AttackResult`s. |
+| `weapon.stats.children.air_burst_explosion` | One related attack result. |
 
-Each item in `weapon.stats.child` is calculated through the same
-base, modded, effective, and average pipeline.
+`weapon.stats.average` is the selected attack alone.
+`weapon.stats.combined` folds in related attacks and uses the selected attack's
+fire rate for aggregate DPS.
+
+Each related result under `weapon.stats.children` uses the same base, modded,
+effective, average, and combined pipeline.
 
 ```python
-average = weapon.stats.average
+average = weapon.stats.combined
 
 print(average.crit_chance)
 print(average.crit_multiplier)
@@ -875,7 +888,7 @@ procs per shot, and beam behavior:
 
 ```python
 print(average.fire_rate)
-print(average.procs_per_shot)
+print(weapon.stats.average.procs_per_shot)
 print(average.weakpoint_crit_chance)
 print(average.total_weakpoint_dph)
 print(average.total_weakpoint_dps)
@@ -910,6 +923,8 @@ build.stats.total
 ```
 
 ### Contribution estimates
+
+Contribution helpers live on the private calculator:
 
 ```python
 weapon = arsenal.get("Acceltra Prime").configure(
@@ -1033,7 +1048,7 @@ shots, projectiles, or animation frames.
 - Each attack may scale the bonus with `co_factor`.
 - `co_effect="adds"` adds the bonus to additive base damage.
 - `co_effect="multiplies"` adds the bonus to multiplicative base damage.
-- Child attacks resolve their own Condition Overload factor and effect.
+- Related attacks resolve their own Condition Overload factor and effect.
 
 ### Primary mechanics
 

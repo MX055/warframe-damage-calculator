@@ -3,7 +3,6 @@ from copy import deepcopy
 from typing import ClassVar, Self, get_args, get_origin
 
 from ..utils.types import DataValue
-from .dist import Dist
 
 
 class Data(MutableMapping[str, DataValue]):
@@ -31,12 +30,11 @@ class Data(MutableMapping[str, DataValue]):
         cls._fields = fields
         cls._defaults = defaults
 
-    def __init__(self, data: Mapping[str, DataValue] | None = None, /, **values: DataValue) -> None:
+    def __init__(self, data: Mapping[str, DataValue] | None = None, /) -> None:
         object.__setattr__(self, "_values", {})
         self.update(deepcopy(self._defaults))
         if data is not None:
             self.update(data)
-        self.update(values)
 
     def __getitem__(self, key: str) -> DataValue:
         return self._values[key]
@@ -96,12 +94,17 @@ class Data(MutableMapping[str, DataValue]):
     @classmethod
     def _convert(cls, key: str, value: DataValue) -> DataValue:
         annotation = cls._fields.get(key)
-        if isinstance(annotation, type) and issubclass(annotation, Dist): return value if isinstance(value, annotation) else annotation(value)
-        if isinstance(value, Data): return value
-        if isinstance(annotation, type) and issubclass(annotation, Data) and isinstance(value, Mapping): return annotation(value)
-        if get_origin(annotation) is list and isinstance(value, list): return cls._convert_items(value, get_args(annotation)[0])
-        if isinstance(value, Mapping): return Data(value)
-        if isinstance(value, list): return [cls._convert("", item) for item in value]
+        if isinstance(value, Data):
+            return value
+        if isinstance(annotation, type) and get_origin(annotation) is None and isinstance(value, Mapping):
+            if issubclass(annotation, Data) or not issubclass(annotation, Mapping):
+                return value if isinstance(value, annotation) else annotation(value)
+        if get_origin(annotation) is list and isinstance(value, list):
+            return cls._convert_items(value, get_args(annotation)[0])
+        if isinstance(value, Mapping):
+            return Data(value)
+        if isinstance(value, list):
+            return [cls._convert("", item) for item in value]
         return value
 
     @classmethod
@@ -110,9 +113,12 @@ class Data(MutableMapping[str, DataValue]):
             return [cls._convert("", value) for value in values]
         items: list[DataValue] = []
         for value in values:
-            if isinstance(value, Data): items.append(value)
-            elif isinstance(value, Mapping): items.append(item_type(value))
-            else: items.append(value)
+            if isinstance(value, Data):
+                items.append(value)
+            elif isinstance(value, Mapping):
+                items.append(item_type(value))
+            else:
+                items.append(value)
         return items
 
     def keys(self) -> KeysView[str]:

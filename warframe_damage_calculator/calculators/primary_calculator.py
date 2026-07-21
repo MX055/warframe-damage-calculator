@@ -1,30 +1,30 @@
+from ..models.fields import AttackResult
 from ..utils.constants import DOT_MULTIPLIERS
 from ..utils.functions import clamp
-from ..models.fields import AttackBucket
 from .ranged_calculator import RangedCalculator
 
 
 class PrimaryCalculator(RangedCalculator):
-    def _compute_modded_stats(self, bucket: AttackBucket) -> None:
-        super()._compute_modded_stats(bucket)
-        build, modded = bucket.build, bucket.modded
+    def _compute_modded_stats(self, result: AttackResult) -> None:
+        super()._compute_modded_stats(result)
+        build, modded = result.build, result.modded
 
         modded.hunter_munitions = clamp(build.hunter_munitions, 0, 0.3)
         modded.primed_chamber = clamp(build.primed_chamber, 0, 1.4)
         modded.vigilante_bonus = clamp(build.vigilante_bonus, 0, 0.3)
 
-    def _compute_effective_stats(self, bucket: AttackBucket) -> None:
-        super()._compute_effective_stats(bucket)
-        modded, effective = bucket.modded, bucket.effective
+    def _compute_effective_stats(self, result: AttackResult) -> None:
+        super()._compute_effective_stats(result)
+        modded, effective = result.modded, result.effective
         effective.hunter_munitions = modded.hunter_munitions
         effective.primed_chamber = modded.primed_chamber
         effective.vigilante_bonus = modded.vigilante_bonus
         effective.crit_chance += effective.vigilante_bonus
         effective.weakpoint_crit_chance += effective.vigilante_bonus
 
-    def _compute_average_stats(self, bucket: AttackBucket) -> None:
-        super()._compute_average_stats(bucket)
-        effective, average = bucket.effective, bucket.average
+    def _compute_average_stats(self, result: AttackResult) -> None:
+        super()._compute_average_stats(result)
+        effective, average = result.effective, result.average
         average.primed_chamber_multiplier = 1 + effective.primed_chamber / effective.magazine_capacity
         average.flat_dph *= average.primed_chamber_multiplier
         average.flat_weakpoint_dph *= average.primed_chamber_multiplier
@@ -35,9 +35,9 @@ class PrimaryCalculator(RangedCalculator):
         average.total_dps = average.flat_dps + average.flat_dotps
         average.total_weakpoint_dps = average.flat_weakpoint_dps + average.flat_weakpoint_dotps
 
-    def _flat_dotph(self, bucket: AttackBucket, *, weakpoint: bool = False) -> float:
-        damage, forced_procs = bucket.effective.damage, bucket.base.forced_procs
-        effective, average = bucket.effective, bucket.average
+    def _flat_dotph(self, result: AttackResult, *, weakpoint: bool = False) -> float:
+        damage, forced_procs = result.effective.damage, result.base.forced_procs
+        effective, average = result.effective, result.average
         if damage.total_damage() <= 0:
             return 0.0
         crit_chance = average.weakpoint_crit_chance if weakpoint else average.crit_chance

@@ -3,7 +3,7 @@ from typing import Any
 
 from ..models.data import Data
 from ..models.dist import Dist
-from ..models.fields import BuildContext, ResolvedStat
+from ..models.fields import ResolvedStat
 from ..models.upgrade import Upgrade
 from ..utils.constants import DAMAGE_TYPES
 
@@ -21,7 +21,11 @@ class BuildCalculator:
             stat, value = "damage", {stat: value}
         current = stats.get(stat)
         if stat == "damage":
-            stats[stat] = Dist(current) + Dist(value)
+            if not isinstance(current, Dist):
+                current = Dist(current or {})
+            if not isinstance(value, Dist):
+                value = Dist(value)
+            stats[stat] = current + value
         elif stat == "condition_overload":
             current = current or {}
             maximums = {current.get("max_stacks", 0), value.get("max_stacks", 0)}
@@ -40,9 +44,9 @@ class BuildCalculator:
 
     def resolve(self, weapon: Data | object | None = None) -> None:
         weapon_data = getattr(weapon, "data", weapon) or Data()
-        build_data = Data({"context": BuildContext({
+        build_data = Data({
             "equipped": [" ".join(str(upgrade.data.name or "").casefold().split()) for upgrade in self.build.upgrades]
-        })})
+        })
         for bucket in self.BUCKETS:
             setattr(self, bucket, ResolvedStat())
 

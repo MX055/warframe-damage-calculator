@@ -3,14 +3,31 @@ from typing import Self
 
 from ..utils.constants import DAMAGE_TYPE_ORDER, ELEMENTAL_COMBINATIONS, ELEMENTAL_TYPES, PHYSICAL_TYPES
 from ..utils.types import DamageType, Number
+from .data import Data
+
+
+class DistData(Data):
+    impact: Number
+    puncture: Number
+    slash: Number
+    blast: Number
+    corrosive: Number
+    gas: Number
+    magnetic: Number
+    radiation: Number
+    viral: Number
+    cold: Number
+    electricity: Number
+    heat: Number
+    toxin: Number
+    void: Number
+    tau: Number
+    true: Number
 
 
 class Dist:
-    def __init__(self, data: Mapping[DamageType, Number] | Self | None = None, /, **values: Number) -> None:
-        from .fields import DistData
-
-        self.data = DistData(data.data if isinstance(data, Dist) else data or {})
-        self.data.update(values)
+    def __init__(self, data: Mapping[DamageType, Number] | None = None) -> None:
+        self.data = DistData(data or {})
 
     def __iter__(self) -> Iterator[tuple[DamageType, Number]]:
         return iter(self.data.items())

@@ -4,26 +4,6 @@ from ..utils.types import JsonValue, Number
 from .data import Data
 from .dist import Dist
 
-
-class DistData(Data):
-    impact: Number
-    puncture: Number
-    slash: Number
-    blast: Number
-    corrosive: Number
-    gas: Number
-    magnetic: Number
-    radiation: Number
-    viral: Number
-    cold: Number
-    electricity: Number
-    heat: Number
-    toxin: Number
-    void: Number
-    tau: Number
-    true: Number
-
-
 # ========================================================================
 # Weapons
 # ========================================================================
@@ -96,22 +76,6 @@ class PrimaryStats(RangedStats):
 class SecondaryStats(RangedStats):
     pass
 
-# ------------------------------------------------------------------------
-# Context
-# ------------------------------------------------------------------------
-
-class WeaponContext(Data):
-    type: str | None = None
-    name: str | None = None
-    subtype: str | None = None
-
-
-class AttackContext(Data):
-    name: str | None = None
-    child: str | list[str] | None = None
-    trigger: str | None = None
-    projectile: str | None = None
-
 
 class Attack(Data):
     trigger: str | None = None
@@ -138,49 +102,18 @@ class Evolutions(Data):
             value = Evolution(value)
         super().__setitem__(key, value)
 
-
-class RangedContext(WeaponContext):
-    pass
-
-
-class PrimaryContext(RangedContext):
-    pass
-
-
-class SecondaryContext(RangedContext):
-    pass
-
-
-class MeleeContext(WeaponContext):
-    pass
-
 # ------------------------------------------------------------------------
 # Data
 # ------------------------------------------------------------------------
 
-class WeaponEntryData(Data):
+class WeaponData(Data):
+    name: str = ""
     type: str | None = None
     subtype: str | None = None
     disposition: Number = 0.0
     ammo: Data = {}
     attacks: Attacks = Attacks()
     evolutions: Evolutions = Evolutions()
-
-
-
-class WeaponData(Data):
-    def __setitem__(self, key: str, value: JsonValue) -> None:
-        if isinstance(value, Mapping) and not isinstance(value, WeaponEntryData):
-            value = WeaponEntryData(value)
-        super().__setitem__(key, value)
-
-    @property
-    def name(self) -> str:
-        return next(iter(self))
-
-    @property
-    def entry(self) -> WeaponEntryData:
-        return self[self.name]
 
 
 class RangedData(WeaponData):
@@ -325,60 +258,14 @@ class UpgradeStats(Data):
     weakpoint_crit_chance: JsonValue
     weakpoint_damage: JsonValue
 
-# ------------------------------------------------------------------------
-# Context
-# ------------------------------------------------------------------------
 
-class UpgradeContext(Data):
-    category: str = "Upgrade"
-    type: str | None = None
-    name: str | None = None
-    compatibility: list[str] = []
-    incompatibility: list[str] = []
-    requirements: Mapping[str, JsonValue] = {}
-    max_rank: int | None = None
-    max_stacks: int | None = None
-    rank: int | None = None
-    stacks: int | None = None
-    is_exilus: bool = False
-    weapon: str | None = None
-
-
-class BuildContext(Data):
-    equipped: list[str] = []
-
-
-class SetupContext(Data):
-    weapon: WeaponContext = {}
-    build: BuildContext = {}
-    upgrade: UpgradeContext = {}
-
-# ------------------------------------------------------------------------
-# Data
-# ------------------------------------------------------------------------
-
-class UpgradeEntryData(Data):
+class UpgradeData(Data):
+    name: str = ""
     type: str | None = None
     max_rank: int = 0
     compatibility: Data = {}
     incompatibility: list[str] = []
     stats: UpgradeStats = {}
-
-
-
-class UpgradeData(Data):
-    def __setitem__(self, key: str, value: JsonValue) -> None:
-        if isinstance(value, Mapping) and not isinstance(value, UpgradeEntryData):
-            value = UpgradeEntryData(value)
-        super().__setitem__(key, value)
-
-    @property
-    def name(self) -> str:
-        return next(iter(self))
-
-    @property
-    def entry(self) -> UpgradeEntryData:
-        return self[self.name]
 
     @property
     def runtime(self) -> Data:
@@ -434,11 +321,32 @@ class ResolvedStat(Data):
     weakpoint_damage: Number = 0.0
 
 
-class AttackBucket(Data):
+class AttackResults(Data):
+    def __setitem__(self, key: str, value: JsonValue) -> None:
+        if isinstance(value, Mapping) and not isinstance(value, AttackResult):
+            value = AttackResult(value)
+        super().__setitem__(key, value)
+
+
+class AttackResult(Data):
+    name: str = ""
     attack: Attack = Attack()
     build: ResolvedStat = ResolvedStat()
     base: CalculatedStats = CalculatedStats()
     modded: CalculatedStats = CalculatedStats()
     effective: CalculatedStats = CalculatedStats()
     average: AverageStats = AverageStats()
-    children: list["AttackBucket"] = []
+    combined: AverageStats = AverageStats()
+    children: AttackResults = AttackResults()
+
+    @property
+    def trigger(self) -> str | None:
+        return self.attack.trigger
+
+    @property
+    def delivery(self) -> str | None:
+        return self.attack.delivery
+
+    @property
+    def aoe(self) -> bool:
+        return self.attack.aoe

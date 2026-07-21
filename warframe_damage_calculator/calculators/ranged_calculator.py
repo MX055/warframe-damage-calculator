@@ -1,12 +1,12 @@
+from ..models.fields import AttackResult
 from ..utils.functions import clamp, true_round
-from ..models.fields import AttackBucket
 from .weapon_calculator import WeaponCalculator
 
 
 class RangedCalculator(WeaponCalculator):
-    def _compute_modded_stats(self, bucket: AttackBucket) -> None:
-        super()._compute_modded_stats(bucket)
-        build, base, modded = bucket.build, bucket.base, bucket.modded
+    def _compute_modded_stats(self, result: AttackResult) -> None:
+        super()._compute_modded_stats(result)
+        build, base, modded = result.build, result.base, result.modded
 
         modded.weakpoint_damage = max(base.weakpoint_damage + build.weakpoint_damage, 1)
         modded.multiplicative_fire_rate = 1 if build.fire_rate_lock else max(1 + build.multiplicative_fire_rate, 1)
@@ -23,11 +23,11 @@ class RangedCalculator(WeaponCalculator):
         modded.weakpoint_crit_chance = max(base.crit_chance * (1 + build.crit_chance + build.weakpoint_crit_chance), 0)
         modded.internal_bleeding = max(build.internal_bleeding * (2 if modded.fire_rate * modded.multiplicative_fire_rate < 2.5 else 1), 0)
 
-    def _compute_effective_stats(self, bucket: AttackBucket) -> None:
-        super()._compute_effective_stats(bucket)
-        modded, effective = bucket.modded, bucket.effective
-        is_battery = "recharge_delay" in self.weapon.data.entry.ammo
-        is_beam = bucket.attack.delivery == "beam"
+    def _compute_effective_stats(self, result: AttackResult) -> None:
+        super()._compute_effective_stats(result)
+        modded, effective = result.modded, result.effective
+        is_battery = "recharge_delay" in self.weapon.data.ammo
+        is_beam = result.attack.delivery == "beam"
 
         effective.weakpoint_damage = modded.weakpoint_damage
         effective.fire_rate = modded.fire_rate * modded.multiplicative_fire_rate
@@ -42,21 +42,21 @@ class RangedCalculator(WeaponCalculator):
         effective.weakpoint_crit_chance = modded.weakpoint_crit_chance * (modded.multiplicative_crit_chance + modded.multiplicative_weakpoint_crit_chance - 1) + modded.flat_crit_chance
         effective.internal_bleeding = modded.internal_bleeding
 
-    def _compute_average_stats(self, bucket: AttackBucket) -> None:
-        super()._compute_average_stats(bucket)
-        effective, average = bucket.effective, bucket.average
+    def _compute_average_stats(self, result: AttackResult) -> None:
+        super()._compute_average_stats(result)
+        effective, average = result.effective, result.average
 
         average.weakpoint_crit_chance = effective.weakpoint_crit_chance
         average.weakpoint_crit_multiplier = 1 + average.weakpoint_crit_chance * (effective.crit_damage - 1)
-        average.fire_rate = self._effective_fire_rate(bucket)
+        average.fire_rate = self._effective_attacks_per_second(result)
         average.procs_per_shot = effective.status_chance * effective.multishot
-        average.beam_dot_multiplier = effective.multishot if bucket.attack.delivery == "beam" else 1
+        average.beam_dot_multiplier = effective.multishot if result.attack.delivery == "beam" else 1
         average.flat_dph = effective.damage.total_damage() * effective.multishot * effective.faction_damage * average.crit_multiplier
         average.flat_weakpoint_dph = effective.damage.total_damage() * effective.multishot * effective.weakpoint_damage * average.weakpoint_crit_multiplier * effective.faction_damage
         average.flat_dps = average.fire_rate * average.flat_dph
         average.flat_weakpoint_dps = average.fire_rate * average.flat_weakpoint_dph
-        average.flat_dotph = self._flat_dotph(bucket)
-        average.flat_weakpoint_dotph = self._flat_dotph(bucket, weakpoint=True)
+        average.flat_dotph = self._flat_dotph(result)
+        average.flat_weakpoint_dotph = self._flat_dotph(result, weakpoint=True)
         average.flat_dotps = average.fire_rate * average.flat_dotph
         average.flat_weakpoint_dotps = average.fire_rate * average.flat_weakpoint_dotph
         average.total_dph = average.flat_dph + average.flat_dotph
