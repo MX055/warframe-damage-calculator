@@ -18,9 +18,6 @@ def main() -> None:
     weapon.configure(build, attack="buckshot")
 
     print(weapon.format.summary())
-    print(weapon.results.main.final.total_dps)
-    print(weapon.results.main.name)
-    print(weapon.data.attacks.buckshot.name)
 
 
 if __name__ == "__main__":
