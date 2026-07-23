@@ -6,9 +6,11 @@ from .upgrade import Upgrade
 
 
 class Build:
+    results: BuildCalculator
+
     def __init__(self, *upgrades: Upgrade) -> None:
         self.upgrades = [upgrade.copy() for upgrade in upgrades]
-        self.stats = BuildCalculator(self)
+        self.results = BuildCalculator(self)
 
     def __iter__(self) -> Iterator[Upgrade]:
         return (upgrade.copy() for upgrade in self.upgrades)
@@ -29,7 +31,7 @@ class Build:
     def configure(self, context: Mapping[str, Any] | None = None) -> Self:
         for upgrade in self.upgrades:
             upgrade.configure(context)
-        self.stats.resolve()
+        self.results.resolve()
         return self
 
     def copy(self) -> Self:

@@ -14,7 +14,7 @@ class DatabaseFactory:
         if context:
             if isinstance(model, Upgrade):
                 model.data.runtime.update(context)
-                model.stats.resolve()
+                model.results.resolve()
             else:
                 model.data.update(context)
                 model.results.recompute()

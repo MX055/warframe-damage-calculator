@@ -7,9 +7,11 @@ from ..utils.types import JsonValue
 
 
 class Upgrade:
+    results: UpgradeCalculator
+
     def __init__(self, data: Mapping[str, JsonValue] | None = None) -> None:
         self.data = UpgradeData(data or {})
-        self.stats = UpgradeCalculator(self)
+        self.results = UpgradeCalculator(self)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Upgrade):
@@ -19,11 +21,11 @@ class Upgrade:
     def configure(self, context: Mapping[str, Any] | None = None) -> Self:
         if context is not None:
             self.data.runtime.update(context)
-        self.stats.resolve()
+        self.results.resolve()
         return self
 
     def copy(self) -> Self:
         copied = type(self)(self.data.copy())
         copied.data.runtime.update(self.data.runtime.with_defaults())
-        copied.stats.resolve()
+        copied.results.resolve()
         return copied

@@ -15,7 +15,7 @@ class UpgradeOwner(Protocol):
 
 
 @runtime_checkable
-class UpgradeStatsView(Protocol):
+class UpgradeResultsView(Protocol):
     static: ResolvedStat
     conditional: ResolvedStat
     modular: ResolvedStat
@@ -29,7 +29,7 @@ class UpgradeStatsView(Protocol):
 @runtime_checkable
 class BuildUpgradeOwner(Protocol):
     data: UpgradeData
-    stats: UpgradeStatsView
+    results: UpgradeResultsView
 
 
 @runtime_checkable

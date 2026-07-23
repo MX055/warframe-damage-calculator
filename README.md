@@ -280,9 +280,9 @@ print(weapon.format.summary())
 
 ```python
 upgrade = Upgrade({"name": "Headshot", "type": "mod", "max_rank": 0, "stats": {"crit_chance": [1.2, {"value": 0.8, "when": "headshot"}]}})
-print(upgrade.stats.total.additive.crit_chance)  # 2.0
+print(upgrade.results.total.additive.crit_chance)  # 2.0
 upgrade.configure({"headshot": False})
-print(upgrade.stats.total.additive.crit_chance)  # 1.2
+print(upgrade.results.total.additive.crit_chance)  # 1.2
 
 build = Build(upgrade)
 build.configure({"headshot": True})
@@ -463,7 +463,7 @@ upgrade = Upgrade(
 
 print(upgrade.data.name)
 print(upgrade.data.stats.damage_bonus)
-print(upgrade.stats.total.additive.damage_bonus)
+print(upgrade.results.total.additive.damage_bonus)
 ```
 
 The canonical data contains persistent metadata and stat effects. Runtime
@@ -507,12 +507,12 @@ upgrade.data.runtime.update(
 build = Build(upgrade, partner)
 resolved = build.upgrades[0]
 
-print(resolved.stats.static.additive.damage_bonus)       # 0.30
-print(resolved.stats.conditional.additive.damage_bonus)  # 0.20
-print(resolved.stats.stacking.additive.damage_bonus)     # 0.20
-print(resolved.stats.rank_locked.additive.damage_bonus)  # 0.25
-print(resolved.stats.modular.additive.damage_bonus)      # 0.15
-print(resolved.stats.total.additive.damage_bonus)        # 1.10
+print(resolved.results.static.additive.damage_bonus)       # 0.30
+print(resolved.results.conditional.additive.damage_bonus)  # 0.20
+print(resolved.results.stacking.additive.damage_bonus)     # 0.20
+print(resolved.results.rank_locked.additive.damage_bonus)  # 0.25
+print(resolved.results.modular.additive.damage_bonus)      # 0.15
+print(resolved.results.total.additive.damage_bonus)        # 1.10
 ```
 
 | Form | Example | Behavior |
@@ -553,7 +553,7 @@ For a manually constructed upgrade:
 upgrade.data.runtime.rank = 5
 upgrade.data.runtime.kill = 3
 upgrade.data.runtime.headshot = True
-upgrade.stats.resolve()
+upgrade.results.resolve()
 ```
 
 Ranks are zero-based. Ordinary effects scale by:
@@ -608,7 +608,7 @@ copies. The canonical mutable collection is `build.upgrades`:
 
 ```python
 build.upgrades[0].data.runtime.stacks = 0
-build.stats.resolve()
+build.results.resolve()
 ```
 
 `weapon.configure(build)` copies the build again, so later changes to the
@@ -931,29 +931,29 @@ Mechanic-specific outputs include:
 Both upgrade and build calculators expose:
 
 ```python
-upgrade.stats.static
-upgrade.stats.conditional
-upgrade.stats.modular
-upgrade.stats.stacking
-upgrade.stats.rank_locked
-upgrade.stats.total
+upgrade.results.static
+upgrade.results.conditional
+upgrade.results.modular
+upgrade.results.stacking
+upgrade.results.rank_locked
+upgrade.results.total
 
-build.stats.static
-build.stats.conditional
-build.stats.modular
-build.stats.stacking
-build.stats.rank_locked
-build.stats.total
+build.results.static
+build.results.conditional
+build.results.modular
+build.results.stacking
+build.results.rank_locked
+build.results.total
 ```
 
 Each activation bucket contains `additive`, `multiplicative`, `base`, and
 `flat` mode buckets:
 
 ```python
-print(upgrade.stats.total.additive.crit_chance)
-print(upgrade.stats.total.multiplicative.crit_chance)
-print(upgrade.stats.total.base.crit_chance)
-print(upgrade.stats.total.flat.crit_chance)
+print(upgrade.results.total.additive.crit_chance)
+print(upgrade.results.total.multiplicative.crit_chance)
+print(upgrade.results.total.base.crit_chance)
+print(upgrade.results.total.flat.crit_chance)
 
 print(weapon.results.main.build.additive.damage_bonus)
 print(weapon.results.main.evolutions.base.damage)

@@ -50,8 +50,8 @@ class WeaponCalculator:
 
     def _resolved_build(self) -> ResolvedStat:
         build = Build(*self.weapon.build)
-        build.stats.resolve(self.weapon.data)
-        return build.stats.total.copy()
+        build.results.resolve(self.weapon.data)
+        return build.results.total.copy()
 
     def _resolved_evolutions(self) -> ResolvedEvolutionStat:
         return EvolutionCalculator(self.weapon).total.copy()

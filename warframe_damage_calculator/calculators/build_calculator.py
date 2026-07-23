@@ -17,7 +17,7 @@ class BuildCalculator(UpgradeCalculator):
             setattr(self, bucket, ResolvedStat())
 
         for upgrade in self.build.upgrades:
-            calculator = upgrade.stats
+            calculator = upgrade.results
             calculator.resolve(weapon_data, build_data)
             for bucket in self.BUCKETS:
                 target = getattr(self, bucket)
