@@ -6,6 +6,7 @@ from .weapon_input import AttackStats
 
 
 class Attack(Data):
+    name: str = ""
     trigger: str | None = None
     delivery: str | None = None
     aoe: bool = False
@@ -17,6 +18,8 @@ class Attacks(Data):
     def __setitem__(self, key: str, value: JsonValue) -> None:
         if isinstance(value, Mapping) and not isinstance(value, Attack):
             value = Attack(value)
+        if isinstance(value, Attack) and not value.name:
+            value.name = key
         super().__setitem__(key, value)
 
 

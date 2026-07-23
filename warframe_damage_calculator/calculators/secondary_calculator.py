@@ -1,11 +1,11 @@
 from ..fields.attack_result import AttackResult
 from ..utils.constants import DOT_MULTIPLIERS
 from ..utils.functions import clamp
-from .ranged_calculator import RangedCalculator
-from .weapon_calculator import WeaponCalculator
+from .attack_calculator import AttackCalculator
+from .ranged_calculator import RangedAttackCalculator, RangedCalculator
 
 
-class SecondaryCalculator(RangedCalculator):
+class SecondaryAttackCalculator(RangedAttackCalculator):
     def _compute_modded_stats(self, result: AttackResult) -> None:
         super()._compute_modded_stats(result)
         build, modded = result.build, result.modded
@@ -21,7 +21,7 @@ class SecondaryCalculator(RangedCalculator):
         effective.secondary_encumber = modded.secondary_encumber
 
     def _compute_average_stats(self, result: AttackResult) -> None:
-        WeaponCalculator._compute_average_stats(self, result)
+        AttackCalculator._compute_average_stats(self, result)
         self._setup_ranged_averages(result)
         modded, effective, average = result.modded, result.effective, result.average
         secondary_enervate_bonus = self._average_secondary_enervate_bonus(modded.crit_chance * modded.multiplicative_crit_chance + modded.flat_crit_chance, result)
@@ -79,3 +79,7 @@ class SecondaryCalculator(RangedCalculator):
         dot_damage = sum(multiplier * damage.get(damage_type) * damage.weight(damage_type) for damage_type, multiplier in DOT_MULTIPLIERS) * effective.status_chance * crit_multiplier * effective.status_damage * effective.faction_damage ** 2
         forced_dot_damage = sum(multiplier * forced_procs.get(damage_type) * damage.get(damage_type) for damage_type, multiplier in DOT_MULTIPLIERS) * crit_multiplier * effective.status_damage * effective.faction_damage ** 2
         return (dot_damage + internal_bleeding_damage + forced_dot_damage) * effective.multishot * average.beam_dot_multiplier + secondary_encumber_dot
+
+
+class SecondaryCalculator(RangedCalculator):
+    attack_calculator_type = SecondaryAttackCalculator

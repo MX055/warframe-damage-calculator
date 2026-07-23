@@ -1,9 +1,10 @@
 from ..fields.attack_result import AttackResult
 from ..utils.functions import clamp, true_round
+from .attack_calculator import AttackCalculator
 from .weapon_calculator import WeaponCalculator
 
 
-class MeleeCalculator(WeaponCalculator):
+class MeleeAttackCalculator(AttackCalculator):
     def _compute_modded_stats(self, result: AttackResult) -> None:
         super()._compute_modded_stats(result)
         build, base, modded = result.build, result.base, result.modded
@@ -32,3 +33,7 @@ class MeleeCalculator(WeaponCalculator):
         average.flat_dotps = effective.attack_speed * average.flat_dotph
         average.total_dph = average.flat_dph + average.flat_dotph
         average.total_dps = average.flat_dps + average.flat_dotps
+
+
+class MeleeCalculator(WeaponCalculator):
+    attack_calculator_type = MeleeAttackCalculator

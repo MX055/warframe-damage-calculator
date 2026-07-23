@@ -1,10 +1,11 @@
 from ..fields.attack_result import AttackResult
 from ..fields.calculated import AverageStats
 from ..utils.functions import clamp, true_round
+from .attack_calculator import AttackCalculator
 from .weapon_calculator import WeaponCalculator
 
 
-class RangedCalculator(WeaponCalculator):
+class RangedAttackCalculator(AttackCalculator):
     def _compute_modded_stats(self, result: AttackResult) -> None:
         super()._compute_modded_stats(result)
         build, base, modded = result.build, result.base, result.modded
@@ -76,3 +77,7 @@ class RangedCalculator(WeaponCalculator):
         super()._compute_average_stats(result)
         self._setup_ranged_averages(result)
         self._apply_ranged_damage_averages(result)
+
+
+class RangedCalculator(WeaponCalculator):
+    attack_calculator_type = RangedAttackCalculator

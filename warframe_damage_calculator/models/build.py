@@ -1,5 +1,5 @@
-from collections.abc import Iterator
-from typing import Self
+from collections.abc import Iterator, Mapping
+from typing import Any, Self
 
 from ..calculators.build_calculator import BuildCalculator
 from .upgrade import Upgrade
@@ -26,6 +26,11 @@ class Build:
         excluded = [other] if isinstance(other, Upgrade) else list(other)
         names = {str(upgrade.data.name).casefold() for upgrade in excluded}
         return Build(*(upgrade for upgrade in self if str(upgrade.data.name).casefold() not in names))
+
+    def configure(self, context: Mapping[str, Any] | None = None) -> Self:
+        for upgrade in self.upgrades: upgrade.configure(context)
+        self.stats.resolve()
+        return self
     
     def copy(self) -> Self:
         return type(self)(*self)

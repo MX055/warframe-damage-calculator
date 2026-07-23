@@ -1,0 +1,35 @@
+weapon = Weapon(...)
+upgrade_1 = Upgrade(...)
+upgrade_2 = Upgrade(...).configure(...)
+    upgrade = Upgrade({"stats": "crit_chance": [1.2, {"value": 0.8, "when": "headshot"}]})
+    pugrade.stats.total.crit_chance
+    >> 2.0
+    upgrade.configure({"headshot": False})
+    pugrade.stats.total.crit_chance
+    >> 1.2
+build = Build(upgrade_1, upgrade_2)
+    build = Build(Upgrade({"stats": "crit_chance": {"value": 0.8, "when": "headshot"}}), Upgrade({"stats": "crit_damage": {"value": 0.8, "when": "headshot"}}))
+    build.stats.total.crit_chance
+    >> 0.8
+    build.stats.total.crit_damage
+    >> 0.8
+    build.configure({"headshot": False})
+    build.stats.total.crit_chance
+    >> 0
+    build.stats.total.crit_damage
+    >> 0
+weapon.configure(build=build, attack="attack_name", evolutions={evolution_index: perk_index, ...})
+    weapon.configure(build, attack: "impact", evolutions: {1: 2, 2: 3, 3: 1})
+
+weapon.data.name
+weapon.stats.combined.total_dps
+weapon.data.attacks[attack_name].name
+weapon.stats.attacks[attack_name].effective.crit_chnace
+    weapon.data.attacks
+    >> {"impact": {name: "impact", children: ["explosion", "lingering"], ...}, "explosion": {name: "explosion", ...}, "lingering": {name: "lingering", ...}, "secondary_attack": {name: "secondary_attack", ...}}
+    weapon.stats.attacks["impact"]:
+    >> AttackCalculator({name: "impact", children: ["explosion", "lingering"], ...})
+    weapon.stats.attacks["secondary_attack"]:
+    >> AttackCalculator({name: "secondary_attack", ...})
+    weapon.stats.attacks["lingering"]
+    >> AttackCalculator({name: "lingering", ...})

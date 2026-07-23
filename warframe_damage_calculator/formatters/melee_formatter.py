@@ -3,11 +3,13 @@ from .weapon_formatter import WeaponFormatter
 
 class MeleeFormatter(WeaponFormatter):
     def summary(self) -> str:
-        base = self.weapon.stats.base
-        effective = self.weapon.stats.effective
+        attack_name = self.weapon.stats._attack_name()
+        selected = self.weapon.stats.attacks[attack_name]
+        base = selected.base
+        effective = selected.effective
         average = self.weapon.stats.combined
         return "\n".join([
-            f"{self.weapon.data.name} - {self.weapon.stats.name.replace('_', ' ').title()}",
+            f"{self.weapon.data.name} - {selected.name.replace('_', ' ').title()}",
             "-------------------------------------",
             f"{'ATTACK SPEED:':<14} {f'{base.attack_speed:.2f}x':<6} -> {effective.attack_speed:.2f}x",
             f"{'CRIT CHANCE:':<14} {f'{base.crit_chance:.2%}':<6} -> {effective.crit_chance:.2%}",

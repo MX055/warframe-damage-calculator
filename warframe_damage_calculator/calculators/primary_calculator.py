@@ -1,10 +1,10 @@
 from ..fields.attack_result import AttackResult
 from ..utils.constants import DOT_MULTIPLIERS
 from ..utils.functions import clamp
-from .ranged_calculator import RangedCalculator
+from .ranged_calculator import RangedAttackCalculator, RangedCalculator
 
 
-class PrimaryCalculator(RangedCalculator):
+class PrimaryAttackCalculator(RangedAttackCalculator):
     def _compute_modded_stats(self, result: AttackResult) -> None:
         super()._compute_modded_stats(result)
         build, modded = result.build, result.modded
@@ -52,3 +52,7 @@ class PrimaryCalculator(RangedCalculator):
         dot_damage = sum(multiplier * damage.get(damage_type) * damage.weight(damage_type) for damage_type, multiplier in DOT_MULTIPLIERS) * effective.status_chance * crit_multiplier * effective.status_damage * effective.faction_damage ** 2 * primed_chamber_multiplier
         forced_dot_damage = sum(multiplier * forced_procs.get(damage_type) * damage.get(damage_type) for damage_type, multiplier in DOT_MULTIPLIERS) * crit_multiplier * effective.status_damage * effective.faction_damage ** 2 * primed_chamber_multiplier
         return (dot_damage + extra_slash_damage + forced_dot_damage) * effective.multishot * average.beam_dot_multiplier
+
+
+class PrimaryCalculator(RangedCalculator):
+    attack_calculator_type = PrimaryAttackCalculator
