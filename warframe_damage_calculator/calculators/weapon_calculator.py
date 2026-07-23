@@ -40,6 +40,10 @@ class WeaponCalculator:
         return WeaponCalculator._crit_multiplier(crit_chance, crit_damage) + max(0.0, 1.0 - float(crit_chance)) * bonus
 
     @staticmethod
+    def _combine_chance(additive: Number, multiplicative: Number = 1, flat: Number = 0) -> Number:
+        return max(additive * multiplicative + flat, 0)
+
+    @staticmethod
     def _refresh_dps_from_dph(average: AverageStats) -> None:
         average.flat_dps = average.fire_rate * average.flat_dph
         average.flat_weakpoint_dps = average.fire_rate * average.flat_weakpoint_dph
@@ -107,10 +111,10 @@ class WeaponCalculator:
         evo = result.evolutions.base
         added = float(evo.get("damage", 0) or 0)
         if added: result.base.damage = result.base.damage + self._distribute_flat_damage(result.base.damage, added)
-        result.base.crit_chance = float(result.base.get("crit_chance", 0) or 0) + float(evo.get("crit_chance", 0) or 0)
-        result.base.crit_damage = float(result.base.get("crit_damage", 0) or 0) + float(evo.get("crit_damage", 0) or 0)
-        result.base.status_chance = float(result.base.get("status_chance", 0) or 0) + float(evo.get("status_chance", 0) or 0)
-        result.base.magazine_capacity = float(result.base.get("magazine_capacity", 0) or 0) + float(evo.get("magazine_capacity", 0) or 0)
+        result.base.crit_chance = max(float(result.base.get("crit_chance", 0) or 0) + float(evo.get("crit_chance", 0) or 0), 0)
+        result.base.crit_damage = max(float(result.base.get("crit_damage", 0) or 0) + float(evo.get("crit_damage", 0) or 0), 1)
+        result.base.status_chance = max(float(result.base.get("status_chance", 0) or 0) + float(evo.get("status_chance", 0) or 0), 0)
+        result.base.magazine_capacity = max(float(result.base.get("magazine_capacity", 0) or 0) + float(evo.get("magazine_capacity", 0) or 0), 1)
 
     def _compute_modded_scalars(self, result: AttackResult) -> None:
         build, evo, base, modded = result.build, result.evolutions, result.base, result.modded
@@ -192,9 +196,9 @@ class WeaponCalculator:
         effective.orokin_damage = modded.additive.orokin_damage
         effective.murmur_damage = modded.additive.murmur_damage
         effective.sentient_damage = modded.additive.sentient_damage
-        effective.crit_chance = modded.additive.crit_chance * modded.multiplicative.crit_chance + modded.flat.crit_chance
+        effective.crit_chance = self._combine_chance(modded.additive.crit_chance, modded.multiplicative.crit_chance, modded.flat.crit_chance)
         effective.crit_damage = modded.additive.crit_damage + modded.flat.crit_damage
-        effective.status_chance = modded.additive.status_chance + modded.flat.status_chance
+        effective.status_chance = self._combine_chance(modded.additive.status_chance, flat=modded.flat.status_chance)
         effective.status_damage = modded.additive.status_damage
         effective.non_crit_bonus_damage = modded.additive.non_crit_bonus_damage
         effective.non_crit_bonus_chance = modded.additive.non_crit_bonus_chance
@@ -202,15 +206,15 @@ class WeaponCalculator:
     def _refresh_crit_scalars(self, result: AttackResult) -> None:
         build, base, modded, effective = result.build, result.base, result.modded, result.effective
         modded.additive.crit_chance = max(base.crit_chance * (1 + build.additive.crit_chance), 0)
-        effective.crit_chance = modded.additive.crit_chance * modded.multiplicative.crit_chance + modded.flat.crit_chance
+        effective.crit_chance = self._combine_chance(modded.additive.crit_chance, modded.multiplicative.crit_chance, modded.flat.crit_chance)
         if "weakpoint_crit_chance" in modded.additive:
             modded.additive.weakpoint_crit_chance = max(base.crit_chance * (1 + build.additive.crit_chance + build.additive.weakpoint_crit_chance), 0)
-            effective.weakpoint_crit_chance = modded.additive.weakpoint_crit_chance * (modded.multiplicative.crit_chance + modded.multiplicative.weakpoint_crit_chance - 1) + modded.flat.crit_chance
+            effective.weakpoint_crit_chance = self._combine_chance(modded.additive.weakpoint_crit_chance, modded.multiplicative.crit_chance + modded.multiplicative.weakpoint_crit_chance - 1, modded.flat.crit_chance)
 
     def _refresh_status_scalars(self, result: AttackResult) -> None:
         build, evo, base, modded, effective = result.build, result.evolutions, result.base, result.modded, result.effective
         modded.additive.status_chance = max(base.status_chance * (1 + build.additive.status_chance + evo.additive.status_chance), 0)
-        effective.status_chance = modded.additive.status_chance + modded.flat.status_chance
+        effective.status_chance = self._combine_chance(modded.additive.status_chance, flat=modded.flat.status_chance)
 
     def _apply_evolution_conversions(self, result: AttackResult) -> None:
         evo = result.evolutions
@@ -218,14 +222,14 @@ class WeaponCalculator:
         if isinstance(crit_from, ConversionBonus) and float(crit_from.value):
             cap = float(crit_from.max) if float(crit_from.max) else float("inf")
             bonus = min(cap, float(crit_from.value) * float(result.effective.status_chance))
-            result.base.crit_chance = float(result.base.crit_chance) + bonus
+            result.base.crit_chance = max(float(result.base.crit_chance) + bonus, 0)
             self._refresh_crit_scalars(result)
 
         status_from = evo.additive.get("status_from_crit")
         if isinstance(status_from, ConversionBonus) and float(status_from.value):
             cap = float(status_from.max) if float(status_from.max) else float("inf")
             bonus = min(cap, float(status_from.value) * float(result.effective.crit_chance))
-            result.base.status_chance = float(result.base.status_chance) + bonus
+            result.base.status_chance = max(float(result.base.status_chance) + bonus, 0)
             self._refresh_status_scalars(result)
 
     def _max_average_faction_damage(self, result: AttackResult) -> float:

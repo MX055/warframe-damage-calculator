@@ -40,7 +40,7 @@ class RangedCalculator(WeaponCalculator):
         effective.ammo_efficiency = modded.additive.ammo_efficiency
         effective.magazine_capacity = modded.additive.magazine_capacity
         effective.multishot = modded.additive.multishot
-        effective.weakpoint_crit_chance = modded.additive.weakpoint_crit_chance * (modded.multiplicative.crit_chance + modded.multiplicative.weakpoint_crit_chance - 1) + modded.flat.crit_chance
+        effective.weakpoint_crit_chance = self._combine_chance(modded.additive.weakpoint_crit_chance, modded.multiplicative.crit_chance + modded.multiplicative.weakpoint_crit_chance - 1, modded.flat.crit_chance)
         effective.internal_bleeding = modded.additive.internal_bleeding
 
     def _setup_ranged_averages(self, result: AttackResult) -> None:

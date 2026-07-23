@@ -467,6 +467,61 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(selected(weapon).base.magazine_capacity, raw_mag + 20)
         self.assertEqual(selected(weapon).modded.additive.magazine_capacity, raw_mag + 20)
 
+    def test_incarnon_flat_crit_penalty_cannot_make_crit_chance_negative(self):
+        negative_crit = Upgrade({"name": "Negative Crit", "stats": {"crit_chance": [{"value": -2.0}]}})
+        weapon = arsenal.get("Laetum").configure(Build(negative_crit), evolutions={4: 3})
+        result = selected(weapon)
+
+        self.assertAlmostEqual(result.evolutions.flat.crit_chance, -0.1)
+        self.assertEqual(result.modded.additive.crit_chance, 0)
+        self.assertEqual(result.effective.crit_chance, 0)
+        self.assertEqual(result.effective.weakpoint_crit_chance, 0)
+        self.assertEqual(result.average.crit_chance, 0)
+        self.assertEqual(result.average.weakpoint_crit_chance, 0)
+
+    def test_incarnon_chance_floors_survive_conversion_refreshes(self):
+        negative_chances = Upgrade({
+            "name": "Negative Chances",
+            "stats": {
+                "crit_chance": [{"value": -2.0}],
+                "status_chance": [{"value": -2.0}],
+            },
+        })
+        weapon = Primary({
+            "name": "Negative Conversion Chances",
+            "type": "primary",
+            "attacks": {
+                "shot": {
+                    "stats": {
+                        "damage": {"impact": 100},
+                        "crit_chance": 0.2,
+                        "crit_damage": 2,
+                        "status_chance": 0.2,
+                        "fire_rate": 1,
+                    },
+                },
+            },
+            "evolutions": {
+                "2": {
+                    "1": {
+                        "stats": {
+                            "crit_chance": [{"value": -0.1, "mode": "flat"}],
+                            "status_chance": [{"value": -0.1, "mode": "flat"}],
+                            "crit_from_status": [{"value": 0.25, "max": 0.35}],
+                            "status_from_crit": [{"value": 0.3, "max": 0.4}],
+                        },
+                    },
+                },
+            },
+        }).configure(Build(negative_chances), evolutions={2: 1})
+        result = selected(weapon)
+
+        self.assertAlmostEqual(result.base.crit_chance, 0.2)
+        self.assertAlmostEqual(result.base.status_chance, 0.2)
+        self.assertEqual(result.effective.crit_chance, 0)
+        self.assertEqual(result.effective.weakpoint_crit_chance, 0)
+        self.assertEqual(result.effective.status_chance, 0)
+
     def test_incarnon_crit_from_status_updates_base(self):
         status_mod = Upgrade({"name": "Status", "type": "mod", "max_rank": 0, "stats": {"status_chance": [{"value": 1.0}]}})
         weapon = arsenal.get("Dera Vandal")
