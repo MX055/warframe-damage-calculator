@@ -14,9 +14,7 @@ class BuildCalculator(UpgradeCalculator):
 
     def resolve(self, weapon: Data | object | None = None) -> None:
         weapon_data = getattr(weapon, "data", weapon) or Data()
-        build_data = Data({
-            "equipped": [" ".join(str(upgrade.data.name or "").casefold().split()) for upgrade in self.build.upgrades]
-        })
+        build_data = Data({"equipped": [str(upgrade.data.name or "") for upgrade in self.build.upgrades]})
         for bucket in self.BUCKETS:
             setattr(self, bucket, ResolvedStat())
 

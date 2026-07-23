@@ -3,12 +3,12 @@ from .weapon_formatter import WeaponFormatter
 
 class RangedFormatter(WeaponFormatter):
     def summary(self) -> str:
-        selected = self.weapon.stats.main
+        selected = self.weapon.results.main
         base = selected.base
         effective = selected.effective
         average = selected.final
         related_rows = []
-        for child in self.weapon.stats.child:
+        for child in self.weapon.results.child:
             name = child.name.replace("_", " ").title()
             related_base, related = child.base, child.effective
             damage_types = dict.fromkeys((*related_base.damage.data, *related.damage.data))

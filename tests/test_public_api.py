@@ -21,7 +21,7 @@ def galvanized_build() -> Build:
 
 
 def selected(weapon: Weapon):
-    return weapon.stats.main
+    return weapon.results.main
 
 
 class DataDefaults(Data):
@@ -112,9 +112,9 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(selected(weapon).effective.damage.total_damage(), 10)
         self.assertEqual(len(selected(weapon).children), 0)
         self.assertEqual(weapon.data.attacks.normal.name, "normal")
-        self.assertEqual(weapon.stats.main.name, "normal")
-        self.assertEqual(weapon.stats.child, [])
-        self.assertFalse(hasattr(weapon.stats, "attacks"))
+        self.assertEqual(weapon.results.main.name, "normal")
+        self.assertEqual(weapon.results.child, [])
+        self.assertFalse(hasattr(weapon.results, "attacks"))
 
     def test_data_mapping_views_match_explicit_values(self):
         data = Data({"first": 1})
@@ -165,20 +165,21 @@ class PublicApiTests(unittest.TestCase):
         self.assertTrue(all(isinstance(attack, Attack) for attack in weapon.data.attacks.values()))
         self.assertFalse(hasattr(weapon, "context"))
         self.assertFalse(hasattr(weapon, "mode_name"))
-        self.assertTrue(hasattr(weapon, "stats"))
+        self.assertTrue(hasattr(weapon, "results"))
+        self.assertFalse(hasattr(weapon, "stats"))
         self.assertFalse(hasattr(weapon, "attacks"))
-        self.assertTrue(hasattr(weapon.stats, "main"))
-        self.assertTrue(hasattr(weapon.stats, "child"))
-        self.assertFalse(hasattr(weapon.stats, "attacks"))
-        self.assertFalse(hasattr(weapon.stats, "final"))
+        self.assertTrue(hasattr(weapon.results, "main"))
+        self.assertTrue(hasattr(weapon.results, "child"))
+        self.assertFalse(hasattr(weapon.results, "attacks"))
+        self.assertFalse(hasattr(weapon.results, "final"))
         for attribute in ("base", "modded", "effective", "average", "final", "children"):
-            self.assertTrue(hasattr(weapon.stats.main, attribute))
+            self.assertTrue(hasattr(weapon.results.main, attribute))
         for attribute in ("base", "modded", "effective", "average", "attacks", "parent"):
-            self.assertFalse(hasattr(weapon.stats, attribute))
+            self.assertFalse(hasattr(weapon.results, attribute))
         for attribute in ("type", "subtype", "base", "moded", "modded", "effective", "total_dps", "calculation_build"):
             self.assertFalse(hasattr(weapon, attribute))
         self.assertTrue(all(attack.name == key for key, attack in weapon.data.attacks.items()))
-        self.assertEqual(weapon.stats.main.name, weapon._attack)
+        self.assertEqual(weapon.results.main.name, weapon._attack)
         self.assertEqual(weapon.data.ammo.reload_time, 3)
         self.assertEqual(weapon.data.ammo.magazine_size, 20)
         self.assertNotIn("damage", weapon.data.ammo)
@@ -192,8 +193,8 @@ class PublicApiTests(unittest.TestCase):
         self.assertIs(weapon.configure(attack="air_burst_projectile"), weapon)
         self.assertEqual(weapon.data.attacks[weapon._attack].children, ["air_burst_explosion"])
         self.assertEqual(selected(weapon).base.damage.total_damage(), 100)
-        self.assertEqual(weapon.stats.child[0].effective.damage.total_damage(), 2200)
-        self.assertIs(weapon.stats.child[0].attack, weapon.data.attacks.air_burst_explosion)
+        self.assertEqual(weapon.results.child[0].effective.damage.total_damage(), 2200)
+        self.assertIs(weapon.results.child[0].attack, weapon.data.attacks.air_burst_explosion)
 
     def test_mode_specific_stats_and_global_ranged_stats(self):
         weapon = arsenal.get("Corinth Prime").configure(attack="buckshot")
@@ -216,17 +217,17 @@ class PublicApiTests(unittest.TestCase):
         weapon = arsenal.get("Corinth Prime").configure(attack="air_burst_projectile")
         related = weapon.data.attacks.air_burst_explosion
         related.stats.fire_rate = 2
-        weapon.stats.recompute()
+        weapon.results.recompute()
 
         self.assertNotEqual(
-            weapon.stats._effective_attacks_per_second(selected(weapon)),
-            weapon.stats._effective_attacks_per_second(weapon.stats.child[0]),
+            weapon.results._effective_attacks_per_second(selected(weapon)),
+            weapon.results._effective_attacks_per_second(weapon.results.child[0]),
         )
 
     def test_selected_and_child_attacks_use_independent_buckets(self):
         weapon = arsenal.get("Corinth Prime").configure(attack="air_burst_projectile")
         parent = selected(weapon)
-        child = weapon.stats.child[0]
+        child = weapon.results.child[0]
 
         self.assertIs(parent.attack, weapon.data.attacks[weapon._attack])
         self.assertIsNot(parent.average, parent.final)
@@ -245,18 +246,18 @@ class PublicApiTests(unittest.TestCase):
                 "grandchild": {"stats": {"damage": {"slash": 30}, "fire_rate": 9, "status_chance": 0.75}},
             },
         })
-        parent = weapon.stats.main
-        child = weapon.stats.child[0]
+        parent = weapon.results.main
+        child = weapon.results.child[0]
         weapon.configure(attack="child")
-        grandchild = weapon.stats.child[0]
+        grandchild = weapon.results.child[0]
         grandchild_avg_dph = grandchild.average.flat_dph
         grandchild_avg_dps = grandchild.average.flat_dps
         grandchild_avg_dotph = grandchild.average.flat_dotph
         grandchild_final_dph = grandchild.final.flat_dph
         grandchild_status = grandchild.effective.status_chance
         weapon.configure(attack="parent")
-        parent = weapon.stats.main
-        child = weapon.stats.child[0]
+        parent = weapon.results.main
+        child = weapon.results.child[0]
 
         self.assertNotEqual(parent.effective.crit_chance, child.effective.crit_chance)
         self.assertNotEqual(child.effective.status_chance, grandchild_status)
@@ -264,7 +265,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(parent.final.flat_dph, expected_dph)
         self.assertAlmostEqual(
             parent.final.flat_dps,
-            weapon.stats._effective_attacks_per_second(parent) * expected_dph,
+            weapon.results._effective_attacks_per_second(parent) * expected_dph,
         )
         self.assertNotEqual(
             parent.final.flat_dps,
@@ -274,7 +275,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertGreater(expected_dotph, 0)
         self.assertAlmostEqual(parent.final.flat_dotph, expected_dotph)
         self.assertAlmostEqual(parent.final.total_dph, expected_dph + expected_dotph)
-        self.assertAlmostEqual(parent.final.flat_dotps, weapon.stats._effective_attacks_per_second(parent) * expected_dotph)
+        self.assertAlmostEqual(parent.final.flat_dotps, weapon.results._effective_attacks_per_second(parent) * expected_dotph)
         self.assertAlmostEqual(child.final.flat_dph, child.average.flat_dph + grandchild_avg_dph)
         self.assertAlmostEqual(grandchild_final_dph, grandchild_avg_dph)
 
@@ -299,8 +300,8 @@ class PublicApiTests(unittest.TestCase):
                 "child": {"delivery": "beam", "stats": {"damage": {"heat": 20}, "multishot": 3, "ammo_cost": 0.5, "fire_rate": 10}},
             },
         })
-        parent = weapon.stats.main
-        child = weapon.stats.child[0]
+        parent = weapon.results.main
+        child = weapon.results.child[0]
 
         self.assertEqual(parent.effective.ammo_cost, 1)
         self.assertEqual(child.effective.ammo_cost, 0.5)
@@ -325,7 +326,7 @@ class PublicApiTests(unittest.TestCase):
     def test_melee_weapons_include_related_attacks(self):
         weapon = arsenal.get("Ceramic Dagger").configure(attack="spectral_dagger")
 
-        self.assertIs(weapon.stats.child[0].attack, weapon.data.attacks.spectral_dagger_explosion)
+        self.assertIs(weapon.results.child[0].attack, weapon.data.attacks.spectral_dagger_explosion)
         self.assertGreater(selected(weapon).final.flat_dph, selected(weapon).effective.damage.total_damage())
 
     def test_melee_duplicate_increases_condition_overload_status_acquisition(self):
@@ -341,8 +342,8 @@ class PublicApiTests(unittest.TestCase):
         with_duplicate = arsenal.get("Skana").configure(Build(condition_overload, duplicate))
 
         self.assertGreater(
-            with_duplicate.stats._average_condition_overload_bonus(selected(with_duplicate)),
-            without_duplicate.stats._average_condition_overload_bonus(selected(without_duplicate)),
+            with_duplicate.results._average_condition_overload_bonus(selected(with_duplicate)),
+            without_duplicate.results._average_condition_overload_bonus(selected(without_duplicate)),
         )
         self.assertGreater(selected(with_duplicate).average.flat_dotph, selected(without_duplicate).average.flat_dotph)
 
@@ -376,10 +377,10 @@ class PublicApiTests(unittest.TestCase):
         weapon = arsenal.get("Braton").configure(Build(serration))
         full_dps = selected(weapon).final.total_dps
 
-        self.assertGreater(weapon.stats.contribution(serration), 0)
+        self.assertGreater(weapon.results.contribution(serration), 0)
         self.assertAlmostEqual(selected(weapon).final.total_dps, full_dps)
         self.assertEqual([upgrade.data.name for upgrade in weapon.build], ["Serration"])
-        self.assertGreater(weapon.stats.contribution_values()["Serration"], 0)
+        self.assertGreater(weapon.results.contribution_values()["Serration"], 0)
 
     def test_build_has_one_canonical_upgrade_collection(self):
         build = galvanized_build()
@@ -453,12 +454,12 @@ class PublicApiTests(unittest.TestCase):
 
         self.assertEqual(weapon.build.stats.total.corpus_damage, 0.55)
         self.assertEqual(weapon.build.stats.total.grineer_damage, 0.3)
-        attack = weapon.stats.main
+        attack = weapon.results.main
         self.assertEqual(attack.modded.corpus_damage, 1.55)
         self.assertEqual(attack.effective.corpus_damage, 1.55)
         self.assertEqual(attack.average.corpus_damage, 1.55)
         self.assertEqual(attack.modded.grineer_damage, 1.3)
-        self.assertEqual(weapon.stats._max_average_faction_damage(attack), 1.55)
+        self.assertEqual(weapon.results._max_average_faction_damage(attack), 1.55)
 
     def test_upgrade_stats_accept_scalar_and_single_record_shorthand(self):
         scalar = Upgrade({"name": "Scalar", "type": "mod", "max_rank": 0, "stats": {"base_damage": 1.5}})
@@ -572,8 +573,8 @@ class PublicApiTests(unittest.TestCase):
         })
         weapon = arsenal.get("Cernos").configure(Build(condition_overload))
 
-        self.assertGreater(weapon.stats._average_condition_overload_bonus(selected(weapon)), 0)
-        self.assertLess(weapon.stats._average_condition_overload_bonus(selected(weapon)), 1.6)
+        self.assertGreater(weapon.results._average_condition_overload_bonus(selected(weapon)), 0)
+        self.assertLess(weapon.results._average_condition_overload_bonus(selected(weapon)), 1.6)
 
     def test_condition_overload_uses_each_attack_bucket(self):
         condition_overload = Upgrade({
@@ -591,11 +592,11 @@ class PublicApiTests(unittest.TestCase):
                 "child": {"stats": {"damage": {"heat": 10}, "status_chance": 1}},
             },
         }).configure(Build(condition_overload))
-        parent = weapon.stats.main
-        child = weapon.stats.child[0]
+        parent = weapon.results.main
+        child = weapon.results.child[0]
 
-        self.assertEqual(weapon.stats._average_condition_overload_bonus(parent), 0)
-        self.assertGreater(weapon.stats._average_condition_overload_bonus(child), 0)
+        self.assertEqual(weapon.results._average_condition_overload_bonus(parent), 0)
+        self.assertGreater(weapon.results._average_condition_overload_bonus(child), 0)
         self.assertEqual(parent.modded.base_damage, 1)
         self.assertGreater(child.modded.base_damage, 1)
 

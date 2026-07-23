@@ -17,5 +17,5 @@ class DatabaseFactory:
                 model.stats.resolve()
             else:
                 model.data.update(context)
-                model.stats.recompute()
+                model.results.recompute()
         return model
