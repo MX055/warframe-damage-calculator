@@ -56,6 +56,8 @@ class WeaponResultsView(Protocol):
     main: AttackResult
     child: list[AttackResult]
 
+    def resolve(self) -> None: ...
+
     def contribution_proportions(self) -> Mapping[str, float]: ...
 
 

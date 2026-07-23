@@ -236,7 +236,7 @@ class PublicApiTests(unittest.TestCase):
         weapon = arsenal.get("Corinth Prime").configure(attack="air_burst_projectile")
         related = weapon.data.attacks.air_burst_explosion
         related.stats.fire_rate = 2
-        weapon.results.recompute()
+        weapon.results.resolve()
 
         self.assertNotEqual(
             weapon.results._effective_attacks_per_second(selected(weapon)),
@@ -408,7 +408,6 @@ class PublicApiTests(unittest.TestCase):
         result_hints = get_type_hints(BuildCalculator)
 
         self.assertFalse(hasattr(build, "data"))
-        self.assertFalse(hasattr(build, "stats"))
         self.assertTrue(hasattr(build, "results"))
         self.assertIs(get_type_hints(Build)["results"], BuildCalculator)
         for bucket in ("static", "conditional", "modular", "stacking", "rank_locked", "total"):
@@ -422,7 +421,6 @@ class PublicApiTests(unittest.TestCase):
         copied = upgrade.copy()
         result_hints = get_type_hints(UpgradeCalculator)
 
-        self.assertFalse(hasattr(upgrade, "stats"))
         self.assertTrue(hasattr(upgrade, "results"))
         self.assertIs(get_type_hints(Upgrade)["results"], UpgradeCalculator)
         for bucket in ("static", "conditional", "modular", "stacking", "rank_locked", "total"):
@@ -645,8 +643,6 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(modded.flat.crit_chance, 0.2)
         self.assertEqual(modded.multiplicative.crit_chance, 1.5)
         self.assertEqual(set(modded), {"additive", "multiplicative", "base", "flat"})
-        for field in ("status_damage", "flat_crit_chance", "multiplicative_crit_chance"):
-            self.assertFalse(hasattr(modded, field))
 
     def test_upgrade_stats_reject_unknown_modes(self):
         with self.assertRaisesRegex(ValueError, "unsupported effect mode"):

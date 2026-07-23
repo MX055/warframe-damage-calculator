@@ -27,5 +27,5 @@ class Weapon:
         if build is not None: self.build = build.copy()
         if attack is not None: self._attack = attack
         if evolutions is not None: self._evolutions = dict(evolutions)
-        self.results.recompute()
+        self.results.resolve()
         return self

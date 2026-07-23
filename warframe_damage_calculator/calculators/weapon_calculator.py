@@ -20,7 +20,7 @@ class WeaponCalculator:
 
     def __init__(self, weapon: ConfigurableWeaponOwner) -> None:
         self.weapon = weapon
-        self.recompute()
+        self.resolve()
 
     @staticmethod
     def _crit_multiplier(crit_chance: Number, crit_damage: Number) -> float:
@@ -305,7 +305,7 @@ class WeaponCalculator:
             final.total_weakpoint_dps = final.total_weakpoint_dph * attack_rate
         return final
 
-    def recompute(self) -> None:
+    def resolve(self) -> None:
         self._validate_attack_cycles()
         resolved_build = self._resolved_build()
         resolved_evolutions = self._resolved_evolutions()
