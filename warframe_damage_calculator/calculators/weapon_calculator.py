@@ -16,9 +16,6 @@ class WeaponCalculator:
         self.attacks = AttackResults()
         self.recompute()
 
-    def _attack_name(self) -> str:
-        return next(name for name, attack in self.weapon.data.attacks.items() if attack is self.weapon._attack)
-
     def _resolved_build(self) -> ResolvedStat:
         build = Build(*self.weapon.build, *helpers.selected_evolution_upgrades(self.weapon))
         build.stats.resolve(self.weapon.data)
@@ -163,10 +160,10 @@ class WeaponCalculator:
         if all(equipped.data != upgrade.data for equipped in full):
             return 0.0
         reduced = full - upgrade
-        full_dps = self.attacks[self._attack_name()].final.total_dps
+        full_dps = self.attacks[self.weapon._attack].final.total_dps
         try:
             self.weapon.configure(reduced)
-            return full_dps - self.attacks[self._attack_name()].final.total_dps
+            return full_dps - self.attacks[self.weapon._attack].final.total_dps
         finally:
             self.weapon.configure(full)
 

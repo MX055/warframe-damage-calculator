@@ -3,8 +3,7 @@ from .weapon_formatter import WeaponFormatter
 
 class MeleeFormatter(WeaponFormatter):
     def summary(self) -> str:
-        attack_name = self.weapon.stats._attack_name()
-        selected = self.weapon.stats.attacks[attack_name]
+        selected = self.weapon.stats.attacks[self.weapon._attack]
         base = selected.base
         effective = selected.effective
         average = selected.final

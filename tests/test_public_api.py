@@ -21,7 +21,7 @@ def galvanized_build() -> Build:
 
 
 def selected(weapon: Weapon):
-    return weapon.stats.attacks[weapon.stats._attack_name()]
+    return weapon.stats.attacks[weapon._attack]
 
 
 class DataDefaults(Data):
@@ -148,7 +148,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertIsInstance(mod, Upgrade)
         self.assertIsNot(first, second)
         first.configure(attack="air_burst_projectile")
-        self.assertIs(second._attack, second.data.attacks.buckshot)
+        self.assertEqual(second._attack, "buckshot")
 
         mod.data.runtime.stacks = 99
         self.assertIsNone(arsenal.get("Galvanized Chamber").data.runtime.get("stacks"))
@@ -178,22 +178,22 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(weapon.data.ammo.reload_time, 3)
         self.assertEqual(weapon.data.ammo.magazine_size, 20)
         self.assertNotIn("damage", weapon.data.ammo)
-        self.assertEqual(weapon._attack.stats.damage.total_damage(), 90)
-        self.assertNotIn("reload_time", weapon._attack.stats)
+        self.assertEqual(weapon.data.attacks[weapon._attack].stats.damage.total_damage(), 90)
+        self.assertNotIn("reload_time", weapon.data.attacks[weapon._attack].stats)
 
     def test_default_mode_switching(self):
         weapon = arsenal.get("Corinth Prime")
-        self.assertIs(weapon._attack, weapon.data.attacks.buckshot)
+        self.assertEqual(weapon._attack, "buckshot")
 
         self.assertIs(weapon.configure(attack="air_burst_projectile"), weapon)
-        self.assertEqual(weapon._attack.children, ["air_burst_explosion"])
+        self.assertEqual(weapon.data.attacks[weapon._attack].children, ["air_burst_explosion"])
         self.assertEqual(selected(weapon).base.damage.total_damage(), 100)
         self.assertEqual(weapon.stats.attacks.air_burst_explosion.effective.damage.total_damage(), 2200)
         self.assertIs(weapon.stats.attacks.air_burst_explosion.attack, weapon.data.attacks.air_burst_explosion)
 
     def test_mode_specific_stats_and_global_ranged_stats(self):
         weapon = arsenal.get("Corinth Prime").configure(attack="buckshot")
-        mode = weapon._attack.stats
+        mode = weapon.data.attacks[weapon._attack].stats
 
         self.assertAlmostEqual(mode.crit_chance, 0.3)
         self.assertAlmostEqual(mode.status_chance, 0.09)
@@ -224,7 +224,7 @@ class PublicApiTests(unittest.TestCase):
         parent = selected(weapon)
         child = weapon.stats.attacks.air_burst_explosion
 
-        self.assertIs(parent.attack, weapon._attack)
+        self.assertIs(parent.attack, weapon.data.attacks[weapon._attack])
         self.assertIsNot(parent.average, parent.final)
         self.assertIs(child.attack, weapon.data.attacks.air_burst_explosion)
         self.assertNotEqual(parent.base.damage, child.base.damage)
@@ -437,7 +437,7 @@ class PublicApiTests(unittest.TestCase):
 
         self.assertEqual(weapon.build.stats.total.corpus_damage, 0.55)
         self.assertEqual(weapon.build.stats.total.grineer_damage, 0.3)
-        self.assertEqual(weapon.stats.attacks[weapon.stats._attack_name()].effective.faction_damage, 1.55)
+        self.assertEqual(weapon.stats.attacks[weapon._attack].effective.faction_damage, 1.55)
 
     def test_upgrade_stats_accept_scalar_and_single_record_shorthand(self):
         scalar = Upgrade({"name": "Scalar", "type": "mod", "max_rank": 0, "stats": {"base_damage": 1.5}})
@@ -517,14 +517,14 @@ class PublicApiTests(unittest.TestCase):
 
         additive = arsenal.get("Cernos").configure(build, attack="charged_shot")
         additive_base = selected(additive).base.damage.total_damage()
-        self.assertEqual(additive._attack.stats.co_factor, 0.5)
-        self.assertEqual(additive._attack.stats.co_effect, "adds")
+        self.assertEqual(additive.data.attacks[additive._attack].stats.co_factor, 0.5)
+        self.assertEqual(additive.data.attacks[additive._attack].stats.co_effect, "adds")
         self.assertGreater(selected(additive).effective.damage.total_damage(), additive_base * 2)
         self.assertLess(selected(additive).effective.damage.total_damage(), additive_base * 3)
 
         multiplicative = arsenal.get("Coda Bassocyst").configure(build, attack="normal_attack")
         multiplicative_base = selected(multiplicative).base.damage.total_damage()
-        self.assertEqual(multiplicative._attack.stats.co_effect, "multiplies")
+        self.assertEqual(multiplicative.data.attacks[multiplicative._attack].stats.co_effect, "multiplies")
         self.assertGreater(selected(multiplicative).effective.damage.total_damage(), multiplicative_base * 2)
         self.assertLess(selected(multiplicative).effective.damage.total_damage(), multiplicative_base * 6)
 

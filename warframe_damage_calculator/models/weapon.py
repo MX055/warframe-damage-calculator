@@ -18,14 +18,14 @@ class Weapon:
     def __init__(self, data: Mapping[str, JsonValue] | None = None) -> None:
         self.data = self.data_type(data or {})
         self.build = Build()
-        self._attack = next(iter(self.data.attacks.values()))
+        self._attack = next(iter(self.data.attacks))
         self._evolutions: dict[int, int] = {}
         self.stats = self.calculator_type(self)
         self.format = self.formatter_type(self)
 
     def configure(self, build: Build | None = None, attack: str | None = None, evolutions: Mapping[int, int] | None = None) -> Self:
         if build is not None: self.build = build.copy()
-        if attack is not None: self._attack = self.data.attacks[attack]
+        if attack is not None: self._attack = attack
         if evolutions is not None: self._evolutions = dict(evolutions)
         self.stats.recompute()
         return self
