@@ -11,7 +11,9 @@ class Upgrade:
         self.data = UpgradeData(data or {})
         self.stats = UpgradeCalculator(self)
 
-    def __eq__(self, other: Upgrade) -> bool:
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Upgrade):
+            return NotImplemented
         return self.data == other.data
 
     def configure(self, context: Mapping[str, Any] | None = None) -> Self:

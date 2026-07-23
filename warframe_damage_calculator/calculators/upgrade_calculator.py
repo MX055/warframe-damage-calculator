@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, replace
-from typing import Any
+from typing import Any, Literal
 
 from ..fields.upgrade import ResolvedStat
 from ..loader.matching import MELEE_TYPES, PRIMARY_TYPES, SECONDARY_TYPES
@@ -10,13 +10,18 @@ from ..models.data import Data
 from ..models.dist import Dist
 from ..protocols import UpgradeOwner
 from ..utils.constants import DAMAGE_TYPES
+from ..utils.types import Number
+
+
+type EffectBucket = Literal["static", "conditional", "modular", "stacking", "rank_locked"]
+type EffectValue = Number | bool | Mapping[str, object] | Dist
 
 
 @dataclass(frozen=True, slots=True)
 class _Effect:
     stat: str
-    value: Any
-    bucket: str
+    value: EffectValue
+    bucket: EffectBucket
     required_rank: int | None = None
     condition: str | None = None
     equipped: tuple[str, ...] | None = None
@@ -24,6 +29,17 @@ class _Effect:
     max_stacks: int | None = None
     scales_with_rank: bool = True
     co_max_stacks: int | str | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class _ResolutionContext:
+    weapon: Data
+    build: Data
+    upgrade: Data
+    rank: int
+    rank_multiplier: float
+    max_stacks: int | None
+    use_defaults: bool
 
 
 class UpgradeCalculator:
@@ -49,10 +65,7 @@ class UpgradeCalculator:
         elif stat == "condition_overload":
             current = current or {}
             maximums = {current.get("max_stacks", 0), value.get("max_stacks", 0)}
-            stats[stat] = {
-                "value": current.get("value", 0) + value.get("value", 0),
-                "max_stacks": "inf" if "inf" in maximums else max(maximums),
-            }
+            stats[stat] = {"value": current.get("value", 0) + value.get("value", 0), "max_stacks": "inf" if "inf" in maximums else max(maximums),}
         elif current is None:
             stats[stat] = value
         elif isinstance(value, bool):
@@ -64,14 +77,7 @@ class UpgradeCalculator:
 
     def _upgrade_data(self) -> Data:
         data = self.upgrade.data
-        return Data({
-            "name": data.name,
-            "type": data.type,
-            "max_rank": data.max_rank,
-            "compatibility": data.compatibility,
-            "incompatibility": data.incompatibility,
-            **data.runtime.with_defaults(),
-        })
+        return Data({"name": data.name, "type": data.type, "max_rank": data.max_rank, "compatibility": data.compatibility, "incompatibility": data.incompatibility, **data.runtime.with_defaults()})
 
     def _condition(self, weapon: Data, upgrade: Data, condition: Any) -> bool:
         if condition in self.WEAPON_TYPES:
@@ -82,14 +88,14 @@ class UpgradeCalculator:
         return bool(upgrade.get(condition, True))
 
     @classmethod
-    def _scale(cls, value: Any, multiplier: float) -> Any:
-        if isinstance(value, Mapping):
+    def _scale(cls, value: EffectValue, multiplier: float) -> EffectValue:
+        if isinstance(value, Mapping) and not isinstance(value, Dist):
             return {key: cls._scale(item, multiplier) for key, item in value.items()}
         if isinstance(value, bool):
             return value
         return value * multiplier
 
-    def _record(self, bucket: ResolvedStat, stat: str, value: Any) -> None:
+    def _record(self, bucket: ResolvedStat, stat: str, value: EffectValue) -> None:
         self._merge_stat(bucket, stat, value)
         self._merge_stat(self.total, stat, value)
 
@@ -107,16 +113,12 @@ class UpgradeCalculator:
     def _normalize_effect(self, stat: str, effect: Data) -> _Effect:
         if stat == "condition_overload":
             maximum = effect.get("stacks", {}).get("max")
-            return _Effect(
-                stat=stat,
-                value=effect.value,
-                bucket="static",
-                scales_with_rank=True,
-                co_max_stacks="inf" if maximum is None else maximum,
-            )
+            return _Effect(stat=stat, value=effect.value, bucket="static", scales_with_rank=True, co_max_stacks="inf" if maximum is None else maximum)
 
         equipped = effect.get("equipped")
-        required_rank = effect.get("rank")
+        required_rank = effect.get("at_rank")
+        if required_rank is None:
+            required_rank = effect.get("rank")
         condition = effect.get("when")
         stacks = effect.get("stacks")
         value = effect.value
@@ -126,21 +128,13 @@ class UpgradeCalculator:
             if required_rank is not None:
                 return _Effect(stat, value, "modular", required_rank=required_rank, equipped=names, scales_with_rank=False)
             if stacks is not None:
-                return _Effect(
-                    stat, value, "modular", equipped=names,
-                    stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"),
-                    scales_with_rank=True,
-                )
+                return _Effect(stat, value, "modular", equipped=names, stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"), scales_with_rank=True)
             return _Effect(stat, value, "modular", condition=condition, equipped=names, scales_with_rank=True)
 
         if required_rank is not None:
             return _Effect(stat, value, "rank_locked", required_rank=required_rank, scales_with_rank=False)
         if stacks is not None:
-            return _Effect(
-                stat, value, "stacking",
-                stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"),
-                scales_with_rank=True,
-            )
+            return _Effect(stat, value, "stacking", stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"), scales_with_rank=True)
         if condition is None:
             return _Effect(stat, value, "static", scales_with_rank=True)
         return _Effect(stat, value, "conditional", condition=condition, scales_with_rank=True)
@@ -148,38 +142,50 @@ class UpgradeCalculator:
     def _normalize_effects(self) -> tuple[_Effect, ...]:
         return tuple(self._normalize_effect(stat, effect) for stat, raw in self.upgrade.data.stats.items() for effect in self._raw_effects(raw))
 
-    def _stack_count(self, effect: _Effect, upgrade: Data, upgrade_max_stacks: int | None, defaults: bool) -> int:
-        effect_max = effect.max_stacks if effect.max_stacks is not None else upgrade_max_stacks
-        stacks_value = upgrade.get("stacks")
-        fallback = ((effect_max or 0) if defaults else 0) if stacks_value is None else stacks_value
-        stacks = upgrade.get(effect.stacks_on, fallback)
+    def _stack_count(self, effect: _Effect, context: _ResolutionContext) -> int:
+        effect_max = effect.max_stacks if effect.max_stacks is not None else context.max_stacks
+        stacks_value = context.upgrade.get("stacks")
+        if stacks_value is None:
+            fallback = (effect_max or 0) if context.use_defaults else 0
+        else:
+            fallback = stacks_value
+        stacks = context.upgrade.get(effect.stacks_on, fallback)
         return min(stacks, effect_max) if effect_max is not None else stacks
 
-    def _resolve_effects(self, effects: Iterable[_Effect], weapon: Data, build: Data, upgrade: Data, rank: int, multiplier: float, upgrade_max_stacks: int | None, defaults: bool) -> tuple[_Effect, ...]:
+    def _is_effect_applicable(self, effect: _Effect, context: _ResolutionContext) -> bool:
+        if effect.equipped is not None:
+            equipped_names = set(context.build.get("equipped", []))
+            if not all(name in equipped_names for name in effect.equipped):
+                return False
+        if effect.required_rank is not None and context.rank < effect.required_rank:
+            return False
+        if effect.condition is not None and not self._condition(context.weapon, context.upgrade, effect.condition):
+            return False
+        return True
+
+    def _resolve_effect(self, effect: _Effect, context: _ResolutionContext) -> _Effect | None:
+        stacks = 1
+        if effect.stacks_on is not None:
+            stacks = self._stack_count(effect, context)
+            if not stacks:
+                return None
+
+        value = (self._scale(effect.value, context.rank_multiplier) if effect.scales_with_rank else effect.value)
+        if effect.stat == "condition_overload":
+            value = {"value": value, "max_stacks": effect.co_max_stacks}
+        elif effect.stacks_on is not None and not isinstance(value, bool):
+            value = value * stacks
+
+        return replace(effect, value=value)
+
+    def _resolve_effects(self, effects: Iterable[_Effect], context: _ResolutionContext) -> tuple[_Effect, ...]:
         resolved: list[_Effect] = []
-        equipped_names = set(build.get("equipped", []))
-
         for effect in effects:
-            if effect.equipped is not None and not all(name in equipped_names for name in effect.equipped):
+            if not self._is_effect_applicable(effect, context):
                 continue
-            if effect.required_rank is not None and rank < effect.required_rank:
-                continue
-            if effect.condition is not None and not self._condition(weapon, upgrade, effect.condition):
-                continue
-
-            stacks = 1
-            if effect.stacks_on is not None:
-                stacks = self._stack_count(effect, upgrade, upgrade_max_stacks, defaults)
-                if not stacks:
-                    continue
-
-            value = self._scale(effect.value, multiplier) if effect.scales_with_rank else effect.value
-            if effect.stat == "condition_overload":
-                value = {"value": value, "max_stacks": effect.co_max_stacks}
-            elif effect.stacks_on is not None and not isinstance(value, bool):
-                value = value * stacks
-
-            resolved.append(replace(effect, value=value))
+            resolved_effect = self._resolve_effect(effect, context)
+            if resolved_effect is not None:
+                resolved.append(resolved_effect)
         return tuple(resolved)
 
     def _aggregate_effects(self, effects: Iterable[_Effect]) -> None:
@@ -200,9 +206,10 @@ class UpgradeCalculator:
             rank = max_rank or 0
         if max_rank is not None:
             rank = min(rank, max_rank)
-        multiplier = 1 if max_rank in {None, 0} else (rank + 1) / (max_rank + 1)
-        defaults = set(upgrade_data) <= self.METADATA
+        rank_multiplier = 1 if max_rank in {None, 0} else (rank + 1) / (max_rank + 1)
+        use_defaults = set(upgrade_data) <= self.METADATA
 
+        context = _ResolutionContext(weapon=weapon_data, build=build_data, upgrade=upgrade_data, rank=rank, rank_multiplier=rank_multiplier, max_stacks=max_stacks, use_defaults=use_defaults)
         effects = self._normalize_effects()
-        applicable = self._resolve_effects(effects, weapon_data, build_data, upgrade_data, rank, multiplier, max_stacks, defaults)
+        applicable = self._resolve_effects(effects, context)
         self._aggregate_effects(applicable)

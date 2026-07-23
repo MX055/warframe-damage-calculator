@@ -5,13 +5,13 @@ from ..fields.calculated import AverageStats, CalculatedStats
 from ..fields.upgrade import ResolvedStat
 from ..fields.weapon_data import Attack
 from ..models.build import Build
-from ..protocols import BuildUpgradeOwner, WeaponCalculatorOwner
+from ..protocols import BuildUpgradeOwner, ConfigurableWeaponOwner
 from ..utils.types import Number
 from . import helpers
 
 
 class WeaponCalculator:
-    def __init__(self, weapon: WeaponCalculatorOwner) -> None:
+    def __init__(self, weapon: ConfigurableWeaponOwner) -> None:
         self.weapon = weapon
         self._results: dict[str, AttackResult] = {}
         self.recompute()

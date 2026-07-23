@@ -23,8 +23,7 @@ class UpgradeStatsView(Protocol):
     rank_locked: ResolvedStat
     total: ResolvedStat
 
-    def resolve(self, weapon: object | None = None, build: object | None = None) -> None:
-        ...
+    def resolve(self, weapon: object | None = None, build: object | None = None) -> None: ...
 
 
 @runtime_checkable
@@ -46,8 +45,15 @@ class WeaponCalculatorOwner(Protocol):
     _evolutions: Mapping[int, int]
     stats_type: type[WeaponStats]
 
-    def configure(self, build: BuildOwner | None = None, attack: str | None = None, evolutions: Mapping[int, int] | None = None) -> WeaponCalculatorOwner:
-        ...
+
+@runtime_checkable
+class ConfigurableWeaponOwner(WeaponCalculatorOwner, Protocol):
+    def configure(
+        self,
+        build: BuildOwner | None = None,
+        attack: str | None = None,
+        evolutions: Mapping[int, int] | None = None,
+    ) -> ConfigurableWeaponOwner: ...
 
 
 @runtime_checkable
@@ -55,8 +61,7 @@ class WeaponResultsView(Protocol):
     main: AttackResult
     child: list[AttackResult]
 
-    def contribution_proportions(self) -> Mapping[str, float]:
-        ...
+    def contribution_proportions(self) -> Mapping[str, float]: ...
 
 
 @runtime_checkable

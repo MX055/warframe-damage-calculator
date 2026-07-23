@@ -643,7 +643,7 @@ class PublicApiTests(unittest.TestCase):
             "max_rank": 5,
             "stats": {
                 "base_damage": 1.65,
-                "reload_speed": [{"value": 0.3, "rank": 5}],
+                "reload_speed": [{"value": 0.3, "at_rank": 5}],
             },
         })
 
@@ -662,6 +662,13 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(merciless.stats.stacking.base_damage, 0.3 * 3 / 6 * 12)
         self.assertEqual(merciless.stats.rank_locked.reload_speed, 0)
 
+        at_rank = Upgrade({"stats": {"crit_chance": {"value": 2, "at_rank": 10}}, "max_rank": 11})
+        at_rank.configure({"rank": 10})
+        self.assertEqual(at_rank.stats.rank_locked.crit_chance, 2)
+        self.assertEqual(at_rank.stats.total.crit_chance, 2)
+        at_rank.configure({"rank": 9})
+        self.assertEqual(at_rank.stats.total.crit_chance, 0)
+
     def test_build_subtraction_matches_definition_not_runtime(self):
         low = arsenal.get("Serration", context={"rank": 5})
         high = arsenal.get("Serration", context={"rank": 10})
@@ -669,6 +676,8 @@ class PublicApiTests(unittest.TestCase):
         build = Build(high, other)
 
         self.assertTrue(low == high)
+        self.assertNotEqual(low, object())
+        self.assertNotEqual(low, "Serration")
         reduced = build - low
         self.assertEqual([upgrade.data.name for upgrade in reduced], ["Point Strike"])
 
@@ -679,6 +688,7 @@ class PublicApiTests(unittest.TestCase):
 
     def test_protocols_accept_concrete_models(self):
         from warframe_damage_calculator.protocols import (
+            ConfigurableWeaponOwner,
             UpgradeOwner,
             WeaponCalculatorOwner,
             WeaponFormatterOwner,
@@ -689,10 +699,42 @@ class PublicApiTests(unittest.TestCase):
 
         self.assertIsInstance(upgrade, UpgradeOwner)
         self.assertIsInstance(weapon, WeaponCalculatorOwner)
+        self.assertIsInstance(weapon, ConfigurableWeaponOwner)
         self.assertIsInstance(weapon, WeaponFormatterOwner)
         self.assertEqual(UpgradeCalculator(upgrade).total.base_damage, 1)
         self.assertEqual(weapon.results.main.name, weapon._attack)
         self.assertIn(weapon.data.name, weapon.format.summary())
+
+    def test_effect_buckets_aggregate_independently(self):
+        upgrade = Upgrade({
+            "name": "Buckets",
+            "type": "mod",
+            "max_rank": 5,
+            "stats": {
+                "base_damage": [
+                    0.30,
+                    {"value": 0.20, "when": "headshot"},
+                    {"value": 0.10, "stacks": {"when": "kill", "max": 3}},
+                    {"value": 0.25, "at_rank": 5},
+                    {"value": 0.15, "equipped": ["Partner"]},
+                ],
+            },
+        })
+        upgrade.data.runtime.update({"rank": 5, "headshot": True, "kill": 2})
+        upgrade.stats.resolve(build=Data({"equipped": ["Partner"]}))
+
+        self.assertAlmostEqual(upgrade.stats.static.base_damage, 0.30)
+        self.assertAlmostEqual(upgrade.stats.conditional.base_damage, 0.20)
+        self.assertAlmostEqual(upgrade.stats.stacking.base_damage, 0.20)
+        self.assertAlmostEqual(upgrade.stats.rank_locked.base_damage, 0.25)
+        self.assertAlmostEqual(upgrade.stats.modular.base_damage, 0.15)
+        self.assertAlmostEqual(upgrade.stats.total.base_damage, 1.10)
+
+        alone = Upgrade(upgrade.data.copy())
+        alone.data.runtime.update({"rank": 5, "headshot": True, "kill": 2})
+        alone.stats.resolve()
+        self.assertEqual(alone.stats.modular.base_damage, 0)
+        self.assertAlmostEqual(alone.stats.total.base_damage, 0.95)
 
     def test_condition_overload_applies_before_modded_damage(self):
         from warframe_damage_calculator.calculators.weapon_calculator import WeaponCalculator
