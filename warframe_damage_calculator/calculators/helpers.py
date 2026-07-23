@@ -82,7 +82,7 @@ def average_condition_overload_bonus(weapon: Any, result: AttackResult, time: Nu
     return float(condition_overload.value) * stats.co_factor * expected
 
 
-def flat_dotph(result: AttackResult, *, weakpoint: bool = False, hits: Number | None = None, damage_multiplier: Number = 1, extra_damage: Number = 0) -> float:
+def flat_dotph(result: AttackResult, *, weakpoint: bool = False, hits: Number | None = None, damage_multiplier: Number = 1, extra_damage: Number = 0, faction_damage: Number = 1) -> float:
     base, effective, average = result.base, result.effective, result.average
     if effective.damage.total_damage() <= 0:
         return 0.0
@@ -90,10 +90,10 @@ def flat_dotph(result: AttackResult, *, weakpoint: bool = False, hits: Number | 
     regular = sum(factor * effective.damage.get(damage_type) * effective.damage.weight(damage_type) for damage_type, factor in DOT_MULTIPLIERS) * effective.status_chance
     forced = sum(factor * base.forced_procs.get(damage_type) * effective.damage.get(damage_type) for damage_type, factor in DOT_MULTIPLIERS)
     shot_hits = effective.get("multishot", status_hits(result)) if hits is None else hits
-    return (regular + forced) * effective.status_damage * effective.faction_damage ** 2 * multiplier * damage_multiplier * shot_hits + extra_damage
+    return (regular + forced) * effective.status_damage * faction_damage ** 2 * multiplier * damage_multiplier * shot_hits + extra_damage
 
 
-def primary_flat_dotph(result: AttackResult, *, weakpoint: bool = False) -> float:
+def primary_flat_dotph(result: AttackResult, *, weakpoint: bool = False, faction_damage: Number = 1) -> float:
     damage, forced_procs = result.effective.damage, result.base.forced_procs
     effective, average = result.effective, result.average
     if damage.total_damage() <= 0:
@@ -102,20 +102,20 @@ def primary_flat_dotph(result: AttackResult, *, weakpoint: bool = False) -> floa
     multiplier = average.weakpoint_crit_multiplier if weakpoint else average.crit_multiplier
     primed = 1 + effective.primed_chamber / effective.magazine_capacity
     hunter_procs = effective.hunter_munitions * min(crit_chance, 1)
-    hunter_dpp = 2.1 * damage.total_damage() * max(effective.crit_damage, multiplier) * effective.status_damage * effective.faction_damage ** 2 * primed
+    hunter_dpp = 2.1 * damage.total_damage() * max(effective.crit_damage, multiplier) * effective.status_damage * faction_damage ** 2 * primed
     hunter_damage = hunter_procs * hunter_dpp
     impact_ib = (damage.weight("impact") + forced_procs.get("impact")) * effective.internal_bleeding
     guaranteed_proc, fractional_proc = divmod(effective.status_chance, 1)
     ib_procs = impact_ib * effective.status_chance
-    ib_dpp = 2.1 * damage.total_damage() * multiplier * effective.status_damage * effective.faction_damage ** 2 * primed
+    ib_dpp = 2.1 * damage.total_damage() * multiplier * effective.status_damage * faction_damage ** 2 * primed
     ib_damage = ib_procs * ib_dpp
     ib_probability = 1 - (1 - impact_ib) ** guaranteed_proc * ((1 - fractional_proc) + fractional_proc * (1 - impact_ib))
     overlap = hunter_procs * ib_probability * min(hunter_dpp, ib_dpp)
     extra = hunter_damage + ib_damage - overlap
-    return flat_dotph(result, weakpoint=weakpoint, damage_multiplier=primed, extra_damage=extra * effective.multishot)
+    return flat_dotph(result, weakpoint=weakpoint, damage_multiplier=primed, extra_damage=extra * effective.multishot, faction_damage=faction_damage)
 
 
-def secondary_flat_dotph(result: AttackResult, *, weakpoint: bool = False) -> float:
+def secondary_flat_dotph(result: AttackResult, *, weakpoint: bool = False, faction_damage: Number = 1) -> float:
     # Secondary Encumber calculations need testing in-game
     damage, forced_procs = result.effective.damage, result.base.forced_procs
     effective, average = result.effective, result.average
@@ -123,11 +123,11 @@ def secondary_flat_dotph(result: AttackResult, *, weakpoint: bool = False) -> fl
         return 0.0
     multiplier = average.weakpoint_crit_multiplier if weakpoint else average.crit_multiplier
     encumber_chance = 1 - (1 - effective.secondary_encumber * min(effective.status_chance, 1)) ** effective.multishot
-    encumber_dot = encumber_chance * damage.total_damage() * 14.1 / 13 * multiplier * effective.status_damage * effective.faction_damage ** 2
+    encumber_dot = encumber_chance * damage.total_damage() * 14.1 / 13 * multiplier * effective.status_damage * faction_damage ** 2
     ib_procs = ((damage.weight("impact") + forced_procs.get("impact")) * effective.status_chance + encumber_chance / 13) * effective.internal_bleeding
-    ib_dpp = 2.1 * damage.total_damage() * multiplier * effective.status_damage * effective.faction_damage ** 2
+    ib_dpp = 2.1 * damage.total_damage() * multiplier * effective.status_damage * faction_damage ** 2
     extra = ib_procs * ib_dpp * effective.multishot
-    return flat_dotph(result, weakpoint=weakpoint, extra_damage=extra + encumber_dot)
+    return flat_dotph(result, weakpoint=weakpoint, extra_damage=extra + encumber_dot, faction_damage=faction_damage)
 
 
 def selected_evolution_upgrades(weapon: Any) -> list:

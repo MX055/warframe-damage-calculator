@@ -30,4 +30,4 @@ class PrimaryCalculator(RangedCalculator):
         helpers.refresh_dps_from_dph(average)
 
     def _flat_dotph(self, result: AttackResult, *, weakpoint: bool = False) -> float:
-        return helpers.primary_flat_dotph(result, weakpoint=weakpoint)
+        return helpers.primary_flat_dotph(result, weakpoint=weakpoint, faction_damage=self._max_average_faction_damage(result))

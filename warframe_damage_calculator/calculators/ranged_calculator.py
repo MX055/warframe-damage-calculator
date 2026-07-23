@@ -53,8 +53,8 @@ class RangedCalculator(WeaponCalculator):
 
     def _apply_ranged_damage_averages(self, result: AttackResult) -> None:
         effective, average = result.effective, result.average
-        average.flat_dph = effective.damage.total_damage() * effective.multishot * effective.faction_damage * average.crit_multiplier
-        average.flat_weakpoint_dph = effective.damage.total_damage() * effective.multishot * effective.weakpoint_damage * average.weakpoint_crit_multiplier * effective.faction_damage
+        average.flat_dph = effective.damage.total_damage() * effective.multishot * self._max_average_faction_damage(result) * average.crit_multiplier
+        average.flat_weakpoint_dph = effective.damage.total_damage() * effective.multishot * effective.weakpoint_damage * average.weakpoint_crit_multiplier * self._max_average_faction_damage(result)
         average.flat_dotph = self._flat_dotph(result)
         average.flat_weakpoint_dotph = self._flat_dotph(result, weakpoint=True)
         average.flat_dotps = average.fire_rate * average.flat_dotph

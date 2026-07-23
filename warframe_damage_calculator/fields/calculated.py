@@ -8,7 +8,12 @@ class CalculatedStats(Data):
     forced_procs: Dist = Dist()
     multiplicative_base_damage: Number
     base_damage: Number
-    faction_damage: Number
+    corpus_damage: Number
+    grineer_damage: Number
+    infested_damage: Number
+    orokin_damage: Number
+    murmur_damage: Number
+    sentient_damage: Number
     flat_crit_chance: Number
     multiplicative_crit_chance: Number
     crit_chance: Number
@@ -46,6 +51,12 @@ class AverageStats(Data):
     crit_multiplier: Number
     weakpoint_crit_chance: Number
     weakpoint_crit_multiplier: Number
+    corpus_damage: Number
+    grineer_damage: Number
+    infested_damage: Number
+    orokin_damage: Number
+    murmur_damage: Number
+    sentient_damage: Number
     fire_rate: Number
     procs_per_shot: Number
     flat_dph: Number

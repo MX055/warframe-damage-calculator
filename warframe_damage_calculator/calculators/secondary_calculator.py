@@ -64,4 +64,4 @@ class SecondaryCalculator(RangedCalculator):
         return 0.1 * accumulated[0][0] / length[0][0]
 
     def _flat_dotph(self, result: AttackResult, *, weakpoint: bool = False) -> float:
-        return helpers.secondary_flat_dotph(result, weakpoint=weakpoint)
+        return helpers.secondary_flat_dotph(result, weakpoint=weakpoint, faction_damage=self._max_average_faction_damage(result))

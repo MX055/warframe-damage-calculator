@@ -437,7 +437,12 @@ class PublicApiTests(unittest.TestCase):
 
         self.assertEqual(weapon.build.stats.total.corpus_damage, 0.55)
         self.assertEqual(weapon.build.stats.total.grineer_damage, 0.3)
-        self.assertEqual(weapon.stats.attacks[weapon._attack].effective.faction_damage, 1.55)
+        attack = weapon.stats.attacks[weapon._attack]
+        self.assertEqual(attack.modded.corpus_damage, 1.55)
+        self.assertEqual(attack.effective.corpus_damage, 1.55)
+        self.assertEqual(attack.average.corpus_damage, 1.55)
+        self.assertEqual(attack.modded.grineer_damage, 1.3)
+        self.assertEqual(weapon.stats._max_average_faction_damage(attack), 1.55)
 
     def test_upgrade_stats_accept_scalar_and_single_record_shorthand(self):
         scalar = Upgrade({"name": "Scalar", "type": "mod", "max_rank": 0, "stats": {"base_damage": 1.5}})

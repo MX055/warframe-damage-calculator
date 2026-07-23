@@ -72,26 +72,22 @@ class WeaponCalculator:
     def _compute_base_stats(self, result: AttackResult) -> None:
         attack = result.attack
         ammo, stats = self.weapon.data.ammo, dict(attack.stats)
-        stats.update({
-            "attack_speed": attack.stats.fire_rate,
-            "magazine_capacity": ammo.get("magazine_size", 1),
-            "reload_speed": ammo.get("reload_time", 0),
-            "recharge_rate": ammo.get("recharge_rate", 0),
-        })
+        stats.update({"attack_speed": attack.stats.fire_rate, "magazine_capacity": ammo.get("magazine_size", 1), "reload_speed": ammo.get("reload_time", 0), "recharge_rate": ammo.get("recharge_rate", 0)})
         result.base = CalculatedStats(self.weapon.stats_type(stats).with_defaults())
 
     def _compute_modded_stats(self, result: AttackResult) -> None:
         build, base, modded = result.build, result.base, result.modded
         damage = base.damage.apply(build.damage).combine().sorted()
-        faction_damage = max(
-            build.corpus_damage, build.grineer_damage, build.infested_damage,
-            build.orokin_damage, build.murmur_damage, build.sentient_damage,
-        )
 
         modded.multiplicative_base_damage = max(1 + build.multiplicative_base_damage, 1)
         modded.base_damage = max(1 + build.base_damage, 0)
         modded.damage = modded.base_damage * damage
-        modded.faction_damage = max(1 + faction_damage, 1)
+        modded.corpus_damage = max(1 + build.corpus_damage, 1)
+        modded.grineer_damage = max(1 + build.grineer_damage, 1)
+        modded.infested_damage = max(1 + build.infested_damage, 1)
+        modded.orokin_damage = max(1 + build.orokin_damage, 1)
+        modded.murmur_damage = max(1 + build.murmur_damage, 1)
+        modded.sentient_damage = max(1 + build.sentient_damage, 1)
         modded.flat_crit_chance = max(build.flat_crit_chance, 0)
         modded.multiplicative_crit_chance = max(1 + build.multiplicative_crit_chance, 1)
         modded.crit_chance = max(base.crit_chance * (1 + build.crit_chance), 0)
@@ -105,19 +101,42 @@ class WeaponCalculator:
         effective.forced_procs = base.forced_procs
         effective.base_damage = modded.base_damage * modded.multiplicative_base_damage
         effective.damage = modded.multiplicative_base_damage * modded.damage
-        effective.faction_damage = modded.faction_damage
+        effective.corpus_damage = modded.corpus_damage
+        effective.grineer_damage = modded.grineer_damage
+        effective.infested_damage = modded.infested_damage
+        effective.orokin_damage = modded.orokin_damage
+        effective.murmur_damage = modded.murmur_damage
+        effective.sentient_damage = modded.sentient_damage
         effective.crit_chance = modded.crit_chance * modded.multiplicative_crit_chance + modded.flat_crit_chance
         effective.crit_damage = modded.crit_damage + modded.flat_crit_damage
         effective.status_chance = modded.status_chance
         effective.status_damage = modded.status_damage
 
+    def _max_average_faction_damage(self, result: AttackResult) -> float:
+        average = result.average
+        return max(
+            average.get("corpus_damage", 1),
+            average.get("grineer_damage", 1),
+            average.get("infested_damage", 1),
+            average.get("orokin_damage", 1),
+            average.get("murmur_damage", 1),
+            average.get("sentient_damage", 1),
+            1,
+        )
+
     def _compute_average_stats(self, result: AttackResult) -> None:
         effective, average = result.effective, result.average
         average.crit_chance = effective.crit_chance
         average.crit_multiplier = helpers.crit_multiplier(average.crit_chance, effective.crit_damage)
+        average.corpus_damage = effective.corpus_damage
+        average.grineer_damage = effective.grineer_damage
+        average.infested_damage = effective.infested_damage
+        average.orokin_damage = effective.orokin_damage
+        average.murmur_damage = effective.murmur_damage
+        average.sentient_damage = effective.sentient_damage
 
     def _flat_dotph(self, result: AttackResult, *, weakpoint: bool = False) -> float:
-        return helpers.flat_dotph(result, weakpoint=weakpoint)
+        return helpers.flat_dotph(result, weakpoint=weakpoint, faction_damage=self._max_average_faction_damage(result))
 
     def _average_condition_overload_bonus(self, result: AttackResult, time: Number = 5) -> float:
         return helpers.average_condition_overload_bonus(self.weapon, result, time)

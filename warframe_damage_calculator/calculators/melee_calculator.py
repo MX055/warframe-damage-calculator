@@ -23,7 +23,7 @@ class MeleeCalculator(WeaponCalculator):
         effective, average = result.effective, result.average
         average.melee_doughty_bonus = true_round(10 * effective.damage.weight("puncture") * effective.status_chance * effective.melee_doughty, 1)
         average.melee_duplicate_multiplier = 1 + effective.melee_duplicate * max(0, 1 - abs(effective.crit_chance - 1))
-        average.flat_dph = effective.damage.total_damage() * effective.faction_damage * average.crit_multiplier * average.melee_duplicate_multiplier
+        average.flat_dph = effective.damage.total_damage() * self._max_average_faction_damage(result) * average.crit_multiplier * average.melee_duplicate_multiplier
         average.flat_dps = effective.attack_speed * average.flat_dph
         average.flat_dotph = self._flat_dotph(result)
         average.flat_dotps = effective.attack_speed * average.flat_dotph
