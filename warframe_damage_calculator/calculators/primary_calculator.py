@@ -7,16 +7,16 @@ class PrimaryCalculator(RangedCalculator):
     def _compute_modded_scalars(self, result: AttackResult) -> None:
         super()._compute_modded_scalars(result)
         build, modded = result.build, result.modded
-        modded.hunter_munitions = clamp(build.additive.hunter_munitions, 0, 0.3)
-        modded.primed_chamber = clamp(build.additive.primed_chamber, 0, 1.4)
-        modded.vigilante_bonus = clamp(build.additive.vigilante_bonus, 0, 0.3)
+        modded.additive.hunter_munitions = clamp(build.additive.hunter_munitions, 0, 0.3)
+        modded.additive.primed_chamber = clamp(build.additive.primed_chamber, 0, 1.4)
+        modded.additive.vigilante_bonus = clamp(build.additive.vigilante_bonus, 0, 0.3)
 
     def _compute_effective(self, result: AttackResult) -> None:
         super()._compute_effective(result)
         modded, effective = result.modded, result.effective
-        effective.hunter_munitions = modded.hunter_munitions
-        effective.primed_chamber = modded.primed_chamber
-        effective.vigilante_bonus = modded.vigilante_bonus
+        effective.hunter_munitions = modded.additive.hunter_munitions
+        effective.primed_chamber = modded.additive.primed_chamber
+        effective.vigilante_bonus = modded.additive.vigilante_bonus
         effective.crit_chance += effective.vigilante_bonus
         effective.weakpoint_crit_chance += effective.vigilante_bonus
 

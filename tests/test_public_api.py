@@ -450,7 +450,7 @@ class PublicApiTests(unittest.TestCase):
         raw_mag = selected(weapon).base.magazine_capacity
         weapon.configure(evolutions={3: 2})
         self.assertAlmostEqual(selected(weapon).base.magazine_capacity, raw_mag + 20)
-        self.assertEqual(selected(weapon).modded.magazine_capacity, raw_mag + 20)
+        self.assertEqual(selected(weapon).modded.additive.magazine_capacity, raw_mag + 20)
 
     def test_incarnon_crit_from_status_updates_base(self):
         status_mod = Upgrade({"name": "Status", "type": "mod", "max_rank": 0, "stats": {"status_chance": [{"value": 1.0}]}})
@@ -460,7 +460,7 @@ class PublicApiTests(unittest.TestCase):
         effective_status = selected(weapon).effective.status_chance
         expected_bonus = min(0.35, 0.25 * effective_status)
         self.assertAlmostEqual(selected(weapon).base.crit_chance, raw_crit + expected_bonus)
-        self.assertAlmostEqual(selected(weapon).modded.crit_chance, selected(weapon).base.crit_chance)
+        self.assertAlmostEqual(selected(weapon).modded.additive.crit_chance, selected(weapon).base.crit_chance)
 
     def test_incarnon_status_from_crit_updates_base(self):
         crit_mod = Upgrade({"name": "Crit", "type": "mod", "max_rank": 0, "stats": {"crit_chance": [{"value": 1.0}]}})
@@ -571,10 +571,10 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(weapon.build.stats.total.additive.corpus_damage, 0.55)
         self.assertEqual(weapon.build.stats.total.additive.grineer_damage, 0.3)
         attack = weapon.results.main
-        self.assertEqual(attack.modded.corpus_damage, 1.55)
+        self.assertEqual(attack.modded.additive.corpus_damage, 1.55)
         self.assertEqual(attack.effective.corpus_damage, 1.55)
         self.assertEqual(attack.average.corpus_damage, 1.55)
-        self.assertEqual(attack.modded.grineer_damage, 1.3)
+        self.assertEqual(attack.modded.additive.grineer_damage, 1.3)
         self.assertEqual(weapon.results._max_average_faction_damage(attack), 1.55)
 
     def test_upgrade_stats_accept_scalar_and_single_record_shorthand(self):
@@ -610,6 +610,26 @@ class PublicApiTests(unittest.TestCase):
         omitted = Upgrade({"stats": {"crit_chance": {"value": 1.2}}})
 
         self.assertEqual(explicit.stats.total.additive.crit_chance, omitted.stats.total.additive.crit_chance)
+
+    def test_calculated_stats_use_mode_buckets(self):
+        upgrade = Upgrade({
+            "stats": {
+                "crit_chance": [
+                    {"value": 1.2, "mode": "additive"},
+                    {"value": 0.2, "mode": "flat"},
+                    {"value": 0.5, "mode": "multiplicative"},
+                ],
+            },
+        })
+        modded = selected(arsenal.get("Braton").configure(Build(upgrade))).modded
+
+        self.assertGreater(modded.additive.crit_chance, 0)
+        self.assertGreaterEqual(modded.additive.status_damage, 1)
+        self.assertEqual(modded.flat.crit_chance, 0.2)
+        self.assertEqual(modded.multiplicative.crit_chance, 1.5)
+        self.assertEqual(set(modded), {"additive", "multiplicative", "base", "flat"})
+        for field in ("status_damage", "flat_crit_chance", "multiplicative_crit_chance"):
+            self.assertFalse(hasattr(modded, field))
 
     def test_upgrade_stats_reject_unknown_modes(self):
         with self.assertRaisesRegex(ValueError, "unsupported effect mode"):
@@ -743,8 +763,8 @@ class PublicApiTests(unittest.TestCase):
 
         self.assertEqual(weapon.results._average_condition_overload_bonus(parent), 0)
         self.assertGreater(weapon.results._average_condition_overload_bonus(child), 0)
-        self.assertEqual(parent.modded.damage_bonus, 1)
-        self.assertGreater(child.modded.damage_bonus, 1)
+        self.assertEqual(parent.modded.additive.damage_bonus, 1)
+        self.assertGreater(child.modded.additive.damage_bonus, 1)
 
     def test_condition_overload_mod_has_no_status_cap(self):
         heat = Upgrade({
@@ -900,20 +920,20 @@ class PublicApiTests(unittest.TestCase):
         }).configure(Build(condition_overload))
 
         result = weapon.results.main
-        self.assertGreater(result.modded.damage_bonus, 1)
-        expected_damage = result.modded.damage_bonus * result.base.damage.apply(result.build.additive.damage).combine().sorted()
-        self.assertEqual(dict(result.modded.damage), dict(expected_damage))
+        self.assertGreater(result.modded.additive.damage_bonus, 1)
+        expected_damage = result.modded.additive.damage_bonus * result.base.damage.apply(result.build.additive.damage).combine().sorted()
+        self.assertEqual(dict(result.modded.additive.damage), dict(expected_damage))
 
         damage_assignments: list[float] = []
         original = WeaponCalculator._compute_modded_damage
         test_case = self
 
         def tracked(calculator, attack_result):
-            damage_assignments.append(attack_result.modded.damage_bonus)
+            damage_assignments.append(attack_result.modded.additive.damage_bonus)
             original(calculator, attack_result)
             test_case.assertEqual(
-                dict(attack_result.modded.damage),
-                dict(attack_result.modded.damage_bonus * attack_result.base.damage.apply(attack_result.build.additive.damage).combine().sorted()),
+                dict(attack_result.modded.additive.damage),
+                dict(attack_result.modded.additive.damage_bonus * attack_result.base.damage.apply(attack_result.build.additive.damage).combine().sorted()),
             )
 
         WeaponCalculator._compute_modded_damage = tracked
@@ -939,10 +959,10 @@ class PublicApiTests(unittest.TestCase):
         })
         calculator._compute_base(fresh)
         calculator._compute_modded_scalars(fresh)
-        self.assertEqual(fresh.modded.damage.total_damage(), 0)
+        self.assertEqual(fresh.modded.additive.damage.total_damage(), 0)
         calculator._apply_condition_overload(fresh)
         calculator._compute_modded_damage(fresh)
-        self.assertGreater(fresh.modded.damage.total_damage(), 0)
+        self.assertGreater(fresh.modded.additive.damage.total_damage(), 0)
         self.assertIsInstance(calculator, WeaponCalculator)
 
 

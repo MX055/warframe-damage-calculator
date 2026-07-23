@@ -114,32 +114,30 @@ class WeaponCalculator:
 
     def _compute_modded_scalars(self, result: AttackResult) -> None:
         build, evo, base, modded = result.build, result.evolutions, result.base, result.modded
-        additive, multiplicative, flat = build.additive, build.multiplicative, build.flat
-        evo_additive, evo_flat = evo.additive, evo.flat
-        modded.multiplicative_damage_bonus = max(1 + multiplicative.damage_bonus, 1)
-        modded.damage_bonus = max(1 + additive.damage_bonus + evo_additive.damage_bonus, 0)
-        modded.corpus_damage = max(1 + additive.corpus_damage, 1)
-        modded.grineer_damage = max(1 + additive.grineer_damage, 1)
-        modded.infested_damage = max(1 + additive.infested_damage, 1)
-        modded.orokin_damage = max(1 + additive.orokin_damage, 1)
-        modded.murmur_damage = max(1 + additive.murmur_damage, 1)
-        modded.sentient_damage = max(1 + additive.sentient_damage, 1)
-        modded.flat_crit_chance = flat.crit_chance + evo_flat.crit_chance
-        modded.multiplicative_crit_chance = max(1 + multiplicative.crit_chance, 1)
-        modded.crit_chance = max(base.crit_chance * (1 + additive.crit_chance), 0)
-        modded.flat_crit_damage = max(flat.crit_damage + evo_flat.crit_damage, 0)
-        modded.crit_damage = max(base.crit_damage * (1 + additive.crit_damage), 1)
-        modded.flat_status_chance = flat.status_chance + evo_flat.status_chance
-        modded.status_chance = max(base.status_chance * (1 + additive.status_chance + evo_additive.status_chance), 0)
-        modded.status_damage = max(1 + additive.status_damage, 1)
-        modded.non_crit_bonus_damage = max(additive.non_crit_bonus_damage + evo_additive.non_crit_bonus_damage, 0)
-        modded.non_crit_bonus_chance = max(additive.non_crit_bonus_chance, evo_additive.non_crit_bonus_chance, 0)
+        modded.multiplicative.damage_bonus = max(1 + build.multiplicative.damage_bonus, 1)
+        modded.additive.damage_bonus = max(1 + build.additive.damage_bonus + evo.additive.damage_bonus, 0)
+        modded.additive.corpus_damage = max(1 + build.additive.corpus_damage, 1)
+        modded.additive.grineer_damage = max(1 + build.additive.grineer_damage, 1)
+        modded.additive.infested_damage = max(1 + build.additive.infested_damage, 1)
+        modded.additive.orokin_damage = max(1 + build.additive.orokin_damage, 1)
+        modded.additive.murmur_damage = max(1 + build.additive.murmur_damage, 1)
+        modded.additive.sentient_damage = max(1 + build.additive.sentient_damage, 1)
+        modded.flat.crit_chance = build.flat.crit_chance + evo.flat.crit_chance
+        modded.multiplicative.crit_chance = max(1 + build.multiplicative.crit_chance, 1)
+        modded.additive.crit_chance = max(base.crit_chance * (1 + build.additive.crit_chance), 0)
+        modded.flat.crit_damage = max(build.flat.crit_damage + evo.flat.crit_damage, 0)
+        modded.additive.crit_damage = max(base.crit_damage * (1 + build.additive.crit_damage), 1)
+        modded.flat.status_chance = build.flat.status_chance + evo.flat.status_chance
+        modded.additive.status_chance = max(base.status_chance * (1 + build.additive.status_chance + evo.additive.status_chance), 0)
+        modded.additive.status_damage = max(1 + build.additive.status_damage, 1)
+        modded.additive.non_crit_bonus_damage = max(build.additive.non_crit_bonus_damage + evo.additive.non_crit_bonus_damage, 0)
+        modded.additive.non_crit_bonus_chance = max(build.additive.non_crit_bonus_chance, evo.additive.non_crit_bonus_chance, 0)
 
     def _average_condition_overload_bonus(self, result: AttackResult, time: Number = 5) -> float:
         build, stats = result.build, result.attack.stats
         # GunCO / CO scales off original (pre-evolution) base damage only.
         damage = result.original_damage.apply(build.additive.damage).combine().sorted()
-        guaranteed, fractional = divmod(max(stats.status_chance * (1 + build.additive.status_chance + result.evolutions.additive.status_chance) + result.modded.flat_status_chance, 0), 1)
+        guaranteed, fractional = divmod(max(stats.status_chance * (1 + build.additive.status_chance + result.evolutions.additive.status_chance) + result.modded.flat.status_chance, 0), 1)
         guaranteed_hits, fractional_hit = divmod(max(self._status_hits(result), 0), 1)
         probabilities: dict[str, float] = {}
         for damage_type in damage.data:
@@ -167,9 +165,9 @@ class WeaponCalculator:
     def _apply_condition_overload(self, result: AttackResult) -> None:
         bonus = self._average_condition_overload_bonus(result)
         if result.attack.stats.co_effect == "multiplies":
-            result.modded.multiplicative_damage_bonus = max(result.modded.multiplicative_damage_bonus + bonus, 1)
+            result.modded.multiplicative.damage_bonus = max(result.modded.multiplicative.damage_bonus + bonus, 1)
         else:
-            result.modded.damage_bonus = max(result.modded.damage_bonus + bonus, 0)
+            result.modded.additive.damage_bonus = max(result.modded.additive.damage_bonus + bonus, 0)
 
     def _compute_modded_damage(self, result: AttackResult) -> None:
         build = result.build
@@ -177,44 +175,42 @@ class WeaponCalculator:
         original = result.original_damage.apply(build.additive.damage).combine().sorted()
         serration = max(1 + build.additive.damage_bonus + result.evolutions.additive.damage_bonus, 0)
         if result.attack.stats.co_effect == "multiplies":
-            # Multiplicative CO remains on multiplicative_damage_bonus; Serration uses evolved base.
-            result.modded.damage = result.modded.damage_bonus * evolved
+            result.modded.additive.damage = result.modded.additive.damage_bonus * evolved
         else:
             # GunCO / additive CO scales original (pre-evolution) damage only; Serration scales evolved.
-            co_bonus = max(float(result.modded.damage_bonus) - serration, 0)
-            result.modded.damage = serration * evolved + co_bonus * original
+            co_bonus = max(float(result.modded.additive.damage_bonus) - serration, 0)
+            result.modded.additive.damage = serration * evolved + co_bonus * original
 
     def _compute_effective(self, result: AttackResult) -> None:
         base, modded, effective = result.base, result.modded, result.effective
         effective.forced_procs = base.forced_procs
-        effective.damage_bonus = modded.damage_bonus * modded.multiplicative_damage_bonus
-        effective.damage = modded.multiplicative_damage_bonus * modded.damage
-        effective.corpus_damage = modded.corpus_damage
-        effective.grineer_damage = modded.grineer_damage
-        effective.infested_damage = modded.infested_damage
-        effective.orokin_damage = modded.orokin_damage
-        effective.murmur_damage = modded.murmur_damage
-        effective.sentient_damage = modded.sentient_damage
-        effective.crit_chance = modded.crit_chance * modded.multiplicative_crit_chance + modded.flat_crit_chance
-        effective.crit_damage = modded.crit_damage + modded.flat_crit_damage
-        effective.flat_status_chance = modded.flat_status_chance
-        effective.status_chance = modded.status_chance + modded.flat_status_chance
-        effective.status_damage = modded.status_damage
-        effective.non_crit_bonus_damage = modded.non_crit_bonus_damage
-        effective.non_crit_bonus_chance = modded.non_crit_bonus_chance
+        effective.damage_bonus = modded.additive.damage_bonus * modded.multiplicative.damage_bonus
+        effective.damage = modded.multiplicative.damage_bonus * modded.additive.damage
+        effective.corpus_damage = modded.additive.corpus_damage
+        effective.grineer_damage = modded.additive.grineer_damage
+        effective.infested_damage = modded.additive.infested_damage
+        effective.orokin_damage = modded.additive.orokin_damage
+        effective.murmur_damage = modded.additive.murmur_damage
+        effective.sentient_damage = modded.additive.sentient_damage
+        effective.crit_chance = modded.additive.crit_chance * modded.multiplicative.crit_chance + modded.flat.crit_chance
+        effective.crit_damage = modded.additive.crit_damage + modded.flat.crit_damage
+        effective.status_chance = modded.additive.status_chance + modded.flat.status_chance
+        effective.status_damage = modded.additive.status_damage
+        effective.non_crit_bonus_damage = modded.additive.non_crit_bonus_damage
+        effective.non_crit_bonus_chance = modded.additive.non_crit_bonus_chance
 
     def _refresh_crit_scalars(self, result: AttackResult) -> None:
         build, base, modded, effective = result.build, result.base, result.modded, result.effective
-        modded.crit_chance = max(base.crit_chance * (1 + build.additive.crit_chance), 0)
-        effective.crit_chance = modded.crit_chance * modded.multiplicative_crit_chance + modded.flat_crit_chance
-        if "weakpoint_crit_chance" in modded:
-            modded.weakpoint_crit_chance = max(base.crit_chance * (1 + build.additive.crit_chance + build.additive.weakpoint_crit_chance), 0)
-            effective.weakpoint_crit_chance = modded.weakpoint_crit_chance * (modded.multiplicative_crit_chance + modded.multiplicative_weakpoint_crit_chance - 1) + modded.flat_crit_chance
+        modded.additive.crit_chance = max(base.crit_chance * (1 + build.additive.crit_chance), 0)
+        effective.crit_chance = modded.additive.crit_chance * modded.multiplicative.crit_chance + modded.flat.crit_chance
+        if "weakpoint_crit_chance" in modded.additive:
+            modded.additive.weakpoint_crit_chance = max(base.crit_chance * (1 + build.additive.crit_chance + build.additive.weakpoint_crit_chance), 0)
+            effective.weakpoint_crit_chance = modded.additive.weakpoint_crit_chance * (modded.multiplicative.crit_chance + modded.multiplicative.weakpoint_crit_chance - 1) + modded.flat.crit_chance
 
     def _refresh_status_scalars(self, result: AttackResult) -> None:
         build, evo, base, modded, effective = result.build, result.evolutions, result.base, result.modded, result.effective
-        modded.status_chance = max(base.status_chance * (1 + build.additive.status_chance + evo.additive.status_chance), 0)
-        effective.status_chance = modded.status_chance + modded.flat_status_chance
+        modded.additive.status_chance = max(base.status_chance * (1 + build.additive.status_chance + evo.additive.status_chance), 0)
+        effective.status_chance = modded.additive.status_chance + modded.flat.status_chance
 
     def _apply_evolution_conversions(self, result: AttackResult) -> None:
         evo = result.evolutions
@@ -249,31 +245,31 @@ class WeaponCalculator:
     @staticmethod
     def _status_hits(result: AttackResult) -> float:
         build, stats, modded = result.build, result.attack.stats, result.modded
-        hits = max(modded.get("multishot", stats.multishot), 1)
-        duplicate = modded.get("melee_duplicate", 0)
-        chance = max(stats.crit_chance * (1 + build.additive.crit_chance) * modded.multiplicative_crit_chance + modded.flat_crit_chance, 0)
+        hits = max(modded.additive.get("multishot", stats.multishot), 1)
+        duplicate = modded.additive.get("melee_duplicate", 0)
+        chance = max(stats.crit_chance * (1 + build.additive.crit_chance) * modded.multiplicative.crit_chance + modded.flat.crit_chance, 0)
         return hits + duplicate * max(0, 1 - abs(chance - 1))
 
     def _effective_attacks_per_second(self, result: AttackResult) -> float:
         stats, base, modded = result.attack.stats, result.base, result.modded
-        if "attack_speed" in modded:
-            return max(stats.fire_rate * modded.attack_speed / (base.attack_speed or 1), 0)
-        if "magazine_capacity" not in modded:
+        if "attack_speed" in modded.additive:
+            return max(stats.fire_rate * modded.additive.attack_speed / (base.attack_speed or 1), 0)
+        if "magazine_capacity" not in modded.additive:
             return max(stats.fire_rate, 0)
 
         build, evo = result.build, result.evolutions
         speed = 1 if build.additive.fire_rate_lock else max(1 + build.additive.fire_rate + evo.additive.fire_rate, 0.01)
-        fire_rate = max(stats.fire_rate * speed, 0.05) * modded.multiplicative_fire_rate
+        fire_rate = max(stats.fire_rate * speed, 0.05) * modded.multiplicative.fire_rate
         burst_count = max(stats.burst_count, 1)
-        ammo_cost = max(float(modded.get("ammo_cost", stats.ammo_cost)), 0)
+        ammo_cost = max(float(modded.additive.get("ammo_cost", stats.ammo_cost)), 0)
         if ammo_cost <= 0:
             return fire_rate
-        shots = modded.magazine_capacity / ammo_cost
+        shots = modded.additive.magazine_capacity / ammo_cost
         bursts = shots / burst_count
         is_battery = "recharge_delay" in self.weapon.data.ammo
-        reload_speed = modded.reload_speed + (0 if not is_battery else float("inf") if modded.recharge_rate <= 0 else modded.magazine_capacity / modded.recharge_rate)
-        ammo_spent = 1 - modded.ammo_efficiency
-        cycle = bursts * (max(stats.charge_time, 0) / speed / modded.multiplicative_fire_rate + (burst_count - 1) * max(stats.burst_delay, 0) / max(speed, 1))
+        reload_speed = modded.additive.reload_speed + (0 if not is_battery else float("inf") if modded.additive.recharge_rate <= 0 else modded.additive.magazine_capacity / modded.additive.recharge_rate)
+        ammo_spent = 1 - modded.additive.ammo_efficiency
+        cycle = bursts * (max(stats.charge_time, 0) / speed / modded.multiplicative.fire_rate + (burst_count - 1) * max(stats.burst_delay, 0) / max(speed, 1))
         cycle += (bursts - ammo_spent) / fire_rate + ammo_spent * reload_speed
         return float("inf") if cycle <= 0 else shots / cycle
 

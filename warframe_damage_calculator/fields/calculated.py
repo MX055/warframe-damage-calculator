@@ -3,10 +3,9 @@ from ..models.dist import Dist
 from ..utils.types import Number
 
 
-class CalculatedStats(Data):
+class CalculatedValues(Data):
     damage: Dist = Dist()
     forced_procs: Dist = Dist()
-    multiplicative_damage_bonus: Number
     damage_bonus: Number
     corpus_damage: Number
     grineer_damage: Number
@@ -14,12 +13,8 @@ class CalculatedStats(Data):
     orokin_damage: Number
     murmur_damage: Number
     sentient_damage: Number
-    flat_crit_chance: Number
-    multiplicative_crit_chance: Number
     crit_chance: Number
-    flat_crit_damage: Number
     crit_damage: Number
-    flat_status_chance: Number
     status_chance: Number
     status_damage: Number
     attack_speed: Number
@@ -29,7 +24,6 @@ class CalculatedStats(Data):
     non_crit_bonus_chance: Number
     non_crit_bonus_damage: Number
     fire_rate: Number
-    multiplicative_fire_rate: Number
     burst_count: int
     burst_delay: Number
     charge_time: Number
@@ -39,7 +33,6 @@ class CalculatedStats(Data):
     ammo_efficiency: Number
     magazine_capacity: Number
     weakpoint_damage: Number
-    multiplicative_weakpoint_crit_chance: Number
     weakpoint_crit_chance: Number
     internal_bleeding: Number
     hunter_munitions: Number
@@ -47,6 +40,21 @@ class CalculatedStats(Data):
     vigilante_bonus: Number
     secondary_enervate: Number
     secondary_encumber: Number
+
+
+class CalculatedModeStats(CalculatedValues):
+    pass
+
+
+class CalculatedStats(CalculatedValues):
+    pass
+
+
+class ModdedStats(Data):
+    additive: CalculatedModeStats = CalculatedModeStats()
+    multiplicative: CalculatedModeStats = CalculatedModeStats()
+    base: CalculatedModeStats = CalculatedModeStats()
+    flat: CalculatedModeStats = CalculatedModeStats()
 
 
 class AverageStats(Data):

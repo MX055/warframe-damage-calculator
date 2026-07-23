@@ -47,7 +47,11 @@ class HelperTests(unittest.TestCase):
         result = AttackResult({
             "name": "test",
             "attack": Attack({"name": "test", "stats": {"multishot": 1, "crit_chance": 0.1}}),
-            "modded": {"multishot": 2.5, "multiplicative_crit_chance": 1, "flat_crit_chance": 0},
+            "modded": {
+                "additive": {"multishot": 2.5},
+                "multiplicative": {"crit_chance": 1},
+                "flat": {"crit_chance": 0},
+            },
         })
         self.assertAlmostEqual(WeaponCalculator._status_hits(result), 2.5)
 

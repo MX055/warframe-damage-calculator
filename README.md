@@ -957,6 +957,10 @@ print(upgrade.stats.total.flat.crit_chance)
 
 print(weapon.results.main.build.additive.damage_bonus)
 print(weapon.results.main.evolutions.base.damage)
+print(weapon.results.main.modded.additive.crit_chance)
+print(weapon.results.main.modded.additive.status_damage)
+print(weapon.results.main.modded.multiplicative.crit_chance)
+print(weapon.results.main.modded.flat.crit_chance)
 ```
 
 ### Contribution estimates
