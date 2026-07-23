@@ -11,6 +11,6 @@ class Ranged(Weapon):
     format: RangedFormatter
 
     data_type = RangedData
-    mode_stats_type = RangedStats
+    stats_type = RangedStats
     calculator_type = RangedCalculator
     formatter_type = RangedFormatter

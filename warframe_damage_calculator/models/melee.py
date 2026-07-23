@@ -11,6 +11,6 @@ class Melee(Weapon):
     format: MeleeFormatter
 
     data_type = MeleeData
-    mode_stats_type = MeleeStats
+    stats_type = MeleeStats
     calculator_type = MeleeCalculator
     formatter_type = MeleeFormatter

@@ -78,7 +78,7 @@ class WeaponCalculator:
             "reload_speed": ammo.get("reload_time", 0),
             "recharge_rate": ammo.get("recharge_rate", 0),
         })
-        result.base = CalculatedStats(self.weapon.mode_stats_type(stats).with_defaults())
+        result.base = CalculatedStats(self.weapon.stats_type(stats).with_defaults())
 
     def _compute_modded_stats(self, result: AttackResult) -> None:
         build, base, modded = result.build, result.base, result.modded

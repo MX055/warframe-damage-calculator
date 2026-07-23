@@ -11,6 +11,6 @@ class Primary(Ranged):
     format: PrimaryFormatter
 
     data_type = PrimaryData
-    mode_stats_type = PrimaryStats
+    stats_type = PrimaryStats
     calculator_type = PrimaryCalculator
     formatter_type = PrimaryFormatter

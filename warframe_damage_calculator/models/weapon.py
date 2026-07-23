@@ -11,7 +11,7 @@ from ..fields.weapon_input import WeaponStats
 
 class Weapon:
     data_type = WeaponData
-    mode_stats_type = WeaponStats
+    stats_type = WeaponStats
     calculator_type = WeaponCalculator
     formatter_type = WeaponFormatter
 

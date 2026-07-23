@@ -11,6 +11,6 @@ class Secondary(Ranged):
     format: SecondaryFormatter
 
     data_type = SecondaryData
-    mode_stats_type = SecondaryStats
+    stats_type = SecondaryStats
     calculator_type = SecondaryCalculator
     formatter_type = SecondaryFormatter
