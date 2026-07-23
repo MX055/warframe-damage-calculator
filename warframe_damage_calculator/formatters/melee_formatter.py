@@ -7,7 +7,7 @@ class MeleeFormatter(WeaponFormatter):
         selected = self.weapon.stats.attacks[attack_name]
         base = selected.base
         effective = selected.effective
-        average = self.weapon.stats.combined
+        average = selected.final
         return "\n".join([
             f"{self.weapon.data.name} - {selected.name.replace('_', ' ').title()}",
             "-------------------------------------",

@@ -165,8 +165,10 @@ class PublicApiTests(unittest.TestCase):
         self.assertFalse(hasattr(weapon, "mode_name"))
         self.assertTrue(hasattr(weapon, "stats"))
         self.assertFalse(hasattr(weapon, "attacks"))
-        for attribute in ("combined", "attacks"):
-            self.assertTrue(hasattr(weapon.stats, attribute))
+        self.assertTrue(hasattr(weapon.stats, "attacks"))
+        self.assertFalse(hasattr(weapon.stats, "final"))
+        for attribute in ("base", "modded", "effective", "average", "final", "children"):
+            self.assertTrue(hasattr(next(iter(weapon.stats.attacks.values())), attribute))
         for attribute in ("base", "modded", "effective", "average", "children", "parent", "child"):
             self.assertFalse(hasattr(weapon.stats, attribute))
         for attribute in ("type", "subtype", "base", "moded", "modded", "effective", "total_dps", "calculation_build"):
@@ -223,12 +225,12 @@ class PublicApiTests(unittest.TestCase):
         child = weapon.stats.attacks.air_burst_explosion
 
         self.assertIs(parent.attack, weapon._attack)
-        self.assertIsNot(parent.average, weapon.stats.combined)
+        self.assertIsNot(parent.average, parent.final)
         self.assertIs(child.attack, weapon.data.attacks.air_burst_explosion)
         self.assertNotEqual(parent.base.damage, child.base.damage)
         self.assertIsNot(parent.average, child.average)
 
-    def test_combined_average_recurses_and_uses_parent_fire_rate(self):
+    def test_attack_final_recurses_and_uses_parent_fire_rate(self):
         weapon = Primary({
             "name": "Nested",
             "type": "primary",
@@ -246,17 +248,19 @@ class PublicApiTests(unittest.TestCase):
         self.assertNotEqual(parent.effective.crit_chance, child.effective.crit_chance)
         self.assertNotEqual(child.effective.status_chance, grandchild.effective.status_chance)
         expected_dph = sum(bucket.average.flat_dph for bucket in (parent, child, grandchild))
-        self.assertAlmostEqual(weapon.stats.combined.flat_dph, expected_dph)
+        self.assertAlmostEqual(parent.final.flat_dph, expected_dph)
         self.assertAlmostEqual(
-            weapon.stats.combined.flat_dps,
+            parent.final.flat_dps,
             weapon.stats._effective_attacks_per_second(parent) * expected_dph,
         )
-        self.assertNotEqual(weapon.stats.combined.flat_dps, sum(bucket.average.flat_dps for bucket in (parent, child, grandchild)))
+        self.assertNotEqual(parent.final.flat_dps, sum(bucket.average.flat_dps for bucket in (parent, child, grandchild)))
         expected_dotph = sum(bucket.average.flat_dotph for bucket in (parent, child, grandchild))
         self.assertGreater(expected_dotph, 0)
-        self.assertAlmostEqual(weapon.stats.combined.flat_dotph, expected_dotph)
-        self.assertAlmostEqual(weapon.stats.combined.total_dph, expected_dph + expected_dotph)
-        self.assertAlmostEqual(weapon.stats.combined.flat_dotps, weapon.stats._effective_attacks_per_second(parent) * expected_dotph)
+        self.assertAlmostEqual(parent.final.flat_dotph, expected_dotph)
+        self.assertAlmostEqual(parent.final.total_dph, expected_dph + expected_dotph)
+        self.assertAlmostEqual(parent.final.flat_dotps, weapon.stats._effective_attacks_per_second(parent) * expected_dotph)
+        self.assertAlmostEqual(child.final.flat_dph, child.average.flat_dph + grandchild.average.flat_dph)
+        self.assertAlmostEqual(grandchild.final.flat_dph, grandchild.average.flat_dph)
 
     def test_attack_relationship_cycles_are_detected_by_name(self):
         with self.assertRaisesRegex(ValueError, "cyclic attack relationship detected: parent"):
@@ -300,13 +304,13 @@ class PublicApiTests(unittest.TestCase):
         })
 
         self.assertEqual(selected(weapon).children, ["first", "second"])
-        self.assertAlmostEqual(weapon.stats.combined.flat_dph, 60)
+        self.assertAlmostEqual(selected(weapon).final.flat_dph, 60)
 
     def test_melee_weapons_include_related_attacks(self):
         weapon = arsenal.get("Ceramic Dagger").configure(attack="spectral_dagger")
 
         self.assertIs(weapon.stats.attacks.spectral_dagger_explosion.attack, weapon.data.attacks.spectral_dagger_explosion)
-        self.assertGreater(weapon.stats.combined.flat_dph, selected(weapon).effective.damage.total_damage())
+        self.assertGreater(selected(weapon).final.flat_dph, selected(weapon).effective.damage.total_damage())
 
     def test_melee_duplicate_increases_condition_overload_status_acquisition(self):
         condition_overload = arsenal.get("Condition Overload")
@@ -354,10 +358,10 @@ class PublicApiTests(unittest.TestCase):
     def test_contribution_recomputes_through_attack_buckets_and_restores_build(self):
         serration = arsenal.get("Serration")
         weapon = arsenal.get("Braton").configure(Build(serration))
-        full_dps = weapon.stats.combined.total_dps
+        full_dps = selected(weapon).final.total_dps
 
         self.assertGreater(weapon.stats.contribution(serration), 0)
-        self.assertAlmostEqual(weapon.stats.combined.total_dps, full_dps)
+        self.assertAlmostEqual(selected(weapon).final.total_dps, full_dps)
         self.assertEqual([upgrade.data.name for upgrade in weapon.build], ["Serration"])
         self.assertGreater(weapon.stats.contribution_values()["Serration"], 0)
 
@@ -382,7 +386,7 @@ class PublicApiTests(unittest.TestCase):
         second = arsenal.get("Corinth Prime").configure(attack="air_burst_projectile").configure(build)
 
         self.assertEqual(selected(first).effective, selected(second).effective)
-        self.assertAlmostEqual(first.stats.combined.total_dps, second.stats.combined.total_dps, places=6)
+        self.assertAlmostEqual(selected(first).final.total_dps, selected(second).final.total_dps, places=6)
 
     def test_incarnon_evolution_selection_recomputes(self):
         weapon = arsenal.get("Telos Boltor")

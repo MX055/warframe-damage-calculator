@@ -27,7 +27,7 @@ front ends, but it is not a complete simulation of Warframe combat.
 - Runtime attack selection with `weapon.configure(attack=...)`
 - Automatic calculation of related attacks, such as projectiles and their explosions
 - Flat per-attack results under `weapon.stats.attacks`
-- Aggregate DPS for the selected attack tree on `weapon.stats.combined`
+- Per-attack tree totals on `weapon.stats.attacks[name].final` (attack + children DPH/DPS)
 - Global weapon data separated from attack-specific stats
 - Incarnon evolution selection with `weapon.configure(evolutions={...})`
 - Fluent runtime configuration on `Upgrade.configure(...)` and `Build.configure(...)`
@@ -168,13 +168,12 @@ build = Build(
 weapon.configure(build)
 
 print(weapon.format.summary())
-print(f"Average DPS:   {weapon.stats.combined.total_dps:.2f}")
-print(f"Weakpoint DPS: {weapon.stats.combined.total_weakpoint_dps:.2f}")
+print(f"Average DPS:   {weapon.stats.attacks['buckshot'].final.total_dps:.2f}")
+print(f"Weakpoint DPS: {weapon.stats.attacks['buckshot'].final.total_weakpoint_dps:.2f}")
 ```
 
-`weapon.stats` is a container with `attacks` (every attack) and `combined`
-(aggregate DPH/DPS for the selected attack tree). Read a single attack through
-`weapon.stats.attacks[name]`.
+`weapon.stats` holds `attacks` (every attack). Each attack has `base` / `modded` /
+`effective` / `average` for itself, and `final` for itself plus related children.
 
 Database upgrades resolve at maximum rank and, where applicable, maximum stacks
 by default. Pass runtime values through `context` or `configure(...)` to
@@ -265,11 +264,11 @@ print(selected.base)
 print(selected.modded)
 print(selected.effective)
 print(selected.average)
-print(weapon.stats.combined)
+print(selected.final)
 print(weapon.stats.attacks)
 
-print(weapon.stats.combined.total_dph)
-print(weapon.stats.combined.total_dps)
+print(selected.final.total_dph)
+print(selected.final.total_dps)
 print(weapon.format.summary())
 ```
 
@@ -386,13 +385,14 @@ weapon.configure(attack="projectile")
 
 print(weapon.stats.attacks["projectile"].effective.damage)
 print(weapon.stats.attacks["explosion"].effective.damage)
-print(weapon.stats.combined.total_dps)
+print(weapon.stats.attacks["projectile"].final.total_dps)
 ```
 
 For ranged weapons, selected attacks may name related attacks through
 `children`. Every attack is computed into the flat map `weapon.stats.attacks`,
 including each attack's base, modded, effective, and average layers.
-`weapon.stats.combined` aggregates the selected attack tree.
+`attacks[name].final` folds that attack plus its related children (DPH summed,
+DPS using that attack's fire rate).
 
 ### Constructing a melee weapon
 
@@ -425,7 +425,7 @@ weapon = Melee(
 )
 
 print(weapon.stats.attacks["normal_attack"].base.attack_speed)
-print(weapon.stats.combined.total_dps)
+print(weapon.stats.attacks["normal_attack"].final.total_dps)
 ```
 
 For melee attacks, the selected attack's `fire_rate` is used as the base attack
@@ -861,7 +861,7 @@ Each weapon exposes:
 |---|---|
 | `weapon.data` | Flat weapon definition (`name`, `type`, `ammo`, `attacks`, `evolutions`). |
 | `weapon.build` | Detached active build. |
-| `weapon.stats` | Result container (`combined`, `attacks`). |
+| `weapon.stats` | Result container (`attacks`). |
 | `weapon.format` | Text formatter. |
 
 ### Weapon state buckets
@@ -872,25 +872,24 @@ Each weapon exposes:
 | `weapon.data.attacks[name].name` | Attack identity (same as the map key). |
 | `weapon.stats` | Result container. |
 | `weapon.stats.attacks` | Flat map of every computed attack. |
-| `weapon.stats.attacks[name].base` / `modded` / `effective` / `average` | Per-attack layers. |
+| `weapon.stats.attacks[name].base` / `modded` / `effective` / `average` | Per-attack layers (that attack alone). |
+| `weapon.stats.attacks[name].final` | That attack plus related children (DPH summed; DPS uses this attack's fire rate). |
 | `weapon.stats.attacks[name].children` | Related attack name list. |
-| `weapon.stats.combined` | Aggregate average for the selected attack tree. |
 
 `weapon.stats.attacks[name].average` is that attack alone.
-`weapon.stats.combined` folds in related attacks and uses the selected attack's
-fire rate for aggregate DPS.
+`weapon.stats.attacks[name].final` folds in related attacks.
 
 ```python
-average = weapon.stats.combined
+final = weapon.stats.attacks["buckshot"].final
 
-print(average.crit_chance)
-print(average.crit_multiplier)
-print(average.flat_dph)
-print(average.flat_dotph)
-print(average.total_dph)
-print(average.flat_dps)
-print(average.flat_dotps)
-print(average.total_dps)
+print(final.crit_chance)
+print(final.crit_multiplier)
+print(final.flat_dph)
+print(final.flat_dotph)
+print(final.total_dph)
+print(final.flat_dps)
+print(final.flat_dotps)
+print(final.total_dps)
 ```
 
 Ranged models also expose weakpoint versions, effective fire rate, expected

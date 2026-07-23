@@ -15,6 +15,7 @@ class AttackResult(Data):
     modded: CalculatedStats = CalculatedStats()
     effective: CalculatedStats = CalculatedStats()
     average: AverageStats = AverageStats()
+    final: AverageStats = AverageStats()
     children: list[str] = []
 
     @property

@@ -7,7 +7,7 @@ class RangedFormatter(WeaponFormatter):
         selected = self.weapon.stats.attacks[attack_name]
         base = selected.base
         effective = selected.effective
-        average = self.weapon.stats.combined
+        average = selected.final
         related_rows = []
         for child_name in selected.children:
             if child_name not in self.weapon.stats.attacks:

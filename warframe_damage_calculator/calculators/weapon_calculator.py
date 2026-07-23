@@ -14,7 +14,6 @@ class WeaponCalculator:
     def __init__(self, weapon: Any) -> None:
         self.weapon = weapon
         self.attacks = AttackResults()
-        self.combined = AverageStats()
         self.recompute()
 
     def _attack_name(self) -> str:
@@ -40,7 +39,7 @@ class WeaponCalculator:
         for name in attacks:
             walk(name, frozenset())
 
-    def _walk_selected(self, name: str, ancestors: frozenset[str] | None = None) -> Iterator[AttackResult]:
+    def _walk_tree(self, name: str, ancestors: frozenset[str] | None = None) -> Iterator[AttackResult]:
         ancestors = frozenset() if ancestors is None else ancestors
         if name in ancestors:
             raise ValueError(f"cyclic attack relationship detected: {name}")
@@ -49,7 +48,7 @@ class WeaponCalculator:
         next_ancestors = ancestors | {name}
         for child in result.children:
             if child in self.attacks:
-                yield from self._walk_selected(child, next_ancestors)
+                yield from self._walk_tree(child, next_ancestors)
 
     def compute_attack(self, name: str, attack: Attack, resolved_build: ResolvedStat) -> AttackResult:
         result = AttackResult({
@@ -129,25 +128,25 @@ class WeaponCalculator:
     def _effective_attacks_per_second(self, result: AttackResult) -> float:
         return helpers.effective_attacks_per_second(self.weapon, result)
 
-    def _compute_combined(self, selected: AttackResult, results: list[AttackResult]) -> AverageStats:
-        combined = selected.average.copy()
-        combined.flat_dph = sum(item.average.get("flat_dph", 0) for item in results)
-        combined.flat_dotph = sum(item.average.get("flat_dotph", 0) for item in results)
-        combined.total_dph = combined.flat_dph + combined.flat_dotph
+    def _fold_attack_tree(self, root: AttackResult, tree: list[AttackResult]) -> AverageStats:
+        final = root.average.copy()
+        final.flat_dph = sum(item.average.get("flat_dph", 0) for item in tree)
+        final.flat_dotph = sum(item.average.get("flat_dotph", 0) for item in tree)
+        final.total_dph = final.flat_dph + final.flat_dotph
 
-        attack_rate = self._effective_attacks_per_second(selected)
-        combined.flat_dps = combined.flat_dph * attack_rate
-        combined.flat_dotps = combined.flat_dotph * attack_rate
-        combined.total_dps = combined.total_dph * attack_rate
+        attack_rate = self._effective_attacks_per_second(root)
+        final.flat_dps = final.flat_dph * attack_rate
+        final.flat_dotps = final.flat_dotph * attack_rate
+        final.total_dps = final.total_dph * attack_rate
 
-        if any("flat_weakpoint_dph" in item.average for item in results):
-            combined.flat_weakpoint_dph = sum(item.average.get("flat_weakpoint_dph", 0) for item in results)
-            combined.flat_weakpoint_dotph = sum(item.average.get("flat_weakpoint_dotph", 0) for item in results)
-            combined.total_weakpoint_dph = combined.flat_weakpoint_dph + combined.flat_weakpoint_dotph
-            combined.flat_weakpoint_dps = combined.flat_weakpoint_dph * attack_rate
-            combined.flat_weakpoint_dotps = combined.flat_weakpoint_dotph * attack_rate
-            combined.total_weakpoint_dps = combined.total_weakpoint_dph * attack_rate
-        return combined
+        if any("flat_weakpoint_dph" in item.average for item in tree):
+            final.flat_weakpoint_dph = sum(item.average.get("flat_weakpoint_dph", 0) for item in tree)
+            final.flat_weakpoint_dotph = sum(item.average.get("flat_weakpoint_dotph", 0) for item in tree)
+            final.total_weakpoint_dph = final.flat_weakpoint_dph + final.flat_weakpoint_dotph
+            final.flat_weakpoint_dps = final.flat_weakpoint_dph * attack_rate
+            final.flat_weakpoint_dotps = final.flat_weakpoint_dotph * attack_rate
+            final.total_weakpoint_dps = final.total_weakpoint_dph * attack_rate
+        return final
 
     def recompute(self) -> None:
         self._validate_attack_cycles()
@@ -156,18 +155,18 @@ class WeaponCalculator:
             name: self.compute_attack(name, attack, resolved)
             for name, attack in self.weapon.data.attacks.items()
         })
-        name = self._attack_name()
-        self.combined = self._compute_combined(self.attacks[name], list(self._walk_selected(name)))
+        for name, result in self.attacks.items():
+            result.final = self._fold_attack_tree(result, list(self._walk_tree(name)))
 
     def contribution(self, upgrade: Upgrade) -> float:
         full = self.weapon.build
         if all(equipped.data != upgrade.data for equipped in full):
             return 0.0
         reduced = full - upgrade
-        full_dps = self.combined.total_dps
+        full_dps = self.attacks[self._attack_name()].final.total_dps
         try:
             self.weapon.configure(reduced)
-            return full_dps - self.combined.total_dps
+            return full_dps - self.attacks[self._attack_name()].final.total_dps
         finally:
             self.weapon.configure(full)
 
