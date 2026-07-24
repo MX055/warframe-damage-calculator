@@ -189,10 +189,8 @@ class WeaponCalculator:
 
     def _apply_condition_overload(self, result: AttackResult) -> None:
         bonus = self._average_condition_overload_bonus(result)
-        if result.attack.stats.co_effect == "multiplies":
-            result.modded.multiplicative.damage_bonus = max(result.modded.multiplicative.damage_bonus + bonus, 1)
-        else:
-            result.modded.additive.damage_bonus = max(result.modded.additive.damage_bonus + bonus, 0)
+        if result.attack.stats.co_effect == "multiplies": result.modded.multiplicative.damage_bonus = max(result.modded.multiplicative.damage_bonus + bonus, 1)
+        else: result.modded.additive.damage_bonus = max(result.modded.additive.damage_bonus + bonus, 0)
 
     def _compute_modded_damage(self, result: AttackResult) -> None:
         build = result.build
