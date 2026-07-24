@@ -1,4 +1,4 @@
-from collections.abc import Iterator, Mapping
+from collections.abc import Callable, Iterator, Mapping
 from math import expm1, factorial, log1p
 
 from ..fields.attack_result import AttackResult
@@ -6,12 +6,13 @@ from ..fields.calculated import AverageStats, CalculatedStats
 from ..fields.evolution import ConversionBonus, ResolvedEvolutionStat
 from ..fields.upgrade import ResolvedStat
 from ..fields.weapon_data import Attack
-from ..models.build import Build
+from ..models.data import Data
 from ..models.dist import Dist
 from ..protocols import ConfigurableWeaponOwner
 from ..utils.constants import DOT_MULTIPLIERS
 from ..utils.types import Number
 from .evolution_calculator import EvolutionCalculator
+from .upgrade_calculator import UpgradeCalculator
 
 
 class WeaponCalculator:
@@ -53,12 +54,14 @@ class WeaponCalculator:
         average.total_weakpoint_dps = average.flat_weakpoint_dps + average.flat_weakpoint_dotps
 
     def _resolved_build(self) -> ResolvedStat:
-        build = Build(*self.weapon.build)
+        build = self.weapon.build
         build.results.resolve(self.weapon.data)
-        return build.results.total.copy()
+        return build.results.total
 
     def _resolved_evolutions(self) -> ResolvedEvolutionStat:
-        return EvolutionCalculator(self.weapon).total.copy()
+        if not self.weapon._evolutions:
+            return ResolvedEvolutionStat()
+        return EvolutionCalculator(self.weapon).total
 
     def _validate_attack_cycles(self) -> None:
         attacks = self.weapon.data.attacks
@@ -87,7 +90,7 @@ class WeaponCalculator:
                 yield from self._walk_tree(child, results, next_ancestors)
 
     def _compute_attack(self, name: str, attack: Attack, resolved_build: ResolvedStat, resolved_evolutions: ResolvedEvolutionStat) -> AttackResult:
-        result = AttackResult({"name": name, "attack": attack, "build": resolved_build.copy(), "evolutions": resolved_evolutions.copy(), "children": list(attack.children)})
+        result = AttackResult({"name": name, "attack": attack, "build": resolved_build, "evolutions": resolved_evolutions, "children": list(attack.children)})
         self._compute_base(result)
         self._compute_modded_scalars(result)
         self._apply_condition_overload(result)
@@ -136,6 +139,8 @@ class WeaponCalculator:
         modded.additive.status_damage = max(1 + build.additive.status_damage, 1)
         modded.additive.non_crit_bonus_damage = max(build.additive.non_crit_bonus_damage + evo.additive.non_crit_bonus_damage, 0)
         modded.additive.non_crit_bonus_chance = max(build.additive.non_crit_bonus_chance, evo.additive.non_crit_bonus_chance, 0)
+        modded.additive.projectile_speed = build.additive.projectile_speed + evo.additive.get("projectile_speed", 0)
+        modded.additive.range = build.additive.range + build.flat.range + evo.additive.get("range", 0) + evo.flat.get("range", 0)
 
     def _average_condition_overload_bonus(self, result: AttackResult, time: Number = 5) -> float:
         build, stats = result.build, result.attack.stats
@@ -202,6 +207,24 @@ class WeaponCalculator:
         effective.status_damage = modded.additive.status_damage
         effective.non_crit_bonus_damage = modded.additive.non_crit_bonus_damage
         effective.non_crit_bonus_chance = modded.additive.non_crit_bonus_chance
+        self._apply_range_stats(result)
+
+    @staticmethod
+    def _apply_range_stats(result: AttackResult) -> None:
+        base, modded, effective = result.base, result.modded, result.effective
+        projectile_speed = float(modded.additive.get("projectile_speed", 0) or 0)
+        range_bonus = float(modded.additive.get("range", 0) or 0)
+        effective.projectile_speed = projectile_speed
+        effective.range = float(base.get("range", 0) or 0) + range_bonus
+        base_falloff = base.get("falloff") or {}
+        if not base_falloff:
+            return
+        speed = 1 + projectile_speed
+        effective.falloff = {
+            "start_range": float(base_falloff.get("start_range", 0) or 0) * speed + range_bonus,
+            "end_range": float(base_falloff.get("end_range", 0) or 0) * speed + range_bonus,
+            "final_multiplier": base_falloff.get("final_multiplier", 1),
+        }
 
     def _refresh_crit_scalars(self, result: AttackResult) -> None:
         build, base, modded, effective = result.build, result.base, result.modded, result.effective
@@ -309,27 +332,99 @@ class WeaponCalculator:
             final.total_weakpoint_dps = final.total_weakpoint_dph * attack_rate
         return final
 
-    def resolve(self) -> None:
-        self._validate_attack_cycles()
+    def _needed_attack_names(self) -> set[str]:
+        attacks = self.weapon.data.attacks
+        needed = {self.weapon._attack}
+        pending = [self.weapon._attack]
+        while pending:
+            name = pending.pop()
+            attack = attacks.get(name)
+            if attack is None:
+                continue
+            for child in attack.children:
+                if child not in needed and child in attacks:
+                    needed.add(child)
+                    pending.append(child)
+        return needed
+
+    def _total_dps(self, resolved_build: ResolvedStat, resolved_evolutions: ResolvedEvolutionStat) -> float:
+        attacks = self.weapon.data.attacks
+        needed = self._needed_attack_names()
+        results = {name: self._compute_attack(name, attacks[name], resolved_build, resolved_evolutions) for name in needed}
+        for name, result in results.items():
+            result.final = self._fold_attack_tree(result, list(self._walk_tree(name, results)))
+        return float(results[self.weapon._attack].final.total_dps)
+
+    def resolve(self, *, validate_cycles: bool = True) -> None:
+        if validate_cycles:
+            self._validate_attack_cycles()
         resolved_build = self._resolved_build()
         resolved_evolutions = self._resolved_evolutions()
-        results = {name: self._compute_attack(name, attack, resolved_build, resolved_evolutions) for name, attack in self.weapon.data.attacks.items()}
+        attacks = self.weapon.data.attacks
+        needed = self._needed_attack_names()
+        results = {name: self._compute_attack(name, attacks[name], resolved_build, resolved_evolutions) for name in needed}
         for name, result in results.items():
             result.final = self._fold_attack_tree(result, list(self._walk_tree(name, results)))
         self.main = results[self.weapon._attack]
         self.child = [results[name] for name in self.main.children if name in results]
 
-    def contribution_values(self) -> dict[str, float]:
+    @staticmethod
+    def _upgrade_depends_on_equipped(upgrade) -> bool:
+        return any(effect.equipped is not None for effect in upgrade.results._normalize_effects())
+
+    def _coalition_total_lookup(self) -> tuple[list[str], int, Callable[[int, int], ResolvedStat], ResolvedEvolutionStat]:
         upgrades = list(self.weapon.build)
         count = len(upgrades)
-        if count == 0:
+        names = [str(upgrade.data.name or "") for upgrade in upgrades]
+        weapon_data = self.weapon.data
+        resolved_evolutions = self._resolved_evolutions()
+        depends_on_equipped = [self._upgrade_depends_on_equipped(upgrade) for upgrade in upgrades]
+        cached_totals: list[ResolvedStat | None] = [None] * count
+        modular_totals: dict[tuple[int, int], ResolvedStat] = {}
+
+        for index, upgrade in enumerate(upgrades):
+            if depends_on_equipped[index]:
+                continue
+            upgrade.results.resolve(weapon_data, Data({"equipped": names}))
+            cached_totals[index] = upgrade.results.total
+
+        def total_for(index: int, mask: int) -> ResolvedStat:
+            cached = cached_totals[index]
+            if cached is not None:
+                return cached
+            key = (index, mask)
+            cached = modular_totals.get(key)
+            if cached is None:
+                equipped = [names[other] for other in range(count) if mask & (1 << other)]
+                upgrades[index].results.resolve(weapon_data, Data({"equipped": equipped}))
+                cached = upgrades[index].results.total
+                modular_totals[key] = cached
+            return cached
+
+        return names, count, total_for, resolved_evolutions
+
+    def _dps_for_coalition(self, mask: int, count: int, total_for: Callable[[int, int], ResolvedStat], resolved_evolutions: ResolvedEvolutionStat) -> float:
+        resolved_build = ResolvedStat()
+        for index in range(count):
+            if mask & (1 << index):
+                UpgradeCalculator._merge_resolved_stat(resolved_build, total_for(index, mask))
+        return self._total_dps(resolved_build, resolved_evolutions)
+
+    def removal_contributions(self) -> dict[str, float]:
+        if not self.weapon.build:
             return {}
 
-        probe = self.weapon.copy()
-        coalition_dps = [0.0] * (1 << count)
-        for mask in range(1 << count):
-            probe.configure(Build(*(upgrades[index] for index in range(count) if mask & (1 << index))))
-            coalition_dps[mask] = float(probe.results.main.final.total_dps)
+        names, count, total_for, resolved_evolutions = self._coalition_total_lookup()
+        full_mask = (1 << count) - 1
+        full_dps = self._dps_for_coalition(full_mask, count, total_for, resolved_evolutions)
+        return {names[index]: full_dps - self._dps_for_coalition(full_mask ^ (1 << index), count, total_for, resolved_evolutions) for index in range(count)}
+
+    def shapley_contributions(self) -> dict[str, float]:
+        if not self.weapon.build:
+            return {}
+
+        names, count, total_for, resolved_evolutions = self._coalition_total_lookup()
+        coalition_dps = [self._dps_for_coalition(mask, count, total_for, resolved_evolutions) for mask in range(1 << count)]
 
         contributions = [0.0] * count
         denominator = factorial(count)
@@ -345,9 +440,5 @@ class WeaponCalculator:
                     continue
                 contributions[index] += weight * (coalition_dps[mask | bit] - baseline)
 
-        return {str(upgrades[index].data.name): contributions[index] for index in range(count)}
-
-    def contribution_fractions(self) -> dict[str, float]:
-        contributions = self.contribution_values()
-        total = sum(contributions.values()) or 1
-        return {name: contribution / total for name, contribution in contributions.items()}
+        total = sum(contributions) or 1
+        return {names[index]: contributions[index] / total for index in range(count)}

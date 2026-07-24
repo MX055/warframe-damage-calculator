@@ -33,6 +33,7 @@ class AttackStats(Data):
     charge_time: Number = 0.0
     co_factor: Number = 1.0
     co_effect: str = "adds"
+    range: Number = 0.0
 
 
 class WeaponStats(Data):
@@ -56,6 +57,7 @@ class RangedStats(WeaponStats):
     recharge_rate: Number = 0.0
     reload_speed: Number = 0.0
     weakpoint_damage: Number = 3.0
+    projectile_speed: Number = 0.0
 
 
 class MeleeStats(WeaponStats):

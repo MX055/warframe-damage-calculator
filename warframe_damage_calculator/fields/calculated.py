@@ -37,6 +37,8 @@ class CalculatedValues(Data):
     internal_bleeding: Number
     hunter_munitions: Number
     primed_chamber: Number
+    projectile_speed: Number
+    range: Number
     vigilante_bonus: Number
     secondary_enervate: Number
     secondary_encumber: Number

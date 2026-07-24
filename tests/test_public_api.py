@@ -396,17 +396,21 @@ class PublicApiTests(unittest.TestCase):
         heavy_caliber = arsenal.get("Heavy Caliber")
         weapon = arsenal.get("Braton").configure(Build(serration, heavy_caliber))
         full_dps = selected(weapon).final.total_dps
-        empty = weapon.copy().configure(Build())
-        empty_dps = selected(empty).final.total_dps
 
-        contributions = weapon.results.contribution_values()
-        self.assertGreater(contributions["Serration"], 0)
-        self.assertGreater(contributions["Heavy Caliber"], 0)
-        self.assertAlmostEqual(sum(contributions.values()), full_dps - empty_dps)
+        proportions = weapon.results.shapley_contributions()
+        self.assertGreater(proportions["Serration"], 0)
+        self.assertGreater(proportions["Heavy Caliber"], 0)
+        self.assertAlmostEqual(sum(proportions.values()), 1.0)
         self.assertAlmostEqual(selected(weapon).final.total_dps, full_dps)
         self.assertEqual([upgrade.data.name for upgrade in weapon.build], ["Serration", "Heavy Caliber"])
-        proportions = weapon.results.contribution_fractions()
-        self.assertAlmostEqual(sum(proportions.values()), 1.0)
+
+        without_serration = weapon.copy().configure(Build(heavy_caliber))
+        without_heavy = weapon.copy().configure(Build(serration))
+        removals = weapon.results.removal_contributions()
+        self.assertAlmostEqual(removals["Serration"], full_dps - selected(without_serration).final.total_dps)
+        self.assertAlmostEqual(removals["Heavy Caliber"], full_dps - selected(without_heavy).final.total_dps)
+        self.assertAlmostEqual(selected(weapon).final.total_dps, full_dps)
+        self.assertEqual([upgrade.data.name for upgrade in weapon.build], ["Serration", "Heavy Caliber"])
 
     def test_build_has_one_canonical_upgrade_collection(self):
         from typing import get_type_hints
@@ -889,15 +893,30 @@ class PublicApiTests(unittest.TestCase):
         self.assertIn("Buckshot", summary)
         self.assertIn("TOTAL DPS", summary)
         self.assertIn("Galvanized Chamber", upgrades)
+        self.assertIn("shapley", upgrades)
+        self.assertIn("removal", upgrades)
+
+    def test_projectile_speed_scales_falloff_without_changing_dps(self):
+        base = arsenal.get("Corinth Prime").configure(attack="buckshot")
+        modded = arsenal.get("Corinth Prime").configure(Build(arsenal.get("Fatal Acceleration")), attack="buckshot")
+        base_result = selected(base)
+        modded_result = selected(modded)
+
+        self.assertAlmostEqual(base_result.effective.falloff["start_range"], 18)
+        self.assertAlmostEqual(base_result.effective.falloff["end_range"], 36)
+        self.assertAlmostEqual(modded_result.effective.projectile_speed, 0.4)
+        self.assertAlmostEqual(modded_result.effective.falloff["start_range"], 18 * 1.4)
+        self.assertAlmostEqual(modded_result.effective.falloff["end_range"], 36 * 1.4)
+        self.assertAlmostEqual(base_result.average.total_dps, modded_result.average.total_dps)
 
     def test_formatter_renders_related_attack_base_and_total_damage(self):
         weapon = arsenal.get("Corinth Prime").configure(attack="air_burst_projectile")
         summary = weapon.format.summary()
-        blast = next(line for line in summary.splitlines() if line.startswith("Air Burst Explosion BLAST:"))
-        total = next(line for line in summary.splitlines() if line.startswith("Air Burst Explosion TOTAL DAMAGE:"))
+        blast = next(line for line in summary.splitlines() if line.startswith("AIR BURST EXPLOSION BLAST"))
+        total = next(line for line in summary.splitlines() if line.startswith("AIR BURST EXPLOSION TOTAL DAMAGE"))
 
-        self.assertRegex(blast, r"2200\.00\s+-> 2200\.00$")
-        self.assertRegex(total, r"2200\.00\s+-> 2200\.00$")
+        self.assertRegex(blast, r"2200\.00\s+\|\s+2200\.00")
+        self.assertRegex(total, r"2200\.00\s+\|\s+2200\.00")
 
     def test_rank_scaled_and_rank_locked_effects_resolve_independently(self):
         upgrade = Upgrade({

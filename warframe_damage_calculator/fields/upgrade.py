@@ -38,7 +38,9 @@ class UpgradeStats(Data):
     non_crit_bonus_damage: JsonValue
     orokin_damage: JsonValue
     primed_chamber: JsonValue
+    projectile_speed: JsonValue
     puncture: JsonValue
+    range: JsonValue
     radiation: JsonValue
     reload_speed: JsonValue
     secondary_encumber: JsonValue
@@ -97,6 +99,8 @@ class ResolvedModeStats(Data):
     non_crit_bonus_damage: Number = 0.0
     orokin_damage: Number = 0.0
     primed_chamber: Number = 0.0
+    projectile_speed: Number = 0.0
+    range: Number = 0.0
     reload_speed: Number = 0.0
     secondary_encumber: Number = 0.0
     secondary_enervate: Number = 0.0

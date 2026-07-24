@@ -69,19 +69,32 @@ class UpgradeCalculator:
                 current = Dist(current or {})
             if not isinstance(value, Dist):
                 value = Dist(value)
-            stats[stat] = current + value
+            stats._values[stat] = current + value
         elif stat == "condition_overload":
             current = current or {}
             maximums = {current.get("max_stacks", 0), value.get("max_stacks", 0)}
-            stats[stat] = {"value": current.get("value", 0) + value.get("value", 0), "max_stacks": "inf" if "inf" in maximums else max(maximums),}
+            stats[stat] = {"value": current.get("value", 0) + value.get("value", 0), "max_stacks": "inf" if "inf" in maximums else max(maximums)}
         elif current is None:
             stats[stat] = value
         elif isinstance(value, bool):
-            stats[stat] = current or value
+            stats._values[stat] = current or value
         elif isinstance(current, Mapping) and isinstance(value, Mapping):
             stats[stat] = {key: current.get(key, 0) + value.get(key, 0) for key in dict(current) | dict(value)}
         else:
-            stats[stat] = current + value
+            stats._values[stat] = current + value
+
+    @classmethod
+    def _merge_mode_stats(cls, target: Data, source: Data) -> None:
+        defaults = type(source)._defaults
+        for stat, value in source.items():
+            if stat in defaults and value == defaults[stat]:
+                continue
+            cls._merge_stat(target, stat, value)
+
+    @classmethod
+    def _merge_resolved_stat(cls, target: ResolvedStat, source: ResolvedStat) -> None:
+        for mode in EFFECT_MODES:
+            cls._merge_mode_stats(getattr(target, mode), getattr(source, mode))
 
     def _upgrade_data(self) -> Data:
         data = self.upgrade.data

@@ -1,4 +1,5 @@
 from warframe_damage_calculator import Build, Upgrade, arsenal
+from time import perf_counter
 
 
 def main() -> None:

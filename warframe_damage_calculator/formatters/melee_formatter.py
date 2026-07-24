@@ -1,4 +1,5 @@
 from .weapon_formatter import WeaponFormatter
+from ..calculators.weapon_calculator import WeaponCalculator
 
 
 class MeleeFormatter(WeaponFormatter):
@@ -6,23 +7,49 @@ class MeleeFormatter(WeaponFormatter):
         selected = self.weapon.results.main
         base = selected.base
         effective = selected.effective
-        average = selected.final
-        return "\n".join([
-            f"{self.weapon.data.name} - {selected.name.replace('_', ' ').title()}",
-            "-------------------------------------",
-            f"{'ATTACK SPEED:':<14} {f'{base.attack_speed:.2f}x':<6} -> {effective.attack_speed:.2f}x",
-            f"{'CRIT CHANCE:':<14} {f'{base.crit_chance:.2%}':<6} -> {effective.crit_chance:.2%}",
-            f"{'CRIT DAMAGE:':<14} {f'{base.crit_damage:.2f}x':<6} -> {effective.crit_damage:.2f}x",
-            f"{'STATUS CHANCE:':<14} {f'{base.status_chance:.2%}':<6} -> {effective.status_chance:.2%}",
-            f"{'STATUS DAMAGE:':<14} {'1.00x':<6} -> {effective.status_damage:.2f}x",
-            *(f"{f'{dt.upper()}:':<14} {f'{base.damage.get(dt, 0):.2f}':<6} -> {effective.damage.get(dt):.2f}" for dt in effective.damage.data),
-            f"{'TOTAL DAMAGE:':<14} {f'{base.damage.total_damage():.2f}':<6} -> {effective.damage.total_damage():.2f}",
-            "-------------------------------------",
-            f"{'FLAT DPH:':<14} {average.flat_dph:.2f}",
-            f"{'FLAT DOTPH:':<14} {average.flat_dotph:.2f}",
-            f"{'TOTAL DPH:':<14} {average.total_dph:.2f}",
-            f"{'FLAT DPS:':<14} {average.flat_dps:.2f} x BASE HPS",
-            f"{'FLAT DOTPS:':<14} {average.flat_dotps:.2f} x BASE HPS",
-            f"{'TOTAL DPS:':<14} {average.total_dps:.2f} x BASE HPS",
-            "-------------------------------------"
-        ])
+        average = selected.average
+        final = selected.final
+        hit_multiplier = WeaponCalculator._hit_multiplier(
+            average.crit_chance,
+            effective.crit_damage,
+            effective.get("non_crit_bonus_damage", 0),
+            effective.get("non_crit_bonus_chance", 0),
+        )
+
+        rows: list[tuple[str, ...]] = []
+        self._append(rows, "RANGE", self._fmt_meters(base.get("range", 0)), self._fmt_meters(effective.get("range", 0)), self._fmt_meters(effective.get("range", 0)), when=float(effective.get("range", 0) or 0) > 0)
+        self._append(rows, "ATTACK SPEED", self._fmt_multiplier(base.attack_speed), self._fmt_multiplier(effective.attack_speed), self._fmt_multiplier(effective.attack_speed))
+        self._append(rows, "CRIT CHANCE", self._fmt_percent(base.crit_chance), self._fmt_percent(effective.crit_chance), self._fmt_percent(average.crit_chance))
+        self._append(rows, "CRIT DAMAGE", self._fmt_multiplier(base.crit_damage), self._fmt_multiplier(effective.crit_damage), self._fmt_multiplier(effective.crit_damage))
+        self._append(rows, "STATUS CHANCE", self._fmt_percent(base.status_chance), self._fmt_percent(effective.status_chance), self._fmt_percent(effective.status_chance))
+
+        section_breaks: list[int] = []
+        damage_at = len(rows)
+        self._append_damage_type_rows(rows, base.damage, effective.damage)
+        self._append(
+            rows,
+            "TOTAL DAMAGE",
+            self._fmt_number(base.damage.total_damage()),
+            self._fmt_number(effective.damage.total_damage()),
+            self._fmt_number(final.flat_dph),
+        )
+        if damage_at < len(rows):
+            section_breaks.append(damage_at)
+
+        averages_at = len(rows)
+        self._append(rows, "HIT MULTIPLIER", "", "", self._fmt_multiplier(hit_multiplier))
+        self._append(rows, "MELEE DUPLICATE MULTIPLIER", "", "", self._fmt_multiplier(average.get("melee_duplicate_multiplier", 1)), when=float(average.get("melee_duplicate_multiplier", 1) or 1) != 1)
+        self._append(rows, "MELEE DOUGHTY BONUS", "", "", self._fmt_number(average.get("melee_doughty_bonus", 0)), when=float(average.get("melee_doughty_bonus", 0) or 0) > 0)
+        section_breaks.append(averages_at)
+
+        dps_at = len(rows)
+        self._append(rows, "FLAT DPH", "", "", self._fmt_number(final.flat_dph))
+        self._append(rows, "FLAT DOTPH", "", "", self._fmt_number(final.flat_dotph))
+        self._append(rows, "TOTAL DPH", "", "", self._fmt_number(final.total_dph))
+        self._append(rows, "FLAT DPS", "", "", f"{self._fmt_number(final.flat_dps)} x BASE HPS")
+        self._append(rows, "FLAT DOTPS", "", "", f"{self._fmt_number(final.flat_dotps)} x BASE HPS")
+        self._append(rows, "TOTAL DPS", "", "", f"{self._fmt_number(final.total_dps)} x BASE HPS")
+        section_breaks.append(dps_at)
+
+        title = f"{self.weapon.data.name} - {selected.name.replace('_', ' ').title()}"
+        return self._table(("stat", "base", "effective", "average"), rows, title=title, border="=", section_at=tuple(section_breaks))
