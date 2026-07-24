@@ -20,10 +20,9 @@ class SecondaryCalculator(RangedCalculator):
     def _compute_average(self, result: AttackResult) -> None:
         WeaponCalculator._compute_average(self, result)
         self._setup_ranged_averages(result)
-        modded, effective, average = result.modded, result.effective, result.average
+        effective, average = result.effective, result.average
         secondary_enervate_bonus = self._average_secondary_enervate_bonus(effective.crit_chance, result)
         weakpoint_secondary_enervate_bonus = self._average_secondary_enervate_bonus(effective.weakpoint_crit_chance, result)
-
         average.secondary_enervate_bonus = secondary_enervate_bonus
         average.weakpoint_secondary_enervate_bonus = weakpoint_secondary_enervate_bonus
         average.crit_chance = effective.crit_chance + secondary_enervate_bonus

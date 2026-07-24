@@ -23,9 +23,9 @@ class MeleeCalculator(WeaponCalculator):
     def _compute_average(self, result: AttackResult) -> None:
         super()._compute_average(result)
         effective, average = result.effective, result.average
+        hit_mult = self._hit_multiplier(average.crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
         average.melee_doughty_bonus = true_round(10 * effective.damage.weight("puncture") * effective.status_chance * effective.melee_doughty, 1)
         average.melee_duplicate_multiplier = 1 + effective.melee_duplicate * max(0, 1 - abs(effective.crit_chance - 1))
-        hit_mult = self._hit_multiplier(average.crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
         average.flat_dph = effective.damage.total_damage() * self._max_average_faction_damage(result) * hit_mult * average.melee_duplicate_multiplier
         average.flat_dps = effective.attack_speed * average.flat_dph
         average.flat_dotph = self._flat_dotph(result)
