@@ -28,7 +28,7 @@ class RangedFormatter(WeaponFormatter):
         )
 
         rows: list[tuple[str, ...]] = []
-        self._falloff_row(rows, base.get("falloff"), effective.get("falloff") or base.get("falloff"))
+        self._falloff_row(rows, base, effective)
         self._append(rows, "RANGE", self._fmt_meters(base.get("range", 0)), self._fmt_meters(effective.get("range", 0)), self._fmt_meters(effective.get("range", 0)), when=float(effective.get("range", 0) or 0) > 0)
         self._append(rows, "FIRE RATE", self._fmt_rate(base.fire_rate), self._fmt_rate(effective.fire_rate), self._fmt_rate(final.fire_rate))
         self._append(rows, "RELOAD SPEED", self._fmt_seconds(base.reload_speed), self._fmt_seconds(effective.reload_speed), self._fmt_seconds(effective.reload_speed))

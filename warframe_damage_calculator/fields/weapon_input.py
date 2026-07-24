@@ -51,13 +51,16 @@ class RangedStats(WeaponStats):
     burst_delay: Number = 0.0
     charge_time: Number = 0.0
     fire_rate: Number = 0.05
-    falloff: Mapping[str, JsonValue] = {}
+    start_range: Number
+    end_range: Number
+    final_multiplier: Number
     magazine_capacity: Number = 1
     multishot: Number = 1.0
     recharge_rate: Number = 0.0
     reload_speed: Number = 0.0
     weakpoint_damage: Number = 3.0
     projectile_speed: Number = 0.0
+    range: Number = 0.0
 
 
 class MeleeStats(WeaponStats):

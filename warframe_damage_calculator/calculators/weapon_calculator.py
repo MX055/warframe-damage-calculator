@@ -107,7 +107,10 @@ class WeaponCalculator:
     def _compute_base(self, result: AttackResult) -> None:
         attack = result.attack
         ammo, stats = self.weapon.data.ammo, dict(attack.stats)
+        falloff = stats.pop("falloff", None) or {}
         stats.update({"attack_speed": attack.stats.fire_rate, "magazine_capacity": ammo.get("magazine_size", 1), "reload_speed": ammo.get("reload_time", 0), "recharge_rate": ammo.get("recharge_rate", 0)})
+        if falloff:
+            stats.update({"start_range": falloff.get("start_range", 0), "end_range": falloff.get("end_range", 0), "final_multiplier": falloff.get("final_multiplier", 1)})
         result.base = CalculatedStats(self.weapon.stats_type(stats).with_defaults())
         result.original_damage = Dist(dict(result.base.damage))
 
@@ -139,8 +142,6 @@ class WeaponCalculator:
         modded.additive.status_damage = max(1 + build.additive.status_damage, 1)
         modded.additive.non_crit_bonus_damage = max(build.additive.non_crit_bonus_damage + evo.additive.non_crit_bonus_damage, 0)
         modded.additive.non_crit_bonus_chance = max(build.additive.non_crit_bonus_chance, evo.additive.non_crit_bonus_chance, 0)
-        modded.additive.projectile_speed = build.additive.projectile_speed + evo.additive.get("projectile_speed", 0)
-        modded.additive.range = build.additive.range + build.flat.range + evo.additive.get("range", 0) + evo.flat.get("range", 0)
 
     def _average_condition_overload_bonus(self, result: AttackResult, time: Number = 5) -> float:
         build, stats = result.build, result.attack.stats
@@ -207,24 +208,6 @@ class WeaponCalculator:
         effective.status_damage = modded.additive.status_damage
         effective.non_crit_bonus_damage = modded.additive.non_crit_bonus_damage
         effective.non_crit_bonus_chance = modded.additive.non_crit_bonus_chance
-        self._apply_range_stats(result)
-
-    @staticmethod
-    def _apply_range_stats(result: AttackResult) -> None:
-        base, modded, effective = result.base, result.modded, result.effective
-        projectile_speed = float(modded.additive.get("projectile_speed", 0) or 0)
-        range_bonus = float(modded.additive.get("range", 0) or 0)
-        effective.projectile_speed = projectile_speed
-        effective.range = float(base.get("range", 0) or 0) + range_bonus
-        base_falloff = base.get("falloff") or {}
-        if not base_falloff:
-            return
-        speed = 1 + projectile_speed
-        effective.falloff = {
-            "start_range": float(base_falloff.get("start_range", 0) or 0) * speed + range_bonus,
-            "end_range": float(base_falloff.get("end_range", 0) or 0) * speed + range_bonus,
-            "final_multiplier": base_falloff.get("final_multiplier", 1),
-        }
 
     def _refresh_crit_scalars(self, result: AttackResult) -> None:
         build, base, modded, effective = result.build, result.base, result.modded, result.effective

@@ -10,13 +10,15 @@ class MeleeCalculator(WeaponCalculator):
         modded.additive.attack_speed = max(base.attack_speed * (1 + build.additive.attack_speed + evo.additive.attack_speed), 0)
         modded.additive.melee_duplicate = clamp(build.additive.melee_duplicate, 0, 1)
         modded.additive.melee_doughty = clamp(build.additive.melee_doughty, 0, 1)
+        modded.additive.range = build.additive.range + build.flat.range + evo.additive.get("range", 0) + evo.flat.get("range", 0)
 
     def _compute_effective(self, result: AttackResult) -> None:
         super()._compute_effective(result)
-        effective, modded = result.effective, result.modded
+        base, effective, modded = result.base, result.effective, result.modded
         effective.attack_speed = modded.additive.attack_speed
         effective.melee_duplicate = modded.additive.melee_duplicate
         effective.melee_doughty = modded.additive.melee_doughty
+        effective.range = float(base.get("range", 0) or 0) + float(modded.additive.range or 0)
 
     def _compute_average(self, result: AttackResult) -> None:
         super()._compute_average(result)

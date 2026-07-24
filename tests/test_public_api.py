@@ -902,11 +902,11 @@ class PublicApiTests(unittest.TestCase):
         base_result = selected(base)
         modded_result = selected(modded)
 
-        self.assertAlmostEqual(base_result.effective.falloff["start_range"], 18)
-        self.assertAlmostEqual(base_result.effective.falloff["end_range"], 36)
+        self.assertAlmostEqual(base_result.effective.start_range, 18)
+        self.assertAlmostEqual(base_result.effective.end_range, 36)
         self.assertAlmostEqual(modded_result.effective.projectile_speed, 0.4)
-        self.assertAlmostEqual(modded_result.effective.falloff["start_range"], 18 * 1.4)
-        self.assertAlmostEqual(modded_result.effective.falloff["end_range"], 36 * 1.4)
+        self.assertAlmostEqual(modded_result.effective.start_range, 18 * 1.4)
+        self.assertAlmostEqual(modded_result.effective.end_range, 36 * 1.4)
         self.assertAlmostEqual(base_result.average.total_dps, modded_result.average.total_dps)
 
     def test_formatter_renders_related_attack_base_and_total_damage(self):

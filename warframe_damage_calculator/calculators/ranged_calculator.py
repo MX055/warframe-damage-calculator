@@ -23,10 +23,12 @@ class RangedCalculator(WeaponCalculator):
         modded.multiplicative.weakpoint_crit_chance = max(1 + build.multiplicative.weakpoint_crit_chance, 1)
         modded.additive.weakpoint_crit_chance = max(base.crit_chance * (1 + build.additive.crit_chance + build.additive.weakpoint_crit_chance), 0)
         modded.additive.internal_bleeding = max(build.additive.internal_bleeding * (2 if modded.additive.fire_rate * modded.multiplicative.fire_rate < 2.5 else 1), 0)
+        modded.additive.projectile_speed = build.additive.projectile_speed + evo.additive.get("projectile_speed", 0)
+        modded.additive.range = build.additive.range + build.flat.range + evo.additive.get("range", 0) + evo.flat.get("range", 0)
 
     def _compute_effective(self, result: AttackResult) -> None:
         super()._compute_effective(result)
-        modded, effective = result.modded, result.effective
+        base, modded, effective = result.base, result.modded, result.effective
         is_battery = "recharge_delay" in self.weapon.data.ammo
 
         effective.weakpoint_damage = modded.additive.weakpoint_damage
@@ -42,6 +44,11 @@ class RangedCalculator(WeaponCalculator):
         effective.multishot = modded.additive.multishot
         effective.weakpoint_crit_chance = self._combine_chance(modded.additive.weakpoint_crit_chance, modded.multiplicative.crit_chance + modded.multiplicative.weakpoint_crit_chance - 1, modded.flat.crit_chance)
         effective.internal_bleeding = modded.additive.internal_bleeding
+        effective.projectile_speed = modded.additive.projectile_speed
+        effective.range = float(base.get("range", 0) or 0) + float(modded.additive.range or 0)
+        effective.start_range = float(base.get("start_range", 0) or 0) * (1 + float(modded.additive.projectile_speed or 0)) + float(modded.additive.range or 0)
+        effective.end_range = float(base.get("end_range", 0) or 0) * (1 + float(modded.additive.projectile_speed or 0)) + float(modded.additive.range or 0)
+        effective.final_multiplier = base.get("final_multiplier", 0) or 0
 
     def _setup_ranged_averages(self, result: AttackResult) -> None:
         effective, average = result.effective, result.average

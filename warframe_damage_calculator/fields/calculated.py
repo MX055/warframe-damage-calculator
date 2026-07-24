@@ -39,6 +39,9 @@ class CalculatedValues(Data):
     primed_chamber: Number
     projectile_speed: Number
     range: Number
+    start_range: Number
+    end_range: Number
+    final_multiplier: Number
     vigilante_bonus: Number
     secondary_enervate: Number
     secondary_encumber: Number

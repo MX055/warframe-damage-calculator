@@ -1,5 +1,3 @@
-from collections.abc import Mapping
-
 from ..models.dist import Dist
 from ..protocols import WeaponFormatterOwner
 from ..utils.types import Number
@@ -91,20 +89,14 @@ class WeaponFormatter:
             lines.append(border * len(header))
         return "\n".join(lines)
 
-    def _falloff_row(self, rows: list[tuple[str, ...]], base_falloff: Mapping[str, object] | None, effective_falloff: Mapping[str, object] | None = None) -> None:
-        if not base_falloff:
+    def _falloff_row(self, rows: list[tuple[str, ...]], base, effective) -> None:
+        if "start_range" not in base:
             return
+        def format_falloff(stats) -> str:
+            return f"{float(stats.start_range):g}m -> {float(stats.end_range):g}m @ {float(stats.final_multiplier):.2%}"
 
-        def format_falloff(falloff: Mapping[str, object] | None) -> str:
-            if not falloff:
-                return ""
-            start = falloff.get("start_range", 0)
-            end = falloff.get("end_range", 0)
-            final = falloff.get("final_multiplier", 1)
-            return f"{float(start):g}m -> {float(end):g}m @ {float(final):.2%}"
-
-        base_text = format_falloff(base_falloff)
-        effective_text = format_falloff(effective_falloff if effective_falloff is not None else base_falloff)
+        base_text = format_falloff(base)
+        effective_text = format_falloff(effective if "start_range" in effective else base)
         self._append(rows, "FALLOFF", base_text, effective_text, effective_text)
 
     def upgrades(self) -> str:
