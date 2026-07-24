@@ -831,7 +831,7 @@ class PublicApiTests(unittest.TestCase):
                 self.assertEqual(arsenal.upgrades[name]["stats"]["condition_overload"], [canonical])
                 self.assertEqual(arsenal.get(name).results.total.additive.condition_overload, resolved)
 
-    def test_condition_overload_bonus_uses_expected_stacks_over_five_seconds(self):
+    def test_condition_overload_bonus_uses_sustained_unique_procs(self):
         condition_overload = Upgrade({
             "name": "Condition Overload",
             "type": "mod",
@@ -843,6 +843,54 @@ class PublicApiTests(unittest.TestCase):
 
         self.assertGreater(weapon.results._average_condition_overload_bonus(selected(weapon)), 0)
         self.assertLess(weapon.results._average_condition_overload_bonus(selected(weapon)), 1.6)
+
+    def test_condition_overload_scales_with_status_duration(self):
+        condition_overload = Upgrade({
+            "name": "Condition Overload",
+            "type": "mod",
+            "max_rank": 0,
+            "compatibility": {"types": []},
+            "stats": {"condition_overload": [{"value": 0.8, "stacks": {"when": "status_type", "max": 3}}]},
+        })
+        duration = Upgrade({
+            "name": "Lasting Sting",
+            "type": "mod",
+            "max_rank": 0,
+            "compatibility": {"types": []},
+            "stats": {"status_duration": [{"value": 1}]},
+        })
+        without_duration = arsenal.get("Skana").configure(Build(condition_overload))
+        with_duration = arsenal.get("Skana").configure(Build(condition_overload, duration))
+
+        self.assertGreater(
+            with_duration.results._average_condition_overload_bonus(selected(with_duration)),
+            without_duration.results._average_condition_overload_bonus(selected(without_duration)),
+        )
+
+    def test_condition_overload_forced_proc_is_fully_sustained(self):
+        condition_overload = Upgrade({
+            "name": "Condition Overload",
+            "type": "mod",
+            "max_rank": 0,
+            "compatibility": {"types": []},
+            "stats": {"condition_overload": [{"value": 1, "stacks": {"when": "status_type", "max": 1}}]},
+        })
+        weapon = Primary({
+            "name": "Forced CO",
+            "type": "primary",
+            "attacks": {
+                "normal": {
+                    "stats": {
+                        "damage": {"impact": 10},
+                        "status_chance": 0,
+                        "fire_rate": 1,
+                        "forced_procs": {"heat": 1},
+                    },
+                },
+            },
+        }).configure(Build(condition_overload))
+
+        self.assertAlmostEqual(weapon.results._average_condition_overload_bonus(selected(weapon)), 1)
 
     def test_condition_overload_uses_each_attack_bucket(self):
         condition_overload = Upgrade({

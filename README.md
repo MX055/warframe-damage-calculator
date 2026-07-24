@@ -1084,7 +1084,9 @@ shots, projectiles, or animation frames.
 
 ### Condition Overload
 
-- Condition Overload counts unique damage types plus positive forced-proc types on the attack.
+- Condition Overload uses the expected number of unique statuses sustained on a target.
+- Per-type application chance accounts for status chance, damage weights, multishot/status hits, and forced procs.
+- Uptime for each type is `1 - (1 - p)^(attacks_per_second × status_duration)`.
 - The effect may be capped by the upgrade's structured `max_stacks` value.
 - Each attack may scale the bonus with `co_factor`.
 - `co_effect="adds"` adds the bonus to additive base damage.
@@ -1108,7 +1110,6 @@ shots, projectiles, or animation frames.
 ### Fire cycle
 
 - Charge time and burst timing are included in average fire rate.
-- Condition Overload uses the expected number of distinct status types acquired over a five-second firing window.
 - `fire_rate_lock` ignores additive and multiplicative fire-rate upgrades.
 - `multishot_lock` preserves native multishot but ignores upgrade multishot.
 - Fire-cycle math uses per-attack `ammo_cost` (shots per magazine = magazine / ammo_cost).

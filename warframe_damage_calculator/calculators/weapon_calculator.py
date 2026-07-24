@@ -144,10 +144,9 @@ class WeaponCalculator:
         modded.additive.non_crit_bonus_damage = max(build.additive.non_crit_bonus_damage + evo.additive.non_crit_bonus_damage, 0)
         modded.additive.non_crit_bonus_chance = max(build.additive.non_crit_bonus_chance, evo.additive.non_crit_bonus_chance, 0)
 
-    def _average_condition_overload_bonus(self, result: AttackResult, time: Number = 5) -> float:
+    def _per_attack_status_probabilities(self, result: AttackResult) -> dict[str, float]:
         build, stats = result.build, result.attack.stats
-        # GunCO / CO scales off original (pre-evolution) base damage only.
-        damage = result.original_damage.apply(build.additive.damage).combine().sorted()
+        damage = result.base.damage.apply(build.additive.damage).combine().sorted()
         guaranteed, fractional = divmod(max(stats.status_chance * (1 + build.additive.status_chance + result.evolutions.additive.status_chance) + result.modded.flat.status_chance, 0), 1)
         guaranteed_hits, fractional_hit = divmod(max(self._status_hits(result), 0), 1)
         probabilities: dict[str, float] = {}
@@ -156,19 +155,34 @@ class WeaponCalculator:
             miss = (1 - weight) ** guaranteed * (1 - fractional * weight)
             probabilities[damage_type] = 1 - miss ** guaranteed_hits * (1 - fractional_hit + fractional_hit * miss)
         probabilities.update({damage_type: 1.0 for damage_type, count in stats.forced_procs if count > 0})
+        return probabilities
 
-        condition_overload = build.additive.condition_overload
+    @staticmethod
+    def _sustained_proc_chance(per_attack_probability: float, attacks_during_duration: float) -> float:
+        if per_attack_probability <= 0 or attacks_during_duration <= 0: return 0.0
+        if per_attack_probability >= 1 or attacks_during_duration == float("inf"): return 1.0
+        return float(-expm1(attacks_during_duration * log1p(-per_attack_probability)))
+
+    def _average_condition_overload_bonus(self, result: AttackResult) -> float:
+        stats = result.attack.stats
+        probabilities = self._per_attack_status_probabilities(result)
+        condition_overload = result.build.additive.condition_overload
         maximum = len(probabilities) if condition_overload.max_stacks == "inf" else int(condition_overload.max_stacks)
         attack_rate = self._effective_attacks_per_second(result)
-        if maximum <= 0 or attack_rate <= 0:
+        duration = float(result.modded.additive.status_duration)
+        if maximum <= 0 or attack_rate <= 0 or duration <= 0:
             return 0.0
-        attempts, distribution = attack_rate * time, [1.0] + [0.0] * maximum
+
+        # Expected unique statuses currently active: each type's uptime over one
+        # status-duration window at the average attack rate.
+        attempts = attack_rate * duration
+        distribution = [1.0] + [0.0] * maximum
         for probability in probabilities.values():
-            acquired = 0 if probability <= 0 else 1 if probability >= 1 else -expm1(attempts * log1p(-probability))
+            active = self._sustained_proc_chance(probability, attempts)
             updated = [0.0] * (maximum + 1)
             for count, chance in enumerate(distribution):
-                updated[count] += chance * (1 - acquired)
-                updated[min(count + 1, maximum)] += chance * acquired
+                updated[count] += chance * (1 - active)
+                updated[min(count + 1, maximum)] += chance * active
             distribution = updated
         expected = sum(count * chance for count, chance in enumerate(distribution))
         return float(condition_overload.value) * stats.co_factor * expected
