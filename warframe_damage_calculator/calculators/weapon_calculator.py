@@ -140,7 +140,7 @@ class WeaponCalculator:
         modded.flat.status_chance = build.flat.status_chance + evo.flat.status_chance
         modded.additive.status_chance = max(base.status_chance * (1 + build.additive.status_chance + evo.additive.status_chance), 0)
         modded.additive.status_damage = max(1 + build.additive.status_damage, 1)
-        modded.additive.status_duration = max(1 + build.additive.status_duration + evo.additive.status_duration, 0)
+        modded.additive.status_duration = max(base.status_duration * (1 + build.additive.status_duration + evo.additive.status_duration), 0)
         modded.additive.non_crit_bonus_damage = max(build.additive.non_crit_bonus_damage + evo.additive.non_crit_bonus_damage, 0)
         modded.additive.non_crit_bonus_chance = max(build.additive.non_crit_bonus_chance, evo.additive.non_crit_bonus_chance, 0)
 
@@ -295,7 +295,7 @@ class WeaponCalculator:
         regular = sum(factor * effective.damage.get(damage_type) * effective.damage.weight(damage_type) for damage_type, factor in DOT_MULTIPLIERS) * effective.status_chance
         forced = sum(factor * base.forced_procs.get(damage_type) * effective.damage.get(damage_type) for damage_type, factor in DOT_MULTIPLIERS)
         shot_hits = effective.get("multishot", self._status_hits(result)) if hits is None else hits
-        return (regular + forced) * effective.status_damage * faction_damage ** 2 * multiplier * damage_multiplier * shot_hits + extra_damage
+        return (regular + forced) * effective.status_duration * effective.status_damage * faction_damage ** 2 * multiplier * damage_multiplier * shot_hits + extra_damage
 
     def _fold_attack_tree(self, root: AttackResult, tree: list[AttackResult]) -> AverageStats:
         final = root.average.copy()

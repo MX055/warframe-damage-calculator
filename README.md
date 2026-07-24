@@ -1048,6 +1048,7 @@ Faction damage is applied twice to modeled DoT damage.
 
 - `status_chance`
 - `status_damage`
+- `status_duration`
 - `hunter_munitions`
 - `internal_bleeding`
 - `primed_chamber`
@@ -1074,7 +1075,7 @@ shots, projectiles, or animation frames.
 ### Damage, critical hits, status, and DoT
 
 - Elemental combination follows the order in which elemental upgrade effects are aggregated.
-- DoT values represent expected total proc damage using a multiplier of `2.1` for Slash and `3.0` for Heat, Toxin, Electricity, and Gas.
+- DoT values represent expected total proc damage using per-tick multipliers of `0.35` for Slash and `0.5` for Heat, Toxin, Electricity, and Gas, times effective status duration (base `6` seconds, scaled by status duration mods).
 - Native status chance is treated per projectile.
 - Forced proc counts are added independently of ordinary status weighting.
 - Faction damage is applied twice to modeled DoT.

@@ -1,4 +1,5 @@
 from ..fields.attack_result import AttackResult
+from ..utils.constants import DOT_MULTIPLIERS
 from ..utils.functions import clamp
 from .ranged_calculator import RangedCalculator
 
@@ -37,13 +38,14 @@ class PrimaryCalculator(RangedCalculator):
         crit_chance = average.weakpoint_crit_chance if weakpoint else average.crit_chance
         multiplier = self._hit_multiplier(crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
         primed = 1 + effective.primed_chamber / effective.magazine_capacity
+        slash_dot = dict(DOT_MULTIPLIERS)["slash"] * effective.status_duration
         hunter_procs = effective.hunter_munitions * min(crit_chance, 1)
-        hunter_dpp = 2.1 * damage.total_damage() * max(effective.crit_damage, multiplier) * effective.status_damage * faction_damage ** 2 * primed
+        hunter_dpp = slash_dot * damage.total_damage() * max(effective.crit_damage, multiplier) * effective.status_damage * faction_damage ** 2 * primed
         hunter_damage = hunter_procs * hunter_dpp
         impact_ib = (damage.weight("impact") + forced_procs.get("impact")) * effective.internal_bleeding
         guaranteed_proc, fractional_proc = divmod(effective.status_chance, 1)
         ib_procs = impact_ib * effective.status_chance
-        ib_dpp = 2.1 * damage.total_damage() * multiplier * effective.status_damage * faction_damage ** 2 * primed
+        ib_dpp = slash_dot * damage.total_damage() * multiplier * effective.status_damage * faction_damage ** 2 * primed
         ib_damage = ib_procs * ib_dpp
         ib_probability = 1 - (1 - impact_ib) ** guaranteed_proc * ((1 - fractional_proc) + fractional_proc * (1 - impact_ib))
         overlap = hunter_procs * ib_probability * min(hunter_dpp, ib_dpp)

@@ -44,6 +44,7 @@ class WeaponStats(Data):
     crit_chance: Number = 0.0
     crit_damage: Number = 1.0
     status_chance: Number = 0.0
+    status_duration: Number = 6.0
 
 
 class RangedStats(WeaponStats):

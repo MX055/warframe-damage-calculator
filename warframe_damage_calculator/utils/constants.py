@@ -1,4 +1,4 @@
-DOT_MULTIPLIERS = (("slash", 2.1), ("heat", 3.0), ("toxin", 3.0), ("electricity", 3.0), ("gas", 3.0))
+DOT_MULTIPLIERS = (("slash", 0.35), ("heat", 0.5), ("toxin", 0.5), ("electricity", 0.5), ("gas", 0.5))
 PHYSICAL_TYPES = ("impact", "puncture", "slash")
 ELEMENTAL_TYPES = ("cold", "electricity", "heat", "toxin")
 DAMAGE_TYPES = ("impact", "puncture", "slash", "blast", "corrosive", "gas", "magnetic", "radiation", "viral", "cold", "electricity", "heat", "toxin", "void", "tau", "true")
