@@ -13,7 +13,7 @@ class Build:
         self.results = BuildCalculator(self)
 
     def __iter__(self) -> Iterator[Upgrade]:
-        return (upgrade.copy() for upgrade in self.upgrades)
+        return (upgrade for upgrade in self.upgrades)
 
     def __len__(self) -> int:
         return len(self.upgrades)
