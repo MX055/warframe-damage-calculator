@@ -1,5 +1,5 @@
 from collections.abc import Iterator, Mapping
-from math import expm1, log1p
+from math import expm1, factorial, log1p
 
 from ..fields.attack_result import AttackResult
 from ..fields.calculated import AverageStats, CalculatedStats
@@ -8,7 +8,7 @@ from ..fields.upgrade import ResolvedStat
 from ..fields.weapon_data import Attack
 from ..models.build import Build
 from ..models.dist import Dist
-from ..protocols import BuildUpgradeOwner, ConfigurableWeaponOwner
+from ..protocols import ConfigurableWeaponOwner
 from ..utils.constants import DOT_MULTIPLIERS
 from ..utils.types import Number
 from .evolution_calculator import EvolutionCalculator
@@ -319,15 +319,35 @@ class WeaponCalculator:
         self.main = results[self.weapon._attack]
         self.child = [results[name] for name in self.main.children if name in results]
 
-    def contribution(self, upgrade: BuildUpgradeOwner) -> float:
-        reduced = self.weapon.copy()
-        reduced.configure(self.weapon.build - upgrade)
-        return self.main.final.total_dps - reduced.results.main.final.total_dps
-
     def contribution_values(self) -> dict[str, float]:
-        return {str(upgrade.data.name): self.contribution(upgrade) for upgrade in self.weapon.build}
+        upgrades = list(self.weapon.build)
+        count = len(upgrades)
+        if count == 0:
+            return {}
 
-    def contribution_proportions(self) -> dict[str, float]:
+        probe = self.weapon.copy()
+        coalition_dps = [0.0] * (1 << count)
+        for mask in range(1 << count):
+            probe.configure(Build(*(upgrades[index] for index in range(count) if mask & (1 << index))))
+            coalition_dps[mask] = float(probe.results.main.final.total_dps)
+
+        contributions = [0.0] * count
+        denominator = factorial(count)
+        for mask in range(1 << count):
+            size = mask.bit_count()
+            if size == count:
+                continue
+            weight = factorial(size) * factorial(count - size - 1) / denominator
+            baseline = coalition_dps[mask]
+            for index in range(count):
+                bit = 1 << index
+                if mask & bit:
+                    continue
+                contributions[index] += weight * (coalition_dps[mask | bit] - baseline)
+
+        return {str(upgrades[index].data.name): contributions[index] for index in range(count)}
+
+    def contribution_fractions(self) -> dict[str, float]:
         contributions = self.contribution_values()
         total = sum(contributions.values()) or 1
         return {name: contribution / total for name, contribution in contributions.items()}

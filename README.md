@@ -976,13 +976,15 @@ weapon = arsenal.get("Acceltra Prime").configure(
 )
 
 print(weapon.results.contribution_values())
-print(weapon.results.contribution_proportions())
+print(weapon.results.contribution_fractions())
 print(weapon.format.upgrades())
 ```
 
-Each contribution is the full build's DPS minus the DPS after removing that
-upgrade. These are marginal estimates, so interactions between upgrades mean
-the proportions are not independent multipliers.
+Each value is that upgrade's Shapley contribution to total DPS: the average
+marginal DPS gain from adding the upgrade across every possible subset of the
+rest of the build. Shapley values sum to the full build's DPS minus the empty
+build's DPS. Proportions normalize those shares; interactions between upgrades
+mean they are attribution weights, not independent multipliers.
 
 ### Formatters
 

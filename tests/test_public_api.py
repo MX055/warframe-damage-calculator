@@ -391,15 +391,22 @@ class PublicApiTests(unittest.TestCase):
         reduced = build - chamber
         self.assertEqual([upgrade.data.name for upgrade in reduced], ["Galvanized Aptitude"])
 
-    def test_contribution_uses_copy_without_mutating_weapon(self):
+    def test_contribution_uses_shapley_values_without_mutating_weapon(self):
         serration = arsenal.get("Serration")
-        weapon = arsenal.get("Braton").configure(Build(serration))
+        heavy_caliber = arsenal.get("Heavy Caliber")
+        weapon = arsenal.get("Braton").configure(Build(serration, heavy_caliber))
         full_dps = selected(weapon).final.total_dps
+        empty = weapon.copy().configure(Build())
+        empty_dps = selected(empty).final.total_dps
 
-        self.assertGreater(weapon.results.contribution(serration), 0)
+        contributions = weapon.results.contribution_values()
+        self.assertGreater(contributions["Serration"], 0)
+        self.assertGreater(contributions["Heavy Caliber"], 0)
+        self.assertAlmostEqual(sum(contributions.values()), full_dps - empty_dps)
         self.assertAlmostEqual(selected(weapon).final.total_dps, full_dps)
-        self.assertEqual([upgrade.data.name for upgrade in weapon.build], ["Serration"])
-        self.assertGreater(weapon.results.contribution_values()["Serration"], 0)
+        self.assertEqual([upgrade.data.name for upgrade in weapon.build], ["Serration", "Heavy Caliber"])
+        proportions = weapon.results.contribution_fractions()
+        self.assertAlmostEqual(sum(proportions.values()), 1.0)
 
     def test_build_has_one_canonical_upgrade_collection(self):
         from typing import get_type_hints
