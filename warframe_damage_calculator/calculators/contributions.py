@@ -7,7 +7,7 @@ from math import factorial
 
 from ..fields.evolution import ResolvedEvolutionStat
 from ..fields.upgrade import ResolvedStat
-from ..models.data import Data
+from ..core.data import Data
 from ..protocols import BuildUpgradeOwner
 from .stat_aggregation import merge_resolved_stat
 

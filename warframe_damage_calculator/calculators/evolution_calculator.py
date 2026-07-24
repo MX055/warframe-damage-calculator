@@ -9,7 +9,7 @@ from collections.abc import Mapping, Sequence
 from typing import Any, cast
 
 from ..fields.evolution import EvolutionPerk, ResolvedEvolutionStat
-from ..models.data import Data
+from ..core.data import Data
 from ..protocols import WeaponCalculatorOwner
 from ..utils.constants import EFFECT_MODES
 from ..utils.types import EffectMode

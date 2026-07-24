@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from ..fields.calculated import AverageStats
-from ..models.dist import Dist
+from ..core.dist import Dist
 from ..utils.types import Number
 
 

@@ -12,7 +12,7 @@ from ..fields.calculated import CalculatedStats, ModdedStats
 from ..fields.evolution import ConversionBonus, ResolvedEvolutionStat
 from ..fields.upgrade import ResolvedStat
 from ..fields.weapon_data import Attack
-from ..models.dist import Dist
+from ..core.dist import Dist
 from ..utils.types import Number
 from . import formulas
 

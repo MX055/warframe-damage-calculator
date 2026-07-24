@@ -13,11 +13,11 @@ from warframe_damage_calculator.calculators.stat_aggregation import UPGRADE_AGGR
 from warframe_damage_calculator.calculators.status_model import SustainedStatusModel, apply_condition_overload, build_sustained_status_model, condition_overload_bonus, per_attack_status_probabilities, sustained_proc_chance
 from warframe_damage_calculator.calculators.upgrade_calculator import UpgradeCalculator
 from warframe_damage_calculator.calculators.weapon_calculator import WeaponCalculator
+from warframe_damage_calculator.core.data import Data
+from warframe_damage_calculator.core.dist import Dist
 from warframe_damage_calculator.fields.calculated import ModdedStats
 from warframe_damage_calculator.fields.evolution import ConversionBonus
 from warframe_damage_calculator.fields.weapon_data import Attack
-from warframe_damage_calculator.models.data import Data
-from warframe_damage_calculator.models.dist import Dist
 
 
 def selected(weapon):

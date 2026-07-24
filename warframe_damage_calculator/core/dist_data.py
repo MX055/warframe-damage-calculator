@@ -1,4 +1,4 @@
-from ..models.data import Data
+from .data import Data
 from ..utils.types import Number
 
 

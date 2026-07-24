@@ -1,5 +1,5 @@
 from ..fields.upgrade import ResolvedStat
-from ..models.data import Data
+from ..core.data import Data
 from ..protocols import BuildOwner
 from .stat_aggregation import merge_resolved_stat
 from .upgrade_calculator import UpgradeCalculator

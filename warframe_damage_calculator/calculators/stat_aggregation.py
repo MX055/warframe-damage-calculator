@@ -14,8 +14,8 @@ from typing import Any
 
 from ..fields.evolution import ConversionBonus
 from ..fields.upgrade import ResolvedStat
-from ..models.data import Data
-from ..models.dist import Dist
+from ..core.data import Data
+from ..core.dist import Dist
 from ..utils.constants import DAMAGE_TYPES, EFFECT_MODES
 from ..utils.types import Number
 

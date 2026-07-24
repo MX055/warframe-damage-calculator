@@ -10,8 +10,8 @@ from typing import Any, cast
 
 from ..fields.upgrade import ResolvedStat
 from ..loader.matching import MELEE_TYPES, PRIMARY_TYPES, SECONDARY_TYPES
-from ..models.data import Data
-from ..models.dist import Dist
+from ..core.data import Data
+from ..core.dist import Dist
 from ..protocols import UpgradeOwner
 from ..utils.constants import EFFECT_MODES
 from ..utils.types import EffectMode, Number

@@ -1,7 +1,7 @@
 from collections.abc import Iterable, Iterator, Mapping
 from typing import Self
 
-from ..fields.dist_data import DistData
+from .dist_data import DistData
 from ..utils.constants import DAMAGE_TYPE_ORDER, ELEMENTAL_COMBINATIONS, ELEMENTAL_TYPES, PHYSICAL_TYPES
 from ..utils.types import DamageType, Number
 

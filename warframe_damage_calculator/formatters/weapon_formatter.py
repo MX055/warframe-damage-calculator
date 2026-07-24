@@ -1,4 +1,4 @@
-from ..models.dist import Dist
+from ..core.dist import Dist
 from ..protocols import WeaponFormatterOwner
 from ..utils.types import Number
 

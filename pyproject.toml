@@ -34,9 +34,10 @@ classifiers = [
 
 [tool.setuptools.packages.find]
 include = ["warframe_damage_calculator*"]
+namespaces = true
 
-[tool.setuptools.data-files]
-database = ["database/database.json"]
+[tool.setuptools.package-data]
+"warframe_damage_calculator.database" = ["database.json"]
 
 [tool.setuptools.dynamic]
 version = {attr = "warframe_damage_calculator.__version__"}

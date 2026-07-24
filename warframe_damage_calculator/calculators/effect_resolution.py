@@ -13,7 +13,7 @@ from collections.abc import Callable, Collection, Iterable, Mapping, Sequence
 from dataclasses import dataclass, replace
 from typing import Any, TypeVar
 
-from ..models.data import Data
+from ..core.data import Data
 from ..utils.types import EffectMode, Number
 
 T = TypeVar("T")

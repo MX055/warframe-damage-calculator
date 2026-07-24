@@ -129,7 +129,8 @@ from warframe_damage_calculator import (
 
 `Primary`, `Secondary`, and `Melee` inherit from `Weapon`. `Data`, `Dist`, the
 calculator classes, and `WarframeDatabase` remain available from their internal
-modules for advanced use, but they are not package-root exports.
+modules (`warframe_damage_calculator.core`, calculators, and loader) for advanced
+use, but they are not package-root exports.
 
 ---
 

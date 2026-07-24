@@ -9,11 +9,11 @@ from warframe_damage_calculator.calculators.build_calculator import BuildCalcula
 from warframe_damage_calculator.calculators.upgrade_calculator import UpgradeCalculator
 from warframe_damage_calculator.calculators.weapon_calculator import WeaponCalculator
 from warframe_damage_calculator.loader.bundled_names import MeleeName, PrimaryName, SecondaryName, UpgradeName
-from warframe_damage_calculator.models.data import Data
-from warframe_damage_calculator.models.dist import Dist
+from warframe_damage_calculator.core.data import Data
+from warframe_damage_calculator.core.dist import Dist
+from warframe_damage_calculator.core.dist_data import DistData
 from warframe_damage_calculator.fields.attack_result import AttackResult
 from warframe_damage_calculator.fields.calculated import CalculatedStats
-from warframe_damage_calculator.fields.dist_data import DistData
 from warframe_damage_calculator.fields.upgrade import ResolvedStat
 from warframe_damage_calculator.fields.weapon_data import Attack, Attacks, Evolutions
 

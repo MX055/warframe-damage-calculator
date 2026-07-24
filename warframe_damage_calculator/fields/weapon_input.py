@@ -1,7 +1,7 @@
 from collections.abc import Mapping
 
-from ..models.data import Data
-from ..models.dist import Dist
+from ..core.data import Data
+from ..core.dist import Dist
 from ..utils.types import JsonValue, Number
 
 

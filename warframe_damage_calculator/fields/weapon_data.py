@@ -1,6 +1,6 @@
 from collections.abc import Mapping
 
-from ..models.data import Data
+from ..core.data import Data
 from ..utils.types import JsonValue, Number
 from .evolution import Evolutions
 from .weapon_input import AttackStats

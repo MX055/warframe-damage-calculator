@@ -1,4 +1,4 @@
-from collections.abc import Iterator, Mapping
+from collections.abc import Callable, Iterator, Mapping
 from pathlib import Path
 from typing import Any, Literal, Self, overload
 
@@ -11,7 +11,7 @@ from .bundled_names import MeleeName, PrimaryName, SecondaryName, UpgradeName
 from .construction import DatabaseFactory
 from .matching import entry_matches
 from .normalization import normalize_identifier, normalize_name
-from .paths import DEFAULT_DATABASE_PATH, load_json
+from .paths import load_bundled_database, load_json
 from .schema import DatabaseEntry
 
 type DatabaseItem = Weapon | Upgrade
@@ -29,12 +29,16 @@ class WarframeDatabase:
         self._name_index = {normalize_name(entry.name): entry for entry in self._entries}
 
     @classmethod
-    def from_file(cls, path: str | Path = DEFAULT_DATABASE_PATH) -> Self:
+    def from_file(cls, path: str | Path) -> Self:
         return cls(load_json(path))
 
     @classmethod
     def from_folder(cls, folder: str | Path) -> Self:
         return cls.from_file(Path(folder) / "database.json")
+
+    @classmethod
+    def from_bundled(cls) -> Self:
+        return cls(load_bundled_database())
 
     @overload
     def get(self, name: PrimaryName, *, type: str | None = ..., context: Mapping[str, Any] | None = ..., attribute: None = ...) -> Primary: ...
@@ -60,14 +64,7 @@ class WarframeDatabase:
     @overload
     def get(self, name: None = ..., *, type: str | None = ..., context: Mapping[str, Any] | None = ..., attribute: str | None = ...) -> dict[str, DatabaseItem | object | None]: ...
 
-    def get(
-        self,
-        name: str | None = None,
-        *,
-        type: str | None = None,
-        context: Mapping[str, Any] | None = None,
-        attribute: str | None = None,
-    ) -> DatabaseItem | object | None:
+    def get(self, name: str | None = None, *, type: str | None = None, context: Mapping[str, Any] | None = None, attribute: str | None = None) -> DatabaseItem | object | None:
         if name is not None:
             entry = self._name_index.get(normalize_name(name))
             if entry is None or not entry_matches(entry, type):
@@ -128,4 +125,60 @@ class WarframeDatabase:
         return None
 
 
-arsenal = WarframeDatabase.from_file()
+class LazyWarframeDatabase:
+    """Deferred bundled-database accessor; loads once on first use."""
+
+    def __init__(self, factory: Callable[[], WarframeDatabase]) -> None:
+        self._factory = factory
+        self._database: WarframeDatabase | None = None
+
+    def _resolve(self) -> WarframeDatabase:
+        if self._database is None:
+            self._database = self._factory()
+        return self._database
+
+    @property
+    def database(self) -> Mapping[str, Any]:
+        return self._resolve().database
+
+    @property
+    def weapons(self) -> Mapping[str, Any]:
+        return self._resolve().weapons
+
+    @property
+    def upgrades(self) -> Mapping[str, Any]:
+        return self._resolve().upgrades
+
+    @property
+    def riven_stats(self) -> Mapping[str, Any]:
+        return self._resolve().riven_stats
+
+    @overload
+    def get(self, name: PrimaryName, *, type: str | None = ..., context: Mapping[str, Any] | None = ..., attribute: None = ...) -> Primary: ...
+
+    @overload
+    def get(self, name: SecondaryName, *, type: str | None = ..., context: Mapping[str, Any] | None = ..., attribute: None = ...) -> Secondary: ...
+
+    @overload
+    def get(self, name: MeleeName, *, type: str | None = ..., context: Mapping[str, Any] | None = ..., attribute: None = ...) -> Melee: ...
+
+    @overload
+    def get(self, name: UpgradeName, *, type: str | None = ..., context: Mapping[str, Any] | None = ..., attribute: None = ...) -> Upgrade: ...
+
+    @overload
+    def get(self, name: str, *, type: str | None = ..., context: Mapping[str, Any] | None = ..., attribute: None = ...) -> DatabaseItem | None: ...
+
+    @overload
+    def get(self, name: str, *, type: str | None = ..., context: Mapping[str, Any] | None = ..., attribute: str) -> object | None: ...
+
+    @overload
+    def get(self, name: None = ..., *, type: str | None = ..., context: Mapping[str, Any] | None = ..., attribute: Literal["name"]) -> list[str]: ...
+
+    @overload
+    def get(self, name: None = ..., *, type: str | None = ..., context: Mapping[str, Any] | None = ..., attribute: str | None = ...) -> dict[str, DatabaseItem | object | None]: ...
+
+    def get(self, name: str | None = None, *, type: str | None = None, context: Mapping[str, Any] | None = None, attribute: str | None = None) -> DatabaseItem | object | None:
+        return self._resolve().get(name, type=type, context=context, attribute=attribute)
+
+
+arsenal = LazyWarframeDatabase(WarframeDatabase.from_bundled)
