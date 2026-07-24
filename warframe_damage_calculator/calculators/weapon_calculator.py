@@ -140,6 +140,7 @@ class WeaponCalculator:
         modded.flat.status_chance = build.flat.status_chance + evo.flat.status_chance
         modded.additive.status_chance = max(base.status_chance * (1 + build.additive.status_chance + evo.additive.status_chance), 0)
         modded.additive.status_damage = max(1 + build.additive.status_damage, 1)
+        modded.additive.status_duration = max(1 + build.additive.status_duration + evo.additive.status_duration, 0)
         modded.additive.non_crit_bonus_damage = max(build.additive.non_crit_bonus_damage + evo.additive.non_crit_bonus_damage, 0)
         modded.additive.non_crit_bonus_chance = max(build.additive.non_crit_bonus_chance, evo.additive.non_crit_bonus_chance, 0)
 
@@ -206,6 +207,7 @@ class WeaponCalculator:
         effective.crit_damage = modded.additive.crit_damage + modded.flat.crit_damage
         effective.status_chance = self._combine_chance(modded.additive.status_chance, flat=modded.flat.status_chance)
         effective.status_damage = modded.additive.status_damage
+        effective.status_duration = modded.additive.status_duration
         effective.non_crit_bonus_damage = modded.additive.non_crit_bonus_damage
         effective.non_crit_bonus_chance = modded.additive.non_crit_bonus_chance
 

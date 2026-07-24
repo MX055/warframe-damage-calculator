@@ -10,15 +10,23 @@ class MeleeCalculator(WeaponCalculator):
         modded.additive.attack_speed = max(base.attack_speed * (1 + build.additive.attack_speed + evo.additive.attack_speed), 0)
         modded.additive.melee_duplicate = clamp(build.additive.melee_duplicate, 0, 1)
         modded.additive.melee_doughty = clamp(build.additive.melee_doughty, 0, 1)
-        modded.additive.range = build.additive.range + build.flat.range + evo.additive.get("range", 0) + evo.flat.get("range", 0)
+        modded.additive.range = max(float(base.get("range", 0) or 0) + build.additive.range + build.flat.range + evo.additive.range + evo.flat.range, 0)
+        modded.additive.heavy_attack_speed = max(1 + build.additive.heavy_attack_speed + evo.additive.heavy_attack_speed, 0)
+        modded.additive.initial_combo = max(build.additive.initial_combo + evo.additive.initial_combo, 0)
+        modded.additive.slam_damage = max(1 + build.additive.slam_damage + evo.additive.slam_damage, 0)
+        modded.additive.slide_crit_chance = max(1 + build.additive.slide_crit_chance + evo.additive.slide_crit_chance, 0)
 
     def _compute_effective(self, result: AttackResult) -> None:
         super()._compute_effective(result)
-        base, effective, modded = result.base, result.effective, result.modded
+        effective, modded = result.effective, result.modded
         effective.attack_speed = modded.additive.attack_speed
         effective.melee_duplicate = modded.additive.melee_duplicate
         effective.melee_doughty = modded.additive.melee_doughty
-        effective.range = float(base.get("range", 0) or 0) + float(modded.additive.range or 0)
+        effective.range = modded.additive.range
+        effective.heavy_attack_speed = modded.additive.heavy_attack_speed
+        effective.initial_combo = modded.additive.initial_combo
+        effective.slam_damage = modded.additive.slam_damage
+        effective.slide_crit_chance = modded.additive.slide_crit_chance
 
     def _compute_average(self, result: AttackResult) -> None:
         super()._compute_average(result)

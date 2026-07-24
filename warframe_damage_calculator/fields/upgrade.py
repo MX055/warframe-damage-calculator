@@ -23,9 +23,11 @@ class UpgradeStats(Data):
     gas: JsonValue
     grineer_damage: JsonValue
     heat: JsonValue
+    heavy_attack_speed: JsonValue
     hunter_munitions: JsonValue
     impact: JsonValue
     infested_damage: JsonValue
+    initial_combo: JsonValue
     internal_bleeding: JsonValue
     magazine_capacity: JsonValue
     magnetic: JsonValue
@@ -46,9 +48,12 @@ class UpgradeStats(Data):
     secondary_encumber: JsonValue
     secondary_enervate: JsonValue
     sentient_damage: JsonValue
+    slam_damage: JsonValue
     slash: JsonValue
+    slide_crit_chance: JsonValue
     status_chance: JsonValue
     status_damage: JsonValue
+    status_duration: JsonValue
     toxin: JsonValue
     vigilante_bonus: JsonValue
     viral: JsonValue
@@ -86,8 +91,10 @@ class ResolvedModeStats(Data):
     fire_rate: Number = 0.0
     fire_rate_lock: bool = False
     grineer_damage: Number = 0.0
+    heavy_attack_speed: Number = 0.0
     hunter_munitions: Number = 0.0
     internal_bleeding: Number = 0.0
+    initial_combo: Number = 0.0
     infested_damage: Number = 0.0
     magazine_capacity: Number = 0.0
     melee_doughty: Number = 0.0
@@ -105,8 +112,11 @@ class ResolvedModeStats(Data):
     secondary_encumber: Number = 0.0
     secondary_enervate: Number = 0.0
     sentient_damage: Number = 0.0
+    slam_damage: Number = 0.0
+    slide_crit_chance: Number = 0.0
     status_chance: Number = 0.0
     status_damage: Number = 0.0
+    status_duration: Number = 0.0
     vigilante_bonus: Number = 0.0
     weakpoint_crit_chance: Number = 0.0
     weakpoint_damage: Number = 0.0

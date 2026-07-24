@@ -17,6 +17,7 @@ class CalculatedValues(Data):
     crit_damage: Number
     status_chance: Number
     status_damage: Number
+    status_duration: Number
     attack_speed: Number
     melee_duplicate: Number
     melee_doughty: Number
@@ -42,6 +43,10 @@ class CalculatedValues(Data):
     start_range: Number
     end_range: Number
     final_multiplier: Number
+    heavy_attack_speed: Number
+    initial_combo: Number
+    slam_damage: Number
+    slide_crit_chance: Number
     vigilante_bonus: Number
     secondary_enervate: Number
     secondary_encumber: Number

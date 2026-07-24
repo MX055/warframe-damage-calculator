@@ -65,6 +65,7 @@ class RangedStats(WeaponStats):
 
 class MeleeStats(WeaponStats):
     attack_speed: Number = 1.0
+    range: Number = 0.0
 
 
 class PrimaryStats(RangedStats):
