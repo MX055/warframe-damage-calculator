@@ -35,4 +35,4 @@ class Build:
         return self
 
     def copy(self) -> Self:
-        return type(self)(*self)
+        return type(self)(*(upgrade.copy() for upgrade in self.upgrades))
