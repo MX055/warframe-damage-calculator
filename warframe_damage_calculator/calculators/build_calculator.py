@@ -1,10 +1,20 @@
 from ..fields.upgrade import ResolvedStat
 from ..models.data import Data
 from ..protocols import BuildOwner
+from .stat_aggregation import merge_resolved_stat
 from .upgrade_calculator import UpgradeCalculator
 
 
-class BuildCalculator(UpgradeCalculator):
+class BuildCalculator:
+    static: ResolvedStat
+    conditional: ResolvedStat
+    modular: ResolvedStat
+    stacking: ResolvedStat
+    rank_locked: ResolvedStat
+    total: ResolvedStat
+
+    BUCKETS = UpgradeCalculator.BUCKETS
+
     def __init__(self, build: BuildOwner) -> None:
         self.build = build
         self.resolve()
@@ -19,4 +29,4 @@ class BuildCalculator(UpgradeCalculator):
             calculator = upgrade.results
             calculator.resolve(weapon_data, build_data)
             for bucket in self.BUCKETS:
-                self._merge_resolved_stat(getattr(self, bucket), getattr(calculator, bucket))
+                merge_resolved_stat(getattr(self, bucket), getattr(calculator, bucket))

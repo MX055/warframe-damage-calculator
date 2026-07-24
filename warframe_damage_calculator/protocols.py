@@ -25,6 +25,8 @@ class UpgradeResultsView(Protocol):
 
     def resolve(self, weapon: object | None = None, build: object | None = None) -> None: ...
 
+    def _normalize_effects(self) -> Sequence[object]: ...
+
 
 @runtime_checkable
 class BuildUpgradeOwner(Protocol):

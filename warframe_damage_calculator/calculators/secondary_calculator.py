@@ -1,8 +1,8 @@
 from ..fields.attack_result import AttackResult
 from ..utils.constants import DOT_MULTIPLIERS
 from ..utils.functions import clamp
+from ..utils.types import Number
 from .ranged_calculator import RangedCalculator
-from .weapon_calculator import WeaponCalculator
 
 
 class SecondaryCalculator(RangedCalculator):
@@ -18,32 +18,24 @@ class SecondaryCalculator(RangedCalculator):
         effective.secondary_enervate = modded.additive.secondary_enervate
         effective.secondary_encumber = modded.additive.secondary_encumber
 
-    def _compute_average(self, result: AttackResult) -> None:
-        WeaponCalculator._compute_average(self, result)
-        self._setup_ranged_averages(result)
+    def _average_crit_chances(self, result: AttackResult) -> tuple[float, float]:
         effective, average = result.effective, result.average
         secondary_enervate_bonus = self._average_secondary_enervate_bonus(effective.crit_chance, result)
         weakpoint_secondary_enervate_bonus = self._average_secondary_enervate_bonus(effective.weakpoint_crit_chance, result)
         average.secondary_enervate_bonus = secondary_enervate_bonus
         average.weakpoint_secondary_enervate_bonus = weakpoint_secondary_enervate_bonus
-        average.crit_chance = effective.crit_chance + secondary_enervate_bonus
-        average.weakpoint_crit_chance = effective.weakpoint_crit_chance + weakpoint_secondary_enervate_bonus
-        average.crit_multiplier = self._crit_multiplier(average.crit_chance, effective.crit_damage)
-        average.weakpoint_crit_multiplier = self._crit_multiplier(average.weakpoint_crit_chance, effective.crit_damage)
-        self._apply_ranged_damage_averages(result)
+        return float(effective.crit_chance + secondary_enervate_bonus), float(effective.weakpoint_crit_chance + weakpoint_secondary_enervate_bonus)
 
     @staticmethod
     def _average_secondary_enervate_bonus(crit_chance: float, result: AttackResult, max_stacks: int = 500) -> float:
         rate = result.effective.secondary_enervate
-        if rate == 0:
-            return 0.0
+        if rate == 0: return 0.0
         length = [[0.0] * rate for _ in range(max_stacks + 1)]
         accumulated = [[0.0] * rate for _ in range(max_stacks + 1)]
 
         probability = max(0.0, min(1.0, crit_chance + 0.1 * max_stacks - 1))
         miss = 1.0 - probability
-        if miss == 1.0:
-            return float("inf")
+        if miss == 1.0: return float("inf")
 
         length[max_stacks][rate - 1] = 1.0 / (1.0 - miss)
         accumulated[max_stacks][rate - 1] = max_stacks / (1.0 - miss)
@@ -62,19 +54,17 @@ class SecondaryCalculator(RangedCalculator):
 
         return 0.1 * accumulated[0][0] / length[0][0]
 
-    def _flat_dotph(self, result: AttackResult, *, weakpoint: bool = False) -> float:
+    def _flat_dotph(self, result: AttackResult, *, weakpoint: bool = False, hits: Number | None = None, damage_multiplier: Number = 1, extra_damage: Number = 0, faction_damage: Number | None = None) -> float:
         # Secondary Encumber calculations need testing in-game
-        damage, forced_procs = result.effective.damage, result.base.forced_procs
+        damage = result.effective.damage
         effective, average = result.effective, result.average
-        if damage.total_damage() <= 0:
-            return 0.0
-        faction_damage = self._max_average_faction_damage(result)
+        if damage.total_damage() <= 0: return 0.0
+        if faction_damage is None: faction_damage = self._max_average_faction_damage(result)
         multiplier = self._hit_multiplier(average.weakpoint_crit_chance if weakpoint else average.crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
         encumber_chance = 1 - (1 - effective.secondary_encumber * min(effective.status_chance, 1)) ** effective.multishot
         encumber_dot_factor = sum(factor for _, factor in DOT_MULTIPLIERS) * effective.status_duration
         encumber_dot = encumber_chance * damage.total_damage() * encumber_dot_factor / 13 * multiplier * effective.status_damage * faction_damage ** 2
-        ib_procs = ((damage.weight("impact") + forced_procs.get("impact")) * effective.status_chance + encumber_chance / 13) * effective.internal_bleeding
-        slash_dot = dict(DOT_MULTIPLIERS)["slash"] * effective.status_duration
-        ib_dpp = slash_dot * damage.total_damage() * multiplier * effective.status_damage * faction_damage ** 2
+        ib_procs = (self._impact_weight(result) * effective.status_chance + encumber_chance / 13) * effective.internal_bleeding
+        ib_dpp = self._ib_slash_dot_per_proc(result, hit_multiplier=multiplier, faction_damage=faction_damage)
         extra = ib_procs * ib_dpp * effective.multishot
-        return super()._flat_dotph(result, weakpoint=weakpoint, extra_damage=extra + encumber_dot, faction_damage=faction_damage)
+        return super()._flat_dotph(result, weakpoint=weakpoint, hits=hits, damage_multiplier=damage_multiplier, extra_damage=extra + encumber_dot + extra_damage, faction_damage=faction_damage)

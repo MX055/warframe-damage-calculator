@@ -15,8 +15,7 @@ class MeleeCalculator(WeaponCalculator):
 
     def _runtime_defaults(self) -> tuple[str, ...]:
         runtime = self.weapon.data.runtime
-        if "combo" in runtime:
-            return ()
+        if "combo" in runtime: return ()
         runtime.combo = MAX_COMBO_MULTIPLIER
         if self._selected_category() in HEAVY_ATTACK_CATEGORIES:
             self.weapon.build.results.resolve(self.weapon.data)
@@ -56,12 +55,24 @@ class MeleeCalculator(WeaponCalculator):
             effective.crit_chance = effective.crit_chance * effective.slide_crit_chance
 
     def _combo_multiplier(self, result: AttackResult) -> int:
-        if result.category not in HEAVY_ATTACK_CATEGORIES:
-            return 1
+        if result.category not in HEAVY_ATTACK_CATEGORIES: return 1
         combo = self.weapon.data.runtime.get("combo")
-        if combo is not None:
-            return max(1, min(MAX_COMBO_MULTIPLIER, int(combo)))
+        if combo is not None: return max(1, min(MAX_COMBO_MULTIPLIER, int(combo)))
         return self._combo_multiplier_from_hits(float(result.effective.get("initial_combo", 0) or 0))
+
+    def _status_hits(self, result: AttackResult) -> float:
+        hits = super()._status_hits(result)
+        build, stats, modded = result.build, result.attack.stats, result.modded
+        duplicate = modded.additive.get("melee_duplicate", 0)
+        crit_mods = self._crit_upgrade_multiplier(result)
+        chance = max(stats.crit_chance * (1 + build.additive.crit_chance * crit_mods) * modded.multiplicative.crit_chance + modded.flat.crit_chance, 0)
+        return hits + duplicate * max(0, 1 - abs(chance - 1))
+
+    def _sustained_attack_rate(self, result: AttackResult) -> float:
+        """Melee sustained attack rate from modded attack speed."""
+        stats, base, modded = result.attack.stats, result.base, result.modded
+        if "attack_speed" not in modded.additive: return super()._sustained_attack_rate(result)
+        return max(stats.fire_rate * modded.additive.attack_speed / (base.attack_speed or 1), 0)
 
     def _compute_average(self, result: AttackResult) -> None:
         super()._compute_average(result)

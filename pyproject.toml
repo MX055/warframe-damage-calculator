@@ -40,3 +40,7 @@ database = ["database/database.json"]
 
 [tool.setuptools.dynamic]
 version = {attr = "warframe_damage_calculator.__version__"}
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]

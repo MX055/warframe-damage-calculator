@@ -1213,6 +1213,7 @@ class PublicApiTests(unittest.TestCase):
             "children": list(result.children),
         })
         calculator._compute_base(fresh)
+        calculator._apply_evolution_conversions(fresh)
         calculator._compute_modded_scalars(fresh)
         self.assertEqual(fresh.modded.additive.damage.total_damage(), 0)
         calculator._apply_condition_overload(fresh)

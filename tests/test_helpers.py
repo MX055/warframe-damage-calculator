@@ -61,7 +61,7 @@ class HelperTests(unittest.TestCase):
                 "flat": {"crit_chance": 0},
             },
         })
-        self.assertAlmostEqual(WeaponCalculator._status_hits(result), 2.5)
+        self.assertAlmostEqual(WeaponCalculator._status_hits(None, result), 2.5)
 
 
 if __name__ == "__main__":
