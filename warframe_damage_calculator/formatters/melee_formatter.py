@@ -86,4 +86,4 @@ class MeleeFormatter(WeaponFormatter):
         section_breaks.append(dps_at)
 
         title = f"{self.weapon.data.name} - {selected.name.replace('_', ' ').title()}"
-        return self._table(("stat", "base", "effective", "average"), rows, title=title, border="=", section_at=tuple(section_breaks))
+        return self._table(("stat", "base", "effective", "final"), rows, title=title, border="=", section_at=tuple(section_breaks))
