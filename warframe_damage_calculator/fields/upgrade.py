@@ -11,6 +11,7 @@ class UpgradeStats(Data):
     cold: JsonValue
     corrosive: JsonValue
     condition_overload: JsonValue
+    status_effect_stacks: JsonValue
     corpus_damage: JsonValue
     crit_chance: JsonValue
     crit_damage: JsonValue
@@ -86,6 +87,7 @@ class ResolvedModeStats(Data):
     crit_chance: Number = 0.0
     crit_damage: Number = 0.0
     condition_overload: Mapping[str, Number | str] = {"value": 0.0, "max_stacks": 0}
+    status_effect_stacks: list = []
     corpus_damage: Number = 0.0
     damage_bonus: Number = 0.0
     fire_rate: Number = 0.0

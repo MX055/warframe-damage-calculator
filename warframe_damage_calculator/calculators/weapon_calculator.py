@@ -7,6 +7,7 @@ scalar folds, damage Dist construction, and sustained status live in sibling mod
 from __future__ import annotations
 
 from ..fields.attack_result import AttackResult
+from ..fields.calculated import ModdedStats
 from ..fields.evolution import ResolvedEvolutionStat
 from ..fields.upgrade import ResolvedStat
 from ..fields.weapon_data import Attack
@@ -15,7 +16,7 @@ from ..utils.types import Number
 from . import attack_tree, damage_calculator, formulas, scalar_calculator
 from .contributions import ContributionCalculator
 from .evolution_calculator import EvolutionCalculator
-from .status_model import SustainedStatusModel, apply_condition_overload, build_sustained_status_model, condition_overload_bonus
+from .status_model import SustainedStatusModel, apply_condition_overload, build_sustained_status_model, condition_overload_bonus, status_effect_stack_bonuses
 
 
 class WeaponCalculator:
@@ -59,7 +60,9 @@ class WeaponCalculator:
         self._compute_base(result)
         self._apply_evolution_conversions(result)
         self._compute_modded_scalars(result)
-        self._apply_condition_overload(result)
+        model = self._sustained_status_model(result)
+        self._apply_status_effect_stacks(result, model)
+        self._apply_condition_overload(result, model)
         self._compute_modded_damage(result)
         self._compute_effective(result)
         self._compute_average(result)
@@ -91,17 +94,37 @@ class WeaponCalculator:
         """Compatibility alias for sustained attack rate (tests and tree fold)."""
         return self._sustained_attack_rate(result)
 
-    def _sustained_status_model(self, result: AttackResult) -> SustainedStatusModel | None:
+    def _sustained_status_model(self, result: AttackResult) -> SustainedStatusModel:
         return build_sustained_status_model(attack=result.attack, base=result.base, modded=result.modded, build=result.build, evolution_status_chance=result.evolutions.additive.status_chance, status_attempts_per_attack=self._status_hits(result), sustained_attack_rate=self._sustained_attack_rate(result))
 
     def _average_condition_overload_bonus(self, result: AttackResult) -> float:
         model = self._sustained_status_model(result)
-        if model is None: return 0.0
+        if model.max_unique_statuses <= 0: return 0.0
         return condition_overload_bonus(model, value_per_status=result.build.additive.condition_overload.value, co_factor=result.attack.stats.co_factor, co_effect=result.attack.stats.co_effect).bonus
 
-    def _apply_condition_overload(self, result: AttackResult) -> None:
-        model = self._sustained_status_model(result)
-        if model is None: return
+    def _apply_status_effect_stacks(self, result: AttackResult, model: SustainedStatusModel | None = None) -> None:
+        """Apply deferred on_*_status_effect stack bonuses from sustained proc expectations.
+
+        Injects expected (or runtime-overridden) stacks into a per-attack build copy and
+        recomputes modded scalars so category-specific folds stay consistent. Does not
+        rebuild the status model, so multishot/status bonuses do not feed back.
+        """
+        entries = list(result.build.additive.get("status_effect_stacks") or [])
+        if not entries: return
+        model = model or self._sustained_status_model(result)
+        bonuses = status_effect_stack_bonuses(model=model, entries=entries, runtime=self.weapon.data.runtime)
+        if not bonuses: return
+        result.build = result.build.copy()
+        for mode, stat, bonus in bonuses:
+            bucket = getattr(result.build, mode)
+            bucket[stat] = float(bucket.get(stat, 0) or 0) + bonus
+        result.modded = ModdedStats()
+        self._compute_modded_scalars(result)
+
+    def _apply_condition_overload(self, result: AttackResult, model: SustainedStatusModel | None = None) -> None:
+        model = model or self._sustained_status_model(result)
+        if model.max_unique_statuses <= 0: return
+        if not float(result.build.additive.condition_overload.value or 0): return
         apply_condition_overload(modded=result.modded, model=model, value_per_status=result.build.additive.condition_overload.value, co_factor=result.attack.stats.co_factor, co_effect=result.attack.stats.co_effect)
 
     def _compute_modded_damage(self, result: AttackResult) -> None:

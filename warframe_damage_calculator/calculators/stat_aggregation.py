@@ -51,6 +51,13 @@ def _merge_condition_overload(stats: Data, stat: str, value: Mapping[str, Any]) 
     stats[stat] = {"value": current.get("value", 0) + value.get("value", 0), "max_stacks": "inf" if "inf" in maximums else max(maximums)}
 
 
+def _merge_status_effect_stacks(stats: Data, stat: str, value: Any) -> None:
+    current = stats.get(stat)
+    if not isinstance(current, list): current = [] if current is None else [current]
+    entries = value if isinstance(value, list) else [value]
+    stats[stat] = [*current, *entries]
+
+
 def _merge_conversion(stats: Data, stat: str, value: Any, *, conversion_max: Number | None = None) -> None:
     current = stats.get(stat)
     if not isinstance(current, ConversionBonus): current = ConversionBonus()
@@ -73,6 +80,7 @@ UPGRADE_AGGREGATORS: dict[str, Aggregator] = {
     "damage": _merge_damage,
     "forced_procs": _merge_damage,
     "condition_overload": _merge_condition_overload,
+    "status_effect_stacks": _merge_status_effect_stacks,
     "fire_rate_lock": _merge_boolean,
     "multishot_lock": _merge_boolean,
 }

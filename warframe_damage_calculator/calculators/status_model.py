@@ -1,15 +1,17 @@
-"""Sustained status production model and Condition Overload bonus calculation.
+"""Sustained status production model, Condition Overload, and status-effect stacks.
 
-Status production is computed from pre-damage scalars only. Condition Overload
-consumes SustainedStatusModel and never feeds back into status production.
+Status production is computed from pre-damage scalars only. Condition Overload and
+status_effect_stacks consume SustainedStatusModel and do not feed back into status
+production within the same pass.
 
 Quantities:
 - status_attempts_per_attack: expected multishot (or melee duplicate) hits that can roll status
 - per_attack_probability: P(a given status type procs on one attack/shot)
 - sustained_attack_rate: sustained attacks/sec used to re-apply statuses over duration
 - expected_unique_active_statuses: E[number of distinct status types currently
-  active] over one status-duration window at the sustained attack rate
-- condition_overload bonus: value × co_factor × expected_unique_active_statuses
+  active] over one status-duration window (Condition Overload)
+- expected_status_stacks: E[proc count of one status type] in that window, capped
+  (Cascadia / Frostbite-style status_effect_stacks)
 """
 
 from __future__ import annotations
@@ -27,7 +29,7 @@ from ..utils.types import Number
 
 @dataclass(frozen=True, slots=True)
 class SustainedStatusModel:
-    """Inputs for sustained unique-status modelling (no damage Dist)."""
+    """Inputs for sustained status modelling (no damage Dist)."""
 
     per_attack_probabilities: Mapping[str, float]
     attacks_per_second: float
@@ -55,6 +57,14 @@ class SustainedStatusModel:
                 updated[min(count + 1, maximum)] += chance * active
             distribution = updated
         return sum(count * chance for count, chance in enumerate(distribution))
+
+    def expected_status_stacks(self, status: str, max_stacks: int) -> float:
+        """Expected stacks from sustained procs of one status type, capped at max_stacks."""
+        if max_stacks <= 0: return 0.0
+        probability = float(self.per_attack_probabilities.get(status, 0.0))
+        attempts = self.attempts_during_duration
+        if probability <= 0 or attempts <= 0: return 0.0
+        return min(float(max_stacks), attempts * probability)
 
 
 @dataclass(frozen=True, slots=True)
@@ -93,12 +103,11 @@ def per_attack_status_probabilities(*, attack: Attack, base: CalculatedStats, bu
     return probabilities
 
 
-def build_sustained_status_model(*, attack: Attack, base: CalculatedStats, modded: ModdedStats, build: ResolvedStat, evolution_status_chance: Number, status_attempts_per_attack: float, sustained_attack_rate: float) -> SustainedStatusModel | None:
-    """Build the status model used by Condition Overload, or None when capped at zero uniques."""
+def build_sustained_status_model(*, attack: Attack, base: CalculatedStats, modded: ModdedStats, build: ResolvedStat, evolution_status_chance: Number, status_attempts_per_attack: float, sustained_attack_rate: float) -> SustainedStatusModel:
+    """Build the sustained status model used by Condition Overload and status_effect_stacks."""
     condition_overload = build.additive.condition_overload
     probabilities = per_attack_status_probabilities(attack=attack, base=base, build=build, evolution_status_chance=evolution_status_chance, flat_status_chance=modded.flat.status_chance, status_attempts_per_attack=status_attempts_per_attack)
     maximum = len(probabilities) if condition_overload.max_stacks == "inf" else int(condition_overload.max_stacks)
-    if maximum <= 0: return None
     return SustainedStatusModel(per_attack_probabilities=probabilities, attacks_per_second=sustained_attack_rate, status_duration=float(modded.additive.status_duration), max_unique_statuses=maximum, status_attempts_per_attack=status_attempts_per_attack)
 
 
@@ -108,3 +117,21 @@ def apply_condition_overload(*, modded: ModdedStats, model: SustainedStatusModel
     if resolved.effect == "multiplies": modded.multiplicative.damage_bonus = max(modded.multiplicative.damage_bonus + resolved.bonus, 1)
     else: modded.additive.damage_bonus = max(modded.additive.damage_bonus + resolved.bonus, 0)
     return resolved
+
+
+def status_effect_stack_bonuses(*, model: SustainedStatusModel, entries: list, runtime: Mapping[str, object] | None = None) -> list[tuple[str, str, float]]:
+    """Resolve (mode, target_stat, bonus) triples from deferred status_effect_stacks entries.
+
+    Runtime keys `on_<status>_status_effect` override the sustained expectation when set.
+    """
+    runtime = runtime or {}
+    bonuses: list[tuple[str, str, float]] = []
+    for entry in entries:
+        status = str(entry["status"])
+        maximum = int(entry["max_stacks"])
+        override = runtime.get(f"on_{status}_status_effect")
+        if override is None: override = runtime.get(f"{status}_status_effect")
+        stacks = min(float(override), float(maximum)) if override is not None else model.expected_status_stacks(status, maximum)
+        if not stacks: continue
+        bonuses.append((str(entry.get("mode", "additive")), str(entry["stat"]), float(entry["value"]) * stacks))
+    return bonuses

@@ -91,6 +91,12 @@ def resolve_and_aggregate(effects: Sequence[T], context: C, *, is_applicable: Ca
 
 def resolve_stack_scaled_effect(effect: ResolvableEffect, context: ResolutionContext, *, scale: Callable[[EffectValue, float], EffectValue] | None = None) -> ResolvableEffect | None:
     """Apply optional rank scaling and stack multiplication to a normalized effect."""
+    if effect.stat == "status_effect_stacks":
+        payload = dict(effect.value)
+        inner = payload["value"]
+        if effect.scales_with_rank and scale is not None: inner = scale(inner, context.rank_multiplier)
+        return replace(effect, value={**payload, "value": inner})
+
     stacks = 1
     if effect.stacks_on is not None:
         effect_max = effect.max_stacks if effect.max_stacks is not None else context.max_stacks

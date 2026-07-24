@@ -10,7 +10,7 @@ from warframe_damage_calculator.calculators.attack_tree import needed_attack_nam
 from warframe_damage_calculator.calculators.effect_resolution import ResolutionContext, ResolvableEffect, raw_effects, resolve_and_aggregate, resolve_stack_scaled_effect, stack_count
 from warframe_damage_calculator.calculators.evolution_calculator import EvolutionCalculator
 from warframe_damage_calculator.calculators.stat_aggregation import UPGRADE_AGGREGATORS, merge_evolution_stat, merge_upgrade_stat
-from warframe_damage_calculator.calculators.status_model import SustainedStatusModel, apply_condition_overload, build_sustained_status_model, condition_overload_bonus, per_attack_status_probabilities, sustained_proc_chance
+from warframe_damage_calculator.calculators.status_model import SustainedStatusModel, apply_condition_overload, build_sustained_status_model, condition_overload_bonus, per_attack_status_probabilities, status_effect_stack_bonuses, sustained_proc_chance
 from warframe_damage_calculator.calculators.upgrade_calculator import UpgradeCalculator
 from warframe_damage_calculator.calculators.weapon_calculator import WeaponCalculator
 from warframe_damage_calculator.core.data import Data
@@ -52,6 +52,18 @@ class StatusModelTests(unittest.TestCase):
         self.assertAlmostEqual(resolved.expected_unique_active, 1.0)
         self.assertAlmostEqual(resolved.bonus, 0.8)
         self.assertEqual(resolved.effect, "adds")
+
+    def test_expected_status_stacks_are_capped_mean_procs(self):
+        model = SustainedStatusModel(per_attack_probabilities={"cold": 0.5}, attacks_per_second=10, status_duration=6, max_unique_statuses=1)
+        self.assertAlmostEqual(model.expected_status_stacks("cold", 40), 30.0)
+        self.assertAlmostEqual(model.expected_status_stacks("cold", 20), 20.0)
+        self.assertEqual(model.expected_status_stacks("heat", 40), 0.0)
+
+    def test_status_effect_stack_bonuses_use_model_or_runtime_override(self):
+        model = SustainedStatusModel(per_attack_probabilities={"heat": 1.0}, attacks_per_second=1, status_duration=6, max_unique_statuses=1)
+        entries = [{"value": 0.12, "stat": "damage_bonus", "mode": "additive", "status": "heat", "max_stacks": 40}]
+        self.assertEqual(status_effect_stack_bonuses(model=model, entries=entries), [("additive", "damage_bonus", 0.72)])
+        self.assertEqual(status_effect_stack_bonuses(model=model, entries=entries, runtime={"on_heat_status_effect": 10}), [("additive", "damage_bonus", 1.2)])
 
     def test_apply_condition_overload_only_needs_status_model(self):
         modded = ModdedStats()
@@ -231,7 +243,9 @@ class PipelineOrderTests(unittest.TestCase):
         calculator._compute_base(fresh)
         calculator._apply_evolution_conversions(fresh)
         calculator._compute_modded_scalars(fresh)
-        calculator._apply_condition_overload(fresh)
+        model = calculator._sustained_status_model(fresh)
+        calculator._apply_status_effect_stacks(fresh, model)
+        calculator._apply_condition_overload(fresh, model)
         calculator._compute_modded_damage(fresh)
         calculator._compute_effective(fresh)
         calculator._compute_average(fresh)

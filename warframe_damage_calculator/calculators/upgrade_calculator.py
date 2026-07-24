@@ -71,6 +71,14 @@ class UpgradeCalculator:
             maximum = effect.get("stacks", {}).get("max")
             return ResolvableEffect(stat=stat, value=effect.value, bucket="static", mode=mode, scales_with_rank=True, co_max_stacks="inf" if maximum is None else maximum)
 
+        if stat == "status_effect_stacks":
+            target = effect.get("stat")
+            status = effect.get("status")
+            if not target or not status: raise ValueError("status_effect_stacks requires 'stat' and 'status'")
+            maximum = effect.get("max_stacks", effect.get("stacks", {}).get("max"))
+            if maximum is None: raise ValueError("status_effect_stacks requires max_stacks")
+            return ResolvableEffect(stat=stat, value={"value": effect.value, "stat": target, "status": status, "max_stacks": maximum, "mode": mode}, bucket="static", mode="additive", scales_with_rank=True)
+
         equipped = effect.get("equipped")
         required_rank = effect.get("rank")
         condition = effect.get("when")

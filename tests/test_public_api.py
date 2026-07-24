@@ -1217,10 +1217,38 @@ class PublicApiTests(unittest.TestCase):
         calculator._apply_evolution_conversions(fresh)
         calculator._compute_modded_scalars(fresh)
         self.assertEqual(fresh.modded.additive.damage.total_damage(), 0)
-        calculator._apply_condition_overload(fresh)
+        model = calculator._sustained_status_model(fresh)
+        calculator._apply_status_effect_stacks(fresh, model)
+        calculator._apply_condition_overload(fresh, model)
         calculator._compute_modded_damage(fresh)
         self.assertGreater(fresh.modded.additive.damage.total_damage(), 0)
         self.assertIsInstance(calculator, WeaponCalculator)
+
+    def test_status_effect_stacks_database_shape(self):
+        frostbite = arsenal.upgrades["Primary Frostbite"]["stats"]["status_effect_stacks"]
+        self.assertEqual(frostbite, [
+            {"value": 0.03, "stat": "crit_damage", "mode": "additive", "status": "cold", "max_stacks": 40},
+            {"value": 0.022, "stat": "multishot", "mode": "additive", "status": "cold", "max_stacks": 40},
+        ])
+        resolved = arsenal.get("Primary Frostbite").results.total.additive.status_effect_stacks
+        self.assertEqual(len(resolved), 2)
+        self.assertEqual(resolved[0]["status"], "cold")
+        self.assertEqual(resolved[0]["stat"], "crit_damage")
+
+    def test_status_effect_stacks_use_sustained_procs(self):
+        cold = Upgrade({"name": "Cold", "type": "mod", "max_rank": 0, "stats": {"cold": [{"value": 1.0}]}})
+        without = arsenal.get("Braton").configure(Build(cold))
+        with_arcane = arsenal.get("Braton").configure(Build(cold, arsenal.get("Primary Frostbite")))
+        self.assertGreater(selected(with_arcane).effective.crit_damage, selected(without).effective.crit_damage)
+        self.assertGreater(selected(with_arcane).effective.multishot, selected(without).effective.multishot)
+
+    def test_status_effect_stacks_runtime_override(self):
+        cold = Upgrade({"name": "Cold", "type": "mod", "max_rank": 0, "stats": {"cold": [{"value": 1.0}]}})
+        auto = arsenal.get("Braton").configure(Build(cold, arsenal.get("Primary Frostbite")))
+        capped = arsenal.get("Braton").configure(Build(cold, arsenal.get("Primary Frostbite")), context={"on_cold_status_effect": 40})
+        zero = arsenal.get("Braton").configure(Build(cold, arsenal.get("Primary Frostbite")), context={"on_cold_status_effect": 0})
+        self.assertGreater(selected(capped).effective.crit_damage, selected(auto).effective.crit_damage)
+        self.assertAlmostEqual(selected(zero).effective.crit_damage, selected(arsenal.get("Braton").configure(Build(cold))).effective.crit_damage)
 
 
 if __name__ == "__main__":
