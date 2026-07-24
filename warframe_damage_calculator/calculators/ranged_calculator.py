@@ -7,7 +7,6 @@ class RangedCalculator(WeaponCalculator):
     def _compute_modded_scalars(self, result: AttackResult) -> None:
         super()._compute_modded_scalars(result)
         build, evo, base, modded = result.build, result.evolutions, result.base, result.modded
-
         modded.additive.weakpoint_damage = max(base.weakpoint_damage + build.additive.weakpoint_damage + evo.additive.weakpoint_damage, 1)
         modded.multiplicative.fire_rate = 1 if build.additive.fire_rate_lock else max(1 + build.multiplicative.fire_rate + evo.multiplicative.fire_rate, 1)
         modded.additive.fire_rate = max(base.fire_rate * (1 if build.additive.fire_rate_lock else (1 + build.additive.fire_rate + evo.additive.fire_rate)), 0.05)
@@ -29,14 +28,12 @@ class RangedCalculator(WeaponCalculator):
     def _compute_effective(self, result: AttackResult) -> None:
         super()._compute_effective(result)
         base, modded, effective = result.base, result.modded, result.effective
-        is_battery = "recharge_delay" in self.weapon.data.ammo
-
         effective.weakpoint_damage = modded.additive.weakpoint_damage
         effective.fire_rate = modded.additive.fire_rate * modded.multiplicative.fire_rate
         effective.burst_count = modded.additive.burst_count
         effective.burst_delay = modded.additive.burst_delay
         effective.charge_time = modded.additive.charge_time / modded.multiplicative.fire_rate
-        effective.reload_speed = modded.additive.reload_speed + (0 if not is_battery else float("inf") if modded.additive.recharge_rate <= 0 else modded.additive.magazine_capacity / modded.additive.recharge_rate)
+        effective.reload_speed = modded.additive.reload_speed + (0 if "recharge_delay" not in self.weapon.data.ammo else float("inf") if modded.additive.recharge_rate <= 0 else modded.additive.magazine_capacity / modded.additive.recharge_rate)
         effective.recharge_rate = modded.additive.recharge_rate
         effective.ammo_cost = modded.additive.ammo_cost
         effective.ammo_efficiency = modded.additive.ammo_efficiency
