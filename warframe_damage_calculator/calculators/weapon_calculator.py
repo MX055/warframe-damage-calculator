@@ -320,11 +320,8 @@ class WeaponCalculator:
         self.child = [results[name] for name in self.main.children if name in results]
 
     def contribution(self, upgrade: BuildUpgradeOwner) -> float:
-        full = self.weapon.build
-        if upgrade not in full:
-            return 0.0
         reduced = self.weapon.copy()
-        reduced.configure(full - upgrade)
+        reduced.configure(self.weapon.build - upgrade)
         return self.main.final.total_dps - reduced.results.main.final.total_dps
 
     def contribution_values(self) -> dict[str, float]:
