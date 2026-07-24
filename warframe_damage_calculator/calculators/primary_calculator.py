@@ -1,6 +1,7 @@
 from ..fields.attack_result import AttackResult
 from ..utils.functions import clamp
 from ..utils.types import Number
+from . import formulas
 from .ranged_calculator import RangedCalculator
 
 
@@ -27,7 +28,7 @@ class PrimaryCalculator(RangedCalculator):
         average.primed_chamber_multiplier = 1 + effective.primed_chamber / effective.magazine_capacity
         average.flat_dph *= average.primed_chamber_multiplier
         average.flat_weakpoint_dph *= average.primed_chamber_multiplier
-        self._refresh_dps_from_dph(average)
+        formulas.refresh_dps_from_dph(average)
 
     def _flat_dotph(self, result: AttackResult, *, weakpoint: bool = False, hits: Number | None = None, damage_multiplier: Number = 1, extra_damage: Number = 0, faction_damage: Number | None = None) -> float:
         damage = result.effective.damage
@@ -35,7 +36,7 @@ class PrimaryCalculator(RangedCalculator):
         if damage.total_damage() <= 0: return 0.0
         if faction_damage is None: faction_damage = self._max_average_faction_damage(result)
         crit_chance = average.weakpoint_crit_chance if weakpoint else average.crit_chance
-        multiplier = self._hit_multiplier(crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
+        multiplier = formulas.hit_multiplier(crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
         primed = 1 + effective.primed_chamber / effective.magazine_capacity
         hunter_procs = effective.hunter_munitions * min(crit_chance, 1)
         hunter_dpp = self._ib_slash_dot_per_proc(result, hit_multiplier=max(effective.crit_damage, multiplier), faction_damage=faction_damage, damage_multiplier=primed)

@@ -57,7 +57,7 @@ class RangedCalculator(WeaponCalculator):
         effective.ammo_efficiency = modded.additive.ammo_efficiency
         effective.magazine_capacity = modded.additive.magazine_capacity
         effective.multishot = modded.additive.multishot
-        effective.weakpoint_crit_chance = self._combine_chance(modded.additive.weakpoint_crit_chance, modded.multiplicative.crit_chance + modded.multiplicative.weakpoint_crit_chance - 1, modded.flat.crit_chance)
+        effective.weakpoint_crit_chance = formulas.combine_chance(modded.additive.weakpoint_crit_chance, modded.multiplicative.crit_chance + modded.multiplicative.weakpoint_crit_chance - 1, modded.flat.crit_chance)
         effective.internal_bleeding = modded.additive.internal_bleeding
         effective.projectile_speed = modded.additive.projectile_speed
         effective.start_range = modded.additive.start_range
@@ -105,13 +105,13 @@ class RangedCalculator(WeaponCalculator):
         crit_chance, weakpoint_crit_chance = self._average_crit_chances(result)
         average.crit_chance = crit_chance
         average.weakpoint_crit_chance = weakpoint_crit_chance
-        average.crit_multiplier = self._crit_multiplier(crit_chance, effective.crit_damage)
-        average.weakpoint_crit_multiplier = self._crit_multiplier(weakpoint_crit_chance, effective.crit_damage)
+        average.crit_multiplier = formulas.crit_multiplier(crit_chance, effective.crit_damage)
+        average.weakpoint_crit_multiplier = formulas.crit_multiplier(weakpoint_crit_chance, effective.crit_damage)
         average.fire_rate = self._sustained_attack_rate(result)
         average.procs_per_shot = effective.status_chance * effective.multishot
 
-        hit_mult = self._hit_multiplier(crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
-        weakpoint_hit_mult = self._hit_multiplier(weakpoint_crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
+        hit_mult = formulas.hit_multiplier(crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
+        weakpoint_hit_mult = formulas.hit_multiplier(weakpoint_crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
         faction = self._max_average_faction_damage(result)
         average.flat_dph = effective.damage.total_damage() * effective.multishot * faction * hit_mult
         average.flat_weakpoint_dph = effective.damage.total_damage() * effective.multishot * effective.weakpoint_damage * weakpoint_hit_mult * faction

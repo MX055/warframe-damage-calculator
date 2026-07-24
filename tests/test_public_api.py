@@ -4,6 +4,7 @@ from types import MappingProxyType
 from typing import get_args
 
 from warframe_damage_calculator import Build, Melee, Primary, Upgrade, Weapon, arsenal
+from warframe_damage_calculator.calculators import formulas
 from warframe_damage_calculator.calculators.build_calculator import BuildCalculator
 from warframe_damage_calculator.calculators.upgrade_calculator import UpgradeCalculator
 from warframe_damage_calculator.calculators.weapon_calculator import WeaponCalculator
@@ -719,7 +720,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(result.effective.non_crit_bonus_damage, 20)
         self.assertAlmostEqual(result.effective.non_crit_bonus_chance, 0.5)
         cc, cd = result.average.crit_chance, result.effective.crit_damage
-        expected_mult = WeaponCalculator._hit_multiplier(cc, cd, 20, 0.5)
+        expected_mult = formulas.hit_multiplier(cc, cd, 20, 0.5)
         expected_dph = result.effective.damage.total_damage() * result.effective.multishot * expected_mult
         self.assertAlmostEqual(result.average.flat_dph, expected_dph)
         self.assertGreater(result.average.flat_dph, base_dph)

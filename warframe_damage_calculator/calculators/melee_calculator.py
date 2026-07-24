@@ -2,6 +2,7 @@ from ..fields.attack_result import AttackResult
 from ..utils.constants import COMBO_HIT_INTERVAL, HEAVY_ATTACK_CATEGORIES, MAX_COMBO_MULTIPLIER, SLAM_ATTACK_CATEGORIES, SLIDE_ATTACK_CATEGORIES
 from ..utils.functions import clamp, true_round
 from ..utils.types import Number
+from . import formulas
 from .weapon_calculator import WeaponCalculator
 
 
@@ -77,7 +78,7 @@ class MeleeCalculator(WeaponCalculator):
     def _compute_average(self, result: AttackResult) -> None:
         super()._compute_average(result)
         effective, average = result.effective, result.average
-        hit_mult = self._hit_multiplier(average.crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
+        hit_mult = formulas.hit_multiplier(average.crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
         combo = self._combo_multiplier(result)
         average.combo_multiplier = combo
         average.melee_doughty_bonus = true_round(10 * effective.damage.weight("puncture") * effective.status_chance * effective.melee_doughty, 1)

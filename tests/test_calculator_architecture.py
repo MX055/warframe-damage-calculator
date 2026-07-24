@@ -5,12 +5,14 @@ from __future__ import annotations
 import unittest
 
 from warframe_damage_calculator import Build, Melee, Primary, Upgrade, arsenal
+from warframe_damage_calculator.calculators import formulas
 from warframe_damage_calculator.calculators.attack_tree import needed_attack_names, validate_attack_cycles
 from warframe_damage_calculator.calculators.effect_resolution import ResolutionContext, ResolvableEffect, raw_effects, resolve_and_aggregate, resolve_stack_scaled_effect, stack_count
 from warframe_damage_calculator.calculators.evolution_calculator import EvolutionCalculator
 from warframe_damage_calculator.calculators.stat_aggregation import UPGRADE_AGGREGATORS, merge_evolution_stat, merge_upgrade_stat
 from warframe_damage_calculator.calculators.status_model import SustainedStatusModel, apply_condition_overload, build_sustained_status_model, condition_overload_bonus, per_attack_status_probabilities, sustained_proc_chance
 from warframe_damage_calculator.calculators.upgrade_calculator import UpgradeCalculator
+from warframe_damage_calculator.calculators.weapon_calculator import WeaponCalculator
 from warframe_damage_calculator.fields.calculated import ModdedStats
 from warframe_damage_calculator.fields.evolution import ConversionBonus
 from warframe_damage_calculator.fields.weapon_data import Attack
@@ -283,6 +285,25 @@ class ContributionArchitectureTests(unittest.TestCase):
         self.assertAlmostEqual(sum(shares.values()), 1.0)
         removals = weapon.results.removal_contributions()
         self.assertEqual(set(removals), set(shares))
+
+
+class FormulaBoundaryTests(unittest.TestCase):
+    REMOVED_WRAPPERS = (
+        "_crit_multiplier",
+        "_non_crit_bonus",
+        "_hit_multiplier",
+        "_combine_chance",
+        "_refresh_dps_from_dph",
+        "_distribute_flat_damage",
+    )
+
+    def test_weapon_calculator_has_no_formula_wrappers(self):
+        for name in self.REMOVED_WRAPPERS:
+            self.assertFalse(hasattr(WeaponCalculator, name), f"WeaponCalculator must not reintroduce {name}")
+
+    def test_formulas_module_exposes_stateless_entry_points(self):
+        for name in ("crit_multiplier", "non_crit_bonus", "hit_multiplier", "combine_chance", "refresh_dps_from_dph", "distribute_flat_damage"):
+            self.assertTrue(callable(getattr(formulas, name)))
 
 
 if __name__ == "__main__":

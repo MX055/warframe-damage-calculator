@@ -7,11 +7,9 @@ scalar folds, damage Dist construction, and sustained status live in sibling mod
 from __future__ import annotations
 
 from ..fields.attack_result import AttackResult
-from ..fields.calculated import AverageStats
 from ..fields.evolution import ResolvedEvolutionStat
 from ..fields.upgrade import ResolvedStat
 from ..fields.weapon_data import Attack
-from ..models.dist import Dist
 from ..protocols import BuildUpgradeOwner, ConfigurableWeaponOwner
 from ..utils.types import Number
 from . import attack_tree, damage_calculator, formulas, scalar_calculator
@@ -27,32 +25,6 @@ class WeaponCalculator:
     def __init__(self, weapon: ConfigurableWeaponOwner) -> None:
         self.weapon = weapon
         self.resolve()
-
-    # --- shared math (delegates; kept for subclass/test compatibility) ---
-
-    @staticmethod
-    def _crit_multiplier(crit_chance: Number, crit_damage: Number) -> float:
-        return formulas.crit_multiplier(crit_chance, crit_damage)
-
-    @staticmethod
-    def _non_crit_bonus(damage: Number = 0, chance: Number = 0) -> float:
-        return formulas.non_crit_bonus(damage, chance)
-
-    @staticmethod
-    def _hit_multiplier(crit_chance: Number, crit_damage: Number, non_crit_bonus_damage: Number = 0, non_crit_bonus_chance: Number = 0) -> float:
-        return formulas.hit_multiplier(crit_chance, crit_damage, non_crit_bonus_damage, non_crit_bonus_chance)
-
-    @staticmethod
-    def _combine_chance(additive: Number, multiplicative: Number = 1, flat: Number = 0) -> Number:
-        return formulas.combine_chance(additive, multiplicative, flat)
-
-    @staticmethod
-    def _refresh_dps_from_dph(average: AverageStats) -> None:
-        formulas.refresh_dps_from_dph(average)
-
-    @staticmethod
-    def _distribute_flat_damage(damage: Dist, flat: Number) -> Dist:
-        return formulas.distribute_flat_damage(damage, flat)
 
     # --- resolve wiring ---
 
@@ -94,7 +66,7 @@ class WeaponCalculator:
         return result
 
     def _compute_base(self, result: AttackResult) -> None:
-        result.base, result.original_damage = scalar_calculator.seed_base_stats(attack=result.attack, ammo=self.weapon.data.ammo, stats_type=self.weapon.stats_type, evolutions=result.evolutions, distribute_flat=self._distribute_flat_damage)
+        result.base, result.original_damage = scalar_calculator.seed_base_stats(attack=result.attack, ammo=self.weapon.data.ammo, stats_type=self.weapon.stats_type, evolutions=result.evolutions, distribute_flat=formulas.distribute_flat_damage)
 
     def _apply_evolution_conversions(self, result: AttackResult) -> None:
         scalar_calculator.apply_evolution_conversions(base=result.base, build=result.build, evolutions=result.evolutions, crit_upgrade_multiplier=self._crit_upgrade_multiplier(result))

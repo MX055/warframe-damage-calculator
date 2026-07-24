@@ -1,5 +1,5 @@
 from .weapon_formatter import WeaponFormatter
-from ..calculators.weapon_calculator import WeaponCalculator
+from ..calculators import formulas
 from ..utils.constants import HEAVY_ATTACK_CATEGORIES, SLAM_ATTACK_CATEGORIES, SLIDE_ATTACK_CATEGORIES
 
 
@@ -11,12 +11,7 @@ class MeleeFormatter(WeaponFormatter):
         average = selected.average
         final = selected.final
         category = selected.category
-        hit_multiplier = WeaponCalculator._hit_multiplier(
-            average.crit_chance,
-            effective.crit_damage,
-            effective.get("non_crit_bonus_damage", 0),
-            effective.get("non_crit_bonus_chance", 0),
-        )
+        hit_multiplier = formulas.hit_multiplier(average.crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
 
         rows: list[tuple[str, ...]] = []
         self._append(rows, "RANGE", self._fmt_meters(base.get("range", 0)), self._fmt_meters(effective.get("range", 0)), self._fmt_meters(effective.get("range", 0)), when=float(effective.get("range", 0) or 0) > 0)

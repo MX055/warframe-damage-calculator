@@ -1,4 +1,4 @@
-from ..calculators.weapon_calculator import WeaponCalculator
+from ..calculators import formulas
 from .weapon_formatter import WeaponFormatter
 
 
@@ -14,18 +14,8 @@ class RangedFormatter(WeaponFormatter):
         final = selected.final
         total_base = base.damage.total_damage() * base.multishot
         total_effective = effective.damage.total_damage() * effective.multishot
-        hit_multiplier = WeaponCalculator._hit_multiplier(
-            average.crit_chance,
-            effective.crit_damage,
-            effective.get("non_crit_bonus_damage", 0),
-            effective.get("non_crit_bonus_chance", 0),
-        )
-        weakpoint_hit_multiplier = WeaponCalculator._hit_multiplier(
-            average.weakpoint_crit_chance,
-            effective.crit_damage,
-            effective.get("non_crit_bonus_damage", 0),
-            effective.get("non_crit_bonus_chance", 0),
-        )
+        hit_multiplier = formulas.hit_multiplier(average.crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
+        weakpoint_hit_multiplier = formulas.hit_multiplier(average.weakpoint_crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
 
         rows: list[tuple[str, ...]] = []
         self._falloff_row(rows, base, effective)
