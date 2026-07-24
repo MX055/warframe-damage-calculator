@@ -105,7 +105,8 @@ class WeaponFormatter:
             return ""
         removal = self.weapon.results.removal_contributions()
         rows = [(name, f"{share:.2%}", f"{removal[name]:.2f}") for name, share in shapley.items()]
-        return self._table(("upgrade", "shapley", "removal"), rows)
+        title = f"{self.weapon.data.name} - {self.weapon.results.main.name.replace('_', ' ').title()}"
+        return self._table(("upgrade", "shapley", "removal"), rows, title=title, border="=")
 
     def summary(self) -> str:
         raise NotImplementedError
