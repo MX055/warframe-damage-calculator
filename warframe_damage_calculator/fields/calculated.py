@@ -44,6 +44,7 @@ class CalculatedValues(Data):
     end_range: Number
     final_multiplier: Number
     heavy_attack_speed: Number
+    heavy_attack_efficiency: Number
     initial_combo: Number
     slam_damage: Number
     slide_crit_chance: Number
@@ -94,6 +95,7 @@ class AverageStats(Data):
     total_weakpoint_dps: Number
     melee_doughty_bonus: Number
     melee_duplicate_multiplier: Number
+    combo_multiplier: Number
     primed_chamber_multiplier: Number
     secondary_enervate_bonus: Number
     weakpoint_secondary_enervate_bonus: Number

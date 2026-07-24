@@ -24,12 +24,12 @@ front ends, but it is not a complete simulation of Warframe combat.
 - One canonical database file: `database/database.json`
 - Flat constructors for weapons and upgrades (`name` is a field on the model data)
 - Multiple named attack modes per weapon
-- Runtime attack selection with `weapon.configure(attack=...)`
+- Runtime attack selection with `weapon.configure(context={"attack": ...})`
 - Automatic calculation of related attacks, such as projectiles and their explosions
 - Selected attack results on `weapon.results.main`; direct children on `weapon.results.child`
 - Per-attack tree totals on `weapon.results.main.final` (selected attack + related children DPH/DPS)
 - Global weapon data separated from attack-specific stats
-- Incarnon evolution selection with `weapon.configure(evolutions={...})`
+- Incarnon evolution selection with `weapon.configure(context={"evolutions": {...}})`
 - Fluent runtime configuration on `Upgrade.configure(...)` and `Build.configure(...)`
 - Attack-specific Condition Overload factors and additive or multiplicative behavior
 - Separate faction-damage stats for Corpus, Grineer, Infested, Murmur, Orokin, and Sentient
@@ -203,7 +203,7 @@ The first attack in the weapon data is selected by default.
 ### Select another attack mode
 
 ```python
-weapon.configure(attack="air_burst_projectile")
+weapon.configure(context={"attack": "air_burst_projectile"})
 
 print(weapon.data.attacks.air_burst_projectile.trigger)
 print(weapon.data.attacks.air_burst_projectile.delivery)
@@ -241,7 +241,7 @@ Build, attack, and evolutions can be set together (or chained):
 ```python
 weapon = arsenal.get("Corinth Prime").configure(
     build,
-    attack="air_burst_projectile",
+    context={"attack": "air_burst_projectile"},
 )
 ```
 
@@ -249,10 +249,14 @@ weapon = arsenal.get("Corinth Prime").configure(
 
 ```python
 weapon = arsenal.get("Telos Boltor")
-weapon.configure(evolutions={2: 1, 3: 2}, attack="incarnon_form")
+weapon.configure(context={"evolutions": {2: 1, 3: 2}, "attack": "incarnon_form"})
 
 print(weapon.results.main.effective.damage.total_damage())
 ```
+
+Melee Incarnons use the same pattern with `incarnon_*` attack names (for example
+`arsenal.get("Furax").configure(context={"attack": "incarnon_normal_attack"})`). Evolution
+tier `1` is the activation perk and is not selected via `configure(context={"evolutions": ...})`.
 
 Evolution keys are tier numbers matching the database (`2`, `3`, …); values are
 perk indices. Selected evolutions are resolved separately from the mod build:
@@ -385,7 +389,7 @@ weapon = Primary(
     }
 )
 
-weapon.configure(attack="projectile")
+weapon.configure(context={"attack": "projectile"})
 
 print(weapon.results.main.effective.damage)
 print(weapon.results.child[0].effective.damage)
@@ -397,7 +401,7 @@ For ranged weapons, selected attacks may name related attacks through
 direct children are on `weapon.results.child`. `main.final` folds that attack
 plus its related children (DPH summed, DPS using that attack's fire rate).
 To inspect a deeper related attack as `main`, select it with
-`weapon.configure(attack=...)`.
+`weapon.configure(context={"attack": ...})`.
 
 ### Constructing a melee weapon
 
@@ -740,7 +744,9 @@ weapon.data.evolutions
 ```
 
 `weapon.data` is the flat weapon definition. Select an attack with
-`weapon.configure(attack=...)` using a key from `weapon.data.attacks`.
+`weapon.configure(context={"attack": ...})` using a key from `weapon.data.attacks`.
+Selected attack and Incarnon perk choices are stored in
+`weapon.data.runtime` (same pattern as upgrade runtime).
 
 ### Upgrade data
 
@@ -752,6 +758,15 @@ upgrade.data.compatibility
 upgrade.data.incompatibility
 upgrade.data.stats
 upgrade.data.runtime
+```
+
+### Weapon runtime
+
+```python
+weapon.configure(build, context={"attack": "...", "evolutions": {...}, "combo": 6})
+weapon.data.runtime.attack = "heavy_attack"
+weapon.data.runtime.evolutions = {2: 1}
+weapon.data.runtime.combo = 6
 ```
 
 Permanent database data and runtime resolution values are intentionally
@@ -841,6 +856,8 @@ Common ranged ammo fields:
 |---|---:|---|
 | `trigger` | `None` | Trigger class such as `semi`, `auto`, `charge`, or `melee`. |
 | `delivery` | `None` | Delivery class such as `hitscan`, `projectile`, `beam`, or `melee`. |
+| `form` | `"normal"` | `normal` or `incarnon` attack form. |
+| `category` | `"normal"` | Combat role: `normal`, `heavy`, `slam`, `heavy_slam`, or `slide`. |
 | `aoe` | `False` | Whether the attack is radial or area-of-effect. |
 | `children` | empty | Related attacks calculated with the selected ranged attack. |
 | `stats` | empty | Attack-specific combat stats. |
@@ -883,9 +900,11 @@ Each weapon exposes:
 | Path | Description |
 |---|---|
 | `weapon.data` | Flat weapon definition (`name`, `type`, `ammo`, `attacks`, `evolutions`). |
+| `weapon.data.runtime` | Session overrides (`attack`, `evolutions`) when set. |
+| `weapon.data.selected_attack` | Active attack key (`runtime.attack`, else first attack). |
 | `weapon.data.attacks[name].name` | Attack identity (same as the map key). |
 | `weapon.results` | Result container. |
-| `weapon.results.main` | Selected attack result (`weapon._attack`). |
+| `weapon.results.main` | Selected attack result (`weapon.data.selected_attack`). |
 | `weapon.results.child` | Direct children of `main` (flat list of `AttackResult`). |
 | `weapon.results.main.base` / `modded` / `effective` / `average` | Per-attack layers (that attack alone). |
 | `weapon.results.main.final` | That attack plus related children (DPH summed; DPS uses this attack's fire rate). |
@@ -1120,9 +1139,15 @@ shots, projectiles, or animation frames.
 ### Melee
 
 Melee DPS is calculated as expected damage per selected attack multiplied by its
-attack speed. Stance animation timing, combo counters, follow-through, range,
-and multi-hit stance sequences are not modeled, so melee DPS is best treated as
-a relative comparison.
+attack speed. Attack `category` drives heavy/slam/slide rules:
+
+- `heavy` / `heavy_slam`: hit and DoT damage are multiplied by the combo multiplier from `initial_combo` (`floor(hits / 20) + 1`, clamped to `1`–`12`). Critical chance bonuses from upgrades (additive and flat) are doubled.
+- `slam` / `heavy_slam`: effective damage is multiplied by `slam_damage`.
+- `slide`: effective crit chance is multiplied by `slide_crit_chance`.
+- Combo-scaling mods (`stacks.when == "stacks"`, e.g. Blood Rush) read `weapon.data.runtime.combo` (default `12` on non-heavy attacks, or the initial-combo tier on heavy attacks when unset). Set `upgrade.runtime.stacks` to override.
+
+Stance animation timing, follow-through, and multi-hit stance sequences are not
+modeled, so melee DPS is best treated as a relative comparison.
 
 ---
 

@@ -12,10 +12,9 @@ class DatabaseFactory:
     def create(self, entry: DatabaseEntry, context: dict | None = None) -> Weapon | Upgrade:
         model = self.models[entry.category](entry.data)
         if context:
-            if isinstance(model, Upgrade):
-                model.data.runtime.update(context)
-                model.results.resolve()
+            if isinstance(model, Weapon):
+                model.data.runtime.update(Weapon._normalize_runtime_context(context))
             else:
-                model.data.update(context)
-                model.results.resolve()
+                model.data.runtime.update(context)
+            model.results.resolve()
         return model

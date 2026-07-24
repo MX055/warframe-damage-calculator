@@ -30,3 +30,11 @@ class AttackResult(Data):
     @property
     def aoe(self) -> bool:
         return self.attack.aoe
+
+    @property
+    def category(self) -> str:
+        return self.attack.category or "normal"
+
+    @property
+    def form(self) -> str:
+        return self.attack.form or "normal"

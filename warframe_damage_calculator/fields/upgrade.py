@@ -92,6 +92,7 @@ class ResolvedModeStats(Data):
     fire_rate_lock: bool = False
     grineer_damage: Number = 0.0
     heavy_attack_speed: Number = 0.0
+    heavy_attack_efficiency: Number = 0.0
     hunter_munitions: Number = 0.0
     internal_bleeding: Number = 0.0
     initial_combo: Number = 0.0

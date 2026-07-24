@@ -23,7 +23,6 @@ class RangedCalculator(WeaponCalculator):
         modded.additive.weakpoint_crit_chance = max(base.crit_chance * (1 + build.additive.crit_chance + build.additive.weakpoint_crit_chance), 0)
         modded.additive.internal_bleeding = max(build.additive.internal_bleeding * (2 if modded.additive.fire_rate * modded.multiplicative.fire_rate < 2.5 else 1), 0)
         modded.additive.projectile_speed = build.additive.projectile_speed + evo.additive.projectile_speed
-        modded.additive.range = max(float(base.get("range", 0) or 0) + build.additive.range + build.flat.range + evo.additive.range + evo.flat.range, 0)
         modded.additive.start_range = float(base.get("start_range", 0) or 0) * (1 + float(modded.additive.projectile_speed or 0))
         modded.additive.end_range = float(base.get("end_range", 0) or 0) * (1 + float(modded.additive.projectile_speed or 0))
         modded.additive.final_multiplier = base.get("final_multiplier", 1) or 1
@@ -45,7 +44,6 @@ class RangedCalculator(WeaponCalculator):
         effective.weakpoint_crit_chance = self._combine_chance(modded.additive.weakpoint_crit_chance, modded.multiplicative.crit_chance + modded.multiplicative.weakpoint_crit_chance - 1, modded.flat.crit_chance)
         effective.internal_bleeding = modded.additive.internal_bleeding
         effective.projectile_speed = modded.additive.projectile_speed
-        effective.range = modded.additive.range
         effective.start_range = modded.additive.start_range
         effective.end_range = modded.additive.end_range
         effective.final_multiplier = modded.additive.final_multiplier

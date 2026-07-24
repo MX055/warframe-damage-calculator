@@ -111,7 +111,7 @@ class WarframeDatabase:
         key = normalize_identifier(attribute)
         if key == "name":
             return item.data.name
-        contexts = (item.data.runtime, item.data.stats) if isinstance(item, Upgrade) else (item.data, item.data.ammo)
+        contexts = (item.data.runtime, item.data.stats) if isinstance(item, Upgrade) else (item.data.runtime, item.data, item.data.ammo)
         for data in contexts:
             if key in data:
                 return data[key]
@@ -120,7 +120,7 @@ class WarframeDatabase:
             for state in (selected.base, selected.effective):
                 if key in state:
                     return state[key]
-            attack = item.data.attacks[item._attack]
+            attack = item.data.attacks[item.data.selected_attack]
             if key in attack:
                 return attack[key]
             if key in attack.stats:

@@ -34,6 +34,9 @@ class AttackStats(Data):
     co_factor: Number = 1.0
     co_effect: str = "adds"
     range: Number = 0.0
+    damage_bonus: Number = 0.0
+    initial_combo: Number = 0.0
+    heavy_attack_efficiency: Number = 0.0
 
 
 class WeaponStats(Data):

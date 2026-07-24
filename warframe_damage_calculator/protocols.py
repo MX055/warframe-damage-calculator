@@ -41,14 +41,12 @@ class BuildOwner(Protocol):
 class WeaponCalculatorOwner(Protocol):
     data: WeaponData
     build: BuildOwner
-    _attack: str
-    _evolutions: Mapping[int, int]
     stats_type: type[WeaponStats]
 
 
 @runtime_checkable
 class ConfigurableWeaponOwner(WeaponCalculatorOwner, Protocol):
-    def configure(self, build: BuildOwner | None = None, attack: str | None = None, evolutions: Mapping[int, int] | None = None) -> ConfigurableWeaponOwner: ...
+    def configure(self, build: BuildOwner | None = None, context: Mapping[str, object] | None = None) -> ConfigurableWeaponOwner: ...
 
     def copy(self) -> ConfigurableWeaponOwner: ...
 

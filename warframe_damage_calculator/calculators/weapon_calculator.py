@@ -58,8 +58,17 @@ class WeaponCalculator:
         build.results.resolve(self.weapon.data)
         return build.results.total
 
+    def _selected_category(self) -> str:
+        attack = self.weapon.data.attacks.get(self.weapon.data.selected_attack)
+        if attack is None:
+            return "normal"
+        return attack.category or "normal"
+
+    def _crit_upgrade_multiplier(self, result: AttackResult) -> float:
+        return 1.0
+
     def _resolved_evolutions(self) -> ResolvedEvolutionStat:
-        if not self.weapon._evolutions:
+        if not self.weapon.data.selected_evolutions:
             return ResolvedEvolutionStat()
         return EvolutionCalculator(self.weapon).total
 
@@ -124,17 +133,19 @@ class WeaponCalculator:
 
     def _compute_modded_scalars(self, result: AttackResult) -> None:
         build, evo, base, modded = result.build, result.evolutions, result.base, result.modded
+        innate_damage_bonus = float(result.attack.stats.get("damage_bonus", 0) or 0)
+        crit_mods = self._crit_upgrade_multiplier(result)
         modded.multiplicative.damage_bonus = max(1 + build.multiplicative.damage_bonus, 1)
-        modded.additive.damage_bonus = max(1 + build.additive.damage_bonus + evo.additive.damage_bonus, 0)
+        modded.additive.damage_bonus = max(1 + build.additive.damage_bonus + evo.additive.damage_bonus + innate_damage_bonus, 0)
         modded.additive.corpus_damage = max(1 + build.additive.corpus_damage, 1)
         modded.additive.grineer_damage = max(1 + build.additive.grineer_damage, 1)
         modded.additive.infested_damage = max(1 + build.additive.infested_damage, 1)
         modded.additive.orokin_damage = max(1 + build.additive.orokin_damage, 1)
         modded.additive.murmur_damage = max(1 + build.additive.murmur_damage, 1)
         modded.additive.sentient_damage = max(1 + build.additive.sentient_damage, 1)
-        modded.flat.crit_chance = build.flat.crit_chance + evo.flat.crit_chance
+        modded.flat.crit_chance = build.flat.crit_chance * crit_mods + evo.flat.crit_chance
         modded.multiplicative.crit_chance = max(1 + build.multiplicative.crit_chance, 1)
-        modded.additive.crit_chance = max(base.crit_chance * (1 + build.additive.crit_chance), 0)
+        modded.additive.crit_chance = max(base.crit_chance * (1 + build.additive.crit_chance * crit_mods), 0)
         modded.flat.crit_damage = max(build.flat.crit_damage + evo.flat.crit_damage, 0)
         modded.additive.crit_damage = max(base.crit_damage * (1 + build.additive.crit_damage), 1)
         modded.flat.status_chance = build.flat.status_chance + evo.flat.status_chance
@@ -143,6 +154,7 @@ class WeaponCalculator:
         modded.additive.status_duration = max(base.status_duration * (1 + build.additive.status_duration + evo.additive.status_duration), 0)
         modded.additive.non_crit_bonus_damage = max(build.additive.non_crit_bonus_damage + evo.additive.non_crit_bonus_damage, 0)
         modded.additive.non_crit_bonus_chance = max(build.additive.non_crit_bonus_chance, evo.additive.non_crit_bonus_chance, 0)
+        modded.additive.range = max(float(base.get("range", 0) or 0) + build.additive.range + build.flat.range + evo.additive.range + evo.flat.range, 0)
 
     def _per_attack_status_probabilities(self, result: AttackResult) -> dict[str, float]:
         build, stats = result.build, result.attack.stats
@@ -196,7 +208,8 @@ class WeaponCalculator:
         build = result.build
         evolved = result.base.damage.apply(build.additive.damage).combine().sorted()
         original = result.original_damage.apply(build.additive.damage).combine().sorted()
-        serration = max(1 + build.additive.damage_bonus + result.evolutions.additive.damage_bonus, 0)
+        innate_damage_bonus = float(result.attack.stats.get("damage_bonus", 0) or 0)
+        serration = max(1 + build.additive.damage_bonus + result.evolutions.additive.damage_bonus + innate_damage_bonus, 0)
         if result.attack.stats.co_effect == "multiplies":
             result.modded.additive.damage = result.modded.additive.damage_bonus * evolved
         else:
@@ -222,13 +235,15 @@ class WeaponCalculator:
         effective.status_duration = modded.additive.status_duration
         effective.non_crit_bonus_damage = modded.additive.non_crit_bonus_damage
         effective.non_crit_bonus_chance = modded.additive.non_crit_bonus_chance
+        effective.range = modded.additive.range
 
     def _refresh_crit_scalars(self, result: AttackResult) -> None:
         build, base, modded, effective = result.build, result.base, result.modded, result.effective
-        modded.additive.crit_chance = max(base.crit_chance * (1 + build.additive.crit_chance), 0)
+        crit_mods = self._crit_upgrade_multiplier(result)
+        modded.additive.crit_chance = max(base.crit_chance * (1 + build.additive.crit_chance * crit_mods), 0)
         effective.crit_chance = self._combine_chance(modded.additive.crit_chance, modded.multiplicative.crit_chance, modded.flat.crit_chance)
         if "weakpoint_crit_chance" in modded.additive:
-            modded.additive.weakpoint_crit_chance = max(base.crit_chance * (1 + build.additive.crit_chance + build.additive.weakpoint_crit_chance), 0)
+            modded.additive.weakpoint_crit_chance = max(base.crit_chance * (1 + build.additive.crit_chance * crit_mods + build.additive.weakpoint_crit_chance), 0)
             effective.weakpoint_crit_chance = self._combine_chance(modded.additive.weakpoint_crit_chance, modded.multiplicative.crit_chance + modded.multiplicative.weakpoint_crit_chance - 1, modded.flat.crit_chance)
 
     def _refresh_status_scalars(self, result: AttackResult) -> None:
@@ -266,12 +281,16 @@ class WeaponCalculator:
         average.murmur_damage = effective.murmur_damage
         average.sentient_damage = effective.sentient_damage
 
-    @staticmethod
-    def _status_hits(result: AttackResult) -> float:
+    def _status_hits(self, result: AttackResult) -> float:
         build, stats, modded = result.build, result.attack.stats, result.modded
         hits = max(modded.additive.get("multishot", stats.multishot), 1)
         duplicate = modded.additive.get("melee_duplicate", 0)
-        chance = max(stats.crit_chance * (1 + build.additive.crit_chance) * modded.multiplicative.crit_chance + modded.flat.crit_chance, 0)
+        crit_mods = self._crit_upgrade_multiplier(result)
+        chance = max(
+            stats.crit_chance * (1 + build.additive.crit_chance * crit_mods) * modded.multiplicative.crit_chance
+            + modded.flat.crit_chance,
+            0,
+        )
         return hits + duplicate * max(0, 1 - abs(chance - 1))
 
     def _effective_attacks_per_second(self, result: AttackResult) -> float:
@@ -331,8 +350,9 @@ class WeaponCalculator:
 
     def _needed_attack_names(self) -> set[str]:
         attacks = self.weapon.data.attacks
-        needed = {self.weapon._attack}
-        pending = [self.weapon._attack]
+        selected = self.weapon.data.selected_attack
+        needed = {selected}
+        pending = [selected]
         while pending:
             name = pending.pop()
             attack = attacks.get(name)
@@ -350,20 +370,32 @@ class WeaponCalculator:
         results = {name: self._compute_attack(name, attacks[name], resolved_build, resolved_evolutions) for name in needed}
         for name, result in results.items():
             result.final = self._fold_attack_tree(result, list(self._walk_tree(name, results)))
-        return float(results[self.weapon._attack].final.total_dps)
+        return float(results[self.weapon.data.selected_attack].final.total_dps)
+
+    def _runtime_defaults(self) -> tuple[str, ...]:
+        return ()
+
+    def _clear_runtime_defaults(self, defaults: tuple[str, ...]) -> None:
+        runtime = self.weapon.data.runtime
+        for key in defaults:
+            runtime.pop(key, None)
 
     def resolve(self, *, validate_cycles: bool = True) -> None:
-        if validate_cycles:
-            self._validate_attack_cycles()
-        resolved_build = self._resolved_build()
-        resolved_evolutions = self._resolved_evolutions()
-        attacks = self.weapon.data.attacks
-        needed = self._needed_attack_names()
-        results = {name: self._compute_attack(name, attacks[name], resolved_build, resolved_evolutions) for name in needed}
-        for name, result in results.items():
-            result.final = self._fold_attack_tree(result, list(self._walk_tree(name, results)))
-        self.main = results[self.weapon._attack]
-        self.child = [results[name] for name in self.main.children if name in results]
+        defaults = self._runtime_defaults()
+        try:
+            if validate_cycles:
+                self._validate_attack_cycles()
+            resolved_build = self._resolved_build()
+            resolved_evolutions = self._resolved_evolutions()
+            attacks = self.weapon.data.attacks
+            needed = self._needed_attack_names()
+            results = {name: self._compute_attack(name, attacks[name], resolved_build, resolved_evolutions) for name in needed}
+            for name, result in results.items():
+                result.final = self._fold_attack_tree(result, list(self._walk_tree(name, results)))
+            self.main = results[self.weapon.data.selected_attack]
+            self.child = [results[name] for name in self.main.children if name in results]
+        finally:
+            self._clear_runtime_defaults(defaults)
 
     @staticmethod
     def _upgrade_depends_on_equipped(upgrade) -> bool:

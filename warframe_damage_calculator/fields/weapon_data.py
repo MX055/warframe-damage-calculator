@@ -10,6 +10,8 @@ class Attack(Data):
     name: str = ""
     trigger: str | None = None
     delivery: str | None = None
+    form: str = "normal"
+    category: str = "normal"
     aoe: bool = False
     children: list[str] = []
     stats: AttackStats = {}
@@ -32,6 +34,32 @@ class WeaponData(Data):
     ammo: Data = {}
     attacks: Attacks = Attacks()
     evolutions: Evolutions = Evolutions()
+
+    @property
+    def runtime(self) -> Data:
+        runtime = getattr(self, "_runtime", None)
+        if runtime is None:
+            runtime = Data()
+            object.__setattr__(self, "_runtime", runtime)
+        return runtime
+
+    @property
+    def selected_attack(self) -> str:
+        selected = self.runtime.get("attack")
+        if selected is not None:
+            return selected
+        return next(iter(self.attacks))
+
+    @property
+    def selected_evolutions(self) -> dict:
+        return dict(self.runtime.get("evolutions") or {})
+
+    @property
+    def selected_combo(self) -> int | None:
+        combo = self.runtime.get("combo")
+        if combo is None:
+            return None
+        return int(combo)
 
 
 class RangedData(WeaponData):

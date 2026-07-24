@@ -73,7 +73,7 @@ class EvolutionCalculator:
     def _selected_perks(self) -> list[EvolutionPerk]:
         evolutions = self.weapon.data.evolutions
         perks: list[EvolutionPerk] = []
-        for tier, perk in self.weapon._evolutions.items():
+        for tier, perk in self.weapon.data.selected_evolutions.items():
             tier_data = evolutions.get(str(tier))
             if tier_data is None:
                 continue

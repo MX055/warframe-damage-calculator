@@ -169,6 +169,10 @@ class UpgradeCalculator:
     def _stack_count(self, effect: _Effect, context: _ResolutionContext) -> int:
         effect_max = effect.max_stacks if effect.max_stacks is not None else context.max_stacks
         stacks_value = context.upgrade.get("stacks")
+        if stacks_value is None and effect.stacks_on == "stacks":
+            runtime = getattr(context.weapon, "runtime", None)
+            if runtime is not None and runtime.get("combo") is not None:
+                stacks_value = runtime.get("combo")
         if stacks_value is None:
             fallback = (effect_max or 0) if context.use_defaults else 0
         else:

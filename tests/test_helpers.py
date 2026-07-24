@@ -1,5 +1,6 @@
 import unittest
 
+from warframe_damage_calculator.calculators.melee_calculator import MeleeCalculator
 from warframe_damage_calculator.calculators.weapon_calculator import WeaponCalculator
 from warframe_damage_calculator.fields.attack_result import AttackResult
 from warframe_damage_calculator.fields.calculated import AverageStats
@@ -11,6 +12,13 @@ class HelperTests(unittest.TestCase):
         self.assertAlmostEqual(WeaponCalculator._crit_multiplier(0.5, 3.0), 2.0)
         self.assertAlmostEqual(WeaponCalculator._crit_multiplier(0.0, 3.0), 1.0)
         self.assertAlmostEqual(WeaponCalculator._crit_multiplier(2.0, 2.0), 3.0)
+
+    def test_combo_multiplier_from_hits(self):
+        self.assertEqual(MeleeCalculator._combo_multiplier_from_hits(0), 1)
+        self.assertEqual(MeleeCalculator._combo_multiplier_from_hits(19), 1)
+        self.assertEqual(MeleeCalculator._combo_multiplier_from_hits(20), 2)
+        self.assertEqual(MeleeCalculator._combo_multiplier_from_hits(220), 12)
+        self.assertEqual(MeleeCalculator._combo_multiplier_from_hits(999), 12)
 
     def test_hit_multiplier_includes_non_crit_bonus(self):
         # 12% crit @ 2.2x, Attrition +2000% @ 50% → expected non-crit bonus 10
