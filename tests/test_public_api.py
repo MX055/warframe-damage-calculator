@@ -528,6 +528,20 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(len(weapon.build), 0)
         self.assertAlmostEqual(selected(weapon).evolutions.base.damage, 4)
 
+    def test_incarnon_fire_rate_applies_after_runtime_mutation(self):
+        weapon = arsenal.get("Phenmor")
+        base_rate = selected(weapon).effective.fire_rate
+        weapon.data.runtime.evolutions = {2: 2}
+        self.assertAlmostEqual(selected(weapon).evolutions.additive.fire_rate, 0.2)
+        self.assertAlmostEqual(selected(weapon).effective.fire_rate, base_rate * 1.2)
+
+    def test_incarnon_scoped_magazine_skips_incarnon_form(self):
+        normal = arsenal.get("Phenmor").configure(context={"evolutions": {3: 1}, "attack": "normal_attack"})
+        incarnon = arsenal.get("Phenmor").configure(context={"evolutions": {3: 1}, "attack": "incarnon_form"})
+        self.assertAlmostEqual(selected(normal).effective.magazine_capacity, 45)
+        self.assertAlmostEqual(selected(incarnon).effective.magazine_capacity, selected(incarnon).base.magazine_capacity)
+        self.assertAlmostEqual(selected(incarnon).evolutions.additive.magazine_capacity, 0)
+
     def test_incarnon_base_damage_scales_with_serration(self):
         serration = Upgrade({"name": "Serration", "type": "mod", "max_rank": 0, "stats": {"damage_bonus": [{"value": 1.0}]}})
         weapon = arsenal.get("Telos Boltor")

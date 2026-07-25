@@ -19,10 +19,13 @@ from .stat_aggregation import CONVERSION_STATS, merge_evolution_stat
 
 class EvolutionCalculator:
     CONVERSION_STATS = CONVERSION_STATS
+    # Selection / session keys that must not disable default stack assumptions.
+    _SELECTION_KEYS = frozenset({"evolutions", "attack", "combo", "stance_combo"})
 
-    def __init__(self, weapon: WeaponCalculatorOwner, runtime: Mapping[str, Any] | None = None) -> None:
+    def __init__(self, weapon: WeaponCalculatorOwner, runtime: Mapping[str, Any] | None = None, *, form: str | None = None) -> None:
         self.weapon = weapon
-        self.runtime = Data(runtime or {})
+        self.runtime = Data(runtime if runtime is not None else getattr(weapon.data, "runtime", {}) or {})
+        self.form = form
         self.total = ResolvedEvolutionStat()
         self.resolve()
 
@@ -32,13 +35,14 @@ class EvolutionCalculator:
         mode = cast(EffectMode, raw_mode)
 
         condition = effect.get("when")
+        scope = effect.get("scope")
         stacks = effect.get("stacks")
         value = effect.value
         conversion_max = effect.get("max")
 
-        if stacks is not None: return ResolvableEffect(stat=stat, value=value, mode=mode, bucket="stacking", stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"), conversion_max=conversion_max)
-        if condition is None: return ResolvableEffect(stat=stat, value=value, mode=mode, bucket="static", conversion_max=conversion_max)
-        return ResolvableEffect(stat=stat, value=value, mode=mode, bucket="conditional", condition=condition, conversion_max=conversion_max)
+        if stacks is not None: return ResolvableEffect(stat=stat, value=value, mode=mode, bucket="stacking", scope=scope, stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"), conversion_max=conversion_max)
+        if condition is None: return ResolvableEffect(stat=stat, value=value, mode=mode, bucket="static", scope=scope, conversion_max=conversion_max)
+        return ResolvableEffect(stat=stat, value=value, mode=mode, bucket="conditional", condition=condition, scope=scope, conversion_max=conversion_max)
 
     def _selected_perks(self) -> list[EvolutionPerk]:
         evolutions = self.weapon.data.evolutions
@@ -60,6 +64,8 @@ class EvolutionCalculator:
         return tuple(effects)
 
     def _is_effect_applicable(self, effect: ResolvableEffect, context: ResolutionContext) -> bool:
+        if effect.scope is not None and context.form is not None and effect.scope != context.form:
+            return False
         if effect.condition is None: return True
         runtime = context.runtime or Data()
         return bool(runtime.get(effect.condition, True))
@@ -73,7 +79,9 @@ class EvolutionCalculator:
             merge_evolution_stat(getattr(self.total, effect.mode), effect.stat, effect.value, conversion_max=effect.conversion_max)
 
     def resolve(self) -> ResolvedEvolutionStat:
-        use_defaults = not self.runtime
-        context = ResolutionContext(use_defaults=use_defaults, stacks_lookup=self.runtime, default_stacks=self.runtime.get("stacks"), runtime=self.runtime)
+        # Empty runtime, or runtime that only selects attack/evolutions/combo, still
+        # assumes max stacks for stacking Incarnon perks (e.g. activation stacks).
+        use_defaults = not any(key not in self._SELECTION_KEYS for key in self.runtime)
+        context = ResolutionContext(use_defaults=use_defaults, stacks_lookup=self.runtime, default_stacks=self.runtime.get("stacks"), runtime=self.runtime, form=self.form)
         resolve_and_aggregate(self._normalize_effects(), context, is_applicable=self._is_effect_applicable, resolve_one=self._resolve_effect, aggregate=self._aggregate_effects)
         return self.total

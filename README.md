@@ -770,6 +770,10 @@ weapon.data.runtime.evolutions = {2: 1}
 weapon.data.runtime.combo = 6
 ```
 
+Direct `runtime` assignments are picked up the next time results are read
+(`weapon.results.main`, formatting, etc.). Prefer `configure(context=...)`
+when setting several values at once.
+
 Permanent database data and runtime resolution values are intentionally
 separate.
 

@@ -6,6 +6,8 @@ scalar folds, damage Dist construction, and sustained status live in sibling mod
 
 from __future__ import annotations
 
+from collections.abc import Mapping
+
 from ..fields.attack_result import AttackResult
 from ..fields.calculated import ModdedStats
 from ..fields.evolution import ResolvedEvolutionStat
@@ -22,11 +24,11 @@ CONTRIBUTION_TARGETS = frozenset({"flat_dph", "flat_weakpoint_dph", "flat_dps", 
 
 
 class WeaponCalculator:
-    main: AttackResult
-    child: list[AttackResult]
-
     def __init__(self, weapon: ConfigurableWeaponOwner) -> None:
         self.weapon = weapon
+        self._main = AttackResult()
+        self._child: list[AttackResult] = []
+        self._inputs_fingerprint: object | None = None
         self.resolve()
 
     # --- resolve wiring ---
@@ -44,9 +46,11 @@ class WeaponCalculator:
     def _crit_upgrade_multiplier(self, result: AttackResult) -> float:
         return 1.0
 
-    def _resolved_evolutions(self) -> ResolvedEvolutionStat:
+    def _resolved_evolutions(self, attack: Attack | None = None) -> ResolvedEvolutionStat:
         if not self.weapon.data.selected_evolutions: return ResolvedEvolutionStat()
-        return EvolutionCalculator(self.weapon).total
+        if attack is None: attack = self.weapon.data.attacks.get(self.weapon.data.selected_attack)
+        form = (attack.form if attack is not None else None) or "normal"
+        return EvolutionCalculator(self.weapon, self.weapon.data.runtime, form=form).total
 
     def _runtime_defaults(self) -> tuple[str, ...]:
         return ()
@@ -54,6 +58,21 @@ class WeaponCalculator:
     def _clear_runtime_defaults(self, defaults: tuple[str, ...]) -> None:
         runtime = self.weapon.data.runtime
         for key in defaults: runtime.pop(key, None)
+
+    def _fingerprint_runtime(self) -> tuple:
+        """Capture runtime/build inputs so direct runtime mutations recompute results."""
+        runtime = self.weapon.data.runtime
+        evolutions = runtime.get("evolutions") or {}
+        if isinstance(evolutions, Mapping):
+            evolutions_key = tuple(sorted((str(key), evolutions[key]) for key in evolutions))
+        else:
+            evolutions_key = (repr(evolutions),)
+        other = tuple(sorted((str(key), repr(runtime[key])) for key in runtime if key not in {"evolutions", "attack", "combo", "stance_combo"}))
+        return (id(self.weapon.build), runtime.get("attack"), evolutions_key, runtime.get("combo"), runtime.get("stance_combo"), other)
+
+    def _ensure_resolved(self) -> None:
+        fingerprint = self._fingerprint_runtime()
+        if fingerprint != self._inputs_fingerprint: self.resolve()
 
     # --- per-attack pipeline ---
 
@@ -151,22 +170,40 @@ class WeaponCalculator:
 
     # --- tree + resolve ---
 
-    def _compute_attack_results(self, resolved_build: ResolvedStat, resolved_evolutions: ResolvedEvolutionStat) -> dict[str, AttackResult]:
-        return attack_tree.compute_attack_results(attacks=self.weapon.data.attacks, selected=self.weapon.data.selected_attack, compute_attack=lambda name, attack: self._compute_attack(name, attack, resolved_build, resolved_evolutions), attack_rate_for=self._sustained_attack_rate)
+    def _compute_attack_results(self, resolved_build: ResolvedStat, resolved_evolutions: ResolvedEvolutionStat | None = None) -> dict[str, AttackResult]:
+        return attack_tree.compute_attack_results(
+            attacks=self.weapon.data.attacks,
+            selected=self.weapon.data.selected_attack,
+            compute_attack=lambda name, attack: self._compute_attack(name, attack, resolved_build, resolved_evolutions if resolved_evolutions is not None else self._resolved_evolutions(attack)),
+            attack_rate_for=self._sustained_attack_rate,
+        )
 
     def _metric_for_build(self, resolved_build: ResolvedStat, resolved_evolutions: ResolvedEvolutionStat, target: ContributionTarget) -> float:
         results = self._compute_attack_results(resolved_build, resolved_evolutions)
         return float(results[self.weapon.data.selected_attack].final.get(target, 0) or 0)
 
     def resolve(self, *, validate_cycles: bool = True) -> None:
+        # Fingerprint user runtime before injecting transient defaults (e.g. melee combo).
+        fingerprint = self._fingerprint_runtime()
         defaults = self._runtime_defaults()
         try:
             if validate_cycles: attack_tree.validate_attack_cycles(self.weapon.data.attacks)
-            results = self._compute_attack_results(self._resolved_build(), self._resolved_evolutions())
-            self.main = results[self.weapon.data.selected_attack]
-            self.child = [results[name] for name in self.main.children if name in results]
+            results = self._compute_attack_results(self._resolved_build())
+            self._main = results[self.weapon.data.selected_attack]
+            self._child = [results[name] for name in self._main.children if name in results]
+            self._inputs_fingerprint = fingerprint
         finally:
             self._clear_runtime_defaults(defaults)
+
+    @property
+    def main(self) -> AttackResult:
+        self._ensure_resolved()
+        return self._main
+
+    @property
+    def child(self) -> list[AttackResult]:
+        self._ensure_resolved()
+        return self._child
 
     # --- contributions ---
 

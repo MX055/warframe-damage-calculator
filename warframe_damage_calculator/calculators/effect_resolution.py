@@ -31,6 +31,7 @@ class ResolvableEffect:
     mode: EffectMode = "additive"
     bucket: str = "static"
     condition: str | None = None
+    scope: str | None = None
     stacks_on: str | None = None
     max_stacks: int | None = None
     required_rank: int | None = None
@@ -55,6 +56,7 @@ class ResolutionContext:
     upgrade: Data | None = None
     build: Data | None = None
     runtime: Data | None = None
+    form: str | None = None
 
 
 def raw_effects(raw: Any) -> list[Data]:
