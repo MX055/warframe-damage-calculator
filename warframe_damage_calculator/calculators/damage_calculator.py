@@ -49,15 +49,20 @@ def max_faction_damage(average: AverageStats) -> float:
     return max(average.corpus_damage, average.grineer_damage, average.infested_damage, average.orokin_damage, average.murmur_damage, average.sentient_damage)
 
 
-def flat_dotph(*, base: CalculatedStats, effective: CalculatedStats, average: AverageStats, status_attempts_per_attack: float, weakpoint: bool = False, hits: Number | None = None, damage_multiplier: Number = 1, extra_damage: Number = 0, faction_damage: Number | None = None) -> float:
+def flat_dotph(*, base: CalculatedStats, effective: CalculatedStats, average: AverageStats, status_attempts_per_attack: float, weakpoint: bool = False, hits: Number | None = None, damage_multiplier: Number = 1, extra_damage: Number = 0, faction_damage: Number | None = None, continuous: bool = False) -> float:
+    # Beam: random DoT ×MS² (merged tick damage × status); forced procs ×MS once after merge.
     if faction_damage is None: faction_damage = max_faction_damage(average)
     if effective.damage.total_damage() <= 0: return 0.0
     multiplier = formulas.hit_multiplier(average.weakpoint_crit_chance if weakpoint else average.crit_chance, effective.crit_damage, effective.non_crit_bonus_damage, effective.non_crit_bonus_chance)
     regular = sum(factor * effective.damage.get(damage_type) * effective.damage.weight(damage_type) for damage_type, factor in DOT_MULTIPLIERS) * effective.status_chance
     forced = sum(factor * base.forced_procs.get(damage_type) * effective.damage.get(damage_type) for damage_type, factor in DOT_MULTIPLIERS)
     shot_hits = effective.multishot if hits is None else hits
-    return (regular + forced) * effective.status_duration * effective.status_damage * faction_damage ** 2 * multiplier * damage_multiplier * shot_hits + extra_damage
+    regular_hits = shot_hits * shot_hits if continuous else shot_hits
+    forced_hits = shot_hits
+    shared = effective.status_duration * effective.status_damage * faction_damage ** 2 * multiplier * damage_multiplier
+    return (regular * regular_hits + forced * forced_hits) * shared + extra_damage
 
 
 def flat_dotph_from_result(result: AttackResult, *, status_attempts_per_attack: float, weakpoint: bool = False, hits: Number | None = None, damage_multiplier: Number = 1, extra_damage: Number = 0, faction_damage: Number | None = None) -> float:
-    return flat_dotph(base=result.base, effective=result.effective, average=result.average, status_attempts_per_attack=status_attempts_per_attack, weakpoint=weakpoint, hits=hits, damage_multiplier=damage_multiplier, extra_damage=extra_damage, faction_damage=faction_damage)
+    continuous = (result.attack.delivery or "") == "beam"
+    return flat_dotph(base=result.base, effective=result.effective, average=result.average, status_attempts_per_attack=status_attempts_per_attack, weakpoint=weakpoint, hits=hits, damage_multiplier=damage_multiplier, extra_damage=extra_damage, faction_damage=faction_damage, continuous=continuous)

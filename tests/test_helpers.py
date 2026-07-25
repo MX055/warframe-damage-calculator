@@ -1,11 +1,20 @@
 import unittest
 
 from warframe_damage_calculator.calculators import formulas
+from warframe_damage_calculator.calculators.damage_calculator import flat_dotph, flat_dotph_from_result
 from warframe_damage_calculator.calculators.melee_calculator import MeleeCalculator
 from warframe_damage_calculator.calculators.weapon_calculator import WeaponCalculator
+from warframe_damage_calculator.core.dist import Dist
 from warframe_damage_calculator.fields.attack_result import AttackResult
-from warframe_damage_calculator.fields.calculated import AverageStats
+from warframe_damage_calculator.fields.calculated import AverageStats, CalculatedStats
 from warframe_damage_calculator.fields.weapon_data import Attack
+
+
+def _dot_stats(*, heat: float = 100.0, status_chance: float = 1.0, multishot: float = 2.0, forced_heat: float = 0.0):
+    base = CalculatedStats({"damage": Dist({"heat": heat}), "forced_procs": Dist({"heat": forced_heat})})
+    effective = CalculatedStats({"damage": Dist({"heat": heat}), "status_chance": status_chance, "status_duration": 6.0, "status_damage": 1.0, "multishot": multishot, "crit_chance": 0.0, "crit_damage": 2.0, "non_crit_bonus_damage": 0.0, "non_crit_bonus_chance": 0.0})
+    average = AverageStats({"crit_chance": 0.0, "weakpoint_crit_chance": 0.0, "corpus_damage": 1.0, "grineer_damage": 1.0, "infested_damage": 1.0, "orokin_damage": 1.0, "murmur_damage": 1.0, "sentient_damage": 1.0})
+    return base, effective, average
 
 
 class HelperTests(unittest.TestCase):
@@ -63,6 +72,32 @@ class HelperTests(unittest.TestCase):
             },
         })
         self.assertAlmostEqual(WeaponCalculator._status_hits(None, result), 2.5)
+
+    def test_beam_random_dot_double_dips_multishot(self):
+        base, effective, average = _dot_stats(multishot=2.0)
+        kwargs = dict(base=base, effective=effective, average=average, status_attempts_per_attack=1.0, faction_damage=1.0)
+        hitscan = flat_dotph(**kwargs, continuous=False)
+        beam = flat_dotph(**kwargs, continuous=True)
+        # Heat DoT factor 0.5 → regular = 50; shared = 6 → hitscan 600, beam 1200 (MS²).
+        self.assertAlmostEqual(hitscan, 600.0)
+        self.assertAlmostEqual(beam, 1200.0)
+        self.assertAlmostEqual(beam / hitscan, 2.0)
+
+    def test_beam_forced_dot_scales_once_with_multishot(self):
+        base, effective, average = _dot_stats(status_chance=0.0, multishot=3.0, forced_heat=1.0)
+        kwargs = dict(base=base, effective=effective, average=average, status_attempts_per_attack=1.0, faction_damage=1.0)
+        hitscan = flat_dotph(**kwargs, continuous=False)
+        beam = flat_dotph(**kwargs, continuous=True)
+        # Forced heat only: 0.5 * 100 * MS * 6 = 900 for both (no second MS on forced).
+        self.assertAlmostEqual(hitscan, 900.0)
+        self.assertAlmostEqual(beam, 900.0)
+
+    def test_flat_dotph_from_result_uses_beam_delivery(self):
+        base, effective, average = _dot_stats(multishot=2.0)
+        hitscan = AttackResult({"name": "hitscan", "attack": Attack({"name": "hitscan", "delivery": "hitscan"}), "base": base, "effective": effective, "average": average})
+        beam = AttackResult({"name": "beam", "attack": Attack({"name": "beam", "delivery": "beam"}), "base": base, "effective": effective, "average": average})
+        self.assertAlmostEqual(flat_dotph_from_result(hitscan, status_attempts_per_attack=1.0, faction_damage=1.0), 600.0)
+        self.assertAlmostEqual(flat_dotph_from_result(beam, status_attempts_per_attack=1.0, faction_damage=1.0), 1200.0)
 
 
 if __name__ == "__main__":

@@ -1144,6 +1144,7 @@ shots, projectiles, or animation frames.
 - DoT values represent expected total proc damage using per-tick multipliers of `0.35` for Slash and `0.5` for Heat, Toxin, Electricity, and Gas, times effective status duration (base `6` seconds, scaled by status duration mods).
 - Native status chance is treated per projectile.
 - Forced proc counts are added independently of ordinary status weighting.
+- Continuous (`delivery: "beam"`) weapons merge multishot into one tick: random Slash/Heat/Toxin/Electricity/Gas DoT scales with multishot twice (merged tick damage × merged status chance), while forced procs apply after the merge and scale with tick damage once.
 - Faction damage is applied twice to modeled DoT.
 - Related ranged attacks are included automatically when the selected attack lists them as children.
 - Falloff, punch through, and several other database fields are currently metadata only.

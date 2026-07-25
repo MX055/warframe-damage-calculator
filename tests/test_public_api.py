@@ -331,6 +331,19 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(child.effective.ammo_efficiency, 0)
         self.assertGreater(child.average.fire_rate, parent.average.fire_rate)
 
+    def test_beam_dot_scales_with_multishot_squared(self):
+        def heat_weapon(delivery: str, multishot: float) -> Primary:
+            return Primary({"name": f"{delivery}-{multishot}", "type": "primary", "ammo": {"magazine_size": 100, "reload_time": 1}, "attacks": {"tick": {"delivery": delivery, "stats": {"damage": {"heat": 100}, "status_chance": 1.0, "crit_chance": 0.0, "crit_damage": 2.0, "multishot": multishot, "fire_rate": 12}}}})
+
+        hitscan_ms1 = selected(heat_weapon("hitscan", 1.0)).average.flat_dotph
+        hitscan_ms2 = selected(heat_weapon("hitscan", 2.0)).average.flat_dotph
+        beam_ms1 = selected(heat_weapon("beam", 1.0)).average.flat_dotph
+        beam_ms2 = selected(heat_weapon("beam", 2.0)).average.flat_dotph
+        self.assertGreater(hitscan_ms1, 0)
+        self.assertAlmostEqual(hitscan_ms2 / hitscan_ms1, 2.0)
+        self.assertAlmostEqual(beam_ms1, hitscan_ms1)
+        self.assertAlmostEqual(beam_ms2 / beam_ms1, 4.0)
+
     def test_multiple_child_attacks_are_combined_once(self):
         weapon = Primary({
             "name": "Multiple Children",
