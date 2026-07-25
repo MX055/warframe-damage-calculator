@@ -29,6 +29,7 @@ class AttackStats(Data):
     status_chance: Number = 0.0
     multishot: Number = 1.0
     fire_rate: Number = 0.05
+    attack_speed: Number
     burst_count: int = 1
     burst_delay: Number = 0.0
     charge_time: Number = 0.0

@@ -199,7 +199,8 @@ class PublicApiTests(unittest.TestCase):
             self.assertFalse(hasattr(weapon.results, attribute))
         for attribute in ("type", "subtype", "base", "moded", "modded", "effective", "total_dps", "calculation_build"):
             self.assertFalse(hasattr(weapon, attribute))
-        self.assertTrue(all(attack.name == key for key, attack in weapon.data.attacks.items()))
+        self.assertTrue(all(isinstance(attack.name, str) and attack.name for attack in weapon.data.attacks.values()))
+        self.assertEqual(weapon.data.attacks["buckshot"].name, "Buckshot")
         self.assertEqual(weapon.results.main.name, weapon.data.selected_attack)
         self.assertEqual(weapon.data.ammo.reload_time, 3)
         self.assertEqual(weapon.data.ammo.magazine_size, 20)
@@ -679,7 +680,7 @@ class PublicApiTests(unittest.TestCase):
         damage = dict(result.base.damage)
         self.assertIn("puncture", damage)
         self.assertAlmostEqual(float(damage.get("impact", 0) or 0), 0)
-        self.assertAlmostEqual(attack.stats.fire_rate, 0.65)
+        self.assertAlmostEqual(attack.stats.attack_speed, 0.65)
         self.assertAlmostEqual(result.effective.attack_speed, 0.65)
         self.assertAlmostEqual(result.effective.range, 3)
 
@@ -711,7 +712,7 @@ class PublicApiTests(unittest.TestCase):
             "name": "NCD Melee",
             "type": "melee",
             "attacks": {
-                "normal_attack": {"stats": {"damage": {"slash": 100}, "crit_chance": 0.0, "crit_damage": 2.0, "status_chance": 0.1, "fire_rate": 1}},
+                "normal_attack": {"stats": {"damage": {"slash": 100}, "crit_chance": 0.0, "crit_damage": 2.0, "status_chance": 0.1, "attack_speed": 1}},
             },
         }).configure(Build(non_crit))
         # 0% crit → every hit is non-crit → ×(1+2.4)
@@ -1285,6 +1286,29 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(selected(drummed).effective.ammo_maximum, 190)
         boar = arsenal.get("Boar").configure(context={"evolutions": {3: 2}})
         self.assertAlmostEqual(selected(boar).effective.ammo_maximum, 195)
+
+    def test_stance_combo_scales_attack_speed_and_damage(self):
+        bare = selected(arsenal.get("Skana"))
+        stance = arsenal.get("Iron Phoenix")
+        combo = stance.data.combos["neutral"]
+        with_stance = selected(arsenal.get("Skana").configure(Build(stance)))
+        self.assertAlmostEqual(with_stance.effective.attack_speed, bare.effective.attack_speed * combo.hits / combo.duration)
+        self.assertAlmostEqual(with_stance.effective.damage.total_damage(), bare.effective.damage.total_damage() * combo.multiplier)
+        self.assertGreater(with_stance.average.total_dps, bare.average.total_dps)
+        forward = selected(arsenal.get("Skana").configure(Build(stance), context={"stance_combo": "forward"}))
+        forward_combo = stance.data.combos["forward"]
+        self.assertAlmostEqual(forward.effective.attack_speed, bare.effective.attack_speed * forward_combo.hits / forward_combo.duration)
+
+    def test_heavy_attack_speed_ignores_normal_attack_speed_mods(self):
+        fury = arsenal.get("Fury")
+        killing_blow = arsenal.get("Killing Blow")
+        bare = selected(arsenal.get("Skana").configure(context={"attack": "heavy_attack"}))
+        with_fury = selected(arsenal.get("Skana").configure(Build(fury), context={"attack": "heavy_attack"}))
+        with_killing_blow = selected(arsenal.get("Skana").configure(Build(killing_blow), context={"attack": "heavy_attack"}))
+        self.assertAlmostEqual(with_fury.effective.attack_speed, bare.effective.attack_speed)
+        self.assertAlmostEqual(with_killing_blow.effective.attack_speed, bare.effective.attack_speed * (1 + killing_blow.results.total.additive.heavy_attack_speed))
+        normal_with_fury = selected(arsenal.get("Skana").configure(Build(fury)))
+        self.assertGreater(normal_with_fury.effective.attack_speed, selected(arsenal.get("Skana")).effective.attack_speed)
 
 
 if __name__ == "__main__":

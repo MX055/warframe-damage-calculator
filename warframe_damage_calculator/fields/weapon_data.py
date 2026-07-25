@@ -61,6 +61,13 @@ class WeaponData(Data):
             return None
         return int(combo)
 
+    @property
+    def selected_stance_combo(self) -> str:
+        selected = self.runtime.get("stance_combo")
+        if selected is not None:
+            return str(selected)
+        return "neutral"
+
 
 class RangedData(WeaponData):
     pass

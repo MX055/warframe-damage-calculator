@@ -427,7 +427,7 @@ weapon = Melee(
                     "crit_chance": 0.20,
                     "crit_damage": 2.0,
                     "status_chance": 0.30,
-                    "fire_rate": 1.0,
+                    "attack_speed": 1.0,
                 },
             }
         },
@@ -438,8 +438,8 @@ print(weapon.results.main.base.attack_speed)
 print(weapon.results.main.final.total_dps)
 ```
 
-For melee attacks, the selected attack's `fire_rate` is used as the base attack
-speed.
+For melee attacks, the selected attack's `attack_speed` is the base attack speed
+(default `1.0` when omitted).
 
 ### Constructing an upgrade
 
@@ -881,7 +881,8 @@ Common attack stats:
 | `crit_damage` | `1.0` | Base critical multiplier. |
 | `status_chance` | `0.0` | Base status chance per projectile. |
 | `multishot` | `1.0` | Native projectiles per attack. |
-| `fire_rate` | `0.05` | Attacks per second, or melee attack speed. |
+| `fire_rate` | `0.05` | Ranged attacks per second. |
+| `attack_speed` | `1.0` | Melee attacks per second (used instead of `fire_rate` on melee). |
 | `burst_count` | `1` | Attacks in each burst. |
 | `burst_delay` | `0.0` | Delay between burst attacks. |
 | `charge_time` | `0.0` | Charge duration. |
@@ -1165,9 +1166,10 @@ shots, projectiles, or animation frames.
 ### Melee
 
 Melee DPS is calculated as expected damage per selected attack multiplied by its
-attack speed. Attack `category` drives heavy/slam/slide rules:
+effective attack speed (hits/sec when a stance combo is equipped). Attack
+`category` drives heavy/slam/slide rules:
 
-- `heavy` / `heavy_slam`: hit and DoT damage are multiplied by the combo multiplier from `initial_combo` (`floor(hits / 20) + 1`, clamped to `1`–`12`). Critical chance bonuses from upgrades (additive and flat) are doubled.
+- `heavy` / `heavy_slam`: wind-up speed uses `heavy_attack_speed` mods, not `attack_speed`. Hit and DoT damage are multiplied by the combo multiplier from `initial_combo` (`floor(hits / 20) + 1`, clamped to `1`–`12`). Critical chance bonuses from upgrades (additive and flat) are doubled.
 - `slam` / `heavy_slam`: effective damage is multiplied by `slam_damage`.
 - `slide`: effective crit chance is multiplied by `slide_crit_chance`.
 - Combo-scaling mods (`stacks.when == "stacks"`, e.g. Blood Rush) read `weapon.data.runtime.combo` (default `12` on non-heavy attacks, or the initial-combo tier on heavy attacks when unset). Set `upgrade.runtime.stacks` to override.

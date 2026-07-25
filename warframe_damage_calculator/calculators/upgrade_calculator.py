@@ -30,7 +30,7 @@ class UpgradeCalculator:
     rank_locked: ResolvedStat
     total: ResolvedStat
 
-    METADATA = {"name", "category", "type", "trigger", "is_beam", "is_battery", "compatibility", "incompatibility", "requirements", "max_rank", "max_stacks", "stacks", "is_exilus", "rank", "weapon"}
+    METADATA = {"name", "category", "type", "trigger", "is_beam", "is_battery", "compatibility", "incompatibility", "requirements", "max_rank", "max_stacks", "stacks", "is_exilus", "rank", "weapon", "combos"}
     WEAPON_TYPES = PRIMARY_TYPES | SECONDARY_TYPES | MELEE_TYPES
     BUCKETS = ("static", "conditional", "modular", "stacking", "rank_locked", "total")
 

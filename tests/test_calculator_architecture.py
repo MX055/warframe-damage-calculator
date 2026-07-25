@@ -74,8 +74,8 @@ class StatusModelTests(unittest.TestCase):
 
     def test_ranged_and_melee_sustained_rates_differ(self):
         ranged = Primary({"name": "R", "type": "primary", "ammo": {"magazine_size": 10, "reload_time": 2}, "attacks": {"shot": {"stats": {"damage": {"impact": 10}, "fire_rate": 10, "ammo_cost": 1}}}})
-        melee = Melee({"name": "M", "type": "melee", "attacks": {"normal": {"stats": {"damage": {"slash": 10}, "fire_rate": 1}}}})
-        # Melee defaults attack_speed from fire_rate; with no mods rates are close to base fire_rate.
+        melee = Melee({"name": "M", "type": "melee", "attacks": {"normal": {"stats": {"damage": {"slash": 10}, "attack_speed": 1}}}})
+        # Melee uses attack_speed; with no mods the sustained rate matches effective attack speed.
         self.assertGreater(ranged.results._sustained_attack_rate(selected(ranged)), 0)
         self.assertGreater(melee.results._sustained_attack_rate(selected(melee)), 0)
         self.assertAlmostEqual(melee.results._sustained_attack_rate(selected(melee)), melee.results._effective_attacks_per_second(selected(melee)))

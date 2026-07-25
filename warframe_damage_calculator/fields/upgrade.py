@@ -69,6 +69,20 @@ class UpgradeStats(Data):
     zoom: JsonValue
 
 
+class StanceCombo(Data):
+    name: str = ""
+    multiplier: Number = 1.0
+    hits: Number = 0
+    duration: Number = 0.0
+
+
+class StanceCombos(Data):
+    def __setitem__(self, key: str, value: JsonValue) -> None:
+        if isinstance(value, Mapping) and not isinstance(value, StanceCombo):
+            value = StanceCombo(value)
+        super().__setitem__(key, value)
+
+
 class UpgradeData(Data):
     name: str = ""
     type: str | None = None
@@ -76,6 +90,7 @@ class UpgradeData(Data):
     compatibility: Data = {}
     incompatibility: list[str] = []
     stats: UpgradeStats = {}
+    combos: StanceCombos = {}
 
     @property
     def runtime(self) -> Data:

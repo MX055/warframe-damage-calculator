@@ -21,7 +21,8 @@ def seed_base_stats(*, attack: Attack, ammo: dict | object, stats_type: Callable
     """Build base CalculatedStats and the original damage Dist used by GunCO."""
     stats = dict(attack.stats)
     falloff = stats.pop("falloff", None) or {}
-    stats.update({"attack_speed": attack.stats.fire_rate, "magazine_capacity": ammo.get("magazine_size", 1) if hasattr(ammo, "get") else 1, "ammo_maximum": ammo.get("ammo_maximum", 0) if hasattr(ammo, "get") else 0, "reload_speed": ammo.get("reload_time", 0) if hasattr(ammo, "get") else 0, "recharge_rate": ammo.get("recharge_rate", 0) if hasattr(ammo, "get") else 0, "start_range": falloff.get("start_range", 0), "end_range": falloff.get("end_range", 0), "final_multiplier": falloff.get("final_multiplier", 1)})
+    attack_speed = attack.stats.attack_speed if "attack_speed" in attack.stats else attack.stats.fire_rate
+    stats.update({"attack_speed": attack_speed, "magazine_capacity": ammo.get("magazine_size", 1) if hasattr(ammo, "get") else 1, "ammo_maximum": ammo.get("ammo_maximum", 0) if hasattr(ammo, "get") else 0, "reload_speed": ammo.get("reload_time", 0) if hasattr(ammo, "get") else 0, "recharge_rate": ammo.get("recharge_rate", 0) if hasattr(ammo, "get") else 0, "start_range": falloff.get("start_range", 0), "end_range": falloff.get("end_range", 0), "final_multiplier": falloff.get("final_multiplier", 1)})
     base = CalculatedStats(stats_type(stats).with_defaults())
     original_damage = Dist(dict(base.damage))
 

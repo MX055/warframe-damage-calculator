@@ -90,7 +90,8 @@ class WeaponCalculator:
         Base returns the attack's raw fire_rate as a pre-modded fallback. Category
         calculators override with magazine-cycle or attack-speed sustained rates.
         """
-        return max(float(result.attack.stats.fire_rate or 0), 0)
+        stats = result.attack.stats
+        return max(float(stats.attack_speed if "attack_speed" in stats else stats.fire_rate or 0), 0)
 
     def _effective_attacks_per_second(self, result: AttackResult) -> float:
         """Compatibility alias for sustained attack rate (tests and tree fold)."""

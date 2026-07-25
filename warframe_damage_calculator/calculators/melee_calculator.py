@@ -1,4 +1,5 @@
 from ..fields.attack_result import AttackResult
+from ..fields.upgrade import StanceCombo
 from ..utils.constants import COMBO_HIT_INTERVAL, HEAVY_ATTACK_CATEGORIES, MAX_COMBO_MULTIPLIER, SLAM_ATTACK_CATEGORIES, SLIDE_ATTACK_CATEGORIES
 from ..utils.functions import clamp, true_round
 from ..utils.types import Number
@@ -24,14 +25,50 @@ class MeleeCalculator(WeaponCalculator):
             runtime.combo = self._combo_multiplier_from_hits(initial_combo)
         return ("combo",)
 
+    def _equipped_stance(self):
+        for upgrade in self.weapon.build:
+            if upgrade.data.compatibility.get("stance"): return upgrade
+        return None
+
+    def _stance_combo_key(self, result: AttackResult) -> str:
+        category = result.category
+        if category in HEAVY_ATTACK_CATEGORIES: return "heavy"
+        if category in SLIDE_ATTACK_CATEGORIES: return "slide"
+        if category == "slam": return "slam"
+        return self.weapon.data.selected_stance_combo
+
+    def _stance_combo(self, result: AttackResult) -> StanceCombo | None:
+        stance = self._equipped_stance()
+        if stance is None: return None
+        combos = stance.data.combos
+        key = self._stance_combo_key(result)
+        combo = combos.get(key)
+        if combo is None and key != "neutral": combo = combos.get("neutral")
+        return combo if isinstance(combo, StanceCombo) else StanceCombo(combo) if combo is not None else None
+
+    def _stance_hits_per_second_factor(self, result: AttackResult) -> float:
+        """hits/duration at 1.0 attack speed; scales modded attack speed into hits/sec."""
+        combo = self._stance_combo(result)
+        if combo is None: return 1.0
+        duration = float(combo.duration or 0)
+        hits = float(combo.hits or 0)
+        if duration <= 0 or hits <= 0: return 1.0
+        return hits / duration
+
+    def _stance_damage_multiplier(self, result: AttackResult) -> float:
+        combo = self._stance_combo(result)
+        if combo is None: return 1.0
+        return max(float(combo.multiplier or 1.0), 0.0)
+
     def _compute_modded_scalars(self, result: AttackResult) -> None:
         super()._compute_modded_scalars(result)
         build, evo, base, modded = result.build, result.evolutions, result.base, result.modded
         stats = result.attack.stats
-        modded.additive.attack_speed = max(base.attack_speed * (1 + build.additive.attack_speed + evo.additive.attack_speed), 0)
+        modded.additive.heavy_attack_speed = max(1 + build.additive.heavy_attack_speed + evo.additive.heavy_attack_speed, 0)
+        speed = modded.additive.heavy_attack_speed if result.category in HEAVY_ATTACK_CATEGORIES else max(1 + build.additive.attack_speed + evo.additive.attack_speed, 0)
+        modded.additive.attack_speed = max(base.attack_speed * speed * self._stance_hits_per_second_factor(result), 0)
         modded.additive.melee_duplicate = clamp(build.additive.melee_duplicate, 0, 1)
         modded.additive.melee_doughty = clamp(build.additive.melee_doughty, 0, 1)
-        modded.additive.heavy_attack_speed = max(1 + build.additive.heavy_attack_speed + evo.additive.heavy_attack_speed, 0)
         modded.additive.heavy_attack_efficiency = max(build.additive.heavy_attack_efficiency + evo.additive.heavy_attack_efficiency + float(stats.heavy_attack_efficiency or 0), 0)
         modded.additive.initial_combo = max(build.additive.initial_combo + evo.additive.initial_combo + float(stats.initial_combo or 0), 0)
         modded.additive.slam_damage = max(1 + build.additive.slam_damage + evo.additive.slam_damage, 0)
@@ -49,10 +86,13 @@ class MeleeCalculator(WeaponCalculator):
         effective.initial_combo = modded.additive.initial_combo
         effective.slam_damage = modded.additive.slam_damage
         effective.slide_crit_chance = modded.additive.slide_crit_chance
-        if category in SLAM_ATTACK_CATEGORIES and effective.slam_damage != 1:
+        stance_multiplier = self._stance_damage_multiplier(result)
+        effective.damage = effective.damage * stance_multiplier
+        effective.damage_bonus = effective.damage_bonus * stance_multiplier
+        if category in SLAM_ATTACK_CATEGORIES:
             effective.damage = effective.damage * effective.slam_damage
             effective.damage_bonus = effective.damage_bonus * effective.slam_damage
-        if category in SLIDE_ATTACK_CATEGORIES and effective.slide_crit_chance != 1:
+        if category in SLIDE_ATTACK_CATEGORIES:
             effective.crit_chance = effective.crit_chance * effective.slide_crit_chance
 
     def _combo_multiplier(self, result: AttackResult) -> int:
@@ -68,10 +108,9 @@ class MeleeCalculator(WeaponCalculator):
         return hits + modded.additive.melee_duplicate * max(0, 1 - abs(chance - 1))
 
     def _sustained_attack_rate(self, result: AttackResult) -> float:
-        """Melee sustained attack rate from modded attack speed."""
-        stats, base, modded = result.attack.stats, result.base, result.modded
-        if "attack_speed" not in modded.additive: return super()._sustained_attack_rate(result)
-        return max(stats.fire_rate * modded.additive.attack_speed / (base.attack_speed or 1), 0)
+        """Melee sustained hit rate from modded attack speed (includes stance hits/sec)."""
+        if "attack_speed" not in result.modded.additive: return super()._sustained_attack_rate(result)
+        return max(float(result.modded.additive.attack_speed), 0)
 
     def _compute_average(self, result: AttackResult) -> None:
         super()._compute_average(result)
