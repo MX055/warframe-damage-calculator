@@ -753,6 +753,7 @@ type UpgradeName = Literal[
     "Arcane Warmth",
     "Archgun Ace",
     "Argent Scourge",
+    "Argo & Vel",
     "Argon Scope",
     "Arrow Mutation",
     "Arum Spinosa",

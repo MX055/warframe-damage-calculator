@@ -81613,12 +81613,183 @@
             },
             "stats": {}
         },
-        "Sigma & Octantis": {
-            "name": "Sigma & Octantis",
+        "Argo & Vel": {
+            "name": "Argo & Vel",
             "type": "mod",
             "max_rank": 0,
             "compatibility": {
-                "names": ["Sigma & Octantis"],
+                "names": ["Argo & Vel"],
+                "stance": true,
+                "exilus": false
+            },
+            "combos": {},
+            "stats": {}
+        },
+        "Arum Spinosa": {
+            "name": "Arum Spinosa",
+            "type": "mod",
+            "max_rank": 0,
+            "compatibility": {
+                "names": ["Arum Spinosa"],
+                "stance": true,
+                "exilus": false
+            },
+            "combos": {
+                "heavy": {
+                    "name": "Arum Spinosa Heavy (unofficial)",
+                    "multiplier": 3.3333,
+                    "hits": 30,
+                    "duration": 0
+                },
+                "slide": {
+                    "name": "Spiral Cut",
+                    "multiplier": 1,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "aerial": {
+                    "name": "Sky Doom",
+                    "multiplier": 2,
+                    "hits": 11,
+                    "duration": 0
+                },
+                "wall": {
+                    "name": "Weightless Steel",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "finisher": {
+                    "name": "Death's Mark",
+                    "multiplier": 10,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "slam": {
+                    "name": "Slam Attack",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0
+                }
+            },
+            "stats": {}
+        },
+        "Azothane": {
+            "name": "Azothane",
+            "type": "mod",
+            "max_rank": 0,
+            "compatibility": {
+                "names": ["Azothane"],
+                "stance": true,
+                "exilus": false
+            },
+            "combos": {
+                "block": {
+                    "name": "Azothane Block (unofficial)",
+                    "multiplier": 0.5,
+                    "hits": 1,
+                    "duration": 3.1
+                },
+                "heavy": {
+                    "name": "Lover's Farewell",
+                    "multiplier": 4,
+                    "hits": 3,
+                    "duration": 0
+                },
+                "slide": {
+                    "name": "Deceitful Serpent",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "aerial": {
+                    "name": "Cunning Monkey",
+                    "multiplier": 2,
+                    "hits": 3,
+                    "duration": 0
+                },
+                "wall": {
+                    "name": "Strident Gazelle",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "finisher": {
+                    "name": "Terrapin's Rebuke",
+                    "multiplier": 12,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "slam": {
+                    "name": "Slam Attack",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0
+                }
+            },
+            "stats": {}
+        },
+        "Caustacyst": {
+            "name": "Caustacyst",
+            "type": "mod",
+            "max_rank": 0,
+            "compatibility": {
+                "names": [
+                    "Caustacyst",
+                    "Coda Caustacyst"
+                ],
+                "stance": true,
+                "exilus": false
+            },
+            "combos": {
+                "heavy": {
+                    "name": "Caustacyst Heavy (unofficial)",
+                    "multiplier": 3.5,
+                    "hits": 4,
+                    "duration": 0
+                },
+                "slide": {
+                    "name": "Hell's Wave",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "aerial": {
+                    "name": "Mountain's Chisel",
+                    "multiplier": 2,
+                    "hits": 2,
+                    "duration": 0
+                },
+                "wall": {
+                    "name": "Flaying Home",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "finisher": {
+                    "name": "Tunneling Spike",
+                    "multiplier": 12,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "slam": {
+                    "name": "Slam Attack",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0
+                }
+            },
+            "stats": {}
+        },
+        "Cobra & Crane": {
+            "name": "Cobra & Crane",
+            "type": "mod",
+            "max_rank": 0,
+            "compatibility": {
+                "names": [
+                    "Cobra & Crane",
+                    "Cobra & Crane Prime"
+                ],
                 "stance": true,
                 "exilus": false
             },
@@ -81636,7 +81807,7 @@
                     "duration": 0
                 },
                 "aerial": {
-                    "name": "Sigma & Octantis Air (unofficial)",
+                    "name": "Cobra & Crane Air (unofficial)",
                     "multiplier": 1,
                     "hits": 1,
                     "duration": 0
@@ -81662,20 +81833,69 @@
             },
             "stats": {}
         },
-        "Quassus": {
-            "name": "Quassus",
+        "Edun": {
+            "name": "Edun",
             "type": "mod",
             "max_rank": 0,
             "compatibility": {
-                "names": ["Quassus"],
+                "names": ["Edun"],
                 "stance": true,
                 "exilus": false
             },
             "combos": {
                 "heavy": {
-                    "name": "Quassus Heavy (unofficial)",
-                    "multiplier": 3.3333,
-                    "hits": 21,
+                    "name": "Edun Heavy (unofficial)",
+                    "multiplier": 2,
+                    "hits": 2,
+                    "duration": 3.3
+                },
+                "slide": {
+                    "name": "Cyclone Strike",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0.78
+                },
+                "aerial": {
+                    "name": "Planting Widow",
+                    "multiplier": 3,
+                    "hits": 3,
+                    "duration": 0
+                },
+                "wall": {
+                    "name": "Guiding Plank",
+                    "multiplier": 1.66,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "finisher": {
+                    "name": "Tunneling Spike",
+                    "multiplier": 12,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "slam": {
+                    "name": "Slam Attack",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0
+                }
+            },
+            "stats": {}
+        },
+        "Jat Kusar": {
+            "name": "Jat Kusar",
+            "type": "mod",
+            "max_rank": 0,
+            "compatibility": {
+                "names": ["Jat Kusar"],
+                "stance": true,
+                "exilus": false
+            },
+            "combos": {
+                "heavy": {
+                    "name": "Jat Kusar Heavy (unofficial)",
+                    "multiplier": 4,
+                    "hits": 6,
                     "duration": 0
                 },
                 "slide": {
@@ -81685,20 +81905,124 @@
                     "duration": 0
                 },
                 "aerial": {
-                    "name": "Sky Doom",
-                    "multiplier": 2,
-                    "hits": 11,
+                    "name": "Weightless Steel",
+                    "multiplier": 2.3333,
+                    "hits": 3,
                     "duration": 0
                 },
                 "wall": {
                     "name": "Weightless Steel",
-                    "multiplier": 2,
-                    "hits": 1,
+                    "multiplier": 2.3333,
+                    "hits": 3,
                     "duration": 0
                 },
                 "finisher": {
                     "name": "Death's Mark",
                     "multiplier": 10,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "slam": {
+                    "name": "Slam Attack",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0
+                }
+            },
+            "stats": {}
+        },
+        "Keratinos": {
+            "name": "Keratinos",
+            "type": "mod",
+            "max_rank": 0,
+            "compatibility": {
+                "names": ["Keratinos"],
+                "stance": true,
+                "exilus": false
+            },
+            "combos": {
+                "heavy": {
+                    "name": "Keratinos Heavy (unofficial)",
+                    "multiplier": 1.75,
+                    "hits": 8,
+                    "duration": 0
+                },
+                "slide": {
+                    "name": "Launching Spring",
+                    "multiplier": 3,
+                    "hits": 1,
+                    "duration": 0.67
+                },
+                "aerial": {
+                    "name": "One Point",
+                    "multiplier": 2.25,
+                    "hits": 4,
+                    "duration": 0
+                },
+                "wall": {
+                    "name": "Through Strike",
+                    "multiplier": 3,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "finisher": {
+                    "name": "Roaring Drums",
+                    "multiplier": 2.085,
+                    "hits": 6,
+                    "duration": 0
+                },
+                "slam": {
+                    "name": "Slam Attack",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0
+                }
+            },
+            "stats": {}
+        },
+        "Korumm": {
+            "name": "Korumm",
+            "type": "mod",
+            "max_rank": 0,
+            "compatibility": {
+                "names": ["Korumm"],
+                "stance": true,
+                "exilus": false
+            },
+            "combos": {
+                "block": {
+                    "name": "Korumm Block (unofficial)",
+                    "multiplier": 3,
+                    "hits": 3,
+                    "duration": 4.15
+                },
+                "heavy": {
+                    "name": "The Way",
+                    "multiplier": 6,
+                    "hits": 2,
+                    "duration": 0
+                },
+                "slide": {
+                    "name": "Cyclone Strike",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0.78
+                },
+                "aerial": {
+                    "name": "Planting Widow",
+                    "multiplier": 3,
+                    "hits": 3,
+                    "duration": 0
+                },
+                "wall": {
+                    "name": "Guiding Plank",
+                    "multiplier": 1.66,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "finisher": {
+                    "name": "Tunneling Spike",
+                    "multiplier": 12,
                     "hits": 1,
                     "duration": 0
                 },
@@ -81766,22 +82090,218 @@
             },
             "stats": {}
         },
-        "Azothane": {
-            "name": "Azothane",
+        "Quassus": {
+            "name": "Quassus",
             "type": "mod",
             "max_rank": 0,
             "compatibility": {
-                "names": ["Azothane"],
+                "names": [
+                    "Quassus",
+                    "Quassus Prime"
+                ],
                 "stance": true,
                 "exilus": false
             },
             "combos": {
-                "block": {
-                    "name": "Azothane Block (unofficial)",
-                    "multiplier": 0.5,
-                    "hits": 1,
-                    "duration": 3.1
+                "heavy": {
+                    "name": "Quassus Heavy (unofficial)",
+                    "multiplier": 3.3333,
+                    "hits": 21,
+                    "duration": 0
                 },
+                "slide": {
+                    "name": "Spiral Cut",
+                    "multiplier": 1,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "aerial": {
+                    "name": "Sky Doom",
+                    "multiplier": 2,
+                    "hits": 11,
+                    "duration": 0
+                },
+                "wall": {
+                    "name": "Weightless Steel",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "finisher": {
+                    "name": "Death's Mark",
+                    "multiplier": 10,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "slam": {
+                    "name": "Slam Attack",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0
+                }
+            },
+            "stats": {}
+        },
+        "Sampotes": {
+            "name": "Sampotes",
+            "type": "mod",
+            "max_rank": 0,
+            "compatibility": {
+                "names": ["Sampotes"],
+                "stance": true,
+                "exilus": false
+            },
+            "combos": {
+                "heavy": {
+                    "name": "Sampotes Heavy (unofficial)",
+                    "multiplier": 6,
+                    "hits": 2,
+                    "duration": 4.2
+                },
+                "slide": {
+                    "name": "Hell's Wave",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0.97
+                },
+                "aerial": {
+                    "name": "Mountain's Chisel",
+                    "multiplier": 2,
+                    "hits": 3,
+                    "duration": 0
+                },
+                "wall": {
+                    "name": "Cyclical Dwelling",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "finisher": {
+                    "name": "Tunneling Spike",
+                    "multiplier": 12,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "slam": {
+                    "name": "Sampotes Slam (unofficial)",
+                    "multiplier": 2,
+                    "hits": 8,
+                    "duration": 2.3
+                }
+            },
+            "stats": {}
+        },
+        "Sigma & Octantis": {
+            "name": "Sigma & Octantis",
+            "type": "mod",
+            "max_rank": 0,
+            "compatibility": {
+                "names": ["Sigma & Octantis"],
+                "stance": true,
+                "exilus": false
+            },
+            "combos": {
+                "heavy": {
+                    "name": "Hallowed Name",
+                    "multiplier": 5,
+                    "hits": 2,
+                    "duration": 0
+                },
+                "slide": {
+                    "name": "Destructive Symphony",
+                    "multiplier": 1,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "aerial": {
+                    "name": "Sigma & Octantis Air (unofficial)",
+                    "multiplier": 1,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "wall": {
+                    "name": "Dying Angel",
+                    "multiplier": 3,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "finisher": {
+                    "name": "Last Stand",
+                    "multiplier": 8,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "slam": {
+                    "name": "Slam Attack",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0
+                }
+            },
+            "stats": {}
+        },
+        "Syam": {
+            "name": "Syam",
+            "type": "mod",
+            "max_rank": 0,
+            "compatibility": {
+                "names": ["Syam"],
+                "stance": true,
+                "exilus": false
+            },
+            "combos": {
+                "heavy": {
+                    "name": "Syam Heavy (unofficial)",
+                    "multiplier": 3.7,
+                    "hits": 2,
+                    "duration": 3.6
+                },
+                "slide": {
+                    "name": "Parting Knee",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0.67
+                },
+                "aerial": {
+                    "name": "Setting Sun",
+                    "multiplier": 2,
+                    "hits": 3,
+                    "duration": 0
+                },
+                "wall": {
+                    "name": "Guiding Wire",
+                    "multiplier": 2.15,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "finisher": {
+                    "name": "Resting Place",
+                    "multiplier": 10,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "slam": {
+                    "name": "Slam Attack",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0
+                }
+            },
+            "stats": {}
+        },
+        "Tatsu": {
+            "name": "Tatsu",
+            "type": "mod",
+            "max_rank": 0,
+            "compatibility": {
+                "names": [
+                    "Tatsu",
+                    "Tatsu Prime"
+                ],
+                "stance": true,
+                "exilus": false
+            },
+            "combos": {
                 "heavy": {
                     "name": "Lover's Farewell",
                     "multiplier": 4,
@@ -81789,9 +82309,9 @@
                     "duration": 0
                 },
                 "slide": {
-                    "name": "Deceitful Serpent",
-                    "multiplier": 2,
-                    "hits": 1,
+                    "name": "Tatsu Slide (unofficial)",
+                    "multiplier": 0.6667,
+                    "hits": 6,
                     "duration": 0
                 },
                 "aerial": {
@@ -81821,43 +82341,92 @@
             },
             "stats": {}
         },
-        "Edun": {
-            "name": "Edun",
+        "Telos Boltace": {
+            "name": "Telos Boltace",
             "type": "mod",
             "max_rank": 0,
             "compatibility": {
-                "names": ["Edun"],
+                "names": ["Telos Boltace"],
                 "stance": true,
                 "exilus": false
             },
             "combos": {
                 "heavy": {
-                    "name": "Edun Heavy (unofficial)",
-                    "multiplier": 2,
-                    "hits": 2,
-                    "duration": 3.3
+                    "name": "Discord Sewn",
+                    "multiplier": 2.5,
+                    "hits": 4,
+                    "duration": 0
                 },
                 "slide": {
-                    "name": "Cyclone Strike",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0.78
+                    "name": "Stormpath",
+                    "multiplier": 1,
+                    "hits": 2,
+                    "duration": 1.48
                 },
                 "aerial": {
-                    "name": "Planting Widow",
-                    "multiplier": 3,
+                    "name": "Ascendant Bane",
+                    "multiplier": 2,
+                    "hits": 10,
+                    "duration": 0
+                },
+                "wall": {
+                    "name": "Opposing Force",
+                    "multiplier": 2,
+                    "hits": 2,
+                    "duration": 0
+                },
+                "finisher": {
+                    "name": "Cold Vendetta",
+                    "multiplier": 1.3333,
+                    "hits": 3,
+                    "duration": 0
+                },
+                "slam": {
+                    "name": "Slam Attack",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0
+                }
+            },
+            "stats": {}
+        },
+        "Tenet Agendus": {
+            "name": "Tenet Agendus",
+            "type": "mod",
+            "max_rank": 0,
+            "compatibility": {
+                "names": ["Tenet Agendus"],
+                "stance": true,
+                "exilus": false
+            },
+            "combos": {
+                "heavy": {
+                    "name": "Tenet Agendus Heavy (unofficial)",
+                    "multiplier": 5,
+                    "hits": 2,
+                    "duration": 0
+                },
+                "slide": {
+                    "name": "Destructive Symphony",
+                    "multiplier": 1,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "aerial": {
+                    "name": "Fist of Iron",
+                    "multiplier": 2,
                     "hits": 3,
                     "duration": 0
                 },
                 "wall": {
-                    "name": "Guiding Plank",
-                    "multiplier": 1.66,
+                    "name": "Dying Angel",
+                    "multiplier": 3,
                     "hits": 1,
                     "duration": 0
                 },
                 "finisher": {
-                    "name": "Tunneling Spike",
-                    "multiplier": 12,
+                    "name": "Last Stand",
+                    "multiplier": 8,
                     "hits": 1,
                     "duration": 0
                 },
@@ -81870,43 +82439,92 @@
             },
             "stats": {}
         },
-        "Cobra & Crane": {
-            "name": "Cobra & Crane",
+        "Tenet Exec": {
+            "name": "Tenet Exec",
             "type": "mod",
             "max_rank": 0,
             "compatibility": {
-                "names": ["Cobra & Crane"],
+                "names": ["Tenet Exec"],
                 "stance": true,
                 "exilus": false
             },
             "combos": {
                 "heavy": {
-                    "name": "Hallowed Name",
-                    "multiplier": 5,
-                    "hits": 2,
+                    "name": "Crowd Fall",
+                    "multiplier": 4,
+                    "hits": 3,
                     "duration": 0
                 },
                 "slide": {
-                    "name": "Destructive Symphony",
-                    "multiplier": 1,
+                    "name": "Hell's Wave",
+                    "multiplier": 2,
                     "hits": 1,
-                    "duration": 0
+                    "duration": 0.98
                 },
                 "aerial": {
-                    "name": "Cobra & Crane Air (unofficial)",
-                    "multiplier": 1,
-                    "hits": 1,
+                    "name": "Mountain's Chisel",
+                    "multiplier": 2,
+                    "hits": 3,
                     "duration": 0
                 },
                 "wall": {
-                    "name": "Dying Angel",
-                    "multiplier": 3,
+                    "name": "Flaying Home",
+                    "multiplier": 2,
                     "hits": 1,
                     "duration": 0
                 },
                 "finisher": {
-                    "name": "Last Stand",
-                    "multiplier": 8,
+                    "name": "Tunneling Spike",
+                    "multiplier": 12,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "slam": {
+                    "name": "Tenet Exec Slam (unofficial)",
+                    "multiplier": 2,
+                    "hits": 3,
+                    "duration": 2.5
+                }
+            },
+            "stats": {}
+        },
+        "Tenet Grigori": {
+            "name": "Tenet Grigori",
+            "type": "mod",
+            "max_rank": 0,
+            "compatibility": {
+                "names": ["Tenet Grigori"],
+                "stance": true,
+                "exilus": false
+            },
+            "combos": {
+                "heavy": {
+                    "name": "Tenet Grigori (unofficial)",
+                    "multiplier": 6,
+                    "hits": 3,
+                    "duration": 0
+                },
+                "slide": {
+                    "name": "Hell's Wave",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "aerial": {
+                    "name": "Mountain's Chisel",
+                    "multiplier": 2,
+                    "hits": 2,
+                    "duration": 0
+                },
+                "wall": {
+                    "name": "Flaying Home",
+                    "multiplier": 2,
+                    "hits": 1,
+                    "duration": 0
+                },
+                "finisher": {
+                    "name": "Tunneling Spike",
+                    "multiplier": 12,
                     "hits": 1,
                     "duration": 0
                 },
@@ -82023,251 +82641,6 @@
             },
             "stats": {}
         },
-        "Tenet Grigori": {
-            "name": "Tenet Grigori",
-            "type": "mod",
-            "max_rank": 0,
-            "compatibility": {
-                "names": ["Tenet Grigori"],
-                "stance": true,
-                "exilus": false
-            },
-            "combos": {
-                "heavy": {
-                    "name": "Tenet Grigori (unofficial)",
-                    "multiplier": 6,
-                    "hits": 3,
-                    "duration": 0
-                },
-                "slide": {
-                    "name": "Hell's Wave",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "aerial": {
-                    "name": "Mountain's Chisel",
-                    "multiplier": 2,
-                    "hits": 2,
-                    "duration": 0
-                },
-                "wall": {
-                    "name": "Flaying Home",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "finisher": {
-                    "name": "Tunneling Spike",
-                    "multiplier": 12,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "slam": {
-                    "name": "Slam Attack",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0
-                }
-            },
-            "stats": {}
-        },
-        "Arum Spinosa": {
-            "name": "Arum Spinosa",
-            "type": "mod",
-            "max_rank": 0,
-            "compatibility": {
-                "names": ["Arum Spinosa"],
-                "stance": true,
-                "exilus": false
-            },
-            "combos": {
-                "heavy": {
-                    "name": "Arum Spinosa Heavy (unofficial)",
-                    "multiplier": 3.3333,
-                    "hits": 30,
-                    "duration": 0
-                },
-                "slide": {
-                    "name": "Spiral Cut",
-                    "multiplier": 1,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "aerial": {
-                    "name": "Sky Doom",
-                    "multiplier": 2,
-                    "hits": 11,
-                    "duration": 0
-                },
-                "wall": {
-                    "name": "Weightless Steel",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "finisher": {
-                    "name": "Death's Mark",
-                    "multiplier": 10,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "slam": {
-                    "name": "Slam Attack",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0
-                }
-            },
-            "stats": {}
-        },
-        "Tenet Agendus": {
-            "name": "Tenet Agendus",
-            "type": "mod",
-            "max_rank": 0,
-            "compatibility": {
-                "names": ["Tenet Agendus"],
-                "stance": true,
-                "exilus": false
-            },
-            "combos": {
-                "heavy": {
-                    "name": "Tenet Agendus Heavy (unofficial)",
-                    "multiplier": 5,
-                    "hits": 2,
-                    "duration": 0
-                },
-                "slide": {
-                    "name": "Destructive Symphony",
-                    "multiplier": 1,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "aerial": {
-                    "name": "Fist of Iron",
-                    "multiplier": 2,
-                    "hits": 3,
-                    "duration": 0
-                },
-                "wall": {
-                    "name": "Dying Angel",
-                    "multiplier": 3,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "finisher": {
-                    "name": "Last Stand",
-                    "multiplier": 8,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "slam": {
-                    "name": "Slam Attack",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0
-                }
-            },
-            "stats": {}
-        },
-        "Caustacyst": {
-            "name": "Caustacyst",
-            "type": "mod",
-            "max_rank": 0,
-            "compatibility": {
-                "names": ["Caustacyst"],
-                "stance": true,
-                "exilus": false
-            },
-            "combos": {
-                "heavy": {
-                    "name": "Caustacyst Heavy (unofficial)",
-                    "multiplier": 3.5,
-                    "hits": 4,
-                    "duration": 0
-                },
-                "slide": {
-                    "name": "Hell's Wave",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "aerial": {
-                    "name": "Mountain's Chisel",
-                    "multiplier": 2,
-                    "hits": 2,
-                    "duration": 0
-                },
-                "wall": {
-                    "name": "Flaying Home",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "finisher": {
-                    "name": "Tunneling Spike",
-                    "multiplier": 12,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "slam": {
-                    "name": "Slam Attack",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0
-                }
-            },
-            "stats": {}
-        },
-        "Keratinos": {
-            "name": "Keratinos",
-            "type": "mod",
-            "max_rank": 0,
-            "compatibility": {
-                "names": ["Keratinos"],
-                "stance": true,
-                "exilus": false
-            },
-            "combos": {
-                "heavy": {
-                    "name": "Keratinos Heavy (unofficial)",
-                    "multiplier": 1.75,
-                    "hits": 8,
-                    "duration": 0
-                },
-                "slide": {
-                    "name": "Launching Spring",
-                    "multiplier": 3,
-                    "hits": 1,
-                    "duration": 0.67
-                },
-                "aerial": {
-                    "name": "One Point",
-                    "multiplier": 2.25,
-                    "hits": 4,
-                    "duration": 0
-                },
-                "wall": {
-                    "name": "Through Strike",
-                    "multiplier": 3,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "finisher": {
-                    "name": "Roaring Drums",
-                    "multiplier": 2.085,
-                    "hits": 6,
-                    "duration": 0
-                },
-                "slam": {
-                    "name": "Slam Attack",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0
-                }
-            },
-            "stats": {}
-        },
         "Zenistar": {
             "name": "Zenistar",
             "type": "mod",
@@ -82299,355 +82672,6 @@
                 "wall": {
                     "name": "Flaying Home",
                     "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "finisher": {
-                    "name": "Tunneling Spike",
-                    "multiplier": 12,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "slam": {
-                    "name": "Slam Attack",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0
-                }
-            },
-            "stats": {}
-        },
-        "Tenet Exec": {
-            "name": "Tenet Exec",
-            "type": "mod",
-            "max_rank": 0,
-            "compatibility": {
-                "names": ["Tenet Exec"],
-                "stance": true,
-                "exilus": false
-            },
-            "combos": {
-                "heavy": {
-                    "name": "Crowd Fall",
-                    "multiplier": 4,
-                    "hits": 3,
-                    "duration": 0
-                },
-                "slide": {
-                    "name": "Hell's Wave",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0.98
-                },
-                "aerial": {
-                    "name": "Mountain's Chisel",
-                    "multiplier": 2,
-                    "hits": 3,
-                    "duration": 0
-                },
-                "wall": {
-                    "name": "Flaying Home",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "finisher": {
-                    "name": "Tunneling Spike",
-                    "multiplier": 12,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "slam": {
-                    "name": "Tenet Exec Slam (unofficial)",
-                    "multiplier": 2,
-                    "hits": 3,
-                    "duration": 2.5
-                }
-            },
-            "stats": {}
-        },
-        "Telos Boltace": {
-            "name": "Telos Boltace",
-            "type": "mod",
-            "max_rank": 0,
-            "compatibility": {
-                "names": ["Telos Boltace"],
-                "stance": true,
-                "exilus": false
-            },
-            "combos": {
-                "heavy": {
-                    "name": "Discord Sewn",
-                    "multiplier": 2.5,
-                    "hits": 4,
-                    "duration": 0
-                },
-                "slide": {
-                    "name": "Stormpath",
-                    "multiplier": 1,
-                    "hits": 2,
-                    "duration": 1.48
-                },
-                "aerial": {
-                    "name": "Ascendant Bane",
-                    "multiplier": 2,
-                    "hits": 10,
-                    "duration": 0
-                },
-                "wall": {
-                    "name": "Opposing Force",
-                    "multiplier": 2,
-                    "hits": 2,
-                    "duration": 0
-                },
-                "finisher": {
-                    "name": "Cold Vendetta",
-                    "multiplier": 1.3333,
-                    "hits": 3,
-                    "duration": 0
-                },
-                "slam": {
-                    "name": "Slam Attack",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0
-                }
-            },
-            "stats": {}
-        },
-        "Syam": {
-            "name": "Syam",
-            "type": "mod",
-            "max_rank": 0,
-            "compatibility": {
-                "names": ["Syam"],
-                "stance": true,
-                "exilus": false
-            },
-            "combos": {
-                "heavy": {
-                    "name": "Syam Heavy (unofficial)",
-                    "multiplier": 3.7,
-                    "hits": 2,
-                    "duration": 3.6
-                },
-                "slide": {
-                    "name": "Parting Knee",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0.67
-                },
-                "aerial": {
-                    "name": "Setting Sun",
-                    "multiplier": 2,
-                    "hits": 3,
-                    "duration": 0
-                },
-                "wall": {
-                    "name": "Guiding Wire",
-                    "multiplier": 2.15,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "finisher": {
-                    "name": "Resting Place",
-                    "multiplier": 10,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "slam": {
-                    "name": "Slam Attack",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0
-                }
-            },
-            "stats": {}
-        },
-        "Tatsu": {
-            "name": "Tatsu",
-            "type": "mod",
-            "max_rank": 0,
-            "compatibility": {
-                "names": ["Tatsu"],
-                "stance": true,
-                "exilus": false
-            },
-            "combos": {
-                "heavy": {
-                    "name": "Lover's Farewell",
-                    "multiplier": 4,
-                    "hits": 3,
-                    "duration": 0
-                },
-                "slide": {
-                    "name": "Tatsu Slide (unofficial)",
-                    "multiplier": 0.6667,
-                    "hits": 6,
-                    "duration": 0
-                },
-                "aerial": {
-                    "name": "Cunning Monkey",
-                    "multiplier": 2,
-                    "hits": 3,
-                    "duration": 0
-                },
-                "wall": {
-                    "name": "Strident Gazelle",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "finisher": {
-                    "name": "Terrapin's Rebuke",
-                    "multiplier": 12,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "slam": {
-                    "name": "Slam Attack",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0
-                }
-            },
-            "stats": {}
-        },
-        "Sampotes": {
-            "name": "Sampotes",
-            "type": "mod",
-            "max_rank": 0,
-            "compatibility": {
-                "names": ["Sampotes"],
-                "stance": true,
-                "exilus": false
-            },
-            "combos": {
-                "heavy": {
-                    "name": "Sampotes Heavy (unofficial)",
-                    "multiplier": 6,
-                    "hits": 2,
-                    "duration": 4.2
-                },
-                "slide": {
-                    "name": "Hell's Wave",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0.97
-                },
-                "aerial": {
-                    "name": "Mountain's Chisel",
-                    "multiplier": 2,
-                    "hits": 3,
-                    "duration": 0
-                },
-                "wall": {
-                    "name": "Cyclical Dwelling",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "finisher": {
-                    "name": "Tunneling Spike",
-                    "multiplier": 12,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "slam": {
-                    "name": "Sampotes Slam (unofficial)",
-                    "multiplier": 2,
-                    "hits": 8,
-                    "duration": 2.3
-                }
-            },
-            "stats": {}
-        },
-        "Jat Kusar": {
-            "name": "Jat Kusar",
-            "type": "mod",
-            "max_rank": 0,
-            "compatibility": {
-                "names": ["Jat Kusar"],
-                "stance": true,
-                "exilus": false
-            },
-            "combos": {
-                "heavy": {
-                    "name": "Jat Kusar Heavy (unofficial)",
-                    "multiplier": 4,
-                    "hits": 6,
-                    "duration": 0
-                },
-                "slide": {
-                    "name": "Spiral Cut",
-                    "multiplier": 1,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "aerial": {
-                    "name": "Weightless Steel",
-                    "multiplier": 2.3333,
-                    "hits": 3,
-                    "duration": 0
-                },
-                "wall": {
-                    "name": "Weightless Steel",
-                    "multiplier": 2.3333,
-                    "hits": 3,
-                    "duration": 0
-                },
-                "finisher": {
-                    "name": "Death's Mark",
-                    "multiplier": 10,
-                    "hits": 1,
-                    "duration": 0
-                },
-                "slam": {
-                    "name": "Slam Attack",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0
-                }
-            },
-            "stats": {}
-        },
-        "Korumm": {
-            "name": "Korumm",
-            "type": "mod",
-            "max_rank": 0,
-            "compatibility": {
-                "names": ["Korumm"],
-                "stance": true,
-                "exilus": false
-            },
-            "combos": {
-                "block": {
-                    "name": "Korumm Block (unofficial)",
-                    "multiplier": 3,
-                    "hits": 3,
-                    "duration": 4.15
-                },
-                "heavy": {
-                    "name": "The Way",
-                    "multiplier": 6,
-                    "hits": 2,
-                    "duration": 0
-                },
-                "slide": {
-                    "name": "Cyclone Strike",
-                    "multiplier": 2,
-                    "hits": 1,
-                    "duration": 0.78
-                },
-                "aerial": {
-                    "name": "Planting Widow",
-                    "multiplier": 3,
-                    "hits": 3,
-                    "duration": 0
-                },
-                "wall": {
-                    "name": "Guiding Plank",
-                    "multiplier": 1.66,
                     "hits": 1,
                     "duration": 0
                 },
