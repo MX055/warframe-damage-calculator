@@ -55,7 +55,7 @@ class UpgradeCalculator:
     @classmethod
     def _scale(cls, value: EffectValue, multiplier: float) -> EffectValue:
         if isinstance(value, Mapping) and not isinstance(value, Dist): return {key: cls._scale(item, multiplier) for key, item in value.items()}
-        if isinstance(value, bool): return value
+        if isinstance(value, (bool, str)): return value
         return value * multiplier
 
     def _record(self, bucket: ResolvedStat, effect: ResolvableEffect) -> None:

@@ -21,8 +21,7 @@ def compute_modded_damage(*, attack: Attack, base: CalculatedStats, original_dam
     """Write modded.additive.damage from Serration/CO semantics."""
     evolved = base.damage.apply(build.additive.damage).combine().sorted()
     original = original_damage.apply(build.additive.damage).combine().sorted()
-    innate_damage_bonus = float(attack.stats.get("damage_bonus", 0) or 0)
-    serration = max(1 + build.additive.damage_bonus + evolutions.additive.damage_bonus + innate_damage_bonus, 0)
+    serration = max(1 + build.additive.damage_bonus + evolutions.additive.damage_bonus + float(attack.stats.damage_bonus or 0), 0)
     if attack.stats.co_effect == "multiplies":
         modded.additive.damage = modded.additive.damage_bonus * evolved
     else:
@@ -53,10 +52,10 @@ def max_faction_damage(average: AverageStats) -> float:
 def flat_dotph(*, base: CalculatedStats, effective: CalculatedStats, average: AverageStats, status_attempts_per_attack: float, weakpoint: bool = False, hits: Number | None = None, damage_multiplier: Number = 1, extra_damage: Number = 0, faction_damage: Number | None = None) -> float:
     if faction_damage is None: faction_damage = max_faction_damage(average)
     if effective.damage.total_damage() <= 0: return 0.0
-    multiplier = formulas.hit_multiplier(average.weakpoint_crit_chance if weakpoint else average.crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
+    multiplier = formulas.hit_multiplier(average.weakpoint_crit_chance if weakpoint else average.crit_chance, effective.crit_damage, effective.non_crit_bonus_damage, effective.non_crit_bonus_chance)
     regular = sum(factor * effective.damage.get(damage_type) * effective.damage.weight(damage_type) for damage_type, factor in DOT_MULTIPLIERS) * effective.status_chance
     forced = sum(factor * base.forced_procs.get(damage_type) * effective.damage.get(damage_type) for damage_type, factor in DOT_MULTIPLIERS)
-    shot_hits = effective.get("multishot", status_attempts_per_attack) if hits is None else hits
+    shot_hits = effective.multishot if hits is None else hits
     return (regular + forced) * effective.status_duration * effective.status_damage * faction_damage ** 2 * multiplier * damage_multiplier * shot_hits + extra_damage
 
 

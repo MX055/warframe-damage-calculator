@@ -33,6 +33,7 @@ class CalculatedValues(Data):
     ammo_cost: Number
     ammo_efficiency: Number
     magazine_capacity: Number
+    ammo_maximum: Number
     weakpoint_damage: Number
     weakpoint_crit_chance: Number
     internal_bleeding: Number
@@ -51,6 +52,11 @@ class CalculatedValues(Data):
     vigilante_bonus: Number
     secondary_enervate: Number
     secondary_encumber: Number
+    punch_through: Number
+    zoom: Number
+    noise_level: str
+    accuracy: Number
+    recoil: Number
 
 
 class CalculatedModeStats(CalculatedValues):

@@ -8,6 +8,7 @@ from ..utils.types import JsonValue, Number
 class GlobalWeaponStats(Data):
     reload_time: Number = 0.0
     magazine_size: Number = 1
+    ammo_maximum: Number = 0.0
     recharge_rate: Number = 0.0
     incarnon_charges: Number = 0
     incarnon_recharge_count: Number = 0
@@ -37,6 +38,10 @@ class AttackStats(Data):
     damage_bonus: Number = 0.0
     initial_combo: Number = 0.0
     heavy_attack_efficiency: Number = 0.0
+    zoom: Number = 0.0
+    accuracy: Number = 0.0
+    recoil: Number = 0.0
+    noise_level: str
 
 
 class WeaponStats(Data):
@@ -48,6 +53,7 @@ class WeaponStats(Data):
     crit_damage: Number = 1.0
     status_chance: Number = 0.0
     status_duration: Number = 6.0
+    noise_level: str = "alarming"
 
 
 class RangedStats(WeaponStats):
@@ -59,17 +65,22 @@ class RangedStats(WeaponStats):
     end_range: Number
     final_multiplier: Number
     magazine_capacity: Number = 1
+    ammo_maximum: Number = 0.0
     multishot: Number = 1.0
     recharge_rate: Number = 0.0
     reload_speed: Number = 0.0
     weakpoint_damage: Number = 3.0
     projectile_speed: Number = 0.0
     range: Number = 0.0
+    zoom: Number = 0.0
+    accuracy: Number = 0.0
+    recoil: Number = 0.0
 
 
 class MeleeStats(WeaponStats):
     attack_speed: Number = 1.0
     range: Number = 0.0
+    noise_level: str = "silent"
 
 
 class PrimaryStats(RangedStats):

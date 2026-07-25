@@ -1259,6 +1259,33 @@ class PublicApiTests(unittest.TestCase):
         self.assertGreater(selected(capped).effective.crit_damage, selected(auto).effective.crit_damage)
         self.assertAlmostEqual(selected(zero).effective.crit_damage, selected(arsenal.get("Braton").configure(Build(cold))).effective.crit_damage)
 
+    def test_metadata_stats_defaults_and_silence_mods(self):
+        rifle = arsenal.get("Braton")
+        bow = arsenal.get("Dread")
+        melee = arsenal.get("Skana")
+        self.assertEqual(selected(rifle).effective.noise_level, "alarming")
+        self.assertEqual(selected(bow).effective.noise_level, "silent")
+        self.assertEqual(selected(melee).effective.noise_level, "silent")
+        silenced = rifle.configure(Build(arsenal.get("Hush")))
+        self.assertEqual(selected(silenced).effective.noise_level, "silent")
+        self.assertEqual(arsenal.upgrades["Hush"]["stats"]["noise_level"], [{"value": "silent", "mode": "base"}])
+
+    def test_metadata_upgrade_stats_fold_into_effective(self):
+        weapon = arsenal.get("Braton").configure(Build(arsenal.get("Eagle Eye"), arsenal.get("Metal Auger"), arsenal.get("Stabilizer")))
+        result = selected(weapon)
+        self.assertAlmostEqual(result.effective.zoom, 0.4)
+        self.assertAlmostEqual(result.effective.punch_through, 2.1)
+        self.assertAlmostEqual(result.effective.recoil, -0.6)
+        narrowed = arsenal.get("Boar").configure(Build(arsenal.get("Narrow Barrel")))
+        self.assertAlmostEqual(selected(narrowed).effective.accuracy, 0.3)
+
+    def test_ammo_maximum_percent_and_evolution_capacity(self):
+        base = Primary({"name": "Reserve", "type": "primary", "subtype": "rifle", "ammo": {"magazine_size": 10, "reload_time": 1, "ammo_maximum": 100}, "attacks": {"normal_attack": {"trigger": "auto", "delivery": "hitscan", "stats": {"damage": {"impact": 10}, "crit_chance": 0.1, "crit_damage": 2, "status_chance": 0.1, "fire_rate": 10}}}})
+        drummed = base.configure(Build(arsenal.get("Ammo Drum")))
+        self.assertAlmostEqual(selected(drummed).effective.ammo_maximum, 190)
+        boar = arsenal.get("Boar").configure(context={"evolutions": {3: 2}})
+        self.assertAlmostEqual(selected(boar).effective.ammo_maximum, 195)
+
 
 if __name__ == "__main__":
     unittest.main()

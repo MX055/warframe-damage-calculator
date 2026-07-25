@@ -61,7 +61,7 @@ class SecondaryCalculator(RangedCalculator):
         effective, average = result.effective, result.average
         if damage.total_damage() <= 0: return 0.0
         if faction_damage is None: faction_damage = self._max_average_faction_damage(result)
-        multiplier = formulas.hit_multiplier(average.weakpoint_crit_chance if weakpoint else average.crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
+        multiplier = formulas.hit_multiplier(average.weakpoint_crit_chance if weakpoint else average.crit_chance, effective.crit_damage, effective.non_crit_bonus_damage, effective.non_crit_bonus_chance)
         encumber_chance = 1 - (1 - effective.secondary_encumber * min(effective.status_chance, 1)) ** effective.multishot
         encumber_dot_factor = sum(factor for _, factor in DOT_MULTIPLIERS) * effective.status_duration
         encumber_dot = encumber_chance * damage.total_damage() * encumber_dot_factor / 13 * multiplier * effective.status_damage * faction_damage ** 2

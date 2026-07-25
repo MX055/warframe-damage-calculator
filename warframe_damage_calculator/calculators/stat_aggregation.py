@@ -66,11 +66,18 @@ def _merge_conversion(stats: Data, stat: str, value: Any, *, conversion_max: Num
     stats[stat] = current
 
 
+def _merge_noise_level(stats: Data, stat: str, value: Any) -> None:
+    """Silent wins when any contributing source silences the weapon."""
+    current = stats.get(stat)
+    stats[stat] = "silent" if "silent" in (current, value) else value
+
+
 def _merge_ordinary(stats: Data, stat: str, value: Any) -> None:
     """Fallback for ordinary additive stats without a declared special policy."""
     current = stats.get(stat)
     if current is None: stats[stat] = value
-    elif isinstance(value, bool): _merge_boolean(stats, stat, value)
+    elif isinstance(value, bool) or isinstance(current, bool): _merge_boolean(stats, stat, value)
+    elif isinstance(value, str) or isinstance(current, str): stats[stat] = value
     elif isinstance(current, Mapping) and isinstance(value, Mapping): _merge_mapping(stats, stat, value)
     else: _merge_numeric(stats, stat, value)
 
@@ -83,6 +90,7 @@ UPGRADE_AGGREGATORS: dict[str, Aggregator] = {
     "status_effect_stacks": _merge_status_effect_stacks,
     "fire_rate_lock": _merge_boolean,
     "multishot_lock": _merge_boolean,
+    "noise_level": _merge_noise_level,
 }
 
 CONVERSION_STATS = frozenset({"crit_from_status", "status_from_crit"})

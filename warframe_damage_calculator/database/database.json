@@ -1415,7 +1415,8 @@
                         "status_chance": 0.18,
                         "fire_rate": 1,
                         "co_factor": 1.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 },
                 "charged_shot": {
@@ -1436,7 +1437,8 @@
                         "fire_rate": 1,
                         "charge_time": 0.5,
                         "co_factor": 0.5,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 }
             },
@@ -1536,7 +1538,8 @@
                         "fire_rate": 1,
                         "charge_time": 1,
                         "co_factor": 1.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 }
             },
@@ -2073,7 +2076,7 @@
                             "ammo_maximum": [
                                 {
                                     "value": 195,
-                                    "mode": "additive"
+                                    "mode": "base"
                                 }
                             ]
                         }
@@ -3091,7 +3094,7 @@
                             "ammo_maximum": [
                                 {
                                     "value": 195,
-                                    "mode": "additive"
+                                    "mode": "base"
                                 }
                             ]
                         }
@@ -5838,7 +5841,8 @@
                         "multishot": 3,
                         "fire_rate": 1,
                         "co_factor": 1.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 },
                 "charged_horizontal_vertical_shot": {
@@ -5860,7 +5864,8 @@
                         "fire_rate": 1,
                         "charge_time": 0.5,
                         "co_factor": 0.5,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 }
             },
@@ -7315,7 +7320,7 @@
                             "ammo_maximum": [
                                 {
                                     "value": 9,
-                                    "mode": "additive"
+                                    "mode": "base"
                                 }
                             ]
                         }
@@ -9475,7 +9480,8 @@
                         "fire_rate": 1,
                         "charge_time": 1.2,
                         "co_factor": 1.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     },
                     "children": [
                         "initial_blast",
@@ -9506,7 +9512,8 @@
                         "fire_rate": 1,
                         "charge_time": 1.2,
                         "co_factor": 0.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 },
                 "bubble_collapse": {
@@ -9530,7 +9537,8 @@
                         "fire_rate": 1,
                         "charge_time": 1.2,
                         "co_factor": 0.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 }
             },
@@ -12292,7 +12300,8 @@
                         "status_chance": 0.3,
                         "fire_rate": 0.67,
                         "co_factor": 1.0,
-                        "co_effect": "multiplies"
+                        "co_effect": "multiplies",
+                        "noise_level": "silent"
                     }
                 },
                 "charged_shot": {
@@ -12311,7 +12320,8 @@
                         "fire_rate": 0.67,
                         "charge_time": 1.5,
                         "co_factor": 1.0,
-                        "co_effect": "multiplies"
+                        "co_effect": "multiplies",
+                        "noise_level": "silent"
                     }
                 },
                 "perfect_shot": {
@@ -12330,7 +12340,8 @@
                         "fire_rate": 0.67,
                         "charge_time": 1.1,
                         "co_factor": 1.0,
-                        "co_effect": "multiplies"
+                        "co_effect": "multiplies",
+                        "noise_level": "silent"
                     }
                 }
             },
@@ -13092,7 +13103,8 @@
                         "fire_rate": 1,
                         "charge_time": 0.7,
                         "co_factor": 1.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     },
                     "children": [
                         "appendages",
@@ -13121,7 +13133,8 @@
                         "fire_rate": 1,
                         "charge_time": 0.7,
                         "co_factor": 0.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 },
                 "charged_shot_explosion": {
@@ -13145,7 +13158,8 @@
                         "fire_rate": 1,
                         "charge_time": 0.7,
                         "co_factor": 0.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 }
             },
@@ -18922,7 +18936,8 @@
                         "status_chance": 0.39,
                         "fire_rate": 2.5,
                         "co_factor": 1.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 },
                 "burst_shot": {
@@ -18946,7 +18961,8 @@
                         "burst_count": 9,
                         "burst_delay": 0.15,
                         "co_factor": 1.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 }
             },
@@ -21190,7 +21206,7 @@
                             "ammo_maximum": [
                                 {
                                     "value": 160,
-                                    "mode": "additive",
+                                    "mode": "base",
                                     "scope": "normal"
                                 }
                             ]
@@ -22999,7 +23015,7 @@
                             "ammo_maximum": [
                                 {
                                     "value": 560,
-                                    "mode": "additive"
+                                    "mode": "base"
                                 }
                             ]
                         }
@@ -26072,7 +26088,8 @@
                         "status_chance": 0.1,
                         "fire_rate": 1,
                         "co_factor": 1.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 },
                 "charged_shot": {
@@ -26093,7 +26110,8 @@
                         "fire_rate": 1,
                         "charge_time": 0.5,
                         "co_factor": 0.5,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 },
                 "incarnon_form_charged_shot": {
@@ -26113,7 +26131,8 @@
                         "fire_rate": 1,
                         "charge_time": 0.8,
                         "co_factor": 1.0,
-                        "co_effect": "multiplies"
+                        "co_effect": "multiplies",
+                        "noise_level": "silent"
                     }
                 }
             },
@@ -28400,7 +28419,8 @@
                         "status_chance": 0.49,
                         "fire_rate": 1,
                         "co_factor": 1.0,
-                        "co_effect": "multiplies"
+                        "co_effect": "multiplies",
+                        "noise_level": "silent"
                     }
                 },
                 "charged_shot": {
@@ -28421,7 +28441,8 @@
                         "fire_rate": 1,
                         "charge_time": 0.5,
                         "co_factor": 0.5,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     },
                     "children": [
                         "toxin_cloud"
@@ -28451,7 +28472,8 @@
                         "fire_rate": 1,
                         "charge_time": 0.5,
                         "co_factor": 41.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 }
             },
@@ -29535,7 +29557,8 @@
                         "multishot": 7,
                         "fire_rate": 1,
                         "co_factor": 0.3125,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     },
                     "children": [
                         "uncharged_shot_concentrated_arrow_explosion"
@@ -29561,7 +29584,8 @@
                         "fire_rate": 1,
                         "charge_time": 1,
                         "co_factor": 0.3125,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     },
                     "children": [
                         "charged_shot_concentrated_arrow_explosion"
@@ -29592,7 +29616,8 @@
                         "status_chance": 0.2,
                         "fire_rate": 1,
                         "co_factor": 0.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 },
                 "charged_shot_concentrated_arrow_explosion": {
@@ -29621,7 +29646,8 @@
                         "fire_rate": 1,
                         "charge_time": 1,
                         "co_factor": 0.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 }
             }
@@ -30863,7 +30889,8 @@
                         "fire_rate": 0.67,
                         "charge_time": 0.4,
                         "co_factor": 1.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     },
                     "children": [
                         "radial_attack",
@@ -30892,7 +30919,8 @@
                         "fire_rate": 0.67,
                         "charge_time": 0.4,
                         "co_factor": 0.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 },
                 "cluster_bomb_contact": {
@@ -30911,7 +30939,8 @@
                         "fire_rate": 1,
                         "charge_time": 0.4,
                         "co_factor": 3.82,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 },
                 "cluster_bomb_explosion": {
@@ -30936,7 +30965,8 @@
                         "fire_rate": 1,
                         "charge_time": 0.4,
                         "co_factor": 3.82,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 }
             },
@@ -34006,7 +34036,8 @@
                         "status_chance": 0.15,
                         "fire_rate": 1,
                         "co_factor": 1.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 },
                 "charged_shot": {
@@ -34027,7 +34058,8 @@
                         "fire_rate": 1,
                         "charge_time": 0.5,
                         "co_factor": 0.5,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 },
                 "incarnon_form_charged_shot": {
@@ -34047,7 +34079,8 @@
                         "fire_rate": 1,
                         "charge_time": 0.8,
                         "co_factor": 1.0,
-                        "co_effect": "multiplies"
+                        "co_effect": "multiplies",
+                        "noise_level": "silent"
                     }
                 }
             },
@@ -38349,7 +38382,8 @@
                         "status_chance": 0.2,
                         "fire_rate": 1,
                         "co_factor": 1.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 },
                 "charged_shot": {
@@ -38370,7 +38404,8 @@
                         "fire_rate": 1,
                         "charge_time": 0.5,
                         "co_factor": 0.5,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 },
                 "incarnon_form_charged_shot": {
@@ -38390,7 +38425,8 @@
                         "fire_rate": 1,
                         "charge_time": 0.8,
                         "co_factor": 1.0,
-                        "co_effect": "multiplies"
+                        "co_effect": "multiplies",
+                        "noise_level": "silent"
                     }
                 }
             },
@@ -39558,7 +39594,7 @@
                             "ammo_maximum": [
                                 {
                                     "value": 9,
-                                    "mode": "additive"
+                                    "mode": "base"
                                 }
                             ]
                         }
@@ -40090,7 +40126,8 @@
                         "fire_rate": 1,
                         "charge_time": 1.2,
                         "co_factor": 1.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     },
                     "children": [
                         "initial_blast",
@@ -40121,7 +40158,8 @@
                         "fire_rate": 1,
                         "charge_time": 1.2,
                         "co_factor": 0.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 },
                 "bubble_collapse": {
@@ -40145,7 +40183,8 @@
                         "fire_rate": 1,
                         "charge_time": 1.2,
                         "co_factor": 0.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 }
             },
@@ -42320,7 +42359,8 @@
                         "status_chance": 0.15,
                         "fire_rate": 1,
                         "co_factor": 1.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 },
                 "charged_shot": {
@@ -42341,7 +42381,8 @@
                         "fire_rate": 1,
                         "charge_time": 0.3,
                         "co_factor": 0.5,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 }
             },
@@ -43533,7 +43574,8 @@
                         "status_chance": 0.35,
                         "fire_rate": 4.17,
                         "co_factor": 1.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 }
             },
@@ -43938,7 +43980,7 @@
                             "ammo_maximum": [
                                 {
                                     "value": 675,
-                                    "mode": "additive",
+                                    "mode": "base",
                                     "scope": "normal"
                                 }
                             ]
@@ -46720,7 +46762,8 @@
                         "status_chance": 0.2,
                         "fire_rate": 1,
                         "co_factor": 1.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 },
                 "charged_shot": {
@@ -46741,7 +46784,8 @@
                         "fire_rate": 1,
                         "charge_time": 0.5,
                         "co_factor": 0.5,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 },
                 "incarnon_form_charged_shot": {
@@ -46762,7 +46806,8 @@
                         "fire_rate": 1.5,
                         "charge_time": 0.6,
                         "co_factor": 1.0,
-                        "co_effect": "multiplies"
+                        "co_effect": "multiplies",
+                        "noise_level": "silent"
                     }
                 }
             },
@@ -46849,7 +46894,7 @@
                             "ammo_maximum": [
                                 {
                                     "value": 144,
-                                    "mode": "additive"
+                                    "mode": "base"
                                 }
                             ]
                         }
@@ -51295,7 +51340,8 @@
                         "status_chance": 0.1,
                         "fire_rate": 3.67,
                         "co_factor": 1.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 }
             },
@@ -53011,7 +53057,8 @@
                         "status_chance": 0.38,
                         "fire_rate": 1,
                         "co_factor": 1.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 },
                 "charged_shot": {
@@ -53030,7 +53077,8 @@
                         "fire_rate": 1,
                         "charge_time": 1.2,
                         "co_factor": 0.65,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     },
                     "children": [
                         "charged_radial_attack"
@@ -53057,7 +53105,8 @@
                         "fire_rate": 1,
                         "charge_time": 1.2,
                         "co_factor": 0.65,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 }
             },
@@ -60061,7 +60110,8 @@
                         "status_chance": 0.3,
                         "fire_rate": 5.5,
                         "co_factor": 1.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     },
                     "children": [
                         "arrow_explosion"
@@ -60089,7 +60139,8 @@
                         "status_chance": 0.3,
                         "fire_rate": 5.5,
                         "co_factor": 0.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 }
             },
@@ -63240,7 +63291,8 @@
                         "status_chance": 0.5,
                         "fire_rate": 1,
                         "co_factor": 1.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 },
                 "charged_shot": {
@@ -63262,7 +63314,8 @@
                         "status_chance": 0.5,
                         "fire_rate": 1,
                         "co_factor": 0.5,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 }
             },
@@ -65439,7 +65492,8 @@
                         "status_chance": 0.3,
                         "fire_rate": 0.67,
                         "co_factor": 1.0,
-                        "co_effect": "adds"
+                        "co_effect": "adds",
+                        "noise_level": "silent"
                     }
                 },
                 "charged_shot": {
@@ -65459,7 +65513,8 @@
                         "fire_rate": 0.67,
                         "charge_time": 1,
                         "co_factor": 1.0,
-                        "co_effect": "multiplies"
+                        "co_effect": "multiplies",
+                        "noise_level": "silent"
                     }
                 },
                 "perfect_shot": {
@@ -65479,7 +65534,8 @@
                         "fire_rate": 0.67,
                         "charge_time": 0.7,
                         "co_factor": 1.0,
-                        "co_effect": "multiplies"
+                        "co_effect": "multiplies",
+                        "noise_level": "silent"
                     }
                 }
             },
@@ -70273,7 +70329,14 @@
                 ],
                 "exilus": true
             },
-            "stats": {}
+            "stats": {
+                "zoom": [
+                    {
+                        "value": -0.32,
+                        "mode": "additive"
+                    }
+                ]
+            }
         },
         "Ammo Chain": {
             "name": "Ammo Chain",
@@ -70285,7 +70348,14 @@
                 ],
                 "exilus": false
             },
-            "stats": {}
+            "stats": {
+                "ammo_maximum": [
+                    {
+                        "value": 1.0,
+                        "mode": "additive"
+                    }
+                ]
+            }
         },
         "Primed Ammo Chain": {
             "name": "Primed Ammo Chain",
@@ -70297,7 +70367,14 @@
                 ],
                 "exilus": false
             },
-            "stats": {}
+            "stats": {
+                "ammo_maximum": [
+                    {
+                        "value": 1.1,
+                        "mode": "additive"
+                    }
+                ]
+            }
         },
         "Ammo Drum": {
             "name": "Ammo Drum",
@@ -70309,7 +70386,14 @@
                 ],
                 "exilus": true
             },
-            "stats": {},
+            "stats": {
+                "ammo_maximum": [
+                    {
+                        "value": 0.9,
+                        "mode": "additive"
+                    }
+                ]
+            },
             "incompatibility": [
                 "Flawed Ammo Drum"
             ]
@@ -71177,7 +71261,14 @@
                 ],
                 "exilus": true
             },
-            "stats": {}
+            "stats": {
+                "zoom": [
+                    {
+                        "value": 0.4,
+                        "mode": "additive"
+                    }
+                ]
+            }
         },
         "Brute Conditioning": {
             "name": "Brute Conditioning",
@@ -72899,7 +72990,14 @@
                 ],
                 "exilus": true
             },
-            "stats": {}
+            "stats": {
+                "zoom": [
+                    {
+                        "value": 0.4,
+                        "mode": "additive"
+                    }
+                ]
+            }
         },
         "Efficient Beams": {
             "name": "Efficient Beams",
@@ -74592,7 +74690,14 @@
                 ],
                 "exilus": true
             },
-            "stats": {}
+            "stats": {
+                "zoom": [
+                    {
+                        "value": 0.4,
+                        "mode": "additive"
+                    }
+                ]
+            }
         },
         "Healing Return": {
             "name": "Healing Return",
@@ -74955,7 +75060,14 @@
                 ],
                 "exilus": true
             },
-            "stats": {}
+            "stats": {
+                "noise_level": [
+                    {
+                        "value": "silent",
+                        "mode": "base"
+                    }
+                ]
+            }
         },
         "Hydraulic Barrel": {
             "name": "Hydraulic Barrel",
@@ -76126,6 +76238,12 @@
                         "value": 1.65,
                         "mode": "additive"
                     }
+                ],
+                "accuracy": [
+                    {
+                        "value": -0.55,
+                        "mode": "additive"
+                    }
                 ]
             }
         },
@@ -76700,7 +76818,14 @@
                 ],
                 "exilus": true
             },
-            "stats": {}
+            "stats": {
+                "accuracy": [
+                    {
+                        "value": 0.3,
+                        "mode": "additive"
+                    }
+                ]
+            }
         },
         "Nebula Bore": {
             "name": "Nebula Bore",
@@ -77819,7 +77944,14 @@
                 ],
                 "exilus": true
             },
-            "stats": {}
+            "stats": {
+                "recoil": [
+                    {
+                        "value": -0.55,
+                        "mode": "additive"
+                    }
+                ]
+            }
         },
         "Primed Cryo Rounds": {
             "name": "Primed Cryo Rounds",
@@ -80034,7 +80166,14 @@
                 ],
                 "exilus": true
             },
-            "stats": {},
+            "stats": {
+                "ammo_maximum": [
+                    {
+                        "value": 0.9,
+                        "mode": "additive"
+                    }
+                ]
+            },
             "incompatibility": [
                 "Flawed Shell Compression"
             ]
@@ -80373,7 +80512,14 @@
                 ],
                 "exilus": true
             },
-            "stats": {}
+            "stats": {
+                "noise_level": [
+                    {
+                        "value": "silent",
+                        "mode": "base"
+                    }
+                ]
+            }
         },
         "Sinister Reach": {
             "name": "Sinister Reach",
@@ -81099,7 +81245,14 @@
                 ],
                 "exilus": true
             },
-            "stats": {}
+            "stats": {
+                "noise_level": [
+                    {
+                        "value": "silent",
+                        "mode": "base"
+                    }
+                ]
+            }
         },
         "Sure Shot": {
             "name": "Sure Shot",
@@ -81551,7 +81704,14 @@
                 ],
                 "exilus": true
             },
-            "stats": {},
+            "stats": {
+                "ammo_maximum": [
+                    {
+                        "value": 0.9,
+                        "mode": "additive"
+                    }
+                ]
+            },
             "incompatibility": [
                 "Flawed Trick Mag"
             ]
@@ -82651,7 +82811,14 @@
                 ],
                 "exilus": true
             },
-            "stats": {}
+            "stats": {
+                "recoil": [
+                    {
+                        "value": -1.0,
+                        "mode": "additive"
+                    }
+                ]
+            }
         },
         "Truth's Flame": {
             "name": "Truth's Flame",

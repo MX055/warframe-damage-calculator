@@ -6,7 +6,9 @@ from ..utils.types import JsonValue, Number
 
 
 class UpgradeStats(Data):
+    accuracy: JsonValue
     ammo_efficiency: JsonValue
+    ammo_maximum: JsonValue
     attack_speed: JsonValue
     cold: JsonValue
     corrosive: JsonValue
@@ -24,6 +26,7 @@ class UpgradeStats(Data):
     gas: JsonValue
     grineer_damage: JsonValue
     heat: JsonValue
+    heavy_attack_efficiency: JsonValue
     heavy_attack_speed: JsonValue
     hunter_munitions: JsonValue
     impact: JsonValue
@@ -37,14 +40,17 @@ class UpgradeStats(Data):
     multishot: JsonValue
     multishot_lock: JsonValue
     murmur_damage: JsonValue
+    noise_level: JsonValue
     non_crit_bonus_chance: JsonValue
     non_crit_bonus_damage: JsonValue
     orokin_damage: JsonValue
     primed_chamber: JsonValue
     projectile_speed: JsonValue
+    punch_through: JsonValue
     puncture: JsonValue
     range: JsonValue
     radiation: JsonValue
+    recoil: JsonValue
     reload_speed: JsonValue
     secondary_encumber: JsonValue
     secondary_enervate: JsonValue
@@ -60,6 +66,7 @@ class UpgradeStats(Data):
     viral: JsonValue
     weakpoint_crit_chance: JsonValue
     weakpoint_damage: JsonValue
+    zoom: JsonValue
 
 
 class UpgradeData(Data):
@@ -82,7 +89,9 @@ class UpgradeData(Data):
 class ResolvedModeStats(Data):
     damage: Dist = Dist()
     elements: Data = Data()
+    accuracy: Number = 0.0
     ammo_efficiency: Number = 0.0
+    ammo_maximum: Number = 0.0
     attack_speed: Number = 0.0
     crit_chance: Number = 0.0
     crit_damage: Number = 0.0
@@ -105,12 +114,15 @@ class ResolvedModeStats(Data):
     multishot: Number = 0.0
     multishot_lock: bool = False
     murmur_damage: Number = 0.0
+    noise_level: str | None = None
     non_crit_bonus_chance: Number = 0.0
     non_crit_bonus_damage: Number = 0.0
     orokin_damage: Number = 0.0
     primed_chamber: Number = 0.0
     projectile_speed: Number = 0.0
+    punch_through: Number = 0.0
     range: Number = 0.0
+    recoil: Number = 0.0
     reload_speed: Number = 0.0
     secondary_encumber: Number = 0.0
     secondary_enervate: Number = 0.0
@@ -123,6 +135,7 @@ class ResolvedModeStats(Data):
     vigilante_bonus: Number = 0.0
     weakpoint_crit_chance: Number = 0.0
     weakpoint_damage: Number = 0.0
+    zoom: Number = 0.0
 
 
 class ResolvedStat(Data):

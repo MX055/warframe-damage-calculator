@@ -39,9 +39,13 @@ class RangedCalculator(WeaponCalculator):
         modded.additive.weakpoint_crit_chance = max(base.crit_chance * (1 + build.additive.crit_chance + build.additive.weakpoint_crit_chance), 0)
         modded.additive.internal_bleeding = max(build.additive.internal_bleeding * (2 if modded.additive.fire_rate * modded.multiplicative.fire_rate < 2.5 else 1), 0)
         modded.additive.projectile_speed = build.additive.projectile_speed + evo.additive.projectile_speed
-        modded.additive.start_range = float(base.get("start_range", 0) or 0) * (1 + float(modded.additive.projectile_speed or 0))
-        modded.additive.end_range = float(base.get("end_range", 0) or 0) * (1 + float(modded.additive.projectile_speed or 0))
-        modded.additive.final_multiplier = base.get("final_multiplier", 1) or 1
+        modded.additive.start_range = float(base.start_range or 0) * (1 + float(modded.additive.projectile_speed or 0))
+        modded.additive.end_range = float(base.end_range or 0) * (1 + float(modded.additive.projectile_speed or 0))
+        modded.additive.final_multiplier = base.final_multiplier or 1
+        modded.additive.accuracy = base.accuracy * (1 + build.additive.accuracy + evo.additive.accuracy) + build.flat.accuracy + evo.flat.accuracy if base.accuracy else build.additive.accuracy + evo.additive.accuracy + build.flat.accuracy + evo.flat.accuracy
+        modded.additive.zoom = base.zoom * (1 + build.additive.zoom + evo.additive.zoom) + build.flat.zoom + evo.flat.zoom if base.zoom else build.additive.zoom + evo.additive.zoom + build.flat.zoom + evo.flat.zoom
+        modded.additive.recoil = base.recoil * (1 + build.additive.recoil + evo.additive.recoil) + build.flat.recoil + evo.flat.recoil if base.recoil else build.additive.recoil + evo.additive.recoil + build.flat.recoil + evo.flat.recoil
+        modded.additive.ammo_maximum = max(base.ammo_maximum * (1 + build.additive.ammo_maximum + evo.additive.ammo_maximum) + build.flat.ammo_maximum + evo.flat.ammo_maximum, 0)
 
     def _compute_effective(self, result: AttackResult) -> None:
         super()._compute_effective(result)
@@ -56,6 +60,7 @@ class RangedCalculator(WeaponCalculator):
         effective.ammo_cost = modded.additive.ammo_cost
         effective.ammo_efficiency = modded.additive.ammo_efficiency
         effective.magazine_capacity = modded.additive.magazine_capacity
+        effective.ammo_maximum = modded.additive.ammo_maximum
         effective.multishot = modded.additive.multishot
         effective.weakpoint_crit_chance = formulas.combine_chance(modded.additive.weakpoint_crit_chance, modded.multiplicative.crit_chance + modded.multiplicative.weakpoint_crit_chance - 1, modded.flat.crit_chance)
         effective.internal_bleeding = modded.additive.internal_bleeding
@@ -63,6 +68,9 @@ class RangedCalculator(WeaponCalculator):
         effective.start_range = modded.additive.start_range
         effective.end_range = modded.additive.end_range
         effective.final_multiplier = modded.additive.final_multiplier
+        effective.accuracy = modded.additive.accuracy
+        effective.zoom = modded.additive.zoom
+        effective.recoil = modded.additive.recoil
 
     def _sustained_attack_rate(self, result: AttackResult) -> float:
         """Magazine-cycle sustained fire rate used for status/CO and average DPS."""
@@ -72,7 +80,7 @@ class RangedCalculator(WeaponCalculator):
         speed = self._fire_rate_scale(result)
         fire_rate = max(stats.fire_rate * speed, 0.05) * modded.multiplicative.fire_rate
         burst_count = max(stats.burst_count, 1)
-        ammo_cost = max(float(modded.additive.get("ammo_cost", stats.ammo_cost)), 0)
+        ammo_cost = max(float(modded.additive.ammo_cost), 0)
         if ammo_cost <= 0: return fire_rate
         shots = modded.additive.magazine_capacity / ammo_cost
         bursts = shots / burst_count
@@ -110,8 +118,8 @@ class RangedCalculator(WeaponCalculator):
         average.fire_rate = self._sustained_attack_rate(result)
         average.procs_per_shot = effective.status_chance * effective.multishot
 
-        hit_mult = formulas.hit_multiplier(crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
-        weakpoint_hit_mult = formulas.hit_multiplier(weakpoint_crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
+        hit_mult = formulas.hit_multiplier(crit_chance, effective.crit_damage, effective.non_crit_bonus_damage, effective.non_crit_bonus_chance)
+        weakpoint_hit_mult = formulas.hit_multiplier(weakpoint_crit_chance, effective.crit_damage, effective.non_crit_bonus_damage, effective.non_crit_bonus_chance)
         faction = self._max_average_faction_damage(result)
         average.flat_dph = effective.damage.total_damage() * effective.multishot * faction * hit_mult
         average.flat_weakpoint_dph = effective.damage.total_damage() * effective.multishot * effective.weakpoint_damage * weakpoint_hit_mult * faction

@@ -20,7 +20,7 @@ class MeleeCalculator(WeaponCalculator):
         runtime.combo = MAX_COMBO_MULTIPLIER
         if self._selected_category() in HEAVY_ATTACK_CATEGORIES:
             self.weapon.build.results.resolve(self.weapon.data)
-            initial_combo = float(self.weapon.build.results.total.additive.get("initial_combo", 0) or 0)
+            initial_combo = float(self.weapon.build.results.total.additive.initial_combo or 0)
             runtime.combo = self._combo_multiplier_from_hits(initial_combo)
         return ("combo",)
 
@@ -32,8 +32,8 @@ class MeleeCalculator(WeaponCalculator):
         modded.additive.melee_duplicate = clamp(build.additive.melee_duplicate, 0, 1)
         modded.additive.melee_doughty = clamp(build.additive.melee_doughty, 0, 1)
         modded.additive.heavy_attack_speed = max(1 + build.additive.heavy_attack_speed + evo.additive.heavy_attack_speed, 0)
-        modded.additive.heavy_attack_efficiency = max(float(build.additive.get("heavy_attack_efficiency", 0) or 0) + float(evo.additive.get("heavy_attack_efficiency", 0) or 0) + float(stats.get("heavy_attack_efficiency", 0) or 0), 0)
-        modded.additive.initial_combo = max(build.additive.initial_combo + evo.additive.initial_combo + float(stats.get("initial_combo", 0) or 0), 0)
+        modded.additive.heavy_attack_efficiency = max(build.additive.heavy_attack_efficiency + evo.additive.heavy_attack_efficiency + float(stats.heavy_attack_efficiency or 0), 0)
+        modded.additive.initial_combo = max(build.additive.initial_combo + evo.additive.initial_combo + float(stats.initial_combo or 0), 0)
         modded.additive.slam_damage = max(1 + build.additive.slam_damage + evo.additive.slam_damage, 0)
         modded.additive.slide_crit_chance = max(1 + build.additive.slide_crit_chance + evo.additive.slide_crit_chance, 0)
 
@@ -59,15 +59,13 @@ class MeleeCalculator(WeaponCalculator):
         if result.category not in HEAVY_ATTACK_CATEGORIES: return 1
         combo = self.weapon.data.runtime.get("combo")
         if combo is not None: return max(1, min(MAX_COMBO_MULTIPLIER, int(combo)))
-        return self._combo_multiplier_from_hits(float(result.effective.get("initial_combo", 0) or 0))
+        return self._combo_multiplier_from_hits(float(result.effective.initial_combo or 0))
 
     def _status_hits(self, result: AttackResult) -> float:
         hits = super()._status_hits(result)
         build, stats, modded = result.build, result.attack.stats, result.modded
-        duplicate = modded.additive.get("melee_duplicate", 0)
-        crit_mods = self._crit_upgrade_multiplier(result)
-        chance = max(stats.crit_chance * (1 + build.additive.crit_chance * crit_mods) * modded.multiplicative.crit_chance + modded.flat.crit_chance, 0)
-        return hits + duplicate * max(0, 1 - abs(chance - 1))
+        chance = max(stats.crit_chance * (1 + build.additive.crit_chance * self._crit_upgrade_multiplier(result)) * modded.multiplicative.crit_chance + modded.flat.crit_chance, 0)
+        return hits + modded.additive.melee_duplicate * max(0, 1 - abs(chance - 1))
 
     def _sustained_attack_rate(self, result: AttackResult) -> float:
         """Melee sustained attack rate from modded attack speed."""
@@ -78,7 +76,7 @@ class MeleeCalculator(WeaponCalculator):
     def _compute_average(self, result: AttackResult) -> None:
         super()._compute_average(result)
         effective, average = result.effective, result.average
-        hit_mult = formulas.hit_multiplier(average.crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
+        hit_mult = formulas.hit_multiplier(average.crit_chance, effective.crit_damage, effective.non_crit_bonus_damage, effective.non_crit_bonus_chance)
         combo = self._combo_multiplier(result)
         average.combo_multiplier = combo
         average.melee_doughty_bonus = true_round(10 * effective.damage.weight("puncture") * effective.status_chance * effective.melee_doughty, 1)

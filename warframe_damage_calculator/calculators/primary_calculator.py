@@ -36,7 +36,7 @@ class PrimaryCalculator(RangedCalculator):
         if damage.total_damage() <= 0: return 0.0
         if faction_damage is None: faction_damage = self._max_average_faction_damage(result)
         crit_chance = average.weakpoint_crit_chance if weakpoint else average.crit_chance
-        multiplier = formulas.hit_multiplier(crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
+        multiplier = formulas.hit_multiplier(crit_chance, effective.crit_damage, effective.non_crit_bonus_damage, effective.non_crit_bonus_chance)
         primed = 1 + effective.primed_chamber / effective.magazine_capacity
         hunter_procs = effective.hunter_munitions * min(crit_chance, 1)
         hunter_dpp = self._ib_slash_dot_per_proc(result, hit_multiplier=max(effective.crit_damage, multiplier), faction_damage=faction_damage, damage_multiplier=primed)

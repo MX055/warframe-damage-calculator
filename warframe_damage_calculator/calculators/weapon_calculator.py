@@ -82,7 +82,7 @@ class WeaponCalculator:
     def _status_hits(self, result: AttackResult) -> float:
         """Status attempts per attack (typically multishot; melee may add duplicate hits)."""
         stats, modded = result.attack.stats, result.modded
-        return max(modded.additive.get("multishot", stats.multishot), 1)
+        return max(modded.additive.multishot, 1)
 
     def _sustained_attack_rate(self, result: AttackResult) -> float:
         """Sustained attacks/sec for status production and average fire rate.
@@ -111,7 +111,7 @@ class WeaponCalculator:
         recomputes modded scalars so category-specific folds stay consistent. Does not
         rebuild the status model, so multishot/status bonuses do not feed back.
         """
-        entries = list(result.build.additive.get("status_effect_stacks") or [])
+        entries = list(result.build.additive.status_effect_stacks)
         if not entries: return
         model = model or self._sustained_status_model(result)
         bonuses = status_effect_stack_bonuses(model=model, entries=entries, runtime=self.weapon.data.runtime)
@@ -119,7 +119,7 @@ class WeaponCalculator:
         result.build = result.build.copy()
         for mode, stat, bonus in bonuses:
             bucket = getattr(result.build, mode)
-            bucket[stat] = float(bucket.get(stat, 0) or 0) + bonus
+            bucket[stat] = float(bucket[stat] if stat in bucket else 0) + bonus
         result.modded = ModdedStats()
         self._compute_modded_scalars(result)
 
@@ -144,7 +144,7 @@ class WeaponCalculator:
 
     def _flat_dotph(self, result: AttackResult, *, weakpoint: bool = False, hits: Number | None = None, damage_multiplier: Number = 1, extra_damage: Number = 0, faction_damage: Number | None = None) -> float:
         # Allow unbound helper-test calls with self=None (status attempts unused when damage is empty).
-        if self is None: status_attempts = max(result.modded.additive.get("multishot", result.attack.stats.multishot), 1)
+        if self is None: status_attempts = max(result.modded.additive.multishot if "multishot" in result.modded.additive else result.attack.stats.multishot, 1)
         else: status_attempts = self._status_hits(result)
         return damage_calculator.flat_dotph_from_result(result, status_attempts_per_attack=status_attempts, weakpoint=weakpoint, hits=hits, damage_multiplier=damage_multiplier, extra_damage=extra_damage, faction_damage=faction_damage)
 

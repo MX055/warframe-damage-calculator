@@ -846,6 +846,7 @@ Common ranged ammo fields:
 |---|---:|---|
 | `reload_time` | `0.0` | Base reload duration in seconds. |
 | `magazine_size` | `1` | Base magazine size. |
+| `ammo_maximum` | `0.0` | Reserve ammo capacity; percent upgrades scale this, Incarnon `mode: "base"` perks set it. |
 | `recharge_rate` | `0.0` | Battery recharge units per second. |
 | `recharge_delay` | absent | Marks a battery weapon and preserves its delay metadata. |
 | `incarnon_charges` | `0` | Incarnon charge capacity metadata. |
@@ -868,7 +869,11 @@ Common attack stats:
 | Field | Default | Meaning |
 |---|---:|---|
 | `ammo_cost` | `1` | Ammo consumed per shot/tick; drives shots-per-magazine in fire-cycle math. |
-| `punch_through` | `0.0` | Punch-through metadata. |
+| `punch_through` | `0.0` | Punch-through in meters (metadata; folded into effective). |
+| `zoom` | `0.0` | Zoom metadata (absolute FOV factor when set on the attack, else upgrade bonus). |
+| `accuracy` | `0.0` | Accuracy metadata (absolute when set on the attack, else upgrade bonus). |
+| `recoil` | `0.0` | Recoil metadata (absolute when set on the attack, else upgrade bonus). |
+| `noise_level` | category default | `alarming` for ranged, `silent` for melee; bows are `silent` in the database. |
 | `damage` | empty | Damage distribution. |
 | `forced_procs` | empty | Guaranteed proc counts by damage or status type. |
 | `falloff` | empty | Falloff metadata; currently stored but not applied to calculations. |
@@ -1067,6 +1072,15 @@ Faction damage is applied twice to modeled DoT damage.
 - `reload_speed`
 - `magazine_capacity`
 - `ammo_efficiency`
+- `ammo_maximum`
+
+### Handling metadata
+
+- `punch_through`
+- `accuracy`
+- `recoil`
+- `zoom`
+- `noise_level` (string; use `mode: "base"` with value `"silent"` to silence a weapon)
 
 ### Critical
 
