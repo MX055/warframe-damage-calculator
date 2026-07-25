@@ -13,12 +13,18 @@ from .effect_schema import (
     BEHAVIOUR_ON_HIT,
     BEHAVIOUR_ON_IMPACT_FR,
     DOUGHTY_PER,
+    IB_FIRE_RATE_THRESHOLD,
 )
 from .special_effects import iter_deferred
 
 
 def _entries(*sources: Sequence[Mapping[str, Any]] | None) -> list[Mapping[str, Any]]:
     return iter_deferred(*sources)
+
+
+def _behaviour_data(entry: Mapping[str, Any]) -> Mapping[str, Any]:
+    data = entry.get("behaviour_data")
+    return data if isinstance(data, Mapping) else {}
 
 
 def sum_chance(entries: Sequence[Mapping[str, Any]], *, behaviour: str, stat: str | None = None) -> float:
@@ -36,6 +42,15 @@ def hunter_munitions_chance(*sources: Sequence[Mapping[str, Any]] | None) -> flo
 
 def internal_bleeding_chance(*sources: Sequence[Mapping[str, Any]] | None) -> float:
     return sum_chance(_entries(*sources), behaviour=BEHAVIOUR_ON_IMPACT_FR, stat="slash_proc")
+
+
+def internal_bleeding_threshold(*sources: Sequence[Mapping[str, Any]] | None) -> float:
+    threshold = IB_FIRE_RATE_THRESHOLD
+    for entry in _entries(*sources):
+        if entry.get("behaviour") != BEHAVIOUR_ON_IMPACT_FR: continue
+        data = _behaviour_data(entry)
+        if "fire_rate_threshold" in data: threshold = min(threshold, float(data["fire_rate_threshold"]))
+    return threshold
 
 
 def encumber_chance(*sources: Sequence[Mapping[str, Any]] | None) -> float:
@@ -59,5 +74,14 @@ def doughty_factor(*sources: Sequence[Mapping[str, Any]] | None) -> float:
     return total
 
 
-def doughty_crit_damage(*, puncture_weight: float, status_chance: float, factor: float) -> float:
-    return DOUGHTY_PER * 10 * puncture_weight * status_chance * factor
+def doughty_per(*sources: Sequence[Mapping[str, Any]] | None) -> float:
+    per = DOUGHTY_PER
+    for entry in _entries(*sources):
+        if entry.get("behaviour") != BEHAVIOUR_FROM_PUNCTURE_X_STATUS: continue
+        data = _behaviour_data(entry)
+        if "per" in data: per = float(data["per"])
+    return per
+
+
+def doughty_crit_damage(*, puncture_weight: float, status_chance: float, factor: float, per: float = DOUGHTY_PER) -> float:
+    return per * 10 * puncture_weight * status_chance * factor

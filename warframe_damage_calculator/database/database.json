@@ -4769,7 +4769,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS"
+                                    "behaviour": "UNIQUE_STATUS",
+                                    "automatic": true,
+                                    "behaviour_data": {}
                                 }
                             ]
                         }
@@ -4958,7 +4960,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS"
+                                    "behaviour": "UNIQUE_STATUS",
+                                    "automatic": true,
+                                    "behaviour_data": {}
                                 }
                             ]
                         }
@@ -7511,7 +7515,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS"
+                                    "behaviour": "UNIQUE_STATUS",
+                                    "automatic": true,
+                                    "behaviour_data": {}
                                 }
                             ]
                         }
@@ -29942,7 +29948,9 @@
                                 {
                                     "value": 0.33,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS"
+                                    "behaviour": "UNIQUE_STATUS",
+                                    "automatic": true,
+                                    "behaviour_data": {}
                                 }
                             ]
                         }
@@ -33446,7 +33454,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS"
+                                    "behaviour": "UNIQUE_STATUS",
+                                    "automatic": true,
+                                    "behaviour_data": {}
                                 }
                             ]
                         }
@@ -33568,7 +33578,9 @@
                                 {
                                     "value": 0.3,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS"
+                                    "behaviour": "UNIQUE_STATUS",
+                                    "automatic": true,
+                                    "behaviour_data": {}
                                 }
                             ]
                         }
@@ -40311,7 +40323,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS"
+                                    "behaviour": "UNIQUE_STATUS",
+                                    "automatic": true,
+                                    "behaviour_data": {}
                                 }
                             ]
                         }
@@ -40762,7 +40776,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS"
+                                    "behaviour": "UNIQUE_STATUS",
+                                    "automatic": true,
+                                    "behaviour_data": {}
                                 }
                             ]
                         }
@@ -45956,7 +45972,9 @@
                                 {
                                     "value": 0.3,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS"
+                                    "behaviour": "UNIQUE_STATUS",
+                                    "automatic": true,
+                                    "behaviour_data": {}
                                 }
                             ]
                         }
@@ -47872,7 +47890,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS"
+                                    "behaviour": "UNIQUE_STATUS",
+                                    "automatic": true,
+                                    "behaviour_data": {}
                                 }
                             ]
                         }
@@ -48348,7 +48368,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS"
+                                    "behaviour": "UNIQUE_STATUS",
+                                    "automatic": true,
+                                    "behaviour_data": {}
                                 }
                             ]
                         }
@@ -50678,7 +50700,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS"
+                                    "behaviour": "UNIQUE_STATUS",
+                                    "automatic": true,
+                                    "behaviour_data": {}
                                 }
                             ]
                         }
@@ -51144,7 +51168,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS"
+                                    "behaviour": "UNIQUE_STATUS",
+                                    "automatic": true,
+                                    "behaviour_data": {}
                                 }
                             ]
                         }
@@ -58259,7 +58285,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS"
+                                    "behaviour": "UNIQUE_STATUS",
+                                    "automatic": true,
+                                    "behaviour_data": {}
                                 }
                             ]
                         }
@@ -59931,7 +59959,9 @@
                                 {
                                     "value": 0.3,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS"
+                                    "behaviour": "UNIQUE_STATUS",
+                                    "automatic": true,
+                                    "behaviour_data": {}
                                 }
                             ]
                         }
@@ -61961,7 +61991,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS"
+                                    "behaviour": "UNIQUE_STATUS",
+                                    "automatic": true,
+                                    "behaviour_data": {}
                                 }
                             ]
                         }
@@ -73560,7 +73592,8 @@
                         "value": 0.4,
                         "mode": "proportional",
                         "behaviour": "FIRST_SHOT",
-                        "family": "chamber"
+                        "family": "chamber",
+                        "behaviour_data": {}
                     }
                 ]
             }
@@ -74014,9 +74047,8 @@
                         "value": 0.8,
                         "family": "status",
                         "behaviour": "UNIQUE_STATUS",
-                        "stacks": {
-                            "when": "status_type"
-                        }
+                        "automatic": true,
+                        "behaviour_data": {}
                     }
                 ]
             }
@@ -74510,9 +74542,9 @@
                         "value": 0.6,
                         "family": "status",
                         "behaviour": "UNIQUE_STATUS",
-                        "stacks": {
-                            "when": "status_type",
-                            "max": 3
+                        "automatic": true,
+                        "behaviour_data": {
+                            "max_stacks": 3
                         }
                     }
                 ],
@@ -75965,7 +75997,9 @@
                         "stacks": {
                             "when": "on_kill",
                             "max": 2
-                        }
+                        },
+                        "automatic": true,
+                        "behaviour_data": {}
                     }
                 ]
             },
@@ -76176,7 +76210,9 @@
                         "stacks": {
                             "when": "on_kill",
                             "max": 2
-                        }
+                        },
+                        "automatic": true,
+                        "behaviour_data": {}
                     }
                 ]
             },
@@ -76237,7 +76273,9 @@
                         "stacks": {
                             "when": "on_kill",
                             "max": 3
-                        }
+                        },
+                        "automatic": true,
+                        "behaviour_data": {}
                     }
                 ]
             },
@@ -76724,7 +76762,11 @@
                 "slash_proc": [
                     {
                         "value": 0.35,
-                        "behaviour": "ON_IMPACT_DOUBLE_BELOW_2_5_FR"
+                        "behaviour": "ON_IMPACT_DOUBLE_BELOW_2_5_FR",
+                        "automatic": true,
+                        "behaviour_data": {
+                            "fire_rate_threshold": 2.5
+                        }
                     }
                 ]
             }
@@ -76852,7 +76894,9 @@
                 "slash_proc": [
                     {
                         "value": 0.3,
-                        "behaviour": "ON_CRIT"
+                        "behaviour": "ON_CRIT",
+                        "automatic": true,
+                        "behaviour_data": {}
                     }
                 ]
             }
@@ -77207,7 +77251,11 @@
                 "slash_proc": [
                     {
                         "value": 0.35,
-                        "behaviour": "ON_IMPACT_DOUBLE_BELOW_2_5_FR"
+                        "behaviour": "ON_IMPACT_DOUBLE_BELOW_2_5_FR",
+                        "automatic": true,
+                        "behaviour_data": {
+                            "fire_rate_threshold": 2.5
+                        }
                     }
                 ]
             }
@@ -79466,7 +79514,8 @@
                         "value": 1,
                         "mode": "proportional",
                         "behaviour": "FIRST_SHOT",
-                        "family": "chamber"
+                        "family": "chamber",
+                        "behaviour_data": {}
                     }
                 ]
             }
@@ -82895,7 +82944,8 @@
                             "incarnon"
                         ],
                         "behaviour": "LAST_SHOT",
-                        "family": "charge"
+                        "family": "charge",
+                        "behaviour_data": {}
                     }
                 ]
             }
@@ -83507,8 +83557,11 @@
                 "crit_chance": [
                     {
                         "value": 0.05,
-                        "mode": "flat",
-                        "behaviour": "ON_HIT"
+                        "behaviour": "ON_HIT",
+                        "automatic": true,
+                        "behaviour_data": {
+                            "mode": "flat"
+                        }
                     }
                 ]
             }
@@ -83532,8 +83585,11 @@
                 "crit_chance": [
                     {
                         "value": 0.05,
-                        "mode": "flat",
-                        "behaviour": "ON_HIT"
+                        "behaviour": "ON_HIT",
+                        "automatic": true,
+                        "behaviour_data": {
+                            "mode": "flat"
+                        }
                     }
                 ]
             }
@@ -83557,8 +83613,11 @@
                 "crit_chance": [
                     {
                         "value": 0.05,
-                        "mode": "flat",
-                        "behaviour": "ON_HIT"
+                        "behaviour": "ON_HIT",
+                        "automatic": true,
+                        "behaviour_data": {
+                            "mode": "flat"
+                        }
                     }
                 ]
             }
@@ -83577,8 +83636,11 @@
                 "crit_chance": [
                     {
                         "value": 0.05,
-                        "mode": "flat",
-                        "behaviour": "ON_HIT"
+                        "behaviour": "ON_HIT",
+                        "automatic": true,
+                        "behaviour_data": {
+                            "mode": "flat"
+                        }
                     }
                 ]
             }
@@ -90682,9 +90744,10 @@
                     {
                         "value": 0.12,
                         "behaviour": "STATUS_PROC_STACKS",
-                        "status": "heat",
-                        "stacks": {
-                            "max": 40,
+                        "automatic": true,
+                        "behaviour_data": {
+                            "status": "heat",
+                            "max_stacks": 40,
                             "duration": 10
                         }
                     }
@@ -90728,9 +90791,10 @@
                     {
                         "value": 0.015,
                         "behaviour": "STATUS_PROC_STACKS",
-                        "status": "electricity",
-                        "stacks": {
-                            "max": 40,
+                        "automatic": true,
+                        "behaviour_data": {
+                            "status": "electricity",
+                            "max_stacks": 40,
                             "duration": 12
                         }
                     }
@@ -90739,9 +90803,10 @@
                     {
                         "value": 0.03,
                         "behaviour": "STATUS_PROC_STACKS",
-                        "status": "electricity",
-                        "stacks": {
-                            "max": 40,
+                        "automatic": true,
+                        "behaviour_data": {
+                            "status": "electricity",
+                            "max_stacks": 40,
                             "duration": 12
                         }
                     }
@@ -90976,8 +91041,12 @@
                 "crit_damage": [
                     {
                         "value": 1,
-                        "mode": "flat",
-                        "behaviour": "FROM_PUNCTURE_X_STATUS"
+                        "behaviour": "FROM_PUNCTURE_X_STATUS",
+                        "automatic": true,
+                        "behaviour_data": {
+                            "mode": "flat",
+                            "per": 0.1
+                        }
                     }
                 ]
             }
@@ -90996,7 +91065,9 @@
                 "duplicated_hit": [
                     {
                         "value": 1,
-                        "behaviour": "NEAR_YELLOW"
+                        "behaviour": "NEAR_YELLOW",
+                        "automatic": true,
+                        "behaviour_data": {}
                     }
                 ]
             }
@@ -91134,9 +91205,10 @@
                     {
                         "value": 0.036,
                         "behaviour": "STATUS_PROC_STACKS",
-                        "status": "toxin",
-                        "stacks": {
-                            "max": 40,
+                        "automatic": true,
+                        "behaviour_data": {
+                            "status": "toxin",
+                            "max_stacks": 40,
                             "duration": 12
                         }
                     }
@@ -91145,9 +91217,10 @@
                     {
                         "value": 0.018,
                         "behaviour": "STATUS_PROC_STACKS",
-                        "status": "toxin",
-                        "stacks": {
-                            "max": 40,
+                        "automatic": true,
+                        "behaviour_data": {
+                            "status": "toxin",
+                            "max_stacks": 40,
                             "duration": 12
                         }
                     }
@@ -91315,9 +91388,10 @@
                     {
                         "value": 0.03,
                         "behaviour": "STATUS_PROC_STACKS",
-                        "status": "cold",
-                        "stacks": {
-                            "max": 40,
+                        "automatic": true,
+                        "behaviour_data": {
+                            "status": "cold",
+                            "max_stacks": 40,
                             "duration": 12
                         }
                     }
@@ -91326,9 +91400,10 @@
                     {
                         "value": 0.0225,
                         "behaviour": "STATUS_PROC_STACKS",
-                        "status": "cold",
-                        "stacks": {
-                            "max": 40,
+                        "automatic": true,
+                        "behaviour_data": {
+                            "status": "cold",
+                            "max_stacks": 40,
                             "duration": 12
                         }
                     }
@@ -91533,7 +91608,9 @@
                 "random_proc": [
                     {
                         "value": 0.24,
-                        "behaviour": "ON_ANY_PROC"
+                        "behaviour": "ON_ANY_PROC",
+                        "automatic": true,
+                        "behaviour_data": {}
                     }
                 ]
             }
@@ -91552,7 +91629,13 @@
                 "crit_reset_charges": [
                     {
                         "value": 6,
-                        "behaviour": "STACK_RESET_CRIT_2_PLUS"
+                        "behaviour": "STACK_RESET_CRIT_2_PLUS",
+                        "automatic": true,
+                        "behaviour_data": {
+                            "stat": "crit_chance",
+                            "mode": "flat",
+                            "per_stack": 0.1
+                        }
                     }
                 ]
             }

@@ -133,21 +133,18 @@ def apply_condition_overload(*, modded: ModdedStats, model: SustainedStatusModel
     return resolved
 
 
-def status_effect_stack_bonuses(*, model: SustainedStatusModel, entries: list, runtime: Mapping[str, object] | None = None) -> list[tuple[str, str, float]]:
-    """Resolve (mode, target_stat, bonus) triples from deferred status_effect_stacks entries.
+def status_effect_stack_bonuses(*, model: SustainedStatusModel, entries: list) -> list[tuple[str, str, float]]:
+    """Resolve (mode, target_stat, bonus) triples from automatic status_effect_stacks entries.
 
-    Runtime keys `on_<status>_status_effect` override the sustained expectation when set.
-    Automatic stacks use each entry's buff `duration` when present.
+    Automatic effects always use sustained proc expectations; runtime cannot override them.
     """
-    runtime = runtime or {}
     bonuses: list[tuple[str, str, float]] = []
     for entry in entries:
+        if not entry.get("automatic", True): continue
         status = str(entry["status"])
         maximum = int(entry["max_stacks"])
-        override = runtime.get(f"on_{status}_status_effect")
-        if override is None: override = runtime.get(f"{status}_status_effect")
         duration = entry.get("duration")
-        stacks = min(float(override), float(maximum)) if override is not None else model.expected_status_stacks(status, maximum, duration=None if duration is None else float(duration))
+        stacks = model.expected_status_stacks(status, maximum, duration=None if duration is None else float(duration))
         if not stacks: continue
         bonuses.append((str(entry.get("mode", "proportional")), str(entry["stat"]), float(entry["value"]) * stacks))
     return bonuses

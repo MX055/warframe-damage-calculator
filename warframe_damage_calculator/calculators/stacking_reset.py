@@ -15,7 +15,12 @@ def enervate_params(*sources: Sequence[Mapping[str, Any]] | None) -> tuple[float
     charges = 0.0
     for entry in iter_deferred(*sources):
         if entry.get("behaviour") != BEHAVIOUR_STACK_RESET_CRIT_2_PLUS: continue
-        per_stack += float(entry.get("value") or ENERVATE_PER_STACK)
+        data = entry.get("behaviour_data") if isinstance(entry.get("behaviour_data"), Mapping) else {}
+        # Prefer behaviour_data.per_stack (DB source of truth); resolved payloads also put it in value.
+        if "per_stack" in data:
+            per_stack += float(data["per_stack"])
+        else:
+            per_stack += float(entry.get("value") or ENERVATE_PER_STACK)
         charges = max(charges, float(entry.get("after") or entry.get("after_max") or 0))
     return per_stack, charges
 

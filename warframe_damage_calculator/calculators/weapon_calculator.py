@@ -138,16 +138,16 @@ class WeaponCalculator:
         return condition_overload_bonus(model, value_per_status=result.build.proportional.condition_overload.value, co_factor=result.attack.stats.co_factor, co_effect=result.attack.stats.co_effect).bonus
 
     def _apply_status_effect_stacks(self, result: AttackResult, model: SustainedStatusModel | None = None) -> None:
-        """Apply deferred on_*_status_effect stack bonuses from sustained proc expectations.
+        """Apply automatic status_effect_stacks bonuses from sustained proc expectations.
 
-        Injects expected (or runtime-overridden) stacks into a per-attack build copy and
-        recomputes modded scalars so category-specific folds stay consistent. Does not
-        rebuild the status model, so multishot/status bonuses do not feed back.
+        Injects expected stacks into a per-attack build copy and recomputes modded scalars
+        so category-specific folds stay consistent. Does not rebuild the status model, so
+        multishot/status bonuses do not feed back. Runtime cannot override automatic effects.
         """
         entries = list(result.build.proportional.status_effect_stacks)
         if not entries: return
         model = model or self._sustained_status_model(result)
-        bonuses = status_effect_stack_bonuses(model=model, entries=entries, runtime=self.weapon.data.runtime)
+        bonuses = status_effect_stack_bonuses(model=model, entries=entries)
         if not bonuses: return
         result.build = result.build.copy()
         for mode, stat, bonus in bonuses:

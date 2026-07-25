@@ -371,7 +371,7 @@ class PublicApiTests(unittest.TestCase):
             "type": "arcane",
             "max_rank": 0,
             "compatibility": {"types": []},
-            "stats": {"duplicated_hit": [{"value": 1, "behaviour": "NEAR_YELLOW"}]},
+            "stats": {"duplicated_hit": [{"value": 1, "behaviour": "NEAR_YELLOW", "automatic": True, "behaviour_data": {}}]},
         })
         without_duplicate = arsenal.get("Skana").configure(Build(condition_overload))
         with_duplicate = arsenal.get("Skana").configure(Build(condition_overload, duplicate))
@@ -682,7 +682,7 @@ class PublicApiTests(unittest.TestCase):
             "name": "GunCO",
             "type": "mod",
             "max_rank": 0,
-            "stats": {"damage_bonus": [{"value": 1, "behaviour": "UNIQUE_STATUS", "stacks": {"when": "status_type", "max": 1}}]},
+            "stats": {"damage_bonus": [{"value": 1, "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {"max_stacks": 1}}]},
         })
         weapon = Primary({
             "name": "Evo CO",
@@ -818,7 +818,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(application_chance.duplicate_chance(arsenal.get("Melee Duplicate").results.total.application_chance), 1)
         self.assertAlmostEqual(application_chance.doughty_factor(arsenal.get("Melee Doughty").results.total.conversions), 1)
         enervate = arsenal.get("Secondary Enervate")
-        self.assertEqual(enervate.data.stats.crit_reset_charges, [{"value": 6, "behaviour": "STACK_RESET_CRIT_2_PLUS"}])
+        self.assertEqual(enervate.data.stats.crit_reset_charges, [{"value": 6, "behaviour": "STACK_RESET_CRIT_2_PLUS", "automatic": True, "behaviour_data": {"stat": "crit_chance", "mode": "flat", "per_stack": 0.1}}])
         per_stack, charges = stacking_reset.enervate_params(enervate.results.total.stacking_reset)
         self.assertAlmostEqual(per_stack, 0.1)
         self.assertAlmostEqual(charges, 6)
@@ -997,7 +997,7 @@ class PublicApiTests(unittest.TestCase):
             "type": "mod",
             "max_rank": 0,
             "compatibility": {"types": []},
-            "stats": {"damage_bonus": [{"value": 1, "behaviour": "UNIQUE_STATUS", "stacks": {"when": "status_type", "max": 2}}]},
+            "stats": {"damage_bonus": [{"value": 1, "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {"max_stacks": 2}}]},
         })
         base_damage = Upgrade({
             "name": "Base Damage",
@@ -1024,23 +1024,23 @@ class PublicApiTests(unittest.TestCase):
     def test_condition_overload_database_values_remain_structured(self):
         expected = {
             "Condition Overload": (
-                {"value": 0.8, "family": "status", "behaviour": "UNIQUE_STATUS", "stacks": {"when": "status_type"}},
+                {"value": 0.8, "family": "status", "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {}},
                 {"value": 0.8, "max_stacks": "inf"},
             ),
             "Cull the Weak": (
-                {"value": 0.6, "family": "status", "behaviour": "UNIQUE_STATUS", "stacks": {"when": "status_type", "max": 3}},
+                {"value": 0.6, "family": "status", "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {"max_stacks": 3}},
                 {"value": 0.6, "max_stacks": 3},
             ),
             "Galvanized Aptitude": (
-                {"value": 0.4, "family": "status", "behaviour": "UNIQUE_STATUS", "stacks": {"when": "on_kill", "max": 2}},
+                {"value": 0.4, "family": "status", "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {}, "stacks": {"when": "on_kill", "max": 2}},
                 {"value": 0.8, "max_stacks": "inf"},
             ),
             "Galvanized Savvy": (
-                {"value": 0.4, "family": "status", "behaviour": "UNIQUE_STATUS", "stacks": {"when": "on_kill", "max": 2}},
+                {"value": 0.4, "family": "status", "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {}, "stacks": {"when": "on_kill", "max": 2}},
                 {"value": 0.8, "max_stacks": "inf"},
             ),
             "Galvanized Shot": (
-                {"value": 0.4, "family": "status", "behaviour": "UNIQUE_STATUS", "stacks": {"when": "on_kill", "max": 3}},
+                {"value": 0.4, "family": "status", "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {}, "stacks": {"when": "on_kill", "max": 3}},
                 {"value": 1.2, "max_stacks": "inf"},
             ),
         }
@@ -1057,7 +1057,7 @@ class PublicApiTests(unittest.TestCase):
             "type": "mod",
             "max_rank": 0,
             "compatibility": {"types": []},
-            "stats": {"damage_bonus": [{"value": 0.8, "behaviour": "UNIQUE_STATUS", "stacks": {"when": "status_type", "max": 2}}]},
+            "stats": {"damage_bonus": [{"value": 0.8, "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {"max_stacks": 2}}]},
         })
         weapon = arsenal.get("Cernos").configure(Build(condition_overload))
 
@@ -1070,7 +1070,7 @@ class PublicApiTests(unittest.TestCase):
             "type": "mod",
             "max_rank": 0,
             "compatibility": {"types": []},
-            "stats": {"damage_bonus": [{"value": 0.8, "behaviour": "UNIQUE_STATUS", "stacks": {"when": "status_type", "max": 3}}]},
+            "stats": {"damage_bonus": [{"value": 0.8, "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {"max_stacks": 3}}]},
         })
         duration = Upgrade({
             "name": "Lasting Sting",
@@ -1093,7 +1093,7 @@ class PublicApiTests(unittest.TestCase):
             "type": "mod",
             "max_rank": 0,
             "compatibility": {"types": []},
-            "stats": {"damage_bonus": [{"value": 1, "behaviour": "UNIQUE_STATUS", "stacks": {"when": "status_type", "max": 1}}]},
+            "stats": {"damage_bonus": [{"value": 1, "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {"max_stacks": 1}}]},
         })
         weapon = Primary({
             "name": "Forced CO",
@@ -1118,7 +1118,7 @@ class PublicApiTests(unittest.TestCase):
             "type": "mod",
             "max_rank": 0,
             "compatibility": {"types": []},
-            "stats": {"damage_bonus": [{"value": 1, "behaviour": "UNIQUE_STATUS", "stacks": {"when": "status_type", "max": 1}}]},
+            "stats": {"damage_bonus": [{"value": 1, "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {"max_stacks": 1}}]},
         })
         weapon = Primary({
             "name": "Bucketed CO",
@@ -1294,7 +1294,7 @@ class PublicApiTests(unittest.TestCase):
             "type": "mod",
             "max_rank": 0,
             "compatibility": {"types": []},
-            "stats": {"damage_bonus": [{"value": 1, "behaviour": "UNIQUE_STATUS", "stacks": {"when": "status_type", "max": 1}}]},
+            "stats": {"damage_bonus": [{"value": 1, "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {"max_stacks": 1}}]},
         })
         weapon = Primary({
             "name": "CO Order",
@@ -1356,14 +1356,14 @@ class PublicApiTests(unittest.TestCase):
     def test_status_effect_stacks_database_shape(self):
         frostbite = arsenal.upgrades["Primary Frostbite"]["stats"]
         self.assertEqual(frostbite["crit_damage"], [
-            {"value": 0.03, "behaviour": "STATUS_PROC_STACKS", "status": "cold", "stacks": {"max": 40, "duration": 12}},
+            {"value": 0.03, "behaviour": "STATUS_PROC_STACKS", "automatic": True, "behaviour_data": {"status": "cold", "max_stacks": 40, "duration": 12}},
         ])
         self.assertEqual(frostbite["multishot"], [
-            {"value": 0.0225, "behaviour": "STATUS_PROC_STACKS", "status": "cold", "stacks": {"max": 40, "duration": 12}},
+            {"value": 0.0225, "behaviour": "STATUS_PROC_STACKS", "automatic": True, "behaviour_data": {"status": "cold", "max_stacks": 40, "duration": 12}},
         ])
         flare = arsenal.upgrades["Cascadia Flare"]["stats"]["damage_bonus"]
         self.assertEqual(flare, [
-            {"value": 0.12, "behaviour": "STATUS_PROC_STACKS", "status": "heat", "stacks": {"max": 40, "duration": 10}},
+            {"value": 0.12, "behaviour": "STATUS_PROC_STACKS", "automatic": True, "behaviour_data": {"status": "heat", "max_stacks": 40, "duration": 10}},
         ])
         resolved = arsenal.get("Primary Frostbite").results.total.proportional.status_effect_stacks
         self.assertEqual(len(resolved), 2)
@@ -1387,13 +1387,11 @@ class PublicApiTests(unittest.TestCase):
         self.assertGreater(selected(with_heat).effective.damage_bonus, selected(bare).effective.damage_bonus)
         self.assertAlmostEqual(arsenal.get("Cascadia Flare").results.total.proportional.damage_bonus, 0)
 
-    def test_status_effect_stacks_runtime_override(self):
+    def test_status_effect_stacks_ignore_runtime_override(self):
         cold = Upgrade({"name": "Cold", "type": "mod", "max_rank": 0, "stats": {"cold": [{"value": 1.0}]}})
         auto = arsenal.get("Braton").configure(Build(cold, arsenal.get("Primary Frostbite")))
-        capped = arsenal.get("Braton").configure(Build(cold, arsenal.get("Primary Frostbite")), context={"on_cold_status_effect": 40})
-        zero = arsenal.get("Braton").configure(Build(cold, arsenal.get("Primary Frostbite")), context={"on_cold_status_effect": 0})
-        self.assertGreater(selected(capped).effective.crit_damage, selected(auto).effective.crit_damage)
-        self.assertAlmostEqual(selected(zero).effective.crit_damage, selected(arsenal.get("Braton").configure(Build(cold))).effective.crit_damage)
+        overridden = arsenal.get("Braton").configure(Build(cold, arsenal.get("Primary Frostbite")), context={"on_cold_status_effect": 0})
+        self.assertAlmostEqual(selected(overridden).effective.crit_damage, selected(auto).effective.crit_damage)
 
     def test_metadata_stats_defaults_and_silence_mods(self):
         rifle = arsenal.get("Braton")

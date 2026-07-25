@@ -28,8 +28,10 @@ from .effect_schema import (
     BEHAVIOUR_UNIQUE_STATUS,
     COMMON_FAMILY,
     ENERVATE_PER_STACK,
+    behaviour_data_of,
     behaviour_of,
     effect_family,
+    is_automatic,
     normalize_mode,
     rank_scales,
 )
@@ -118,6 +120,11 @@ class UpgradeCalculator:
         condition = effect.get("when")
         stacks = effect.get("stacks")
 
+        if behaviour is not None:
+            data = behaviour_data_of(effect, behaviour=behaviour)
+        else:
+            data = {}
+
         if behaviour == BEHAVIOUR_FIRST_SHOT:
             if family == COMMON_FAMILY: family = "chamber"
             return ResolvableEffect(stat, value, "proportional", "magazine_position", condition="first_shot", exclude=exclude, family=family, scales_with_rank=scales, behaviour=behaviour)
@@ -127,47 +134,61 @@ class UpgradeCalculator:
 
         if behaviour == BEHAVIOUR_STACK_RESET_CRIT_2_PLUS:
             if stat != "crit_reset_charges": raise ValueError("STACK_RESET_CRIT_2_PLUS requires crit_reset_charges")
-            # value = orange+ charges until full reset (rank-scales); per-stack CC is constant.
-            payload = {"stat": "crit_chance", "value": ENERVATE_PER_STACK, "behaviour": behaviour, "after_max": value}
+            if not is_automatic(effect, behaviour=behaviour): raise ValueError("STACK_RESET_CRIT_2_PLUS requires automatic: true")
+            # value = orange+ charges until full reset (rank-scales); per_stack lives in behaviour_data.
+            per_stack = float(data.get("per_stack", ENERVATE_PER_STACK))
+            target = str(data.get("stat", "crit_chance"))
+            apply_mode = str(data.get("mode", "flat"))
+            payload = {"stat": target, "value": per_stack, "mode": apply_mode, "behaviour": behaviour, "automatic": True, "behaviour_data": data, "after_max": value}
             return ResolvableEffect(stat="stacking_reset", value=payload, bucket="stacking_reset", mode="proportional", scales_with_rank=True, behaviour=behaviour)
 
         if behaviour == BEHAVIOUR_ON_CRIT:
             if stat != "slash_proc": raise ValueError("ON_CRIT requires slash_proc")
-            return ResolvableEffect(stat="application_chance", value={"stat": "slash_proc", "value": value, "behaviour": behaviour, "chance": value}, bucket="application_chance", mode="proportional", scales_with_rank=scales, behaviour=behaviour)
+            if not is_automatic(effect, behaviour=behaviour): raise ValueError("ON_CRIT requires automatic: true")
+            return ResolvableEffect(stat="application_chance", value={"stat": "slash_proc", "value": value, "behaviour": behaviour, "automatic": True, "behaviour_data": data, "chance": value}, bucket="application_chance", mode="proportional", scales_with_rank=scales, behaviour=behaviour)
 
         if behaviour == BEHAVIOUR_ON_IMPACT_FR:
             if stat != "slash_proc": raise ValueError("ON_IMPACT_DOUBLE_BELOW_2_5_FR requires slash_proc")
-            return ResolvableEffect(stat="application_chance", value={"stat": "slash_proc", "value": value, "behaviour": behaviour, "chance": value}, bucket="application_chance", mode="proportional", scales_with_rank=scales, behaviour=behaviour)
+            if not is_automatic(effect, behaviour=behaviour): raise ValueError("ON_IMPACT_DOUBLE_BELOW_2_5_FR requires automatic: true")
+            return ResolvableEffect(stat="application_chance", value={"stat": "slash_proc", "value": value, "behaviour": behaviour, "automatic": True, "behaviour_data": data, "chance": value}, bucket="application_chance", mode="proportional", scales_with_rank=scales, behaviour=behaviour)
 
         if behaviour == BEHAVIOUR_ON_ANY_PROC:
             if stat != "random_proc": raise ValueError("ON_ANY_PROC requires random_proc")
-            return ResolvableEffect(stat="application_chance", value={"stat": "random_proc", "value": value, "behaviour": behaviour, "chance": value}, bucket="application_chance", mode="proportional", scales_with_rank=scales, behaviour=behaviour)
+            if not is_automatic(effect, behaviour=behaviour): raise ValueError("ON_ANY_PROC requires automatic: true")
+            return ResolvableEffect(stat="application_chance", value={"stat": "random_proc", "value": value, "behaviour": behaviour, "automatic": True, "behaviour_data": data, "chance": value}, bucket="application_chance", mode="proportional", scales_with_rank=scales, behaviour=behaviour)
 
         if behaviour == BEHAVIOUR_ON_HIT:
             if stat != "crit_chance": raise ValueError("ON_HIT requires crit_chance")
-            return ResolvableEffect(stat="application_chance", value={"stat": "crit_chance", "value": value, "behaviour": behaviour, "mode": "flat"}, bucket="application_chance", mode="proportional", scales_with_rank=scales, behaviour=behaviour)
+            if not is_automatic(effect, behaviour=behaviour): raise ValueError("ON_HIT requires automatic: true")
+            apply_mode = str(data.get("mode", "flat"))
+            return ResolvableEffect(stat="application_chance", value={"stat": "crit_chance", "value": value, "behaviour": behaviour, "automatic": True, "behaviour_data": data, "mode": apply_mode}, bucket="application_chance", mode="proportional", scales_with_rank=scales, behaviour=behaviour)
 
         if behaviour == BEHAVIOUR_NEAR_YELLOW:
             if stat != "duplicated_hit": raise ValueError("NEAR_YELLOW requires duplicated_hit")
-            return ResolvableEffect(stat="application_chance", value={"stat": "duplicated_hit", "value": value, "behaviour": behaviour}, bucket="application_chance", mode="proportional", scales_with_rank=scales, behaviour=behaviour)
+            if not is_automatic(effect, behaviour=behaviour): raise ValueError("NEAR_YELLOW requires automatic: true")
+            return ResolvableEffect(stat="application_chance", value={"stat": "duplicated_hit", "value": value, "behaviour": behaviour, "automatic": True, "behaviour_data": data}, bucket="application_chance", mode="proportional", scales_with_rank=scales, behaviour=behaviour)
 
         if behaviour == BEHAVIOUR_FROM_PUNCTURE_X_STATUS:
-            return ResolvableEffect(stat="conversions", value={"stat": stat, "value": value, "behaviour": behaviour, "mode": "flat"}, bucket="conversions", mode="proportional", scales_with_rank=scales, behaviour=behaviour)
+            if not is_automatic(effect, behaviour=behaviour): raise ValueError("FROM_PUNCTURE_X_STATUS requires automatic: true")
+            apply_mode = str(data.get("mode", "flat"))
+            return ResolvableEffect(stat="conversions", value={"stat": stat, "value": value, "behaviour": behaviour, "automatic": True, "behaviour_data": data, "mode": apply_mode}, bucket="conversions", mode="proportional", scales_with_rank=scales, behaviour=behaviour)
 
         if behaviour == BEHAVIOUR_UNIQUE_STATUS:
-            # CO amount lives on proportional.condition_overload; product folding happens at apply time.
-            if isinstance(stacks, Mapping) and stacks.get("when") not in {None, "status_type"}:
-                return ResolvableEffect(stat="condition_overload", value=value, bucket="stacking", stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"), scales_with_rank=scales, co_max_stacks="inf", behaviour=behaviour)
-            maximum = stacks.get("max") if isinstance(stacks, Mapping) else None
-            return ResolvableEffect(stat="condition_overload", value=value, bucket="static", mode="proportional", scales_with_rank=scales, co_max_stacks="inf" if maximum is None else maximum, behaviour=behaviour)
+            if not is_automatic(effect, behaviour=behaviour): raise ValueError("UNIQUE_STATUS requires automatic: true")
+            # Unique-status cap lives in behaviour_data; ordinary value stacking may still use top-level stacks.
+            co_max = data.get("max_stacks", "inf")
+            if isinstance(stacks, Mapping):
+                return ResolvableEffect(stat="condition_overload", value=value, bucket="stacking", stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"), scales_with_rank=scales, co_max_stacks=co_max, behaviour=behaviour)
+            return ResolvableEffect(stat="condition_overload", value=value, bucket="static", mode="proportional", scales_with_rank=scales, co_max_stacks=co_max, behaviour=behaviour)
 
         if behaviour == BEHAVIOUR_STATUS_PROC_STACKS:
-            status = effect.get("status")
-            if not status: raise ValueError("STATUS_PROC_STACKS requires status")
-            maximum = stacks.get("max") if isinstance(stacks, Mapping) else None
-            if maximum is None: raise ValueError("STATUS_PROC_STACKS requires stacks.max")
-            payload = {"value": value, "stat": stat, "status": status, "max_stacks": maximum, "mode": "proportional"}
-            if isinstance(stacks, Mapping) and stacks.get("duration") is not None: payload["duration"] = stacks["duration"]
+            if not is_automatic(effect, behaviour=behaviour): raise ValueError("STATUS_PROC_STACKS requires automatic: true")
+            status = data.get("status")
+            if not status: raise ValueError("STATUS_PROC_STACKS behaviour_data requires status")
+            maximum = data.get("max_stacks")
+            if maximum is None: raise ValueError("STATUS_PROC_STACKS behaviour_data requires max_stacks")
+            payload = {"value": value, "stat": stat, "status": status, "max_stacks": maximum, "mode": "proportional", "automatic": True, "behaviour_data": data}
+            if data.get("duration") is not None: payload["duration"] = data["duration"]
             return ResolvableEffect(stat="status_effect_stacks", value=payload, bucket="static", mode="proportional", scales_with_rank=scales, behaviour=behaviour)
 
         if equipped is not None:

@@ -10,7 +10,7 @@ from ..core.data import Data
 from ..protocols import WeaponCalculatorOwner
 from ..utils.types import EffectMode
 from .effect_resolution import ResolutionContext, ResolvableEffect, raw_effects, resolve_and_aggregate, resolve_stack_scaled_effect
-from .effect_schema import BEHAVIOUR_FIRST_SHOT, BEHAVIOUR_LAST_SHOT, COMMON_FAMILY, behaviour_of, effect_family, normalize_mode
+from .effect_schema import BEHAVIOUR_FIRST_SHOT, BEHAVIOUR_LAST_SHOT, COMMON_FAMILY, behaviour_data_of, behaviour_of, effect_family, normalize_mode
 from .magazine_position import MAGAZINE_POSITION_WHEN, serialize_position_effect
 from .stat_aggregation import CONVERSION_STATS, merge_evolution_stat
 
@@ -42,6 +42,9 @@ class EvolutionCalculator:
         value = effect.value
         conversion_max = effect.get("max")
         exclude = self._exclude_flags(effect)
+
+        if behaviour is not None:
+            behaviour_data_of(effect, behaviour=behaviour)
 
         if behaviour == BEHAVIOUR_FIRST_SHOT:
             if family == COMMON_FAMILY: family = "chamber"

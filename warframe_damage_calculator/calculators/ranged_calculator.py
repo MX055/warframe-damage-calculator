@@ -3,7 +3,6 @@ from ..utils.constants import DOT_MULTIPLIERS
 from ..utils.functions import clamp, true_round
 from ..utils.types import Number
 from . import application_chance, formulas
-from .effect_schema import IB_FIRE_RATE_THRESHOLD
 from .magazine_position import apply_magazine_position_mixture
 from .weapon_calculator import WeaponCalculator
 
@@ -109,7 +108,8 @@ class RangedCalculator(WeaponCalculator):
 
     def _internal_bleeding_chance(self, result: AttackResult) -> float:
         chance = application_chance.internal_bleeding_chance(result.build.application_chance)
-        if result.effective.fire_rate < IB_FIRE_RATE_THRESHOLD: chance *= 2
+        threshold = application_chance.internal_bleeding_threshold(result.build.application_chance)
+        if result.effective.fire_rate < threshold: chance *= 2
         return max(chance, 0)
 
     def _ib_slash_dot_per_proc(self, result: AttackResult, *, hit_multiplier: Number, faction_damage: Number, damage_multiplier: Number = 1) -> float:

@@ -556,13 +556,28 @@ Every effect has a calculation mode:
 
 Product pools use `family` (not a mode). Same family adds; different families multiply as `Π (1 + sum)`. Common families: `bonus`, `chamber`, `charge`, `status`.
 
-Special cases use closed `behaviour` tags (e.g. `FIRST_SHOT`, `ON_CRIT`) on semantic stats like `slash_proc` / `damage_bonus`.
+Special cases use closed `behaviour` tags (e.g. `FIRST_SHOT`, `ON_CRIT`) on semantic stats like `slash_proc` / `damage_bonus`. Expected-value specials also set `"automatic": true` (required for `ON_*`, `STATUS_PROC_STACKS`, `UNIQUE_STATUS`, Enervate, Duplicate, Doughty). Whenever `behaviour` is set, `behaviour_data` holds that behaviour's parameters (may be `{}` when there are none).
 
 Example — Primed Chamber:
 
 ```json
-{"value": 1, "family": "chamber", "behaviour": "FIRST_SHOT"}
+{"value": 1, "family": "chamber", "behaviour": "FIRST_SHOT", "behaviour_data": {}}
 ```
+
+Example — Secondary Enervate (`value` = orange+ reset charges; per-stack CC in `behaviour_data`):
+
+```json
+{
+  "crit_reset_charges": [{
+    "value": 6,
+    "behaviour": "STACK_RESET_CRIT_2_PLUS",
+    "automatic": true,
+    "behaviour_data": {"stat": "crit_chance", "mode": "flat", "per_stack": 0.1}
+  }]
+}
+```
+
+Other `behaviour_data` shapes: Internal Bleeding `{fire_rate_threshold}`, Vigilante `{mode}`, Doughty `{mode, per}`, Cascadia/Frostbite `{status, max_stacks, duration}`, Cull the Weak `{max_stacks}`.
 
 Boolean effects aggregate with logical OR. Numeric effects add together.
 Damage-type effects aggregate into a single ordered damage distribution.
@@ -1163,7 +1178,7 @@ shots, projectiles, or animation frames.
 - `STATUS_PROC_STACKS` uses the expected sustained proc count of one status type over the arcane buff `duration` (not weapon status duration), capped by `stacks.max` — e.g. Cascadia Flare / Primary Frostbite. Override with runtime `on_<status>_status_effect`.
 - Per-type application chance accounts for status chance, damage weights, multishot/status hits, and forced procs.
 - Uptime for each type is `1 - (1 - p)^(attacks_per_second × status_duration)`.
-- Unique-status CO may be capped by `stacks.max` when `stacks.when` is `status_type`.
+- Unique-status CO may be capped by `behaviour_data.max_stacks` (omit / omit key for uncapped).
 - Each attack may scale the bonus with `co_factor`.
 - `co_effect="adds"` adds the bonus to the proportional damage pool (GunCO).
 - `co_effect="multiplies"` adds the bonus to the `status` product family (melee CO).
@@ -1172,16 +1187,16 @@ shots, projectiles, or animation frames.
 ### Primary mechanics
 
 - Hunter Munitions is modeled as an expected Slash proc chance on critical hits (`slash_proc` + `ON_CRIT`).
-- Internal Bleeding doubles its modeled chance below `2.5` effective fire rate.
+- Internal Bleeding doubles its modeled chance below `behaviour_data.fire_rate_threshold` (default `2.5`).
 - First/last magazine-shot effects (Primed/Charged Chamber, Synth Charge, Torid last-shot multishot, etc.) use a shot-class mixture: buffs apply while the mag counter stays at full / 1 round (so ammo efficiency that keeps the counter there keeps the buff). Continuous/Incarnon exclusions are effect flags. Chamber/Synth use named families (`chamber` / `charge`) that product with other families like `bonus`.
-- Vigilante is uncapped flat crit chance on hit (`crit_chance` + `ON_HIT`).
+- Vigilante is uncapped flat crit chance on hit (`crit_chance` + `ON_HIT`, `behaviour_data.mode: flat`).
 
 ### Secondary mechanics
 
 - Secondary Encumber is modeled as triggering at most once per attack.
 - Its chance accounts for status chance and multishot.
 - It contributes expected DoT and may add an Impact source for Internal Bleeding or Hemorrhage.
-- Secondary Enervate uses an expected-state calculation and exposes separate normal-hit and weakpoint bonuses.
+- Secondary Enervate uses `crit_reset_charges` + `STACK_RESET_CRIT_2_PLUS`; `behaviour_data.per_stack` is the CC per stack, and an expected-state calculation exposes normal-hit and weakpoint bonuses.
 
 ### Fire cycle
 

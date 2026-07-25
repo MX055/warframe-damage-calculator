@@ -118,7 +118,8 @@ class MeleeCalculator(WeaponCalculator):
         hit_mult = formulas.hit_multiplier(average.crit_chance, effective.crit_damage, effective.non_crit_bonus_damage, effective.non_crit_bonus_chance)
         combo = self._combo_multiplier(result)
         average.combo_multiplier = combo
-        average.melee_doughty_bonus = true_round(10 * effective.damage.weight("puncture") * effective.status_chance * effective.melee_doughty, 1)
+        per = application_chance.doughty_per(result.build.conversions)
+        average.melee_doughty_bonus = true_round(application_chance.doughty_crit_damage(puncture_weight=effective.damage.weight("puncture"), status_chance=effective.status_chance, factor=effective.melee_doughty, per=per), 1)
         average.melee_duplicate_multiplier = 1 + effective.melee_duplicate * max(0, 1 - abs(effective.crit_chance - 1))
         average.flat_dph = effective.damage.total_damage() * self._max_average_faction_damage(result) * hit_mult * average.melee_duplicate_multiplier * combo
         average.flat_dps = effective.attack_speed * average.flat_dph
