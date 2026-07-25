@@ -89,8 +89,21 @@ class WeaponCalculator:
         self._compute_average(result)
         return result
 
+    def _ability_strength_multiplier(self) -> float | None:
+        """Return Ability Strength multiplier for exalted/pseudo-exalted weapons.
+
+        Arsenal damage is stored at 100% Strength. Runtime `ability_strength` is a
+        multiplier (1.0 = 100%, 2.5 = 250%). Unset defaults to 1.0 for flagged
+        weapons; non-exalted weapons ignore the key.
+        """
+        data = self.weapon.data
+        if not (data.get("exalted") or data.get("pseudo_exalted")):
+            return None
+        value = data.runtime.get("ability_strength")
+        return 1.0 if value is None else max(float(value), 0.0)
+
     def _compute_base(self, result: AttackResult) -> None:
-        result.base, result.original_damage = scalar_calculator.seed_base_stats(attack=result.attack, ammo=self.weapon.data.ammo, stats_type=self.weapon.stats_type, evolutions=result.evolutions, distribute_flat=formulas.distribute_flat_damage)
+        result.base, result.original_damage = scalar_calculator.seed_base_stats(attack=result.attack, ammo=self.weapon.data.ammo, stats_type=self.weapon.stats_type, evolutions=result.evolutions, distribute_flat=formulas.distribute_flat_damage, ability_strength=self._ability_strength_multiplier())
 
     def _apply_evolution_conversions(self, result: AttackResult) -> None:
         scalar_calculator.apply_evolution_conversions(base=result.base, build=result.build, evolutions=result.evolutions, crit_upgrade_multiplier=self._crit_upgrade_multiplier(result))

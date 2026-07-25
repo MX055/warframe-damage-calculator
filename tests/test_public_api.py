@@ -497,6 +497,35 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(weapon.data.runtime.combo, 12)
         self.assertEqual(weapon.data.selected_combo, 12)
 
+    def test_exalted_ability_strength_scales_base_damage(self):
+        blade = Melee(arsenal.weapons["Exalted Blade"])
+        raw = selected(blade).base.damage.total_damage()
+        self.assertTrue(blade.data.exalted)
+        self.assertFalse(blade.data.pseudo_exalted)
+
+        scaled = blade.configure(context={"ability_strength": 2.5})
+        self.assertAlmostEqual(scaled.data.selected_ability_strength, 2.5)
+        self.assertAlmostEqual(selected(scaled).base.damage.total_damage(), raw * 2.5)
+
+        # Strength is on base before Pressure Point.
+        pressure = Upgrade({"name": "Pressure Point", "type": "mod", "max_rank": 0, "stats": {"damage_bonus": [{"value": 1.0}]}})
+        modded = Melee(arsenal.weapons["Exalted Blade"]).configure(Build(pressure), context={"ability_strength": 2.0})
+        self.assertAlmostEqual(selected(modded).base.damage.total_damage(), raw * 2.0)
+        self.assertAlmostEqual(selected(modded).effective.damage.total_damage(), raw * 2.0 * 2.0)
+
+    def test_pseudo_exalted_ability_strength_scales_base_damage(self):
+        whipclaw = arsenal.get("Whipclaw")
+        self.assertTrue(whipclaw.data.pseudo_exalted)
+        raw = selected(whipclaw).base.damage.total_damage()
+        scaled = whipclaw.configure(context={"ability_strength": 2.0})
+        self.assertAlmostEqual(selected(scaled).base.damage.total_damage(), raw * 2.0)
+
+    def test_ability_strength_ignored_on_non_exalted_weapons(self):
+        weapon = arsenal.get("Braton").configure(context={"ability_strength": 3.0})
+        bare = arsenal.get("Braton")
+        self.assertFalse(weapon.data.exalted or weapon.data.pseudo_exalted)
+        self.assertAlmostEqual(selected(weapon).base.damage.total_damage(), selected(bare).base.damage.total_damage())
+
     def test_weapon_combo_scales_blood_rush(self):
         blood_rush = arsenal.get("Blood Rush")
         self.assertIsNone(blood_rush.data.runtime.get("stacks"))

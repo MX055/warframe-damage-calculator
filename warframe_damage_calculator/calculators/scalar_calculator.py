@@ -17,13 +17,19 @@ from ..utils.types import Number
 from . import formulas
 
 
-def seed_base_stats(*, attack: Attack, ammo: dict | object, stats_type: Callable[..., CalculatedStats], evolutions: ResolvedEvolutionStat, distribute_flat: Callable[[Dist, Number], Dist]) -> tuple[CalculatedStats, Dist]:
-    """Build base CalculatedStats and the original damage Dist used by GunCO."""
+def seed_base_stats(*, attack: Attack, ammo: dict | object, stats_type: Callable[..., CalculatedStats], evolutions: ResolvedEvolutionStat, distribute_flat: Callable[[Dist, Number], Dist], ability_strength: Number | None = None) -> tuple[CalculatedStats, Dist]:
+    """Build base CalculatedStats and the original damage Dist used by GunCO.
+
+    For exalted / pseudo-exalted weapons, `ability_strength` is a multiplier on
+    arsenal base damage (1.0 = 100% Strength) applied before evolution flats.
+    """
     stats = dict(attack.stats)
     falloff = stats.pop("falloff", None) or {}
     attack_speed = attack.stats.attack_speed if "attack_speed" in attack.stats else attack.stats.fire_rate
     stats.update({"attack_speed": attack_speed, "magazine_capacity": ammo.get("magazine_size", 1) if hasattr(ammo, "get") else 1, "ammo_maximum": ammo.get("ammo_maximum", 0) if hasattr(ammo, "get") else 0, "reload_speed": ammo.get("reload_time", 0) if hasattr(ammo, "get") else 0, "recharge_rate": ammo.get("recharge_rate", 0) if hasattr(ammo, "get") else 0, "start_range": falloff.get("start_range", 0), "end_range": falloff.get("end_range", 0), "final_multiplier": falloff.get("final_multiplier", 1)})
     base = CalculatedStats(stats_type(stats).with_defaults())
+    if ability_strength is not None:
+        base.damage = base.damage * max(float(ability_strength), 0.0)
     original_damage = Dist(dict(base.damage))
 
     evo = evolutions.base

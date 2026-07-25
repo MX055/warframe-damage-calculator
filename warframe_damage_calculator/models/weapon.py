@@ -30,6 +30,8 @@ class Weapon:
             normalized["combo"] = int(clamp(int(normalized["combo"]), 1, MAX_COMBO_MULTIPLIER))
         if "evolutions" in normalized and normalized["evolutions"] is not None:
             normalized["evolutions"] = dict(normalized["evolutions"])
+        if "ability_strength" in normalized and normalized["ability_strength"] is not None:
+            normalized["ability_strength"] = float(normalized["ability_strength"])
         return normalized
 
     def configure(self, build: Build | None = None, context: Mapping[str, Any] | None = None) -> Self:

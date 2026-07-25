@@ -264,6 +264,22 @@ perk indices. Selected evolutions are resolved separately from the mod build:
 flat/base-stat bonuses are baked into `results.main.base` before Serration-style
 multipliers, and percent bonuses combine with the build in the scalar formulas.
 
+### Ability Strength on exalted weapons
+
+Weapons flagged `exalted` or `pseudo_exalted` scale arsenal base damage by Warframe
+Ability Strength before mods:
+
+```python
+weapon = arsenal.get("Whipclaw")
+weapon.configure(context={"ability_strength": 2.5})  # 250% Strength
+
+print(weapon.results.main.base.damage.total_damage())  # arsenal base × 2.5
+```
+
+`ability_strength` is a multiplier (`1.0` = 100%). When omitted, exalted weapons
+use `1.0` (arsenal values unchanged). Non-exalted weapons ignore the key.
+Pressure Point / Serration still apply after Strength on the scaled base.
+
 ### Read results
 
 ```python
@@ -764,10 +780,11 @@ upgrade.data.runtime
 ### Weapon runtime
 
 ```python
-weapon.configure(build, context={"attack": "...", "evolutions": {...}, "combo": 6})
+weapon.configure(build, context={"attack": "...", "evolutions": {...}, "combo": 6, "ability_strength": 2.0})
 weapon.data.runtime.attack = "heavy_attack"
 weapon.data.runtime.evolutions = {2: 1}
 weapon.data.runtime.combo = 6
+weapon.data.runtime.ability_strength = 2.0
 ```
 
 Direct `runtime` assignments are picked up the next time results are read

@@ -72,6 +72,14 @@ class WeaponData(Data):
             return str(selected)
         return "neutral"
 
+    @property
+    def selected_ability_strength(self) -> float | None:
+        """Warframe Ability Strength as a multiplier (1.0 = 100%). None when unset."""
+        value = self.runtime.get("ability_strength")
+        if value is None:
+            return None
+        return float(value)
+
 
 class RangedData(WeaponData):
     pass
