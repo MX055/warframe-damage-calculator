@@ -34,6 +34,7 @@ class WeaponData(Data):
     exalted: bool = False
     pseudo_exalted: bool = False
     progenitor: bool = False
+    companion: bool = False
     ammo: Data = {}
     attacks: Attacks = Attacks()
     evolutions: Evolutions = Evolutions()

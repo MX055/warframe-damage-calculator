@@ -4407,7 +4407,8 @@
             "ammo": {
                 "reload_time": 0.01,
                 "magazine_size": 15
-            }
+            },
+            "companion": true
         },
         "Burst Laser Prime": {
             "name": "Burst Laser Prime",
@@ -4441,7 +4442,8 @@
             "ammo": {
                 "reload_time": 0.01,
                 "magazine_size": 15
-            }
+            },
+            "companion": true
         },
         "Sicarus": {
             "name": "Sicarus",
@@ -12250,7 +12252,8 @@
             "ammo": {
                 "reload_time": 5,
                 "magazine_size": 3
-            }
+            },
+            "companion": true
         },
         "Nami Skyla": {
             "name": "Nami Skyla",
@@ -13991,7 +13994,8 @@
             "ammo": {
                 "reload_time": 2,
                 "magazine_size": 100
-            }
+            },
+            "companion": true
         },
         "Deth Machine Rifle Prime": {
             "name": "Deth Machine Rifle Prime",
@@ -14023,7 +14027,8 @@
             "ammo": {
                 "reload_time": 2,
                 "magazine_size": 100
-            }
+            },
+            "companion": true
         },
         "Dex Dakra": {
             "name": "Dex Dakra",
@@ -18662,7 +18667,8 @@
             "ammo": {
                 "reload_time": 1.6,
                 "magazine_size": 80
-            }
+            },
+            "companion": true
         },
         "Fulmin Prime": {
             "name": "Fulmin Prime",
@@ -26892,7 +26898,8 @@
             "ammo": {
                 "reload_time": 3,
                 "magazine_size": 3
-            }
+            },
+            "companion": true
         },
         "Hind": {
             "name": "Hind",
@@ -33354,7 +33361,8 @@
             "ammo": {
                 "reload_time": 1.2,
                 "magazine_size": 20
-            }
+            },
+            "companion": true
         },
         "Prime Laser Rifle": {
             "name": "Prime Laser Rifle",
@@ -33386,7 +33394,8 @@
             "ammo": {
                 "reload_time": 1.2,
                 "magazine_size": 20
-            }
+            },
+            "companion": true
         },
         "Purgator 1": {
             "name": "Purgator 1",
@@ -41021,7 +41030,8 @@
             "ammo": {
                 "reload_time": 0.01,
                 "magazine_size": 15
-            }
+            },
+            "companion": true
         },
         "Prisma Dual Cleavers": {
             "name": "Prisma Dual Cleavers",
@@ -46315,7 +46325,8 @@
             "ammo": {
                 "reload_time": 2,
                 "magazine_size": 10
-            }
+            },
+            "companion": true
         },
         "Venato": {
             "name": "Venato",
@@ -46569,7 +46580,8 @@
             "ammo": {
                 "reload_time": 1.2,
                 "magazine_size": 4
-            }
+            },
+            "companion": true
         },
         "Verglas": {
             "name": "Verglas",
@@ -46600,7 +46612,8 @@
             "ammo": {
                 "reload_time": 2,
                 "magazine_size": 80
-            }
+            },
+            "companion": true
         },
         "Artax": {
             "name": "Artax",
@@ -46631,7 +46644,8 @@
             "ammo": {
                 "reload_time": 1.5,
                 "magazine_size": 100
-            }
+            },
+            "companion": true
         },
         "Sweeper": {
             "name": "Sweeper",
@@ -46669,7 +46683,8 @@
             "ammo": {
                 "reload_time": 2.3,
                 "magazine_size": 10
-            }
+            },
+            "companion": true
         },
         "Sweeper Prime": {
             "name": "Sweeper Prime",
@@ -46707,7 +46722,8 @@
             "ammo": {
                 "reload_time": 2,
                 "magazine_size": 20
-            }
+            },
+            "companion": true
         },
         "Shedu": {
             "name": "Shedu",
@@ -50567,7 +50583,8 @@
             "ammo": {
                 "reload_time": 2,
                 "magazine_size": 80
-            }
+            },
+            "companion": true
         },
         "Sybaris Prime": {
             "name": "Sybaris Prime",
@@ -51148,7 +51165,8 @@
             "ammo": {
                 "reload_time": 2,
                 "magazine_size": 40
-            }
+            },
+            "companion": true
         },
         "Tekko Prime": {
             "name": "Tekko Prime",
@@ -53869,7 +53887,8 @@
             "ammo": {
                 "reload_time": 3,
                 "magazine_size": 1
-            }
+            },
+            "companion": true
         },
         "Endura": {
             "name": "Endura",
@@ -64497,7 +64516,8 @@
                     "name": "Normal Attack"
                 }
             },
-            "disposition": 1
+            "disposition": 1,
+            "companion": true
         },
         "Balefire Charger": {
             "name": "Balefire Charger",
@@ -64608,7 +64628,8 @@
                     "name": "Normal Attack"
                 }
             },
-            "disposition": 1
+            "disposition": 1,
+            "companion": true
         },
         "Bo": {
             "name": "Bo",
@@ -67295,7 +67316,8 @@
                     "name": "Normal Attack"
                 }
             },
-            "disposition": 1
+            "disposition": 1,
+            "companion": true
         },
         "Larkspur": {
             "name": "Larkspur",
