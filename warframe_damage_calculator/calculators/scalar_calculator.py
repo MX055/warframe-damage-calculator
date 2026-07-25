@@ -11,6 +11,7 @@ from ..fields.weapon_data import Attack
 from ..core.dist import Dist
 from ..utils.types import Number
 from . import formulas
+from .effect_schema import NON_CRIT_FAMILY
 
 
 def seed_base_stats(*, attack: Attack, ammo: dict | object, stats_type: Callable[..., CalculatedStats], evolutions: ResolvedEvolutionStat, distribute_flat: Callable[[Dist, Number], Dist], ability_strength: Number | None = None) -> tuple[CalculatedStats, Dist]:
@@ -79,7 +80,12 @@ def compute_shared_modded_scalars(*, base: CalculatedStats, build: ResolvedStat,
     modded.proportional.status_chance = max(base.status_chance * (1 + build.proportional.status_chance + evolutions.proportional.status_chance), 0)
     modded.proportional.status_damage = max(1 + build.proportional.status_damage, 1)
     modded.proportional.status_duration = max(base.status_duration * (1 + build.proportional.status_duration + evolutions.proportional.status_duration), 0)
-    modded.proportional.non_crit_bonus_damage = max(build.proportional.non_crit_bonus_damage + evolutions.proportional.non_crit_bonus_damage, 0)
+    modded.proportional.non_crit_bonus_damage = max(
+        formulas.family_bonus(build, evolutions, family=NON_CRIT_FAMILY, stat="damage_bonus")
+        + build.proportional.non_crit_bonus_damage
+        + evolutions.proportional.non_crit_bonus_damage,
+        0,
+    )
     modded.proportional.non_crit_bonus_chance = max(build.proportional.non_crit_bonus_chance, evolutions.proportional.non_crit_bonus_chance, 0)
     modded.proportional.range = max(float(base.range if "range" in base else 0) + build.proportional.range + build.flat.range + evolutions.proportional.range + evolutions.flat.range, 0)
     modded.proportional.punch_through = max(float(base.punch_through if "punch_through" in base else 0) + build.proportional.punch_through + build.flat.punch_through + evolutions.proportional.punch_through + evolutions.flat.punch_through, 0)

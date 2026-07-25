@@ -577,7 +577,19 @@ Example — Secondary Enervate (`value` = orange+ reset charges; per-stack CC in
 }
 ```
 
-Other `behaviour_data` shapes: Internal Bleeding `{fire_rate_threshold}`, Vigilante `{mode}`, Doughty `{mode, per}`, Cascadia/Frostbite `{status, max_stacks, duration}`, Cull the Weak `{max_stacks}`.
+Other `behaviour_data` shapes: Internal Bleeding `{fire_rate_threshold}`, Vigilante `{mode}`, Doughty `{mode, per}`, Cascadia/Frostbite `{status, max_stacks, duration}`, unique-status cap `{max_stacks}`, non-crit damage `{chance}` (e.g. Devouring Attrition `0.5`; omit when always applying on non-crits).
+
+Example — Cull the Weak non-crit bonus:
+
+```json
+{
+  "value": 2.4,
+  "family": "non_crit",
+  "behaviour": "ON_NON_CRIT",
+  "automatic": true,
+  "behaviour_data": {}
+}
+```
 
 Boolean effects aggregate with logical OR. Numeric effects add together.
 Damage-type effects aggregate into a single ordered damage distribution.
@@ -1144,7 +1156,8 @@ Faction damage is applied twice to modeled DoT damage.
 - `crit_chance` with `behaviour: "ON_HIT"`
 - `crit_reset_charges` with `behaviour: "STACK_RESET_CRIT_2_PLUS"` (value = orange+ charges; +10% CC/stack is hardcoded)
 - `crit_damage` with `behaviour: "FROM_PUNCTURE_X_STATUS"`
-- `damage_bonus` with `behaviour: "UNIQUE_STATUS"` / `"STATUS_PROC_STACKS"` / `"FIRST_SHOT"` / `"LAST_SHOT"`
+- `damage_bonus` with `behaviour: "UNIQUE_STATUS"` / `"STATUS_PROC_STACKS"` / `"FIRST_SHOT"` / `"LAST_SHOT"` / `"ON_NON_CRIT"`
+- `damage_bonus` + `ON_NON_CRIT` + `family: "non_crit"` for non-crit hit damage (optional `behaviour_data.chance`; omit for always-on when the hit is a non-crit)
 - Magazine-position overlays via `behaviour: "FIRST_SHOT"` / `"LAST_SHOT"` (optional `exclude: ["continuous", "incarnon"]`; Chamber/Synth use `family: "chamber"` / `"charge"`)
 
 `elements` is preserved by the resolver but is not read directly by the weapon

@@ -10,7 +10,18 @@ from ..core.data import Data
 from ..protocols import WeaponCalculatorOwner
 from ..utils.types import EffectMode
 from .effect_resolution import ResolutionContext, ResolvableEffect, raw_effects, resolve_and_aggregate, resolve_stack_scaled_effect
-from .effect_schema import BEHAVIOUR_FIRST_SHOT, BEHAVIOUR_LAST_SHOT, COMMON_FAMILY, behaviour_data_of, behaviour_of, effect_family, normalize_mode
+from .effect_schema import (
+    BEHAVIOUR_FIRST_SHOT,
+    BEHAVIOUR_LAST_SHOT,
+    BEHAVIOUR_ON_NON_CRIT,
+    COMMON_FAMILY,
+    NON_CRIT_FAMILY,
+    behaviour_data_of,
+    behaviour_of,
+    effect_family,
+    is_automatic,
+    normalize_mode,
+)
 from .magazine_position import MAGAZINE_POSITION_WHEN, serialize_position_effect
 from .stat_aggregation import CONVERSION_STATS, merge_evolution_stat
 
@@ -52,6 +63,11 @@ class EvolutionCalculator:
         if behaviour == BEHAVIOUR_LAST_SHOT:
             if family == COMMON_FAMILY: family = "charge"
             return ResolvableEffect(stat=stat, value=value, mode="proportional", bucket="magazine_position", condition="last_shot", scope=scope, exclude=exclude, family=family, conversion_max=conversion_max, behaviour=behaviour)
+        if behaviour == BEHAVIOUR_ON_NON_CRIT:
+            if stat != "damage_bonus": raise ValueError("ON_NON_CRIT requires damage_bonus")
+            if not is_automatic(effect, behaviour=behaviour): raise ValueError("ON_NON_CRIT requires automatic: true")
+            if family == COMMON_FAMILY: family = NON_CRIT_FAMILY
+            return ResolvableEffect(stat="damage_bonus", value=value, mode="proportional", bucket="static", scope=scope, exclude=exclude, family=family, conversion_max=conversion_max, behaviour=behaviour)
         if condition in MAGAZINE_POSITION_WHEN:
             return ResolvableEffect(stat=stat, value=value, mode=mode, bucket="magazine_position", condition=condition, scope=scope, exclude=exclude, family=family, conversion_max=conversion_max, behaviour=behaviour)
         if stacks is not None: return ResolvableEffect(stat=stat, value=value, mode=mode, bucket="stacking", scope=scope, stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"), exclude=exclude, family=family, conversion_max=conversion_max, behaviour=behaviour)
@@ -74,7 +90,12 @@ class EvolutionCalculator:
         for perk in self._selected_perks():
             for stat, raw in perk.stats.items():
                 for effect in raw_effects(raw):
-                    effects.append(self._normalize_effect(stat, effect))
+                    normalized = self._normalize_effect(stat, effect)
+                    effects.append(normalized)
+                    if behaviour_of(effect) == BEHAVIOUR_ON_NON_CRIT:
+                        chance = behaviour_data_of(effect, behaviour=BEHAVIOUR_ON_NON_CRIT).get("chance")
+                        if chance is not None:
+                            effects.append(ResolvableEffect(stat="non_crit_bonus_chance", value=float(chance), mode="proportional", bucket=normalized.bucket, scope=normalized.scope, scales_with_rank=False, behaviour=BEHAVIOUR_ON_NON_CRIT))
         return tuple(effects)
 
     def _is_effect_applicable(self, effect: ResolvableEffect, context: ResolutionContext) -> bool:

@@ -16,17 +16,20 @@ def crit_multiplier(crit_chance: Number, crit_damage: Number) -> float:
 
 def fold_multiplicative_families(*sources: object, stat: str = "damage_bonus") -> float:
     """Product of (1 + sum) across named families. Same family adds; different multiply."""
+    from .effect_schema import FOLD_EXCLUDED_FAMILIES
+
     by_family: dict[str, float] = {}
     for source in sources:
         if source is None: continue
         families = getattr(source, "multiplicative_families", None) or {}
         if not isinstance(families, Mapping): continue
         for key, mode_stats in families.items():
+            name = str(key)
+            if name in FOLD_EXCLUDED_FAMILIES: continue
             if isinstance(mode_stats, Mapping) and not isinstance(mode_stats, Data):
                 value = mode_stats.get(stat, 0)
             else:
                 value = getattr(mode_stats, stat, 0) if mode_stats is not None else 0
-            name = str(key)
             by_family[name] = by_family.get(name, 0.0) + float(value or 0)
     factor = 1.0
     for name in sorted(by_family):

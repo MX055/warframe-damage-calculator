@@ -60861,14 +60861,15 @@
                     "1": {
                         "description": "Perk 1: Devouring Attrition : 50% chance to deal 2000% damage on non-critical hits. Affects both modes. Multiplicative to base damage sources such as Hornet Strike . Bosses ignore this perk.",
                         "stats": {
-                            "non_crit_bonus_damage": [
+                            "damage_bonus": [
                                 {
-                                    "value": 20
-                                }
-                            ],
-                            "non_crit_bonus_chance": [
-                                {
-                                    "value": 0.5
+                                    "value": 20,
+                                    "family": "non_crit",
+                                    "behaviour": "ON_NON_CRIT",
+                                    "automatic": true,
+                                    "behaviour_data": {
+                                        "chance": 0.5
+                                    }
                                 }
                             ]
                         }
@@ -61093,14 +61094,15 @@
                     "1": {
                         "description": "Perk 1: Devastating Attrition : 50% chance to deal +2000% damage on non-critical hits Affects both forms. Damage bonus is multiplicative to base damage bonuses such as Point Blank .",
                         "stats": {
-                            "non_crit_bonus_damage": [
+                            "damage_bonus": [
                                 {
-                                    "value": 20
-                                }
-                            ],
-                            "non_crit_bonus_chance": [
-                                {
-                                    "value": 0.5
+                                    "value": 20,
+                                    "family": "non_crit",
+                                    "behaviour": "ON_NON_CRIT",
+                                    "automatic": true,
+                                    "behaviour_data": {
+                                        "chance": 0.5
+                                    }
                                 }
                             ]
                         }
@@ -61310,14 +61312,15 @@
                     "1": {
                         "description": "Perk 1: Devouring Attrition : 50% chance to deal +2000% damage on non-critical hits Damage bonus is multiplicative to base damage bonuses such as Serration .",
                         "stats": {
-                            "non_crit_bonus_damage": [
+                            "damage_bonus": [
                                 {
-                                    "value": 20
-                                }
-                            ],
-                            "non_crit_bonus_chance": [
-                                {
-                                    "value": 0.5
+                                    "value": 20,
+                                    "family": "non_crit",
+                                    "behaviour": "ON_NON_CRIT",
+                                    "automatic": true,
+                                    "behaviour_data": {
+                                        "chance": 0.5
+                                    }
                                 }
                             ]
                         }
@@ -74546,11 +74549,13 @@
                         "behaviour_data": {
                             "max_stacks": 3
                         }
-                    }
-                ],
-                "non_crit_bonus_damage": [
+                    },
                     {
-                        "value": 2.4
+                        "value": 2.4,
+                        "family": "non_crit",
+                        "behaviour": "ON_NON_CRIT",
+                        "automatic": true,
+                        "behaviour_data": {}
                     }
                 ]
             }
@@ -84389,7 +84394,7 @@
                     "duration": 2.6
                 },
                 "forward": {
-                    "name": "Zatōs Creed",
+                    "name": "Zat\u014ds Creed",
                     "multiplier": 1.8571,
                     "hits": 7,
                     "duration": 3.05

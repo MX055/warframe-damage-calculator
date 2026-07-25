@@ -762,8 +762,13 @@ class PublicApiTests(unittest.TestCase):
 
     def test_non_crit_bonus_from_cull_the_weak(self):
         cull = arsenal.get("Cull the Weak")
-        self.assertAlmostEqual(cull.results.total.proportional.non_crit_bonus_damage, 2.4)
-        non_crit = Upgrade({"name": "NonCrit", "type": "mod", "max_rank": 0, "stats": {"non_crit_bonus_damage": [{"value": 2.4}]}})
+        self.assertAlmostEqual(float(cull.results.total.multiplicative_families["non_crit"].damage_bonus), 2.4)
+        non_crit = Upgrade({
+            "name": "NonCrit",
+            "type": "mod",
+            "max_rank": 0,
+            "stats": {"damage_bonus": [{"value": 2.4, "family": "non_crit", "behaviour": "ON_NON_CRIT", "automatic": True, "behaviour_data": {}}]},
+        })
         weapon = Melee({
             "name": "NCD Melee",
             "type": "melee",
@@ -781,7 +786,7 @@ class PublicApiTests(unittest.TestCase):
         base_dph = raw.average.flat_dph
         weapon.configure(context={"evolutions": {5: 1}})
         result = selected(weapon)
-        self.assertAlmostEqual(result.evolutions.proportional.non_crit_bonus_damage, 20)
+        self.assertAlmostEqual(float(result.evolutions.multiplicative_families["non_crit"].damage_bonus), 20)
         self.assertAlmostEqual(result.evolutions.proportional.non_crit_bonus_chance, 0.5)
         self.assertAlmostEqual(result.effective.non_crit_bonus_damage, 20)
         self.assertAlmostEqual(result.effective.non_crit_bonus_chance, 0.5)
@@ -1028,7 +1033,10 @@ class PublicApiTests(unittest.TestCase):
                 {"value": 0.8, "max_stacks": "inf"},
             ),
             "Cull the Weak": (
-                {"value": 0.6, "family": "status", "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {"max_stacks": 3}},
+                [
+                    {"value": 0.6, "family": "status", "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {"max_stacks": 3}},
+                    {"value": 2.4, "family": "non_crit", "behaviour": "ON_NON_CRIT", "automatic": True, "behaviour_data": {}},
+                ],
                 {"value": 0.6, "max_stacks": 3},
             ),
             "Galvanized Aptitude": (
@@ -1046,7 +1054,8 @@ class PublicApiTests(unittest.TestCase):
         }
         for name, (canonical, resolved) in expected.items():
             with self.subTest(name=name):
-                self.assertEqual(arsenal.upgrades[name]["stats"]["damage_bonus"], [canonical])
+                entries = canonical if isinstance(canonical, list) else [canonical]
+                self.assertEqual(arsenal.upgrades[name]["stats"]["damage_bonus"], entries)
                 actual = arsenal.get(name).results.total.proportional.condition_overload
                 self.assertAlmostEqual(float(actual["value"]), float(resolved["value"]))
                 self.assertEqual(actual["max_stacks"], resolved["max_stacks"])

@@ -37,8 +37,6 @@ class UpgradeStats(Data):
     multishot_lock: JsonValue
     murmur_damage: JsonValue
     noise_level: JsonValue
-    non_crit_bonus_chance: JsonValue
-    non_crit_bonus_damage: JsonValue
     orokin_damage: JsonValue
     projectile_speed: JsonValue
     punch_through: JsonValue

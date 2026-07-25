@@ -21,8 +21,6 @@ class EvolutionStats(Data):
     magazine_capacity: JsonValue
     multishot: JsonValue
     noise_level: JsonValue
-    non_crit_bonus_chance: JsonValue
-    non_crit_bonus_damage: JsonValue
     projectile_speed: JsonValue
     punch_through: JsonValue
     range: JsonValue

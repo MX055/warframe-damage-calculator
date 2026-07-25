@@ -23,11 +23,13 @@ from .effect_schema import (
     BEHAVIOUR_ON_CRIT,
     BEHAVIOUR_ON_HIT,
     BEHAVIOUR_ON_IMPACT_FR,
+    BEHAVIOUR_ON_NON_CRIT,
     BEHAVIOUR_STACK_RESET_CRIT_2_PLUS,
     BEHAVIOUR_STATUS_PROC_STACKS,
     BEHAVIOUR_UNIQUE_STATUS,
     COMMON_FAMILY,
     ENERVATE_PER_STACK,
+    NON_CRIT_FAMILY,
     behaviour_data_of,
     behaviour_of,
     effect_family,
@@ -181,6 +183,12 @@ class UpgradeCalculator:
                 return ResolvableEffect(stat="condition_overload", value=value, bucket="stacking", stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"), scales_with_rank=scales, co_max_stacks=co_max, behaviour=behaviour)
             return ResolvableEffect(stat="condition_overload", value=value, bucket="static", mode="proportional", scales_with_rank=scales, co_max_stacks=co_max, behaviour=behaviour)
 
+        if behaviour == BEHAVIOUR_ON_NON_CRIT:
+            if stat != "damage_bonus": raise ValueError("ON_NON_CRIT requires damage_bonus")
+            if not is_automatic(effect, behaviour=behaviour): raise ValueError("ON_NON_CRIT requires automatic: true")
+            if family == COMMON_FAMILY: family = NON_CRIT_FAMILY
+            return ResolvableEffect(stat="damage_bonus", value=value, mode="proportional", bucket="static", exclude=exclude, family=family, scales_with_rank=scales, behaviour=behaviour)
+
         if behaviour == BEHAVIOUR_STATUS_PROC_STACKS:
             if not is_automatic(effect, behaviour=behaviour): raise ValueError("STATUS_PROC_STACKS requires automatic: true")
             status = data.get("status")
@@ -209,10 +217,16 @@ class UpgradeCalculator:
         for stat, raw in self.upgrade.data.stats.items():
             for effect in raw_effects(raw):
                 normalized = self._normalize_effect(stat, effect)
-                if behaviour_of(effect) == BEHAVIOUR_DOUBLE_FOR_BOWS:
+                behaviour = behaviour_of(effect)
+                if behaviour == BEHAVIOUR_DOUBLE_FOR_BOWS:
                     base = replace(normalized, behaviour=None, condition=None, bucket="static")
                     bow = replace(normalized, bucket="conditional", condition="bow")
                     effects.extend((base, bow))
+                elif behaviour == BEHAVIOUR_ON_NON_CRIT:
+                    effects.append(normalized)
+                    chance = behaviour_data_of(effect, behaviour=behaviour).get("chance")
+                    if chance is not None:
+                        effects.append(ResolvableEffect(stat="non_crit_bonus_chance", value=float(chance), mode="proportional", bucket=normalized.bucket, scales_with_rank=False, behaviour=behaviour))
                 else:
                     effects.append(normalized)
         return tuple(effects)
