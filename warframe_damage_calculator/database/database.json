@@ -89446,8 +89446,11 @@
             "name": "Exalted Blade",
             "type": "mod",
             "compatibility": {
-                "subtypes": [
-                    "sword"
+                "names": [
+                    "Exalted Blade",
+                    "Exalted Chromatic Blade",
+                    "Exalted Umbra Blade",
+                    "Exalted Umbra Chromatic Blade"
                 ],
                 "stance": true
             },
@@ -93734,6 +93737,42 @@
                     "duration": 0.0
                 }
             },
+            "stats": {}
+        },
+        "Hysteria": {
+            "name": "Hysteria",
+            "type": "mod",
+            "compatibility": {
+                "names": [
+                    "Valkyr Talons"
+                ],
+                "stance": true
+            },
+            "combos": {},
+            "stats": {}
+        },
+        "Primal Fury": {
+            "name": "Primal Fury",
+            "type": "mod",
+            "compatibility": {
+                "names": [
+                    "Iron Staff"
+                ],
+                "stance": true
+            },
+            "combos": {},
+            "stats": {}
+        },
+        "Serene Storm": {
+            "name": "Serene Storm",
+            "type": "mod",
+            "compatibility": {
+                "names": [
+                    "Desert Wind"
+                ],
+                "stance": true
+            },
+            "combos": {},
             "stats": {}
         }
     },
