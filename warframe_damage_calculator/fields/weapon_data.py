@@ -31,6 +31,9 @@ class WeaponData(Data):
     type: str | None = None
     subtype: str | None = None
     disposition: Number = 0.0
+    exalted: bool = False
+    pseudo_exalted: bool = False
+    progenitor: bool = False
     ammo: Data = {}
     attacks: Attacks = Attacks()
     evolutions: Evolutions = Evolutions()
