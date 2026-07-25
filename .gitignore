@@ -53,6 +53,7 @@ Desktop.ini
 
 # Helper scripts
 /_*.py
+/_*.txt
 
 # Database builder source data and local caches
 /database_builder/
