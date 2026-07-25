@@ -74737,6 +74737,709 @@
             },
             "stats": {}
         },
+        "Akimbo Slip Shot": {
+            "name": "Akimbo Slip Shot",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {
+                "ammo_efficiency": [{"value": 0.65, "mode": "additive", "stacks": {"when": "while_sliding_or_aim_gliding_with_dual_pistols", "max": 1}}]
+            }
+        },
+        "Cascadia Accuracy": {
+            "name": "Cascadia Accuracy",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {
+                "weakpoint_crit_chance": [{"value": 3, "when": "roll", "mode": "additive"}]
+            }
+        },
+        "Cascadia Empowered": {
+            "name": "Cascadia Empowered",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {
+                "cascadia_empowered_proc": [{"value": 750, "mode": "additive", "when": "on_proc"}]
+            }
+        },
+        "Cascadia Flare": {
+            "name": "Cascadia Flare",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {
+                "damage_bonus": [{"value": 0.12, "mode": "additive", "stacks": {"when": "on_heat_status_effect", "max": 40}}],
+                "status_effect_stacks": [{"value": 0.12, "stat": "damage_bonus", "mode": "additive", "status": "heat", "max_stacks": 40}]
+            }
+        },
+        "Cascadia Overcharge": {
+            "name": "Cascadia Overcharge",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {
+                "crit_chance": [{"value": 3, "mode": "additive", "stacks": {"when": "overshields_active", "max": 1}}]
+            }
+        },
+        "Conjunction Voltage": {
+            "name": "Conjunction Voltage",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {
+                "reload_speed": [{"value": 0.015, "mode": "additive", "stacks": {"when": "on_electricity_status_effect", "max": 40}}],
+                "multishot": [{"value": 0.03, "mode": "additive", "stacks": {"when": "on_electricity_status_effect", "max": 40}}],
+                "status_effect_stacks": [
+                    {"value": 0.015, "stat": "reload_speed", "mode": "additive", "status": "electricity", "max_stacks": 40},
+                    {"value": 0.03, "stat": "multishot", "mode": "additive", "status": "electricity", "max_stacks": 40}
+                ]
+            }
+        },
+        "Exodia Brave": {
+            "name": "Exodia Brave",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["melee"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Exodia Contagion": {
+            "name": "Exodia Contagion",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["melee"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Exodia Epidemic": {
+            "name": "Exodia Epidemic",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["melee"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Exodia Force": {
+            "name": "Exodia Force",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["melee"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Exodia Hunt": {
+            "name": "Exodia Hunt",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["melee"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Exodia Might": {
+            "name": "Exodia Might",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["melee"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Exodia Triumph": {
+            "name": "Exodia Triumph",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["melee"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Exodia Valor": {
+            "name": "Exodia Valor",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["melee"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Fractalized Reset": {
+            "name": "Fractalized Reset",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["primary"],
+                "exilus": false
+            },
+            "stats": {
+                "reload_speed": [{"value": 2.4, "mode": "additive", "stacks": {"when": "on_ability_cast", "max": 1}}]
+            }
+        },
+        "Longbow Sharpshot": {
+            "name": "Longbow Sharpshot",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["primary"],
+                "exilus": false
+            },
+            "stats": {
+                "sharpshot_bonus": [{"value": 1, "mode": "additive", "stacks": {"when": "on_headshot", "max": 3}}]
+            }
+        },
+        "Melee Afflictions": {
+            "name": "Melee Afflictions",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["melee"],
+                "exilus": false
+            },
+            "stats": {
+                "afflictions_proc_multiplier": [{"value": 6, "mode": "additive", "when": "on_proc"}]
+            }
+        },
+        "Melee Animosity": {
+            "name": "Melee Animosity",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["melee"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Melee Assimilation": {
+            "name": "Melee Assimilation",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["melee"],
+                "exilus": false
+            },
+            "stats": {
+                "damage_bonus": [{"value": 1.5, "when": "shield_break", "mode": "additive"}]
+            }
+        },
+        "Melee Careen": {
+            "name": "Melee Careen",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["melee"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Melee Crescendo": {
+            "name": "Melee Crescendo",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["melee"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Melee Doughty": {
+            "name": "Melee Doughty",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["melee"],
+                "exilus": false
+            },
+            "stats": {
+                "melee_doughty": [{"value": 1, "mode": "additive"}]
+            }
+        },
+        "Melee Duplicate": {
+            "name": "Melee Duplicate",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["melee"],
+                "exilus": false
+            },
+            "stats": {
+                "melee_duplicate": [{"value": 1, "mode": "additive"}]
+            }
+        },
+        "Melee Exposure": {
+            "name": "Melee Exposure",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["melee"],
+                "exilus": false
+            },
+            "stats": {
+                "corrosive": [{"value": 0.6, "stacks": {"when": "ability_cast", "max": 4}, "mode": "additive"}]
+            }
+        },
+        "Melee Fortification": {
+            "name": "Melee Fortification",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["melee"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Melee Influence": {
+            "name": "Melee Influence",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["melee"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Melee Retaliation": {
+            "name": "Melee Retaliation",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["melee"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Melee Vortex": {
+            "name": "Melee Vortex",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["melee"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Pax Bolt": {
+            "name": "Pax Bolt",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Pax Charge": {
+            "name": "Pax Charge",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Pax Seeker": {
+            "name": "Pax Seeker",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Pax Soar": {
+            "name": "Pax Soar",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Primary Blight": {
+            "name": "Primary Blight",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["primary"],
+                "exilus": false
+            },
+            "stats": {
+                "crit_damage": [{"value": 0.036, "mode": "additive", "stacks": {"when": "on_toxin_status_effect", "max": 40}}],
+                "multishot": [{"value": 0.018, "mode": "additive", "stacks": {"when": "on_toxin_status_effect", "max": 40}}],
+                "status_effect_stacks": [
+                    {"value": 0.036, "stat": "crit_damage", "mode": "additive", "status": "toxin", "max_stacks": 40},
+                    {"value": 0.018, "stat": "multishot", "mode": "additive", "status": "toxin", "max_stacks": 40}
+                ]
+            }
+        },
+        "Primary Bulwark": {
+            "name": "Primary Bulwark",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["primary"],
+                "exilus": false
+            },
+            "stats": {
+                "damage_bonus": [{"value": 0.06, "mode": "additive", "stacks": {"when": "activation", "max": 500}}]
+            }
+        },
+        "Primary Compression": {
+            "name": "Primary Compression",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["primary"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Primary Crux": {
+            "name": "Primary Crux",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["primary"],
+                "exilus": false
+            },
+            "stats": {
+                "status_chance": [{"value": 0.3, "mode": "additive", "stacks": {"when": "on_headshot", "max": 10}}],
+                "ammo_efficiency": [{"value": 0.06, "mode": "additive", "stacks": {"when": "on_headshot", "max": 10}}]
+            }
+        },
+        "Primary Deadhead": {
+            "name": "Primary Deadhead",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["primary"],
+                "exilus": false
+            },
+            "stats": {
+                "damage_bonus": [{"value": 1.2, "mode": "additive", "stacks": {"when": "on_headshot_kill", "max": 3}}],
+                "weakpoint_damage": [{"value": 0.3, "rank": 5, "mode": "additive"}]
+            }
+        },
+        "Primary Debilitate": {
+            "name": "Primary Debilitate",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["primary"],
+                "exilus": false
+            },
+            "stats": {
+                "debilitate_proc_chance": [{"value": 1, "mode": "additive", "when": "on_combined_status_at_10_stacks"}]
+            }
+        },
+        "Primary Dexterity": {
+            "name": "Primary Dexterity",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["primary"],
+                "exilus": false
+            },
+            "stats": {
+                "damage_bonus": [{"value": 0.6, "mode": "additive", "stacks": {"when": "on_melee_kill", "max": 6}}]
+            }
+        },
+        "Primary Exhilarate": {
+            "name": "Primary Exhilarate",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["primary"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Primary Frostbite": {
+            "name": "Primary Frostbite",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["primary"],
+                "exilus": false
+            },
+            "stats": {
+                "status_effect_stacks": [
+                    {"value": 0.03, "stat": "crit_damage", "mode": "additive", "status": "cold", "max_stacks": 40},
+                    {"value": 0.022, "stat": "multishot", "mode": "additive", "status": "cold", "max_stacks": 40}
+                ]
+            }
+        },
+        "Primary Merciless": {
+            "name": "Primary Merciless",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["primary"],
+                "exilus": false
+            },
+            "stats": {
+                "reload_speed": [{"value": 0.3, "rank": 5, "mode": "additive"}],
+                "damage_bonus": [{"value": 0.3, "mode": "additive", "stacks": {"when": "on_kill", "max": 12}}]
+            }
+        },
+        "Primary Obstruct": {
+            "name": "Primary Obstruct",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["primary"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Primary Overcharge": {
+            "name": "Primary Overcharge",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["primary"],
+                "exilus": false
+            },
+            "stats": {
+                "multishot": [{"value": 0.06, "mode": "additive", "stacks": {"when": "activation", "max": 350}}]
+            }
+        },
+        "Primary Plated Round": {
+            "name": "Primary Plated Round",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["primary"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Residual Boils": {
+            "name": "Residual Boils",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Residual Malodor": {
+            "name": "Residual Malodor",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Residual Shock": {
+            "name": "Residual Shock",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Residual Viremia": {
+            "name": "Residual Viremia",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Secondary Cryogenic": {
+            "name": "Secondary Cryogenic",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Secondary Deadhead": {
+            "name": "Secondary Deadhead",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {
+                "damage_bonus": [{"value": 1.2, "mode": "additive", "stacks": {"when": "on_headshot_kill", "max": 3}}],
+                "weakpoint_damage": [{"value": 0.3, "rank": 5, "mode": "additive"}]
+            }
+        },
+        "Secondary Dexterity": {
+            "name": "Secondary Dexterity",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {
+                "damage_bonus": [{"value": 0.6, "mode": "additive", "stacks": {"when": "on_melee_kill", "max": 6}}]
+            }
+        },
+        "Secondary Encumber": {
+            "name": "Secondary Encumber",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {
+                "secondary_encumber": [{"value": 0.24, "mode": "additive"}]
+            }
+        },
+        "Secondary Enervate": {
+            "name": "Secondary Enervate",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {
+                "secondary_enervate": [{"value": 6, "mode": "additive"}]
+            }
+        },
+        "Secondary Fortifier": {
+            "name": "Secondary Fortifier",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {
+                "overguard_damage_multiplier": [{"value": 8, "mode": "additive", "when": "on_hit"}]
+            }
+        },
+        "Secondary Irradiate": {
+            "name": "Secondary Irradiate",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Secondary Kinship": {
+            "name": "Secondary Kinship",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Secondary Merciless": {
+            "name": "Secondary Merciless",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {
+                "reload_speed": [{"value": 0.3, "rank": 5, "mode": "additive"}],
+                "damage_bonus": [{"value": 0.3, "mode": "additive", "stacks": {"when": "on_kill", "max": 12}}]
+            }
+        },
+        "Secondary Outburst": {
+            "name": "Secondary Outburst",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {
+                "crit_chance": [{"value": 0.2, "mode": "additive", "stacks": {"when": "combo_consumed", "max": 12}}],
+                "crit_damage": [{"value": 0.2, "mode": "additive", "stacks": {"when": "combo_consumed", "max": 12}}]
+            }
+        },
+        "Secondary Shiver": {
+            "name": "Secondary Shiver",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {
+                "damage_bonus": [{"value": 0.45, "stacks": {"when": "cold_proc", "max": 10}, "mode": "additive"}]
+            }
+        },
+        "Secondary Surge": {
+            "name": "Secondary Surge",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["secondary"],
+                "exilus": false
+            },
+            "stats": {}
+        },
+        "Shotgun Vendetta": {
+            "name": "Shotgun Vendetta",
+            "type": "arcane",
+            "max_rank": 5,
+            "compatibility": {
+                "types": ["primary"],
+                "exilus": false
+            },
+            "stats": {
+                "multishot": [{"value": 1.8, "mode": "additive", "stacks": {"when": "on_kill", "max": 1}}],
+                "reload_speed": [{"value": 0.75, "mode": "additive", "stacks": {"when": "on_kill", "max": 1}}]
+            }
+        },
         "Argent Scourge": {
             "name": "Argent Scourge",
             "type": "mod",
@@ -77631,18 +78334,6 @@
             },
             "stats": {}
         },
-        "Landslide Fists": {
-            "name": "Landslide Fists",
-            "type": "mod",
-            "max_rank": 3,
-            "compatibility": {
-                "names": ["Landslide Fists"],
-                "stance": true,
-                "exilus": false
-            },
-            "combos": {},
-            "stats": {}
-        },
         "Lashing Coil": {
             "name": "Lashing Coil",
             "type": "mod",
@@ -78250,36 +78941,12 @@
             },
             "stats": {}
         },
-        "Shadow Clones": {
-            "name": "Shadow Clones",
-            "type": "mod",
-            "max_rank": 3,
-            "compatibility": {
-                "names": ["Shadow Clones"],
-                "stance": true,
-                "exilus": false
-            },
-            "combos": {},
-            "stats": {}
-        },
         "Shadow Harvest": {
             "name": "Shadow Harvest",
             "type": "mod",
             "max_rank": 3,
             "compatibility": {
                 "subtypes": ["scythe"],
-                "stance": true,
-                "exilus": false
-            },
-            "combos": {},
-            "stats": {}
-        },
-        "Shattered Lash": {
-            "name": "Shattered Lash",
-            "type": "mod",
-            "max_rank": 3,
-            "compatibility": {
-                "names": ["Exalted Blade"],
                 "stance": true,
                 "exilus": false
             },
@@ -79709,18 +80376,6 @@
             },
             "stats": {}
         },
-        "Whipclaw": {
-            "name": "Whipclaw",
-            "type": "mod",
-            "max_rank": 3,
-            "compatibility": {
-                "names": ["Whipclaw"],
-                "stance": true,
-                "exilus": false
-            },
-            "combos": {},
-            "stats": {}
-        },
         "Wise Razor": {
             "name": "Wise Razor",
             "type": "mod",
@@ -81120,711 +81775,6 @@
                 }
             },
             "stats": {}
-        },
-        "Akimbo Slip Shot": {
-            "name": "Akimbo Slip Shot",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {
-                "ammo_efficiency": [{"value": 0.65, "mode": "additive", "stacks": {"when": "while_sliding_or_aim_gliding_with_dual_pistols", "max": 1}}]
-            }
-        },
-        "Cascadia Accuracy": {
-            "name": "Cascadia Accuracy",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {
-                "weakpoint_crit_chance": [{"value": 3, "when": "roll", "mode": "additive"}]
-            }
-        },
-        "Cascadia Empowered": {
-            "name": "Cascadia Empowered",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {
-                "cascadia_empowered_proc": [{"value": 750, "mode": "additive", "when": "on_proc"}]
-            }
-        },
-        "Cascadia Flare": {
-            "name": "Cascadia Flare",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {
-                "damage_bonus": [{"value": 0.12, "mode": "additive", "stacks": {"when": "on_heat_status_effect", "max": 40}}],
-                "status_effect_stacks": [{"value": 0.12, "stat": "damage_bonus", "mode": "additive", "status": "heat", "max_stacks": 40}]
-            }
-        },
-        "Cascadia Overcharge": {
-            "name": "Cascadia Overcharge",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {
-                "crit_chance": [{"value": 3, "mode": "additive", "stacks": {"when": "overshields_active", "max": 1}}]
-            }
-        },
-        "Conjunction Voltage": {
-            "name": "Conjunction Voltage",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {
-                "reload_speed": [{"value": 0.015, "mode": "additive", "stacks": {"when": "on_electricity_status_effect", "max": 40}}],
-                "multishot": [{"value": 0.03, "mode": "additive", "stacks": {"when": "on_electricity_status_effect", "max": 40}}],
-                "status_effect_stacks": [
-                    {"value": 0.015, "stat": "reload_speed", "mode": "additive", "status": "electricity", "max_stacks": 40},
-                    {"value": 0.03, "stat": "multishot", "mode": "additive", "status": "electricity", "max_stacks": 40}
-                ]
-            }
-        },
-        "Exodia Brave": {
-            "name": "Exodia Brave",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["melee"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Exodia Contagion": {
-            "name": "Exodia Contagion",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["melee"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Exodia Epidemic": {
-            "name": "Exodia Epidemic",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["melee"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Exodia Force": {
-            "name": "Exodia Force",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["melee"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Exodia Hunt": {
-            "name": "Exodia Hunt",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["melee"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Exodia Might": {
-            "name": "Exodia Might",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["melee"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Exodia Triumph": {
-            "name": "Exodia Triumph",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["melee"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Exodia Valor": {
-            "name": "Exodia Valor",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["melee"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Fractalized Reset": {
-            "name": "Fractalized Reset",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["primary"],
-                "exilus": false
-            },
-            "stats": {
-                "reload_speed": [{"value": 2.4, "mode": "additive", "stacks": {"when": "on_ability_cast", "max": 1}}]
-            }
-        },
-        "Longbow Sharpshot": {
-            "name": "Longbow Sharpshot",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["primary"],
-                "exilus": false
-            },
-            "stats": {
-                "sharpshot_bonus": [{"value": 1, "mode": "additive", "stacks": {"when": "on_headshot", "max": 3}}]
-            }
-        },
-        "Melee Afflictions": {
-            "name": "Melee Afflictions",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["melee"],
-                "exilus": false
-            },
-            "stats": {
-                "afflictions_proc_multiplier": [{"value": 6, "mode": "additive", "when": "on_proc"}]
-            }
-        },
-        "Melee Animosity": {
-            "name": "Melee Animosity",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["melee"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Melee Assimilation": {
-            "name": "Melee Assimilation",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["melee"],
-                "exilus": false
-            },
-            "stats": {
-                "damage_bonus": [{"value": 1.5, "when": "shield_break", "mode": "additive"}]
-            }
-        },
-        "Melee Careen": {
-            "name": "Melee Careen",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["melee"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Melee Crescendo": {
-            "name": "Melee Crescendo",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["melee"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Melee Doughty": {
-            "name": "Melee Doughty",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["melee"],
-                "exilus": false
-            },
-            "stats": {
-                "melee_doughty": [{"value": 1, "mode": "additive"}]
-            }
-        },
-        "Melee Duplicate": {
-            "name": "Melee Duplicate",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["melee"],
-                "exilus": false
-            },
-            "stats": {
-                "melee_duplicate": [{"value": 1, "mode": "additive"}]
-            }
-        },
-        "Melee Exposure": {
-            "name": "Melee Exposure",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["melee"],
-                "exilus": false
-            },
-            "stats": {
-                "corrosive": [{"value": 0.6, "stacks": {"when": "ability_cast", "max": 4}, "mode": "additive"}]
-            }
-        },
-        "Melee Fortification": {
-            "name": "Melee Fortification",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["melee"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Melee Influence": {
-            "name": "Melee Influence",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["melee"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Melee Retaliation": {
-            "name": "Melee Retaliation",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["melee"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Melee Vortex": {
-            "name": "Melee Vortex",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["melee"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Pax Bolt": {
-            "name": "Pax Bolt",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Pax Charge": {
-            "name": "Pax Charge",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Pax Seeker": {
-            "name": "Pax Seeker",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Pax Soar": {
-            "name": "Pax Soar",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Primary Blight": {
-            "name": "Primary Blight",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["primary"],
-                "exilus": false
-            },
-            "stats": {
-                "crit_damage": [{"value": 0.036, "mode": "additive", "stacks": {"when": "on_toxin_status_effect", "max": 40}}],
-                "multishot": [{"value": 0.018, "mode": "additive", "stacks": {"when": "on_toxin_status_effect", "max": 40}}],
-                "status_effect_stacks": [
-                    {"value": 0.036, "stat": "crit_damage", "mode": "additive", "status": "toxin", "max_stacks": 40},
-                    {"value": 0.018, "stat": "multishot", "mode": "additive", "status": "toxin", "max_stacks": 40}
-                ]
-            }
-        },
-        "Primary Bulwark": {
-            "name": "Primary Bulwark",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["primary"],
-                "exilus": false
-            },
-            "stats": {
-                "damage_bonus": [{"value": 0.06, "mode": "additive", "stacks": {"when": "activation", "max": 500}}]
-            }
-        },
-        "Primary Compression": {
-            "name": "Primary Compression",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["primary"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Primary Crux": {
-            "name": "Primary Crux",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["primary"],
-                "exilus": false
-            },
-            "stats": {
-                "status_chance": [{"value": 0.3, "mode": "additive", "stacks": {"when": "on_headshot", "max": 10}}],
-                "ammo_efficiency": [{"value": 0.06, "mode": "additive", "stacks": {"when": "on_headshot", "max": 10}}]
-            }
-        },
-        "Primary Deadhead": {
-            "name": "Primary Deadhead",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["primary"],
-                "exilus": false
-            },
-            "stats": {
-                "damage_bonus": [{"value": 1.2, "mode": "additive", "stacks": {"when": "on_headshot_kill", "max": 3}}],
-                "weakpoint_damage": [{"value": 0.3, "rank": 5, "mode": "additive"}]
-            }
-        },
-        "Primary Debilitate": {
-            "name": "Primary Debilitate",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["primary"],
-                "exilus": false
-            },
-            "stats": {
-                "debilitate_proc_chance": [{"value": 1, "mode": "additive", "when": "on_combined_status_at_10_stacks"}]
-            }
-        },
-        "Primary Dexterity": {
-            "name": "Primary Dexterity",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["primary"],
-                "exilus": false
-            },
-            "stats": {
-                "damage_bonus": [{"value": 0.6, "mode": "additive", "stacks": {"when": "on_melee_kill", "max": 6}}]
-            }
-        },
-        "Primary Exhilarate": {
-            "name": "Primary Exhilarate",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["primary"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Primary Frostbite": {
-            "name": "Primary Frostbite",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["primary"],
-                "exilus": false
-            },
-            "stats": {
-                "crit_damage": [{"value": 0.03, "mode": "additive", "stacks": {"when": "on_cold_status_effect", "max": 40}}],
-                "multishot": [{"value": 0.022, "stacks": {"when": "cold_status_effect", "max": 40}, "mode": "additive"}],
-                "status_effect_stacks": [
-                    {"value": 0.03, "stat": "crit_damage", "mode": "additive", "status": "cold", "max_stacks": 40},
-                    {"value": 0.022, "stat": "multishot", "mode": "additive", "status": "cold", "max_stacks": 40}
-                ]
-            }
-        },
-        "Primary Merciless": {
-            "name": "Primary Merciless",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["primary"],
-                "exilus": false
-            },
-            "stats": {
-                "reload_speed": [{"value": 0.3, "rank": 5, "mode": "additive"}],
-                "damage_bonus": [{"value": 0.3, "mode": "additive", "stacks": {"when": "on_kill", "max": 12}}]
-            }
-        },
-        "Primary Obstruct": {
-            "name": "Primary Obstruct",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["primary"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Primary Overcharge": {
-            "name": "Primary Overcharge",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["primary"],
-                "exilus": false
-            },
-            "stats": {
-                "multishot": [{"value": 0.06, "mode": "additive", "stacks": {"when": "activation", "max": 350}}]
-            }
-        },
-        "Primary Plated Round": {
-            "name": "Primary Plated Round",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["primary"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Residual Boils": {
-            "name": "Residual Boils",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Residual Malodor": {
-            "name": "Residual Malodor",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Residual Shock": {
-            "name": "Residual Shock",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Residual Viremia": {
-            "name": "Residual Viremia",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Secondary Cryogenic": {
-            "name": "Secondary Cryogenic",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Secondary Deadhead": {
-            "name": "Secondary Deadhead",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {
-                "damage_bonus": [{"value": 1.2, "mode": "additive", "stacks": {"when": "on_headshot_kill", "max": 3}}],
-                "weakpoint_damage": [{"value": 0.3, "rank": 5, "mode": "additive"}]
-            }
-        },
-        "Secondary Dexterity": {
-            "name": "Secondary Dexterity",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {
-                "damage_bonus": [{"value": 0.6, "mode": "additive", "stacks": {"when": "on_melee_kill", "max": 6}}]
-            }
-        },
-        "Secondary Encumber": {
-            "name": "Secondary Encumber",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {
-                "secondary_encumber": [{"value": 0.24, "mode": "additive"}]
-            }
-        },
-        "Secondary Enervate": {
-            "name": "Secondary Enervate",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {
-                "secondary_enervate": [{"value": 6, "mode": "additive"}]
-            }
-        },
-        "Secondary Fortifier": {
-            "name": "Secondary Fortifier",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {
-                "overguard_damage_multiplier": [{"value": 8, "mode": "additive", "when": "on_hit"}]
-            }
-        },
-        "Secondary Irradiate": {
-            "name": "Secondary Irradiate",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Secondary Kinship": {
-            "name": "Secondary Kinship",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Secondary Merciless": {
-            "name": "Secondary Merciless",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {
-                "reload_speed": [{"value": 0.3, "rank": 5, "mode": "additive"}],
-                "damage_bonus": [{"value": 0.3, "mode": "additive", "stacks": {"when": "on_kill", "max": 12}}]
-            }
-        },
-        "Secondary Outburst": {
-            "name": "Secondary Outburst",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {
-                "crit_chance": [{"value": 0.2, "mode": "additive", "stacks": {"when": "combo_consumed", "max": 12}}],
-                "crit_damage": [{"value": 0.2, "mode": "additive", "stacks": {"when": "combo_consumed", "max": 12}}]
-            }
-        },
-        "Secondary Shiver": {
-            "name": "Secondary Shiver",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {
-                "damage_bonus": [{"value": 0.45, "stacks": {"when": "cold_proc", "max": 10}, "mode": "additive"}]
-            }
-        },
-        "Secondary Surge": {
-            "name": "Secondary Surge",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["secondary"],
-                "exilus": false
-            },
-            "stats": {}
-        },
-        "Shotgun Vendetta": {
-            "name": "Shotgun Vendetta",
-            "type": "arcane",
-            "max_rank": 5,
-            "compatibility": {
-                "types": ["primary"],
-                "exilus": false
-            },
-            "stats": {
-                "multishot": [{"value": 1.8, "mode": "additive", "stacks": {"when": "on_kill", "max": 1}}],
-                "reload_speed": [{"value": 0.75, "mode": "additive", "stacks": {"when": "on_kill", "max": 1}}]
-            }
         }
     },
     "riven_stats": {
