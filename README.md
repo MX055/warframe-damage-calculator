@@ -1126,7 +1126,8 @@ Faction damage is applied twice to modeled DoT damage.
 - `slash_proc` with `behaviour: "ON_CRIT"` / `"ON_IMPACT_DOUBLE_BELOW_2_5_FR"`
 - `random_proc` with `behaviour: "ON_ANY_PROC"`
 - `duplicated_hit` with `behaviour: "NEAR_YELLOW"`
-- `crit_chance` with `behaviour: "ON_HIT"` / `"STACK_RESET_CRIT_2_PLUS"`
+- `crit_chance` with `behaviour: "ON_HIT"`
+- `crit_reset_charges` with `behaviour: "STACK_RESET_CRIT_2_PLUS"` (value = orange+ charges; +10% CC/stack is hardcoded)
 - `crit_damage` with `behaviour: "FROM_PUNCTURE_X_STATUS"`
 - `damage_bonus` with `behaviour: "UNIQUE_STATUS"` / `"STATUS_PROC_STACKS"` / `"FIRST_SHOT"` / `"LAST_SHOT"`
 - Magazine-position overlays via `behaviour: "FIRST_SHOT"` / `"LAST_SHOT"` (optional `exclude: ["continuous", "incarnon"]`; Chamber/Synth use `family: "chamber"` / `"charge"`)

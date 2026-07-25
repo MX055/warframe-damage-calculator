@@ -44,7 +44,7 @@ ALLOWED_BEHAVIOURS = frozenset({
     BEHAVIOUR_STATUS_PROC_STACKS,
 })
 
-ENERVATE_RESET_CHARGES_MAX = 6
+ENERVATE_PER_STACK = 0.1  # flat crit chance per stack; reset charges come from DB value
 DOUGHTY_PER = 0.1
 IB_FIRE_RATE_THRESHOLD = 2.5
 

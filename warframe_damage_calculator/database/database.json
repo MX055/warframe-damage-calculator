@@ -91549,12 +91549,10 @@
                 "exilus": false
             },
             "stats": {
-                "crit_chance": [
+                "crit_reset_charges": [
                     {
-                        "value": 0.1,
-                        "mode": "flat",
-                        "behaviour": "STACK_RESET_CRIT_2_PLUS",
-                        "rank_scale": false
+                        "value": 6,
+                        "behaviour": "STACK_RESET_CRIT_2_PLUS"
                     }
                 ]
             }

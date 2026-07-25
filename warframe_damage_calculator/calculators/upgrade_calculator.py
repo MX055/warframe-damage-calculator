@@ -27,7 +27,7 @@ from .effect_schema import (
     BEHAVIOUR_STATUS_PROC_STACKS,
     BEHAVIOUR_UNIQUE_STATUS,
     COMMON_FAMILY,
-    ENERVATE_RESET_CHARGES_MAX,
+    ENERVATE_PER_STACK,
     behaviour_of,
     effect_family,
     normalize_mode,
@@ -126,9 +126,10 @@ class UpgradeCalculator:
             return ResolvableEffect(stat, value, "proportional", "magazine_position", condition="last_shot", exclude=exclude, family=family, scales_with_rank=scales, behaviour=behaviour)
 
         if behaviour == BEHAVIOUR_STACK_RESET_CRIT_2_PLUS:
-            if stat != "crit_chance": raise ValueError("STACK_RESET_CRIT_2_PLUS requires crit_chance")
-            payload = {"stat": "crit_chance", "value": value, "mode": "flat", "behaviour": behaviour, "after_max": ENERVATE_RESET_CHARGES_MAX}
-            return ResolvableEffect(stat="stacking_reset", value=payload, bucket="stacking_reset", mode="proportional", scales_with_rank=False, behaviour=behaviour)
+            if stat != "crit_reset_charges": raise ValueError("STACK_RESET_CRIT_2_PLUS requires crit_reset_charges")
+            # value = orange+ charges until full reset (rank-scales); per-stack CC is constant.
+            payload = {"stat": "crit_chance", "value": ENERVATE_PER_STACK, "behaviour": behaviour, "after_max": value}
+            return ResolvableEffect(stat="stacking_reset", value=payload, bucket="stacking_reset", mode="proportional", scales_with_rank=True, behaviour=behaviour)
 
         if behaviour == BEHAVIOUR_ON_CRIT:
             if stat != "slash_proc": raise ValueError("ON_CRIT requires slash_proc")
@@ -206,7 +207,8 @@ class UpgradeCalculator:
     def _resolve_effect(self, effect: ResolvableEffect, context: ResolutionContext) -> ResolvableEffect | None:
         if effect.bucket == "stacking_reset":
             payload = dict(effect.value)
-            payload["after"] = float(payload.get("after_max") or ENERVATE_RESET_CHARGES_MAX) * context.rank_multiplier
+            # Rank-scale reset charges only; per-stack CC in payload["value"] stays fixed.
+            payload["after"] = float(payload.get("after_max") or 0) * context.rank_multiplier
             return replace(effect, value=payload)
         if effect.bucket in {"application_chance", "conversions"}:
             payload = dict(effect.value)

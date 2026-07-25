@@ -817,7 +817,9 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(application_chance.vigilante_flat_crit(arsenal.get("Vigilante Supplies").results.total.application_chance), 0.05)
         self.assertAlmostEqual(application_chance.duplicate_chance(arsenal.get("Melee Duplicate").results.total.application_chance), 1)
         self.assertAlmostEqual(application_chance.doughty_factor(arsenal.get("Melee Doughty").results.total.conversions), 1)
-        per_stack, charges = stacking_reset.enervate_params(arsenal.get("Secondary Enervate").results.total.stacking_reset)
+        enervate = arsenal.get("Secondary Enervate")
+        self.assertEqual(enervate.data.stats.crit_reset_charges, [{"value": 6, "behaviour": "STACK_RESET_CRIT_2_PLUS"}])
+        per_stack, charges = stacking_reset.enervate_params(enervate.results.total.stacking_reset)
         self.assertAlmostEqual(per_stack, 0.1)
         self.assertAlmostEqual(charges, 6)
 

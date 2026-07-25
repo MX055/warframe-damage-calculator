@@ -15,6 +15,7 @@ class UpgradeStats(Data):
     corpus_damage: JsonValue
     crit_chance: JsonValue
     crit_damage: JsonValue
+    crit_reset_charges: JsonValue
     damage: JsonValue
     damage_bonus: JsonValue
     duplicated_hit: JsonValue

@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from .effect_schema import BEHAVIOUR_STACK_RESET_CRIT_2_PLUS, ENERVATE_RESET_CHARGES_MAX
+from .effect_schema import BEHAVIOUR_STACK_RESET_CRIT_2_PLUS, ENERVATE_PER_STACK
 from .special_effects import iter_deferred
 
 
@@ -15,8 +15,8 @@ def enervate_params(*sources: Sequence[Mapping[str, Any]] | None) -> tuple[float
     charges = 0.0
     for entry in iter_deferred(*sources):
         if entry.get("behaviour") != BEHAVIOUR_STACK_RESET_CRIT_2_PLUS: continue
-        per_stack += float(entry.get("value") or 0)
-        charges = max(charges, float(entry.get("after") or entry.get("after_max") or ENERVATE_RESET_CHARGES_MAX))
+        per_stack += float(entry.get("value") or ENERVATE_PER_STACK)
+        charges = max(charges, float(entry.get("after") or entry.get("after_max") or 0))
     return per_stack, charges
 
 
