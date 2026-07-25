@@ -414,6 +414,15 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(selected(weapon).final.total_dps, full_dps)
         self.assertEqual([upgrade.data.name for upgrade in weapon.build], ["Serration", "Heavy Caliber"])
 
+        full_dph = selected(weapon).final.total_dph
+        dph_removals = weapon.results.removal_contributions("total_dph")
+        self.assertAlmostEqual(dph_removals["Serration"], full_dph - selected(without_serration).final.total_dph)
+        self.assertAlmostEqual(dph_removals["Heavy Caliber"], full_dph - selected(without_heavy).final.total_dph)
+        dph_shares = weapon.results.shapley_contributions(target="total_dph")
+        self.assertAlmostEqual(sum(dph_shares.values()), 1.0)
+        with self.assertRaisesRegex(ValueError, "unsupported contribution target"):
+            weapon.results.removal_contributions("not_a_metric")
+
     def test_build_has_one_canonical_upgrade_collection(self):
         from typing import get_type_hints
 

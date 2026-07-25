@@ -997,17 +997,26 @@ weapon = arsenal.get("Acceltra Prime").configure(
 
 print(weapon.results.shapley_contributions())
 print(weapon.results.removal_contributions())
+print(weapon.results.shapley_contributions("total_dph"))
+print(weapon.results.removal_contributions("flat_dps"))
 print(weapon.format.upgrades())
 ```
 
-Shapley percentages are each upgrade's share of the average marginal DPS gain from
-adding it across every possible subset of the rest of the build. They sum to 1;
-interactions between upgrades mean they are attribution weights, not independent
-multipliers.
+The optional `target` selects which final average metric to attribute. Defaults to
+`total_dps`. Supported targets: `flat_dph`, `flat_weakpoint_dph`, `flat_dps`,
+`flat_weakpoint_dps`, `flat_dotph`, `flat_weakpoint_dotph`, `flat_dotps`,
+`flat_weakpoint_dotps`, `total_dph`, `total_weakpoint_dph`, `total_dps`, and
+`total_weakpoint_dps`.
 
-Removal values are leave-one-out instead: full-build DPS minus DPS with only
-that upgrade removed. They do not sum to the same total when upgrades interact.
-`weapon.format.upgrades()` prints both for each equipped upgrade.
+Shapley percentages are each upgrade's share of the average marginal gain in the
+chosen metric from adding it across every possible subset of the rest of the
+build. They sum to 1; interactions between upgrades mean they are attribution
+weights, not independent multipliers.
+
+Removal values are leave-one-out instead: full-build metric minus the metric with
+only that upgrade removed. They do not sum to the same total when upgrades
+interact. `weapon.format.upgrades()` prints both for each equipped upgrade using
+`total_dps`.
 
 ### Formatters
 

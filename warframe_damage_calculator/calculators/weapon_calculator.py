@@ -12,11 +12,13 @@ from ..fields.evolution import ResolvedEvolutionStat
 from ..fields.upgrade import ResolvedStat
 from ..fields.weapon_data import Attack
 from ..protocols import BuildUpgradeOwner, ConfigurableWeaponOwner
-from ..utils.types import Number
+from ..utils.types import ContributionTarget, Number
 from . import attack_tree, damage_calculator, formulas, scalar_calculator
 from .contributions import ContributionCalculator
 from .evolution_calculator import EvolutionCalculator
 from .status_model import SustainedStatusModel, apply_condition_overload, build_sustained_status_model, condition_overload_bonus, status_effect_stack_bonuses
+
+CONTRIBUTION_TARGETS = frozenset({"flat_dph", "flat_weakpoint_dph", "flat_dps", "flat_weakpoint_dps", "flat_dotph", "flat_weakpoint_dotph", "flat_dotps", "flat_weakpoint_dotps", "total_dph", "total_weakpoint_dph", "total_dps", "total_weakpoint_dps"})
 
 
 class WeaponCalculator:
@@ -151,9 +153,9 @@ class WeaponCalculator:
     def _compute_attack_results(self, resolved_build: ResolvedStat, resolved_evolutions: ResolvedEvolutionStat) -> dict[str, AttackResult]:
         return attack_tree.compute_attack_results(attacks=self.weapon.data.attacks, selected=self.weapon.data.selected_attack, compute_attack=lambda name, attack: self._compute_attack(name, attack, resolved_build, resolved_evolutions), attack_rate_for=self._sustained_attack_rate)
 
-    def _total_dps(self, resolved_build: ResolvedStat, resolved_evolutions: ResolvedEvolutionStat) -> float:
+    def _metric_for_build(self, resolved_build: ResolvedStat, resolved_evolutions: ResolvedEvolutionStat, target: ContributionTarget) -> float:
         results = self._compute_attack_results(resolved_build, resolved_evolutions)
-        return float(results[self.weapon.data.selected_attack].final.total_dps)
+        return float(results[self.weapon.data.selected_attack].final.get(target, 0) or 0)
 
     def resolve(self, *, validate_cycles: bool = True) -> None:
         defaults = self._runtime_defaults()
@@ -171,13 +173,14 @@ class WeaponCalculator:
     def _upgrade_depends_on_equipped(upgrade: BuildUpgradeOwner) -> bool:
         return any(getattr(effect, "equipped", None) is not None for effect in upgrade.results._normalize_effects())
 
-    def _contribution_calculator(self) -> ContributionCalculator:
-        return ContributionCalculator(upgrades=list(self.weapon.build), weapon_data=self.weapon.data, resolved_evolutions=self._resolved_evolutions(), dps_for_build=self._total_dps, upgrade_depends_on_equipped=self._upgrade_depends_on_equipped)
+    def _contribution_calculator(self, target: ContributionTarget = "total_dps") -> ContributionCalculator:
+        if target not in CONTRIBUTION_TARGETS: raise ValueError(f"unsupported contribution target {target!r}; expected one of {sorted(CONTRIBUTION_TARGETS)}")
+        return ContributionCalculator(upgrades=list(self.weapon.build), weapon_data=self.weapon.data, resolved_evolutions=self._resolved_evolutions(), metric_for_build=lambda build, evolutions: self._metric_for_build(build, evolutions, target), upgrade_depends_on_equipped=self._upgrade_depends_on_equipped)
 
-    def removal_contributions(self) -> dict[str, float]:
+    def removal_contributions(self, target: ContributionTarget = "total_dps") -> dict[str, float]:
         if not self.weapon.build: return {}
-        return self._contribution_calculator().removal_contributions()
+        return self._contribution_calculator(target).removal_contributions()
 
-    def shapley_contributions(self) -> dict[str, float]:
+    def shapley_contributions(self, target: ContributionTarget = "total_dps") -> dict[str, float]:
         if not self.weapon.build: return {}
-        return self._contribution_calculator().shapley_contributions()
+        return self._contribution_calculator(target).shapley_contributions()
