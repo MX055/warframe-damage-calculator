@@ -77,7 +77,10 @@ class UpgradeCalculator:
             if not target or not status: raise ValueError("status_effect_stacks requires 'stat' and 'status'")
             maximum = effect.get("max_stacks", effect.get("stacks", {}).get("max"))
             if maximum is None: raise ValueError("status_effect_stacks requires max_stacks")
-            return ResolvableEffect(stat=stat, value={"value": effect.value, "stat": target, "status": status, "max_stacks": maximum, "mode": mode}, bucket="static", mode="additive", scales_with_rank=True)
+            payload = {"value": effect.value, "stat": target, "status": status, "max_stacks": maximum, "mode": mode}
+            duration = effect.get("duration")
+            if duration is not None: payload["duration"] = duration
+            return ResolvableEffect(stat=stat, value=payload, bucket="static", mode="additive", scales_with_rank=True)
 
         equipped = effect.get("equipped")
         required_rank = effect.get("rank")
@@ -108,7 +111,16 @@ class UpgradeCalculator:
             if not self._condition(weapon, upgrade, effect.condition): return False
         return True
 
+    @staticmethod
+    def _is_status_effect_stack_key(stacks_on: str | None) -> bool:
+        """Legacy `on_<status>_status_effect` stack keys are deferred to status_effect_stacks."""
+        return isinstance(stacks_on, str) and stacks_on.startswith("on_") and stacks_on.endswith("_status_effect")
+
     def _resolve_effect(self, effect: ResolvableEffect, context: ResolutionContext) -> ResolvableEffect | None:
+        # Ignore legacy on_*_status_effect stack rows; automatic/runtime stacks are
+        # applied later from status_effect_stacks + SustainedStatusModel.
+        if self._is_status_effect_stack_key(effect.stacks_on):
+            return None
         return resolve_stack_scaled_effect(effect, context, scale=self._scale)
 
     def _aggregate_effects(self, effects: Sequence[ResolvableEffect]) -> None:

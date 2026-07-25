@@ -58,11 +58,15 @@ class StatusModelTests(unittest.TestCase):
         self.assertAlmostEqual(model.expected_status_stacks("cold", 40), 30.0)
         self.assertAlmostEqual(model.expected_status_stacks("cold", 20), 20.0)
         self.assertEqual(model.expected_status_stacks("heat", 40), 0.0)
+        # Effect/buff duration overrides status duration for stack windows.
+        self.assertAlmostEqual(model.expected_status_stacks("cold", 40, duration=12), 40.0)
+        self.assertAlmostEqual(model.expected_status_stacks("cold", 40, duration=2), 10.0)
 
     def test_status_effect_stack_bonuses_use_model_or_runtime_override(self):
         model = SustainedStatusModel(per_attack_probabilities={"heat": 1.0}, attacks_per_second=1, status_duration=6, max_unique_statuses=1)
-        entries = [{"value": 0.12, "stat": "damage_bonus", "mode": "additive", "status": "heat", "max_stacks": 40}]
-        self.assertEqual(status_effect_stack_bonuses(model=model, entries=entries), [("additive", "damage_bonus", 0.72)])
+        entries = [{"value": 0.12, "stat": "damage_bonus", "mode": "additive", "status": "heat", "max_stacks": 40, "duration": 10}]
+        # 1 rps × 10s buff duration × P=1 → 10 stacks, not status_duration=6.
+        self.assertEqual(status_effect_stack_bonuses(model=model, entries=entries), [("additive", "damage_bonus", 1.2)])
         self.assertEqual(status_effect_stack_bonuses(model=model, entries=entries, runtime={"on_heat_status_effect": 10}), [("additive", "damage_bonus", 1.2)])
 
     def test_apply_condition_overload_only_needs_status_model(self):

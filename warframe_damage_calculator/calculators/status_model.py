@@ -10,8 +10,8 @@ Quantities:
 - sustained_attack_rate: sustained attacks/sec used to re-apply statuses over duration
 - expected_unique_active_statuses: E[number of distinct status types currently
   active] over one status-duration window (Condition Overload)
-- expected_status_stacks: E[proc count of one status type] in that window, capped
-  (Cascadia / Frostbite-style status_effect_stacks)
+- expected_status_stacks: E[proc count of one status type] over a buff/status
+  duration window, capped (Cascadia / Frostbite-style status_effect_stacks)
 """
 
 from __future__ import annotations
@@ -58,11 +58,16 @@ class SustainedStatusModel:
             distribution = updated
         return sum(count * chance for count, chance in enumerate(distribution))
 
-    def expected_status_stacks(self, status: str, max_stacks: int) -> float:
-        """Expected stacks from sustained procs of one status type, capped at max_stacks."""
+    def expected_status_stacks(self, status: str, max_stacks: int, *, duration: float | None = None) -> float:
+        """Expected stacks from sustained procs of one status type, capped at max_stacks.
+
+        `duration` is the buff window (Cascadia/Frostbite-style). When omitted, falls
+        back to the model's status-effect duration used by Condition Overload.
+        """
         if max_stacks <= 0: return 0.0
         probability = float(self.per_attack_probabilities.get(status, 0.0))
-        attempts = self.attempts_during_duration
+        window = float(self.status_duration if duration is None else duration)
+        attempts = self.attacks_per_second * window
         if probability <= 0 or attempts <= 0: return 0.0
         return min(float(max_stacks), attempts * probability)
 
@@ -123,6 +128,7 @@ def status_effect_stack_bonuses(*, model: SustainedStatusModel, entries: list, r
     """Resolve (mode, target_stat, bonus) triples from deferred status_effect_stacks entries.
 
     Runtime keys `on_<status>_status_effect` override the sustained expectation when set.
+    Automatic stacks use each entry's buff `duration` when present.
     """
     runtime = runtime or {}
     bonuses: list[tuple[str, str, float]] = []
@@ -131,7 +137,8 @@ def status_effect_stack_bonuses(*, model: SustainedStatusModel, entries: list, r
         maximum = int(entry["max_stacks"])
         override = runtime.get(f"on_{status}_status_effect")
         if override is None: override = runtime.get(f"{status}_status_effect")
-        stacks = min(float(override), float(maximum)) if override is not None else model.expected_status_stacks(status, maximum)
+        duration = entry.get("duration")
+        stacks = min(float(override), float(maximum)) if override is not None else model.expected_status_stacks(status, maximum, duration=None if duration is None else float(duration))
         if not stacks: continue
         bonuses.append((str(entry.get("mode", "additive")), str(entry["stat"]), float(entry["value"]) * stacks))
     return bonuses

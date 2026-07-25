@@ -1251,13 +1251,21 @@ class PublicApiTests(unittest.TestCase):
     def test_status_effect_stacks_database_shape(self):
         frostbite = arsenal.upgrades["Primary Frostbite"]["stats"]["status_effect_stacks"]
         self.assertEqual(frostbite, [
-            {"value": 0.03, "stat": "crit_damage", "mode": "additive", "status": "cold", "max_stacks": 40},
-            {"value": 0.022, "stat": "multishot", "mode": "additive", "status": "cold", "max_stacks": 40},
+            {"value": 0.03, "stat": "crit_damage", "mode": "additive", "status": "cold", "max_stacks": 40, "duration": 12},
+            {"value": 0.0225, "stat": "multishot", "mode": "additive", "status": "cold", "max_stacks": 40, "duration": 12},
+        ])
+        flare = arsenal.upgrades["Cascadia Flare"]["stats"]["status_effect_stacks"]
+        self.assertEqual(flare, [
+            {"value": 0.12, "stat": "damage_bonus", "mode": "additive", "status": "heat", "max_stacks": 40, "duration": 10},
         ])
         resolved = arsenal.get("Primary Frostbite").results.total.additive.status_effect_stacks
         self.assertEqual(len(resolved), 2)
         self.assertEqual(resolved[0]["status"], "cold")
         self.assertEqual(resolved[0]["stat"], "crit_damage")
+        self.assertEqual(resolved[0]["duration"], 12)
+        # Legacy stack rows must not remain beside the deferred custom stat.
+        self.assertNotIn("crit_damage", arsenal.upgrades["Primary Frostbite"]["stats"])
+        self.assertNotIn("damage_bonus", arsenal.upgrades["Cascadia Flare"]["stats"])
 
     def test_status_effect_stacks_use_sustained_procs(self):
         cold = Upgrade({"name": "Cold", "type": "mod", "max_rank": 0, "stats": {"cold": [{"value": 1.0}]}})
@@ -1265,6 +1273,14 @@ class PublicApiTests(unittest.TestCase):
         with_arcane = arsenal.get("Braton").configure(Build(cold, arsenal.get("Primary Frostbite")))
         self.assertGreater(selected(with_arcane).effective.crit_damage, selected(without).effective.crit_damage)
         self.assertGreater(selected(with_arcane).effective.multishot, selected(without).effective.multishot)
+
+    def test_status_effect_stacks_require_matching_status(self):
+        bare = arsenal.get("Lato").configure(Build(arsenal.get("Cascadia Flare")))
+        heat = Upgrade({"name": "Heat", "type": "mod", "max_rank": 0, "stats": {"heat": [{"value": 1.0}]}})
+        with_heat = arsenal.get("Lato").configure(Build(heat, arsenal.get("Cascadia Flare")))
+        self.assertAlmostEqual(selected(bare).effective.damage_bonus, selected(arsenal.get("Lato")).effective.damage_bonus)
+        self.assertGreater(selected(with_heat).effective.damage_bonus, selected(bare).effective.damage_bonus)
+        self.assertAlmostEqual(arsenal.get("Cascadia Flare").results.total.additive.damage_bonus, 0)
 
     def test_status_effect_stacks_runtime_override(self):
         cold = Upgrade({"name": "Cold", "type": "mod", "max_rank": 0, "stats": {"cold": [{"value": 1.0}]}})

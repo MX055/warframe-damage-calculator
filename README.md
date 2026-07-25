@@ -1134,7 +1134,7 @@ shots, projectiles, or animation frames.
 ### Condition Overload
 
 - Condition Overload uses the expected number of unique statuses sustained on a target.
-- `status_effect_stacks` uses the expected sustained proc count of one status type (capped), e.g. Cascadia Flare / Primary Frostbite. Override with runtime `on_<status>_status_effect`.
+- `status_effect_stacks` uses the expected sustained proc count of one status type over the arcane buff `duration` (not weapon status duration), capped by `max_stacks` — e.g. Cascadia Flare / Primary Frostbite. Override with runtime `on_<status>_status_effect`.
 - Per-type application chance accounts for status chance, damage weights, multishot/status hits, and forced procs.
 - Uptime for each type is `1 - (1 - p)^(attacks_per_second × status_duration)`.
 - The effect may be capped by the upgrade's structured `max_stacks` value.
