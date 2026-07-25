@@ -1,11 +1,4 @@
-"""Aggregation policies for resolved upgrade and evolution effects.
-
-Resolution decides which effects are active and their values.
-Aggregation decides how those values combine into a stats container.
-
-Policies are selected explicitly from registries; unknown ordinary additive
-stats fall back to _merge_ordinary.
-"""
+"""Aggregation policies for resolved upgrade and evolution effects."""
 
 from __future__ import annotations
 
@@ -20,6 +13,7 @@ from ..utils.constants import DAMAGE_TYPES, EFFECT_MODES
 from ..utils.types import Number
 
 Aggregator = Callable[[Data, str, Any], None]
+DEFERRED = ("magazine_position", "stacking_reset", "application_chance", "conversions")
 
 
 def _merge_numeric(stats: Data, stat: str, value: Any) -> None:
@@ -67,13 +61,11 @@ def _merge_conversion(stats: Data, stat: str, value: Any, *, conversion_max: Num
 
 
 def _merge_noise_level(stats: Data, stat: str, value: Any) -> None:
-    """Silent wins when any contributing source silences the weapon."""
     current = stats.get(stat)
     stats[stat] = "silent" if "silent" in (current, value) else value
 
 
 def _merge_ordinary(stats: Data, stat: str, value: Any) -> None:
-    """Fallback for ordinary additive stats without a declared special policy."""
     current = stats.get(stat)
     if current is None: stats[stat] = value
     elif isinstance(value, bool) or isinstance(current, bool): _merge_boolean(stats, stat, value)
@@ -82,7 +74,6 @@ def _merge_ordinary(stats: Data, stat: str, value: Any) -> None:
     else: _merge_numeric(stats, stat, value)
 
 
-# Declared upgrade/build policies. Unknown stats use _merge_ordinary.
 UPGRADE_AGGREGATORS: dict[str, Aggregator] = {
     "damage": _merge_damage,
     "forced_procs": _merge_damage,
@@ -95,14 +86,12 @@ UPGRADE_AGGREGATORS: dict[str, Aggregator] = {
 
 CONVERSION_STATS = frozenset({"crit_from_status", "status_from_crit"})
 
-# Evolution elemental damage types become Dist entries; flat "damage" stays numeric.
 EVOLUTION_AGGREGATORS: dict[str, Aggregator] = {
     "forced_procs": _merge_damage,
 }
 
 
 def merge_upgrade_stat(stats: Data, stat: str, value: Any) -> None:
-    """Merge one upgrade effect into a mode stats container via the policy registry."""
     if stat in DAMAGE_TYPES: stat, value = "damage", {stat: value}
     aggregator = UPGRADE_AGGREGATORS.get(stat, _merge_ordinary)
     aggregator(stats, stat, value)
@@ -115,8 +104,7 @@ def merge_mode_stats(target: Data, source: Data) -> None:
         merge_upgrade_stat(target, stat, value)
 
 
-def merge_multiplicative_tiers(target: Data, source: Data, *, mode_stats_type: type = ResolvedModeStats) -> None:
-    """Merge higher multiplicative tiers (keys \"2\", \"3\", … → mode stats)."""
+def merge_multiplicative_families(target: Data, source: Data, *, mode_stats_type: type = ResolvedModeStats) -> None:
     for key, mode_stats in source.items():
         current = target.get(key)
         if not isinstance(current, mode_stats_type):
@@ -129,25 +117,25 @@ def merge_multiplicative_tiers(target: Data, source: Data, *, mode_stats_type: t
 
 def merge_resolved_stat(target: ResolvedStat, source: ResolvedStat) -> None:
     for mode in EFFECT_MODES: merge_mode_stats(getattr(target, mode), getattr(source, mode))
-    if source.multiplicative_tiers:
-        merge_multiplicative_tiers(target.multiplicative_tiers, source.multiplicative_tiers, mode_stats_type=ResolvedModeStats)
-    if source.magazine_position:
-        target.magazine_position = [*(target.magazine_position or []), *source.magazine_position]
+    if source.multiplicative_families:
+        merge_multiplicative_families(target.multiplicative_families, source.multiplicative_families, mode_stats_type=ResolvedModeStats)
+    for key in DEFERRED:
+        entries = getattr(source, key, None)
+        if entries: setattr(target, key, [*(getattr(target, key) or []), *entries])
 
 
 def merge_resolved_evolution_stat(target: ResolvedEvolutionStat, source: ResolvedEvolutionStat) -> None:
     for mode in EFFECT_MODES: merge_mode_stats(getattr(target, mode), getattr(source, mode))
-    if source.multiplicative_tiers:
-        merge_multiplicative_tiers(target.multiplicative_tiers, source.multiplicative_tiers, mode_stats_type=ResolvedEvolutionModeStats)
-    if source.magazine_position:
-        target.magazine_position = [*(target.magazine_position or []), *source.magazine_position]
+    if source.multiplicative_families:
+        merge_multiplicative_families(target.multiplicative_families, source.multiplicative_families, mode_stats_type=ResolvedEvolutionModeStats)
+    for key in DEFERRED:
+        entries = getattr(source, key, None)
+        if entries: setattr(target, key, [*(getattr(target, key) or []), *entries])
 
 
 def merge_evolution_stat(stats: Data, stat: str, value: Any, *, conversion_max: Number | None = None) -> None:
-    """Merge one evolution effect; conversion stats use ConversionBonus aggregation."""
     if stat in CONVERSION_STATS:
         _merge_conversion(stats, stat, float(value), conversion_max=conversion_max)
         return
-    # Flat evolution "damage" is numeric; Dist merge is only for forced_procs and similar.
     aggregator = EVOLUTION_AGGREGATORS.get(stat, _merge_ordinary)
     aggregator(stats, stat, value)

@@ -66,8 +66,7 @@ class HelperTests(unittest.TestCase):
             "name": "test",
             "attack": Attack({"name": "test", "stats": {"multishot": 1, "crit_chance": 0.1}}),
             "modded": {
-                "additive": {"multishot": 2.5},
-                "multiplicative": {"crit_chance": 1},
+                "proportional": {"multishot": 2.5},
                 "flat": {"crit_chance": 0},
             },
         })

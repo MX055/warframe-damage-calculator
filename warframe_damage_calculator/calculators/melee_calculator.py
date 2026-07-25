@@ -3,7 +3,7 @@ from ..fields.upgrade import StanceCombo
 from ..utils.constants import COMBO_HIT_INTERVAL, HEAVY_ATTACK_CATEGORIES, MAX_COMBO_MULTIPLIER, SLAM_ATTACK_CATEGORIES, SLIDE_ATTACK_CATEGORIES
 from ..utils.functions import clamp, true_round
 from ..utils.types import Number
-from . import formulas
+from . import application_chance, formulas
 from .weapon_calculator import WeaponCalculator
 
 
@@ -21,7 +21,7 @@ class MeleeCalculator(WeaponCalculator):
         runtime.combo = MAX_COMBO_MULTIPLIER
         if self._selected_category() in HEAVY_ATTACK_CATEGORIES:
             self.weapon.build.results.resolve(self.weapon.data)
-            initial_combo = float(self.weapon.build.results.total.additive.initial_combo or 0)
+            initial_combo = float(self.weapon.build.results.total.proportional.initial_combo or 0)
             runtime.combo = self._combo_multiplier_from_hits(initial_combo)
         return ("combo",)
 
@@ -64,28 +64,26 @@ class MeleeCalculator(WeaponCalculator):
         super()._compute_modded_scalars(result)
         build, evo, base, modded = result.build, result.evolutions, result.base, result.modded
         stats = result.attack.stats
-        modded.additive.heavy_attack_speed = max(1 + build.additive.heavy_attack_speed + evo.additive.heavy_attack_speed, 0)
-        speed = modded.additive.heavy_attack_speed if result.category in HEAVY_ATTACK_CATEGORIES else max(1 + build.additive.attack_speed + evo.additive.attack_speed, 0)
-        modded.additive.attack_speed = max(base.attack_speed * speed * self._stance_hits_per_second_factor(result), 0)
-        modded.additive.melee_duplicate = clamp(build.additive.melee_duplicate, 0, 1)
-        modded.additive.melee_doughty = clamp(build.additive.melee_doughty, 0, 1)
-        modded.additive.heavy_attack_efficiency = max(build.additive.heavy_attack_efficiency + evo.additive.heavy_attack_efficiency + float(stats.heavy_attack_efficiency or 0), 0)
-        modded.additive.initial_combo = max(build.additive.initial_combo + evo.additive.initial_combo + float(stats.initial_combo or 0), 0)
-        modded.additive.slam_damage = max(1 + build.additive.slam_damage + evo.additive.slam_damage, 0)
-        modded.additive.slide_crit_chance = max(1 + build.additive.slide_crit_chance + evo.additive.slide_crit_chance, 0)
+        modded.proportional.heavy_attack_speed = max(1 + build.proportional.heavy_attack_speed + evo.proportional.heavy_attack_speed, 0)
+        speed = modded.proportional.heavy_attack_speed if result.category in HEAVY_ATTACK_CATEGORIES else max(1 + build.proportional.attack_speed + evo.proportional.attack_speed, 0)
+        modded.proportional.attack_speed = max(base.attack_speed * speed * self._stance_hits_per_second_factor(result), 0)
+        modded.proportional.heavy_attack_efficiency = max(build.proportional.heavy_attack_efficiency + evo.proportional.heavy_attack_efficiency + float(stats.heavy_attack_efficiency or 0), 0)
+        modded.proportional.initial_combo = max(build.proportional.initial_combo + evo.proportional.initial_combo + float(stats.initial_combo or 0), 0)
+        modded.proportional.slam_damage = max(1 + build.proportional.slam_damage + evo.proportional.slam_damage, 0)
+        modded.proportional.slide_crit_chance = max(1 + build.proportional.slide_crit_chance + evo.proportional.slide_crit_chance, 0)
 
     def _compute_effective(self, result: AttackResult) -> None:
         super()._compute_effective(result)
         effective, modded = result.effective, result.modded
         category = result.category
-        effective.attack_speed = modded.additive.attack_speed
-        effective.melee_duplicate = modded.additive.melee_duplicate
-        effective.melee_doughty = modded.additive.melee_doughty
-        effective.heavy_attack_speed = modded.additive.heavy_attack_speed
-        effective.heavy_attack_efficiency = modded.additive.heavy_attack_efficiency
-        effective.initial_combo = modded.additive.initial_combo
-        effective.slam_damage = modded.additive.slam_damage
-        effective.slide_crit_chance = modded.additive.slide_crit_chance
+        effective.attack_speed = modded.proportional.attack_speed
+        effective.melee_duplicate = clamp(application_chance.duplicate_chance(result.build.application_chance), 0, 1)
+        effective.melee_doughty = clamp(application_chance.doughty_factor(result.build.conversions), 0, 1)
+        effective.heavy_attack_speed = modded.proportional.heavy_attack_speed
+        effective.heavy_attack_efficiency = modded.proportional.heavy_attack_efficiency
+        effective.initial_combo = modded.proportional.initial_combo
+        effective.slam_damage = modded.proportional.slam_damage
+        effective.slide_crit_chance = modded.proportional.slide_crit_chance
         stance_multiplier = self._stance_damage_multiplier(result)
         effective.damage = effective.damage * stance_multiplier
         effective.damage_bonus = effective.damage_bonus * stance_multiplier
@@ -104,13 +102,15 @@ class MeleeCalculator(WeaponCalculator):
     def _status_hits(self, result: AttackResult) -> float:
         hits = super()._status_hits(result)
         build, stats, modded = result.build, result.attack.stats, result.modded
-        chance = max(stats.crit_chance * (1 + build.additive.crit_chance * self._crit_upgrade_multiplier(result)) * modded.multiplicative.crit_chance + modded.flat.crit_chance, 0)
-        return hits + modded.additive.melee_duplicate * max(0, 1 - abs(chance - 1))
+        crit_factor = formulas.fold_multiplicative_families(build, result.evolutions, modded, stat="crit_chance")
+        chance = max(stats.crit_chance * (1 + build.proportional.crit_chance * self._crit_upgrade_multiplier(result)) * crit_factor + modded.flat.crit_chance, 0)
+        duplicate = clamp(application_chance.duplicate_chance(result.build.application_chance), 0, 1)
+        return hits + duplicate * max(0, 1 - abs(chance - 1))
 
     def _sustained_attack_rate(self, result: AttackResult) -> float:
         """Melee sustained hit rate from modded attack speed (includes stance hits/sec)."""
-        if "attack_speed" not in result.modded.additive: return super()._sustained_attack_rate(result)
-        return max(float(result.modded.additive.attack_speed), 0)
+        if "attack_speed" not in result.modded.proportional: return super()._sustained_attack_rate(result)
+        return max(float(result.modded.proportional.attack_speed), 0)
 
     def _compute_average(self, result: AttackResult) -> None:
         super()._compute_average(result)

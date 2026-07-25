@@ -96,8 +96,8 @@ def condition_overload_bonus(model: SustainedStatusModel, *, value_per_status: N
 
 def per_attack_status_probabilities(*, attack: Attack, base: CalculatedStats, build: ResolvedStat, evolution_status_chance: Number, flat_status_chance: Number, status_attempts_per_attack: float) -> dict[str, float]:
     """P(each damage type procs on one attack), including forced procs as certainty."""
-    damage = base.damage.apply(build.additive.damage).combine().sorted()
-    guaranteed, fractional = divmod(max(attack.stats.status_chance * (1 + build.additive.status_chance + evolution_status_chance) + flat_status_chance, 0), 1)
+    damage = base.damage.apply(build.proportional.damage).combine().sorted()
+    guaranteed, fractional = divmod(max(attack.stats.status_chance * (1 + build.proportional.status_chance + evolution_status_chance) + flat_status_chance, 0), 1)
     guaranteed_hits, fractional_hit = divmod(max(status_attempts_per_attack, 0), 1)
     probabilities: dict[str, float] = {}
     for damage_type in damage.data:
@@ -110,17 +110,26 @@ def per_attack_status_probabilities(*, attack: Attack, base: CalculatedStats, bu
 
 def build_sustained_status_model(*, attack: Attack, base: CalculatedStats, modded: ModdedStats, build: ResolvedStat, evolution_status_chance: Number, status_attempts_per_attack: float, sustained_attack_rate: float) -> SustainedStatusModel:
     """Build the sustained status model used by Condition Overload and status_effect_stacks."""
-    condition_overload = build.additive.condition_overload
+    condition_overload = build.proportional.condition_overload
     probabilities = per_attack_status_probabilities(attack=attack, base=base, build=build, evolution_status_chance=evolution_status_chance, flat_status_chance=modded.flat.status_chance, status_attempts_per_attack=status_attempts_per_attack)
     maximum = len(probabilities) if condition_overload.max_stacks == "inf" else int(condition_overload.max_stacks)
-    return SustainedStatusModel(per_attack_probabilities=probabilities, attacks_per_second=sustained_attack_rate, status_duration=float(modded.additive.status_duration), max_unique_statuses=maximum, status_attempts_per_attack=status_attempts_per_attack)
+    return SustainedStatusModel(per_attack_probabilities=probabilities, attacks_per_second=sustained_attack_rate, status_duration=float(modded.proportional.status_duration), max_unique_statuses=maximum, status_attempts_per_attack=status_attempts_per_attack)
 
 
 def apply_condition_overload(*, modded: ModdedStats, model: SustainedStatusModel, value_per_status: Number, co_factor: Number, co_effect: str) -> ConditionOverloadBonus:
     """Apply CO bonus to modded damage_bonus using only the status model + CO parameters."""
+    from .effect_schema import STATUS_FAMILY
+    from ..fields.calculated import CalculatedModeStats
+
     resolved = condition_overload_bonus(model, value_per_status=value_per_status, co_factor=co_factor, co_effect=co_effect)
-    if resolved.effect == "multiplies": modded.multiplicative.damage_bonus = max(modded.multiplicative.damage_bonus + resolved.bonus, 1)
-    else: modded.additive.damage_bonus = max(modded.additive.damage_bonus + resolved.bonus, 0)
+    if resolved.effect == "multiplies":
+        current = modded.multiplicative_families.get(STATUS_FAMILY)
+        if not isinstance(current, CalculatedModeStats):
+            current = CalculatedModeStats(current) if isinstance(current, Mapping) else CalculatedModeStats()
+            modded.multiplicative_families[STATUS_FAMILY] = current
+        current["damage_bonus"] = float(current.get("damage_bonus") or 0) + resolved.bonus
+    else:
+        modded.proportional.damage_bonus = max(modded.proportional.damage_bonus + resolved.bonus, 0)
     return resolved
 
 
@@ -140,5 +149,5 @@ def status_effect_stack_bonuses(*, model: SustainedStatusModel, entries: list, r
         duration = entry.get("duration")
         stacks = min(float(override), float(maximum)) if override is not None else model.expected_status_stacks(status, maximum, duration=None if duration is None else float(duration))
         if not stacks: continue
-        bonuses.append((str(entry.get("mode", "additive")), str(entry["stat"]), float(entry["value"]) * stacks))
+        bonuses.append((str(entry.get("mode", "proportional")), str(entry["stat"]), float(entry["value"]) * stacks))
     return bonuses

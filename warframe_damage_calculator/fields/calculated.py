@@ -36,8 +36,6 @@ class CalculatedValues(Data):
     ammo_maximum: Number
     weakpoint_damage: Number
     weakpoint_crit_chance: Number
-    internal_bleeding: Number
-    hunter_munitions: Number
     projectile_speed: Number
     range: Number
     start_range: Number
@@ -48,9 +46,6 @@ class CalculatedValues(Data):
     initial_combo: Number
     slam_damage: Number
     slide_crit_chance: Number
-    vigilante_bonus: Number
-    secondary_enervate: Number
-    secondary_encumber: Number
     punch_through: Number
     zoom: Number
     noise_level: str
@@ -67,10 +62,11 @@ class CalculatedStats(CalculatedValues):
 
 
 class ModdedStats(Data):
-    additive: CalculatedModeStats = CalculatedModeStats()
-    multiplicative: CalculatedModeStats = CalculatedModeStats()
+    proportional: CalculatedModeStats = CalculatedModeStats()
     base: CalculatedModeStats = CalculatedModeStats()
     flat: CalculatedModeStats = CalculatedModeStats()
+    # Runtime product-family bonuses (e.g. melee CO), folded with build/evo families.
+    multiplicative_families: Data = Data()
 
 
 class AverageStats(Data):

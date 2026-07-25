@@ -10,6 +10,7 @@ from ..fields.attack_result import AttackResult
 from ..fields.calculated import AverageStats
 from ..utils.types import Number
 from . import formulas
+from .effect_schema import COMMON_FAMILY
 
 MAGAZINE_POSITION_WHEN = frozenset({"first_shot", "last_shot"})
 EXCLUDE_CONTINUOUS = "continuous"
@@ -19,14 +20,6 @@ type PositionEntry = Mapping[str, Any]
 
 
 def position_weights(*, magazine_capacity: Number, ammo_cost: Number, ammo_efficiency: Number) -> list[tuple[frozenset[str], float]]:
-    """Long-run weights for magazine-position shot classes.
-
-    Buffs apply while the magazine counter remains at full (first) or 1 (last).
-    With ammo efficiency ``e < 1``, each ammo level is visited equally often in
-    expectation, so first/last each get weight ``1/N``. At ``e >= 1`` the magazine
-    never leaves full, so every shot is first-shot only. Mag size 1 makes first and
-    last the same counter, so both overlays apply to every shot.
-    """
     cost = max(float(ammo_cost), 0.0)
     if cost <= 0: return [(frozenset(), 1.0)]
     shots = max(float(magazine_capacity) / cost, 1.0)
@@ -52,34 +45,34 @@ def iter_applicable(entries: Iterable[PositionEntry], *, when: frozenset[str], d
 
 def _overlay_multishot(result: AttackResult, entries: Sequence[PositionEntry]) -> float:
     build, evo, base = result.build, result.evolutions, result.base
-    additive = float(build.additive.multishot or 0) + float(evo.additive.multishot or 0)
+    proportional = float(build.proportional.multishot or 0) + float(evo.proportional.multishot or 0)
     flat = 0.0
     for entry in entries:
         if entry.get("stat") != "multishot": continue
-        mode = entry.get("mode", "additive")
+        mode = entry.get("mode", "proportional")
         value = float(entry.get("value") or 0)
         if mode == "flat": flat += value
-        elif mode == "additive": additive += value
-    locked = bool(build.additive.multishot_lock)
-    scale = 1.0 if locked else max(1.0 + additive, 0.0)
+        else: proportional += value
+    locked = bool(build.proportional.multishot_lock)
+    scale = 1.0 if locked else max(1.0 + proportional, 0.0)
     return max(float(base.multishot if "multishot" in base else 1) * scale + flat, 1.0)
 
 
 def _overlay_damage_multiplier(entries: Sequence[PositionEntry]) -> float:
-    """Product across multiplicative tiers; bonuses within a tier add."""
-    by_tier: dict[int, float] = {}
+    """Product across families; bonuses within a family add."""
+    by_family: dict[str, float] = {}
     for entry in entries:
-        if entry.get("stat") != "damage_bonus" or entry.get("mode") != "multiplicative": continue
-        tier = max(int(entry.get("tier") or 1), 1)
-        by_tier[tier] = by_tier.get(tier, 0.0) + float(entry.get("value") or 0)
+        if entry.get("stat") != "damage_bonus": continue
+        family = str(entry.get("family") or COMMON_FAMILY)
+        if family == COMMON_FAMILY: continue  # common proportional is not a product overlay here
+        by_family[family] = by_family.get(family, 0.0) + float(entry.get("value") or 0)
     factor = 1.0
-    for tier in sorted(by_tier):
-        factor *= max(1.0 + by_tier[tier], 1.0)
+    for family in sorted(by_family):
+        factor *= max(1.0 + by_family[family], 1.0)
     return factor
 
 
 def _class_metrics(result: AttackResult, *, entries: Sequence[PositionEntry], compute_dotph) -> dict[str, float]:
-    """Hit/DoT metrics for one shot class after applying magazine-position overlays."""
     effective = result.effective
     average = result.average
     multishot = _overlay_multishot(result, entries)
@@ -88,7 +81,6 @@ def _class_metrics(result: AttackResult, *, entries: Sequence[PositionEntry], co
     faction = max(float(average.corpus_damage), float(average.grineer_damage), float(average.infested_damage), float(average.orokin_damage), float(average.murmur_damage), float(average.sentient_damage), 1.0)
     hit_mult = formulas.hit_multiplier(average.crit_chance, effective.crit_damage, effective.non_crit_bonus_damage, effective.non_crit_bonus_chance)
     weakpoint_hit_mult = formulas.hit_multiplier(average.weakpoint_crit_chance, effective.crit_damage, effective.non_crit_bonus_damage, effective.non_crit_bonus_chance)
-    # Temporarily patch multishot/damage scale for DoT helpers that read effective.
     saved_ms, saved_damage = effective.multishot, effective.damage
     effective.multishot = multishot
     if damage_multiplier != 1:
@@ -108,7 +100,6 @@ def _class_metrics(result: AttackResult, *, entries: Sequence[PositionEntry], co
 
 
 def apply_magazine_position_mixture(result: AttackResult, *, compute_dotph) -> None:
-    """Replace averaged hit/DoT metrics with a mixture over magazine-position shot classes."""
     entries = [*(result.build.magazine_position or ()), *(result.evolutions.magazine_position or ())]
     if not entries: return
     delivery, form = result.attack.delivery, result.attack.form or "normal"
@@ -129,15 +120,13 @@ def apply_magazine_position_mixture(result: AttackResult, *, compute_dotph) -> N
         average[key] = value
     average.flat_dotps = average.fire_rate * average.flat_dotph
     average.flat_weakpoint_dotps = average.fire_rate * average.flat_weakpoint_dotph
-    # Display: long-run expected first-shot damage multiplier (1 when unused).
     first_weight = next((weight for when, weight in weights if "first_shot" in when), 0.0)
     first_factor = _overlay_damage_multiplier(iter_applicable(entries, when=frozenset({"first_shot"}), delivery=delivery, form=form))
     average.first_shot_damage_multiplier = 1.0 + (first_factor - 1.0) * first_weight
     formulas.refresh_dps_from_dph(average)
 
 
-def serialize_position_effect(*, stat: str, value: Any, mode: str, when: str, exclude: Sequence[str] = (), tier: int = 1) -> dict[str, Any]:
-    entry = {"stat": stat, "value": deepcopy(value), "mode": mode, "when": when}
-    if tier > 1: entry["tier"] = int(tier)
+def serialize_position_effect(*, stat: str, value: Any, when: str, exclude: Sequence[str] = (), family: str = COMMON_FAMILY, mode: str = "proportional") -> dict[str, Any]:
+    entry = {"stat": stat, "value": deepcopy(value), "mode": mode, "when": when, "family": family}
     if exclude: entry["exclude"] = list(exclude)
     return entry

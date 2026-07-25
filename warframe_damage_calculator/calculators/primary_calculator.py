@@ -1,24 +1,15 @@
 from ..fields.attack_result import AttackResult
-from ..utils.functions import clamp
 from ..utils.types import Number
-from . import formulas
+from . import application_chance, formulas
 from .ranged_calculator import RangedCalculator
 
 
 class PrimaryCalculator(RangedCalculator):
-    def _compute_modded_scalars(self, result: AttackResult) -> None:
-        super()._compute_modded_scalars(result)
-        build, modded = result.build, result.modded
-        modded.additive.hunter_munitions = clamp(build.additive.hunter_munitions, 0, 0.3)
-        modded.additive.vigilante_bonus = clamp(build.additive.vigilante_bonus, 0, 0.3)
-
     def _compute_effective(self, result: AttackResult) -> None:
         super()._compute_effective(result)
-        modded, effective = result.modded, result.effective
-        effective.hunter_munitions = modded.additive.hunter_munitions
-        effective.vigilante_bonus = modded.additive.vigilante_bonus
-        effective.crit_chance += effective.vigilante_bonus
-        effective.weakpoint_crit_chance += effective.vigilante_bonus
+        vigilante = application_chance.vigilante_flat_crit(result.build.application_chance)
+        result.effective.crit_chance += vigilante
+        result.effective.weakpoint_crit_chance += vigilante
 
     def _flat_dotph(self, result: AttackResult, *, weakpoint: bool = False, hits: Number | None = None, damage_multiplier: Number = 1, extra_damage: Number = 0, faction_damage: Number | None = None) -> float:
         damage = result.effective.damage
@@ -29,10 +20,11 @@ class PrimaryCalculator(RangedCalculator):
         crit_chance = average.weakpoint_crit_chance if weakpoint else average.crit_chance
         multiplier = formulas.hit_multiplier(crit_chance, effective.crit_damage, effective.non_crit_bonus_damage, effective.non_crit_bonus_chance)
         tick_damage_scale = effective.multishot if continuous else 1.0
-        hunter_procs = effective.hunter_munitions * min(crit_chance, 1)
+        hunter = application_chance.hunter_munitions_chance(result.build.application_chance)
+        hunter_procs = hunter * min(crit_chance, 1)
         hunter_dpp = self._ib_slash_dot_per_proc(result, hit_multiplier=max(effective.crit_damage, multiplier), faction_damage=faction_damage, damage_multiplier=damage_multiplier * tick_damage_scale)
         hunter_damage = hunter_procs * hunter_dpp
-        impact_ib = self._impact_weight(result) * effective.internal_bleeding
+        impact_ib = self._impact_weight(result) * self._internal_bleeding_chance(result)
         guaranteed_proc, fractional_proc = divmod(effective.status_chance, 1)
         ib_procs = impact_ib * effective.status_chance
         ib_dpp = self._ib_slash_dot_per_proc(result, hit_multiplier=multiplier, faction_damage=faction_damage, damage_multiplier=damage_multiplier * tick_damage_scale)

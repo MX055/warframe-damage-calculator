@@ -18,16 +18,16 @@ from . import formulas
 
 
 def compute_modded_damage(*, attack: Attack, base: CalculatedStats, original_damage: Dist, build: ResolvedStat, evolutions: ResolvedEvolutionStat, modded: ModdedStats) -> None:
-    """Write modded.additive.damage from Serration/CO semantics."""
-    evolved = base.damage.apply(build.additive.damage).combine().sorted()
-    original = original_damage.apply(build.additive.damage).combine().sorted()
-    serration = max(1 + build.additive.damage_bonus + evolutions.additive.damage_bonus + float(attack.stats.damage_bonus or 0), 0)
+    """Write modded.proportional.damage from Serration/CO semantics."""
+    evolved = base.damage.apply(build.proportional.damage).combine().sorted()
+    original = original_damage.apply(build.proportional.damage).combine().sorted()
+    serration = max(1 + build.proportional.damage_bonus + evolutions.proportional.damage_bonus + float(attack.stats.damage_bonus or 0), 0)
     if attack.stats.co_effect == "multiplies":
-        modded.additive.damage = modded.additive.damage_bonus * evolved
+        modded.proportional.damage = modded.proportional.damage_bonus * evolved
     else:
         # GunCO / additive CO scales original (pre-evolution) damage only; Serration scales evolved.
-        co_bonus = max(float(modded.additive.damage_bonus) - serration, 0)
-        modded.additive.damage = serration * evolved + co_bonus * original
+        co_bonus = max(float(modded.proportional.damage_bonus) - serration, 0)
+        modded.proportional.damage = serration * evolved + co_bonus * original
 
 
 def apply_shared_average_factions(*, effective: CalculatedStats, average: AverageStats) -> None:

@@ -14,32 +14,41 @@ def crit_multiplier(crit_chance: Number, crit_damage: Number) -> float:
     return 1 + crit_chance * (crit_damage - 1)
 
 
-def fold_multiplicative_tiers(*sources: object, stat: str = "damage_bonus", min_tier: int = 1) -> float:
-    """Product of (1 + sum) across multiplicative tiers for one stat.
-
-    Tier 1 is ``source.multiplicative``; tiers >= 2 live in ``source.multiplicative_tiers``.
-    Same tier adds; different tiers multiply.
-    """
-    by_tier: dict[int, float] = {}
+def fold_multiplicative_families(*sources: object, stat: str = "damage_bonus") -> float:
+    """Product of (1 + sum) across named families. Same family adds; different multiply."""
+    by_family: dict[str, float] = {}
     for source in sources:
         if source is None: continue
-        if min_tier <= 1:
-            mode = getattr(source, "multiplicative", None)
-            if mode is not None: by_tier[1] = by_tier.get(1, 0.0) + float(getattr(mode, stat, 0) or 0)
-        tiers = getattr(source, "multiplicative_tiers", None) or {}
-        if not isinstance(tiers, Mapping): continue
-        for key, mode_stats in tiers.items():
-            tier = int(key)
-            if tier < min_tier: continue
+        families = getattr(source, "multiplicative_families", None) or {}
+        if not isinstance(families, Mapping): continue
+        for key, mode_stats in families.items():
             if isinstance(mode_stats, Mapping) and not isinstance(mode_stats, Data):
                 value = mode_stats.get(stat, 0)
             else:
                 value = getattr(mode_stats, stat, 0) if mode_stats is not None else 0
-            by_tier[tier] = by_tier.get(tier, 0.0) + float(value or 0)
+            name = str(key)
+            by_family[name] = by_family.get(name, 0.0) + float(value or 0)
     factor = 1.0
-    for tier in sorted(by_tier):
-        factor *= max(1.0 + by_tier[tier], 1.0)
+    for name in sorted(by_family):
+        factor *= max(1.0 + by_family[name], 1.0)
     return factor
+
+
+def family_bonus(*sources: object, family: str, stat: str = "damage_bonus") -> float:
+    """Sum of one named family across sources (not folded with others)."""
+    total = 0.0
+    for source in sources:
+        if source is None: continue
+        families = getattr(source, "multiplicative_families", None) or {}
+        if not isinstance(families, Mapping): continue
+        mode_stats = families.get(family)
+        if mode_stats is None: continue
+        if isinstance(mode_stats, Mapping) and not isinstance(mode_stats, Data):
+            value = mode_stats.get(stat, 0)
+        else:
+            value = getattr(mode_stats, stat, 0) if mode_stats is not None else 0
+        total += float(value or 0)
+    return total
 
 
 def non_crit_bonus(damage: Number = 0, chance: Number = 0) -> float:
@@ -54,8 +63,8 @@ def hit_multiplier(crit_chance: Number, crit_damage: Number, non_crit_bonus_dama
     return crit_multiplier(crit_chance, crit_damage) + max(0.0, 1.0 - float(crit_chance)) * bonus
 
 
-def combine_chance(additive: Number, multiplicative: Number = 1, flat: Number = 0) -> Number:
-    return max(additive * multiplicative + flat, 0)
+def combine_chance(scaled: Number, family_factor: Number = 1, flat: Number = 0) -> Number:
+    return max(scaled * family_factor + flat, 0)
 
 
 def refresh_dps_from_dph(average: AverageStats) -> None:

@@ -95,10 +95,11 @@ class ResolvedEvolutionModeStats(Data):
 
 
 class ResolvedEvolutionStat(Data):
-    additive: ResolvedEvolutionModeStats = ResolvedEvolutionModeStats()
-    multiplicative: ResolvedEvolutionModeStats = ResolvedEvolutionModeStats()
+    proportional: ResolvedEvolutionModeStats = ResolvedEvolutionModeStats()
     base: ResolvedEvolutionModeStats = ResolvedEvolutionModeStats()
     flat: ResolvedEvolutionModeStats = ResolvedEvolutionModeStats()
-    # Multiplicative tiers >= 2 (keys "2", "3", … → ResolvedEvolutionModeStats). Tier 1 is `.multiplicative`.
-    multiplicative_tiers: Data = Data()
+    multiplicative_families: Data = Data()
     magazine_position: list = []
+    stacking_reset: list = []
+    application_chance: list = []
+    conversions: list = []

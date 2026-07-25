@@ -301,9 +301,9 @@ print(weapon.format.summary())
 
 ```python
 upgrade = Upgrade({"name": "Headshot", "type": "mod", "max_rank": 0, "stats": {"crit_chance": [1.2, {"value": 0.8, "when": "headshot"}]}})
-print(upgrade.results.total.additive.crit_chance)  # 2.0
+print(upgrade.results.total.proportional.crit_chance)  # 2.0
 upgrade.configure({"headshot": False})
-print(upgrade.results.total.additive.crit_chance)  # 1.2
+print(upgrade.results.total.proportional.crit_chance)  # 1.2
 
 build = Build(upgrade)
 build.configure({"headshot": True})
@@ -484,7 +484,7 @@ upgrade = Upgrade(
 
 print(upgrade.data.name)
 print(upgrade.data.stats.damage_bonus)
-print(upgrade.results.total.additive.damage_bonus)
+print(upgrade.results.total.proportional.damage_bonus)
 ```
 
 The canonical data contains persistent metadata and stat effects. Runtime
@@ -506,10 +506,10 @@ upgrade = Upgrade(
         "stats": {
             "damage_bonus": [
                 0.30,
-                {"value": 0.20, "mode": "additive", "when": "headshot"},
-                {"value": 0.10, "mode": "additive", "stacks": {"when": "kill", "max": 3}},
-                {"value": 0.25, "mode": "additive", "rank": 5},
-                {"value": 0.15, "mode": "additive", "equipped": ["Partner"]},
+                {"value": 0.20, "when": "headshot"},
+                {"value": 0.10, "stacks": {"when": "kill", "max": 3}},
+                {"value": 0.25, "rank": 5},
+                {"value": 0.15, "equipped": ["Partner"]},
             ]
         },
     }
@@ -528,37 +528,40 @@ upgrade.data.runtime.update(
 build = Build(upgrade, partner)
 resolved = build.upgrades[0]
 
-print(resolved.results.static.additive.damage_bonus)       # 0.30
-print(resolved.results.conditional.additive.damage_bonus)  # 0.20
-print(resolved.results.stacking.additive.damage_bonus)     # 0.20
-print(resolved.results.rank_locked.additive.damage_bonus)  # 0.25
-print(resolved.results.modular.additive.damage_bonus)      # 0.15
-print(resolved.results.total.additive.damage_bonus)        # 1.10
+print(resolved.results.static.proportional.damage_bonus)       # 0.30
+print(resolved.results.conditional.proportional.damage_bonus)  # 0.20
+print(resolved.results.stacking.proportional.damage_bonus)     # 0.20
+print(resolved.results.rank_locked.proportional.damage_bonus)  # 0.25
+print(resolved.results.modular.proportional.damage_bonus)      # 0.15
+print(resolved.results.total.proportional.damage_bonus)        # 1.10
 ```
 
 | Form | Example | Behavior |
 |---|---|---|
 | Scalar | `"damage_bonus": 1.65` | Always active. |
-| Static record | `{"value": 1.65, "mode": "additive"}` | Always active. |
-| Conditional | `{"value": 0.3, "mode": "additive", "when": "headshot"}` | Active when the named runtime condition is truthy. |
-| Stacking | `{"value": 0.1, "mode": "additive", "stacks": {"when": "kill", "max": 3}}` | Multiplied by the named stack count. |
-| Rank-locked | `{"value": 0.3, "mode": "additive", "rank": 5}` | Added at full value when the current rank reaches 5. |
-| Equipped | `{"value": 0.55, "mode": "additive", "equipped": ["Partner"]}` | Active when every named upgrade is equipped. |
+| Static record | `{"value": 1.65}` | Always active. |
+| Conditional | `{"value": 0.3, "when": "headshot"}` | Active when the named runtime condition is truthy. |
+| Stacking | `{"value": 0.1, "stacks": {"when": "kill", "max": 3}}` | Multiplied by the named stack count. |
+| Rank-locked | `{"value": 0.3, "rank": 5}` | Added at full value when the current rank reaches 5. |
+| Equipped | `{"value": 0.55, "equipped": ["Partner"]}` | Active when every named upgrade is equipped. |
 | Mixed list | `[1.0, {...}, {...}]` | Resolves each effect independently. |
 
 Every effect has a calculation mode:
 
 | Mode | Behavior |
 |---|---|
-| `additive` | Joins the stat's ordinary modifier pool. This is the default when `mode` is omitted. |
-| `multiplicative` | Joins a multiplicative modifier pool. Optional `tier` (default `1`): same tier adds, different tiers multiply as `Π (1 + sum_tier)`. |
+| `proportional` | Default pool: `base × (1 + sum)`. Omit `mode` for this. |
 | `base` | Changes the base value before ordinary modifiers. |
-| `flat` | Adds after percentage and multiplicative modifiers. |
+| `flat` | Adds after proportional and family product modifiers. |
 
-Example — Primed Chamber is tier-2 multiplicative damage (separate from GunCO-style tier 1):
+Product pools use `family` (not a mode). Same family adds; different families multiply as `Π (1 + sum)`. Common families: `bonus`, `chamber`, `charge`, `status`.
+
+Special cases use closed `behaviour` tags (e.g. `FIRST_SHOT`, `ON_CRIT`) on semantic stats like `slash_proc` / `damage_bonus`.
+
+Example — Primed Chamber:
 
 ```json
-{"value": 1, "mode": "multiplicative", "tier": 2, "when": "first_shot"}
+{"value": 1, "family": "chamber", "behaviour": "FIRST_SHOT"}
 ```
 
 Boolean effects aggregate with logical OR. Numeric effects add together.
@@ -999,20 +1002,19 @@ build.results.rank_locked
 build.results.total
 ```
 
-Each activation bucket contains `additive`, `multiplicative`, `base`, and
-`flat` mode buckets:
+Each activation bucket contains `proportional`, `base`, and `flat` mode buckets,
+plus `multiplicative_families` for named product pools:
 
 ```python
-print(upgrade.results.total.additive.crit_chance)
-print(upgrade.results.total.multiplicative.crit_chance)
+print(upgrade.results.total.proportional.crit_chance)
+print(upgrade.results.total.multiplicative_families.get("bonus"))
 print(upgrade.results.total.base.crit_chance)
 print(upgrade.results.total.flat.crit_chance)
 
-print(weapon.results.main.build.additive.damage_bonus)
+print(weapon.results.main.build.proportional.damage_bonus)
 print(weapon.results.main.evolutions.base.damage)
-print(weapon.results.main.modded.additive.crit_chance)
-print(weapon.results.main.modded.additive.status_damage)
-print(weapon.results.main.modded.multiplicative.crit_chance)
+print(weapon.results.main.modded.proportional.crit_chance)
+print(weapon.results.main.modded.proportional.status_damage)
 print(weapon.results.main.modded.flat.crit_chance)
 ```
 
@@ -1121,20 +1123,19 @@ Faction damage is applied twice to modeled DoT damage.
 - `status_chance`
 - `status_damage`
 - `status_duration`
-- `hunter_munitions`
-- `internal_bleeding`
-- Magazine-position overlays via effect `when: "first_shot"` / `"last_shot"` (optional `exclude: ["continuous", "incarnon"]`; Chamber/Synth use `mode: "multiplicative", "tier": 2`)
-- `vigilante_bonus`
-- `secondary_enervate`
-- `secondary_encumber`
-- `melee_duplicate`
-- `melee_doughty`
+- `slash_proc` with `behaviour: "ON_CRIT"` / `"ON_IMPACT_DOUBLE_BELOW_2_5_FR"`
+- `random_proc` with `behaviour: "ON_ANY_PROC"`
+- `duplicated_hit` with `behaviour: "NEAR_YELLOW"`
+- `crit_chance` with `behaviour: "ON_HIT"` / `"STACK_RESET_CRIT_2_PLUS"`
+- `crit_damage` with `behaviour: "FROM_PUNCTURE_X_STATUS"`
+- `damage_bonus` with `behaviour: "UNIQUE_STATUS"` / `"STATUS_PROC_STACKS"` / `"FIRST_SHOT"` / `"LAST_SHOT"`
+- Magazine-position overlays via `behaviour: "FIRST_SHOT"` / `"LAST_SHOT"` (optional `exclude: ["continuous", "incarnon"]`; Chamber/Synth use `family: "chamber"` / `"charge"`)
 
 `elements` is preserved by the resolver but is not read directly by the weapon
 calculator. Use individual damage-type fields or `damage` to modify the damage
 distribution.
 
-`melee_doughty` exposes `weapon.results.main.average.melee_doughty_bonus`;
+`FROM_PUNCTURE_X_STATUS` exposes `weapon.results.main.average.melee_doughty_bonus`;
 that bonus is not yet applied to DPH or DPS.
 
 ---
@@ -1158,21 +1159,21 @@ shots, projectiles, or animation frames.
 ### Condition Overload
 
 - Condition Overload uses the expected number of unique statuses sustained on a target.
-- `status_effect_stacks` uses the expected sustained proc count of one status type over the arcane buff `duration` (not weapon status duration), capped by `max_stacks` — e.g. Cascadia Flare / Primary Frostbite. Override with runtime `on_<status>_status_effect`.
+- `STATUS_PROC_STACKS` uses the expected sustained proc count of one status type over the arcane buff `duration` (not weapon status duration), capped by `stacks.max` — e.g. Cascadia Flare / Primary Frostbite. Override with runtime `on_<status>_status_effect`.
 - Per-type application chance accounts for status chance, damage weights, multishot/status hits, and forced procs.
 - Uptime for each type is `1 - (1 - p)^(attacks_per_second × status_duration)`.
-- The effect may be capped by the upgrade's structured `max_stacks` value.
+- Unique-status CO may be capped by `stacks.max` when `stacks.when` is `status_type`.
 - Each attack may scale the bonus with `co_factor`.
-- `co_effect="adds"` adds the bonus to additive base damage.
-- `co_effect="multiplies"` adds the bonus to multiplicative base damage.
+- `co_effect="adds"` adds the bonus to the proportional damage pool (GunCO).
+- `co_effect="multiplies"` adds the bonus to the `status` product family (melee CO).
 - Related attacks resolve their own Condition Overload factor and effect.
 
 ### Primary mechanics
 
-- Hunter Munitions is modeled as an expected Slash proc chance on critical hits.
+- Hunter Munitions is modeled as an expected Slash proc chance on critical hits (`slash_proc` + `ON_CRIT`).
 - Internal Bleeding doubles its modeled chance below `2.5` effective fire rate.
-- First/last magazine-shot effects (Primed/Charged Chamber, Synth Charge, Torid last-shot multishot, etc.) use a shot-class mixture: buffs apply while the mag counter stays at full / 1 round (so ammo efficiency that keeps the counter there keeps the buff). Continuous/Incarnon exclusions are effect flags. Chamber/Synth are multiplicative `damage_bonus` at `tier: 2` (product with tier-1 multipliers like GunCO; Primed+Charged add within tier 2).
-- Vigilante bonus is represented as an expected critical-tier bonus capped at `0.30`.
+- First/last magazine-shot effects (Primed/Charged Chamber, Synth Charge, Torid last-shot multishot, etc.) use a shot-class mixture: buffs apply while the mag counter stays at full / 1 round (so ammo efficiency that keeps the counter there keeps the buff). Continuous/Incarnon exclusions are effect flags. Chamber/Synth use named families (`chamber` / `charge`) that product with other families like `bonus`.
+- Vigilante is uncapped flat crit chance on hit (`crit_chance` + `ON_HIT`).
 
 ### Secondary mechanics
 
@@ -1184,7 +1185,7 @@ shots, projectiles, or animation frames.
 ### Fire cycle
 
 - Charge time and burst timing are included in average fire rate.
-- `fire_rate_lock` ignores additive and multiplicative fire-rate upgrades.
+- `fire_rate_lock` ignores proportional and family fire-rate upgrades.
 - `multishot_lock` preserves native multishot but ignores upgrade multishot.
 - Fire-cycle math uses per-attack `ammo_cost` (shots per magazine = magazine / ammo_cost).
 - Battery recharge time is based on magazine capacity and recharge rate.

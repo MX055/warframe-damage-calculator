@@ -114,7 +114,7 @@ class WeaponCalculator:
     def _status_hits(self, result: AttackResult) -> float:
         """Status attempts per attack (typically multishot; melee may add duplicate hits)."""
         stats, modded = result.attack.stats, result.modded
-        return max(modded.additive.multishot, 1)
+        return max(modded.proportional.multishot, 1)
 
     def _sustained_attack_rate(self, result: AttackResult) -> float:
         """Sustained attacks/sec for status production and average fire rate.
@@ -130,12 +130,12 @@ class WeaponCalculator:
         return self._sustained_attack_rate(result)
 
     def _sustained_status_model(self, result: AttackResult) -> SustainedStatusModel:
-        return build_sustained_status_model(attack=result.attack, base=result.base, modded=result.modded, build=result.build, evolution_status_chance=result.evolutions.additive.status_chance, status_attempts_per_attack=self._status_hits(result), sustained_attack_rate=self._sustained_attack_rate(result))
+        return build_sustained_status_model(attack=result.attack, base=result.base, modded=result.modded, build=result.build, evolution_status_chance=result.evolutions.proportional.status_chance, status_attempts_per_attack=self._status_hits(result), sustained_attack_rate=self._sustained_attack_rate(result))
 
     def _average_condition_overload_bonus(self, result: AttackResult) -> float:
         model = self._sustained_status_model(result)
         if model.max_unique_statuses <= 0: return 0.0
-        return condition_overload_bonus(model, value_per_status=result.build.additive.condition_overload.value, co_factor=result.attack.stats.co_factor, co_effect=result.attack.stats.co_effect).bonus
+        return condition_overload_bonus(model, value_per_status=result.build.proportional.condition_overload.value, co_factor=result.attack.stats.co_factor, co_effect=result.attack.stats.co_effect).bonus
 
     def _apply_status_effect_stacks(self, result: AttackResult, model: SustainedStatusModel | None = None) -> None:
         """Apply deferred on_*_status_effect stack bonuses from sustained proc expectations.
@@ -144,7 +144,7 @@ class WeaponCalculator:
         recomputes modded scalars so category-specific folds stay consistent. Does not
         rebuild the status model, so multishot/status bonuses do not feed back.
         """
-        entries = list(result.build.additive.status_effect_stacks)
+        entries = list(result.build.proportional.status_effect_stacks)
         if not entries: return
         model = model or self._sustained_status_model(result)
         bonuses = status_effect_stack_bonuses(model=model, entries=entries, runtime=self.weapon.data.runtime)
@@ -159,8 +159,8 @@ class WeaponCalculator:
     def _apply_condition_overload(self, result: AttackResult, model: SustainedStatusModel | None = None) -> None:
         model = model or self._sustained_status_model(result)
         if model.max_unique_statuses <= 0: return
-        if not float(result.build.additive.condition_overload.value or 0): return
-        apply_condition_overload(modded=result.modded, model=model, value_per_status=result.build.additive.condition_overload.value, co_factor=result.attack.stats.co_factor, co_effect=result.attack.stats.co_effect)
+        if not float(result.build.proportional.condition_overload.value or 0): return
+        apply_condition_overload(modded=result.modded, model=model, value_per_status=result.build.proportional.condition_overload.value, co_factor=result.attack.stats.co_factor, co_effect=result.attack.stats.co_effect)
 
     def _compute_modded_damage(self, result: AttackResult) -> None:
         damage_calculator.compute_modded_damage(attack=result.attack, base=result.base, original_damage=result.original_damage, build=result.build, evolutions=result.evolutions, modded=result.modded)
@@ -177,7 +177,7 @@ class WeaponCalculator:
 
     def _flat_dotph(self, result: AttackResult, *, weakpoint: bool = False, hits: Number | None = None, damage_multiplier: Number = 1, extra_damage: Number = 0, faction_damage: Number | None = None) -> float:
         # Allow unbound helper-test calls with self=None (status attempts unused when damage is empty).
-        if self is None: status_attempts = max(result.modded.additive.multishot if "multishot" in result.modded.additive else result.attack.stats.multishot, 1)
+        if self is None: status_attempts = max(result.modded.proportional.multishot if "multishot" in result.modded.proportional else result.attack.stats.multishot, 1)
         else: status_attempts = self._status_hits(result)
         return damage_calculator.flat_dotph_from_result(result, status_attempts_per_attack=status_attempts, weakpoint=weakpoint, hits=hits, damage_multiplier=damage_multiplier, extra_damage=extra_damage, faction_damage=faction_damage)
 

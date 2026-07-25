@@ -1,26 +1,44 @@
-"""Upgrade effect resolution: source-specific normalization and aggregation.
-
-Uses the shared ResolvableEffect lifecycle in effect_resolution.
-"""
+"""Upgrade effect resolution: behaviour-based encoding."""
 
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
+from dataclasses import replace
 from typing import Any, cast
 
-from ..fields.upgrade import ResolvedModeStats, ResolvedStat
-from ..loader.matching import MELEE_TYPES, PRIMARY_TYPES, SECONDARY_TYPES
 from ..core.data import Data
 from ..core.dist import Dist
+from ..fields.upgrade import ResolvedModeStats, ResolvedStat
+from ..loader.matching import MELEE_TYPES, PRIMARY_TYPES, SECONDARY_TYPES
 from ..protocols import UpgradeOwner
-from ..utils.constants import EFFECT_MODES
 from ..utils.types import EffectMode, Number
 from .effect_resolution import ResolutionContext, ResolvableEffect, raw_effects, resolve_and_aggregate, resolve_stack_scaled_effect
-from .magazine_position import MAGAZINE_POSITION_WHEN, serialize_position_effect
+from .effect_schema import (
+    BEHAVIOUR_DOUBLE_FOR_BOWS,
+    BEHAVIOUR_FIRST_SHOT,
+    BEHAVIOUR_FROM_PUNCTURE_X_STATUS,
+    BEHAVIOUR_LAST_SHOT,
+    BEHAVIOUR_NEAR_YELLOW,
+    BEHAVIOUR_ON_ANY_PROC,
+    BEHAVIOUR_ON_CRIT,
+    BEHAVIOUR_ON_HIT,
+    BEHAVIOUR_ON_IMPACT_FR,
+    BEHAVIOUR_STACK_RESET_CRIT_2_PLUS,
+    BEHAVIOUR_STATUS_PROC_STACKS,
+    BEHAVIOUR_UNIQUE_STATUS,
+    COMMON_FAMILY,
+    ENERVATE_RESET_CHARGES_MAX,
+    behaviour_of,
+    effect_family,
+    normalize_mode,
+    rank_scales,
+)
+from .magazine_position import serialize_position_effect
+from .special_effects import serialize_deferred
 from .stat_aggregation import merge_resolved_stat, merge_upgrade_stat
 
-
 type EffectValue = Number | bool | Mapping[str, object] | Dist
+DEFERRED = frozenset({"magazine_position", "stacking_reset", "application_chance", "conversions"})
 
 
 class UpgradeCalculator:
@@ -59,27 +77,25 @@ class UpgradeCalculator:
         if isinstance(value, (bool, str)): return value
         return value * multiplier
 
-    @staticmethod
-    def _effect_tier(effect: Data) -> int:
-        return max(int(effect.get("tier") or 1), 1)
-
-    @staticmethod
-    def _record_multiplicative_tier(resolved: ResolvedStat, effect: ResolvableEffect) -> None:
-        key = str(effect.tier)
-        current = resolved.multiplicative_tiers.get(key)
+    def _record_family(self, resolved: ResolvedStat, effect: ResolvableEffect) -> None:
+        current = resolved.multiplicative_families.get(effect.family)
         if not isinstance(current, ResolvedModeStats):
             current = ResolvedModeStats(current) if isinstance(current, Mapping) else ResolvedModeStats()
-            resolved.multiplicative_tiers[key] = current
+            resolved.multiplicative_families[effect.family] = current
         merge_upgrade_stat(current, effect.stat, effect.value)
 
     def _record(self, bucket: ResolvedStat, effect: ResolvableEffect) -> None:
         if effect.bucket == "magazine_position":
-            entry = serialize_position_effect(stat=effect.stat, value=effect.value, mode=effect.mode, when=effect.condition or "", exclude=effect.exclude, tier=effect.tier)
+            entry = serialize_position_effect(stat=effect.stat, value=effect.value, when=effect.condition or "", exclude=effect.exclude, family=effect.family, mode=effect.mode)
             self.total.magazine_position = [*(self.total.magazine_position or []), entry]
             return
-        if effect.mode == "multiplicative" and effect.tier > 1:
-            self._record_multiplicative_tier(bucket, effect)
-            self._record_multiplicative_tier(self.total, effect)
+        if effect.bucket in {"stacking_reset", "application_chance", "conversions"}:
+            payload = serialize_deferred(effect.value if isinstance(effect.value, Mapping) else {"value": effect.value})
+            setattr(self.total, effect.bucket, [*(getattr(self.total, effect.bucket) or []), payload])
+            return
+        if effect.mode == "proportional" and effect.family != COMMON_FAMILY:
+            self._record_family(bucket, effect)
+            self._record_family(self.total, effect)
             return
         merge_upgrade_stat(getattr(bucket, effect.mode), effect.stat, effect.value)
         merge_upgrade_stat(getattr(self.total, effect.mode), effect.stat, effect.value)
@@ -91,76 +107,119 @@ class UpgradeCalculator:
         return tuple(exclude) if isinstance(exclude, list) else (str(exclude),)
 
     def _normalize_effect(self, stat: str, effect: Data) -> ResolvableEffect:
-        raw_mode = effect.get("mode", "additive")
-        if raw_mode not in EFFECT_MODES: raise ValueError(f"unsupported effect mode {raw_mode!r}")
-        mode = cast(EffectMode, raw_mode)
-        tier = self._effect_tier(effect)
-
-        if stat == "condition_overload":
-            maximum = effect.get("stacks", {}).get("max")
-            return ResolvableEffect(stat=stat, value=effect.value, bucket="static", mode=mode, tier=tier, scales_with_rank=True, co_max_stacks="inf" if maximum is None else maximum)
-
-        if stat == "status_effect_stacks":
-            target = effect.get("stat")
-            status = effect.get("status")
-            if not target or not status: raise ValueError("status_effect_stacks requires 'stat' and 'status'")
-            maximum = effect.get("max_stacks", effect.get("stacks", {}).get("max"))
-            if maximum is None: raise ValueError("status_effect_stacks requires max_stacks")
-            payload = {"value": effect.value, "stat": target, "status": status, "max_stacks": maximum, "mode": mode}
-            duration = effect.get("duration")
-            if duration is not None: payload["duration"] = duration
-            return ResolvableEffect(stat=stat, value=payload, bucket="static", mode="additive", tier=tier, scales_with_rank=True)
-
+        mode = cast(EffectMode, normalize_mode(effect.get("mode")))
+        family = effect_family(effect)
+        scales = rank_scales(effect)
+        behaviour = behaviour_of(effect)
+        value = effect.value
+        exclude = self._exclude_flags(effect)
         equipped = effect.get("equipped")
         required_rank = effect.get("rank")
         condition = effect.get("when")
         stacks = effect.get("stacks")
-        value = effect.value
-        exclude = self._exclude_flags(effect)
 
-        if condition in MAGAZINE_POSITION_WHEN:
-            return ResolvableEffect(stat, value, mode, "magazine_position", condition=condition, exclude=exclude, tier=tier, scales_with_rank=True)
+        if behaviour == BEHAVIOUR_FIRST_SHOT:
+            if family == COMMON_FAMILY: family = "chamber"
+            return ResolvableEffect(stat, value, "proportional", "magazine_position", condition="first_shot", exclude=exclude, family=family, scales_with_rank=scales, behaviour=behaviour)
+        if behaviour == BEHAVIOUR_LAST_SHOT:
+            if family == COMMON_FAMILY: family = "charge"
+            return ResolvableEffect(stat, value, "proportional", "magazine_position", condition="last_shot", exclude=exclude, family=family, scales_with_rank=scales, behaviour=behaviour)
+
+        if behaviour == BEHAVIOUR_STACK_RESET_CRIT_2_PLUS:
+            if stat != "crit_chance": raise ValueError("STACK_RESET_CRIT_2_PLUS requires crit_chance")
+            payload = {"stat": "crit_chance", "value": value, "mode": "flat", "behaviour": behaviour, "after_max": ENERVATE_RESET_CHARGES_MAX}
+            return ResolvableEffect(stat="stacking_reset", value=payload, bucket="stacking_reset", mode="proportional", scales_with_rank=False, behaviour=behaviour)
+
+        if behaviour == BEHAVIOUR_ON_CRIT:
+            if stat != "slash_proc": raise ValueError("ON_CRIT requires slash_proc")
+            return ResolvableEffect(stat="application_chance", value={"stat": "slash_proc", "value": value, "behaviour": behaviour, "chance": value}, bucket="application_chance", mode="proportional", scales_with_rank=scales, behaviour=behaviour)
+
+        if behaviour == BEHAVIOUR_ON_IMPACT_FR:
+            if stat != "slash_proc": raise ValueError("ON_IMPACT_DOUBLE_BELOW_2_5_FR requires slash_proc")
+            return ResolvableEffect(stat="application_chance", value={"stat": "slash_proc", "value": value, "behaviour": behaviour, "chance": value}, bucket="application_chance", mode="proportional", scales_with_rank=scales, behaviour=behaviour)
+
+        if behaviour == BEHAVIOUR_ON_ANY_PROC:
+            if stat != "random_proc": raise ValueError("ON_ANY_PROC requires random_proc")
+            return ResolvableEffect(stat="application_chance", value={"stat": "random_proc", "value": value, "behaviour": behaviour, "chance": value}, bucket="application_chance", mode="proportional", scales_with_rank=scales, behaviour=behaviour)
+
+        if behaviour == BEHAVIOUR_ON_HIT:
+            if stat != "crit_chance": raise ValueError("ON_HIT requires crit_chance")
+            return ResolvableEffect(stat="application_chance", value={"stat": "crit_chance", "value": value, "behaviour": behaviour, "mode": "flat"}, bucket="application_chance", mode="proportional", scales_with_rank=scales, behaviour=behaviour)
+
+        if behaviour == BEHAVIOUR_NEAR_YELLOW:
+            if stat != "duplicated_hit": raise ValueError("NEAR_YELLOW requires duplicated_hit")
+            return ResolvableEffect(stat="application_chance", value={"stat": "duplicated_hit", "value": value, "behaviour": behaviour}, bucket="application_chance", mode="proportional", scales_with_rank=scales, behaviour=behaviour)
+
+        if behaviour == BEHAVIOUR_FROM_PUNCTURE_X_STATUS:
+            return ResolvableEffect(stat="conversions", value={"stat": stat, "value": value, "behaviour": behaviour, "mode": "flat"}, bucket="conversions", mode="proportional", scales_with_rank=scales, behaviour=behaviour)
+
+        if behaviour == BEHAVIOUR_UNIQUE_STATUS:
+            # CO amount lives on proportional.condition_overload; product folding happens at apply time.
+            if isinstance(stacks, Mapping) and stacks.get("when") not in {None, "status_type"}:
+                return ResolvableEffect(stat="condition_overload", value=value, bucket="stacking", stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"), scales_with_rank=scales, co_max_stacks="inf", behaviour=behaviour)
+            maximum = stacks.get("max") if isinstance(stacks, Mapping) else None
+            return ResolvableEffect(stat="condition_overload", value=value, bucket="static", mode="proportional", scales_with_rank=scales, co_max_stacks="inf" if maximum is None else maximum, behaviour=behaviour)
+
+        if behaviour == BEHAVIOUR_STATUS_PROC_STACKS:
+            status = effect.get("status")
+            if not status: raise ValueError("STATUS_PROC_STACKS requires status")
+            maximum = stacks.get("max") if isinstance(stacks, Mapping) else None
+            if maximum is None: raise ValueError("STATUS_PROC_STACKS requires stacks.max")
+            payload = {"value": value, "stat": stat, "status": status, "max_stacks": maximum, "mode": "proportional"}
+            if isinstance(stacks, Mapping) and stacks.get("duration") is not None: payload["duration"] = stacks["duration"]
+            return ResolvableEffect(stat="status_effect_stacks", value=payload, bucket="static", mode="proportional", scales_with_rank=scales, behaviour=behaviour)
 
         if equipped is not None:
             names = tuple(equipped if isinstance(equipped, list) else [equipped])
-            if required_rank is not None: return ResolvableEffect(stat, value, mode, "modular", required_rank=required_rank, equipped=names, exclude=exclude, tier=tier, scales_with_rank=False)
-            if stacks is not None: return ResolvableEffect(stat, value, mode, "modular", equipped=names, stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"), exclude=exclude, tier=tier, scales_with_rank=True)
-            return ResolvableEffect(stat, value, mode, "modular", condition=condition, equipped=names, exclude=exclude, tier=tier, scales_with_rank=True)
+            if required_rank is not None: return ResolvableEffect(stat, value, mode, "modular", required_rank=required_rank, equipped=names, exclude=exclude, family=family, scales_with_rank=False, behaviour=behaviour)
+            if stacks is not None: return ResolvableEffect(stat, value, mode, "modular", equipped=names, stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"), exclude=exclude, family=family, scales_with_rank=scales, behaviour=behaviour)
+            return ResolvableEffect(stat, value, mode, "modular", condition=condition, equipped=names, exclude=exclude, family=family, scales_with_rank=scales, behaviour=behaviour)
 
-        if required_rank is not None: return ResolvableEffect(stat, value, mode, "rank_locked", required_rank=required_rank, exclude=exclude, tier=tier, scales_with_rank=False)
-        if stacks is not None: return ResolvableEffect(stat, value, mode, "stacking", stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"), exclude=exclude, tier=tier, scales_with_rank=True)
-        if condition is None: return ResolvableEffect(stat, value, mode, "static", exclude=exclude, tier=tier, scales_with_rank=True)
-        return ResolvableEffect(stat, value, mode, "conditional", condition=condition, exclude=exclude, tier=tier, scales_with_rank=True)
+        if required_rank is not None: return ResolvableEffect(stat, value, mode, "rank_locked", required_rank=required_rank, exclude=exclude, family=family, scales_with_rank=False, behaviour=behaviour)
+        if stacks is not None: return ResolvableEffect(stat, value, mode, "stacking", stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"), exclude=exclude, family=family, scales_with_rank=scales, behaviour=behaviour)
+        if behaviour == BEHAVIOUR_DOUBLE_FOR_BOWS:
+            return ResolvableEffect(stat, value, mode, "conditional", condition="bow", exclude=exclude, family=family, scales_with_rank=scales, behaviour=behaviour)
+        if condition is None: return ResolvableEffect(stat, value, mode, "static", exclude=exclude, family=family, scales_with_rank=scales, behaviour=behaviour)
+        return ResolvableEffect(stat, value, mode, "conditional", condition=condition, exclude=exclude, family=family, scales_with_rank=scales, behaviour=behaviour)
 
     def _normalize_effects(self) -> tuple[ResolvableEffect, ...]:
-        return tuple(self._normalize_effect(stat, effect) for stat, raw in self.upgrade.data.stats.items() for effect in raw_effects(raw))
+        effects: list[ResolvableEffect] = []
+        for stat, raw in self.upgrade.data.stats.items():
+            for effect in raw_effects(raw):
+                normalized = self._normalize_effect(stat, effect)
+                if behaviour_of(effect) == BEHAVIOUR_DOUBLE_FOR_BOWS:
+                    base = replace(normalized, behaviour=None, condition=None, bucket="static")
+                    bow = replace(normalized, bucket="conditional", condition="bow")
+                    effects.extend((base, bow))
+                else:
+                    effects.append(normalized)
+        return tuple(effects)
 
     def _is_effect_applicable(self, effect: ResolvableEffect, context: ResolutionContext) -> bool:
         if effect.equipped is not None and not all(name in context.equipped for name in effect.equipped): return False
         if effect.required_rank is not None and context.rank < effect.required_rank: return False
-        if effect.bucket == "magazine_position": return True
+        if effect.bucket in DEFERRED: return True
         if effect.condition is not None:
-            weapon = context.weapon or Data()
-            upgrade = context.upgrade or Data()
-            if not self._condition(weapon, upgrade, effect.condition): return False
+            if not self._condition(context.weapon or Data(), context.upgrade or Data(), effect.condition): return False
         return True
 
-    @staticmethod
-    def _is_status_effect_stack_key(stacks_on: str | None) -> bool:
-        """Legacy `on_<status>_status_effect` stack keys are deferred to status_effect_stacks."""
-        return isinstance(stacks_on, str) and stacks_on.startswith("on_") and stacks_on.endswith("_status_effect")
-
     def _resolve_effect(self, effect: ResolvableEffect, context: ResolutionContext) -> ResolvableEffect | None:
-        # Ignore legacy on_*_status_effect stack rows; automatic/runtime stacks are
-        # applied later from status_effect_stacks + SustainedStatusModel.
-        if self._is_status_effect_stack_key(effect.stacks_on):
-            return None
+        if effect.bucket == "stacking_reset":
+            payload = dict(effect.value)
+            payload["after"] = float(payload.get("after_max") or ENERVATE_RESET_CHARGES_MAX) * context.rank_multiplier
+            return replace(effect, value=payload)
+        if effect.bucket in {"application_chance", "conversions"}:
+            payload = dict(effect.value)
+            if effect.scales_with_rank:
+                if "chance" in payload: payload["chance"] = self._scale(payload["chance"], context.rank_multiplier)
+                else: payload["value"] = self._scale(payload["value"], context.rank_multiplier)
+            return replace(effect, value=payload)
         return resolve_stack_scaled_effect(effect, context, scale=self._scale)
 
     def _aggregate_effects(self, effects: Sequence[ResolvableEffect]) -> None:
         for bucket in self.BUCKETS: setattr(self, bucket, ResolvedStat())
         for effect in effects:
-            if effect.bucket == "magazine_position":
+            if effect.bucket in DEFERRED:
                 self._record(self.total, effect)
                 continue
             self._record(getattr(self, effect.bucket), effect)
@@ -169,7 +228,6 @@ class UpgradeCalculator:
         weapon_data = getattr(weapon, "data", weapon) or Data()
         build_data = getattr(build, "data", build) or Data()
         upgrade_data = self._upgrade_data()
-
         max_rank = upgrade_data.get("max_rank")
         max_stacks = upgrade_data.get("max_stacks")
         rank = upgrade_data.get("rank")
@@ -177,12 +235,9 @@ class UpgradeCalculator:
         if max_rank is not None: rank = min(rank, max_rank)
         rank_multiplier = 1 if max_rank in {None, 0} else (rank + 1) / (max_rank + 1)
         use_defaults = set(upgrade_data) <= self.METADATA
-
-        # Combo can stand in for unset stacks when resolving melee stacking effects.
         default_stacks = upgrade_data.get("stacks")
         if default_stacks is None:
             runtime = getattr(weapon_data, "runtime", None)
             if runtime is not None: default_stacks = runtime.get("combo")
-
         context = ResolutionContext(rank=rank, rank_multiplier=rank_multiplier, max_stacks=max_stacks, use_defaults=use_defaults, stacks_lookup=upgrade_data, default_stacks=default_stacks, equipped=frozenset(build_data.get("equipped", [])), weapon=weapon_data, upgrade=upgrade_data, build=build_data)
         resolve_and_aggregate(self._normalize_effects(), context, is_applicable=self._is_effect_applicable, resolve_one=self._resolve_effect, aggregate=self._aggregate_effects)

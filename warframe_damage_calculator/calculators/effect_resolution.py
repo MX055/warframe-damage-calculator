@@ -28,7 +28,7 @@ class ResolvableEffect:
 
     stat: str
     value: EffectValue
-    mode: EffectMode = "additive"
+    mode: EffectMode = "proportional"
     bucket: str = "static"
     condition: str | None = None
     scope: str | None = None
@@ -37,8 +37,9 @@ class ResolvableEffect:
     required_rank: int | None = None
     equipped: tuple[str, ...] | None = None
     exclude: tuple[str, ...] = ()
-    tier: int = 1
-    scales_with_rank: bool = False
+    family: str = "common"
+    behaviour: str | None = None
+    scales_with_rank: bool = True
     co_max_stacks: int | str | None = None
     conversion_max: Number | None = None
 
@@ -110,6 +111,6 @@ def resolve_stack_scaled_effect(effect: ResolvableEffect, context: ResolutionCon
 
     value = effect.value
     if effect.scales_with_rank and scale is not None: value = scale(value, context.rank_multiplier)
+    if effect.stacks_on is not None and not isinstance(value, bool): value = value * stacks
     if effect.stat == "condition_overload": value = {"value": value, "max_stacks": effect.co_max_stacks}
-    elif effect.stacks_on is not None and not isinstance(value, bool): value = value * stacks
     return replace(effect, value=value)

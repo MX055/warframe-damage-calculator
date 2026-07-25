@@ -64,17 +64,17 @@ class StatusModelTests(unittest.TestCase):
 
     def test_status_effect_stack_bonuses_use_model_or_runtime_override(self):
         model = SustainedStatusModel(per_attack_probabilities={"heat": 1.0}, attacks_per_second=1, status_duration=6, max_unique_statuses=1)
-        entries = [{"value": 0.12, "stat": "damage_bonus", "mode": "additive", "status": "heat", "max_stacks": 40, "duration": 10}]
+        entries = [{"value": 0.12, "stat": "damage_bonus", "mode": "proportional", "status": "heat", "max_stacks": 40, "duration": 10}]
         # 1 rps × 10s buff duration × P=1 → 10 stacks, not status_duration=6.
-        self.assertEqual(status_effect_stack_bonuses(model=model, entries=entries), [("additive", "damage_bonus", 1.2)])
-        self.assertEqual(status_effect_stack_bonuses(model=model, entries=entries, runtime={"on_heat_status_effect": 10}), [("additive", "damage_bonus", 1.2)])
+        self.assertEqual(status_effect_stack_bonuses(model=model, entries=entries), [("proportional", "damage_bonus", 1.2)])
+        self.assertEqual(status_effect_stack_bonuses(model=model, entries=entries, runtime={"on_heat_status_effect": 10}), [("proportional", "damage_bonus", 1.2)])
 
     def test_apply_condition_overload_only_needs_status_model(self):
         modded = ModdedStats()
-        modded.additive.damage_bonus = 1.0
+        modded.proportional.damage_bonus = 1.0
         model = SustainedStatusModel(per_attack_probabilities={"heat": 1.0}, attacks_per_second=1, status_duration=6, max_unique_statuses=1)
         apply_condition_overload(modded=modded, model=model, value_per_status=0.5, co_factor=1, co_effect="adds")
-        self.assertAlmostEqual(modded.additive.damage_bonus, 1.5)
+        self.assertAlmostEqual(modded.proportional.damage_bonus, 1.5)
 
     def test_ranged_and_melee_sustained_rates_differ(self):
         ranged = Primary({"name": "R", "type": "primary", "ammo": {"magazine_size": 10, "reload_time": 2}, "attacks": {"shot": {"stats": {"damage": {"impact": 10}, "fire_rate": 10, "ammo_cost": 1}}}})
@@ -186,20 +186,20 @@ class EffectResolutionTests(unittest.TestCase):
         })
         calc = UpgradeCalculator(upgrade)
         calc.resolve(Data({"type": "rifle"}), Data({"equipped": []}))
-        self.assertAlmostEqual(calc.rank_locked.additive.crit_chance, 0.5)
-        self.assertEqual(calc.modular.additive.get("crit_chance", 0), 0)
+        self.assertAlmostEqual(calc.rank_locked.proportional.crit_chance, 0.5)
+        self.assertEqual(calc.modular.proportional.get("crit_chance", 0), 0)
         calc.resolve(Data({"type": "rifle"}), Data({"equipped": ["Other"]}))
-        self.assertAlmostEqual(calc.modular.additive.crit_chance, 0.2)
+        self.assertAlmostEqual(calc.modular.proportional.crit_chance, 0.2)
 
     def test_upgrade_condition_and_rank_scaling(self):
         upgrade = Upgrade({"name": "Cond", "type": "mod", "max_rank": 1, "stats": {"crit_chance": [{"value": 1.0, "when": "rifle"}]}})
         upgrade.configure(context={"rank": 0})
         calc = UpgradeCalculator(upgrade)
         calc.resolve(Data({"type": "pistol"}), Data())
-        self.assertEqual(calc.conditional.additive.get("crit_chance", 0), 0)
+        self.assertEqual(calc.conditional.proportional.get("crit_chance", 0), 0)
         calc.resolve(Data({"type": "rifle"}), Data())
         # Rank 0 of max 1 → multiplier (0+1)/(1+1) = 0.5
-        self.assertAlmostEqual(calc.conditional.additive.crit_chance, 0.5)
+        self.assertAlmostEqual(calc.conditional.proportional.crit_chance, 0.5)
 
     def test_evolution_uses_shared_resolvable_effect(self):
         weapon = arsenal.get("Dera Vandal")
@@ -236,8 +236,8 @@ class PipelineOrderTests(unittest.TestCase):
         weapon.configure(Build(status_mod), context={"evolutions": {4: 2}})
         result = selected(weapon)
         self.assertGreater(result.base.crit_chance, raw_crit)
-        self.assertAlmostEqual(result.modded.additive.crit_chance, result.base.crit_chance)
-        self.assertAlmostEqual(result.effective.crit_chance, result.modded.additive.crit_chance)
+        self.assertAlmostEqual(result.modded.proportional.crit_chance, result.base.crit_chance)
+        self.assertAlmostEqual(result.effective.crit_chance, result.modded.proportional.crit_chance)
 
     def test_manual_phase_order_matches_resolve(self):
         weapon = arsenal.get("Braton").configure(Build(arsenal.get("Serration")))
@@ -262,7 +262,7 @@ class PipelineOrderTests(unittest.TestCase):
             "type": "mod",
             "max_rank": 0,
             "compatibility": {"types": []},
-            "stats": {"condition_overload": [{"value": 1, "stacks": {"when": "status_type", "max": 1}}]},
+            "stats": {"damage_bonus": [{"value": 1, "behaviour": "UNIQUE_STATUS", "stacks": {"when": "status_type", "max": 1}}]},
         })
         weapon = Primary({
             "name": "CO Model",
@@ -274,7 +274,7 @@ class PipelineOrderTests(unittest.TestCase):
         self.assertIsNotNone(model)
         self.assertIn("heat", model.per_attack_probabilities)
         self.assertGreater(weapon.results._average_condition_overload_bonus(result), 0)
-        self.assertGreater(result.modded.additive.damage.total_damage(), 0)
+        self.assertGreater(result.modded.proportional.damage.total_damage(), 0)
 
     def test_build_sustained_status_model_from_layers(self):
         condition_overload = Upgrade({
@@ -282,7 +282,7 @@ class PipelineOrderTests(unittest.TestCase):
             "type": "mod",
             "max_rank": 0,
             "compatibility": {"types": []},
-            "stats": {"condition_overload": [{"value": 1, "stacks": {"when": "status_type", "max": 2}}]},
+            "stats": {"damage_bonus": [{"value": 1, "behaviour": "UNIQUE_STATUS", "stacks": {"when": "status_type", "max": 2}}]},
         })
         weapon = Primary({
             "name": "CO Layers",
