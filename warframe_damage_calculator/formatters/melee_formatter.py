@@ -75,9 +75,9 @@ class MeleeFormatter(WeaponFormatter):
         self._append(rows, "FLAT DPH", "", "", self._fmt_number(final.flat_dph))
         self._append(rows, "FLAT DOTPH", "", "", self._fmt_number(final.flat_dotph))
         self._append(rows, "TOTAL DPH", "", "", self._fmt_number(final.total_dph))
-        self._append(rows, "FLAT DPS", "", "", f"{self._fmt_number(final.flat_dps)} x BASE HPS")
-        self._append(rows, "FLAT DOTPS", "", "", f"{self._fmt_number(final.flat_dotps)} x BASE HPS")
-        self._append(rows, "TOTAL DPS", "", "", f"{self._fmt_number(final.total_dps)} x BASE HPS")
+        self._append(rows, "FLAT DPS", "", "", self._fmt_number(final.flat_dps))
+        self._append(rows, "FLAT DOTPS", "", "", self._fmt_number(final.flat_dotps))
+        self._append(rows, "TOTAL DPS", "", "", self._fmt_number(final.total_dps))
         section_breaks.append(dps_at)
 
         title = f"{self.weapon.data.name} - {selected.name.replace('_', ' ').title()}"
