@@ -166,7 +166,7 @@ class WeaponCalculator:
         damage_calculator.compute_modded_damage(attack=result.attack, base=result.base, original_damage=result.original_damage, build=result.build, evolutions=result.evolutions, modded=result.modded)
 
     def _compute_effective(self, result: AttackResult) -> None:
-        scalar_calculator.compute_shared_effective(base=result.base, modded=result.modded, effective=result.effective)
+        scalar_calculator.compute_shared_effective(base=result.base, modded=result.modded, effective=result.effective, build=result.build, evolutions=result.evolutions)
 
     def _max_average_faction_damage(self, result: AttackResult) -> float:
         return damage_calculator.max_faction_damage(result.average)

@@ -3,6 +3,7 @@ from ..utils.constants import DOT_MULTIPLIERS
 from ..utils.functions import clamp, true_round
 from ..utils.types import Number
 from . import formulas
+from .magazine_position import apply_magazine_position_mixture
 from .weapon_calculator import WeaponCalculator
 
 
@@ -128,3 +129,4 @@ class RangedCalculator(WeaponCalculator):
         average.flat_dotps = average.fire_rate * average.flat_dotph
         average.flat_weakpoint_dotps = average.fire_rate * average.flat_weakpoint_dotph
         formulas.refresh_dps_from_dph(average)
+        apply_magazine_position_mixture(result, compute_dotph=self._flat_dotph)

@@ -36,6 +36,8 @@ class ResolvableEffect:
     max_stacks: int | None = None
     required_rank: int | None = None
     equipped: tuple[str, ...] | None = None
+    exclude: tuple[str, ...] = ()
+    tier: int = 1
     scales_with_rank: bool = False
     co_max_stacks: int | str | None = None
     conversion_max: Number | None = None

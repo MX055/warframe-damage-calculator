@@ -8,7 +8,7 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from typing import Any, cast
 
-from ..fields.upgrade import ResolvedStat
+from ..fields.upgrade import ResolvedModeStats, ResolvedStat
 from ..loader.matching import MELEE_TYPES, PRIMARY_TYPES, SECONDARY_TYPES
 from ..core.data import Data
 from ..core.dist import Dist
@@ -16,6 +16,7 @@ from ..protocols import UpgradeOwner
 from ..utils.constants import EFFECT_MODES
 from ..utils.types import EffectMode, Number
 from .effect_resolution import ResolutionContext, ResolvableEffect, raw_effects, resolve_and_aggregate, resolve_stack_scaled_effect
+from .magazine_position import MAGAZINE_POSITION_WHEN, serialize_position_effect
 from .stat_aggregation import merge_resolved_stat, merge_upgrade_stat
 
 
@@ -58,18 +59,46 @@ class UpgradeCalculator:
         if isinstance(value, (bool, str)): return value
         return value * multiplier
 
+    @staticmethod
+    def _effect_tier(effect: Data) -> int:
+        return max(int(effect.get("tier") or 1), 1)
+
+    @staticmethod
+    def _record_multiplicative_tier(resolved: ResolvedStat, effect: ResolvableEffect) -> None:
+        key = str(effect.tier)
+        current = resolved.multiplicative_tiers.get(key)
+        if not isinstance(current, ResolvedModeStats):
+            current = ResolvedModeStats(current) if isinstance(current, Mapping) else ResolvedModeStats()
+            resolved.multiplicative_tiers[key] = current
+        merge_upgrade_stat(current, effect.stat, effect.value)
+
     def _record(self, bucket: ResolvedStat, effect: ResolvableEffect) -> None:
+        if effect.bucket == "magazine_position":
+            entry = serialize_position_effect(stat=effect.stat, value=effect.value, mode=effect.mode, when=effect.condition or "", exclude=effect.exclude, tier=effect.tier)
+            self.total.magazine_position = [*(self.total.magazine_position or []), entry]
+            return
+        if effect.mode == "multiplicative" and effect.tier > 1:
+            self._record_multiplicative_tier(bucket, effect)
+            self._record_multiplicative_tier(self.total, effect)
+            return
         merge_upgrade_stat(getattr(bucket, effect.mode), effect.stat, effect.value)
         merge_upgrade_stat(getattr(self.total, effect.mode), effect.stat, effect.value)
+
+    @staticmethod
+    def _exclude_flags(effect: Data) -> tuple[str, ...]:
+        exclude = effect.get("exclude")
+        if exclude is None: return ()
+        return tuple(exclude) if isinstance(exclude, list) else (str(exclude),)
 
     def _normalize_effect(self, stat: str, effect: Data) -> ResolvableEffect:
         raw_mode = effect.get("mode", "additive")
         if raw_mode not in EFFECT_MODES: raise ValueError(f"unsupported effect mode {raw_mode!r}")
         mode = cast(EffectMode, raw_mode)
+        tier = self._effect_tier(effect)
 
         if stat == "condition_overload":
             maximum = effect.get("stacks", {}).get("max")
-            return ResolvableEffect(stat=stat, value=effect.value, bucket="static", mode=mode, scales_with_rank=True, co_max_stacks="inf" if maximum is None else maximum)
+            return ResolvableEffect(stat=stat, value=effect.value, bucket="static", mode=mode, tier=tier, scales_with_rank=True, co_max_stacks="inf" if maximum is None else maximum)
 
         if stat == "status_effect_stacks":
             target = effect.get("stat")
@@ -80,24 +109,28 @@ class UpgradeCalculator:
             payload = {"value": effect.value, "stat": target, "status": status, "max_stacks": maximum, "mode": mode}
             duration = effect.get("duration")
             if duration is not None: payload["duration"] = duration
-            return ResolvableEffect(stat=stat, value=payload, bucket="static", mode="additive", scales_with_rank=True)
+            return ResolvableEffect(stat=stat, value=payload, bucket="static", mode="additive", tier=tier, scales_with_rank=True)
 
         equipped = effect.get("equipped")
         required_rank = effect.get("rank")
         condition = effect.get("when")
         stacks = effect.get("stacks")
         value = effect.value
+        exclude = self._exclude_flags(effect)
+
+        if condition in MAGAZINE_POSITION_WHEN:
+            return ResolvableEffect(stat, value, mode, "magazine_position", condition=condition, exclude=exclude, tier=tier, scales_with_rank=True)
 
         if equipped is not None:
             names = tuple(equipped if isinstance(equipped, list) else [equipped])
-            if required_rank is not None: return ResolvableEffect(stat, value, mode, "modular", required_rank=required_rank, equipped=names, scales_with_rank=False)
-            if stacks is not None: return ResolvableEffect(stat, value, mode, "modular", equipped=names, stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"), scales_with_rank=True)
-            return ResolvableEffect(stat, value, mode, "modular", condition=condition, equipped=names, scales_with_rank=True)
+            if required_rank is not None: return ResolvableEffect(stat, value, mode, "modular", required_rank=required_rank, equipped=names, exclude=exclude, tier=tier, scales_with_rank=False)
+            if stacks is not None: return ResolvableEffect(stat, value, mode, "modular", equipped=names, stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"), exclude=exclude, tier=tier, scales_with_rank=True)
+            return ResolvableEffect(stat, value, mode, "modular", condition=condition, equipped=names, exclude=exclude, tier=tier, scales_with_rank=True)
 
-        if required_rank is not None: return ResolvableEffect(stat, value, mode, "rank_locked", required_rank=required_rank, scales_with_rank=False)
-        if stacks is not None: return ResolvableEffect(stat, value, mode, "stacking", stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"), scales_with_rank=True)
-        if condition is None: return ResolvableEffect(stat, value, mode, "static", scales_with_rank=True)
-        return ResolvableEffect(stat, value, mode, "conditional", condition=condition, scales_with_rank=True)
+        if required_rank is not None: return ResolvableEffect(stat, value, mode, "rank_locked", required_rank=required_rank, exclude=exclude, tier=tier, scales_with_rank=False)
+        if stacks is not None: return ResolvableEffect(stat, value, mode, "stacking", stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"), exclude=exclude, tier=tier, scales_with_rank=True)
+        if condition is None: return ResolvableEffect(stat, value, mode, "static", exclude=exclude, tier=tier, scales_with_rank=True)
+        return ResolvableEffect(stat, value, mode, "conditional", condition=condition, exclude=exclude, tier=tier, scales_with_rank=True)
 
     def _normalize_effects(self) -> tuple[ResolvableEffect, ...]:
         return tuple(self._normalize_effect(stat, effect) for stat, raw in self.upgrade.data.stats.items() for effect in raw_effects(raw))
@@ -105,6 +138,7 @@ class UpgradeCalculator:
     def _is_effect_applicable(self, effect: ResolvableEffect, context: ResolutionContext) -> bool:
         if effect.equipped is not None and not all(name in context.equipped for name in effect.equipped): return False
         if effect.required_rank is not None and context.rank < effect.required_rank: return False
+        if effect.bucket == "magazine_position": return True
         if effect.condition is not None:
             weapon = context.weapon or Data()
             upgrade = context.upgrade or Data()
@@ -125,7 +159,11 @@ class UpgradeCalculator:
 
     def _aggregate_effects(self, effects: Sequence[ResolvableEffect]) -> None:
         for bucket in self.BUCKETS: setattr(self, bucket, ResolvedStat())
-        for effect in effects: self._record(getattr(self, effect.bucket), effect)
+        for effect in effects:
+            if effect.bucket == "magazine_position":
+                self._record(self.total, effect)
+                continue
+            self._record(getattr(self, effect.bucket), effect)
 
     def resolve(self, weapon: Data | object | None = None, build: Data | object | None = None) -> None:
         weapon_data = getattr(weapon, "data", weapon) or Data()

@@ -2,13 +2,44 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
+
 from ..fields.calculated import AverageStats
+from ..core.data import Data
 from ..core.dist import Dist
 from ..utils.types import Number
 
 
 def crit_multiplier(crit_chance: Number, crit_damage: Number) -> float:
     return 1 + crit_chance * (crit_damage - 1)
+
+
+def fold_multiplicative_tiers(*sources: object, stat: str = "damage_bonus", min_tier: int = 1) -> float:
+    """Product of (1 + sum) across multiplicative tiers for one stat.
+
+    Tier 1 is ``source.multiplicative``; tiers >= 2 live in ``source.multiplicative_tiers``.
+    Same tier adds; different tiers multiply.
+    """
+    by_tier: dict[int, float] = {}
+    for source in sources:
+        if source is None: continue
+        if min_tier <= 1:
+            mode = getattr(source, "multiplicative", None)
+            if mode is not None: by_tier[1] = by_tier.get(1, 0.0) + float(getattr(mode, stat, 0) or 0)
+        tiers = getattr(source, "multiplicative_tiers", None) or {}
+        if not isinstance(tiers, Mapping): continue
+        for key, mode_stats in tiers.items():
+            tier = int(key)
+            if tier < min_tier: continue
+            if isinstance(mode_stats, Mapping) and not isinstance(mode_stats, Data):
+                value = mode_stats.get(stat, 0)
+            else:
+                value = getattr(mode_stats, stat, 0) if mode_stats is not None else 0
+            by_tier[tier] = by_tier.get(tier, 0.0) + float(value or 0)
+    factor = 1.0
+    for tier in sorted(by_tier):
+        factor *= max(1.0 + by_tier[tier], 1.0)
+    return factor
 
 
 def non_crit_bonus(damage: Number = 0, chance: Number = 0) -> float:

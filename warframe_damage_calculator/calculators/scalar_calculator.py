@@ -79,7 +79,8 @@ def apply_evolution_conversions(*, base: CalculatedStats, build: ResolvedStat, e
 
 def compute_shared_modded_scalars(*, base: CalculatedStats, build: ResolvedStat, evolutions: ResolvedEvolutionStat, modded: ModdedStats, attack: Attack, crit_upgrade_multiplier: float) -> None:
     """Fill shared modded scalar fields (no damage Dist, no category-specific stats)."""
-    modded.multiplicative.damage_bonus = max(1 + build.multiplicative.damage_bonus, 1)
+    # Tier 1 only here; GunCO may add into this factor. Tiers >= 2 fold in compute_shared_effective.
+    modded.multiplicative.damage_bonus = max(1 + build.multiplicative.damage_bonus + float(evolutions.multiplicative.damage_bonus or 0), 1)
     modded.additive.damage_bonus = max(1 + build.additive.damage_bonus + evolutions.additive.damage_bonus + float(attack.stats.damage_bonus or 0), 0)
     modded.additive.corpus_damage = max(1 + build.additive.corpus_damage, 1)
     modded.additive.grineer_damage = max(1 + build.additive.grineer_damage, 1)
@@ -104,11 +105,13 @@ def compute_shared_modded_scalars(*, base: CalculatedStats, build: ResolvedStat,
     modded.base.noise_level = "silent" if "silent" in (base.noise_level if "noise_level" in base else None, build.base.noise_level, evolutions.base.noise_level) else next((n for n in (base.noise_level if "noise_level" in base else None, build.base.noise_level, evolutions.base.noise_level) if n is not None), "alarming")
 
 
-def compute_shared_effective(*, base: CalculatedStats, modded: ModdedStats, effective: CalculatedStats) -> None:
+def compute_shared_effective(*, base: CalculatedStats, modded: ModdedStats, effective: CalculatedStats, build: ResolvedStat | None = None, evolutions: ResolvedEvolutionStat | None = None) -> None:
     """Fold shared modded scalars into effective stats."""
+    higher = formulas.fold_multiplicative_tiers(build, evolutions, stat="damage_bonus", min_tier=2) if build is not None else 1.0
+    damage_factor = modded.multiplicative.damage_bonus * higher
     effective.forced_procs = base.forced_procs
-    effective.damage_bonus = modded.additive.damage_bonus * modded.multiplicative.damage_bonus
-    effective.damage = modded.multiplicative.damage_bonus * modded.additive.damage
+    effective.damage_bonus = modded.additive.damage_bonus * damage_factor
+    effective.damage = damage_factor * modded.additive.damage
     effective.corpus_damage = modded.additive.corpus_damage
     effective.grineer_damage = modded.additive.grineer_damage
     effective.infested_damage = modded.additive.infested_damage

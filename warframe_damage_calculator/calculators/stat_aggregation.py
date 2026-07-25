@@ -12,8 +12,8 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping
 from typing import Any
 
-from ..fields.evolution import ConversionBonus
-from ..fields.upgrade import ResolvedStat
+from ..fields.evolution import ConversionBonus, ResolvedEvolutionModeStats, ResolvedEvolutionStat
+from ..fields.upgrade import ResolvedModeStats, ResolvedStat
 from ..core.data import Data
 from ..core.dist import Dist
 from ..utils.constants import DAMAGE_TYPES, EFFECT_MODES
@@ -115,8 +115,32 @@ def merge_mode_stats(target: Data, source: Data) -> None:
         merge_upgrade_stat(target, stat, value)
 
 
+def merge_multiplicative_tiers(target: Data, source: Data, *, mode_stats_type: type = ResolvedModeStats) -> None:
+    """Merge higher multiplicative tiers (keys \"2\", \"3\", … → mode stats)."""
+    for key, mode_stats in source.items():
+        current = target.get(key)
+        if not isinstance(current, mode_stats_type):
+            current = mode_stats_type(current) if isinstance(current, Mapping) else mode_stats_type()
+            target[key] = current
+        if isinstance(mode_stats, Mapping) and not isinstance(mode_stats, mode_stats_type):
+            mode_stats = mode_stats_type(mode_stats)
+        merge_mode_stats(current, mode_stats)
+
+
 def merge_resolved_stat(target: ResolvedStat, source: ResolvedStat) -> None:
     for mode in EFFECT_MODES: merge_mode_stats(getattr(target, mode), getattr(source, mode))
+    if source.multiplicative_tiers:
+        merge_multiplicative_tiers(target.multiplicative_tiers, source.multiplicative_tiers, mode_stats_type=ResolvedModeStats)
+    if source.magazine_position:
+        target.magazine_position = [*(target.magazine_position or []), *source.magazine_position]
+
+
+def merge_resolved_evolution_stat(target: ResolvedEvolutionStat, source: ResolvedEvolutionStat) -> None:
+    for mode in EFFECT_MODES: merge_mode_stats(getattr(target, mode), getattr(source, mode))
+    if source.multiplicative_tiers:
+        merge_multiplicative_tiers(target.multiplicative_tiers, source.multiplicative_tiers, mode_stats_type=ResolvedEvolutionModeStats)
+    if source.magazine_position:
+        target.magazine_position = [*(target.magazine_position or []), *source.magazine_position]
 
 
 def merge_evolution_stat(stats: Data, stat: str, value: Any, *, conversion_max: Number | None = None) -> None:

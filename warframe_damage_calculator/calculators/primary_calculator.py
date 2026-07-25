@@ -10,25 +10,15 @@ class PrimaryCalculator(RangedCalculator):
         super()._compute_modded_scalars(result)
         build, modded = result.build, result.modded
         modded.additive.hunter_munitions = clamp(build.additive.hunter_munitions, 0, 0.3)
-        modded.additive.primed_chamber = clamp(build.additive.primed_chamber, 0, 1.4)
         modded.additive.vigilante_bonus = clamp(build.additive.vigilante_bonus, 0, 0.3)
 
     def _compute_effective(self, result: AttackResult) -> None:
         super()._compute_effective(result)
         modded, effective = result.modded, result.effective
         effective.hunter_munitions = modded.additive.hunter_munitions
-        effective.primed_chamber = modded.additive.primed_chamber
         effective.vigilante_bonus = modded.additive.vigilante_bonus
         effective.crit_chance += effective.vigilante_bonus
         effective.weakpoint_crit_chance += effective.vigilante_bonus
-
-    def _compute_average(self, result: AttackResult) -> None:
-        super()._compute_average(result)
-        effective, average = result.effective, result.average
-        average.primed_chamber_multiplier = 1 + effective.primed_chamber / effective.magazine_capacity
-        average.flat_dph *= average.primed_chamber_multiplier
-        average.flat_weakpoint_dph *= average.primed_chamber_multiplier
-        formulas.refresh_dps_from_dph(average)
 
     def _flat_dotph(self, result: AttackResult, *, weakpoint: bool = False, hits: Number | None = None, damage_multiplier: Number = 1, extra_damage: Number = 0, faction_damage: Number | None = None) -> float:
         damage = result.effective.damage
@@ -38,18 +28,17 @@ class PrimaryCalculator(RangedCalculator):
         continuous = (result.attack.delivery or "") == "beam"
         crit_chance = average.weakpoint_crit_chance if weakpoint else average.crit_chance
         multiplier = formulas.hit_multiplier(crit_chance, effective.crit_damage, effective.non_crit_bonus_damage, effective.non_crit_bonus_chance)
-        primed = 1 + effective.primed_chamber / effective.magazine_capacity
         tick_damage_scale = effective.multishot if continuous else 1.0
         hunter_procs = effective.hunter_munitions * min(crit_chance, 1)
-        hunter_dpp = self._ib_slash_dot_per_proc(result, hit_multiplier=max(effective.crit_damage, multiplier), faction_damage=faction_damage, damage_multiplier=primed * tick_damage_scale)
+        hunter_dpp = self._ib_slash_dot_per_proc(result, hit_multiplier=max(effective.crit_damage, multiplier), faction_damage=faction_damage, damage_multiplier=damage_multiplier * tick_damage_scale)
         hunter_damage = hunter_procs * hunter_dpp
         impact_ib = self._impact_weight(result) * effective.internal_bleeding
         guaranteed_proc, fractional_proc = divmod(effective.status_chance, 1)
         ib_procs = impact_ib * effective.status_chance
-        ib_dpp = self._ib_slash_dot_per_proc(result, hit_multiplier=multiplier, faction_damage=faction_damage, damage_multiplier=primed * tick_damage_scale)
+        ib_dpp = self._ib_slash_dot_per_proc(result, hit_multiplier=multiplier, faction_damage=faction_damage, damage_multiplier=damage_multiplier * tick_damage_scale)
         ib_damage = ib_procs * ib_dpp
         ib_probability = 1 - (1 - impact_ib) ** guaranteed_proc * ((1 - fractional_proc) + fractional_proc * (1 - impact_ib))
         overlap = hunter_procs * ib_probability * min(hunter_dpp, ib_dpp)
         extra = hunter_damage + ib_damage - overlap
         extra_hits = 1.0 if continuous else effective.multishot
-        return super()._flat_dotph(result, weakpoint=weakpoint, hits=hits, damage_multiplier=primed * damage_multiplier, extra_damage=extra * extra_hits + extra_damage, faction_damage=faction_damage)
+        return super()._flat_dotph(result, weakpoint=weakpoint, hits=hits, damage_multiplier=damage_multiplier, extra_damage=extra * extra_hits + extra_damage, faction_damage=faction_damage)

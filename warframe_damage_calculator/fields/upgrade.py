@@ -44,7 +44,6 @@ class UpgradeStats(Data):
     non_crit_bonus_chance: JsonValue
     non_crit_bonus_damage: JsonValue
     orokin_damage: JsonValue
-    primed_chamber: JsonValue
     projectile_speed: JsonValue
     punch_through: JsonValue
     puncture: JsonValue
@@ -133,7 +132,6 @@ class ResolvedModeStats(Data):
     non_crit_bonus_chance: Number = 0.0
     non_crit_bonus_damage: Number = 0.0
     orokin_damage: Number = 0.0
-    primed_chamber: Number = 0.0
     projectile_speed: Number = 0.0
     punch_through: Number = 0.0
     range: Number = 0.0
@@ -158,3 +156,6 @@ class ResolvedStat(Data):
     multiplicative: ResolvedModeStats = ResolvedModeStats()
     base: ResolvedModeStats = ResolvedModeStats()
     flat: ResolvedModeStats = ResolvedModeStats()
+    # Multiplicative tiers >= 2 (keys "2", "3", … → ResolvedModeStats). Tier 1 is `.multiplicative`.
+    multiplicative_tiers: Data = Data()
+    magazine_position: list = []

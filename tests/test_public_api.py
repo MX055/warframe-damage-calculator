@@ -3,7 +3,7 @@ from collections.abc import Mapping
 from types import MappingProxyType
 from typing import get_args
 
-from warframe_damage_calculator import Build, Melee, Primary, Upgrade, Weapon, arsenal
+from warframe_damage_calculator import Build, Melee, Primary, Secondary, Upgrade, Weapon, arsenal
 from warframe_damage_calculator.calculators import formulas
 from warframe_damage_calculator.calculators.build_calculator import BuildCalculator
 from warframe_damage_calculator.calculators.upgrade_calculator import UpgradeCalculator
@@ -809,13 +809,11 @@ class PublicApiTests(unittest.TestCase):
 
     def test_special_upgrades_keep_calculator_values(self):
         expected = {
-            "Charged Chamber": ("primed_chamber", 0.4),
             "Hemorrhage": ("internal_bleeding", 0.35),
             "Hunter Munitions": ("hunter_munitions", 0.3),
             "Internal Bleeding": ("internal_bleeding", 0.35),
             "Melee Doughty": ("melee_doughty", 1),
             "Melee Duplicate": ("melee_duplicate", 1),
-            "Primed Chamber": ("primed_chamber", 1),
             "Secondary Encumber": ("secondary_encumber", 0.24),
             "Secondary Enervate": ("secondary_enervate", 6),
             "Vigilante Supplies": ("vigilante_bonus", 0.05),
@@ -823,6 +821,53 @@ class PublicApiTests(unittest.TestCase):
         for name, (stat, value) in expected.items():
             with self.subTest(name=name):
                 self.assertAlmostEqual(arsenal.get(name).results.static.additive[stat], value)
+
+        primed = arsenal.get("Primed Chamber").results.total.magazine_position
+        charged = arsenal.get("Charged Chamber").results.total.magazine_position
+        synth = arsenal.get("Synth Charge").results.total.magazine_position
+        self.assertEqual(primed, [{"stat": "damage_bonus", "value": 1, "mode": "multiplicative", "when": "first_shot", "tier": 2}])
+        self.assertEqual(charged, [{"stat": "damage_bonus", "value": 0.4, "mode": "multiplicative", "when": "first_shot", "tier": 2}])
+        self.assertEqual(synth, [{"stat": "damage_bonus", "value": 2, "mode": "multiplicative", "when": "last_shot", "tier": 2, "exclude": ["continuous", "incarnon"]}])
+
+    def test_first_shot_damage_averages_across_magazine(self):
+        base = Primary({"name": "Chamber Test", "type": "primary", "subtype": "sniper", "ammo": {"magazine_size": 10, "reload_time": 1}, "attacks": {"shot": {"delivery": "hitscan", "stats": {"damage": {"impact": 100}, "crit_chance": 0, "crit_damage": 2, "multishot": 1, "fire_rate": 1}}}})
+        with_chamber = Primary(base.data).configure(Build(arsenal.get("Primed Chamber")))
+        self.assertAlmostEqual(selected(with_chamber).average.first_shot_damage_multiplier, 1.1)
+        self.assertAlmostEqual(selected(with_chamber).average.flat_dph / selected(base).average.flat_dph, 1.1)
+
+        one_round = Primary({"name": "Vectis-like", "type": "primary", "subtype": "sniper", "ammo": {"magazine_size": 1, "reload_time": 1}, "attacks": {"shot": {"delivery": "hitscan", "stats": {"damage": {"impact": 100}, "crit_chance": 0, "crit_damage": 2, "multishot": 1, "fire_rate": 1}}}})
+        one_chamber = Primary(one_round.data).configure(Build(arsenal.get("Primed Chamber")))
+        self.assertAlmostEqual(selected(one_chamber).average.first_shot_damage_multiplier, 2.0)
+        self.assertAlmostEqual(selected(one_chamber).average.flat_dph / selected(one_round).average.flat_dph, 2.0)
+
+    def test_multiplicative_tiers_product_not_sum(self):
+        sniper = {"name": "Tier Sniper", "type": "primary", "subtype": "sniper", "ammo": {"magazine_size": 1, "reload_time": 1}, "attacks": {"shot": {"delivery": "hitscan", "stats": {"damage": {"impact": 100}, "crit_chance": 0, "crit_damage": 2, "multishot": 1, "fire_rate": 1}}}}
+        tier1 = Upgrade({"name": "Tier1 Mult", "type": "mod", "max_rank": 0, "stats": {"damage_bonus": [{"value": 0.5, "mode": "multiplicative"}]}})
+        with_both = Primary(sniper).configure(Build(tier1, arsenal.get("Primed Chamber")))
+        # Tier1 ×1.5 and Chamber tier2 ×2 product to ×3, not additive ×2.5
+        self.assertAlmostEqual(selected(with_both).average.flat_dph, 300.0)
+        self.assertEqual(float(with_both.build.results.total.multiplicative.damage_bonus), 0.5)
+        self.assertEqual(with_both.build.results.total.magazine_position[0]["tier"], 2)
+
+        both_chambers = Primary(sniper).configure(Build(arsenal.get("Primed Chamber"), arsenal.get("Charged Chamber")))
+        # Same tier 2: Primed + Charged add → +140% → ×2.4
+        self.assertAlmostEqual(selected(both_chambers).average.flat_dph, 240.0)
+        self.assertAlmostEqual(selected(both_chambers).average.first_shot_damage_multiplier, 2.4)
+
+    def test_last_shot_multishot_and_synth_charge_excludes(self):
+        weapon = Primary({"name": "Last MS", "type": "primary", "ammo": {"magazine_size": 5, "reload_time": 1}, "attacks": {"shot": {"delivery": "hitscan", "stats": {"damage": {"heat": 100}, "crit_chance": 0, "crit_damage": 2, "status_chance": 0, "multishot": 1, "fire_rate": 1}}}, "evolutions": {"2": {"1": {"stats": {"multishot": [{"value": 3, "mode": "flat", "when": "last_shot"}]}}}}})
+        weapon.configure(context={"evolutions": {2: 1}})
+        # 4 normal @ MS1 + 1 last @ MS4 → average DPH = (4*100 + 400)/5 = 160
+        self.assertAlmostEqual(selected(weapon).average.flat_dph, 160.0)
+
+        bare = arsenal.get("Lato")
+        synth = arsenal.get("Lato").configure(Build(arsenal.get("Synth Charge")))
+        self.assertGreater(selected(synth).average.flat_dph, selected(bare).average.flat_dph)
+
+        beam_data = {"name": "Beam Pistol", "type": "secondary", "subtype": "pistol", "ammo": {"magazine_size": 10, "reload_time": 1}, "attacks": {"tick": {"delivery": "beam", "stats": {"damage": {"heat": 100}, "crit_chance": 0, "crit_damage": 2, "multishot": 1, "fire_rate": 8}}}}
+        beam = Secondary(beam_data)
+        beam_synth = Secondary(beam_data).configure(Build(arsenal.get("Synth Charge")))
+        self.assertAlmostEqual(selected(beam_synth).average.flat_dph, selected(beam).average.flat_dph)
 
     def test_calculator_uses_largest_faction_damage_bonus(self):
         corpus = arsenal.get("Primed Bane of Corpus")

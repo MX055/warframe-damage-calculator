@@ -551,9 +551,15 @@ Every effect has a calculation mode:
 | Mode | Behavior |
 |---|---|
 | `additive` | Joins the stat's ordinary modifier pool. This is the default when `mode` is omitted. |
-| `multiplicative` | Joins the stat's separate multiplicative modifier pool. |
+| `multiplicative` | Joins a multiplicative modifier pool. Optional `tier` (default `1`): same tier adds, different tiers multiply as `Π (1 + sum_tier)`. |
 | `base` | Changes the base value before ordinary modifiers. |
 | `flat` | Adds after percentage and multiplicative modifiers. |
+
+Example — Primed Chamber is tier-2 multiplicative damage (separate from GunCO-style tier 1):
+
+```json
+{"value": 1, "mode": "multiplicative", "tier": 2, "when": "first_shot"}
+```
 
 Boolean effects aggregate with logical OR. Numeric effects add together.
 Damage-type effects aggregate into a single ordered damage distribution.
@@ -969,7 +975,7 @@ Mechanic-specific outputs include:
 
 | Model | Output |
 |---|---|
-| Primary | `primed_chamber_multiplier` |
+| Primary | `first_shot_damage_multiplier` |
 | Secondary | `secondary_enervate_bonus`, `weakpoint_secondary_enervate_bonus` |
 | Melee | `melee_duplicate_multiplier`, `melee_doughty_bonus` |
 
@@ -1117,7 +1123,7 @@ Faction damage is applied twice to modeled DoT damage.
 - `status_duration`
 - `hunter_munitions`
 - `internal_bleeding`
-- `primed_chamber`
+- Magazine-position overlays via effect `when: "first_shot"` / `"last_shot"` (optional `exclude: ["continuous", "incarnon"]`; Chamber/Synth use `mode: "multiplicative", "tier": 2`)
 - `vigilante_bonus`
 - `secondary_enervate`
 - `secondary_encumber`
@@ -1165,7 +1171,7 @@ shots, projectiles, or animation frames.
 
 - Hunter Munitions is modeled as an expected Slash proc chance on critical hits.
 - Internal Bleeding doubles its modeled chance below `2.5` effective fire rate.
-- Primed Chamber is averaged across the magazine and also affects modeled DoT from the boosted attack.
+- First/last magazine-shot effects (Primed/Charged Chamber, Synth Charge, Torid last-shot multishot, etc.) use a shot-class mixture: buffs apply while the mag counter stays at full / 1 round (so ammo efficiency that keeps the counter there keeps the buff). Continuous/Incarnon exclusions are effect flags. Chamber/Synth are multiplicative `damage_bonus` at `tier: 2` (product with tier-1 multipliers like GunCO; Primed+Charged add within tier 2).
 - Vigilante bonus is represented as an expected critical-tier bonus capped at `0.30`.
 
 ### Secondary mechanics

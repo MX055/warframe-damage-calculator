@@ -38,7 +38,6 @@ class CalculatedValues(Data):
     weakpoint_crit_chance: Number
     internal_bleeding: Number
     hunter_munitions: Number
-    primed_chamber: Number
     projectile_speed: Number
     range: Number
     start_range: Number
@@ -102,6 +101,6 @@ class AverageStats(Data):
     melee_doughty_bonus: Number
     melee_duplicate_multiplier: Number
     combo_multiplier: Number
-    primed_chamber_multiplier: Number
+    first_shot_damage_multiplier: Number = 1.0
     secondary_enervate_bonus: Number
     weakpoint_secondary_enervate_bonus: Number

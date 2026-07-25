@@ -57908,6 +57908,13 @@
                                     "value": 51,
                                     "mode": "base"
                                 }
+                            ],
+                            "multishot": [
+                                {
+                                    "value": 3,
+                                    "mode": "flat",
+                                    "when": "last_shot"
+                                }
                             ]
                         }
                     },
@@ -74040,10 +74047,12 @@
                 "exilus": false
             },
             "stats": {
-                "primed_chamber": [
+                "damage_bonus": [
                     {
                         "value": 0.4,
-                        "mode": "additive"
+                        "mode": "multiplicative",
+                        "tier": 2,
+                        "when": "first_shot"
                     }
                 ]
             }
@@ -80234,10 +80243,12 @@
                 "exilus": false
             },
             "stats": {
-                "primed_chamber": [
+                "damage_bonus": [
                     {
                         "value": 1,
-                        "mode": "additive"
+                        "mode": "multiplicative",
+                        "tier": 2,
+                        "when": "first_shot"
                     }
                 ]
             }
@@ -83820,7 +83831,20 @@
                 ],
                 "exilus": false
             },
-            "stats": {}
+            "stats": {
+                "damage_bonus": [
+                    {
+                        "value": 2,
+                        "mode": "multiplicative",
+                        "tier": 2,
+                        "when": "last_shot",
+                        "exclude": [
+                            "continuous",
+                            "incarnon"
+                        ]
+                    }
+                ]
+            }
         },
         "Tactical Pump": {
             "name": "Tactical Pump",
