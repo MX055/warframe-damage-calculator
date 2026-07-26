@@ -3975,9 +3975,9 @@
                                 {
                                     "value": 0.54,
                                     "family": "multishot_ammo",
-                                    "behaviour": "MULTISHOT_CONSUMES_AMMO",
+                                    "behavior": "MULTISHOT_CONSUMES_AMMO",
                                     "automatic": true,
-                                    "behaviour_data": {}
+                                    "behavior_data": {}
                                 }
                             ]
                         }
@@ -4785,9 +4785,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS",
+                                    "behavior": "UNIQUE_STATUS",
                                     "automatic": true,
-                                    "behaviour_data": {}
+                                    "behavior_data": {}
                                 }
                             ]
                         }
@@ -4977,9 +4977,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS",
+                                    "behavior": "UNIQUE_STATUS",
                                     "automatic": true,
-                                    "behaviour_data": {}
+                                    "behavior_data": {}
                                 }
                             ]
                         }
@@ -7533,9 +7533,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS",
+                                    "behavior": "UNIQUE_STATUS",
                                     "automatic": true,
-                                    "behaviour_data": {}
+                                    "behavior_data": {}
                                 }
                             ]
                         }
@@ -21784,9 +21784,9 @@
                                 {
                                     "value": 0.2,
                                     "family": "multishot_ammo",
-                                    "behaviour": "MULTISHOT_CONSUMES_AMMO",
+                                    "behavior": "MULTISHOT_CONSUMES_AMMO",
                                     "automatic": true,
-                                    "behaviour_data": {}
+                                    "behavior_data": {}
                                 }
                             ]
                         }
@@ -29979,9 +29979,9 @@
                                 {
                                     "value": 0.33,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS",
+                                    "behavior": "UNIQUE_STATUS",
                                     "automatic": true,
-                                    "behaviour_data": {}
+                                    "behavior_data": {}
                                 }
                             ]
                         }
@@ -33485,9 +33485,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS",
+                                    "behavior": "UNIQUE_STATUS",
                                     "automatic": true,
-                                    "behaviour_data": {}
+                                    "behavior_data": {}
                                 }
                             ]
                         }
@@ -33609,9 +33609,9 @@
                                 {
                                     "value": 0.3,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS",
+                                    "behavior": "UNIQUE_STATUS",
                                     "automatic": true,
-                                    "behaviour_data": {}
+                                    "behavior_data": {}
                                 }
                             ]
                         }
@@ -40355,9 +40355,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS",
+                                    "behavior": "UNIQUE_STATUS",
                                     "automatic": true,
-                                    "behaviour_data": {}
+                                    "behavior_data": {}
                                 }
                             ]
                         }
@@ -40808,9 +40808,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS",
+                                    "behavior": "UNIQUE_STATUS",
                                     "automatic": true,
-                                    "behaviour_data": {}
+                                    "behavior_data": {}
                                 }
                             ]
                         }
@@ -45268,9 +45268,9 @@
                                 {
                                     "value": 0.6,
                                     "family": "multishot_ammo",
-                                    "behaviour": "MULTISHOT_CONSUMES_AMMO",
+                                    "behavior": "MULTISHOT_CONSUMES_AMMO",
                                     "automatic": true,
-                                    "behaviour_data": {}
+                                    "behavior_data": {}
                                 }
                             ]
                         }
@@ -46015,9 +46015,9 @@
                                 {
                                     "value": 0.3,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS",
+                                    "behavior": "UNIQUE_STATUS",
                                     "automatic": true,
-                                    "behaviour_data": {}
+                                    "behavior_data": {}
                                 }
                             ]
                         }
@@ -47934,9 +47934,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS",
+                                    "behavior": "UNIQUE_STATUS",
                                     "automatic": true,
-                                    "behaviour_data": {}
+                                    "behavior_data": {}
                                 }
                             ]
                         }
@@ -48412,9 +48412,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS",
+                                    "behavior": "UNIQUE_STATUS",
                                     "automatic": true,
-                                    "behaviour_data": {}
+                                    "behavior_data": {}
                                 }
                             ]
                         }
@@ -48433,9 +48433,9 @@
                                     "value": 1,
                                     "when": "dread_and_hate",
                                     "family": "multishot_ammo",
-                                    "behaviour": "MULTISHOT_CONSUMES_AMMO",
+                                    "behavior": "MULTISHOT_CONSUMES_AMMO",
                                     "automatic": true,
-                                    "behaviour_data": {}
+                                    "behavior_data": {}
                                 }
                             ],
                             "multishot": [
@@ -50749,9 +50749,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS",
+                                    "behavior": "UNIQUE_STATUS",
                                     "automatic": true,
-                                    "behaviour_data": {}
+                                    "behavior_data": {}
                                 }
                             ]
                         }
@@ -51217,9 +51217,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS",
+                                    "behavior": "UNIQUE_STATUS",
                                     "automatic": true,
-                                    "behaviour_data": {}
+                                    "behavior_data": {}
                                 }
                             ]
                         }
@@ -57682,9 +57682,9 @@
                                 {
                                     "value": 0.6,
                                     "family": "multishot_ammo",
-                                    "behaviour": "MULTISHOT_CONSUMES_AMMO",
+                                    "behavior": "MULTISHOT_CONSUMES_AMMO",
                                     "automatic": true,
-                                    "behaviour_data": {}
+                                    "behavior_data": {}
                                 }
                             ]
                         }
@@ -58341,9 +58341,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS",
+                                    "behavior": "UNIQUE_STATUS",
                                     "automatic": true,
-                                    "behaviour_data": {}
+                                    "behavior_data": {}
                                 }
                             ]
                         }
@@ -58479,9 +58479,9 @@
                                 {
                                     "value": 0.58,
                                     "family": "multishot_ammo",
-                                    "behaviour": "MULTISHOT_CONSUMES_AMMO",
+                                    "behavior": "MULTISHOT_CONSUMES_AMMO",
                                     "automatic": true,
-                                    "behaviour_data": {}
+                                    "behavior_data": {}
                                 }
                             ]
                         }
@@ -60025,9 +60025,9 @@
                                 {
                                     "value": 0.3,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS",
+                                    "behavior": "UNIQUE_STATUS",
                                     "automatic": true,
-                                    "behaviour_data": {}
+                                    "behavior_data": {}
                                 }
                             ]
                         }
@@ -60931,9 +60931,9 @@
                                 {
                                     "value": 20,
                                     "family": "non_crit",
-                                    "behaviour": "ON_NON_CRIT",
+                                    "behavior": "ON_NON_CRIT",
                                     "automatic": true,
-                                    "behaviour_data": {
+                                    "behavior_data": {
                                         "chance": 0.5
                                     }
                                 }
@@ -61164,9 +61164,9 @@
                                 {
                                     "value": 20,
                                     "family": "non_crit",
-                                    "behaviour": "ON_NON_CRIT",
+                                    "behavior": "ON_NON_CRIT",
                                     "automatic": true,
-                                    "behaviour_data": {
+                                    "behavior_data": {
                                         "chance": 0.5
                                     }
                                 }
@@ -61382,9 +61382,9 @@
                                 {
                                     "value": 20,
                                     "family": "non_crit",
-                                    "behaviour": "ON_NON_CRIT",
+                                    "behavior": "ON_NON_CRIT",
                                     "automatic": true,
-                                    "behaviour_data": {
+                                    "behavior_data": {
                                         "chance": 0.5
                                     }
                                 }
@@ -62060,9 +62060,9 @@
                                 {
                                     "value": 0.4,
                                     "family": "status",
-                                    "behaviour": "UNIQUE_STATUS",
+                                    "behavior": "UNIQUE_STATUS",
                                     "automatic": true,
-                                    "behaviour_data": {}
+                                    "behavior_data": {}
                                 }
                             ]
                         }
@@ -73354,10 +73354,9 @@
                 "crit_chance": [
                     {
                         "value": 0.4,
-                        "stacks": {
-                            "when": "combo",
-                            "max": 12
-                        }
+                        "behavior": "WEAPON_COMBO",
+                        "automatic": true,
+                        "behavior_data": {"max_stacks": 12}
                     }
                 ]
             }
@@ -73881,9 +73880,9 @@
                     {
                         "value": 0.4,
                         "mode": "proportional",
-                        "behaviour": "FIRST_SHOT",
+                        "behavior": "FIRST_SHOT",
                         "family": "chamber",
-                        "behaviour_data": {}
+                        "behavior_data": {}
                     }
                 ]
             }
@@ -74389,9 +74388,9 @@
                     {
                         "value": 0.8,
                         "family": "status",
-                        "behaviour": "UNIQUE_STATUS",
+                        "behavior": "UNIQUE_STATUS",
                         "automatic": true,
-                        "behaviour_data": {}
+                        "behavior_data": {}
                     }
                 ]
             }
@@ -74944,18 +74943,18 @@
                     {
                         "value": 0.6,
                         "family": "status",
-                        "behaviour": "UNIQUE_STATUS",
+                        "behavior": "UNIQUE_STATUS",
                         "automatic": true,
-                        "behaviour_data": {
+                        "behavior_data": {
                             "max_stacks": 3
                         }
                     },
                     {
                         "value": 2.4,
                         "family": "non_crit",
-                        "behaviour": "ON_NON_CRIT",
+                        "behavior": "ON_NON_CRIT",
                         "automatic": true,
-                        "behaviour_data": {}
+                        "behavior_data": {}
                     }
                 ]
             }
@@ -76604,13 +76603,13 @@
                     {
                         "value": 0.4,
                         "family": "status",
-                        "behaviour": "UNIQUE_STATUS",
+                        "behavior": "UNIQUE_STATUS",
                         "stacks": {
                             "when": "on_kill",
                             "max": 2
                         },
                         "automatic": true,
-                        "behaviour_data": {}
+                        "behavior_data": {}
                     }
                 ]
             }
@@ -76831,13 +76830,13 @@
                     {
                         "value": 0.4,
                         "family": "status",
-                        "behaviour": "UNIQUE_STATUS",
+                        "behavior": "UNIQUE_STATUS",
                         "stacks": {
                             "when": "on_kill",
                             "max": 2
                         },
                         "automatic": true,
-                        "behaviour_data": {}
+                        "behavior_data": {}
                     }
                 ]
             }
@@ -76898,13 +76897,13 @@
                     {
                         "value": 0.4,
                         "family": "status",
-                        "behaviour": "UNIQUE_STATUS",
+                        "behavior": "UNIQUE_STATUS",
                         "stacks": {
                             "when": "on_kill",
                             "max": 3
                         },
                         "automatic": true,
-                        "behaviour_data": {}
+                        "behavior_data": {}
                     }
                 ]
             }
@@ -77459,9 +77458,9 @@
                 "slash_proc": [
                     {
                         "value": 0.35,
-                        "behaviour": "ON_IMPACT_DOUBLE_BELOW_2_5_FR",
+                        "behavior": "ON_IMPACT_DOUBLE_BELOW_2_5_FR",
                         "automatic": true,
-                        "behaviour_data": {
+                        "behavior_data": {
                             "fire_rate_threshold": 2.5
                         }
                     }
@@ -77607,9 +77606,9 @@
                 "slash_proc": [
                     {
                         "value": 0.3,
-                        "behaviour": "ON_CRIT",
+                        "behavior": "ON_CRIT",
                         "automatic": true,
-                        "behaviour_data": {}
+                        "behavior_data": {}
                     }
                 ]
             }
@@ -78008,9 +78007,9 @@
                 "slash_proc": [
                     {
                         "value": 0.35,
-                        "behaviour": "ON_IMPACT_DOUBLE_BELOW_2_5_FR",
+                        "behavior": "ON_IMPACT_DOUBLE_BELOW_2_5_FR",
                         "automatic": true,
-                        "behaviour_data": {
+                        "behavior_data": {
                             "fire_rate_threshold": 2.5
                         }
                     }
@@ -80572,9 +80571,9 @@
                     {
                         "value": 1,
                         "mode": "proportional",
-                        "behaviour": "FIRST_SHOT",
+                        "behavior": "FIRST_SHOT",
                         "family": "chamber",
-                        "behaviour_data": {}
+                        "behavior_data": {}
                     }
                 ]
             }
@@ -84420,9 +84419,9 @@
                             "continuous",
                             "incarnon"
                         ],
-                        "behaviour": "LAST_SHOT",
+                        "behavior": "LAST_SHOT",
                         "family": "charge",
-                        "behaviour_data": {}
+                        "behavior_data": {}
                     }
                 ]
             }
@@ -85122,9 +85121,9 @@
                 "crit_chance": [
                     {
                         "value": 0.05,
-                        "behaviour": "ON_HIT",
+                        "behavior": "ON_HIT",
                         "automatic": true,
-                        "behaviour_data": {
+                        "behavior_data": {
                             "mode": "flat"
                         }
                     }
@@ -85153,9 +85152,9 @@
                 "crit_chance": [
                     {
                         "value": 0.05,
-                        "behaviour": "ON_HIT",
+                        "behavior": "ON_HIT",
                         "automatic": true,
-                        "behaviour_data": {
+                        "behavior_data": {
                             "mode": "flat"
                         }
                     }
@@ -85184,9 +85183,9 @@
                 "crit_chance": [
                     {
                         "value": 0.05,
-                        "behaviour": "ON_HIT",
+                        "behavior": "ON_HIT",
                         "automatic": true,
-                        "behaviour_data": {
+                        "behavior_data": {
                             "mode": "flat"
                         }
                     }
@@ -85210,9 +85209,9 @@
                 "crit_chance": [
                     {
                         "value": 0.05,
-                        "behaviour": "ON_HIT",
+                        "behavior": "ON_HIT",
                         "automatic": true,
-                        "behaviour_data": {
+                        "behavior_data": {
                             "mode": "flat"
                         }
                     }
@@ -85534,10 +85533,9 @@
                 "status_chance": [
                     {
                         "value": 0.4,
-                        "stacks": {
-                            "when": "combo",
-                            "max": 12
-                        }
+                        "behavior": "WEAPON_COMBO",
+                        "automatic": true,
+                        "behavior_data": {"max_stacks": 12}
                     }
                 ]
             }
@@ -92625,9 +92623,9 @@
                 "damage_bonus": [
                     {
                         "value": 0.12,
-                        "behaviour": "STATUS_PROC_STACKS",
+                        "behavior": "STATUS_PROC_STACKS",
                         "automatic": true,
-                        "behaviour_data": {
+                        "behavior_data": {
                             "status": "heat",
                             "max_stacks": 40,
                             "duration": 10
@@ -92678,9 +92676,9 @@
                 "reload_speed": [
                     {
                         "value": 0.015,
-                        "behaviour": "STATUS_PROC_STACKS",
+                        "behavior": "STATUS_PROC_STACKS",
                         "automatic": true,
-                        "behaviour_data": {
+                        "behavior_data": {
                             "status": "electricity",
                             "max_stacks": 40,
                             "duration": 12
@@ -92690,9 +92688,9 @@
                 "multishot": [
                     {
                         "value": 0.03,
-                        "behaviour": "STATUS_PROC_STACKS",
+                        "behavior": "STATUS_PROC_STACKS",
                         "automatic": true,
-                        "behaviour_data": {
+                        "behavior_data": {
                             "status": "electricity",
                             "max_stacks": 40,
                             "duration": 12
@@ -92977,9 +92975,9 @@
                 "crit_damage": [
                     {
                         "value": 1,
-                        "behaviour": "FROM_PUNCTURE_X_STATUS",
+                        "behavior": "FROM_PUNCTURE_X_STATUS",
                         "automatic": true,
-                        "behaviour_data": {
+                        "behavior_data": {
                             "mode": "flat",
                             "per": 0.1
                         }
@@ -93004,9 +93002,9 @@
                 "duplicated_hit": [
                     {
                         "value": 1,
-                        "behaviour": "NEAR_YELLOW",
+                        "behavior": "NEAR_YELLOW",
                         "automatic": true,
-                        "behaviour_data": {}
+                        "behavior_data": {}
                     }
                 ]
             }
@@ -93173,9 +93171,9 @@
                 "crit_damage": [
                     {
                         "value": 0.036,
-                        "behaviour": "STATUS_PROC_STACKS",
+                        "behavior": "STATUS_PROC_STACKS",
                         "automatic": true,
-                        "behaviour_data": {
+                        "behavior_data": {
                             "status": "toxin",
                             "max_stacks": 40,
                             "duration": 12
@@ -93185,9 +93183,9 @@
                 "multishot": [
                     {
                         "value": 0.018,
-                        "behaviour": "STATUS_PROC_STACKS",
+                        "behavior": "STATUS_PROC_STACKS",
                         "automatic": true,
-                        "behaviour_data": {
+                        "behavior_data": {
                             "status": "toxin",
                             "max_stacks": 40,
                             "duration": 12
@@ -93380,9 +93378,9 @@
                 "crit_damage": [
                     {
                         "value": 0.03,
-                        "behaviour": "STATUS_PROC_STACKS",
+                        "behavior": "STATUS_PROC_STACKS",
                         "automatic": true,
-                        "behaviour_data": {
+                        "behavior_data": {
                             "status": "cold",
                             "max_stacks": 40,
                             "duration": 12
@@ -93392,9 +93390,9 @@
                 "multishot": [
                     {
                         "value": 0.0225,
-                        "behaviour": "STATUS_PROC_STACKS",
+                        "behavior": "STATUS_PROC_STACKS",
                         "automatic": true,
-                        "behaviour_data": {
+                        "behavior_data": {
                             "status": "cold",
                             "max_stacks": 40,
                             "duration": 12
@@ -93637,9 +93635,9 @@
                 "random_proc": [
                     {
                         "value": 0.24,
-                        "behaviour": "ON_ANY_PROC",
+                        "behavior": "ON_ANY_PROC",
                         "automatic": true,
-                        "behaviour_data": {}
+                        "behavior_data": {}
                     }
                 ]
             }
@@ -93661,9 +93659,9 @@
                 "crit_reset_charges": [
                     {
                         "value": 6,
-                        "behaviour": "STACK_RESET_CRIT_2_PLUS",
+                        "behavior": "STACK_RESET_CRIT_2_PLUS",
                         "automatic": true,
-                        "behaviour_data": {
+                        "behavior_data": {
                             "stat": "crit_chance",
                             "mode": "flat",
                             "per_stack": 0.1

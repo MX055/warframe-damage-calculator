@@ -281,7 +281,7 @@ class PipelineOrderTests(unittest.TestCase):
             "type": "mod",
             "max_rank": 0,
             "compatibility": {"types": []},
-            "stats": {"damage_bonus": [{"value": 1, "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {"max_stacks": 1}}]},
+            "stats": {"damage_bonus": [{"value": 1, "behavior": "UNIQUE_STATUS", "automatic": True, "behavior_data": {"max_stacks": 1}}]},
         })
         weapon = runtime_weapon(Primary, {
             "name": "CO Model",
@@ -301,7 +301,7 @@ class PipelineOrderTests(unittest.TestCase):
             "type": "mod",
             "max_rank": 0,
             "compatibility": {"types": []},
-            "stats": {"damage_bonus": [{"value": 1, "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {"max_stacks": 2}}]},
+            "stats": {"damage_bonus": [{"value": 1, "behavior": "UNIQUE_STATUS", "automatic": True, "behavior_data": {"max_stacks": 2}}]},
         })
         weapon = runtime_weapon(Primary, {
             "name": "CO Layers",

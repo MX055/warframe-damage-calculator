@@ -38,7 +38,7 @@ class ResolvableEffect:
     equipped: tuple[str, ...] | None = None
     exclude: tuple[str, ...] = ()
     family: str = "common"
-    behaviour: str | None = None
+    behavior: str | None = None
     scales_with_rank: bool = True
     co_max_stacks: int | str | None = None
     conversion_max: Number | None = None

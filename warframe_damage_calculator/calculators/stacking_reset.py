@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from .effect_schema import BEHAVIOUR_STACK_RESET_CRIT_2_PLUS, ENERVATE_PER_STACK
+from .effect_schema import BEHAVIOR_STACK_RESET_CRIT_2_PLUS, ENERVATE_PER_STACK
 from .special_effects import iter_deferred
 
 
@@ -14,9 +14,9 @@ def enervate_params(*sources: Sequence[Mapping[str, Any]] | None) -> tuple[float
     per_stack = 0.0
     charges = 0.0
     for entry in iter_deferred(*sources):
-        if entry.get("behaviour") != BEHAVIOUR_STACK_RESET_CRIT_2_PLUS: continue
-        data = entry.get("behaviour_data") if isinstance(entry.get("behaviour_data"), Mapping) else {}
-        # Prefer behaviour_data.per_stack (DB source of truth); resolved payloads also put it in value.
+        if entry.get("behavior") != BEHAVIOR_STACK_RESET_CRIT_2_PLUS: continue
+        data = entry.get("behavior_data") if isinstance(entry.get("behavior_data"), Mapping) else {}
+        # Prefer behavior_data.per_stack (DB source of truth); resolved payloads also put it in value.
         if "per_stack" in data:
             per_stack += float(data["per_stack"])
         else:
