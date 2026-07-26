@@ -3,18 +3,19 @@ from pathlib import Path
 from typing import Any, Literal, Self, overload
 
 from ..models.melee import Melee
+from ..models.enemy import Enemy
 from ..models.primary import Primary
 from ..models.secondary import Secondary
 from ..models.upgrade import Upgrade
 from ..models.weapon import Weapon
-from .bundled_names import MeleeName, PrimaryName, SecondaryName, UpgradeName
+from .bundled_names import EnemyName, MeleeName, PrimaryName, SecondaryName, UpgradeName
 from .construction import DatabaseFactory
 from .matching import entry_matches, normalize_filter
 from .normalization import normalize_identifier, normalize_name
 from .paths import load_bundled_database, load_json
 from .schema import DatabaseEntry
 
-type DatabaseItem = Weapon | Upgrade
+type DatabaseItem = Weapon | Upgrade | Enemy
 type WeaponItem = Primary | Secondary | Melee
 _UPGRADE_FILTERS = frozenset({"upgrade", "mod", "arcane"})
 
@@ -24,6 +25,7 @@ class WarframeDatabase:
         self.database = database
         self.weapons = database.get("weapons", {})
         self.upgrades = database.get("upgrades", {})
+        self.enemies = database.get("enemies", {})
         self.riven_stats = database.get("riven_stats", {})
         self._factory = DatabaseFactory()
         self._entries = tuple(self._iter_entries())
@@ -57,6 +59,9 @@ class WarframeDatabase:
     def get(self, name: UpgradeName, *, type: str | None = ..., context: Mapping[str, Any] | None = ..., attribute: None = ...) -> Upgrade: ...
 
     @overload
+    def get(self, name: EnemyName, *, type: str | None = ..., context: Mapping[str, Any] | None = ..., attribute: None = ...) -> Enemy: ...
+
+    @overload
     def get(self, name: str, *, type: str | None = ..., context: Mapping[str, Any] | None = ..., attribute: None = ...) -> DatabaseItem | None: ...
 
     @overload
@@ -85,19 +90,26 @@ class WarframeDatabase:
 
     @staticmethod
     def _select_named_entry(entries: tuple[DatabaseEntry, ...], item_type: str | None) -> DatabaseEntry | None:
-        """Pick among same-named weapon/stance pairs using the type filter."""
+        """Pick among same-named database entries using the type filter."""
         matched = [entry for entry in entries if entry_matches(entry, item_type)]
         if not matched:
             return None
         if len(matched) == 1:
             return matched[0]
         normalized = normalize_filter(item_type)
+        if normalized == "enemy":
+            for entry in matched:
+                if entry.is_enemy:
+                    return entry
         if normalized in _UPGRADE_FILTERS:
             for entry in matched:
-                if not entry.is_weapon:
+                if entry.is_upgrade:
                     return entry
         for entry in matched:
             if entry.is_weapon:
+                return entry
+        for entry in matched:
+            if entry.is_enemy:
                 return entry
         return matched[0]
 
@@ -123,6 +135,9 @@ class WarframeDatabase:
                         match_types.add("primary" if weapon.get("type") == "archgun" else normalize_identifier(weapon.get("type")))
                 yield DatabaseEntry(category, raw, match_types)
 
+        for identifier, raw in self.enemies.items():
+            yield DatabaseEntry("enemy", raw, identifier=identifier)
+
     @staticmethod
     def _attribute(item: DatabaseItem, attribute: str | None) -> object:
         if attribute is None:
@@ -130,7 +145,7 @@ class WarframeDatabase:
         key = normalize_identifier(attribute)
         if key == "name":
             return item.data.name
-        contexts = (item.data.runtime, item.data.stats) if isinstance(item, Upgrade) else (item.data.runtime, item.data, item.data.ammo)
+        contexts = (item.data.runtime, item.data.stats) if isinstance(item, Upgrade) else (item.data, item.data.stats, item.data.modifiers, item.data.bodyparts) if isinstance(item, Enemy) else (item.data.runtime, item.data, item.data.ammo)
         for data in contexts:
             if key in data:
                 return data[key]
@@ -172,6 +187,10 @@ class LazyWarframeDatabase:
         return self._resolve().upgrades
 
     @property
+    def enemies(self) -> Mapping[str, Any]:
+        return self._resolve().enemies
+
+    @property
     def riven_stats(self) -> Mapping[str, Any]:
         return self._resolve().riven_stats
 
@@ -186,6 +205,9 @@ class LazyWarframeDatabase:
 
     @overload
     def get(self, name: UpgradeName, *, type: str | None = ..., context: Mapping[str, Any] | None = ..., attribute: None = ...) -> Upgrade: ...
+
+    @overload
+    def get(self, name: EnemyName, *, type: str | None = ..., context: Mapping[str, Any] | None = ..., attribute: None = ...) -> Enemy: ...
 
     @overload
     def get(self, name: str, *, type: str | None = ..., context: Mapping[str, Any] | None = ..., attribute: None = ...) -> DatabaseItem | None: ...

@@ -3,17 +3,18 @@ from collections.abc import Mapping
 from types import MappingProxyType
 from typing import get_args
 
-from warframe_damage_calculator import Build, Melee, Primary, Secondary, Upgrade, Weapon, arsenal
+from warframe_damage_calculator import Build, Enemy, Melee, Primary, Secondary, Upgrade, Weapon, arsenal
 from warframe_damage_calculator.calculators import formulas
 from warframe_damage_calculator.calculators.build_calculator import BuildCalculator
 from warframe_damage_calculator.calculators.upgrade_calculator import UpgradeCalculator
 from warframe_damage_calculator.calculators.weapon_calculator import WeaponCalculator
-from warframe_damage_calculator.loader.bundled_names import MeleeName, PrimaryName, SecondaryName, UpgradeName
+from warframe_damage_calculator.loader.bundled_names import EnemyName, MeleeName, PrimaryName, SecondaryName, UpgradeName
 from warframe_damage_calculator.core.data import Data
 from warframe_damage_calculator.core.dist import Dist
 from warframe_damage_calculator.core.dist_data import DistData
 from warframe_damage_calculator.fields.attack_result import AttackResult
 from warframe_damage_calculator.fields.calculated import CalculatedStats
+from warframe_damage_calculator.fields.enemy import BodyPart, BodyParts, EnemyData, EnemyModifiers, EnemyStats
 from warframe_damage_calculator.fields.upgrade import ResolvedStat
 from warframe_damage_calculator.fields.weapon_data import Attack, Attacks, Evolutions
 from warframe_damage_calculator.loader.construction import DatabaseFactory
@@ -162,6 +163,7 @@ class PublicApiTests(unittest.TestCase):
             SecondaryName: {data["name"] for data in arsenal.weapons.values() if data["type"] == "secondary"},
             MeleeName: {data["name"] for data in arsenal.weapons.values() if data["type"] == "melee"},
             UpgradeName: {data["name"] for data in arsenal.upgrades.values()},
+            EnemyName: set(arsenal.enemies),
         }
         for alias, names in expected.items():
             self.assertEqual(set(get_args(alias.__value__)), names)
@@ -194,6 +196,38 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(heavy["modifiers"], {"corrosive": 1.5, "impact": 1.5})
         self.assertEqual(enemies["Deimos Jugulus Rex"]["bodyparts"]["body"], {"type": "resistant", "multiplier": 0.5})
         self.assertEqual(enemies["Scaldra Dedicant"]["stats"]["overguard"], 22)
+
+    def test_enemy_model_uses_typed_nested_data_without_runtime(self):
+        enemy = arsenal.get("Arid Heavy Gunner")
+        copied = enemy.copy()
+
+        self.assertIsInstance(enemy, Enemy)
+        self.assertIsInstance(enemy.data, EnemyData)
+        self.assertIsInstance(enemy.data.stats, EnemyStats)
+        self.assertIsInstance(enemy.data.bodyparts, BodyParts)
+        self.assertIsInstance(enemy.data.bodyparts.head, BodyPart)
+        self.assertIsInstance(enemy.data.modifiers, EnemyModifiers)
+        self.assertEqual(enemy.data.stats.health, 300)
+        self.assertEqual(enemy.data.bodyparts.head.type, "weakpoint")
+        self.assertEqual(enemy.data.modifiers.impact, 1.5)
+        self.assertNotIn("runtime", enemy.data)
+        self.assertIsInstance(copied, Enemy)
+        self.assertIsNot(copied.data, enemy.data)
+        self.assertIsNot(copied.data.stats, enemy.data.stats)
+
+    def test_enemy_loader_supports_identifiers_filters_and_attributes(self):
+        variant = arsenal.get("Senta Turret (Kuva Fortress)")
+        enemies = arsenal.get(type="enemy")
+        grineer = arsenal.get(type="grineer")
+
+        self.assertIsInstance(variant, Enemy)
+        self.assertEqual(variant.data.name, "Senta Turret")
+        self.assertEqual(len(enemies), 990)
+        self.assertTrue(all(isinstance(enemy, Enemy) for enemy in enemies.values()))
+        self.assertEqual(len(grineer), 253)
+        self.assertTrue(all(enemy.data.faction == "Grineer" for enemy in grineer.values()))
+        self.assertEqual(arsenal.get("Arid Heavy Gunner", attribute="health"), 300)
+        self.assertEqual(arsenal.get("Arid Heavy Gunner", attribute="impact"), 1.5)
 
     def test_arsenal_loads_fresh_weapons_and_safe_upgrades(self):
         first = arsenal.get("Corinth Prime")

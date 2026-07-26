@@ -18,6 +18,7 @@ _FILTER_ALIASES = {
     "upgrades": "upgrade",
     "mods": "mod",
     "arcanes": "arcane",
+    "enemies": "enemy",
 }
 
 _TYPE_ALIASES = {
@@ -78,7 +79,7 @@ def upgrade_matches(entry: DatabaseEntry, item_type: str | None) -> bool:
         return True
     if item_type in {"mod", "arcane"}:
         return entry.category == item_type
-    if item_type == "weapon":
+    if item_type in {"weapon", "enemy"}:
         return False
 
     requested = expand_type_filter(item_type)
@@ -106,7 +107,16 @@ def upgrade_matches(entry: DatabaseEntry, item_type: str | None) -> bool:
     return bool(compatibility & requested) or _requirements_match_type(requirements, requested)
 
 
+def enemy_matches(entry: DatabaseEntry, item_type: str | None) -> bool:
+    item_type = normalize_filter(item_type)
+    if item_type is None or item_type == "enemy": return True
+    if item_type in {"weapon", "primary", "secondary", "melee", "upgrade", "mod", "arcane"}: return False
+    return normalize_identifier(entry.data.get("faction")) == item_type
+
+
 def entry_matches(entry: DatabaseEntry, item_type: str | None) -> bool:
     if entry.is_weapon:
         return weapon_matches(entry, item_type)
-    return upgrade_matches(entry, item_type)
+    if entry.is_upgrade:
+        return upgrade_matches(entry, item_type)
+    return enemy_matches(entry, item_type)

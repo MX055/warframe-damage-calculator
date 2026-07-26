@@ -118,6 +118,7 @@ The package root exports the primary model and loader objects:
 ```python
 from warframe_damage_calculator import (
     Build,
+    Enemy,
     Melee,
     Primary,
     Secondary,
@@ -703,7 +704,7 @@ Every lookup returns a fresh model. Mutating one result does not modify the
 canonical database or a later lookup.
 
 Exact bundled name literals are typed by category, allowing editors and type
-checkers to infer `Primary`, `Secondary`, `Melee`, or `Upgrade` directly.
+checkers to infer `Primary`, `Secondary`, `Melee`, `Upgrade`, or `Enemy` directly.
 
 ### Listing and filtering
 
@@ -713,24 +714,28 @@ When `name` is omitted, `get()` returns a dictionary keyed by item name:
 all_items = arsenal.get()
 weapons = arsenal.get(type="weapon")
 upgrades = arsenal.get(type="upgrade")
+enemies = arsenal.get(type="enemy")
+grineer = arsenal.get(type="grineer")
 mods = arsenal.get(type="mod")
 arcanes = arsenal.get(type="arcane")
 primaries_and_compatible_upgrades = arsenal.get(type="primary")
 shotguns_and_compatible_upgrades = arsenal.get(type="shotgun")
 ```
 
-Category filters such as `weapon`, `upgrade`, `mod`, and `arcane` return only
-that database category. Weapon-family filters such as `primary`, `secondary`,
+Category filters such as `weapon`, `upgrade`, `mod`, `arcane`, and `enemy`
+return only that database category. An enemy faction such as `grineer` filters
+enemies by faction. Weapon-family filters such as `primary`, `secondary`,
 `melee`, `rifle`, `shotgun`, `bow`, `sniper`, and `pistol` may return both
 weapons and upgrades compatible with that family.
 
-Common plural aliases such as `weapons`, `mods`, and `arcanes` are accepted.
+Common plural aliases such as `weapons`, `mods`, `arcanes`, and `enemies` are accepted.
 
 ### Attribute-only queries
 
 ```python
 weapon_names = arsenal.get(type="weapon", attribute="name")
 base_crit = arsenal.get("Corinth Prime", attribute="crit_chance")
+enemy_health = arsenal.get("Arid Heavy Gunner", attribute="health")
 weapon_crits = arsenal.get(type="weapon", attribute="crit_chance")
 shotgun_subtypes = arsenal.get(type="shotgun", attribute="subtype")
 ```
@@ -740,7 +745,8 @@ attributes return one extracted value or a dictionary of values.
 
 For weapons, attribute lookup checks the flat weapon data, ammo data, calculated
 base and effective states, the selected attack, and its stats. For upgrades, it
-checks runtime values and canonical upgrade stats.
+checks runtime values and canonical upgrade stats. For enemies, it checks the
+enemy definition, stats, modifiers, and body parts.
 
 ### Custom databases
 
@@ -828,6 +834,21 @@ upgrade.data.incompatibility
 upgrade.data.stats
 upgrade.data.runtime
 ```
+
+### Enemy data
+
+```python
+enemy = arsenal.get("Arid Heavy Gunner")
+enemy.data.name
+enemy.data.faction
+enemy.data.base_level
+enemy.data.stats
+enemy.data.bodyparts
+enemy.data.modifiers
+```
+
+Enemy definitions do not yet have runtime data; target runtime and damage logic
+will be added with the enemy/target system.
 
 ### Weapon runtime
 

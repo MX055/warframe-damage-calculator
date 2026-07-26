@@ -4,6 +4,7 @@ from typing import Any
 
 from ..models.upgrade import Upgrade
 from ..models.weapon import Weapon
+from ..models.enemy import Enemy
 from ..models.melee import Melee
 from ..models.primary import Primary
 from ..models.secondary import Secondary
@@ -11,7 +12,7 @@ from .schema import DatabaseEntry
 
 
 class DatabaseFactory:
-    models = {"primary": Primary, "secondary": Secondary, "melee": Melee, "mod": Upgrade, "arcane": Upgrade}
+    models = {"primary": Primary, "secondary": Secondary, "melee": Melee, "mod": Upgrade, "arcane": Upgrade, "enemy": Enemy}
 
     @staticmethod
     def _apply_effect_defaults(runtime: dict[str, Any], stats: Mapping[str, Any]) -> None:
@@ -44,7 +45,8 @@ class DatabaseFactory:
         cls._apply_effect_defaults(runtime, data.get("stats", {}))
         return runtime
 
-    def create(self, entry: DatabaseEntry, context: dict | None = None) -> Weapon | Upgrade:
+    def create(self, entry: DatabaseEntry, context: dict | None = None) -> Weapon | Upgrade | Enemy:
+        if entry.is_enemy: return Enemy(entry.data)
         runtime = self._default_weapon_runtime(entry.data) if entry.is_weapon else self._default_upgrade_runtime(entry.data)
         runtime.update(entry.data.get("runtime", {}))
         if context: runtime.update(context)
