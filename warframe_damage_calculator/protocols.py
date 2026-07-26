@@ -4,6 +4,7 @@ from collections.abc import Mapping, Sequence
 from typing import Any, Protocol, runtime_checkable
 
 from .fields.attack_result import AttackResult
+from .fields.enemy import EnemyData
 from .fields.upgrade import ResolvedStat, UpgradeData
 from .fields.weapon_data import WeaponData
 from .fields.weapon_input import WeaponStats
@@ -12,6 +13,11 @@ from .fields.weapon_input import WeaponStats
 @runtime_checkable
 class UpgradeOwner(Protocol):
     data: UpgradeData
+
+
+@runtime_checkable
+class EnemyOwner(Protocol):
+    data: EnemyData
 
 
 @runtime_checkable

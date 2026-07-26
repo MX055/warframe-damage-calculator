@@ -45,9 +45,12 @@ class DatabaseFactory:
         cls._apply_effect_defaults(runtime, data.get("stats", {}))
         return runtime
 
+    @staticmethod
+    def _default_enemy_runtime(data: Mapping[str, Any]) -> dict[str, Any]:
+        return {"level": 100, "steel_path": False, "empowered": False}
+
     def create(self, entry: DatabaseEntry, context: dict | None = None) -> Weapon | Upgrade | Enemy:
-        if entry.is_enemy: return Enemy(entry.data)
-        runtime = self._default_weapon_runtime(entry.data) if entry.is_weapon else self._default_upgrade_runtime(entry.data)
+        runtime = self._default_enemy_runtime(entry.data) if entry.is_enemy else self._default_weapon_runtime(entry.data) if entry.is_weapon else self._default_upgrade_runtime(entry.data)
         runtime.update(entry.data.get("runtime", {}))
         if context: runtime.update(context)
         return self.models[entry.category]({**entry.data, "runtime": runtime})

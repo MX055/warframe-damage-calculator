@@ -27,6 +27,12 @@ class EnemyModifiers(Data):
     pass
 
 
+class EnemyRuntime(Data):
+    level: Number
+    steel_path: bool
+    empowered: bool
+
+
 class EnemyData(Data):
     name: str = ""
     faction: str = ""
@@ -34,3 +40,4 @@ class EnemyData(Data):
     stats: EnemyStats = {}
     bodyparts: BodyParts = {}
     modifiers: EnemyModifiers = {}
+    runtime: EnemyRuntime = EnemyRuntime()

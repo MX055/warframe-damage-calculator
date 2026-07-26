@@ -115596,31 +115596,6 @@
                 "impact": 1.5
             }
         },
-        "[Wiki Dummy]": {
-            "name": "Heavy Gunner",
-            "faction": "Grineer",
-            "base_level": 8,
-            "stats": {
-                "health": 300,
-                "shields": 0,
-                "armor": 500,
-                "overguard": 0
-            },
-            "bodyparts": {
-                "body": {
-                    "type": "normal",
-                    "multiplier": 1.0
-                },
-                "head": {
-                    "type": "weakpoint",
-                    "multiplier": 3.0
-                }
-            },
-            "modifiers": {
-                "corrosive": 1.5,
-                "impact": 1.5
-            }
-        },
         "Ghoul Expired Deserter": {
             "name": "Ghoul Expired Deserter",
             "faction": "Tenno",

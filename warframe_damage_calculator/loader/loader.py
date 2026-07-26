@@ -145,7 +145,7 @@ class WarframeDatabase:
         key = normalize_identifier(attribute)
         if key == "name":
             return item.data.name
-        contexts = (item.data.runtime, item.data.stats) if isinstance(item, Upgrade) else (item.data, item.data.stats, item.data.modifiers, item.data.bodyparts) if isinstance(item, Enemy) else (item.data.runtime, item.data, item.data.ammo)
+        contexts = (item.data.runtime, item.data.stats) if isinstance(item, Upgrade) else (item.data.runtime, item.data, item.results.effective, item.data.stats, item.data.modifiers, item.data.bodyparts) if isinstance(item, Enemy) else (item.data.runtime, item.data, item.data.ammo)
         for data in contexts:
             if key in data:
                 return data[key]

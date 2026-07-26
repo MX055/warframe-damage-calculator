@@ -845,10 +845,15 @@ enemy.data.base_level
 enemy.data.stats
 enemy.data.bodyparts
 enemy.data.modifiers
+enemy.data.runtime
+enemy.results.effective
 ```
 
-Enemy definitions do not yet have runtime data; target runtime and damage logic
-will be added with the enemy/target system.
+The loader assigns `{"level": 100, "steel_path": False, "empowered": False}` as
+enemy runtime. Update it with `enemy.set(...)`; `enemy.results.effective`
+contains the level-scaled health, shields, armor, and overguard. Steel Path
+multiplies health, shields, and armor by 2.5. Empowered uses its solo 2.5
+health/shield multiplier and does not affect armor or overguard.
 
 ### Weapon runtime
 

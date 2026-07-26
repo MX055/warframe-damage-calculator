@@ -2438,5 +2438,4 @@ type EnemyName = Literal[
     "Zealot Herald",
     "Zealot Proselytizer",
     "Zeplen",
-    "[Wiki Dummy]",
 ]

@@ -14,7 +14,7 @@ from warframe_damage_calculator.core.dist import Dist
 from warframe_damage_calculator.core.dist_data import DistData
 from warframe_damage_calculator.fields.attack_result import AttackResult
 from warframe_damage_calculator.fields.calculated import CalculatedStats
-from warframe_damage_calculator.fields.enemy import BodyPart, BodyParts, EnemyData, EnemyModifiers, EnemyStats
+from warframe_damage_calculator.fields.enemy import BodyPart, BodyParts, EnemyData, EnemyModifiers, EnemyRuntime, EnemyStats
 from warframe_damage_calculator.fields.upgrade import ResolvedStat
 from warframe_damage_calculator.fields.weapon_data import Attack, Attacks, Evolutions
 from warframe_damage_calculator.loader.construction import DatabaseFactory
@@ -186,7 +186,7 @@ class PublicApiTests(unittest.TestCase):
 
     def test_bundled_database_contains_normalized_enemy_data(self):
         enemies = arsenal.database["enemies"]
-        self.assertEqual(len(enemies), 990)
+        self.assertEqual(len(enemies), 989)
         heavy = enemies["Arid Heavy Gunner"]
         self.assertEqual(heavy["name"], "Arid Heavy Gunner")
         self.assertEqual(heavy["faction"], "Grineer")
@@ -197,7 +197,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(enemies["Deimos Jugulus Rex"]["bodyparts"]["body"], {"type": "resistant", "multiplier": 0.5})
         self.assertEqual(enemies["Scaldra Dedicant"]["stats"]["overguard"], 22)
 
-    def test_enemy_model_uses_typed_nested_data_without_runtime(self):
+    def test_enemy_model_uses_typed_nested_data_and_loader_runtime(self):
         enemy = arsenal.get("Arid Heavy Gunner")
         copied = enemy.copy()
 
@@ -207,13 +207,37 @@ class PublicApiTests(unittest.TestCase):
         self.assertIsInstance(enemy.data.bodyparts, BodyParts)
         self.assertIsInstance(enemy.data.bodyparts.head, BodyPart)
         self.assertIsInstance(enemy.data.modifiers, EnemyModifiers)
+        self.assertIsInstance(enemy.data.runtime, EnemyRuntime)
         self.assertEqual(enemy.data.stats.health, 300)
         self.assertEqual(enemy.data.bodyparts.head.type, "weakpoint")
         self.assertEqual(enemy.data.modifiers.impact, 1.5)
-        self.assertNotIn("runtime", enemy.data)
+        self.assertEqual(dict(enemy.data.runtime), {"level": 100, "steel_path": False, "empowered": False})
         self.assertIsInstance(copied, Enemy)
         self.assertIsNot(copied.data, enemy.data)
         self.assertIsNot(copied.data.stats, enemy.data.stats)
+        self.assertIsNot(copied.data.runtime, enemy.data.runtime)
+
+        direct = Enemy({"name": "Direct Enemy"})
+        self.assertIn("runtime", direct.data)
+        self.assertEqual(dict(direct.data.runtime), {})
+
+    def test_enemy_calculator_scales_level_and_runtime_modifiers(self):
+        enemy = arsenal.get("Arid Heavy Gunner")
+        self.assertEqual(dict(enemy.results.effective), {"health": 83815.99, "shields": 0.0, "armor": 2700, "overguard": 0.0})
+        configured = arsenal.get("Arid Heavy Gunner", context={"level": 8})
+        self.assertEqual(dict(configured.data.runtime), {"level": 8, "steel_path": False, "empowered": False})
+        configured.set({"empowered": True})
+        self.assertEqual(dict(configured.data.runtime), {"level": 8, "steel_path": False, "empowered": True})
+        self.assertEqual(arsenal.get("Arid Heavy Gunner", attribute="level"), 100)
+
+        base = Enemy({"name": "Base", "faction": "Grineer", "base_level": 1, "stats": {"health": 100, "shields": 100, "armor": 100, "overguard": 100}, "runtime": {"level": 1, "steel_path": False, "empowered": False}})
+        self.assertEqual(dict(base.results.effective), {"health": 100.0, "shields": 100.0, "armor": 100, "overguard": 100.0})
+        base.set({"steel_path": True})
+        self.assertEqual(dict(base.results.effective), {"health": 250.0, "shields": 250.0, "armor": 250, "overguard": 100.0})
+        base.set({"steel_path": False, "empowered": True})
+        self.assertEqual(dict(base.results.effective), {"health": 250.0, "shields": 250.0, "armor": 100, "overguard": 100.0})
+        base.data.runtime.level = 2
+        self.assertNotEqual(base.results.effective.health, 250)
 
     def test_enemy_loader_supports_identifiers_filters_and_attributes(self):
         variant = arsenal.get("Senta Turret (Kuva Fortress)")
@@ -222,11 +246,11 @@ class PublicApiTests(unittest.TestCase):
 
         self.assertIsInstance(variant, Enemy)
         self.assertEqual(variant.data.name, "Senta Turret")
-        self.assertEqual(len(enemies), 990)
+        self.assertEqual(len(enemies), 989)
         self.assertTrue(all(isinstance(enemy, Enemy) for enemy in enemies.values()))
-        self.assertEqual(len(grineer), 253)
+        self.assertEqual(len(grineer), 252)
         self.assertTrue(all(enemy.data.faction == "Grineer" for enemy in grineer.values()))
-        self.assertEqual(arsenal.get("Arid Heavy Gunner", attribute="health"), 300)
+        self.assertEqual(arsenal.get("Arid Heavy Gunner", attribute="health"), 83815.99)
         self.assertEqual(arsenal.get("Arid Heavy Gunner", attribute="impact"), 1.5)
 
     def test_arsenal_loads_fresh_weapons_and_safe_upgrades(self):
