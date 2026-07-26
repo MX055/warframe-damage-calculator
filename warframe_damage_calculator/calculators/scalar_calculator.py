@@ -27,6 +27,7 @@ def seed_base_stats(*, attack: Attack, ammo: dict | object, stats_type: Callable
         magazine_capacity = ammo_get("magazine_size", 1)
     stats.update({"attack_speed": attack_speed, "magazine_capacity": magazine_capacity, "ammo_maximum": ammo_get("ammo_maximum", 0), "reload_speed": ammo_get("reload_time", 0), "recharge_rate": ammo_get("recharge_rate", 0), "start_range": falloff.get("start_range", 0), "end_range": falloff.get("end_range", 0), "final_multiplier": falloff.get("final_multiplier", 1)})
     base = CalculatedStats(stats_type(stats).with_defaults())
+    base.forced_procs = base.forced_procs + evolutions.proportional.forced_procs + evolutions.base.forced_procs + evolutions.flat.forced_procs
     if ability_strength is not None:
         base.damage = base.damage * max(float(ability_strength), 0.0)
     original_damage = Dist(dict(base.damage))

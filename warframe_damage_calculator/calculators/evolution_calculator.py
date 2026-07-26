@@ -84,7 +84,12 @@ class EvolutionCalculator:
     def _selected_perks(self) -> list[EvolutionPerk]:
         evolutions = self.weapon.data.evolutions
         perks: list[EvolutionPerk] = []
+        tier_one = evolutions.get("1")
+        if tier_one is not None:
+            perk_data = tier_one.get("1")
+            if perk_data is not None: perks.append(perk_data if isinstance(perk_data, EvolutionPerk) else EvolutionPerk(perk_data))
         for tier, perk in self.weapon.data.selected_evolutions.items():
+            if str(tier) == "1": continue
             tier_data = evolutions.get(str(tier))
             if tier_data is None: continue
             perk_data = tier_data.get(str(perk))

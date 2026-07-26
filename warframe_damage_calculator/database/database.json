@@ -9961,6 +9961,9 @@
                         "status_chance": 0.38,
                         "attack_speed": 1.08
                     },
+                    "children": [
+                        "energy_disk"
+                    ],
                     "name": "Heavy Attack"
                 },
                 "slide_attack": {
@@ -10985,6 +10988,9 @@
                         "status_chance": 0.14,
                         "attack_speed": 1
                     },
+                    "children": [
+                        "ranged_attack"
+                    ],
                     "name": "Heavy Attack"
                 },
                 "slide_attack": {
@@ -11250,6 +11256,9 @@
                         "status_chance": 0.28,
                         "attack_speed": 0.92
                     },
+                    "children": [
+                        "energy_disk"
+                    ],
                     "name": "Heavy Attack"
                 },
                 "slide_attack": {
@@ -12604,6 +12613,9 @@
                         "status_chance": 0.2,
                         "attack_speed": 1
                     },
+                    "children": [
+                        "polearm_throw"
+                    ],
                     "name": "Heavy Attack"
                 },
                 "slide_attack": {
@@ -12967,6 +12979,9 @@
                         "status_chance": 0.24,
                         "attack_speed": 0.8
                     },
+                    "children": [
+                        "heavy_attack_glaive"
+                    ],
                     "name": "Heavy Attack"
                 },
                 "slide_attack": {
@@ -13127,6 +13142,10 @@
                         "status_chance": 0.34,
                         "attack_speed": 1
                     },
+                    "children": [
+                        "first_shockwave",
+                        "second_shockwave"
+                    ],
                     "name": "Heavy Attack"
                 },
                 "slide_attack": {
@@ -13784,6 +13803,9 @@
                         "damage_bonus": 1,
                         "attack_speed": 0.92
                     },
+                    "children": [
+                        "incarnon_spectral_rapier_heavy"
+                    ],
                     "name": "Incarnon Heavy Attack"
                 },
                 "incarnon_slide_attack": {
@@ -13813,7 +13835,18 @@
                 "1": {
                     "1": {
                         "description": "Reach 6x Combo then Heavy Attack to activate Incarnon Form. +100% Melee Damage, +20% Sprint Speed, +20% Parkour Velocity. +10% Puncture Damage per Heavy Attack kill, up to 300% while transformed.",
-                        "stats": {}
+                        "stats": {
+                            "puncture": [
+                                {
+                                    "value": 0.1,
+                                    "scope": "incarnon",
+                                    "stacks": {
+                                        "when": "heavy_attack_kill",
+                                        "max": 30
+                                    }
+                                }
+                            ]
+                        }
                     }
                 },
                 "2": {
@@ -29229,6 +29262,10 @@
                         "status_chance": 0.37,
                         "attack_speed": 1.08
                     },
+                    "children": [
+                        "first_heavy_attack_toxic_spines",
+                        "second_heavy_attack_toxic_spines"
+                    ],
                     "name": "Heavy Attack"
                 },
                 "slide_attack": {
@@ -39948,7 +39985,24 @@
                 "1": {
                     "1": {
                         "description": "Reach 6x Combo then Heavy Attack to activate Incarnon Form. +100% Melee Damage, +20% Sprint Speed, +20% Bullet Jump.",
-                        "stats": {}
+                        "stats": {
+                            "range": [
+                                {
+                                    "value": 3,
+                                    "scope": "incarnon",
+                                    "when": "slide_attack_hit"
+                                }
+                            ],
+                            "forced_procs": [
+                                {
+                                    "value": {
+                                        "slash": 1
+                                    },
+                                    "scope": "incarnon",
+                                    "when": "slide_attack_hit"
+                                }
+                            ]
+                        }
                     }
                 },
                 "2": {
@@ -43128,6 +43182,10 @@
                         "status_chance": 0.18,
                         "attack_speed": 0.83
                     },
+                    "children": [
+                        "first_heavy_attack_ethereal_daggers",
+                        "second_heavy_attack_ethereal_daggers"
+                    ],
                     "name": "Heavy Attack"
                 },
                 "slide_attack": {
@@ -57319,6 +57377,9 @@
                         "damage_bonus": 1,
                         "attack_speed": 1
                     },
+                    "children": [
+                        "incarnon_spectral_rapier_heavy"
+                    ],
                     "name": "Incarnon Heavy Attack"
                 },
                 "incarnon_slide_attack": {
@@ -57348,7 +57409,18 @@
                 "1": {
                     "1": {
                         "description": "Reach 6x Combo then Heavy Attack to activate Incarnon Form. +100% Melee Damage, +20% Sprint Speed, +20% Parkour Velocity. +10% Puncture Damage per Heavy Attack kill, up to 300% while transformed.",
-                        "stats": {}
+                        "stats": {
+                            "puncture": [
+                                {
+                                    "value": 0.1,
+                                    "scope": "incarnon",
+                                    "stacks": {
+                                        "when": "heavy_attack_kill",
+                                        "max": 30
+                                    }
+                                }
+                            ]
+                        }
                     }
                 },
                 "2": {
@@ -64955,6 +65027,9 @@
                         "status_chance": 0.14,
                         "attack_speed": 1.0
                     },
+                    "children": [
+                        "charged_projectile"
+                    ],
                     "name": "Heavy Attack"
                 },
                 "slide_attack": {
@@ -69694,6 +69769,9 @@
                         "status_chance": 0.31,
                         "attack_speed": 1
                     },
+                    "children": [
+                        "throw"
+                    ],
                     "name": "Heavy Attack"
                 },
                 "slide_attack": {

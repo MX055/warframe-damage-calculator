@@ -1,6 +1,7 @@
 from collections.abc import Mapping
 
 from ..core.data import Data
+from ..core.dist import Dist
 from ..utils.types import JsonValue, Number
 
 
@@ -13,6 +14,8 @@ class EvolutionStats(Data):
     crit_damage: JsonValue
     crit_from_status: JsonValue
     damage: JsonValue
+    damage_types: JsonValue
+    forced_procs: JsonValue
     damage_bonus: JsonValue
     fire_rate: JsonValue
     heavy_attack_efficiency: JsonValue
@@ -68,6 +71,8 @@ class ResolvedEvolutionModeStats(Data):
     crit_damage: Number = 0.0
     crit_from_status: ConversionBonus = ConversionBonus()
     damage: Number = 0.0
+    damage_types: Dist = Dist()
+    forced_procs: Dist = Dist()
     damage_bonus: Number = 0.0
     fire_rate: Number = 0.0
     heavy_attack_efficiency: Number = 0.0

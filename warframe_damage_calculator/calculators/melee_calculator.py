@@ -16,7 +16,7 @@ class MeleeCalculator(WeaponCalculator):
         return 2.0 if result.category in HEAVY_ATTACK_CATEGORIES else 1.0
 
     def _equipped_stance(self):
-        for upgrade in self.weapon.build:
+        for upgrade in self._contribution_upgrades if self._contribution_upgrades is not None else self.weapon.build:
             if upgrade.data.compatibility.get("stance"): return upgrade
         return None
 

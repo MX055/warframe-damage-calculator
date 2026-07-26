@@ -27,6 +27,7 @@ class WeaponCalculator:
         self._main = AttackResult()
         self._child: list[AttackResult] = []
         self._inputs_fingerprint: object | None = None
+        self._contribution_upgrades: list[BuildUpgradeOwner] | None = None
         self.resolve()
 
     # --- resolve wiring ---
@@ -43,7 +44,7 @@ class WeaponCalculator:
         return 1.0
 
     def _resolved_evolutions(self, attack: Attack | None = None) -> ResolvedEvolutionStat:
-        if not self.weapon.data.evolutions or not self.weapon.data.selected_evolutions: return ResolvedEvolutionStat()
+        if not self.weapon.data.evolutions: return ResolvedEvolutionStat()
         if attack is None: attack = self.weapon.data.attacks[self.weapon.data.selected_attack]
         form = attack.form
         return EvolutionCalculator(self.weapon, self.weapon.data.runtime, form=form).total
@@ -112,7 +113,7 @@ class WeaponCalculator:
         return self._sustained_attack_rate(result)
 
     def _sustained_status_model(self, result: AttackResult) -> SustainedStatusModel:
-        return build_sustained_status_model(attack=result.attack, base=result.base, modded=result.modded, build=result.build, evolution_status_chance=result.evolutions.proportional.status_chance, status_attempts_per_attack=self._status_hits(result), sustained_attack_rate=self._sustained_attack_rate(result))
+        return build_sustained_status_model(attack=result.attack, base=result.base, modded=result.modded, build=result.build, evolution_status_chance=result.evolutions.proportional.status_chance, status_attempts_per_attack=self._status_hits(result), sustained_attack_rate=self._sustained_attack_rate(result), evolution_damage_types=result.evolutions.proportional.damage_types)
 
     def _average_condition_overload_bonus(self, result: AttackResult) -> float:
         model = self._sustained_status_model(result)
@@ -181,9 +182,13 @@ class WeaponCalculator:
             attack_rate_for=self._sustained_attack_rate,
         )
 
-    def _metric_for_build(self, resolved_build: ResolvedStat, resolved_evolutions: ResolvedEvolutionStat, target: ContributionTarget) -> float:
-        results = self._compute_attack_results(resolved_build, resolved_evolutions)
-        return float(results[self.weapon.data.selected_attack].final.get(target, 0) or 0)
+    def _metric_for_build(self, resolved_build: ResolvedStat, resolved_evolutions: ResolvedEvolutionStat, target: ContributionTarget, upgrades: list[BuildUpgradeOwner] | None = None) -> float:
+        self._contribution_upgrades = upgrades
+        try:
+            results = self._compute_attack_results(resolved_build, resolved_evolutions)
+            return float(results[self.weapon.data.selected_attack].final.get(target, 0) or 0)
+        finally:
+            self._contribution_upgrades = None
 
     def resolve(self, *, validate_cycles: bool = True) -> None:
         fingerprint = self._fingerprint_runtime()
@@ -211,7 +216,7 @@ class WeaponCalculator:
 
     def _contribution_calculator(self, target: ContributionTarget = "total_dps") -> ContributionCalculator:
         if target not in CONTRIBUTION_TARGETS: raise ValueError(f"unsupported contribution target {target!r}; expected one of {sorted(CONTRIBUTION_TARGETS)}")
-        return ContributionCalculator(upgrades=list(self.weapon.build), weapon_data=self.weapon.data, resolved_evolutions=self._resolved_evolutions(), metric_for_build=lambda build, evolutions: self._metric_for_build(build, evolutions, target), upgrade_depends_on_equipped=self._upgrade_depends_on_equipped)
+        return ContributionCalculator(upgrades=list(self.weapon.build), weapon_data=self.weapon.data, resolved_evolutions=self._resolved_evolutions(), metric_for_build=lambda build, evolutions, upgrades: self._metric_for_build(build, evolutions, target, list(upgrades)), upgrade_depends_on_equipped=self._upgrade_depends_on_equipped)
 
     def removal_contributions(self, target: ContributionTarget = "total_dps") -> dict[str, float]:
         if not self.weapon.build: return {}

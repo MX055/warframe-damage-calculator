@@ -87,6 +87,7 @@ UPGRADE_AGGREGATORS: dict[str, Aggregator] = {
 CONVERSION_STATS = frozenset({"crit_from_status", "status_from_crit"})
 
 EVOLUTION_AGGREGATORS: dict[str, Aggregator] = {
+    "damage_types": _merge_damage,
     "forced_procs": _merge_damage,
 }
 
@@ -134,6 +135,7 @@ def merge_resolved_evolution_stat(target: ResolvedEvolutionStat, source: Resolve
 
 
 def merge_evolution_stat(stats: Data, stat: str, value: Any, *, conversion_max: Number | None = None) -> None:
+    if stat in DAMAGE_TYPES: stat, value = "damage_types", {stat: value}
     if stat in CONVERSION_STATS:
         _merge_conversion(stats, stat, float(value), conversion_max=conversion_max)
         return

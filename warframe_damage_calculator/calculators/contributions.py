@@ -15,7 +15,7 @@ from .stat_aggregation import merge_resolved_stat
 class ContributionCalculator:
     """Repeatedly evaluates coalition builds against a metric oracle."""
 
-    def __init__(self, *, upgrades: Sequence[BuildUpgradeOwner], weapon_data: Data, resolved_evolutions: ResolvedEvolutionStat, metric_for_build: Callable[[ResolvedStat, ResolvedEvolutionStat], float], upgrade_depends_on_equipped: Callable[[BuildUpgradeOwner], bool]) -> None:
+    def __init__(self, *, upgrades: Sequence[BuildUpgradeOwner], weapon_data: Data, resolved_evolutions: ResolvedEvolutionStat, metric_for_build: Callable[[ResolvedStat, ResolvedEvolutionStat, Sequence[BuildUpgradeOwner]], float], upgrade_depends_on_equipped: Callable[[BuildUpgradeOwner], bool]) -> None:
         self._upgrades = list(upgrades)
         self._weapon_data = weapon_data
         self._resolved_evolutions = resolved_evolutions
@@ -47,7 +47,8 @@ class ContributionCalculator:
         resolved_build = ResolvedStat()
         for index in range(self._count):
             if mask & (1 << index): merge_resolved_stat(resolved_build, self._total_for(index, mask))
-        return self._metric_for_build(resolved_build, self._resolved_evolutions)
+        upgrades = [upgrade for index, upgrade in enumerate(self._upgrades) if mask & (1 << index)]
+        return self._metric_for_build(resolved_build, self._resolved_evolutions, upgrades)
 
     def removal_contributions(self) -> dict[str, float]:
         if not self._count: return {}

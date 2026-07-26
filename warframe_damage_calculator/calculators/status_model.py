@@ -21,6 +21,7 @@ from dataclasses import dataclass
 from math import expm1, log1p
 from typing import Literal
 
+from ..core.dist import Dist
 from ..fields.calculated import CalculatedStats, ModdedStats, StatusEffects
 from ..fields.upgrade import ResolvedStat
 from ..fields.weapon_data import Attack
@@ -99,9 +100,9 @@ def condition_overload_bonus(model: SustainedStatusModel, *, value_per_status: N
     return ConditionOverloadBonus(bonus=float(value_per_status) * float(co_factor) * expected, effect=effect, expected_unique_active=expected)
 
 
-def per_attack_status_probabilities(*, attack: Attack, base: CalculatedStats, build: ResolvedStat, evolution_status_chance: Number, flat_status_chance: Number, status_attempts_per_attack: float) -> dict[str, float]:
+def per_attack_status_probabilities(*, attack: Attack, base: CalculatedStats, build: ResolvedStat, evolution_status_chance: Number, flat_status_chance: Number, status_attempts_per_attack: float, evolution_damage_types: Dist | None = None) -> dict[str, float]:
     """P(each damage type procs on one attack), including forced procs as certainty."""
-    damage = base.damage.apply(build.proportional.damage).combine().sorted()
+    damage = base.damage.apply(build.proportional.damage + (evolution_damage_types or Dist())).combine().sorted()
     guaranteed, fractional = divmod(max(attack.stats.status_chance * (1 + build.proportional.status_chance + evolution_status_chance) + flat_status_chance, 0), 1)
     guaranteed_hits, fractional_hit = divmod(max(status_attempts_per_attack, 0), 1)
     probabilities: dict[str, float] = {}
@@ -113,10 +114,10 @@ def per_attack_status_probabilities(*, attack: Attack, base: CalculatedStats, bu
     return probabilities
 
 
-def build_sustained_status_model(*, attack: Attack, base: CalculatedStats, modded: ModdedStats, build: ResolvedStat, evolution_status_chance: Number, status_attempts_per_attack: float, sustained_attack_rate: float) -> SustainedStatusModel:
+def build_sustained_status_model(*, attack: Attack, base: CalculatedStats, modded: ModdedStats, build: ResolvedStat, evolution_status_chance: Number, status_attempts_per_attack: float, sustained_attack_rate: float, evolution_damage_types: Dist | None = None) -> SustainedStatusModel:
     """Build the sustained status model used by Condition Overload and status_effect_stacks."""
     condition_overload = build.proportional.condition_overload
-    probabilities = per_attack_status_probabilities(attack=attack, base=base, build=build, evolution_status_chance=evolution_status_chance, flat_status_chance=modded.flat.status_chance, status_attempts_per_attack=status_attempts_per_attack)
+    probabilities = per_attack_status_probabilities(attack=attack, base=base, build=build, evolution_status_chance=evolution_status_chance, flat_status_chance=modded.flat.status_chance, status_attempts_per_attack=status_attempts_per_attack, evolution_damage_types=evolution_damage_types)
     maximum = len(probabilities) if condition_overload.max_stacks == "inf" else int(condition_overload.max_stacks)
     return SustainedStatusModel(per_attack_probabilities=probabilities, attacks_per_second=sustained_attack_rate, status_duration=float(modded.proportional.status_duration), max_unique_statuses=maximum, status_attempts_per_attack=status_attempts_per_attack)
 

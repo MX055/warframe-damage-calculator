@@ -880,6 +880,44 @@ class PublicApiTests(unittest.TestCase):
         self.assertIsInstance(stats, Mapping)
         self.assertEqual(dict(stats), {})
 
+    def test_destreza_incarnon_evo1_stacks_puncture_from_heavy_attack_kills(self):
+        weapon = arsenal.get("Destreza Prime")
+        self.assertEqual(weapon.data.runtime.heavy_attack_kill, 30)
+        weapon.set({"attack": "incarnon_normal_attack", "heavy_attack_kill": 0})
+        self.assertEqual(dict(selected(weapon).evolutions.proportional.damage_types), {})
+        self.assertAlmostEqual(selected(weapon).effective.damage.get("puncture"), 238)
+        weapon.set({"heavy_attack_kill": 1})
+        self.assertAlmostEqual(selected(weapon).evolutions.proportional.damage_types.get("puncture"), 0.1)
+        self.assertAlmostEqual(selected(weapon).effective.damage.get("puncture"), 261.8)
+        weapon.set({"heavy_attack_kill": 99})
+        self.assertAlmostEqual(selected(weapon).evolutions.proportional.damage_types.get("puncture"), 3)
+        self.assertAlmostEqual(selected(weapon).effective.damage.get("puncture"), 952)
+        weapon.set({"attack": "normal_attack"})
+        self.assertEqual(dict(selected(weapon).evolutions.proportional.damage_types), {})
+
+    def test_pseudo_heavy_attacks_are_attached_to_their_heavy_attack_parents(self):
+        expected = {
+            "Tenet Grigori": ("heavy_attack", ["energy_disk"]), "Stropha": ("heavy_attack", ["ranged_attack"]), "Tenet Agendus": ("heavy_attack", ["energy_disk"]), "Edun": ("heavy_attack", ["polearm_throw"]), "Argo & Vel": ("heavy_attack", ["heavy_attack_glaive"]), "Syam": ("heavy_attack", ["first_shockwave", "second_shockwave"]), "Destreza Prime": ("incarnon_heavy_attack", ["incarnon_spectral_rapier_heavy"]), "Arum Spinosa": ("heavy_attack", ["first_heavy_attack_toxic_spines", "second_heavy_attack_toxic_spines"]), "Quassus Prime": ("heavy_attack", ["first_heavy_attack_ethereal_daggers", "second_heavy_attack_ethereal_daggers"]), "Destreza": ("incarnon_heavy_attack", ["incarnon_spectral_rapier_heavy"]), "Corufell": ("heavy_attack", ["charged_projectile"]), "Tak & Lug": ("heavy_attack", ["throw"]),
+        }
+        for name, (parent, children) in expected.items():
+            with self.subTest(name=name): self.assertEqual(list(arsenal.get(name).data.attacks[parent].children), children)
+        weapon = arsenal.get("Destreza Prime").set({"attack": "incarnon_heavy_attack"})
+        self.assertEqual([child.name for child in weapon.results.child], ["incarnon_spectral_rapier_heavy"])
+        self.assertGreater(weapon.results.main.final.total_dph, weapon.results.main.average.total_dph)
+
+    def test_anku_incarnon_evo1_conditional_range_and_bleed(self):
+        weapon = arsenal.get("Anku")
+        self.assertTrue(weapon.data.runtime.slide_attack_hit)
+        weapon.set({"attack": "incarnon_normal_attack"})
+        self.assertAlmostEqual(selected(weapon).effective.range, 3)
+        self.assertAlmostEqual(selected(weapon).base.forced_procs.get("slash"), 1)
+        weapon.set({"slide_attack_hit": False})
+        self.assertAlmostEqual(selected(weapon).effective.range, 0)
+        self.assertEqual(dict(selected(weapon).base.forced_procs), {})
+        weapon.set({"attack": "normal_attack", "slide_attack_hit": True})
+        self.assertAlmostEqual(selected(weapon).effective.range, 0)
+        self.assertEqual(dict(selected(weapon).base.forced_procs), {})
+
     def test_ruvox_incarnon_bakes_conversion_and_speed(self):
         weapon = arsenal.get("Ruvox").set({"attack": "incarnon_normal_attack"})
         attack = weapon.data.attacks["incarnon_normal_attack"]
@@ -1597,10 +1635,13 @@ class PublicApiTests(unittest.TestCase):
         bare = selected(arsenal.get("Skana"))
         stance = arsenal.get("Iron Phoenix")
         combo = stance.data.combos["neutral"]
-        with_stance = selected(arsenal.get("Skana").configure(Build(stance)))
+        weapon = arsenal.get("Skana").configure(Build(stance))
+        with_stance = selected(weapon)
         self.assertAlmostEqual(with_stance.effective.attack_speed, bare.effective.attack_speed * combo.hits / combo.duration)
         self.assertAlmostEqual(with_stance.effective.damage.total_damage(), bare.effective.damage.total_damage() * combo.multiplier)
         self.assertGreater(with_stance.average.total_dps, bare.average.total_dps)
+        self.assertGreater(weapon.results.removal_contributions()["Iron Phoenix"], 0)
+        self.assertAlmostEqual(weapon.results.shapley_contributions()["Iron Phoenix"], 1)
         forward = selected(arsenal.get("Skana").configure(Build(stance)).set({"stance_combo": "forward"}))
         forward_combo = stance.data.combos["forward"]
         self.assertAlmostEqual(forward.effective.attack_speed, bare.effective.attack_speed * forward_combo.hits / forward_combo.duration)

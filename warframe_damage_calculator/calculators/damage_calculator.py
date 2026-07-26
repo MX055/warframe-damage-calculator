@@ -20,8 +20,9 @@ from . import target_calculator
 
 def compute_modded_damage(*, attack: Attack, base: CalculatedStats, original_damage: Dist, build: ResolvedStat, evolutions: ResolvedEvolutionStat, modded: ModdedStats) -> None:
     """Write modded.proportional.damage from Serration/CO semantics."""
-    evolved = base.damage.apply(build.proportional.damage).combine().sorted()
-    original = original_damage.apply(build.proportional.damage).combine().sorted()
+    damage_types = build.proportional.damage + evolutions.proportional.damage_types
+    evolved = base.damage.apply(damage_types).combine().sorted()
+    original = original_damage.apply(damage_types).combine().sorted()
     serration = max(1 + build.proportional.damage_bonus + evolutions.proportional.damage_bonus + float(attack.stats.damage_bonus or 0), 0)
     if attack.stats.co_effect == "multiplies":
         modded.proportional.damage = modded.proportional.damage_bonus * evolved
