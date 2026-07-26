@@ -21,14 +21,14 @@ class Weapon:
     def __init__(self, data: Mapping[str, JsonValue] | None = None) -> None:
         self.data = self.data_type(data or {})
         self.build = Build()
-        self.target: Enemy | None = None
+        self.target = Enemy()
         self.results = self.calculator_type(self)
         self.format = self.formatter_type(self)
 
-    def configure(self, build: Build | Upgrade | None = None, target: Enemy | None | object = _target_unset) -> Self:
+    def configure(self, build: Build | Upgrade | None = None, target: Enemy | None = None) -> Self:
         if build is not None:
             self.build = build.copy() if isinstance(build, Build) else Build(build)
-        if target is not self._target_unset:
+        if target is not None:
             self.target = target.copy() if isinstance(target, Enemy) else None
         self.results.resolve()
         return self
