@@ -74,7 +74,7 @@ class UpgradeCalculator:
             types = {weapon.get("type"), weapon.get("subtype"), weapon.get("category")} - {None, ""}
             if weapon.get("type") == "bow": types.add("rifle")
             return condition in types
-        return bool(runtime.get(condition, False))
+        return bool(runtime[condition])
 
     @classmethod
     def _scale(cls, value: EffectValue, multiplier: float) -> EffectValue:
@@ -275,13 +275,8 @@ class UpgradeCalculator:
         upgrade_data = self._upgrade_data()
         max_rank = upgrade_data.get("max_rank")
         max_stacks = upgrade_data.get("max_stacks")
-        rank = upgrade_data.get("rank")
-        if rank is None: rank = 0
+        rank = upgrade_data["rank"]
         if max_rank is not None: rank = min(rank, max_rank)
         rank_multiplier = 1 if max_rank in {None, 0} else (rank + 1) / (max_rank + 1)
-        default_stacks = upgrade_data.get("stacks")
-        if default_stacks is None:
-            runtime = getattr(weapon_data, "runtime", None)
-            if runtime is not None: default_stacks = runtime.get("combo")
-        context = ResolutionContext(runtime=self.upgrade.data.runtime, rank=rank, rank_multiplier=rank_multiplier, max_stacks=max_stacks, default_stacks=default_stacks, equipped=frozenset(build_data.get("equipped", [])), weapon=weapon_data, upgrade=upgrade_data, build=build_data)
+        context = ResolutionContext(runtime=self.upgrade.data.runtime, rank=rank, rank_multiplier=rank_multiplier, max_stacks=max_stacks, equipped=frozenset(build_data.get("equipped", [])), weapon=weapon_data, upgrade=upgrade_data, build=build_data)
         resolve_and_aggregate(self._normalize_effects(), context, is_applicable=self._is_effect_applicable, resolve_one=self._resolve_effect, aggregate=self._aggregate_effects)

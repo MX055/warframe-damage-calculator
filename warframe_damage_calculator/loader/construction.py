@@ -14,22 +14,30 @@ class DatabaseFactory:
     models = {"primary": Primary, "secondary": Secondary, "melee": Melee, "mod": Upgrade, "arcane": Upgrade}
 
     @staticmethod
-    def _default_weapon_runtime(data: Mapping[str, Any]) -> dict[str, Any]:
-        attack = next(iter(data.get("attacks", {})), None)
-        return {"attack": attack} if attack is not None else {}
-
-    @staticmethod
-    def _default_upgrade_runtime(data: Mapping[str, Any]) -> dict[str, Any]:
-        runtime: dict[str, Any] = {"rank": data.get("max_rank", 0)}
-        max_stacks: Number = 0
-        for raw in data.get("stats", {}).values():
+    def _apply_effect_defaults(runtime: dict[str, Any], stats: Mapping[str, Any]) -> None:
+        for raw in stats.values():
             for effect in raw if isinstance(raw, list) else (raw,):
                 if not isinstance(effect, Mapping): continue
                 condition = effect.get("when")
                 if condition is not None: runtime[str(condition)] = True
                 stacks = effect.get("stacks")
-                if isinstance(stacks, Mapping) and isinstance(stacks.get("max"), Number): max_stacks = max(max_stacks, stacks["max"])
-        if max_stacks: runtime["stacks"] = max_stacks
+                if isinstance(stacks, Mapping):
+                    key = str(stacks.get("when", "stacks"))
+                    maximum = stacks.get("max", 0)
+                    if isinstance(maximum, Number): runtime[key] = max(runtime.get(key, 0), maximum)
+
+    @classmethod
+    def _default_weapon_runtime(cls, data: Mapping[str, Any]) -> dict[str, Any]:
+        runtime: dict[str, Any] = {"attack": next(iter(data["attacks"])), "evolutions": {}, "combo": 1, "stance_combo": "neutral", "ability_strength": 1.0}
+        for tier in data.get("evolutions", {}).values():
+            for perk in tier.values():
+                cls._apply_effect_defaults(runtime, perk.get("stats", {}))
+        return runtime
+
+    @classmethod
+    def _default_upgrade_runtime(cls, data: Mapping[str, Any]) -> dict[str, Any]:
+        runtime: dict[str, Any] = {"rank": data.get("max_rank", 0)}
+        cls._apply_effect_defaults(runtime, data.get("stats", {}))
         return runtime
 
     def create(self, entry: DatabaseEntry, context: dict | None = None) -> Weapon | Upgrade:

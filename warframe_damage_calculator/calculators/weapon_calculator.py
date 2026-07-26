@@ -6,8 +6,6 @@ scalar folds, damage Dist construction, and sustained status live in sibling mod
 
 from __future__ import annotations
 
-from collections.abc import Mapping
-
 from ..fields.attack_result import AttackResult
 from ..fields.calculated import ModdedStats
 from ..fields.evolution import ResolvedEvolutionStat
@@ -39,29 +37,24 @@ class WeaponCalculator:
         return build.results.total
 
     def _selected_category(self) -> str:
-        attack = self.weapon.data.attacks.get(self.weapon.data.selected_attack)
-        if attack is None: return "normal"
-        return attack.category or "normal"
+        return self.weapon.data.attacks[self.weapon.data.selected_attack].category
 
     def _crit_upgrade_multiplier(self, result: AttackResult) -> float:
         return 1.0
 
     def _resolved_evolutions(self, attack: Attack | None = None) -> ResolvedEvolutionStat:
         if not self.weapon.data.selected_evolutions: return ResolvedEvolutionStat()
-        if attack is None: attack = self.weapon.data.attacks.get(self.weapon.data.selected_attack)
-        form = (attack.form if attack is not None else None) or "normal"
+        if attack is None: attack = self.weapon.data.attacks[self.weapon.data.selected_attack]
+        form = attack.form
         return EvolutionCalculator(self.weapon, self.weapon.data.runtime, form=form).total
 
     def _fingerprint_runtime(self) -> tuple:
         """Capture runtime/build inputs so direct runtime mutations recompute results."""
         runtime = self.weapon.data.runtime
-        evolutions = runtime.get("evolutions") or {}
-        if isinstance(evolutions, Mapping):
-            evolutions_key = tuple(sorted((str(key), evolutions[key]) for key in evolutions))
-        else:
-            evolutions_key = (repr(evolutions),)
+        evolutions = runtime.evolutions
+        evolutions_key = tuple(sorted((str(key), evolutions[key]) for key in evolutions))
         other = tuple(sorted((str(key), repr(runtime[key])) for key in runtime if key not in {"evolutions", "attack", "combo", "stance_combo"}))
-        return (id(self.weapon.build), runtime.get("attack"), evolutions_key, runtime.get("combo"), runtime.get("stance_combo"), other)
+        return (id(self.weapon.build), runtime.attack, evolutions_key, runtime.combo, runtime.stance_combo, other)
 
     def _ensure_resolved(self) -> None:
         fingerprint = self._fingerprint_runtime()
@@ -86,14 +79,12 @@ class WeaponCalculator:
         """Return Ability Strength multiplier for exalted/pseudo-exalted weapons.
 
         Arsenal damage is stored at 100% Strength. Runtime `ability_strength` is a
-        multiplier (1.0 = 100%, 2.5 = 250%). Unset defaults to 1.0 for flagged
-        weapons; non-exalted weapons ignore the key.
+        multiplier (1.0 = 100%, 2.5 = 250%). Non-exalted weapons ignore the key.
         """
         data = self.weapon.data
         if not (data.get("exalted") or data.get("pseudo_exalted")):
             return None
-        value = data.runtime.get("ability_strength")
-        return 1.0 if value is None else max(float(value), 0.0)
+        return max(float(data.runtime.ability_strength), 0.0)
 
     def _compute_base(self, result: AttackResult) -> None:
         result.base, result.original_damage = scalar_calculator.seed_base_stats(attack=result.attack, ammo=self.weapon.data.ammo, stats_type=self.weapon.stats_type, evolutions=result.evolutions, distribute_flat=formulas.distribute_flat_damage, ability_strength=self._ability_strength_multiplier())

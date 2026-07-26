@@ -16,12 +16,32 @@ from warframe_damage_calculator.fields.attack_result import AttackResult
 from warframe_damage_calculator.fields.calculated import CalculatedStats
 from warframe_damage_calculator.fields.upgrade import ResolvedStat
 from warframe_damage_calculator.fields.weapon_data import Attack, Attacks, Evolutions
+from warframe_damage_calculator.loader.construction import DatabaseFactory
+
+
+factory = DatabaseFactory()
+
+
+def runtime_upgrade(data):
+    definition = dict(data)
+    runtime = factory._default_upgrade_runtime(definition)
+    runtime.update(definition.get("runtime", {}))
+    definition["runtime"] = runtime
+    return Upgrade(definition)
+
+
+def runtime_weapon(model, data):
+    definition = dict(data)
+    runtime = factory._default_weapon_runtime(definition)
+    runtime.update(definition.get("runtime", {}))
+    definition["runtime"] = runtime
+    return model(definition)
 
 
 def galvanized_build() -> Build:
     return Build(
-        arsenal.get("Galvanized Chamber", context={"stacks": 5}),
-        arsenal.get("Galvanized Aptitude", context={"stacks": 2}),
+        arsenal.get("Galvanized Chamber", context={"on_kill": 5}),
+        arsenal.get("Galvanized Aptitude", context={"on_kill": 2}),
     )
 
 
@@ -112,7 +132,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertIsNot(copied.children, first.children)
 
     def test_generic_weapon_uses_the_shared_calculation_pipeline(self):
-        weapon = Weapon({"name": "Test Weapon", "type": "test", "attacks": {"normal": {"stats": {"damage": {"impact": 10}}}}})
+        weapon = runtime_weapon(Weapon, {"name": "Test Weapon", "type": "test", "attacks": {"normal": {"stats": {"damage": {"impact": 10}}}}})
 
         self.assertEqual(selected(weapon).effective.damage.total_damage(), 10)
         self.assertEqual(len(selected(weapon).children), 0)
@@ -173,20 +193,19 @@ class PublicApiTests(unittest.TestCase):
         first.set({"attack": "air_burst_projectile"})
         self.assertEqual(second.data.selected_attack, "buckshot")
 
-        mod.data.runtime.stacks = 99
-        self.assertEqual(arsenal.get("Galvanized Chamber").data.runtime.stacks, 5)
+        mod.data.runtime.on_kill = 99
+        self.assertEqual(arsenal.get("Galvanized Chamber").data.runtime.on_kill, 5)
 
     def test_runtime_is_explicit_loader_defaults_and_set_merges(self):
-        direct = Upgrade({"name": "Direct", "max_rank": 5, "stats": {"damage_bonus": {"value": 1, "when": "active"}}})
+        direct = runtime_upgrade({"name": "Direct", "max_rank": 5, "stats": {"damage_bonus": {"value": 1, "when": "active"}}})
         self.assertIn("runtime", direct.data)
-        self.assertEqual(dict(direct.data.runtime), {})
-        self.assertEqual(direct.results.total.proportional.damage_bonus, 0)
+        self.assertEqual(dict(direct.data.runtime), {"rank": 5, "active": True})
+        self.assertEqual(direct.results.total.proportional.damage_bonus, 1)
 
         loaded = arsenal.get("Galvanized Chamber", context={"rank": 4})
-        self.assertEqual(dict(loaded.data.runtime), {"rank": 4, "stacks": 5})
+        self.assertEqual(dict(loaded.data.runtime), {"rank": 4, "on_kill": 5})
         loaded.set({"on_kill": 2})
         self.assertEqual(loaded.data.runtime.rank, 4)
-        self.assertEqual(loaded.data.runtime.stacks, 5)
         self.assertEqual(loaded.data.runtime.on_kill, 2)
 
         weapon = arsenal.get("Corinth Prime").set({"attack": "air_burst_projectile"}).set({"combo": 6})
@@ -195,7 +214,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(weapon.data.runtime.combo, 6)
 
         default_weapon = arsenal.get("Corinth Prime")
-        self.assertEqual(default_weapon.data.runtime.attack, "buckshot")
+        self.assertEqual(dict(default_weapon.data.runtime), {"attack": "buckshot", "evolutions": {}, "combo": 1, "stance_combo": "neutral", "ability_strength": 1.0})
         self.assertEqual(default_weapon.data.selected_attack, "buckshot")
 
     def test_weapon_data_separates_global_stats_and_attacks(self):
@@ -280,7 +299,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertIsNot(parent.average, child.average)
 
     def test_attack_final_recurses_and_uses_parent_fire_rate(self):
-        weapon = Primary({
+        weapon = runtime_weapon(Primary, {
             "name": "Nested",
             "type": "primary",
             "ammo": {"magazine_size": 10, "reload_time": 1},
@@ -325,7 +344,7 @@ class PublicApiTests(unittest.TestCase):
 
     def test_attack_relationship_cycles_are_detected_by_name(self):
         with self.assertRaisesRegex(ValueError, "cyclic attack relationship detected: parent"):
-            Primary({
+            runtime_weapon(Primary, {
                 "name": "Cycle",
                 "type": "primary",
                 "attacks": {
@@ -335,7 +354,7 @@ class PublicApiTests(unittest.TestCase):
             })
 
     def test_ammo_cost_is_local_to_each_attack_bucket(self):
-        weapon = Primary({
+        weapon = runtime_weapon(Primary, {
             "name": "Mixed Delivery",
             "type": "primary",
             "ammo": {"magazine_size": 100, "reload_time": 2},
@@ -375,7 +394,7 @@ class PublicApiTests(unittest.TestCase):
 
     def test_beam_dot_scales_with_multishot_squared(self):
         def heat_weapon(delivery: str, multishot: float) -> Primary:
-            return Primary({"name": f"{delivery}-{multishot}", "type": "primary", "ammo": {"magazine_size": 100, "reload_time": 1}, "attacks": {"tick": {"delivery": delivery, "stats": {"damage": {"heat": 100}, "status_chance": 1.0, "crit_chance": 0.0, "crit_damage": 2.0, "multishot": multishot, "fire_rate": 12}}}})
+            return runtime_weapon(Primary, {"name": f"{delivery}-{multishot}", "type": "primary", "ammo": {"magazine_size": 100, "reload_time": 1}, "attacks": {"tick": {"delivery": delivery, "stats": {"damage": {"heat": 100}, "status_chance": 1.0, "crit_chance": 0.0, "crit_damage": 2.0, "multishot": multishot, "fire_rate": 12}}}})
 
         hitscan_ms1 = selected(heat_weapon("hitscan", 1.0)).average.flat_dotph
         hitscan_ms2 = selected(heat_weapon("hitscan", 2.0)).average.flat_dotph
@@ -387,7 +406,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(beam_ms2 / beam_ms1, 4.0)
 
     def test_multiple_child_attacks_are_combined_once(self):
-        weapon = Primary({
+        weapon = runtime_weapon(Primary, {
             "name": "Multiple Children",
             "type": "primary",
             "attacks": {
@@ -408,7 +427,7 @@ class PublicApiTests(unittest.TestCase):
 
     def test_melee_duplicate_increases_condition_overload_status_acquisition(self):
         condition_overload = arsenal.get("Condition Overload")
-        duplicate = Upgrade({
+        duplicate = runtime_upgrade({
             "name": "Duplicate",
             "type": "arcane",
             "max_rank": 0,
@@ -436,7 +455,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertGreater(selected(weapon).effective.damage.total_damage(), base_damage)
 
         for upgrade in build.upgrades:
-            upgrade.data.runtime.stacks = 0
+            upgrade.data.runtime.on_kill = 0
         build.results.resolve()
         self.assertGreater(selected(weapon).effective.multishot, base_multishot)
 
@@ -444,7 +463,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual([upgrade.data.name for upgrade in single.build], ["Serration"])
 
     def test_build_iteration_addition_and_subtraction_remain_available(self):
-        chamber = arsenal.get("Galvanized Chamber", context={"stacks": 5})
+        chamber = arsenal.get("Galvanized Chamber", context={"on_kill": 5})
         aptitude = arsenal.get("Galvanized Aptitude")
         build = Build(chamber) + aptitude
 
@@ -498,7 +517,7 @@ class PublicApiTests(unittest.TestCase):
     def test_upgrade_copy_preserves_runtime_without_sharing_data(self):
         from typing import get_type_hints
 
-        upgrade = arsenal.get("Galvanized Chamber", context={"stacks": 3})
+        upgrade = arsenal.get("Galvanized Chamber", context={"on_kill": 3})
         copied = upgrade.copy()
         result_hints = get_type_hints(UpgradeCalculator)
 
@@ -506,7 +525,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertIs(get_type_hints(Upgrade)["results"], UpgradeCalculator)
         for bucket in ("static", "conditional", "modular", "stacking", "rank_locked", "total"):
             self.assertIs(result_hints[bucket], ResolvedStat)
-        self.assertEqual(copied.data.runtime.stacks, 3)
+        self.assertEqual(copied.data.runtime.on_kill, 3)
         self.assertIsNot(copied.data, upgrade.data)
         copied.data.stats.multishot = 99
         self.assertNotEqual(copied.data.stats.multishot, upgrade.data.stats.multishot)
@@ -556,7 +575,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(weapon.data.selected_combo, 99)
 
     def test_exalted_ability_strength_scales_base_damage(self):
-        blade = Melee(arsenal.weapons["Exalted Blade"])
+        blade = runtime_weapon(Melee, arsenal.weapons["Exalted Blade"])
         raw = selected(blade).base.damage.total_damage()
         self.assertTrue(blade.data.exalted)
         self.assertFalse(blade.data.pseudo_exalted)
@@ -566,8 +585,8 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(selected(scaled).base.damage.total_damage(), raw * 2.5)
 
         # Strength is on base before Pressure Point.
-        pressure = Upgrade({"name": "Pressure Point", "type": "mod", "max_rank": 0, "stats": {"damage_bonus": [{"value": 1.0}]}})
-        modded = Melee(arsenal.weapons["Exalted Blade"]).configure(Build(pressure)).set({"ability_strength": 2.0})
+        pressure = runtime_upgrade({"name": "Pressure Point", "type": "mod", "max_rank": 0, "stats": {"damage_bonus": [{"value": 1.0}]}})
+        modded = runtime_weapon(Melee, arsenal.weapons["Exalted Blade"]).configure(Build(pressure)).set({"ability_strength": 2.0})
         self.assertAlmostEqual(selected(modded).base.damage.total_damage(), raw * 2.0)
         self.assertAlmostEqual(selected(modded).effective.damage.total_damage(), raw * 2.0 * 2.0)
 
@@ -584,26 +603,20 @@ class PublicApiTests(unittest.TestCase):
         self.assertFalse(weapon.data.exalted or weapon.data.pseudo_exalted)
         self.assertAlmostEqual(selected(weapon).base.damage.total_damage(), selected(bare).base.damage.total_damage())
 
-    def test_weapon_combo_scales_blood_rush(self):
+    def test_explicit_upgrade_stacks_scale_blood_rush(self):
         blood_rush = arsenal.get("Blood Rush")
-        self.assertIsNone(blood_rush.data.runtime.get("stacks"))
+        self.assertEqual(blood_rush.data.runtime.stacks, 0)
         bare = arsenal.get("Furax")
         unset = arsenal.get("Furax").configure(Build(blood_rush))
         self.assertEqual(selected(unset).effective.crit_chance, selected(bare).effective.crit_chance)
-        low = arsenal.get("Furax").configure(Build(blood_rush)).set({"combo": 6})
-        high = arsenal.get("Furax").configure(Build(arsenal.get("Blood Rush"))).set({"combo": 12})
-        self.assertIsNone(low.build.upgrades[0].data.runtime.get("stacks"))
-        self.assertIsNone(high.build.upgrades[0].data.runtime.get("stacks"))
+        low = arsenal.get("Furax").configure(Build(blood_rush.set({"stacks": 6})))
+        high = arsenal.get("Furax").configure(Build(arsenal.get("Blood Rush").set({"stacks": 12})))
         self.assertGreater(selected(high).effective.crit_chance, selected(low).effective.crit_chance)
 
-    def test_upgrade_stacks_override_weapon_combo(self):
-        blood_rush = arsenal.get("Blood Rush")
-        blood_rush.data.runtime.stacks = 3
-        weapon = arsenal.get("Furax").configure(Build(blood_rush)).set({"combo": 12})
-        at_stacks_3 = arsenal.get("Furax").configure(Build(arsenal.get("Blood Rush"))).set({"combo": 3})
-        at_combo_12 = arsenal.get("Furax").configure(Build(arsenal.get("Blood Rush"))).set({"combo": 12})
-        self.assertAlmostEqual(selected(weapon).effective.crit_chance, selected(at_stacks_3).effective.crit_chance)
-        self.assertLess(selected(weapon).effective.crit_chance, selected(at_combo_12).effective.crit_chance)
+    def test_weapon_combo_does_not_supply_upgrade_stacks(self):
+        bare = arsenal.get("Furax")
+        weapon = arsenal.get("Furax").configure(Build(arsenal.get("Blood Rush"))).set({"combo": 12})
+        self.assertEqual(selected(weapon).effective.crit_chance, selected(bare).effective.crit_chance)
 
     def test_incarnon_evolution_selection_recomputes(self):
         weapon = arsenal.get("Telos Boltor")
@@ -642,7 +655,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertGreater(magazine_warp.results.total.proportional.magazine_capacity, 0)
 
     def test_incarnon_base_damage_scales_with_serration(self):
-        serration = Upgrade({"name": "Serration", "type": "mod", "max_rank": 0, "stats": {"damage_bonus": [{"value": 1.0}]}})
+        serration = runtime_upgrade({"name": "Serration", "type": "mod", "max_rank": 0, "stats": {"damage_bonus": [{"value": 1.0}]}})
         weapon = arsenal.get("Telos Boltor")
         raw = selected(weapon).base.damage.total_damage()
         weapon.configure(Build(serration)).set({"evolutions": {2: 1}})
@@ -658,7 +671,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(selected(weapon).modded.proportional.magazine_capacity, raw_mag + 20)
 
     def test_incarnon_flat_crit_penalty_cannot_make_crit_chance_negative(self):
-        negative_crit = Upgrade({"name": "Negative Crit", "stats": {"crit_chance": [{"value": -2.0}]}})
+        negative_crit = runtime_upgrade({"name": "Negative Crit", "stats": {"crit_chance": [{"value": -2.0}]}})
         weapon = arsenal.get("Laetum").configure(Build(negative_crit)).set({"evolutions": {4: 3}})
         result = selected(weapon)
 
@@ -670,14 +683,14 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(result.average.weakpoint_crit_chance, 0)
 
     def test_incarnon_chance_floors_survive_conversion_refreshes(self):
-        negative_chances = Upgrade({
+        negative_chances = runtime_upgrade({
             "name": "Negative Chances",
             "stats": {
                 "crit_chance": [{"value": -2.0}],
                 "status_chance": [{"value": -2.0}],
             },
         })
-        weapon = Primary({
+        weapon = runtime_weapon(Primary, {
             "name": "Negative Conversion Chances",
             "type": "primary",
             "attacks": {
@@ -713,7 +726,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(result.effective.status_chance, 0)
 
     def test_incarnon_crit_from_status_updates_base(self):
-        status_mod = Upgrade({"name": "Status", "type": "mod", "max_rank": 0, "stats": {"status_chance": [{"value": 1.0}]}})
+        status_mod = runtime_upgrade({"name": "Status", "type": "mod", "max_rank": 0, "stats": {"status_chance": [{"value": 1.0}]}})
         weapon = arsenal.get("Dera Vandal")
         raw_crit = selected(weapon).base.crit_chance
         weapon.configure(Build(status_mod)).set({"evolutions": {4: 2}})
@@ -723,7 +736,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(selected(weapon).modded.proportional.crit_chance, selected(weapon).base.crit_chance)
 
     def test_incarnon_status_from_crit_updates_base(self):
-        crit_mod = Upgrade({"name": "Crit", "type": "mod", "max_rank": 0, "stats": {"crit_chance": [{"value": 1.0}]}})
+        crit_mod = runtime_upgrade({"name": "Crit", "type": "mod", "max_rank": 0, "stats": {"crit_chance": [{"value": 1.0}]}})
         weapon = arsenal.get("Sicarus")
         raw_status = selected(weapon).base.status_chance
         weapon.configure(Build(crit_mod)).set({"evolutions": {4: 3}})
@@ -735,13 +748,13 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(selected(weapon).base.status_chance, raw_status + expected_bonus, places=6)
 
     def test_incarnon_gunco_ignores_base_damage(self):
-        gunco = Upgrade({
+        gunco = runtime_upgrade({
             "name": "GunCO",
             "type": "mod",
             "max_rank": 0,
             "stats": {"damage_bonus": [{"value": 1, "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {"max_stacks": 1}}]},
         })
-        weapon = Primary({
+        weapon = runtime_weapon(Primary, {
             "name": "Evo CO",
             "type": "primary",
             "attacks": {
@@ -804,7 +817,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertNotIn("spectral_blade", attacks)
 
     def test_heavy_attack_doubles_crit_chance_upgrade_bonus(self):
-        true_steel = Upgrade({
+        true_steel = runtime_upgrade({
             "name": "True Steel",
             "type": "mod",
             "max_rank": 0,
@@ -820,13 +833,13 @@ class PublicApiTests(unittest.TestCase):
     def test_non_crit_bonus_from_cull_the_weak(self):
         cull = arsenal.get("Cull the Weak")
         self.assertAlmostEqual(float(cull.results.total.multiplicative_families["non_crit"].damage_bonus), 2.4)
-        non_crit = Upgrade({
+        non_crit = runtime_upgrade({
             "name": "NonCrit",
             "type": "mod",
             "max_rank": 0,
             "stats": {"damage_bonus": [{"value": 2.4, "family": "non_crit", "behaviour": "ON_NON_CRIT", "automatic": True, "behaviour_data": {}}]},
         })
-        weapon = Melee({
+        weapon = runtime_weapon(Melee, {
             "name": "NCD Melee",
             "type": "melee",
             "attacks": {
@@ -854,20 +867,15 @@ class PublicApiTests(unittest.TestCase):
         self.assertGreater(result.average.flat_dph, base_dph)
 
     def test_upgrade_and_build_set_update_runtime_conditions(self):
-        upgrade = Upgrade({"name": "Headshot", "type": "mod", "max_rank": 0, "stats": {"crit_chance": [1.2, {"value": 0.8, "when": "headshot"}]}})
-        self.assertEqual(upgrade.results.total.proportional.crit_chance, 1.2)
-        upgrade.set({"headshot": True})
+        upgrade = runtime_upgrade({"name": "Headshot", "type": "mod", "max_rank": 0, "stats": {"crit_chance": [1.2, {"value": 0.8, "when": "headshot"}]}})
         self.assertEqual(upgrade.results.total.proportional.crit_chance, 2.0)
         upgrade.set({"headshot": False})
         self.assertEqual(upgrade.results.total.proportional.crit_chance, 1.2)
 
         build = Build(
-            Upgrade({"name": "CC", "type": "mod", "max_rank": 0, "stats": {"crit_chance": {"value": 0.8, "when": "headshot"}}}),
-            Upgrade({"name": "CD", "type": "mod", "max_rank": 0, "stats": {"crit_damage": {"value": 0.8, "when": "headshot"}}}),
+            runtime_upgrade({"name": "CC", "type": "mod", "max_rank": 0, "stats": {"crit_chance": {"value": 0.8, "when": "headshot"}}}),
+            runtime_upgrade({"name": "CD", "type": "mod", "max_rank": 0, "stats": {"crit_damage": {"value": 0.8, "when": "headshot"}}}),
         )
-        self.assertEqual(build.results.total.proportional.crit_chance, 0)
-        self.assertEqual(build.results.total.proportional.crit_damage, 0)
-        build.set({"headshot": True})
         self.assertEqual(build.results.total.proportional.crit_chance, 0.8)
         self.assertEqual(build.results.total.proportional.crit_damage, 0.8)
         build.set({"headshot": False})
@@ -898,32 +906,32 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(synth, [{"stat": "damage_bonus", "value": 2, "mode": "proportional", "when": "last_shot", "family": "charge", "exclude": ["continuous", "incarnon"]}])
 
     def test_first_shot_damage_averages_across_magazine(self):
-        base = Primary({"name": "Chamber Test", "type": "primary", "subtype": "sniper", "ammo": {"magazine_size": 10, "reload_time": 1}, "attacks": {"shot": {"delivery": "hitscan", "stats": {"damage": {"impact": 100}, "crit_chance": 0, "crit_damage": 2, "multishot": 1, "fire_rate": 1}}}})
-        with_chamber = Primary(base.data).configure(Build(arsenal.get("Primed Chamber")))
+        base = runtime_weapon(Primary, {"name": "Chamber Test", "type": "primary", "subtype": "sniper", "ammo": {"magazine_size": 10, "reload_time": 1}, "attacks": {"shot": {"delivery": "hitscan", "stats": {"damage": {"impact": 100}, "crit_chance": 0, "crit_damage": 2, "multishot": 1, "fire_rate": 1}}}})
+        with_chamber = runtime_weapon(Primary, base.data).configure(Build(arsenal.get("Primed Chamber")))
         self.assertAlmostEqual(selected(with_chamber).average.first_shot_damage_multiplier, 1.1)
         self.assertAlmostEqual(selected(with_chamber).average.flat_dph / selected(base).average.flat_dph, 1.1)
 
-        one_round = Primary({"name": "Vectis-like", "type": "primary", "subtype": "sniper", "ammo": {"magazine_size": 1, "reload_time": 1}, "attacks": {"shot": {"delivery": "hitscan", "stats": {"damage": {"impact": 100}, "crit_chance": 0, "crit_damage": 2, "multishot": 1, "fire_rate": 1}}}})
-        one_chamber = Primary(one_round.data).configure(Build(arsenal.get("Primed Chamber")))
+        one_round = runtime_weapon(Primary, {"name": "Vectis-like", "type": "primary", "subtype": "sniper", "ammo": {"magazine_size": 1, "reload_time": 1}, "attacks": {"shot": {"delivery": "hitscan", "stats": {"damage": {"impact": 100}, "crit_chance": 0, "crit_damage": 2, "multishot": 1, "fire_rate": 1}}}})
+        one_chamber = runtime_weapon(Primary, one_round.data).configure(Build(arsenal.get("Primed Chamber")))
         self.assertAlmostEqual(selected(one_chamber).average.first_shot_damage_multiplier, 2.0)
         self.assertAlmostEqual(selected(one_chamber).average.flat_dph / selected(one_round).average.flat_dph, 2.0)
 
     def test_multiplicative_families_product_not_sum(self):
         sniper = {"name": "Tier Sniper", "type": "primary", "subtype": "sniper", "ammo": {"magazine_size": 1, "reload_time": 1}, "attacks": {"shot": {"delivery": "hitscan", "stats": {"damage": {"impact": 100}, "crit_chance": 0, "crit_damage": 2, "multishot": 1, "fire_rate": 1}}}}
-        bonus = Upgrade({"name": "Bonus Mult", "type": "mod", "max_rank": 0, "stats": {"damage_bonus": [{"value": 0.5, "family": "bonus"}]}})
-        with_both = Primary(sniper).configure(Build(bonus, arsenal.get("Primed Chamber")))
+        bonus = runtime_upgrade({"name": "Bonus Mult", "type": "mod", "max_rank": 0, "stats": {"damage_bonus": [{"value": 0.5, "family": "bonus"}]}})
+        with_both = runtime_weapon(Primary, sniper).configure(Build(bonus, arsenal.get("Primed Chamber")))
         # bonus ×1.5 and chamber ×2 product to ×3, not additive ×2.5
         self.assertAlmostEqual(selected(with_both).average.flat_dph, 300.0)
         self.assertEqual(float(with_both.build.results.total.multiplicative_families["bonus"].damage_bonus), 0.5)
         self.assertEqual(with_both.build.results.total.magazine_position[0]["family"], "chamber")
 
-        both_chambers = Primary(sniper).configure(Build(arsenal.get("Primed Chamber"), arsenal.get("Charged Chamber")))
+        both_chambers = runtime_weapon(Primary, sniper).configure(Build(arsenal.get("Primed Chamber"), arsenal.get("Charged Chamber")))
         # Same chamber family: Primed + Charged add → +140% → ×2.4
         self.assertAlmostEqual(selected(both_chambers).average.flat_dph, 240.0)
         self.assertAlmostEqual(selected(both_chambers).average.first_shot_damage_multiplier, 2.4)
 
     def test_last_shot_multishot_and_synth_charge_excludes(self):
-        weapon = Primary({"name": "Last MS", "type": "primary", "ammo": {"magazine_size": 5, "reload_time": 1}, "attacks": {"shot": {"delivery": "hitscan", "stats": {"damage": {"heat": 100}, "crit_chance": 0, "crit_damage": 2, "status_chance": 0, "multishot": 1, "fire_rate": 1}}}, "evolutions": {"2": {"1": {"stats": {"multishot": [{"value": 3, "mode": "flat", "when": "last_shot"}]}}}}})
+        weapon = runtime_weapon(Primary, {"name": "Last MS", "type": "primary", "ammo": {"magazine_size": 5, "reload_time": 1}, "attacks": {"shot": {"delivery": "hitscan", "stats": {"damage": {"heat": 100}, "crit_chance": 0, "crit_damage": 2, "status_chance": 0, "multishot": 1, "fire_rate": 1}}}, "evolutions": {"2": {"1": {"stats": {"multishot": [{"value": 3, "mode": "flat", "when": "last_shot"}]}}}}})
         weapon.set({"evolutions": {2: 1}})
         # 4 normal @ MS1 + 1 last @ MS4 → average DPH = (4*100 + 400)/5 = 160
         self.assertAlmostEqual(selected(weapon).average.flat_dph, 160.0)
@@ -933,8 +941,8 @@ class PublicApiTests(unittest.TestCase):
         self.assertGreater(selected(synth).average.flat_dph, selected(bare).average.flat_dph)
 
         beam_data = {"name": "Beam Pistol", "type": "secondary", "subtype": "pistol", "ammo": {"magazine_size": 10, "reload_time": 1}, "attacks": {"tick": {"delivery": "beam", "stats": {"damage": {"heat": 100}, "crit_chance": 0, "crit_damage": 2, "multishot": 1, "fire_rate": 8}}}}
-        beam = Secondary(beam_data)
-        beam_synth = Secondary(beam_data).configure(Build(arsenal.get("Synth Charge")))
+        beam = runtime_weapon(Secondary, beam_data)
+        beam_synth = runtime_weapon(Secondary, beam_data).configure(Build(arsenal.get("Synth Charge")))
         self.assertAlmostEqual(selected(beam_synth).average.flat_dph, selected(beam).average.flat_dph)
 
     def test_calculator_uses_largest_faction_damage_bonus(self):
@@ -952,17 +960,15 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(weapon.results._max_average_faction_damage(attack), 1.55)
 
     def test_upgrade_stats_accept_scalar_and_single_record_shorthand(self):
-        scalar = Upgrade({"name": "Scalar", "type": "mod", "max_rank": 0, "stats": {"damage_bonus": 1.5}})
-        record = Upgrade({"name": "Record", "type": "mod", "max_rank": 0, "stats": {"crit_damage": {"value": 2.5, "when": "active"}}})
+        scalar = runtime_upgrade({"name": "Scalar", "type": "mod", "max_rank": 0, "stats": {"damage_bonus": 1.5}})
+        record = runtime_upgrade({"name": "Record", "type": "mod", "max_rank": 0, "stats": {"crit_damage": {"value": 2.5, "when": "active"}}})
 
         self.assertEqual(scalar.results.static.proportional.damage_bonus, 1.5)
-        self.assertEqual(record.results.conditional.proportional.crit_damage, 0)
-        record.set({"active": True})
         self.assertEqual(record.results.conditional.proportional.crit_damage, 2.5)
         self.assertEqual(scalar.data.stats.damage_bonus, 1.5)
 
     def test_upgrade_stats_resolve_effect_modes(self):
-        upgrade = Upgrade({
+        upgrade = runtime_upgrade({
             "name": "Modes",
             "type": "buff",
             "max_rank": 0,
@@ -982,13 +988,13 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(upgrade.results.total.base.crit_damage, 0.4)
 
     def test_upgrade_stats_default_to_proportional_mode(self):
-        explicit = Upgrade({"stats": {"crit_chance": {"value": 1.2, "mode": "proportional"}}})
-        omitted = Upgrade({"stats": {"crit_chance": {"value": 1.2}}})
+        explicit = runtime_upgrade({"stats": {"crit_chance": {"value": 1.2, "mode": "proportional"}}})
+        omitted = runtime_upgrade({"stats": {"crit_chance": {"value": 1.2}}})
 
         self.assertEqual(explicit.results.total.proportional.crit_chance, omitted.results.total.proportional.crit_chance)
 
     def test_calculated_stats_use_mode_buckets(self):
-        upgrade = Upgrade({
+        upgrade = runtime_upgrade({
             "stats": {
                 "crit_chance": [
                     {"value": 1.2, "mode": "proportional"},
@@ -1007,10 +1013,10 @@ class PublicApiTests(unittest.TestCase):
 
     def test_upgrade_stats_reject_unknown_modes(self):
         with self.assertRaisesRegex(ValueError, "unsupported effect mode"):
-            Upgrade({"stats": {"crit_chance": {"value": 1.2, "mode": "percent"}}})
+            runtime_upgrade({"stats": {"crit_chance": {"value": 1.2, "mode": "percent"}}})
 
     def test_upgrade_stats_accept_mixed_scalar_and_record_lists(self):
-        upgrade = Upgrade({
+        upgrade = runtime_upgrade({
             "name": "Mixed",
             "type": "mod",
             "max_rank": 0,
@@ -1018,8 +1024,6 @@ class PublicApiTests(unittest.TestCase):
         })
 
         self.assertEqual(upgrade.results.static.proportional.damage_bonus, 1.5)
-        self.assertEqual(upgrade.results.conditional.proportional.damage_bonus, 0)
-        upgrade.set({"active": True})
         self.assertEqual(upgrade.results.conditional.proportional.damage_bonus, 2.5)
         self.assertEqual(upgrade.results.total.proportional.damage_bonus, 4)
 
@@ -1042,7 +1046,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(chamber.results.stacking.proportional.multishot, 1.5)
         self.assertAlmostEqual(chamber.results.total.proportional.multishot, 2.3)
 
-        no_stacks = Build(arsenal.get("Galvanized Chamber", context={"stacks": 0}))
+        no_stacks = Build(arsenal.get("Galvanized Chamber", context={"on_kill": 0}))
         self.assertEqual(no_stacks.results.stacking.proportional.multishot, 0)
         self.assertAlmostEqual(no_stacks.results.total.proportional.multishot, 0.8)
 
@@ -1050,29 +1054,27 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(merciless.results.stacking.proportional.damage_bonus, 3.6)
         self.assertAlmostEqual(merciless.results.rank_locked.proportional.reload_speed, 0.3)
 
-        conditional = Upgrade({
+        conditional = runtime_upgrade({
             "name": "Conditional",
             "type": "mod",
             "max_rank": 0,
             "compatibility": {"types": []},
             "stats": {"damage_bonus": [{"value": 1, "when": "kill"}]},
         })
-        self.assertEqual(conditional.results.conditional.proportional.damage_bonus, 0)
-        conditional.set({"kill": True})
         self.assertEqual(conditional.results.conditional.proportional.damage_bonus, 1)
         conditional.data.runtime.kill = False
         disabled = Build(conditional)
         self.assertEqual(disabled.results.conditional.proportional.damage_bonus, 0)
 
     def test_condition_overload_uses_status_cap_and_attack_rules(self):
-        condition_overload = Upgrade({
+        condition_overload = runtime_upgrade({
             "name": "Condition Overload",
             "type": "mod",
             "max_rank": 0,
             "compatibility": {"types": []},
             "stats": {"damage_bonus": [{"value": 1, "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {"max_stacks": 2}}]},
         })
-        base_damage = Upgrade({
+        base_damage = runtime_upgrade({
             "name": "Base Damage",
             "type": "mod",
             "max_rank": 0,
@@ -1129,7 +1131,7 @@ class PublicApiTests(unittest.TestCase):
                 self.assertEqual(actual["max_stacks"], resolved["max_stacks"])
 
     def test_condition_overload_bonus_uses_sustained_unique_procs(self):
-        condition_overload = Upgrade({
+        condition_overload = runtime_upgrade({
             "name": "Condition Overload",
             "type": "mod",
             "max_rank": 0,
@@ -1142,14 +1144,14 @@ class PublicApiTests(unittest.TestCase):
         self.assertLess(weapon.results._average_condition_overload_bonus(selected(weapon)), 1.6)
 
     def test_condition_overload_scales_with_status_duration(self):
-        condition_overload = Upgrade({
+        condition_overload = runtime_upgrade({
             "name": "Condition Overload",
             "type": "mod",
             "max_rank": 0,
             "compatibility": {"types": []},
             "stats": {"damage_bonus": [{"value": 0.8, "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {"max_stacks": 3}}]},
         })
-        duration = Upgrade({
+        duration = runtime_upgrade({
             "name": "Lasting Sting",
             "type": "mod",
             "max_rank": 0,
@@ -1165,14 +1167,14 @@ class PublicApiTests(unittest.TestCase):
         )
 
     def test_condition_overload_forced_proc_is_fully_sustained(self):
-        condition_overload = Upgrade({
+        condition_overload = runtime_upgrade({
             "name": "Condition Overload",
             "type": "mod",
             "max_rank": 0,
             "compatibility": {"types": []},
             "stats": {"damage_bonus": [{"value": 1, "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {"max_stacks": 1}}]},
         })
-        weapon = Primary({
+        weapon = runtime_weapon(Primary, {
             "name": "Forced CO",
             "type": "primary",
             "attacks": {
@@ -1190,14 +1192,14 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(weapon.results._average_condition_overload_bonus(selected(weapon)), 1)
 
     def test_condition_overload_uses_each_attack_bucket(self):
-        condition_overload = Upgrade({
+        condition_overload = runtime_upgrade({
             "name": "Condition Overload",
             "type": "mod",
             "max_rank": 0,
             "compatibility": {"types": []},
             "stats": {"damage_bonus": [{"value": 1, "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {"max_stacks": 1}}]},
         })
-        weapon = Primary({
+        weapon = runtime_weapon(Primary, {
             "name": "Bucketed CO",
             "type": "primary",
             "attacks": {
@@ -1214,7 +1216,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertGreater(child.modded.proportional.damage_bonus, 1)
 
     def test_condition_overload_mod_has_no_status_cap(self):
-        heat = Upgrade({
+        heat = runtime_upgrade({
             "name": "Heat",
             "type": "mod",
             "max_rank": 0,
@@ -1264,7 +1266,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertRegex(total, r"2200\.00\s+\|\s+2200\.00")
 
     def test_rank_scaled_and_rank_locked_effects_resolve_independently(self):
-        upgrade = Upgrade({
+        upgrade = runtime_upgrade({
             "name": "Hybrid Rank",
             "type": "mod",
             "max_rank": 5,
@@ -1285,11 +1287,11 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(high.results.total.proportional.damage_bonus, 1.65)
         self.assertAlmostEqual(high.results.total.proportional.reload_speed, 0.3)
 
-        merciless = arsenal.get("Primary Merciless", context={"rank": 2, "stacks": 12})
+        merciless = arsenal.get("Primary Merciless", context={"rank": 2, "on_kill": 12})
         self.assertAlmostEqual(merciless.results.stacking.proportional.damage_bonus, 0.3 * 3 / 6 * 12)
         self.assertEqual(merciless.results.rank_locked.proportional.reload_speed, 0)
 
-        rank_locked = Upgrade({"stats": {"crit_chance": {"value": 2, "rank": 10}}, "max_rank": 11})
+        rank_locked = runtime_upgrade({"stats": {"crit_chance": {"value": 2, "rank": 10}}, "max_rank": 11})
         rank_locked.set({"rank": 10})
         self.assertEqual(rank_locked.results.rank_locked.proportional.crit_chance, 2)
         self.assertEqual(rank_locked.results.total.proportional.crit_chance, 2)
@@ -1308,7 +1310,7 @@ class PublicApiTests(unittest.TestCase):
         reduced = build - low
         self.assertEqual([upgrade.data.name for upgrade in reduced], ["Point Strike"])
 
-        different = Upgrade({"name": "Serration", "type": "mod", "max_rank": 10, "stats": {"damage_bonus": 0.1}})
+        different = runtime_upgrade({"name": "Serration", "type": "mod", "max_rank": 10, "stats": {"damage_bonus": 0.1}})
         self.assertFalse(different == high)
         untouched = Build(high) - different
         self.assertEqual([upgrade.data.name for upgrade in untouched], ["Serration"])
@@ -1321,7 +1323,7 @@ class PublicApiTests(unittest.TestCase):
             WeaponFormatterOwner,
         )
 
-        upgrade = Upgrade({"name": "Proto", "type": "mod", "max_rank": 0, "stats": {"damage_bonus": 1}})
+        upgrade = runtime_upgrade({"name": "Proto", "type": "mod", "max_rank": 0, "stats": {"damage_bonus": 1}})
         weapon = arsenal.get("Braton")
 
         self.assertIsInstance(upgrade, UpgradeOwner)
@@ -1333,7 +1335,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertIn(weapon.data.name, weapon.format.summary())
 
     def test_effect_buckets_aggregate_independently(self):
-        upgrade = Upgrade({
+        upgrade = runtime_upgrade({
             "name": "Buckets",
             "type": "mod",
             "max_rank": 5,
@@ -1357,7 +1359,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(upgrade.results.modular.proportional.damage_bonus, 0.15)
         self.assertAlmostEqual(upgrade.results.total.proportional.damage_bonus, 1.10)
 
-        alone = Upgrade(upgrade.data.copy())
+        alone = runtime_upgrade(upgrade.data.copy())
         alone.data.runtime.update({"rank": 5, "headshot": True, "kill": 2})
         alone.results.resolve()
         self.assertEqual(alone.results.modular.proportional.damage_bonus, 0)
@@ -1366,14 +1368,14 @@ class PublicApiTests(unittest.TestCase):
     def test_condition_overload_applies_before_modded_damage(self):
         from warframe_damage_calculator.calculators.weapon_calculator import WeaponCalculator
 
-        condition_overload = Upgrade({
+        condition_overload = runtime_upgrade({
             "name": "CO",
             "type": "mod",
             "max_rank": 0,
             "compatibility": {"types": []},
             "stats": {"damage_bonus": [{"value": 1, "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {"max_stacks": 1}}]},
         })
-        weapon = Primary({
+        weapon = runtime_weapon(Primary, {
             "name": "CO Order",
             "type": "primary",
             "attacks": {
@@ -1450,7 +1452,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertNotIn("status_effect_stacks", frostbite)
 
     def test_status_effect_stacks_use_sustained_procs(self):
-        cold = Upgrade({"name": "Cold", "type": "mod", "max_rank": 0, "stats": {"cold": [{"value": 1.0}]}})
+        cold = runtime_upgrade({"name": "Cold", "type": "mod", "max_rank": 0, "stats": {"cold": [{"value": 1.0}]}})
         without = arsenal.get("Braton").configure(Build(cold))
         with_arcane = arsenal.get("Braton").configure(Build(cold, arsenal.get("Primary Frostbite")))
         self.assertGreater(selected(with_arcane).effective.crit_damage, selected(without).effective.crit_damage)
@@ -1458,14 +1460,14 @@ class PublicApiTests(unittest.TestCase):
 
     def test_status_effect_stacks_require_matching_status(self):
         bare = arsenal.get("Lato").configure(Build(arsenal.get("Cascadia Flare")))
-        heat = Upgrade({"name": "Heat", "type": "mod", "max_rank": 0, "stats": {"heat": [{"value": 1.0}]}})
+        heat = runtime_upgrade({"name": "Heat", "type": "mod", "max_rank": 0, "stats": {"heat": [{"value": 1.0}]}})
         with_heat = arsenal.get("Lato").configure(Build(heat, arsenal.get("Cascadia Flare")))
         self.assertAlmostEqual(selected(bare).effective.damage_bonus, selected(arsenal.get("Lato")).effective.damage_bonus)
         self.assertGreater(selected(with_heat).effective.damage_bonus, selected(bare).effective.damage_bonus)
         self.assertAlmostEqual(arsenal.get("Cascadia Flare").results.total.proportional.damage_bonus, 0)
 
     def test_status_effect_stacks_ignore_runtime_override(self):
-        cold = Upgrade({"name": "Cold", "type": "mod", "max_rank": 0, "stats": {"cold": [{"value": 1.0}]}})
+        cold = runtime_upgrade({"name": "Cold", "type": "mod", "max_rank": 0, "stats": {"cold": [{"value": 1.0}]}})
         auto = arsenal.get("Braton").configure(Build(cold, arsenal.get("Primary Frostbite")))
         overridden = arsenal.get("Braton").configure(Build(cold, arsenal.get("Primary Frostbite"))).set({"on_cold_status_effect": 0})
         self.assertAlmostEqual(selected(overridden).effective.crit_damage, selected(auto).effective.crit_damage)
@@ -1491,7 +1493,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(selected(narrowed).effective.accuracy, 0.3)
 
     def test_ammo_maximum_percent_and_evolution_capacity(self):
-        base = Primary({"name": "Reserve", "type": "primary", "subtype": "rifle", "ammo": {"magazine_size": 10, "reload_time": 1, "ammo_maximum": 100}, "attacks": {"normal_attack": {"trigger": "auto", "delivery": "hitscan", "stats": {"damage": {"impact": 10}, "crit_chance": 0.1, "crit_damage": 2, "status_chance": 0.1, "fire_rate": 10}}}})
+        base = runtime_weapon(Primary, {"name": "Reserve", "type": "primary", "subtype": "rifle", "ammo": {"magazine_size": 10, "reload_time": 1, "ammo_maximum": 100}, "attacks": {"normal_attack": {"trigger": "auto", "delivery": "hitscan", "stats": {"damage": {"impact": 10}, "crit_chance": 0.1, "crit_damage": 2, "status_chance": 0.1, "fire_rate": 10}}}})
         drummed = base.configure(Build(arsenal.get("Ammo Drum")))
         self.assertAlmostEqual(selected(drummed).effective.ammo_maximum, 190)
         boar = arsenal.get("Boar").set({"evolutions": {3: 2}})

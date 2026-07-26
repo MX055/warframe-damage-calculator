@@ -85,9 +85,7 @@ class MeleeCalculator(WeaponCalculator):
 
     def _combo_multiplier(self, result: AttackResult) -> int:
         if result.category not in HEAVY_ATTACK_CATEGORIES: return 1
-        combo = self.weapon.data.runtime.get("combo")
-        if combo is not None: return max(1, min(MAX_COMBO_MULTIPLIER, int(combo)))
-        return self._combo_multiplier_from_hits(float(result.effective.initial_combo or 0))
+        return max(1, min(MAX_COMBO_MULTIPLIER, int(self.weapon.data.runtime.combo)))
 
     def _status_hits(self, result: AttackResult) -> float:
         hits = super()._status_hits(result)

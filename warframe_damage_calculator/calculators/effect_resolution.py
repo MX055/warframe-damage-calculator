@@ -52,7 +52,6 @@ class ResolutionContext:
     rank: int = 0
     rank_multiplier: float = 1.0
     max_stacks: int | None = None
-    default_stacks: Any = None
     equipped: Collection[str] = ()
     weapon: Data | None = None
     upgrade: Data | None = None
@@ -69,11 +68,10 @@ def raw_effects(raw: Any) -> list[Data]:
     return effects
 
 
-def stack_count(*, stacks_on: str | None, max_stacks: int | None, lookup: Mapping[str, Any], default_stacks: Any) -> int:
-    """Resolve a stack count with an optional maximum and explicit fallback."""
+def stack_count(*, stacks_on: str | None, max_stacks: int | None, lookup: Mapping[str, Any]) -> int:
+    """Resolve an explicit stack count with an optional maximum."""
     if stacks_on is None: return 1
-    stacks_value = lookup.get(stacks_on)
-    if stacks_value is None: stacks_value = default_stacks if default_stacks is not None else 0
+    stacks_value = lookup[stacks_on]
     return min(stacks_value, max_stacks) if max_stacks is not None else stacks_value
 
 
@@ -103,7 +101,7 @@ def resolve_stack_scaled_effect(effect: ResolvableEffect, context: ResolutionCon
     stacks = 1
     if effect.stacks_on is not None:
         effect_max = effect.max_stacks if effect.max_stacks is not None else context.max_stacks
-        stacks = stack_count(stacks_on=effect.stacks_on, max_stacks=effect_max, lookup=context.runtime, default_stacks=context.default_stacks)
+        stacks = stack_count(stacks_on=effect.stacks_on, max_stacks=effect_max, lookup=context.runtime)
         if not stacks: return None
 
     value = effect.value

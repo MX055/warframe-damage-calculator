@@ -18,6 +18,26 @@ from warframe_damage_calculator.core.dist import Dist
 from warframe_damage_calculator.fields.calculated import ModdedStats
 from warframe_damage_calculator.fields.evolution import ConversionBonus
 from warframe_damage_calculator.fields.weapon_data import Attack
+from warframe_damage_calculator.loader.construction import DatabaseFactory
+
+
+factory = DatabaseFactory()
+
+
+def runtime_upgrade(data):
+    definition = dict(data)
+    runtime = factory._default_upgrade_runtime(definition)
+    runtime.update(definition.get("runtime", {}))
+    definition["runtime"] = runtime
+    return Upgrade(definition)
+
+
+def runtime_weapon(model, data):
+    definition = dict(data)
+    runtime = factory._default_weapon_runtime(definition)
+    runtime.update(definition.get("runtime", {}))
+    definition["runtime"] = runtime
+    return model(definition)
 
 
 def selected(weapon):
@@ -40,7 +60,7 @@ class StatusModelTests(unittest.TestCase):
         self.assertEqual(SustainedStatusModel({"slash": 1.0}, 10, 0, 3).expected_unique_active_statuses(), 0.0)
 
     def test_multiple_status_attempts_raise_per_attack_probability(self):
-        weapon = Primary({"name": "Attempts", "type": "primary", "attacks": {"shot": {"stats": {"damage": {"heat": 100}, "status_chance": 0.5, "fire_rate": 1, "multishot": 1}}}})
+        weapon = runtime_weapon(Primary, {"name": "Attempts", "type": "primary", "attacks": {"shot": {"stats": {"damage": {"heat": 100}, "status_chance": 0.5, "fire_rate": 1, "multishot": 1}}}})
         result = selected(weapon)
         one = per_attack_status_probabilities(attack=result.attack, base=result.base, build=result.build, evolution_status_chance=0, flat_status_chance=0, status_attempts_per_attack=1)
         two = per_attack_status_probabilities(attack=result.attack, base=result.base, build=result.build, evolution_status_chance=0, flat_status_chance=0, status_attempts_per_attack=2)
@@ -76,8 +96,8 @@ class StatusModelTests(unittest.TestCase):
         self.assertAlmostEqual(modded.proportional.damage_bonus, 1.5)
 
     def test_ranged_and_melee_sustained_rates_differ(self):
-        ranged = Primary({"name": "R", "type": "primary", "ammo": {"magazine_size": 10, "reload_time": 2}, "attacks": {"shot": {"stats": {"damage": {"impact": 10}, "fire_rate": 10, "ammo_cost": 1}}}})
-        melee = Melee({"name": "M", "type": "melee", "attacks": {"normal": {"stats": {"damage": {"slash": 10}, "attack_speed": 1}}}})
+        ranged = runtime_weapon(Primary, {"name": "R", "type": "primary", "ammo": {"magazine_size": 10, "reload_time": 2}, "attacks": {"shot": {"stats": {"damage": {"impact": 10}, "fire_rate": 10, "ammo_cost": 1}}}})
+        melee = runtime_weapon(Melee, {"name": "M", "type": "melee", "attacks": {"normal": {"stats": {"damage": {"slash": 10}, "attack_speed": 1}}}})
         # Melee uses attack_speed; with no mods the sustained rate matches effective attack speed.
         self.assertGreater(ranged.results._sustained_attack_rate(selected(ranged)), 0)
         self.assertGreater(melee.results._sustained_attack_rate(selected(melee)), 0)
@@ -144,10 +164,9 @@ class EffectResolutionTests(unittest.TestCase):
         self.assertEqual(raw_effects(0.5)[0].value, 0.5)
         self.assertEqual(raw_effects([{"value": 1, "when": "headshot"}])[0].when, "headshot")
 
-    def test_stack_count_defaults_and_caps(self):
-        self.assertEqual(stack_count(stacks_on="stacks", max_stacks=5, lookup={}, default_stacks=None), 0)
-        self.assertEqual(stack_count(stacks_on="stacks", max_stacks=5, lookup={}, default_stacks=4), 4)
-        self.assertEqual(stack_count(stacks_on="stacks", max_stacks=3, lookup={"stacks": 10}, default_stacks=None), 3)
+    def test_stack_count_caps_explicit_runtime(self):
+        self.assertEqual(stack_count(stacks_on="stacks", max_stacks=5, lookup={"stacks": 4}), 4)
+        self.assertEqual(stack_count(stacks_on="stacks", max_stacks=3, lookup={"stacks": 10}), 3)
 
     def test_resolve_and_aggregate_pipeline(self):
         recorded: list[int] = []
@@ -172,7 +191,7 @@ class EffectResolutionTests(unittest.TestCase):
         self.assertAlmostEqual(resolved.value, 0.3)
 
     def test_upgrade_rank_locked_and_equipped_dependency(self):
-        upgrade = Upgrade({
+        upgrade = runtime_upgrade({
             "name": "Modular",
             "type": "mod",
             "max_rank": 5,
@@ -192,7 +211,7 @@ class EffectResolutionTests(unittest.TestCase):
         self.assertAlmostEqual(calc.modular.proportional.crit_chance, 0.2)
 
     def test_upgrade_condition_and_rank_scaling(self):
-        upgrade = Upgrade({"name": "Cond", "type": "mod", "max_rank": 1, "stats": {"crit_chance": [{"value": 1.0, "when": "rifle"}]}})
+        upgrade = runtime_upgrade({"name": "Cond", "type": "mod", "max_rank": 1, "stats": {"crit_chance": [{"value": 1.0, "when": "rifle"}]}})
         upgrade.set({"rank": 0})
         calc = UpgradeCalculator(upgrade)
         calc.resolve(Data({"type": "pistol"}), Data())
@@ -230,7 +249,7 @@ class AttackTreeTests(unittest.TestCase):
 
 class PipelineOrderTests(unittest.TestCase):
     def test_conversions_apply_before_modded_scalars(self):
-        status_mod = Upgrade({"name": "Status", "type": "mod", "max_rank": 0, "stats": {"status_chance": [{"value": 1.0}]}})
+        status_mod = runtime_upgrade({"name": "Status", "type": "mod", "max_rank": 0, "stats": {"status_chance": [{"value": 1.0}]}})
         weapon = arsenal.get("Dera Vandal")
         raw_crit = selected(weapon).base.crit_chance
         weapon.configure(Build(status_mod)).set({"evolutions": {4: 2}})
@@ -257,14 +276,14 @@ class PipelineOrderTests(unittest.TestCase):
         self.assertAlmostEqual(fresh.average.flat_dph, resolved.average.flat_dph)
 
     def test_condition_overload_uses_status_model_not_modded_damage(self):
-        condition_overload = Upgrade({
+        condition_overload = runtime_upgrade({
             "name": "CO",
             "type": "mod",
             "max_rank": 0,
             "compatibility": {"types": []},
             "stats": {"damage_bonus": [{"value": 1, "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {"max_stacks": 1}}]},
         })
-        weapon = Primary({
+        weapon = runtime_weapon(Primary, {
             "name": "CO Model",
             "type": "primary",
             "attacks": {"shot": {"stats": {"damage": {"heat": 100}, "status_chance": 1, "fire_rate": 1, "multishot": 1}}},
@@ -277,14 +296,14 @@ class PipelineOrderTests(unittest.TestCase):
         self.assertGreater(result.modded.proportional.damage.total_damage(), 0)
 
     def test_build_sustained_status_model_from_layers(self):
-        condition_overload = Upgrade({
+        condition_overload = runtime_upgrade({
             "name": "CO",
             "type": "mod",
             "max_rank": 0,
             "compatibility": {"types": []},
             "stats": {"damage_bonus": [{"value": 1, "behaviour": "UNIQUE_STATUS", "automatic": True, "behaviour_data": {"max_stacks": 2}}]},
         })
-        weapon = Primary({
+        weapon = runtime_weapon(Primary, {
             "name": "CO Layers",
             "type": "primary",
             "attacks": {"shot": {"stats": {"damage": {"heat": 50, "slash": 50}, "status_chance": 1, "fire_rate": 2, "multishot": 1}}},

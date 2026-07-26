@@ -42,36 +42,24 @@ class WeaponData(Data):
 
     @property
     def selected_attack(self) -> str:
-        selected = self.runtime.get("attack")
-        if selected is not None:
-            return selected
-        return next(iter(self.attacks))
+        return str(self.runtime.attack)
 
     @property
     def selected_evolutions(self) -> dict:
-        return dict(self.runtime.get("evolutions") or {})
+        return dict(self.runtime.evolutions)
 
     @property
-    def selected_combo(self) -> int | None:
-        combo = self.runtime.get("combo")
-        if combo is None:
-            return None
-        return int(combo)
+    def selected_combo(self) -> int:
+        return int(self.runtime.combo)
 
     @property
     def selected_stance_combo(self) -> str:
-        selected = self.runtime.get("stance_combo")
-        if selected is not None:
-            return str(selected)
-        return "neutral"
+        return str(self.runtime.stance_combo)
 
     @property
-    def selected_ability_strength(self) -> float | None:
-        """Warframe Ability Strength as a multiplier (1.0 = 100%). None when unset."""
-        value = self.runtime.get("ability_strength")
-        if value is None:
-            return None
-        return float(value)
+    def selected_ability_strength(self) -> float:
+        """Warframe Ability Strength as a multiplier (1.0 = 100%)."""
+        return float(self.runtime.ability_strength)
 
 
 class RangedData(WeaponData):

@@ -109,7 +109,7 @@ class EvolutionCalculator:
         if effect.scope is not None and context.form is not None and effect.scope != context.form:
             return False
         if effect.bucket == "magazine_position" or effect.condition is None: return True
-        return bool(context.runtime.get(effect.condition, False))
+        return bool(context.runtime[effect.condition])
 
     def _resolve_effect(self, effect: ResolvableEffect, context: ResolutionContext) -> ResolvableEffect | None:
         return resolve_stack_scaled_effect(effect, context)
@@ -134,6 +134,6 @@ class EvolutionCalculator:
             merge_evolution_stat(getattr(self.total, effect.mode), effect.stat, effect.value, conversion_max=effect.conversion_max)
 
     def resolve(self) -> ResolvedEvolutionStat:
-        context = ResolutionContext(runtime=self.runtime, default_stacks=self.runtime.get("stacks"), form=self.form)
+        context = ResolutionContext(runtime=self.runtime, form=self.form)
         resolve_and_aggregate(self._normalize_effects(), context, is_applicable=self._is_effect_applicable, resolve_one=self._resolve_effect, aggregate=self._aggregate_effects)
         return self.total

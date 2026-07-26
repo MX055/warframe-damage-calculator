@@ -161,7 +161,7 @@ weapon = arsenal.get("Corinth Prime")
 assert isinstance(weapon, Primary)
 
 build = Build(
-    arsenal.get("Galvanized Hell", context={"stacks": 4}),
+    arsenal.get("Galvanized Hell", context={"on_kill": 4}),
     arsenal.get("Primed Chilling Grasp"),
     arsenal.get("Critical Deceleration"),
 )
@@ -222,8 +222,8 @@ Attack keys match `weapon.data.attacks` exactly (for example `air_burst_projecti
 from warframe_damage_calculator import Build, arsenal
 
 build = Build(
-    arsenal.get("Galvanized Hell", context={"stacks": 4}),
-    arsenal.get("Primary Merciless", context={"stacks": 12}),
+    arsenal.get("Galvanized Hell", context={"on_kill": 4}),
+    arsenal.get("Primary Merciless", context={"on_kill": 12}),
     arsenal.get("Hunter Munitions"),
 )
 
@@ -298,9 +298,7 @@ print(weapon.format.summary())
 ### Configure upgrade and build runtime conditions
 
 ```python
-upgrade = Upgrade({"name": "Headshot", "type": "mod", "max_rank": 0, "stats": {"crit_chance": [1.2, {"value": 0.8, "when": "headshot"}]}})
-print(upgrade.results.total.proportional.crit_chance)  # 1.2
-upgrade.set({"headshot": True})
+upgrade = Upgrade({"name": "Headshot", "type": "mod", "max_rank": 0, "stats": {"crit_chance": [1.2, {"value": 0.8, "when": "headshot"}]}, "runtime": {"rank": 0, "headshot": True}})
 print(upgrade.results.total.proportional.crit_chance)  # 2.0
 upgrade.set({"headshot": False})
 print(upgrade.results.total.proportional.crit_chance)  # 1.2
@@ -325,6 +323,7 @@ weapon = Primary(
     {
         "name": "Example Rifle",
         "type": "primary",
+        "runtime": {"attack": "normal_attack", "evolutions": {}, "combo": 1, "stance_combo": "neutral", "ability_strength": 1.0},
         "subtype": "rifle",
         "disposition": 1.0,
         "ammo": {
@@ -371,6 +370,7 @@ weapon = Primary(
     {
         "name": "Example Launcher",
         "type": "primary",
+        "runtime": {"attack": "projectile", "evolutions": {}, "combo": 1, "stance_combo": "neutral", "ability_strength": 1.0},
         "subtype": "rifle",
         "ammo": {
             "reload_time": 2.5,
@@ -429,6 +429,7 @@ weapon = Melee(
     {
         "name": "Example Sword",
         "type": "melee",
+        "runtime": {"attack": "normal_attack", "evolutions": {}, "combo": 1, "stance_combo": "neutral", "ability_strength": 1.0},
         "subtype": "sword",
         "attacks": {
             "normal_attack": {
@@ -467,6 +468,7 @@ upgrade = Upgrade(
         "name": "Example Mod",
         "type": "mod",
         "max_rank": 10,
+        "runtime": {"rank": 10},
         "compatibility": {
             "types": ["primary"],
             "subtypes": ["rifle"],
@@ -503,6 +505,7 @@ upgrade = Upgrade(
         "name": "Example Arcane",
         "type": "arcane",
         "max_rank": 5,
+        "runtime": {"rank": 5, "headshot": True, "kill": 3},
         "stats": {
             "damage_bonus": [
                 0.30,
@@ -515,7 +518,7 @@ upgrade = Upgrade(
     }
 )
 
-partner = Upgrade({"name": "Partner", "type": "buff", "stats": {}})
+partner = Upgrade({"name": "Partner", "type": "buff", "stats": {}, "runtime": {"rank": 0}})
 
 upgrade.data.runtime.update(
     {
@@ -599,17 +602,15 @@ Damage-type effects aggregate into a single ordered damage distribution.
 The loader accepts runtime overrides through `context`:
 
 ```python
-inactive = arsenal.get("Galvanized Hell", context={"stacks": 0})
-active = arsenal.get("Galvanized Hell", context={"stacks": 4})
+inactive = arsenal.get("Galvanized Hell", context={"on_kill": 0})
+active = arsenal.get("Galvanized Hell", context={"on_kill": 4})
 partial_rank = arsenal.get("Serration", context={"rank": 4})
 ```
 
-For a manually constructed upgrade, runtime is always present and starts empty:
+Manually constructed models must provide every runtime key they use:
 
 ```python
-upgrade = Upgrade({...})
-assert dict(upgrade.data.runtime) == {}
-upgrade.set({"rank": 5, "kill": 3, "headshot": True})
+upgrade = Upgrade({..., "runtime": {"rank": 5, "kill": 3, "headshot": True}})
 ```
 
 Ranks are zero-based. Ordinary effects scale by:
@@ -618,11 +619,10 @@ Ranks are zero-based. Ordinary effects scale by:
 (rank + 1) / (max_rank + 1)
 ```
 
-The database loader assigns concrete default runtime values: maximum rank,
-maximum finite stacks, and active named conditions. Runtime supplied through
-`arsenal.get(..., context=...)` overlays those defaults. Directly constructed
-models do not infer maximum stacks or active conditions from missing runtime;
-their missing rank resolves at rank `0`.
+The database loader assigns concrete runtime values for rank, each named stack
+trigger, conditions, weapon selection, evolution selection, combo, stance combo,
+and Ability Strength. Runtime supplied through `arsenal.get(..., context=...)`
+overlays those values. Calculators do not infer missing runtime keys.
 
 An upgrade containing a rank-locked effect currently skips proportional scaling
 for its other effects. This matches the database representation used by the
@@ -665,7 +665,7 @@ A build owns detached copies of its upgrades. Iterating over a build also yields
 copies. The canonical mutable collection is `build.upgrades`:
 
 ```python
-build.upgrades[0].data.runtime.stacks = 0
+build.upgrades[0].data.runtime.on_kill = 0
 build.results.resolve()
 ```
 
@@ -1232,10 +1232,10 @@ Melee DPS is calculated as expected damage per selected attack multiplied by its
 effective attack speed (hits/sec when a stance combo is equipped). Attack
 `category` drives heavy/slam/slide rules:
 
-- `heavy` / `heavy_slam`: wind-up speed uses `heavy_attack_speed` mods, not `attack_speed`. Hit and DoT damage are multiplied by the combo multiplier from `initial_combo` (`floor(hits / 20) + 1`, clamped to `1`–`12`). Critical chance bonuses from upgrades (additive and flat) are doubled.
+- `heavy` / `heavy_slam`: wind-up speed uses `heavy_attack_speed` mods, not `attack_speed`. Hit and DoT damage use `weapon.data.runtime.combo`, clamped to `1`–`12`. Critical chance bonuses from upgrades (additive and flat) are doubled.
 - `slam` / `heavy_slam`: effective damage is multiplied by `slam_damage`.
 - `slide`: effective crit chance is multiplied by `slide_crit_chance`.
-- Combo-scaling mods (`stacks.when == "stacks"`, e.g. Blood Rush) read `weapon.data.runtime.combo` only when it is present. Set `upgrade.data.runtime.stacks` to override it for one upgrade.
+- Combo-scaling mods (`stacks.when == "stacks"`, e.g. Blood Rush) read `upgrade.data.runtime.stacks`.
 
 Stance animation timing, follow-through, and multi-hit stance sequences are not
 modeled, so melee DPS is best treated as a relative comparison.
