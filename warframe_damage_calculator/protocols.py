@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
-from typing import Protocol, runtime_checkable
+from typing import Any, Protocol, runtime_checkable
 
 from .fields.attack_result import AttackResult
 from .fields.upgrade import ResolvedStat, UpgradeData
@@ -48,7 +48,9 @@ class WeaponCalculatorOwner(Protocol):
 
 @runtime_checkable
 class ConfigurableWeaponOwner(WeaponCalculatorOwner, Protocol):
-    def configure(self, build: BuildOwner | None = None, context: Mapping[str, object] | None = None) -> ConfigurableWeaponOwner: ...
+    def configure(self, build: BuildOwner | BuildUpgradeOwner | None = None) -> ConfigurableWeaponOwner: ...
+
+    def set(self, context: Mapping[str, Any] | None = None) -> ConfigurableWeaponOwner: ...
 
     def copy(self) -> ConfigurableWeaponOwner: ...
 

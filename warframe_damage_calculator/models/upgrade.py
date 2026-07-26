@@ -16,16 +16,17 @@ class Upgrade:
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Upgrade):
             return NotImplemented
-        return self.data == other.data
+        own = self.data.with_defaults()
+        theirs = other.data.with_defaults()
+        own.pop("runtime", None)
+        theirs.pop("runtime", None)
+        return own == theirs
 
-    def configure(self, context: Mapping[str, Any] | None = None) -> Self:
+    def set(self, context: Mapping[str, Any] | None = None) -> Self:
         if context is not None:
             self.data.runtime.update(context)
         self.results.resolve()
         return self
 
     def copy(self) -> Self:
-        copied = type(self)(self.data.copy())
-        copied.data.runtime.update(self.data.runtime.with_defaults())
-        copied.results.resolve()
-        return copied
+        return type(self)(self.data.copy())

@@ -28,9 +28,9 @@ class Build:
         excluded = [other] if isinstance(other, Upgrade) else list(other)
         return Build(*(upgrade for upgrade in self if all(upgrade != item for item in excluded)))
 
-    def configure(self, context: Mapping[str, Any] | None = None) -> Self:
+    def set(self, context: Mapping[str, Any] | None = None) -> Self:
         for upgrade in self.upgrades:
-            upgrade.configure(context)
+            upgrade.set(context)
         self.results.resolve()
         return self
 

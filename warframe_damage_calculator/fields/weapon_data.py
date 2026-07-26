@@ -38,14 +38,7 @@ class WeaponData(Data):
     ammo: Data = {}
     attacks: Attacks = Attacks()
     evolutions: Evolutions = Evolutions()
-
-    @property
-    def runtime(self) -> Data:
-        runtime = getattr(self, "_runtime", None)
-        if runtime is None:
-            runtime = Data()
-            object.__setattr__(self, "_runtime", runtime)
-        return runtime
+    runtime: Data = Data()
 
     @property
     def selected_attack(self) -> str:

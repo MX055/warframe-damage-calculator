@@ -83,14 +83,7 @@ class UpgradeData(Data):
     incompatibility: list[str] = []
     stats: UpgradeStats = {}
     combos: StanceCombos = {}
-
-    @property
-    def runtime(self) -> Data:
-        runtime = getattr(self, "_runtime", None)
-        if runtime is None:
-            runtime = Data()
-            object.__setattr__(self, "_runtime", runtime)
-        return runtime
+    runtime: Data = Data()
 
 
 class ResolvedModeStats(Data):

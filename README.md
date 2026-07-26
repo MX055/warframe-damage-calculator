@@ -24,13 +24,13 @@ front ends, but it is not a complete simulation of Warframe combat.
 - One canonical database file: `database/database.json`
 - Flat constructors for weapons and upgrades (`name` is a field on the model data)
 - Multiple named attack modes per weapon
-- Runtime attack selection with `weapon.configure(context={"attack": ...})`
+- Runtime attack selection with `weapon.set({"attack": ...})`
 - Automatic calculation of related attacks, such as projectiles and their explosions
 - Selected attack results on `weapon.results.main`; direct children on `weapon.results.child`
 - Per-attack tree totals on `weapon.results.main.final` (selected attack + related children DPH/DPS)
 - Global weapon data separated from attack-specific stats
-- Incarnon evolution selection with `weapon.configure(context={"evolutions": {...}})`
-- Fluent runtime configuration on `Upgrade.configure(...)` and `Build.configure(...)`
+- Incarnon evolution selection with `weapon.set({"evolutions": {...}})`
+- Fluent runtime updates on `Weapon.set(...)`, `Upgrade.set(...)`, and `Build.set(...)`
 - Attack-specific Condition Overload factors and additive or multiplicative behavior
 - Separate faction-damage stats for Corpus, Grineer, Infested, Murmur, Orokin, and Sentient
 - `Weapon` added to the package-root public API
@@ -178,7 +178,7 @@ children (flat list). Each attack result has `base` / `modded` / `effective` /
 `average` for itself, and `final` for itself plus related children.
 
 Database upgrades resolve at maximum rank and, where applicable, maximum stacks
-by default. Pass runtime values through `context` or `configure(...)` to
+by default. Pass runtime values through loader `context` or `set(...)` to
 override that behavior.
 
 ---
@@ -204,7 +204,7 @@ The first attack in the weapon data is selected by default.
 ### Select another attack mode
 
 ```python
-weapon.configure(context={"attack": "air_burst_projectile"})
+weapon.set({"attack": "air_burst_projectile"})
 
 print(weapon.data.attacks.air_burst_projectile.trigger)
 print(weapon.data.attacks.air_burst_projectile.delivery)
@@ -230,6 +230,7 @@ build = Build(
 weapon.configure(build)
 ```
 
+`configure(...)` accepts either a `Build` or one `Upgrade`.
 `configure()` leaves the current build when called with no build argument.
 Pass an empty `Build()` to clear mods:
 
@@ -237,27 +238,24 @@ Pass an empty `Build()` to clear mods:
 weapon.configure(Build())
 ```
 
-Build, attack, and evolutions can be set together (or chained):
+Build configuration and runtime updates are separate and can be chained:
 
 ```python
-weapon = arsenal.get("Corinth Prime").configure(
-    build,
-    context={"attack": "air_burst_projectile"},
-)
+weapon = arsenal.get("Corinth Prime").configure(build).set({"attack": "air_burst_projectile"})
 ```
 
 ### Select Incarnon evolutions
 
 ```python
 weapon = arsenal.get("Telos Boltor")
-weapon.configure(context={"evolutions": {2: 1, 3: 2}, "attack": "incarnon_form"})
+weapon.set({"evolutions": {2: 1, 3: 2}, "attack": "incarnon_form"})
 
 print(weapon.results.main.effective.damage.total_damage())
 ```
 
 Melee Incarnons use the same pattern with `incarnon_*` attack names (for example
-`arsenal.get("Furax").configure(context={"attack": "incarnon_normal_attack"})`). Evolution
-tier `1` is the activation perk and is not selected via `configure(context={"evolutions": ...})`.
+`arsenal.get("Furax").set({"attack": "incarnon_normal_attack"})`). Evolution
+tier `1` is the activation perk and is not selected via `set({"evolutions": ...})`.
 
 Evolution keys are tier numbers matching the database (`2`, `3`, …); values are
 perk indices. Selected evolutions are resolved separately from the mod build:
@@ -271,7 +269,7 @@ Ability Strength before mods:
 
 ```python
 weapon = arsenal.get("Whipclaw")
-weapon.configure(context={"ability_strength": 2.5})  # 250% Strength
+weapon.set({"ability_strength": 2.5})  # 250% Strength
 
 print(weapon.results.main.base.damage.total_damage())  # arsenal base × 2.5
 ```
@@ -301,12 +299,14 @@ print(weapon.format.summary())
 
 ```python
 upgrade = Upgrade({"name": "Headshot", "type": "mod", "max_rank": 0, "stats": {"crit_chance": [1.2, {"value": 0.8, "when": "headshot"}]}})
+print(upgrade.results.total.proportional.crit_chance)  # 1.2
+upgrade.set({"headshot": True})
 print(upgrade.results.total.proportional.crit_chance)  # 2.0
-upgrade.configure({"headshot": False})
+upgrade.set({"headshot": False})
 print(upgrade.results.total.proportional.crit_chance)  # 1.2
 
 build = Build(upgrade)
-build.configure({"headshot": True})
+build.set({"headshot": True})
 ```
 
 ---
@@ -406,7 +406,7 @@ weapon = Primary(
     }
 )
 
-weapon.configure(context={"attack": "projectile"})
+weapon.set({"attack": "projectile"})
 
 print(weapon.results.main.effective.damage)
 print(weapon.results.child[0].effective.damage)
@@ -418,7 +418,7 @@ For ranged weapons, selected attacks may name related attacks through
 direct children are on `weapon.results.child`. `main.final` folds that attack
 plus its related children (DPH summed, DPS using that attack's fire rate).
 To inspect a deeper related attack as `main`, select it with
-`weapon.configure(context={"attack": ...})`.
+`weapon.set({"attack": ...})`.
 
 ### Constructing a melee weapon
 
@@ -604,13 +604,12 @@ active = arsenal.get("Galvanized Hell", context={"stacks": 4})
 partial_rank = arsenal.get("Serration", context={"rank": 4})
 ```
 
-For a manually constructed upgrade:
+For a manually constructed upgrade, runtime is always present and starts empty:
 
 ```python
-upgrade.data.runtime.rank = 5
-upgrade.data.runtime.kill = 3
-upgrade.data.runtime.headshot = True
-upgrade.results.resolve()
+upgrade = Upgrade({...})
+assert dict(upgrade.data.runtime) == {}
+upgrade.set({"rank": 5, "kill": 3, "headshot": True})
 ```
 
 Ranks are zero-based. Ordinary effects scale by:
@@ -619,9 +618,11 @@ Ranks are zero-based. Ordinary effects scale by:
 (rank + 1) / (max_rank + 1)
 ```
 
-Omitted ranks default to `max_rank`. Omitted stack counts generally resolve to
-the effect's maximum for an untouched database upgrade. Supplying runtime
-context lets callers explicitly disable or limit those values.
+The database loader assigns concrete default runtime values: maximum rank,
+maximum finite stacks, and active named conditions. Runtime supplied through
+`arsenal.get(..., context=...)` overlays those defaults. Directly constructed
+models do not infer maximum stacks or active conditions from missing runtime;
+their missing rank resolves at rank `0`.
 
 An upgrade containing a rank-locked effect currently skips proportional scaling
 for its other effects. This matches the database representation used by the
@@ -797,7 +798,7 @@ weapon.data.evolutions
 ```
 
 `weapon.data` is the flat weapon definition. Select an attack with
-`weapon.configure(context={"attack": ...})` using a key from `weapon.data.attacks`.
+`weapon.set({"attack": ...})` using a key from `weapon.data.attacks`.
 Selected attack and Incarnon perk choices are stored in
 `weapon.data.runtime` (same pattern as upgrade runtime).
 
@@ -816,7 +817,7 @@ upgrade.data.runtime
 ### Weapon runtime
 
 ```python
-weapon.configure(build, context={"attack": "...", "evolutions": {...}, "combo": 6, "ability_strength": 2.0})
+weapon.configure(build).set({"attack": "...", "evolutions": {...}, "combo": 6, "ability_strength": 2.0})
 weapon.data.runtime.attack = "heavy_attack"
 weapon.data.runtime.evolutions = {2: 1}
 weapon.data.runtime.combo = 6
@@ -824,8 +825,9 @@ weapon.data.runtime.ability_strength = 2.0
 ```
 
 Direct `runtime` assignments are picked up the next time results are read
-(`weapon.results.main`, formatting, etc.). Prefer `configure(context=...)`
-when setting several values at once.
+(`weapon.results.main`, formatting, etc.). Prefer `set(...)` when updating
+several values at once. `set(...)` merges keys into the existing runtime and
+stores values without clamping or coercion.
 
 Permanent database data and runtime resolution values are intentionally
 separate.
@@ -1233,7 +1235,7 @@ effective attack speed (hits/sec when a stance combo is equipped). Attack
 - `heavy` / `heavy_slam`: wind-up speed uses `heavy_attack_speed` mods, not `attack_speed`. Hit and DoT damage are multiplied by the combo multiplier from `initial_combo` (`floor(hits / 20) + 1`, clamped to `1`–`12`). Critical chance bonuses from upgrades (additive and flat) are doubled.
 - `slam` / `heavy_slam`: effective damage is multiplied by `slam_damage`.
 - `slide`: effective crit chance is multiplied by `slide_crit_chance`.
-- Combo-scaling mods (`stacks.when == "stacks"`, e.g. Blood Rush) read `weapon.data.runtime.combo` (default `12` on non-heavy attacks, or the initial-combo tier on heavy attacks when unset). Set `upgrade.runtime.stacks` to override.
+- Combo-scaling mods (`stacks.when == "stacks"`, e.g. Blood Rush) read `weapon.data.runtime.combo` only when it is present. Set `upgrade.data.runtime.stacks` to override it for one upgrade.
 
 Stance animation timing, follow-through, and multi-hit stance sequences are not
 modeled, so melee DPS is best treated as a relative comparison.

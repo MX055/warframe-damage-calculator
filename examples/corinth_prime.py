@@ -1,5 +1,4 @@
 from warframe_damage_calculator import Build, Upgrade, arsenal
-from time import perf_counter
 
 
 def main() -> None:
@@ -16,8 +15,7 @@ def main() -> None:
     arcane = arsenal.get("Primary Merciless")
     buff = Upgrade({"name": "Buff", "type": "buff", "stats": {"crit_damage": {"value": 1.2, "mode": "flat"}}})
     build = Build(mod1, mod2, mod3, mod4, mod5, mod6, mod7, mod8, exilus, arcane, buff)
-    context = {"attack": "buckshot"}
-    weapon.configure(build, context)
+    weapon.configure(build)
 
     print(weapon.format.summary())
 

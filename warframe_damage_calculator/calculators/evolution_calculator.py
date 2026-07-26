@@ -30,11 +30,10 @@ from .stat_aggregation import CONVERSION_STATS, merge_evolution_stat
 
 class EvolutionCalculator:
     CONVERSION_STATS = CONVERSION_STATS
-    _SELECTION_KEYS = frozenset({"evolutions", "attack", "combo", "stance_combo"})
 
-    def __init__(self, weapon: WeaponCalculatorOwner, runtime: Mapping[str, Any] | None = None, *, form: str | None = None) -> None:
+    def __init__(self, weapon: WeaponCalculatorOwner, runtime: Mapping[str, Any], *, form: str | None = None) -> None:
         self.weapon = weapon
-        self.runtime = Data(runtime if runtime is not None else getattr(weapon.data, "runtime", {}) or {})
+        self.runtime = Data(runtime)
         self.form = form
         self.total = ResolvedEvolutionStat()
         self.resolve()
@@ -110,8 +109,7 @@ class EvolutionCalculator:
         if effect.scope is not None and context.form is not None and effect.scope != context.form:
             return False
         if effect.bucket == "magazine_position" or effect.condition is None: return True
-        runtime = context.runtime or Data()
-        return bool(runtime.get(effect.condition, True))
+        return bool(context.runtime.get(effect.condition, False))
 
     def _resolve_effect(self, effect: ResolvableEffect, context: ResolutionContext) -> ResolvableEffect | None:
         return resolve_stack_scaled_effect(effect, context)
@@ -136,7 +134,6 @@ class EvolutionCalculator:
             merge_evolution_stat(getattr(self.total, effect.mode), effect.stat, effect.value, conversion_max=effect.conversion_max)
 
     def resolve(self) -> ResolvedEvolutionStat:
-        use_defaults = not any(key not in self._SELECTION_KEYS for key in self.runtime)
-        context = ResolutionContext(use_defaults=use_defaults, stacks_lookup=self.runtime, default_stacks=self.runtime.get("stacks"), runtime=self.runtime, form=self.form)
+        context = ResolutionContext(runtime=self.runtime, default_stacks=self.runtime.get("stacks"), form=self.form)
         resolve_and_aggregate(self._normalize_effects(), context, is_applicable=self._is_effect_applicable, resolve_one=self._resolve_effect, aggregate=self._aggregate_effects)
         return self.total

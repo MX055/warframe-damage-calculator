@@ -55,7 +55,6 @@ class UpgradeCalculator:
     rank_locked: ResolvedStat
     total: ResolvedStat
 
-    METADATA = {"name", "category", "type", "trigger", "is_beam", "is_battery", "compatibility", "incompatibility", "requirements", "max_rank", "max_stacks", "stacks", "is_exilus", "rank", "weapon", "combos"}
     WEAPON_TYPES = PRIMARY_TYPES | SECONDARY_TYPES | MELEE_TYPES
     BUCKETS = ("static", "conditional", "modular", "stacking", "rank_locked", "total")
 
@@ -70,12 +69,12 @@ class UpgradeCalculator:
         data = self.upgrade.data
         return Data({"name": data.name, "type": data.type, "max_rank": data.max_rank, "compatibility": data.compatibility, "incompatibility": data.incompatibility, **data.runtime.with_defaults()})
 
-    def _condition(self, weapon: Data, upgrade: Data, condition: Any) -> bool:
+    def _condition(self, weapon: Data, runtime: Mapping[str, Any], condition: Any) -> bool:
         if condition in self.WEAPON_TYPES:
             types = {weapon.get("type"), weapon.get("subtype"), weapon.get("category")} - {None, ""}
             if weapon.get("type") == "bow": types.add("rifle")
             return condition in types
-        return bool(upgrade.get(condition, True))
+        return bool(runtime.get(condition, False))
 
     @classmethod
     def _scale(cls, value: EffectValue, multiplier: float) -> EffectValue:
@@ -245,7 +244,7 @@ class UpgradeCalculator:
         if effect.required_rank is not None and context.rank < effect.required_rank: return False
         if effect.bucket in DEFERRED: return True
         if effect.condition is not None:
-            if not self._condition(context.weapon or Data(), context.upgrade or Data(), effect.condition): return False
+            if not self._condition(context.weapon or Data(), context.runtime, effect.condition): return False
         return True
 
     def _resolve_effect(self, effect: ResolvableEffect, context: ResolutionContext) -> ResolvableEffect | None:
@@ -277,13 +276,12 @@ class UpgradeCalculator:
         max_rank = upgrade_data.get("max_rank")
         max_stacks = upgrade_data.get("max_stacks")
         rank = upgrade_data.get("rank")
-        if rank is None: rank = max_rank or 0
+        if rank is None: rank = 0
         if max_rank is not None: rank = min(rank, max_rank)
         rank_multiplier = 1 if max_rank in {None, 0} else (rank + 1) / (max_rank + 1)
-        use_defaults = set(upgrade_data) <= self.METADATA
         default_stacks = upgrade_data.get("stacks")
         if default_stacks is None:
             runtime = getattr(weapon_data, "runtime", None)
             if runtime is not None: default_stacks = runtime.get("combo")
-        context = ResolutionContext(rank=rank, rank_multiplier=rank_multiplier, max_stacks=max_stacks, use_defaults=use_defaults, stacks_lookup=upgrade_data, default_stacks=default_stacks, equipped=frozenset(build_data.get("equipped", [])), weapon=weapon_data, upgrade=upgrade_data, build=build_data)
+        context = ResolutionContext(runtime=self.upgrade.data.runtime, rank=rank, rank_multiplier=rank_multiplier, max_stacks=max_stacks, default_stacks=default_stacks, equipped=frozenset(build_data.get("equipped", [])), weapon=weapon_data, upgrade=upgrade_data, build=build_data)
         resolve_and_aggregate(self._normalize_effects(), context, is_applicable=self._is_effect_applicable, resolve_one=self._resolve_effect, aggregate=self._aggregate_effects)

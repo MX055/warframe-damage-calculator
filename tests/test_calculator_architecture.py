@@ -145,9 +145,9 @@ class EffectResolutionTests(unittest.TestCase):
         self.assertEqual(raw_effects([{"value": 1, "when": "headshot"}])[0].when, "headshot")
 
     def test_stack_count_defaults_and_caps(self):
-        self.assertEqual(stack_count(stacks_on="stacks", max_stacks=5, lookup={}, default_stacks=None, use_defaults=True), 5)
-        self.assertEqual(stack_count(stacks_on="stacks", max_stacks=5, lookup={}, default_stacks=None, use_defaults=False), 0)
-        self.assertEqual(stack_count(stacks_on="stacks", max_stacks=3, lookup={"stacks": 10}, default_stacks=None, use_defaults=False), 3)
+        self.assertEqual(stack_count(stacks_on="stacks", max_stacks=5, lookup={}, default_stacks=None), 0)
+        self.assertEqual(stack_count(stacks_on="stacks", max_stacks=5, lookup={}, default_stacks=4), 4)
+        self.assertEqual(stack_count(stacks_on="stacks", max_stacks=3, lookup={"stacks": 10}, default_stacks=None), 3)
 
     def test_resolve_and_aggregate_pipeline(self):
         recorded: list[int] = []
@@ -166,7 +166,7 @@ class EffectResolutionTests(unittest.TestCase):
 
     def test_resolve_stack_scaled_effect_multiplies_stacks(self):
         effect = ResolvableEffect(stat="crit_chance", value=0.1, stacks_on="stacks", max_stacks=5)
-        context = ResolutionContext(stacks_lookup={"stacks": 3}, use_defaults=False)
+        context = ResolutionContext(runtime={"stacks": 3})
         resolved = resolve_stack_scaled_effect(effect, context)
         self.assertIsNotNone(resolved)
         self.assertAlmostEqual(resolved.value, 0.3)
@@ -183,6 +183,7 @@ class EffectResolutionTests(unittest.TestCase):
                 ],
             },
         })
+        upgrade.set({"rank": 5})
         calc = UpgradeCalculator(upgrade)
         calc.resolve(Data({"type": "rifle"}), Data({"equipped": []}))
         self.assertAlmostEqual(calc.rank_locked.proportional.crit_chance, 0.5)
@@ -192,7 +193,7 @@ class EffectResolutionTests(unittest.TestCase):
 
     def test_upgrade_condition_and_rank_scaling(self):
         upgrade = Upgrade({"name": "Cond", "type": "mod", "max_rank": 1, "stats": {"crit_chance": [{"value": 1.0, "when": "rifle"}]}})
-        upgrade.configure(context={"rank": 0})
+        upgrade.set({"rank": 0})
         calc = UpgradeCalculator(upgrade)
         calc.resolve(Data({"type": "pistol"}), Data())
         self.assertEqual(calc.conditional.proportional.get("crit_chance", 0), 0)
@@ -202,8 +203,8 @@ class EffectResolutionTests(unittest.TestCase):
 
     def test_evolution_uses_shared_resolvable_effect(self):
         weapon = arsenal.get("Dera Vandal")
-        weapon.configure(context={"evolutions": {4: 2}})
-        effects = EvolutionCalculator(weapon)._normalize_effects()
+        weapon.set({"evolutions": {4: 2}})
+        effects = EvolutionCalculator(weapon, weapon.data.runtime)._normalize_effects()
         self.assertTrue(all(isinstance(effect, ResolvableEffect) for effect in effects))
         self.assertTrue(any(effect.stat == "crit_from_status" for effect in effects))
 
@@ -232,7 +233,7 @@ class PipelineOrderTests(unittest.TestCase):
         status_mod = Upgrade({"name": "Status", "type": "mod", "max_rank": 0, "stats": {"status_chance": [{"value": 1.0}]}})
         weapon = arsenal.get("Dera Vandal")
         raw_crit = selected(weapon).base.crit_chance
-        weapon.configure(Build(status_mod), context={"evolutions": {4: 2}})
+        weapon.configure(Build(status_mod)).set({"evolutions": {4: 2}})
         result = selected(weapon)
         self.assertGreater(result.base.crit_chance, raw_crit)
         self.assertAlmostEqual(result.modded.proportional.crit_chance, result.base.crit_chance)

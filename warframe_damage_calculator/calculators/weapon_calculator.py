@@ -52,13 +52,6 @@ class WeaponCalculator:
         form = (attack.form if attack is not None else None) or "normal"
         return EvolutionCalculator(self.weapon, self.weapon.data.runtime, form=form).total
 
-    def _runtime_defaults(self) -> tuple[str, ...]:
-        return ()
-
-    def _clear_runtime_defaults(self, defaults: tuple[str, ...]) -> None:
-        runtime = self.weapon.data.runtime
-        for key in defaults: runtime.pop(key, None)
-
     def _fingerprint_runtime(self) -> tuple:
         """Capture runtime/build inputs so direct runtime mutations recompute results."""
         runtime = self.weapon.data.runtime
@@ -196,17 +189,12 @@ class WeaponCalculator:
         return float(results[self.weapon.data.selected_attack].final.get(target, 0) or 0)
 
     def resolve(self, *, validate_cycles: bool = True) -> None:
-        # Fingerprint user runtime before injecting transient defaults (e.g. melee combo).
         fingerprint = self._fingerprint_runtime()
-        defaults = self._runtime_defaults()
-        try:
-            if validate_cycles: attack_tree.validate_attack_cycles(self.weapon.data.attacks)
-            results = self._compute_attack_results(self._resolved_build())
-            self._main = results[self.weapon.data.selected_attack]
-            self._child = [results[name] for name in self._main.children if name in results]
-            self._inputs_fingerprint = fingerprint
-        finally:
-            self._clear_runtime_defaults(defaults)
+        if validate_cycles: attack_tree.validate_attack_cycles(self.weapon.data.attacks)
+        results = self._compute_attack_results(self._resolved_build())
+        self._main = results[self.weapon.data.selected_attack]
+        self._child = [results[name] for name in self._main.children if name in results]
+        self._inputs_fingerprint = fingerprint
 
     @property
     def main(self) -> AttackResult:

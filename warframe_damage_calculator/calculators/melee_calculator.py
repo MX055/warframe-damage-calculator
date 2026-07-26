@@ -15,16 +15,6 @@ class MeleeCalculator(WeaponCalculator):
     def _crit_upgrade_multiplier(self, result: AttackResult) -> float:
         return 2.0 if result.category in HEAVY_ATTACK_CATEGORIES else 1.0
 
-    def _runtime_defaults(self) -> tuple[str, ...]:
-        runtime = self.weapon.data.runtime
-        if "combo" in runtime: return ()
-        runtime.combo = MAX_COMBO_MULTIPLIER
-        if self._selected_category() in HEAVY_ATTACK_CATEGORIES:
-            self.weapon.build.results.resolve(self.weapon.data)
-            initial_combo = float(self.weapon.build.results.total.proportional.initial_combo or 0)
-            runtime.combo = self._combo_multiplier_from_hits(initial_combo)
-        return ("combo",)
-
     def _equipped_stance(self):
         for upgrade in self.weapon.build:
             if upgrade.data.compatibility.get("stance"): return upgrade
