@@ -77,7 +77,7 @@ class EvolutionCalculator:
             return ResolvableEffect(stat="damage_bonus", value=value, mode="proportional", bucket=bucket, condition=condition, scope=scope, exclude=exclude, family=family, conversion_max=conversion_max, behaviour=behaviour)
         if condition in MAGAZINE_POSITION_WHEN:
             return ResolvableEffect(stat=stat, value=value, mode=mode, bucket="magazine_position", condition=condition, scope=scope, exclude=exclude, family=family, conversion_max=conversion_max, behaviour=behaviour)
-        if stacks is not None: return ResolvableEffect(stat=stat, value=value, mode=mode, bucket="stacking", scope=scope, stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"), exclude=exclude, family=family, conversion_max=conversion_max, behaviour=behaviour)
+        if stacks is not None: return ResolvableEffect(stat=stat, value=value, mode=mode, bucket="stacking", scope=scope, stacks_on=stacks["when"], max_stacks=stacks.get("max"), exclude=exclude, family=family, conversion_max=conversion_max, behaviour=behaviour)
         if condition is None: return ResolvableEffect(stat=stat, value=value, mode=mode, bucket="static", scope=scope, exclude=exclude, family=family, conversion_max=conversion_max, behaviour=behaviour)
         return ResolvableEffect(stat=stat, value=value, mode=mode, bucket="conditional", condition=condition, scope=scope, exclude=exclude, family=family, conversion_max=conversion_max, behaviour=behaviour)
 

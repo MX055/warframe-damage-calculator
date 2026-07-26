@@ -323,7 +323,7 @@ weapon = Primary(
     {
         "name": "Example Rifle",
         "type": "primary",
-        "runtime": {"attack": "normal_attack", "evolutions": {}, "combo": 1, "stance_combo": "neutral", "ability_strength": 1.0},
+        "runtime": {"attack": "normal_attack"},
         "subtype": "rifle",
         "disposition": 1.0,
         "ammo": {
@@ -370,7 +370,7 @@ weapon = Primary(
     {
         "name": "Example Launcher",
         "type": "primary",
-        "runtime": {"attack": "projectile", "evolutions": {}, "combo": 1, "stance_combo": "neutral", "ability_strength": 1.0},
+        "runtime": {"attack": "projectile"},
         "subtype": "rifle",
         "ammo": {
             "reload_time": 2.5,
@@ -429,7 +429,7 @@ weapon = Melee(
     {
         "name": "Example Sword",
         "type": "melee",
-        "runtime": {"attack": "normal_attack", "evolutions": {}, "combo": 1, "stance_combo": "neutral", "ability_strength": 1.0},
+        "runtime": {"attack": "normal_attack", "combo": 12, "stance_combo": "neutral"},
         "subtype": "sword",
         "attacks": {
             "normal_attack": {
@@ -619,10 +619,12 @@ Ranks are zero-based. Ordinary effects scale by:
 (rank + 1) / (max_rank + 1)
 ```
 
-The database loader assigns concrete runtime values for rank, each named stack
-trigger, conditions, weapon selection, evolution selection, combo, stance combo,
-and Ability Strength. Runtime supplied through `arsenal.get(..., context=...)`
-overlays those values. Calculators do not infer missing runtime keys.
+The database loader assigns only the runtime values applicable to each item:
+weapon selection for every weapon, evolution selection for Incarnon weapons,
+combo and stance combo for melee weapons, Ability Strength for exalted weapons,
+and rank, named stack triggers, and conditions for upgrades. Runtime supplied
+through `arsenal.get(..., context=...)` overlays those values. Calculators do not
+infer missing runtime keys.
 
 An upgrade containing a rank-locked effect currently skips proportional scaling
 for its other effects. This matches the database representation used by the
@@ -1235,7 +1237,7 @@ effective attack speed (hits/sec when a stance combo is equipped). Attack
 - `heavy` / `heavy_slam`: wind-up speed uses `heavy_attack_speed` mods, not `attack_speed`. Hit and DoT damage use `weapon.data.runtime.combo`, clamped to `1`–`12`. Critical chance bonuses from upgrades (additive and flat) are doubled.
 - `slam` / `heavy_slam`: effective damage is multiplied by `slam_damage`.
 - `slide`: effective crit chance is multiplied by `slide_crit_chance`.
-- Combo-scaling mods (`stacks.when == "stacks"`, e.g. Blood Rush) read `upgrade.data.runtime.stacks`.
+- Combo-scaling mods (`stacks.when == "combo"`, e.g. Blood Rush) read `upgrade.data.runtime.combo`, capped at `12`.
 
 Stance animation timing, follow-through, and multi-hit stance sequences are not
 modeled, so melee DPS is best treated as a relative comparison.

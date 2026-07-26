@@ -73355,7 +73355,8 @@
                     {
                         "value": 0.4,
                         "stacks": {
-                            "when": "stacks"
+                            "when": "combo",
+                            "max": 12
                         }
                     }
                 ]
@@ -85534,7 +85535,8 @@
                     {
                         "value": 0.4,
                         "stacks": {
-                            "when": "stacks"
+                            "when": "combo",
+                            "max": 12
                         }
                     }
                 ]

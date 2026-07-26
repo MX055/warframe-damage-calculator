@@ -22,13 +22,17 @@ class DatabaseFactory:
                 if condition is not None: runtime[str(condition)] = True
                 stacks = effect.get("stacks")
                 if isinstance(stacks, Mapping):
-                    key = str(stacks.get("when", "stacks"))
+                    key = str(stacks["when"])
                     maximum = stacks.get("max", 0)
                     if isinstance(maximum, Number): runtime[key] = max(runtime.get(key, 0), maximum)
 
     @classmethod
     def _default_weapon_runtime(cls, data: Mapping[str, Any]) -> dict[str, Any]:
-        runtime: dict[str, Any] = {"attack": next(iter(data["attacks"])), "evolutions": {}, "combo": 1, "stance_combo": "neutral", "ability_strength": 1.0}
+        runtime: dict[str, Any] = {"attack": next(iter(data["attacks"]))}
+        if data.get("type") == "melee": runtime.update({"combo": 12, "stance_combo": "neutral"})
+        if data.get("evolutions"):
+            runtime["evolutions"] = {}
+        if data.get("exalted") or data.get("pseudo_exalted"): runtime["ability_strength"] = 1.0
         for tier in data.get("evolutions", {}).values():
             for perk in tier.values():
                 cls._apply_effect_defaults(runtime, perk.get("stats", {}))

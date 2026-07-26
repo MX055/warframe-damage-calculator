@@ -181,7 +181,7 @@ class UpgradeCalculator:
             # Unique-status cap lives in behaviour_data; ordinary value stacking may still use top-level stacks.
             co_max = data.get("max_stacks", "inf")
             if isinstance(stacks, Mapping):
-                return ResolvableEffect(stat="condition_overload", value=value, bucket="stacking", stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"), scales_with_rank=scales, co_max_stacks=co_max, behaviour=behaviour)
+                return ResolvableEffect(stat="condition_overload", value=value, bucket="stacking", stacks_on=stacks["when"], max_stacks=stacks.get("max"), scales_with_rank=scales, co_max_stacks=co_max, behaviour=behaviour)
             return ResolvableEffect(stat="condition_overload", value=value, bucket="static", mode="proportional", scales_with_rank=scales, co_max_stacks=co_max, behaviour=behaviour)
 
         if behaviour == BEHAVIOUR_ON_NON_CRIT:
@@ -210,11 +210,11 @@ class UpgradeCalculator:
         if equipped is not None:
             names = tuple(equipped if isinstance(equipped, list) else [equipped])
             if required_rank is not None: return ResolvableEffect(stat, value, mode, "modular", required_rank=required_rank, equipped=names, exclude=exclude, family=family, scales_with_rank=False, behaviour=behaviour)
-            if stacks is not None: return ResolvableEffect(stat, value, mode, "modular", equipped=names, stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"), exclude=exclude, family=family, scales_with_rank=scales, behaviour=behaviour)
+            if stacks is not None: return ResolvableEffect(stat, value, mode, "modular", equipped=names, stacks_on=stacks["when"], max_stacks=stacks.get("max"), exclude=exclude, family=family, scales_with_rank=scales, behaviour=behaviour)
             return ResolvableEffect(stat, value, mode, "modular", condition=condition, equipped=names, exclude=exclude, family=family, scales_with_rank=scales, behaviour=behaviour)
 
         if required_rank is not None: return ResolvableEffect(stat, value, mode, "rank_locked", required_rank=required_rank, exclude=exclude, family=family, scales_with_rank=False, behaviour=behaviour)
-        if stacks is not None: return ResolvableEffect(stat, value, mode, "stacking", stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"), exclude=exclude, family=family, scales_with_rank=scales, behaviour=behaviour)
+        if stacks is not None: return ResolvableEffect(stat, value, mode, "stacking", stacks_on=stacks["when"], max_stacks=stacks.get("max"), exclude=exclude, family=family, scales_with_rank=scales, behaviour=behaviour)
         if behaviour == BEHAVIOUR_DOUBLE_FOR_BOWS:
             return ResolvableEffect(stat, value, mode, "conditional", condition="bow", exclude=exclude, family=family, scales_with_rank=scales, behaviour=behaviour)
         if condition is None: return ResolvableEffect(stat, value, mode, "static", exclude=exclude, family=family, scales_with_rank=scales, behaviour=behaviour)

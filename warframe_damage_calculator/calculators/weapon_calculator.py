@@ -43,7 +43,7 @@ class WeaponCalculator:
         return 1.0
 
     def _resolved_evolutions(self, attack: Attack | None = None) -> ResolvedEvolutionStat:
-        if not self.weapon.data.selected_evolutions: return ResolvedEvolutionStat()
+        if not self.weapon.data.evolutions or not self.weapon.data.selected_evolutions: return ResolvedEvolutionStat()
         if attack is None: attack = self.weapon.data.attacks[self.weapon.data.selected_attack]
         form = attack.form
         return EvolutionCalculator(self.weapon, self.weapon.data.runtime, form=form).total
@@ -51,10 +51,7 @@ class WeaponCalculator:
     def _fingerprint_runtime(self) -> tuple:
         """Capture runtime/build inputs so direct runtime mutations recompute results."""
         runtime = self.weapon.data.runtime
-        evolutions = runtime.evolutions
-        evolutions_key = tuple(sorted((str(key), evolutions[key]) for key in evolutions))
-        other = tuple(sorted((str(key), repr(runtime[key])) for key in runtime if key not in {"evolutions", "attack", "combo", "stance_combo"}))
-        return (id(self.weapon.build), runtime.attack, evolutions_key, runtime.combo, runtime.stance_combo, other)
+        return (id(self.weapon.build), tuple(sorted((str(key), repr(runtime[key])) for key in runtime)))
 
     def _ensure_resolved(self) -> None:
         fingerprint = self._fingerprint_runtime()

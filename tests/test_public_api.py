@@ -208,14 +208,18 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(loaded.data.runtime.rank, 4)
         self.assertEqual(loaded.data.runtime.on_kill, 2)
 
-        weapon = arsenal.get("Corinth Prime").set({"attack": "air_burst_projectile"}).set({"combo": 6})
+        weapon = arsenal.get("Corinth Prime").set({"attack": "air_burst_projectile"})
         self.assertIn("runtime", weapon.data)
         self.assertEqual(weapon.data.runtime.attack, "air_burst_projectile")
-        self.assertEqual(weapon.data.runtime.combo, 6)
 
         default_weapon = arsenal.get("Corinth Prime")
-        self.assertEqual(dict(default_weapon.data.runtime), {"attack": "buckshot", "evolutions": {}, "combo": 1, "stance_combo": "neutral", "ability_strength": 1.0})
+        self.assertEqual(dict(default_weapon.data.runtime), {"attack": "buckshot"})
         self.assertEqual(default_weapon.data.selected_attack, "buckshot")
+        self.assertEqual(dict(arsenal.get("Galatine Prime").data.runtime), {"attack": "normal_attack", "combo": 12, "stance_combo": "neutral"})
+        self.assertIn("evolutions", arsenal.get("Telos Boltor").data.runtime)
+        self.assertNotIn("evolutions", default_weapon.data.runtime)
+        self.assertIn("ability_strength", arsenal.get("Exalted Blade").data.runtime)
+        self.assertNotIn("ability_strength", default_weapon.data.runtime)
 
     def test_weapon_data_separates_global_stats_and_attacks(self):
         weapon = arsenal.get("Corinth Prime")
@@ -603,20 +607,22 @@ class PublicApiTests(unittest.TestCase):
         self.assertFalse(weapon.data.exalted or weapon.data.pseudo_exalted)
         self.assertAlmostEqual(selected(weapon).base.damage.total_damage(), selected(bare).base.damage.total_damage())
 
-    def test_explicit_upgrade_stacks_scale_blood_rush(self):
+    def test_explicit_upgrade_combo_scales_blood_rush(self):
         blood_rush = arsenal.get("Blood Rush")
-        self.assertEqual(blood_rush.data.runtime.stacks, 0)
+        stacks = blood_rush.data.stats.crit_chance[0].stacks
+        self.assertEqual(dict(stacks), {"when": "combo", "max": 12})
+        self.assertEqual(blood_rush.data.runtime.combo, 12)
+        self.assertEqual(dict(arsenal.get("Weeping Wounds").data.stats.status_chance[0].stacks), {"when": "combo", "max": 12})
         bare = arsenal.get("Furax")
-        unset = arsenal.get("Furax").configure(Build(blood_rush))
-        self.assertEqual(selected(unset).effective.crit_chance, selected(bare).effective.crit_chance)
-        low = arsenal.get("Furax").configure(Build(blood_rush.set({"stacks": 6})))
-        high = arsenal.get("Furax").configure(Build(arsenal.get("Blood Rush").set({"stacks": 12})))
+        low = arsenal.get("Furax").configure(Build(blood_rush.set({"combo": 6})))
+        high = arsenal.get("Furax").configure(Build(arsenal.get("Blood Rush")))
+        self.assertGreater(selected(high).effective.crit_chance, selected(bare).effective.crit_chance)
         self.assertGreater(selected(high).effective.crit_chance, selected(low).effective.crit_chance)
 
-    def test_weapon_combo_does_not_supply_upgrade_stacks(self):
-        bare = arsenal.get("Furax")
-        weapon = arsenal.get("Furax").configure(Build(arsenal.get("Blood Rush"))).set({"combo": 12})
-        self.assertEqual(selected(weapon).effective.crit_chance, selected(bare).effective.crit_chance)
+    def test_weapon_and_upgrade_combo_are_independent(self):
+        low = arsenal.get("Furax").configure(Build(arsenal.get("Blood Rush").set({"combo": 1}))).set({"combo": 12})
+        high = arsenal.get("Furax").configure(Build(arsenal.get("Blood Rush"))).set({"combo": 1})
+        self.assertGreater(selected(high).effective.crit_chance, selected(low).effective.crit_chance)
 
     def test_incarnon_evolution_selection_recomputes(self):
         weapon = arsenal.get("Telos Boltor")
