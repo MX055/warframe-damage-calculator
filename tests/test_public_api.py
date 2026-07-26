@@ -4,7 +4,7 @@ from types import MappingProxyType
 from typing import get_args
 
 from warframe_damage_calculator import Build, Enemy, Melee, Primary, Secondary, Upgrade, Weapon, arsenal
-from warframe_damage_calculator.calculators import formulas
+from warframe_damage_calculator.calculators import application_chance, formulas
 from warframe_damage_calculator.calculators.build_calculator import BuildCalculator
 from warframe_damage_calculator.calculators.upgrade_calculator import UpgradeCalculator
 from warframe_damage_calculator.calculators.weapon_calculator import WeaponCalculator
@@ -985,6 +985,16 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(primed, [{"stat": "damage_bonus", "value": 1, "mode": "proportional", "when": "first_shot", "family": "chamber"}])
         self.assertEqual(charged, [{"stat": "damage_bonus", "value": 0.4, "mode": "proportional", "when": "first_shot", "family": "chamber"}])
         self.assertEqual(synth, [{"stat": "damage_bonus", "value": 2, "mode": "proportional", "when": "last_shot", "family": "charge", "exclude": ["continuous", "incarnon"]}])
+
+    def test_melee_doughty_applies_puncture_status_crit_multiplier(self):
+        base = arsenal.get("Destreza Prime").results.main
+        doughty = arsenal.get("Destreza Prime").configure(Build(arsenal.get("Melee Doughty"))).results.main
+        self.assertAlmostEqual(doughty.effective.damage.weight("puncture"), 0.7)
+        self.assertAlmostEqual(doughty.effective.status_chance, 0.2)
+        self.assertAlmostEqual(doughty.average.melee_doughty_bonus, 1.4)
+        self.assertAlmostEqual(doughty.effective.crit_damage, base.effective.crit_damage + 1.4)
+        self.assertGreater(doughty.final.flat_dph, base.final.flat_dph)
+        self.assertEqual(application_chance.doughty_crit_damage(puncture_weight=1, status_chance=10, factor=1), 50)
 
     def test_first_shot_damage_averages_across_magazine(self):
         base = runtime_weapon(Primary, {"name": "Chamber Test", "type": "primary", "subtype": "sniper", "ammo": {"magazine_size": 10, "reload_time": 1}, "attacks": {"shot": {"delivery": "hitscan", "stats": {"damage": {"impact": 100}, "crit_chance": 0, "crit_damage": 2, "multishot": 1, "fire_rate": 1}}}})

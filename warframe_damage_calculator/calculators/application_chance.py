@@ -84,4 +84,5 @@ def doughty_per(*sources: Sequence[Mapping[str, Any]] | None) -> float:
 
 
 def doughty_crit_damage(*, puncture_weight: float, status_chance: float, factor: float, per: float = DOUGHTY_PER) -> float:
-    return per * 10 * puncture_weight * status_chance * factor
+    if per <= 0: return 0.0
+    return min(puncture_weight * status_chance / per * factor, 50.0)

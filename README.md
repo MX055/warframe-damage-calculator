@@ -1228,8 +1228,8 @@ Faction damage is applied twice to modeled DoT damage.
 calculator. Use individual damage-type fields or `damage` to modify the damage
 distribution.
 
-`FROM_PUNCTURE_X_STATUS` exposes `weapon.results.main.average.melee_doughty_bonus`;
-that bonus is not yet applied to DPH or DPS.
+`FROM_PUNCTURE_X_STATUS` exposes `weapon.results.main.average.melee_doughty_bonus`
+and adds the rounded bonus to effective Critical Multiplier before DPH, DPS, and DoT calculations.
 
 ---
 

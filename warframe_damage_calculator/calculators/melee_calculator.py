@@ -82,6 +82,12 @@ class MeleeCalculator(WeaponCalculator):
             effective.damage_bonus = effective.damage_bonus * effective.slam_damage
         if category in SLIDE_ATTACK_CATEGORIES:
             effective.crit_chance = effective.crit_chance * effective.slide_crit_chance
+        effective.crit_damage += self._doughty_bonus(result)
+
+    def _doughty_bonus(self, result: AttackResult) -> float:
+        effective = result.effective
+        per = application_chance.doughty_per(result.build.conversions)
+        return true_round(application_chance.doughty_crit_damage(puncture_weight=effective.damage.weight("puncture"), status_chance=effective.status_chance, factor=effective.melee_doughty, per=per), 1)
 
     def _combo_multiplier(self, result: AttackResult) -> int:
         if result.category not in HEAVY_ATTACK_CATEGORIES: return 1
@@ -106,8 +112,7 @@ class MeleeCalculator(WeaponCalculator):
         hit_mult = formulas.hit_multiplier(average.crit_chance, effective.crit_damage, effective.non_crit_bonus_damage, effective.non_crit_bonus_chance)
         combo = self._combo_multiplier(result)
         average.combo_multiplier = combo
-        per = application_chance.doughty_per(result.build.conversions)
-        average.melee_doughty_bonus = true_round(application_chance.doughty_crit_damage(puncture_weight=effective.damage.weight("puncture"), status_chance=effective.status_chance, factor=effective.melee_doughty, per=per), 1)
+        average.melee_doughty_bonus = self._doughty_bonus(result)
         average.melee_duplicate_multiplier = 1 + effective.melee_duplicate * max(0, 1 - abs(effective.crit_chance - 1))
         faction = self._max_average_faction_damage(result)
         shared = faction * hit_mult * average.melee_duplicate_multiplier * combo
