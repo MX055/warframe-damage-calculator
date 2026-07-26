@@ -18,7 +18,14 @@ def seed_base_stats(*, attack: Attack, ammo: dict | object, stats_type: Callable
     stats = dict(attack.stats)
     falloff = stats.pop("falloff", None) or {}
     attack_speed = attack.stats.attack_speed if "attack_speed" in attack.stats else attack.stats.fire_rate
-    stats.update({"attack_speed": attack_speed, "magazine_capacity": ammo.get("magazine_size", 1) if hasattr(ammo, "get") else 1, "ammo_maximum": ammo.get("ammo_maximum", 0) if hasattr(ammo, "get") else 0, "reload_speed": ammo.get("reload_time", 0) if hasattr(ammo, "get") else 0, "recharge_rate": ammo.get("recharge_rate", 0) if hasattr(ammo, "get") else 0, "start_range": falloff.get("start_range", 0), "end_range": falloff.get("end_range", 0), "final_multiplier": falloff.get("final_multiplier", 1)})
+    ammo_get = ammo.get if hasattr(ammo, "get") else (lambda key, default=None: default)
+    form = (attack.form or "normal")
+    incarnon_charges = float(ammo_get("incarnon_charges", 0) or 0)
+    if form == "incarnon" and incarnon_charges > 0:
+        magazine_capacity = incarnon_charges
+    else:
+        magazine_capacity = ammo_get("magazine_size", 1)
+    stats.update({"attack_speed": attack_speed, "magazine_capacity": magazine_capacity, "ammo_maximum": ammo_get("ammo_maximum", 0), "reload_speed": ammo_get("reload_time", 0), "recharge_rate": ammo_get("recharge_rate", 0), "start_range": falloff.get("start_range", 0), "end_range": falloff.get("end_range", 0), "final_multiplier": falloff.get("final_multiplier", 1)})
     base = CalculatedStats(stats_type(stats).with_defaults())
     if ability_strength is not None:
         base.damage = base.damage * max(float(ability_strength), 0.0)
@@ -29,7 +36,9 @@ def seed_base_stats(*, attack: Attack, ammo: dict | object, stats_type: Callable
     base.crit_chance = max(base.crit_chance + evo.crit_chance, 0)
     base.crit_damage = max(base.crit_damage + evo.crit_damage, 1)
     base.status_chance = max(base.status_chance + evo.status_chance, 0)
-    base.magazine_capacity = max(base.magazine_capacity + evo.magazine_capacity, 1)
+    # Mag-size / Extended Volley base adds never apply to Incarnon charge pools.
+    if form != "incarnon":
+        base.magazine_capacity = max(base.magazine_capacity + evo.magazine_capacity, 1)
     for key in ("punch_through", "zoom", "accuracy", "recoil", "projectile_speed", "range"):
         base[key] = float(base[key] if key in base else 0) + float(getattr(evo, key) or 0)
     if evo.ammo_maximum: base.ammo_maximum = evo.ammo_maximum

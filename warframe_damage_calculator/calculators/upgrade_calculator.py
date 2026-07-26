@@ -23,12 +23,14 @@ from .effect_schema import (
     BEHAVIOUR_ON_CRIT,
     BEHAVIOUR_ON_HIT,
     BEHAVIOUR_ON_IMPACT_FR,
+    BEHAVIOUR_MULTISHOT_CONSUMES_AMMO,
     BEHAVIOUR_ON_NON_CRIT,
     BEHAVIOUR_STACK_RESET_CRIT_2_PLUS,
     BEHAVIOUR_STATUS_PROC_STACKS,
     BEHAVIOUR_UNIQUE_STATUS,
     COMMON_FAMILY,
     ENERVATE_PER_STACK,
+    MULTISHOT_AMMO_FAMILY,
     NON_CRIT_FAMILY,
     behaviour_data_of,
     behaviour_of,
@@ -188,6 +190,13 @@ class UpgradeCalculator:
             if not is_automatic(effect, behaviour=behaviour): raise ValueError("ON_NON_CRIT requires automatic: true")
             if family == COMMON_FAMILY: family = NON_CRIT_FAMILY
             return ResolvableEffect(stat="damage_bonus", value=value, mode="proportional", bucket="static", exclude=exclude, family=family, scales_with_rank=scales, behaviour=behaviour)
+
+        if behaviour == BEHAVIOUR_MULTISHOT_CONSUMES_AMMO:
+            if stat != "damage_bonus": raise ValueError("MULTISHOT_CONSUMES_AMMO requires damage_bonus")
+            if not is_automatic(effect, behaviour=behaviour): raise ValueError("MULTISHOT_CONSUMES_AMMO requires automatic: true")
+            if family == COMMON_FAMILY: family = MULTISHOT_AMMO_FAMILY
+            bucket = "static" if condition is None else "conditional"
+            return ResolvableEffect(stat="damage_bonus", value=value, mode="proportional", bucket=bucket, condition=condition, exclude=exclude, family=family, scales_with_rank=scales, behaviour=behaviour)
 
         if behaviour == BEHAVIOUR_STATUS_PROC_STACKS:
             if not is_automatic(effect, behaviour=behaviour): raise ValueError("STATUS_PROC_STACKS requires automatic: true")

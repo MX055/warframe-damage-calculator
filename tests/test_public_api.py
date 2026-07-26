@@ -331,6 +331,26 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(child.effective.ammo_efficiency, 0)
         self.assertGreater(child.average.fire_rate, parent.average.fire_rate)
 
+    def test_multishot_consumes_ammo_scales_cost_and_unique_damage(self):
+        split = arsenal.get("Split Chamber")
+        bare = selected(arsenal.get("Braton"))
+        weapon = arsenal.get("Braton").configure(Build(split), context={"evolutions": {2: 2}})
+        result = selected(weapon)
+        self.assertTrue(formulas.multishot_consumes_ammo_enabled(result.evolutions))
+        self.assertAlmostEqual(formulas.multishot_consumes_ammo_bonus(result.evolutions), 0.6)
+        # Munitions Grit +20% MS stacks with Split Chamber; ammo cost scales with total multishot.
+        self.assertAlmostEqual(result.effective.multishot, bare.effective.multishot * (1 + 0.9 + 0.2))
+        self.assertAlmostEqual(result.effective.ammo_cost, result.effective.multishot)
+        self.assertGreater(formulas.multishot_ammo_damage_factor(result.effective.multishot, 0.6), 1.0)
+        self.assertLess(result.average.fire_rate, bare.average.fire_rate)
+
+    def test_spectral_serration_is_conditional_on_invisible(self):
+        upgrade = arsenal.get("Spectral Serration")
+        self.assertEqual(upgrade.data.stats.damage_bonus, [{"value": 3.3, "when": "invisible"}])
+        self.assertAlmostEqual(upgrade.results.total.proportional.damage_bonus, 3.3)
+        upgrade.configure({"invisible": False})
+        self.assertAlmostEqual(upgrade.results.total.proportional.damage_bonus, 0)
+
     def test_beam_dot_scales_with_multishot_squared(self):
         def heat_weapon(delivery: str, multishot: float) -> Primary:
             return Primary({"name": f"{delivery}-{multishot}", "type": "primary", "ammo": {"magazine_size": 100, "reload_time": 1}, "attacks": {"tick": {"delivery": delivery, "stats": {"damage": {"heat": 100}, "status_chance": 1.0, "crit_chance": 0.0, "crit_damage": 2.0, "multishot": multishot, "fire_rate": 12}}}})
@@ -581,8 +601,17 @@ class PublicApiTests(unittest.TestCase):
         normal = arsenal.get("Phenmor").configure(context={"evolutions": {3: 1}, "attack": "normal_attack"})
         incarnon = arsenal.get("Phenmor").configure(context={"evolutions": {3: 1}, "attack": "incarnon_form"})
         self.assertAlmostEqual(selected(normal).effective.magazine_capacity, 45)
-        self.assertAlmostEqual(selected(incarnon).effective.magazine_capacity, selected(incarnon).base.magazine_capacity)
+        self.assertAlmostEqual(selected(incarnon).base.magazine_capacity, 408)
+        self.assertAlmostEqual(selected(incarnon).effective.magazine_capacity, 408)
         self.assertAlmostEqual(selected(incarnon).evolutions.proportional.magazine_capacity, 0)
+
+    def test_incarnon_charge_pool_ignores_magazine_mods(self):
+        magazine_warp = arsenal.get("Magazine Warp")
+        bare = arsenal.get("Phenmor").configure(context={"attack": "incarnon_form"})
+        modded = arsenal.get("Phenmor").configure(Build(magazine_warp), context={"attack": "incarnon_form"})
+        self.assertAlmostEqual(selected(bare).effective.magazine_capacity, 408)
+        self.assertAlmostEqual(selected(modded).effective.magazine_capacity, 408)
+        self.assertGreater(magazine_warp.results.total.proportional.magazine_capacity, 0)
 
     def test_incarnon_base_damage_scales_with_serration(self):
         serration = Upgrade({"name": "Serration", "type": "mod", "max_rank": 0, "stats": {"damage_bonus": [{"value": 1.0}]}})

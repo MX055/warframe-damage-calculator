@@ -61,6 +61,36 @@ def non_crit_bonus(damage: Number = 0, chance: Number = 0) -> float:
     return damage * (chance if chance else 1.0)
 
 
+def multishot_consumes_ammo_enabled(*sources: object) -> bool:
+    from .effect_schema import MULTISHOT_AMMO_FAMILY
+
+    for source in sources:
+        if source is None: continue
+        families = getattr(source, "multiplicative_families", None) or {}
+        if isinstance(families, Mapping) and MULTISHOT_AMMO_FAMILY in families: return True
+    return False
+
+
+def multishot_consumes_ammo_bonus(*sources: object) -> float:
+    from .effect_schema import MULTISHOT_AMMO_FAMILY
+
+    return family_bonus(*sources, family=MULTISHOT_AMMO_FAMILY, stat="damage_bonus")
+
+
+def multishot_ammo_cost(ammo_cost: Number, multishot: Number, *, enabled: bool) -> float:
+    cost = max(float(ammo_cost or 0), 0.0)
+    if not enabled: return cost
+    return cost * max(float(multishot or 1), 1.0)
+
+
+def multishot_ammo_damage_factor(multishot: Number, bonus: Number) -> float:
+    """Expected damage factor when a unique bonus applies only to multishot-generated pellets."""
+    ms = max(float(multishot or 1), 1.0)
+    value = max(float(bonus or 0), 0.0)
+    if not value: return 1.0
+    return 1.0 + value * (1.0 - 1.0 / ms)
+
+
 def hit_multiplier(crit_chance: Number, crit_damage: Number, non_crit_bonus_damage: Number = 0, non_crit_bonus_chance: Number = 0) -> float:
     bonus = non_crit_bonus(non_crit_bonus_damage, non_crit_bonus_chance)
     return crit_multiplier(crit_chance, crit_damage) + max(0.0, 1.0 - float(crit_chance)) * bonus

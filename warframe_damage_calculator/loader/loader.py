@@ -9,13 +9,14 @@ from ..models.upgrade import Upgrade
 from ..models.weapon import Weapon
 from .bundled_names import MeleeName, PrimaryName, SecondaryName, UpgradeName
 from .construction import DatabaseFactory
-from .matching import entry_matches
+from .matching import entry_matches, normalize_filter
 from .normalization import normalize_identifier, normalize_name
 from .paths import load_bundled_database, load_json
 from .schema import DatabaseEntry
 
 type DatabaseItem = Weapon | Upgrade
 type WeaponItem = Primary | Secondary | Melee
+_UPGRADE_FILTERS = frozenset({"upgrade", "mod", "arcane"})
 
 
 class WarframeDatabase:
@@ -26,7 +27,10 @@ class WarframeDatabase:
         self.riven_stats = database.get("riven_stats", {})
         self._factory = DatabaseFactory()
         self._entries = tuple(self._iter_entries())
-        self._name_index = {normalize_name(entry.name): entry for entry in self._entries}
+        name_index: dict[str, list[DatabaseEntry]] = {}
+        for entry in self._entries:
+            name_index.setdefault(normalize_name(entry.name), []).append(entry)
+        self._name_index = {key: tuple(entries) for key, entries in name_index.items()}
 
     @classmethod
     def from_file(cls, path: str | Path) -> Self:
@@ -66,8 +70,8 @@ class WarframeDatabase:
 
     def get(self, name: str | None = None, *, type: str | None = None, context: Mapping[str, Any] | None = None, attribute: str | None = None) -> DatabaseItem | object | None:
         if name is not None:
-            entry = self._name_index.get(normalize_name(name))
-            if entry is None or not entry_matches(entry, type):
+            entry = self._select_named_entry(self._name_index.get(normalize_name(name), ()), type)
+            if entry is None:
                 return None
             return self._attribute(self._create(entry, context), attribute)
 
@@ -78,6 +82,24 @@ class WarframeDatabase:
         if attribute is not None and normalize_identifier(attribute) == "name":
             return [entry.name for entry in entries]
         return {entry.name: self._attribute(self._create(entry, context), attribute) for entry in entries}
+
+    @staticmethod
+    def _select_named_entry(entries: tuple[DatabaseEntry, ...], item_type: str | None) -> DatabaseEntry | None:
+        """Pick among same-named weapon/stance pairs using the type filter."""
+        matched = [entry for entry in entries if entry_matches(entry, item_type)]
+        if not matched:
+            return None
+        if len(matched) == 1:
+            return matched[0]
+        normalized = normalize_filter(item_type)
+        if normalized in _UPGRADE_FILTERS:
+            for entry in matched:
+                if not entry.is_weapon:
+                    return entry
+        for entry in matched:
+            if entry.is_weapon:
+                return entry
+        return matched[0]
 
     def _create(self, entry: DatabaseEntry, context: Mapping[str, Any] | None) -> DatabaseItem:
         return self._factory.create(entry, dict(context or {}))

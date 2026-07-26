@@ -30,6 +30,7 @@ class RangedCalculator(WeaponCalculator):
     def _compute_modded_scalars(self, result: AttackResult) -> None:
         super()._compute_modded_scalars(result)
         build, evo, base, modded = result.build, result.evolutions, result.base, result.modded
+        is_incarnon = (result.attack.form or "normal") == "incarnon"
         modded.proportional.weakpoint_damage = max(base.weakpoint_damage + build.proportional.weakpoint_damage + evo.proportional.weakpoint_damage, 1)
         modded.proportional.fire_rate = max(base.fire_rate * self._fire_rate_scale(result, floor=None), 0.05)
         modded.proportional.burst_count = max(base.burst_count, 1)
@@ -38,9 +39,19 @@ class RangedCalculator(WeaponCalculator):
         modded.proportional.reload_speed = max(base.reload_speed, 0) / max(1 + build.proportional.reload_speed + evo.proportional.reload_speed, 0.01)
         modded.proportional.recharge_rate = max(base.recharge_rate, 0)
         modded.proportional.ammo_cost = max(base.ammo_cost, 0)
-        modded.proportional.ammo_efficiency = clamp(build.proportional.ammo_efficiency + evo.proportional.ammo_efficiency, 0, 1)
-        modded.proportional.magazine_capacity = max(true_round(base.magazine_capacity * (1 + build.proportional.magazine_capacity + evo.proportional.magazine_capacity)), 1)
-        modded.proportional.multishot = max(base.multishot * (1 if build.proportional.multishot_lock else (1 + build.proportional.multishot + evo.proportional.multishot)), 1)
+        # Incarnon charge pools ignore magazine mods and ammo efficiency.
+        if is_incarnon:
+            modded.proportional.ammo_efficiency = 0
+            modded.proportional.magazine_capacity = max(true_round(base.magazine_capacity), 1)
+        else:
+            modded.proportional.ammo_efficiency = clamp(build.proportional.ammo_efficiency + evo.proportional.ammo_efficiency, 0, 1)
+            modded.proportional.magazine_capacity = max(true_round(base.magazine_capacity * (1 + build.proportional.magazine_capacity + evo.proportional.magazine_capacity)), 1)
+        ms_bonus = 0.0 if build.proportional.multishot_lock else (build.proportional.multishot + evo.proportional.multishot)
+        ms_ammo_bonus = formulas.multishot_consumes_ammo_bonus(build, evo)
+        # Beam Incarnon perks boost all multishot bonuses instead of per-pellet unique damage.
+        if ms_ammo_bonus and result.attack.delivery == "beam" and not build.proportional.multishot_lock:
+            ms_bonus *= 1 + ms_ammo_bonus
+        modded.proportional.multishot = max(base.multishot * (1 + ms_bonus), 1)
         modded.proportional.weakpoint_crit_chance = max(base.crit_chance * (1 + build.proportional.crit_chance + build.proportional.weakpoint_crit_chance), 0)
         modded.proportional.projectile_speed = build.proportional.projectile_speed + evo.proportional.projectile_speed
         modded.proportional.start_range = float(base.start_range or 0) * (1 + float(modded.proportional.projectile_speed or 0))
@@ -64,11 +75,13 @@ class RangedCalculator(WeaponCalculator):
         effective.charge_time = modded.proportional.charge_time / fire_rate_factor
         effective.reload_speed = modded.proportional.reload_speed + self._battery_reload_time(result)
         effective.recharge_rate = modded.proportional.recharge_rate
-        effective.ammo_cost = modded.proportional.ammo_cost
+        ms_ammo_enabled = formulas.multishot_consumes_ammo_enabled(result.build, result.evolutions)
+        ms_ammo_bonus = formulas.multishot_consumes_ammo_bonus(result.build, result.evolutions)
+        effective.multishot = modded.proportional.multishot
+        effective.ammo_cost = formulas.multishot_ammo_cost(modded.proportional.ammo_cost, effective.multishot, enabled=ms_ammo_enabled)
         effective.ammo_efficiency = modded.proportional.ammo_efficiency
         effective.magazine_capacity = modded.proportional.magazine_capacity
         effective.ammo_maximum = modded.proportional.ammo_maximum
-        effective.multishot = modded.proportional.multishot
         # Crit and weakpoint family bonuses stack their excesses (1+c)+(1+w)-1, matching Primary Acuity.
         effective.weakpoint_crit_chance = formulas.combine_chance(modded.proportional.weakpoint_crit_chance, crit_factor + weakpoint_crit_factor - 1, modded.flat.crit_chance)
         effective.projectile_speed = modded.proportional.projectile_speed
@@ -78,6 +91,9 @@ class RangedCalculator(WeaponCalculator):
         effective.accuracy = modded.proportional.accuracy
         effective.zoom = modded.proportional.zoom
         effective.recoil = modded.proportional.recoil
+        # Unique MS-ammo damage applies only to multishot-generated pellets (non-beam).
+        if ms_ammo_enabled and result.attack.delivery != "beam" and ms_ammo_bonus:
+            effective.damage = effective.damage * formulas.multishot_ammo_damage_factor(effective.multishot, ms_ammo_bonus)
 
     def _sustained_attack_rate(self, result: AttackResult) -> float:
         """Magazine-cycle sustained fire rate used for status/CO and average DPS."""
@@ -88,7 +104,11 @@ class RangedCalculator(WeaponCalculator):
         fire_rate_factor = self._fire_rate_factor(result)
         fire_rate = max(stats.fire_rate * speed, 0.05) * fire_rate_factor
         burst_count = max(stats.burst_count, 1)
-        ammo_cost = max(float(modded.proportional.ammo_cost), 0)
+        ammo_cost = formulas.multishot_ammo_cost(
+            modded.proportional.ammo_cost,
+            modded.proportional.multishot,
+            enabled=formulas.multishot_consumes_ammo_enabled(result.build, result.evolutions),
+        )
         if ammo_cost <= 0: return fire_rate
         shots = modded.proportional.magazine_capacity / ammo_cost
         bursts = shots / burst_count

@@ -13,8 +13,10 @@ from .effect_resolution import ResolutionContext, ResolvableEffect, raw_effects,
 from .effect_schema import (
     BEHAVIOUR_FIRST_SHOT,
     BEHAVIOUR_LAST_SHOT,
+    BEHAVIOUR_MULTISHOT_CONSUMES_AMMO,
     BEHAVIOUR_ON_NON_CRIT,
     COMMON_FAMILY,
+    MULTISHOT_AMMO_FAMILY,
     NON_CRIT_FAMILY,
     behaviour_data_of,
     behaviour_of,
@@ -68,6 +70,12 @@ class EvolutionCalculator:
             if not is_automatic(effect, behaviour=behaviour): raise ValueError("ON_NON_CRIT requires automatic: true")
             if family == COMMON_FAMILY: family = NON_CRIT_FAMILY
             return ResolvableEffect(stat="damage_bonus", value=value, mode="proportional", bucket="static", scope=scope, exclude=exclude, family=family, conversion_max=conversion_max, behaviour=behaviour)
+        if behaviour == BEHAVIOUR_MULTISHOT_CONSUMES_AMMO:
+            if stat != "damage_bonus": raise ValueError("MULTISHOT_CONSUMES_AMMO requires damage_bonus")
+            if not is_automatic(effect, behaviour=behaviour): raise ValueError("MULTISHOT_CONSUMES_AMMO requires automatic: true")
+            if family == COMMON_FAMILY: family = MULTISHOT_AMMO_FAMILY
+            bucket = "static" if condition is None else "conditional"
+            return ResolvableEffect(stat="damage_bonus", value=value, mode="proportional", bucket=bucket, condition=condition, scope=scope, exclude=exclude, family=family, conversion_max=conversion_max, behaviour=behaviour)
         if condition in MAGAZINE_POSITION_WHEN:
             return ResolvableEffect(stat=stat, value=value, mode=mode, bucket="magazine_position", condition=condition, scope=scope, exclude=exclude, family=family, conversion_max=conversion_max, behaviour=behaviour)
         if stacks is not None: return ResolvableEffect(stat=stat, value=value, mode=mode, bucket="stacking", scope=scope, stacks_on=stacks.get("when", "stacks"), max_stacks=stacks.get("max"), exclude=exclude, family=family, conversion_max=conversion_max, behaviour=behaviour)

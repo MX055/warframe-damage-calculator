@@ -549,7 +549,8 @@
                             "magazine_capacity": [
                                 {
                                     "value": 20,
-                                    "mode": "base"
+                                    "mode": "base",
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -1946,7 +1947,8 @@
                             "magazine_capacity": [
                                 {
                                     "value": 25,
-                                    "mode": "base"
+                                    "mode": "base",
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -3350,7 +3352,8 @@
                             "magazine_capacity": [
                                 {
                                     "value": 20,
-                                    "mode": "base"
+                                    "mode": "base",
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -3662,7 +3665,8 @@
                             "magazine_capacity": [
                                 {
                                     "value": 20,
-                                    "mode": "base"
+                                    "mode": "base",
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -3965,6 +3969,15 @@
                             "multishot": [
                                 {
                                     "value": 0.2
+                                }
+                            ],
+                            "damage_bonus": [
+                                {
+                                    "value": 0.54,
+                                    "family": "multishot_ammo",
+                                    "behaviour": "MULTISHOT_CONSUMES_AMMO",
+                                    "automatic": true,
+                                    "behaviour_data": {}
                                 }
                             ]
                         }
@@ -4291,7 +4304,8 @@
                             "magazine_capacity": [
                                 {
                                     "value": 2,
-                                    "mode": "base"
+                                    "mode": "base",
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -4539,7 +4553,8 @@
                             "magazine_capacity": [
                                 {
                                     "value": 9,
-                                    "mode": "base"
+                                    "mode": "base",
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -4712,7 +4727,8 @@
                             "magazine_capacity": [
                                 {
                                     "value": 21,
-                                    "mode": "base"
+                                    "mode": "base",
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -4903,7 +4919,8 @@
                             "magazine_capacity": [
                                 {
                                     "value": 21,
-                                    "mode": "base"
+                                    "mode": "base",
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -5247,7 +5264,8 @@
                             "magazine_capacity": [
                                 {
                                     "value": 40,
-                                    "mode": "base"
+                                    "mode": "base",
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -13377,7 +13395,8 @@
                             "magazine_capacity": [
                                 {
                                     "value": 30,
-                                    "mode": "base"
+                                    "mode": "base",
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -14225,7 +14244,8 @@
                             "magazine_capacity": [
                                 {
                                     "value": 10,
-                                    "mode": "base"
+                                    "mode": "base",
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -16511,7 +16531,8 @@
                             "magazine_capacity": [
                                 {
                                     "value": 22,
-                                    "mode": "base"
+                                    "mode": "base",
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -20092,7 +20113,8 @@
                                     "stacks": {
                                         "when": "activation",
                                         "max": 3
-                                    }
+                                    },
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -21155,7 +21177,8 @@
                                     "stacks": {
                                         "when": "activation",
                                         "max": 3
-                                    }
+                                    },
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -21759,7 +21782,11 @@
                             ],
                             "damage_bonus": [
                                 {
-                                    "value": 0.2
+                                    "value": 0.2,
+                                    "family": "multishot_ammo",
+                                    "behaviour": "MULTISHOT_CONSUMES_AMMO",
+                                    "automatic": true,
+                                    "behaviour_data": {}
                                 }
                             ]
                         }
@@ -23685,7 +23712,8 @@
                                     "stacks": {
                                         "when": "activation",
                                         "max": 7
-                                    }
+                                    },
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -25860,7 +25888,8 @@
                             "magazine_capacity": [
                                 {
                                     "value": 2,
-                                    "mode": "base"
+                                    "mode": "base",
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -26429,7 +26458,8 @@
                             "magazine_capacity": [
                                 {
                                     "value": 10,
-                                    "mode": "base"
+                                    "mode": "base",
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -26632,7 +26662,8 @@
                                     "stacks": {
                                         "when": "activation",
                                         "max": 3
-                                    }
+                                    },
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -33776,7 +33807,8 @@
                             "magazine_capacity": [
                                 {
                                     "value": 10,
-                                    "mode": "base"
+                                    "mode": "base",
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -41117,7 +41149,8 @@
                                     "stacks": {
                                         "when": "activation",
                                         "max": 3
-                                    }
+                                    },
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -44186,7 +44219,8 @@
                             "magazine_capacity": [
                                 {
                                     "value": 40,
-                                    "mode": "base"
+                                    "mode": "base",
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -45228,6 +45262,15 @@
                             "multishot": [
                                 {
                                     "value": 0.2
+                                }
+                            ],
+                            "damage_bonus": [
+                                {
+                                    "value": 0.6,
+                                    "family": "multishot_ammo",
+                                    "behaviour": "MULTISHOT_CONSUMES_AMMO",
+                                    "automatic": true,
+                                    "behaviour_data": {}
                                 }
                             ]
                         }
@@ -46894,7 +46937,8 @@
                             "magazine_capacity": [
                                 {
                                     "value": 12,
-                                    "mode": "base"
+                                    "mode": "base",
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -48387,7 +48431,11 @@
                             "damage_bonus": [
                                 {
                                     "value": 1,
-                                    "when": "dread_and_hate"
+                                    "when": "dread_and_hate",
+                                    "family": "multishot_ammo",
+                                    "behaviour": "MULTISHOT_CONSUMES_AMMO",
+                                    "automatic": true,
+                                    "behaviour_data": {}
                                 }
                             ],
                             "multishot": [
@@ -50425,7 +50473,8 @@
                             "magazine_capacity": [
                                 {
                                     "value": 12,
-                                    "mode": "base"
+                                    "mode": "base",
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -51896,7 +51945,8 @@
                             "magazine_capacity": [
                                 {
                                     "value": 8,
-                                    "mode": "base"
+                                    "mode": "base",
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -52179,7 +52229,8 @@
                                 {
                                     "value": 14,
                                     "mode": "base",
-                                    "when": "no_primary"
+                                    "when": "no_primary",
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -57629,7 +57680,11 @@
                             ],
                             "damage_bonus": [
                                 {
-                                    "value": 0.6
+                                    "value": 0.6,
+                                    "family": "multishot_ammo",
+                                    "behaviour": "MULTISHOT_CONSUMES_AMMO",
+                                    "automatic": true,
+                                    "behaviour_data": {}
                                 }
                             ]
                         }
@@ -57663,7 +57718,8 @@
                             "magazine_capacity": [
                                 {
                                     "value": 9,
-                                    "mode": "base"
+                                    "mode": "base",
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -58418,6 +58474,15 @@
                                 {
                                     "value": 0.2
                                 }
+                            ],
+                            "damage_bonus": [
+                                {
+                                    "value": 0.58,
+                                    "family": "multishot_ammo",
+                                    "behaviour": "MULTISHOT_CONSUMES_AMMO",
+                                    "automatic": true,
+                                    "behaviour_data": {}
+                                }
                             ]
                         }
                     }
@@ -58721,7 +58786,8 @@
                                 {
                                     "value": 14,
                                     "mode": "base",
-                                    "when": "no_primary"
+                                    "when": "no_primary",
+                                    "scope": "normal"
                                 }
                             ]
                         }
@@ -83715,7 +83781,8 @@
             "stats": {
                 "damage_bonus": [
                     {
-                        "value": 3.3
+                        "value": 3.3,
+                        "when": "invisible"
                     }
                 ]
             }

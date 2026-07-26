@@ -1158,6 +1158,7 @@ Faction damage is applied twice to modeled DoT damage.
 - `crit_damage` with `behaviour: "FROM_PUNCTURE_X_STATUS"`
 - `damage_bonus` with `behaviour: "UNIQUE_STATUS"` / `"STATUS_PROC_STACKS"` / `"FIRST_SHOT"` / `"LAST_SHOT"` / `"ON_NON_CRIT"`
 - `damage_bonus` + `ON_NON_CRIT` + `family: "non_crit"` for non-crit hit damage (optional `behaviour_data.chance`; omit for always-on when the hit is a non-crit)
+- `damage_bonus` + `MULTISHOT_CONSUMES_AMMO` + `family: "multishot_ammo"` for Incarnon perks where multishot spends magazine ammo (unique MS-pellet damage; beams boost multishot bonuses instead)
 - Magazine-position overlays via `behaviour: "FIRST_SHOT"` / `"LAST_SHOT"` (optional `exclude: ["continuous", "incarnon"]`; Chamber/Synth use `family: "chamber"` / `"charge"`)
 
 `elements` is preserved by the resolver but is not read directly by the weapon
@@ -1217,6 +1218,8 @@ shots, projectiles, or animation frames.
 - `fire_rate_lock` ignores proportional and family fire-rate upgrades.
 - `multishot_lock` preserves native multishot but ignores upgrade multishot.
 - Fire-cycle math uses per-attack `ammo_cost` (shots per magazine = magazine / ammo_cost).
+- `MULTISHOT_CONSUMES_AMMO` multiplies ammo cost by multishot (Plentiful Mayhem / Munitions Grit).
+- Incarnon form magazine is `ammo.incarnon_charges` and ignores magazine-capacity mods and ammo efficiency.
 - Battery recharge time is based on magazine capacity and recharge rate.
 - Magazine capacity uses Warframe-style true rounding and never falls below one.
 - Average fire rate is a closed-form fire-cycle calculation, not a frame-by-frame simulation.
