@@ -20,6 +20,7 @@ class EvolutionStats(Data):
     fire_rate: JsonValue
     heavy_attack_efficiency: JsonValue
     heavy_attack_speed: JsonValue
+    impact_to_puncture_conversion: JsonValue
     initial_combo: JsonValue
     magazine_capacity: JsonValue
     multishot: JsonValue
@@ -77,6 +78,7 @@ class ResolvedEvolutionModeStats(Data):
     fire_rate: Number = 0.0
     heavy_attack_efficiency: Number = 0.0
     heavy_attack_speed: Number = 0.0
+    impact_to_puncture_conversion: Number = 0.0
     initial_combo: Number = 0.0
     magazine_capacity: Number = 0.0
     multishot: Number = 0.0

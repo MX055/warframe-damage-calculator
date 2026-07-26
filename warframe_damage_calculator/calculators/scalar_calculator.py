@@ -14,6 +14,19 @@ from . import formulas
 from .effect_schema import NON_CRIT_FAMILY
 
 
+def _convert_impact_to_puncture(damage: Dist, fraction: Number) -> Dist:
+    amount = float(fraction)
+    if amount <= 0: return damage
+    impact = float(damage.get("impact"))
+    if impact <= 0: return damage
+    converted = impact * min(amount, 1.0)
+    remaining = impact - converted
+    values = {name: float(value) for name, value in damage if name != "impact"}
+    if remaining: values["impact"] = remaining
+    if converted: values["puncture"] = float(values.get("puncture", 0)) + converted
+    return Dist({name: value for name, value in values.items() if value})
+
+
 def seed_base_stats(*, attack: Attack, ammo: dict | object, stats_type: Callable[..., CalculatedStats], evolutions: ResolvedEvolutionStat, distribute_flat: Callable[[Dist, Number], Dist], ability_strength: Number | None = None) -> tuple[CalculatedStats, Dist]:
     stats = dict(attack.stats)
     falloff = stats.pop("falloff", None) or {}
@@ -30,6 +43,8 @@ def seed_base_stats(*, attack: Attack, ammo: dict | object, stats_type: Callable
     base.forced_procs = base.forced_procs + evolutions.proportional.forced_procs + evolutions.base.forced_procs + evolutions.flat.forced_procs
     if ability_strength is not None:
         base.damage = base.damage * max(float(ability_strength), 0.0)
+    conversion = float(evolutions.proportional.impact_to_puncture_conversion or 0) + float(evolutions.base.impact_to_puncture_conversion or 0) + float(evolutions.flat.impact_to_puncture_conversion or 0)
+    if conversion: base.damage = _convert_impact_to_puncture(base.damage, conversion)
     original_damage = Dist(dict(base.damage))
 
     evo = evolutions.base

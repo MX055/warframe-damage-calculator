@@ -853,32 +853,29 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(with_evo.effective.damage.total_damage(), 150 + co_without)
         self.assertAlmostEqual(with_evo.original_damage.total_damage(), 100)
 
-    def test_melee_incarnon_attack_applies_baked_damage_bonus(self):
+    def test_melee_incarnon_attack_applies_evo1_damage_bonus(self):
         normal = selected(arsenal.get("Furax"))
         incarnon = selected(arsenal.get("Furax").set({"attack": "incarnon_normal_attack"}))
-        # Innate attack damage_bonus 1 + base 1 => effective 2; total damage doubles vs normal.
+        # Evo 1 +100% melee damage: base 1 + evo 1 => effective 2; total damage doubles vs normal.
+        self.assertAlmostEqual(incarnon.evolutions.proportional.damage_bonus, 1)
         self.assertAlmostEqual(incarnon.effective.damage_bonus, 2)
-        self.assertAlmostEqual(
-            incarnon.effective.damage.total_damage(),
-            normal.effective.damage.total_damage() * 2,
-        )
+        self.assertAlmostEqual(incarnon.effective.damage.total_damage(), normal.effective.damage.total_damage() * 2)
 
     def test_melee_incarnon_damage_bonus_stacks_additively_with_pressure_point(self):
         pressure_point = arsenal.get("Primed Pressure Point")
         self.assertAlmostEqual(pressure_point.results.total.proportional.damage_bonus, 1.65)
         weapon = arsenal.get("Furax").configure(Build(pressure_point)).set({"attack": "incarnon_normal_attack"})
         result = selected(weapon)
-        # 1 base + 1.65 Pressure Point + 1 innate incarnon => 3.65
+        # 1 base + 1.65 Pressure Point + 1 evo1 => 3.65
         self.assertAlmostEqual(result.effective.damage_bonus, 3.65)
-        self.assertAlmostEqual(
-            result.effective.damage.total_damage(),
-            result.base.damage.total_damage() * 3.65,
-        )
+        self.assertAlmostEqual(result.effective.damage.total_damage(), result.base.damage.total_damage() * 3.65)
 
-    def test_melee_incarnon_evo1_stats_empty(self):
+    def test_melee_incarnon_evo1_stats_include_form_bonuses(self):
         stats = arsenal.get("Furax").data.evolutions["1"]["1"].stats
         self.assertIsInstance(stats, Mapping)
-        self.assertEqual(dict(stats), {})
+        self.assertAlmostEqual(stats["damage_bonus"][0]["value"], 1)
+        self.assertEqual(stats["damage_bonus"][0].get("scope"), "incarnon")
+        self.assertAlmostEqual(float(arsenal.get("Furax").data.attacks["incarnon_normal_attack"].stats.damage_bonus or 0), 0)
 
     def test_destreza_incarnon_evo1_stacks_puncture_from_heavy_attack_kills(self):
         weapon = arsenal.get("Destreza Prime")
@@ -918,16 +915,33 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(selected(weapon).effective.range, 0)
         self.assertEqual(dict(selected(weapon).base.forced_procs), {})
 
-    def test_ruvox_incarnon_bakes_conversion_and_speed(self):
+    def test_ruvox_incarnon_evo1_conversion_and_speed(self):
         weapon = arsenal.get("Ruvox").set({"attack": "incarnon_normal_attack"})
+        evo1 = weapon.data.evolutions["1"]["1"].stats
+        self.assertAlmostEqual(evo1["range"][0]["value"], 3)
+        self.assertAlmostEqual(evo1["attack_speed"][0]["value"], -0.35)
+        self.assertAlmostEqual(evo1["impact_to_puncture_conversion"][0]["value"], 1)
         attack = weapon.data.attacks["incarnon_normal_attack"]
+        self.assertAlmostEqual(float(attack.stats.damage_bonus or 0), 0)
         result = selected(weapon)
         damage = dict(result.base.damage)
         self.assertIn("puncture", damage)
         self.assertAlmostEqual(float(damage.get("impact", 0) or 0), 0)
-        self.assertAlmostEqual(attack.stats.attack_speed, 0.65)
-        self.assertAlmostEqual(result.effective.attack_speed, 0.65)
-        self.assertAlmostEqual(result.effective.range, 3)
+        base_speed = attack.stats.attack_speed if "attack_speed" in attack.stats else attack.stats.fire_rate
+        self.assertAlmostEqual(result.effective.attack_speed, base_speed * 0.65)
+        self.assertAlmostEqual(result.effective.range, float(attack.stats.range or 0) + 3)
+
+    def test_destreza_incarnon_evo2_status_chance_stacks(self):
+        weapon = arsenal.get("Destreza").set({"attack": "incarnon_normal_attack", "evolutions": {2: 2}, "on_puncture_status_effect": 0})
+        effect = weapon.data.evolutions["2"]["2"].stats["status_chance"][0]
+        self.assertEqual(effect["stacks"], {"when": "on_puncture_status_effect", "max": 5})
+        self.assertAlmostEqual(effect["value"], 0.2)
+        self.assertNotIn("when", effect)
+        self.assertNotEqual(effect.get("mode"), "base")
+        base_sc = selected(weapon).effective.status_chance
+        weapon.set({"on_puncture_status_effect": 5})
+        self.assertAlmostEqual(selected(weapon).evolutions.proportional.status_chance, 1.0)
+        self.assertAlmostEqual(selected(weapon).effective.status_chance, base_sc * 2)
 
     def test_hate_spectral_is_incarnon_only(self):
         attacks = arsenal.get("Hate").data.attacks
