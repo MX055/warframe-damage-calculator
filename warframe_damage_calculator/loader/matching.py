@@ -84,11 +84,13 @@ def upgrade_matches(entry: DatabaseEntry, item_type: str | None) -> bool:
     requested = expand_type_filter(item_type)
     raw_compatibility = entry.data.get("compatibility", {})
     if isinstance(raw_compatibility, Mapping):
+        # Boolean / metadata flags are not type filters (stance/exilus/aoe).
         compatibility = {
             normalize_identifier(value)
             for key, values in raw_compatibility.items()
-            if key not in {"aoe", "exilus"}
+            if key not in {"aoe", "exilus", "stance"}
             for value in as_list(values)
+            if value is not None and value != ""
         } | entry.match_types
     else:
         compatibility = _normalized_values(raw_compatibility)
