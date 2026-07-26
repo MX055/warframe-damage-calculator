@@ -757,7 +757,7 @@ The file uses the same top-level schema as the bundled database:
 
 ```json
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "weapons": {
     "Example Rifle": {
       "name": "Example Rifle",
@@ -770,6 +770,19 @@ The file uses the same top-level schema as the bundled database:
       "name": "Example Mod",
       "type": "mod",
       "stats": {}
+    }
+  },
+  "enemies": {
+    "Example Enemy": {
+      "name": "Example Enemy",
+      "faction": "Grineer",
+      "base_level": 1,
+      "stats": {"health": 100, "shields": 0, "armor": 50, "overguard": 0},
+      "bodyparts": {
+        "body": {"type": "normal", "multiplier": 1.0},
+        "head": {"type": "weakpoint", "multiplier": 3.0}
+      },
+      "modifiers": {"impact": 1.5, "corrosive": 1.5}
     }
   },
   "riven_stats": {}

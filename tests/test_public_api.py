@@ -182,6 +182,19 @@ class PublicApiTests(unittest.TestCase):
                 for effect in effects:
                     self.assertIn(effect.get("mode"), allowed_modes)
 
+    def test_bundled_database_contains_normalized_enemy_data(self):
+        enemies = arsenal.database["enemies"]
+        self.assertEqual(len(enemies), 990)
+        heavy = enemies["Arid Heavy Gunner"]
+        self.assertEqual(heavy["name"], "Arid Heavy Gunner")
+        self.assertEqual(heavy["faction"], "Grineer")
+        self.assertEqual(heavy["base_level"], 8)
+        self.assertEqual(heavy["stats"], {"health": 300, "shields": 0, "armor": 500, "overguard": 0})
+        self.assertEqual(heavy["bodyparts"]["head"], {"type": "weakpoint", "multiplier": 3.0})
+        self.assertEqual(heavy["modifiers"], {"corrosive": 1.5, "impact": 1.5})
+        self.assertEqual(enemies["Deimos Jugulus Rex"]["bodyparts"]["body"], {"type": "resistant", "multiplier": 0.5})
+        self.assertEqual(enemies["Scaldra Dedicant"]["stats"]["overguard"], 22)
+
     def test_arsenal_loads_fresh_weapons_and_safe_upgrades(self):
         first = arsenal.get("Corinth Prime")
         second = arsenal.get("Corinth Prime")
