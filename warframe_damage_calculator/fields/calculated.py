@@ -65,6 +65,13 @@ class CalculatedMultiplicativeFamilies(Data):
     pass
 
 
+class StatusEffects(Data):
+    viral: Number = 0.0
+    magnetic: Number = 0.0
+    corrosive: Number = 0.0
+    heat: Number = 0.0
+
+
 class ModdedStats(Data):
     proportional: CalculatedModeStats = CalculatedModeStats()
     base: CalculatedModeStats = CalculatedModeStats()

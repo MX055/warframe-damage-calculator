@@ -134,7 +134,7 @@ class RangedCalculator(WeaponCalculator):
 
     def _ib_slash_dot_per_proc(self, result: AttackResult, *, hit_multiplier: Number, faction_damage: Number, damage_multiplier: Number = 1, weakpoint: bool = False, resistant: bool = False) -> float:
         zone = "weakpoint" if weakpoint else "resistant" if resistant else "normal"
-        target = target_calculator.damage_type_multiplier(self.weapon.target, "slash", dot=True, zone=zone, weakpoint_bonus=self._weakpoint_damage_bonus(result))
+        target = target_calculator.damage_type_multiplier(self.weapon.target, "slash", dot=True, status_effects=result.status_effects, zone=zone, weakpoint_bonus=self._weakpoint_damage_bonus(result))
         return self._slash_dot_factor(result) * result.effective.damage.total_damage() * hit_multiplier * result.effective.status_damage * faction_damage ** 2 * damage_multiplier * target
 
     def _average_crit_chances(self, result: AttackResult) -> tuple[float, float]:

@@ -21,7 +21,7 @@ from dataclasses import dataclass
 from math import expm1, log1p
 from typing import Literal
 
-from ..fields.calculated import CalculatedStats, ModdedStats
+from ..fields.calculated import CalculatedStats, ModdedStats, StatusEffects
 from ..fields.upgrade import ResolvedStat
 from ..fields.weapon_data import Attack
 from ..utils.types import Number
@@ -71,6 +71,11 @@ class SustainedStatusModel:
         if probability <= 0 or attempts <= 0: return 0.0
         return min(float(max_stacks), attempts * probability)
 
+    def active_status_chance(self, status: str, *, duration: float | None = None) -> float:
+        probability = float(self.per_attack_probabilities.get(status, 0.0))
+        window = float(self.status_duration if duration is None else duration)
+        return sustained_proc_chance(probability, self.attacks_per_second * window)
+
 
 @dataclass(frozen=True, slots=True)
 class ConditionOverloadBonus:
@@ -114,6 +119,16 @@ def build_sustained_status_model(*, attack: Attack, base: CalculatedStats, modde
     probabilities = per_attack_status_probabilities(attack=attack, base=base, build=build, evolution_status_chance=evolution_status_chance, flat_status_chance=modded.flat.status_chance, status_attempts_per_attack=status_attempts_per_attack)
     maximum = len(probabilities) if condition_overload.max_stacks == "inf" else int(condition_overload.max_stacks)
     return SustainedStatusModel(per_attack_probabilities=probabilities, attacks_per_second=sustained_attack_rate, status_duration=float(modded.proportional.status_duration), max_unique_statuses=maximum, status_attempts_per_attack=status_attempts_per_attack)
+
+
+def non_dot_status_effects(model: SustainedStatusModel) -> StatusEffects:
+    corrosive_duration = model.status_duration * 4 / 3
+    return StatusEffects({
+        "viral": model.expected_status_stacks("viral", 10),
+        "magnetic": model.expected_status_stacks("magnetic", 10),
+        "corrosive": model.expected_status_stacks("corrosive", 10, duration=corrosive_duration),
+        "heat": model.active_status_chance("heat"),
+    })
 
 
 def apply_condition_overload(*, modded: ModdedStats, model: SustainedStatusModel, value_per_status: Number, co_factor: Number, co_effect: str) -> ConditionOverloadBonus:

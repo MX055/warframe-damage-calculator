@@ -26,7 +26,7 @@ class SecondaryCalculator(RangedCalculator):
         encumber_chance = 1 - (1 - encumber * min(effective.status_chance, 1)) ** effective.multishot
         tick_damage = damage.total_damage() * (effective.multishot if continuous else 1.0)
         zone = "weakpoint" if weakpoint else "resistant" if resistant else "normal"
-        encumber_dot_factor = sum(factor * target_calculator.damage_type_multiplier(self.weapon.target, damage_type, dot=True, zone=zone, weakpoint_bonus=self._weakpoint_damage_bonus(result)) for damage_type, factor in DOT_MULTIPLIERS) * effective.status_duration
+        encumber_dot_factor = sum(factor * target_calculator.damage_type_multiplier(self.weapon.target, damage_type, dot=True, status_effects=result.status_effects, zone=zone, weakpoint_bonus=self._weakpoint_damage_bonus(result)) for damage_type, factor in DOT_MULTIPLIERS) * effective.status_duration
         encumber_dot = encumber_chance * tick_damage * encumber_dot_factor / 13 * multiplier * effective.status_damage * faction_damage ** 2
         ib_procs = (self._impact_weight(result) * effective.status_chance + encumber_chance / 13) * self._internal_bleeding_chance(result)
         tick_damage_scale = effective.multishot if continuous else 1.0

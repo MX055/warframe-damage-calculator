@@ -16,7 +16,7 @@ from ..utils.types import ContributionTarget, Number
 from . import attack_tree, damage_calculator, formulas, scalar_calculator, target_calculator
 from .contributions import ContributionCalculator
 from .evolution_calculator import EvolutionCalculator
-from .status_model import SustainedStatusModel, apply_condition_overload, build_sustained_status_model, condition_overload_bonus, status_effect_stack_bonuses
+from .status_model import SustainedStatusModel, apply_condition_overload, build_sustained_status_model, condition_overload_bonus, non_dot_status_effects, status_effect_stack_bonuses
 
 CONTRIBUTION_TARGETS = frozenset({"flat_dph", "flat_weakpoint_dph", "flat_resistant_dph", "flat_dps", "flat_weakpoint_dps", "flat_resistant_dps", "flat_dotph", "flat_weakpoint_dotph", "flat_resistant_dotph", "flat_dotps", "flat_weakpoint_dotps", "flat_resistant_dotps", "total_dph", "total_weakpoint_dph", "total_resistant_dph", "total_dps", "total_weakpoint_dps", "total_resistant_dps"})
 
@@ -69,6 +69,7 @@ class WeaponCalculator:
         self._apply_condition_overload(result, model)
         self._compute_modded_damage(result)
         self._compute_effective(result)
+        result.status_effects = non_dot_status_effects(model)
         self._compute_average(result)
         return result
 
@@ -157,7 +158,7 @@ class WeaponCalculator:
 
     def _direct_damage(self, result: AttackResult, zone: target_calculator.HitZone = "normal") -> float:
         if self.weapon.target is None: return float(result.effective.damage.total_damage()) if zone == "normal" else 0.0
-        return target_calculator.damage_total(result.effective.damage, self.weapon.target, zone=zone, weakpoint_bonus=self._weakpoint_damage_bonus(result))
+        return target_calculator.damage_total(result.effective.damage, self.weapon.target, status_effects=result.status_effects, zone=zone, weakpoint_bonus=self._weakpoint_damage_bonus(result))
 
     def _compute_average(self, result: AttackResult) -> None:
         damage_calculator.apply_shared_average_factions(effective=result.effective, average=result.average)
@@ -168,7 +169,7 @@ class WeaponCalculator:
         if resistant and self is not None and self.weapon.target is None: return 0.0
         if self is None: status_attempts = max(result.modded.proportional.multishot if "multishot" in result.modded.proportional else result.attack.stats.multishot, 1)
         else: status_attempts = self._status_hits(result)
-        return damage_calculator.flat_dotph_from_result(result, status_attempts_per_attack=status_attempts, weakpoint=weakpoint, resistant=resistant, hits=hits, damage_multiplier=damage_multiplier, extra_damage=extra_damage, faction_damage=faction_damage, target=None if self is None else self.weapon.target, weakpoint_bonus=0 if self is None else self._weakpoint_damage_bonus(result))
+        return damage_calculator.flat_dotph_from_result(result, status_attempts_per_attack=status_attempts, weakpoint=weakpoint, resistant=resistant, hits=hits, damage_multiplier=damage_multiplier, extra_damage=extra_damage, faction_damage=faction_damage, target=None if self is None else self.weapon.target, status_effects=None if self is None else result.status_effects, weakpoint_bonus=0 if self is None else self._weakpoint_damage_bonus(result))
 
     # --- tree + resolve ---
 

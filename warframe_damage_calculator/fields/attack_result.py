@@ -1,6 +1,6 @@
 from ..core.data import Data
 from ..core.dist import Dist
-from .calculated import AverageStats, CalculatedStats, ModdedStats
+from .calculated import AverageStats, CalculatedStats, ModdedStats, StatusEffects
 from .evolution import ResolvedEvolutionStat
 from .upgrade import ResolvedStat
 from .weapon_data import Attack
@@ -15,6 +15,7 @@ class AttackResult(Data):
     base: CalculatedStats = CalculatedStats()
     modded: ModdedStats = ModdedStats()
     effective: CalculatedStats = CalculatedStats()
+    status_effects: StatusEffects = StatusEffects()
     average: AverageStats = AverageStats()
     final: AverageStats = AverageStats()
     children: list[str] = []

@@ -9,8 +9,8 @@ from warframe_damage_calculator.loader.construction import DatabaseFactory
 factory = DatabaseFactory()
 
 
-def weapon(damage, *, status_chance=0):
-    data = {"name": "Target Test", "type": "primary", "ammo": {"magazine_size": 10, "reload_time": 1}, "attacks": {"normal": {"stats": {"damage": damage, "crit_chance": 0, "crit_damage": 1, "status_chance": status_chance, "fire_rate": 1, "multishot": 1}}}}
+def weapon(damage, *, status_chance=0, forced_procs=None):
+    data = {"name": "Target Test", "type": "primary", "ammo": {"magazine_size": 10, "reload_time": 1}, "attacks": {"normal": {"stats": {"damage": damage, "forced_procs": forced_procs or {}, "crit_chance": 0, "crit_damage": 1, "status_chance": status_chance, "fire_rate": 1, "multishot": 1}}}}
     data["runtime"] = factory._default_weapon_runtime(data)
     return Primary(data)
 
@@ -138,6 +138,45 @@ class EnemyTargetTests(unittest.TestCase):
         self.assertAlmostEqual(target_calculator.defense_multiplier(guarded, "impact"), 1)
         self.assertAlmostEqual(target_calculator.defense_multiplier(guarded, "void"), 1.5)
         self.assertAlmostEqual(target_calculator.defense_multiplier(guarded, "heat", dot=True), 0)
+
+    def test_viral_status_amplifies_health_but_not_shields(self):
+        health = weapon({"impact": 100}, forced_procs={"viral": 1}).configure(target=enemy(health=100)).results.main
+        shields = weapon({"impact": 100}, forced_procs={"viral": 1}).configure(target=enemy(health=0, shields=100)).results.main
+        self.assertEqual(health.status_effects.viral, 6)
+        self.assertAlmostEqual(health.final.flat_dph, 325)
+        self.assertAlmostEqual(shields.final.flat_dph, 50)
+
+    def test_magnetic_status_amplifies_shields_and_overguard(self):
+        shields = weapon({"impact": 100}, forced_procs={"magnetic": 1}).configure(target=enemy(health=0, shields=100)).results.main
+        overguard = weapon({"impact": 100}, forced_procs={"magnetic": 1}).configure(target=enemy(health=0, overguard=100)).results.main
+        health = weapon({"impact": 100}, forced_procs={"magnetic": 1}).configure(target=enemy(health=100)).results.main
+        self.assertEqual(shields.status_effects.magnetic, 6)
+        self.assertAlmostEqual(shields.final.flat_dph, 162.5)
+        self.assertAlmostEqual(overguard.final.flat_dph, 325)
+        self.assertAlmostEqual(health.final.flat_dph, 100)
+
+    def test_corrosive_and_heat_status_strip_armor_multiplicatively(self):
+        corrosive = weapon({"impact": 100}, forced_procs={"corrosive": 1}).configure(target=enemy(health=100, armor=300)).results.main
+        heat = weapon({"impact": 100}, forced_procs={"heat": 1}).configure(target=enemy(health=100, armor=300)).results.main
+        combined = weapon({"impact": 100}, forced_procs={"corrosive": 1, "heat": 1}).configure(target=enemy(health=100, armor=300)).results.main
+        self.assertEqual(corrosive.status_effects.corrosive, 8)
+        self.assertEqual(heat.status_effects.heat, 1)
+        self.assertAlmostEqual(target_calculator.remaining_armor_multiplier(corrosive.status_effects), 0.32)
+        self.assertAlmostEqual(target_calculator.remaining_armor_multiplier(heat.status_effects), 0.5)
+        self.assertAlmostEqual(target_calculator.remaining_armor_multiplier(combined.status_effects), 0.16)
+        self.assertGreater(corrosive.final.flat_dph, 70)
+        self.assertGreater(heat.final.flat_dph, 70)
+        self.assertGreater(combined.final.flat_dph, corrosive.final.flat_dph)
+        self.assertGreater(combined.final.flat_dph, heat.final.flat_dph)
+
+    def test_status_vulnerability_and_armor_strip_caps(self):
+        self.assertEqual(target_calculator.status_vulnerability(0), 1)
+        self.assertEqual(target_calculator.status_vulnerability(1), 2)
+        self.assertEqual(target_calculator.status_vulnerability(10), 4.25)
+        self.assertEqual(target_calculator.status_vulnerability(20), 4.25)
+        self.assertEqual(target_calculator.corrosive_armor_strip(0), 0)
+        self.assertEqual(target_calculator.corrosive_armor_strip(1), 0.26)
+        self.assertAlmostEqual(target_calculator.corrosive_armor_strip(10), 0.8)
 
     def test_zero_pool_enemy_validation_fails(self):
         invalid = {"Unknown": {"name": "Unknown", "faction": "Unknown", "base_level": 1, "stats": {"health": 0, "shields": 0, "armor": 0, "overguard": 0}, "bodyparts": {"body": {"type": "normal", "multiplier": 1}}, "modifiers": {}}}
