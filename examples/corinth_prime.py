@@ -18,6 +18,8 @@ def main() -> None:
     weapon.configure(build)
 
     print(weapon.format.summary())
+    print(weapon.data.runtime)
+    print(mod2.data.runtime)
 
 
 if __name__ == "__main__":

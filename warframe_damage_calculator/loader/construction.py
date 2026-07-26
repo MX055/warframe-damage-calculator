@@ -14,6 +14,11 @@ class DatabaseFactory:
     models = {"primary": Primary, "secondary": Secondary, "melee": Melee, "mod": Upgrade, "arcane": Upgrade}
 
     @staticmethod
+    def _default_weapon_runtime(data: Mapping[str, Any]) -> dict[str, Any]:
+        attack = next(iter(data.get("attacks", {})), None)
+        return {"attack": attack} if attack is not None else {}
+
+    @staticmethod
     def _default_upgrade_runtime(data: Mapping[str, Any]) -> dict[str, Any]:
         runtime: dict[str, Any] = {"rank": data.get("max_rank", 0)}
         max_stacks: Number = 0
@@ -28,7 +33,7 @@ class DatabaseFactory:
         return runtime
 
     def create(self, entry: DatabaseEntry, context: dict | None = None) -> Weapon | Upgrade:
-        runtime = {} if entry.is_weapon else self._default_upgrade_runtime(entry.data)
+        runtime = self._default_weapon_runtime(entry.data) if entry.is_weapon else self._default_upgrade_runtime(entry.data)
         runtime.update(entry.data.get("runtime", {}))
         if context: runtime.update(context)
         return self.models[entry.category]({**entry.data, "runtime": runtime})

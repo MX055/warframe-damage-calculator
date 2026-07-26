@@ -199,7 +199,7 @@ print(weapon.data.attacks.buckshot.name)
 print(weapon.data.attacks.buckshot.stats.damage)
 ```
 
-The first attack in the weapon data is selected by default.
+The loader writes the first attack key to `weapon.data.runtime.attack` by default.
 
 ### Select another attack mode
 

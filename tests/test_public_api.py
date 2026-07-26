@@ -194,6 +194,10 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(weapon.data.runtime.attack, "air_burst_projectile")
         self.assertEqual(weapon.data.runtime.combo, 6)
 
+        default_weapon = arsenal.get("Corinth Prime")
+        self.assertEqual(default_weapon.data.runtime.attack, "buckshot")
+        self.assertEqual(default_weapon.data.selected_attack, "buckshot")
+
     def test_weapon_data_separates_global_stats_and_attacks(self):
         weapon = arsenal.get("Corinth Prime")
 
