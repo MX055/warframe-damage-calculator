@@ -84,16 +84,22 @@ class AverageStats(Data):
     procs_per_shot: Number
     flat_dph: Number
     flat_weakpoint_dph: Number
+    flat_resistant_dph: Number
     flat_dps: Number
     flat_weakpoint_dps: Number
+    flat_resistant_dps: Number
     flat_dotph: Number
     flat_weakpoint_dotph: Number
+    flat_resistant_dotph: Number
     flat_dotps: Number
     flat_weakpoint_dotps: Number
+    flat_resistant_dotps: Number
     total_dph: Number
     total_weakpoint_dph: Number
+    total_resistant_dph: Number
     total_dps: Number
     total_weakpoint_dps: Number
+    total_resistant_dps: Number
     melee_doughty_bonus: Number
     melee_duplicate_multiplier: Number
     combo_multiplier: Number

@@ -231,8 +231,9 @@ build = Build(
 weapon.configure(build)
 ```
 
-`configure(...)` accepts either a `Build` or one `Upgrade`.
-`configure()` leaves the current build when called with no build argument.
+`configure(build, target)` accepts either a `Build` or one `Upgrade`, plus an
+optional `Enemy` target. Omitted arguments preserve the current configuration;
+passing `target=None` explicitly clears the target. Builds and targets are copied.
 Pass an empty `Build()` to clear mods:
 
 ```python
@@ -855,6 +856,21 @@ contains the level-scaled health, shields, armor, and overguard. Steel Path
 multiplies health, shields, and armor by 2.5. Empowered uses its solo 2.5
 health/shield multiplier and does not affect armor or overguard.
 
+Configure an enemy target to apply its faction, damage-type modifiers, effective
+armor/shield/overguard pools, and averaged normal/weakpoint/resistant bodyparts:
+
+```python
+enemy = arsenal.get("Arid Heavy Gunner").set({"level": 150, "steel_path": True})
+weapon.configure(build, enemy)
+print(weapon.results.main.final.total_dps)
+print(weapon.results.main.final.total_weakpoint_dps)
+print(weapon.results.main.final.total_resistant_dps)
+```
+
+The configured target is available as `weapon.target`. Use
+`weapon.target.set(...)` to update its runtime and automatically refresh weapon
+results.
+
 ### Weapon runtime
 
 ```python
@@ -1033,8 +1049,8 @@ print(final.flat_dotps)
 print(final.total_dps)
 ```
 
-Ranged models also expose weakpoint versions, effective fire rate, expected
-procs per shot, and weakpoint averages:
+Targeted models expose weakpoint and resistant versions. Ranged models also
+expose effective fire rate, expected procs per shot, and weakpoint averages:
 
 ```python
 print(average.fire_rate)
@@ -1042,6 +1058,8 @@ print(weapon.results.main.average.procs_per_shot)
 print(average.weakpoint_crit_chance)
 print(average.total_weakpoint_dph)
 print(average.total_weakpoint_dps)
+print(average.total_resistant_dph)
+print(average.total_resistant_dps)
 ```
 
 Mechanic-specific outputs include:
@@ -1108,10 +1126,9 @@ print(weapon.format.upgrades())
 ```
 
 The optional `target` selects which final average metric to attribute. Defaults to
-`total_dps`. Supported targets: `flat_dph`, `flat_weakpoint_dph`, `flat_dps`,
-`flat_weakpoint_dps`, `flat_dotph`, `flat_weakpoint_dotph`, `flat_dotps`,
-`flat_weakpoint_dotps`, `total_dph`, `total_weakpoint_dph`, `total_dps`, and
-`total_weakpoint_dps`.
+`total_dps`. Supported targets include the body, weakpoint, and resistant forms
+of `flat_dph`, `flat_dps`, `flat_dotph`, `flat_dotps`, `total_dph`, and
+`total_dps`.
 
 Shapley percentages are each upgrade's share of the average marginal gain in the
 chosen metric from adding it across every possible subset of the rest of the
@@ -1288,11 +1305,11 @@ modeled, so melee DPS is best treated as a relative comparison.
 
 The calculator does not currently model:
 
-- Enemy armor, shields, health types, resistances, or damage attenuation
+- Unique enemy damage attenuation, invulnerability phases, or destructible subcomponents
 - Time-to-kill
 - Most non-DoT status effects
 - Projectile travel time or falloff application
-- Headshot eligibility or enemy-specific weakpoint rules
+- Head-only versus non-head weakpoint bonus distinctions
 - Melee stance animation timing and combo progression
 - Heavy-attack wind-up, slam timing, and multi-hit sequences as complete gameplay cycles
 - Frame abilities and weapon-specific scripted mechanics unless represented by upgrade stats

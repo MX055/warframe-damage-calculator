@@ -7,6 +7,8 @@ from ..utils.types import JsonValue
 
 
 class Upgrade:
+    results: UpgradeCalculator
+
     def __init__(self, data: Mapping[str, JsonValue] | None = None) -> None:
         self.data = UpgradeData(data or {})
         self.results = UpgradeCalculator(self)

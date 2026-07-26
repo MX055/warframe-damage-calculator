@@ -61,6 +61,13 @@ def fold_attack_tree(root: AttackResult, tree: list[AttackResult], *, attack_rat
         final.flat_weakpoint_dps = final.flat_weakpoint_dph * attack_rate
         final.flat_weakpoint_dotps = final.flat_weakpoint_dotph * attack_rate
         final.total_weakpoint_dps = final.total_weakpoint_dph * attack_rate
+    if any("flat_resistant_dph" in item.average for item in tree):
+        final.flat_resistant_dph = sum(item.average.get("flat_resistant_dph", 0) for item in tree)
+        final.flat_resistant_dotph = sum(item.average.get("flat_resistant_dotph", 0) for item in tree)
+        final.total_resistant_dph = final.flat_resistant_dph + final.flat_resistant_dotph
+        final.flat_resistant_dps = final.flat_resistant_dph * attack_rate
+        final.flat_resistant_dotps = final.flat_resistant_dotph * attack_rate
+        final.total_resistant_dps = final.total_resistant_dph * attack_rate
     return final
 
 

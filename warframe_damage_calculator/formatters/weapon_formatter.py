@@ -11,6 +11,9 @@ class WeaponFormatter:
     def _with_weakpoint(value: str, weakpoint: str | None = None) -> str:
         return value if weakpoint is None else f"{value} | {weakpoint}"
 
+    def _with_hit_zones(self, normal: str, weakpoint: str, resistant: str) -> str:
+        return f"{normal} | {weakpoint} | {resistant}" if getattr(self.weapon, "target", None) is not None else self._with_weakpoint(normal, weakpoint)
+
     @staticmethod
     def _fmt_number(value: Number) -> str:
         return f"{float(value):.2f}"

@@ -49,12 +49,13 @@ class BuildOwner(Protocol):
 class WeaponCalculatorOwner(Protocol):
     data: WeaponData
     build: BuildOwner
+    target: EnemyOwner | None
     stats_type: type[WeaponStats]
 
 
 @runtime_checkable
 class ConfigurableWeaponOwner(WeaponCalculatorOwner, Protocol):
-    def configure(self, build: BuildOwner | BuildUpgradeOwner | None = None) -> ConfigurableWeaponOwner: ...
+    def configure(self, build: BuildOwner | BuildUpgradeOwner | None = None, target: EnemyOwner | None | object = ...) -> ConfigurableWeaponOwner: ...
 
     def set(self, context: Mapping[str, Any] | None = None) -> ConfigurableWeaponOwner: ...
 

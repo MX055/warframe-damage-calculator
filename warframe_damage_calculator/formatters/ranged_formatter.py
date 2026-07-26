@@ -54,7 +54,7 @@ class RangedFormatter(WeaponFormatter):
             "TOTAL DAMAGE",
             self._fmt_number(total_base),
             self._with_weakpoint(self._fmt_number(total_effective), self._fmt_number(total_effective * effective.weakpoint_damage)),
-            self._with_weakpoint(self._fmt_number(final.flat_dph), self._fmt_number(final.flat_weakpoint_dph)),
+            self._with_hit_zones(self._fmt_number(final.flat_dph), self._fmt_number(final.flat_weakpoint_dph), self._fmt_number(final.flat_resistant_dph)),
         )
         for child in self.weapon.results.child:
             name = self._attack_label(child.name)
@@ -77,13 +77,14 @@ class RangedFormatter(WeaponFormatter):
         section_breaks.append(averages_at)
 
         dps_at = len(rows)
-        self._append(rows, "FLAT DPH", "", "", self._with_weakpoint(self._fmt_number(final.flat_dph), self._fmt_number(final.flat_weakpoint_dph)))
-        self._append(rows, "FLAT DOTPH", "", "", self._with_weakpoint(self._fmt_number(final.flat_dotph), self._fmt_number(final.flat_weakpoint_dotph)))
-        self._append(rows, "TOTAL DPH", "", "", self._with_weakpoint(self._fmt_number(final.total_dph), self._fmt_number(final.total_weakpoint_dph)))
-        self._append(rows, "FLAT DPS", "", "", self._with_weakpoint(self._fmt_number(final.flat_dps), self._fmt_number(final.flat_weakpoint_dps)))
-        self._append(rows, "FLAT DOTPS", "", "", self._with_weakpoint(self._fmt_number(final.flat_dotps), self._fmt_number(final.flat_weakpoint_dotps)))
-        self._append(rows, "TOTAL DPS", "", "", self._with_weakpoint(self._fmt_number(final.total_dps), self._fmt_number(final.total_weakpoint_dps)))
+        self._append(rows, "FLAT DPH", "", "", self._with_hit_zones(self._fmt_number(final.flat_dph), self._fmt_number(final.flat_weakpoint_dph), self._fmt_number(final.flat_resistant_dph)))
+        self._append(rows, "FLAT DOTPH", "", "", self._with_hit_zones(self._fmt_number(final.flat_dotph), self._fmt_number(final.flat_weakpoint_dotph), self._fmt_number(final.flat_resistant_dotph)))
+        self._append(rows, "TOTAL DPH", "", "", self._with_hit_zones(self._fmt_number(final.total_dph), self._fmt_number(final.total_weakpoint_dph), self._fmt_number(final.total_resistant_dph)))
+        self._append(rows, "FLAT DPS", "", "", self._with_hit_zones(self._fmt_number(final.flat_dps), self._fmt_number(final.flat_weakpoint_dps), self._fmt_number(final.flat_resistant_dps)))
+        self._append(rows, "FLAT DOTPS", "", "", self._with_hit_zones(self._fmt_number(final.flat_dotps), self._fmt_number(final.flat_weakpoint_dotps), self._fmt_number(final.flat_resistant_dotps)))
+        self._append(rows, "TOTAL DPS", "", "", self._with_hit_zones(self._fmt_number(final.total_dps), self._fmt_number(final.total_weakpoint_dps), self._fmt_number(final.total_resistant_dps)))
         section_breaks.append(dps_at)
 
         title = f"{self.weapon.data.name} - {selected.name.replace('_', ' ').title()}"
+        if self.weapon.target is not None: title += f" vs {self.weapon.target.data.name} (normal | weakpoint | resistant)"
         return self._table(("stat", "base", "effective", "final"), rows, title=title, border="=", section_at=tuple(section_breaks))

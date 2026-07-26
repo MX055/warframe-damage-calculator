@@ -5,6 +5,7 @@ from ..calculators.weapon_calculator import WeaponCalculator
 from ..formatters.weapon_formatter import WeaponFormatter
 from ..utils.types import JsonValue
 from .build import Build
+from .enemy import Enemy
 from .upgrade import Upgrade
 from ..fields.weapon_data import WeaponData
 from ..fields.weapon_input import WeaponStats
@@ -15,16 +16,20 @@ class Weapon:
     stats_type = WeaponStats
     calculator_type = WeaponCalculator
     formatter_type = WeaponFormatter
+    _target_unset = object()
 
     def __init__(self, data: Mapping[str, JsonValue] | None = None) -> None:
         self.data = self.data_type(data or {})
         self.build = Build()
+        self.target: Enemy | None = None
         self.results = self.calculator_type(self)
         self.format = self.formatter_type(self)
 
-    def configure(self, build: Build | Upgrade | None = None) -> Self:
+    def configure(self, build: Build | Upgrade | None = None, target: Enemy | None | object = _target_unset) -> Self:
         if build is not None:
             self.build = build.copy() if isinstance(build, Build) else Build(build)
+        if target is not self._target_unset:
+            self.target = target.copy() if isinstance(target, Enemy) else None
         self.results.resolve()
         return self
 
@@ -37,5 +42,6 @@ class Weapon:
     def copy(self) -> Self:
         copied = type(self)(self.data.copy())
         copied.build = self.build.copy()
+        copied.target = self.target.copy() if self.target is not None else None
         copied.results.resolve()
         return copied

@@ -109,9 +109,27 @@ class MeleeCalculator(WeaponCalculator):
         per = application_chance.doughty_per(result.build.conversions)
         average.melee_doughty_bonus = true_round(application_chance.doughty_crit_damage(puncture_weight=effective.damage.weight("puncture"), status_chance=effective.status_chance, factor=effective.melee_doughty, per=per), 1)
         average.melee_duplicate_multiplier = 1 + effective.melee_duplicate * max(0, 1 - abs(effective.crit_chance - 1))
-        average.flat_dph = effective.damage.total_damage() * self._max_average_faction_damage(result) * hit_mult * average.melee_duplicate_multiplier * combo
+        faction = self._max_average_faction_damage(result)
+        shared = faction * hit_mult * average.melee_duplicate_multiplier * combo
+        average.flat_dph = self._direct_damage(result) * shared
         average.flat_dps = effective.attack_speed * average.flat_dph
         average.flat_dotph = self._flat_dotph(result) * combo
         average.flat_dotps = effective.attack_speed * average.flat_dotph
+        average.flat_weakpoint_dph = average.flat_weakpoint_dotph = average.flat_resistant_dph = average.flat_resistant_dotph = 0.0
+        if self.weapon.target is not None:
+            average.weakpoint_crit_chance = average.crit_chance
+            average.weakpoint_crit_multiplier = average.crit_multiplier
+            average.flat_weakpoint_dph = self._direct_damage(result, "weakpoint") * shared
+            average.flat_resistant_dph = self._direct_damage(result, "resistant") * shared
+            average.flat_weakpoint_dotph = self._flat_dotph(result, weakpoint=True) * combo
+            average.flat_resistant_dotph = self._flat_dotph(result, resistant=True) * combo
+        average.flat_weakpoint_dotps = effective.attack_speed * average.flat_weakpoint_dotph
+        average.flat_resistant_dotps = effective.attack_speed * average.flat_resistant_dotph
+        average.flat_weakpoint_dps = effective.attack_speed * average.flat_weakpoint_dph
+        average.flat_resistant_dps = effective.attack_speed * average.flat_resistant_dph
         average.total_dph = average.flat_dph + average.flat_dotph
+        average.total_weakpoint_dph = average.flat_weakpoint_dph + average.flat_weakpoint_dotph
+        average.total_resistant_dph = average.flat_resistant_dph + average.flat_resistant_dotph
         average.total_dps = average.flat_dps + average.flat_dotps
+        average.total_weakpoint_dps = average.flat_weakpoint_dps + average.flat_weakpoint_dotps
+        average.total_resistant_dps = average.flat_resistant_dps + average.flat_resistant_dotps

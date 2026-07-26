@@ -6,6 +6,8 @@ from .upgrade import Upgrade
 
 
 class Build:
+    results: BuildCalculator
+
     def __init__(self, *upgrades: Upgrade) -> None:
         self.upgrades = [upgrade.copy() for upgrade in upgrades]
         self.results = BuildCalculator(self)

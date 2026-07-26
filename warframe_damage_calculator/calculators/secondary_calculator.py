@@ -1,7 +1,7 @@
 from ..fields.attack_result import AttackResult
 from ..utils.constants import DOT_MULTIPLIERS
 from ..utils.types import Number
-from . import application_chance, formulas, stacking_reset
+from . import application_chance, formulas, stacking_reset, target_calculator
 from .ranged_calculator import RangedCalculator
 
 
@@ -15,7 +15,7 @@ class SecondaryCalculator(RangedCalculator):
         average.weakpoint_secondary_enervate_bonus = weakpoint_secondary_enervate_bonus
         return float(effective.crit_chance + secondary_enervate_bonus), float(effective.weakpoint_crit_chance + weakpoint_secondary_enervate_bonus)
 
-    def _flat_dotph(self, result: AttackResult, *, weakpoint: bool = False, hits: Number | None = None, damage_multiplier: Number = 1, extra_damage: Number = 0, faction_damage: Number | None = None) -> float:
+    def _flat_dotph(self, result: AttackResult, *, weakpoint: bool = False, resistant: bool = False, hits: Number | None = None, damage_multiplier: Number = 1, extra_damage: Number = 0, faction_damage: Number | None = None) -> float:
         damage = result.effective.damage
         effective, average = result.effective, result.average
         if damage.total_damage() <= 0: return 0.0
@@ -25,11 +25,12 @@ class SecondaryCalculator(RangedCalculator):
         encumber = application_chance.encumber_chance(result.build.application_chance)
         encumber_chance = 1 - (1 - encumber * min(effective.status_chance, 1)) ** effective.multishot
         tick_damage = damage.total_damage() * (effective.multishot if continuous else 1.0)
-        encumber_dot_factor = sum(factor for _, factor in DOT_MULTIPLIERS) * effective.status_duration
+        zone = "weakpoint" if weakpoint else "resistant" if resistant else "normal"
+        encumber_dot_factor = sum(factor * target_calculator.damage_type_multiplier(self.weapon.target, damage_type, dot=True, zone=zone, weakpoint_bonus=self._weakpoint_damage_bonus(result)) for damage_type, factor in DOT_MULTIPLIERS) * effective.status_duration
         encumber_dot = encumber_chance * tick_damage * encumber_dot_factor / 13 * multiplier * effective.status_damage * faction_damage ** 2
         ib_procs = (self._impact_weight(result) * effective.status_chance + encumber_chance / 13) * self._internal_bleeding_chance(result)
         tick_damage_scale = effective.multishot if continuous else 1.0
-        ib_dpp = self._ib_slash_dot_per_proc(result, hit_multiplier=multiplier, faction_damage=faction_damage, damage_multiplier=tick_damage_scale)
+        ib_dpp = self._ib_slash_dot_per_proc(result, hit_multiplier=multiplier, faction_damage=faction_damage, damage_multiplier=tick_damage_scale, weakpoint=weakpoint, resistant=resistant)
         extra_hits = 1.0 if continuous else effective.multishot
         extra = ib_procs * ib_dpp * extra_hits
-        return super()._flat_dotph(result, weakpoint=weakpoint, hits=hits, damage_multiplier=damage_multiplier, extra_damage=extra + encumber_dot + extra_damage, faction_damage=faction_damage)
+        return super()._flat_dotph(result, weakpoint=weakpoint, resistant=resistant, hits=hits, damage_multiplier=damage_multiplier, extra_damage=extra + encumber_dot + extra_damage, faction_damage=faction_damage)

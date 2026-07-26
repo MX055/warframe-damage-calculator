@@ -103,10 +103,16 @@ def combine_chance(scaled: Number, family_factor: Number = 1, flat: Number = 0) 
 def refresh_dps_from_dph(average: AverageStats) -> None:
     average.flat_dps = average.fire_rate * average.flat_dph
     average.flat_weakpoint_dps = average.fire_rate * average.flat_weakpoint_dph
+    average.flat_resistant_dph = average.get("flat_resistant_dph", 0)
+    average.flat_resistant_dotph = average.get("flat_resistant_dotph", 0)
+    average.flat_resistant_dotps = average.fire_rate * average.flat_resistant_dotph
+    average.flat_resistant_dps = average.fire_rate * average.flat_resistant_dph
     average.total_dph = average.flat_dph + average.flat_dotph
     average.total_weakpoint_dph = average.flat_weakpoint_dph + average.flat_weakpoint_dotph
+    average.total_resistant_dph = average.flat_resistant_dph + average.flat_resistant_dotph
     average.total_dps = average.flat_dps + average.flat_dotps
     average.total_weakpoint_dps = average.flat_weakpoint_dps + average.flat_weakpoint_dotps
+    average.total_resistant_dps = average.flat_resistant_dps + average.flat_resistant_dotps
 
 
 def distribute_flat_damage(damage: Dist, flat: Number) -> Dist:

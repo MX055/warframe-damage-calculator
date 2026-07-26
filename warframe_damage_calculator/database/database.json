@@ -94073,27 +94073,6 @@
                 "impact": 1.5
             }
         },
-        "Kuva": {
-            "name": "Kuva",
-            "faction": "Grineer",
-            "base_level": 1,
-            "stats": {
-                "health": 0,
-                "shields": 0,
-                "armor": 0,
-                "overguard": 0
-            },
-            "bodyparts": {
-                "body": {
-                    "type": "normal",
-                    "multiplier": 1.0
-                }
-            },
-            "modifiers": {
-                "corrosive": 1.5,
-                "impact": 1.5
-            }
-        },
         "Tusk Command Dargyn": {
             "name": "Tusk Command Dargyn",
             "faction": "Grineer",
@@ -97931,27 +97910,6 @@
                 "impact": 1.5
             }
         },
-        "Elite Exo Ramsled": {
-            "name": "Elite Exo Ramsled",
-            "faction": "Grineer",
-            "base_level": 1,
-            "stats": {
-                "health": 0,
-                "shields": 0,
-                "armor": 0,
-                "overguard": 0
-            },
-            "bodyparts": {
-                "body": {
-                    "type": "normal",
-                    "multiplier": 1.0
-                }
-            },
-            "modifiers": {
-                "corrosive": 1.5,
-                "impact": 1.5
-            }
-        },
         "Executioner Harkonar": {
             "name": "Executioner Harkonar",
             "faction": "Grineer",
@@ -98256,31 +98214,6 @@
                     "multiplier": 1.0
                 },
                 "head": {
-                    "type": "weakpoint",
-                    "multiplier": 3.0
-                }
-            },
-            "modifiers": {
-                "corrosive": 1.5,
-                "impact": 1.5
-            }
-        },
-        "Ogma Elite": {
-            "name": "Ogma Elite",
-            "faction": "Grineer",
-            "base_level": 1,
-            "stats": {
-                "health": 0,
-                "shields": 0,
-                "armor": 0,
-                "overguard": 0
-            },
-            "bodyparts": {
-                "body": {
-                    "type": "normal",
-                    "multiplier": 1.0
-                },
-                "machine": {
                     "type": "weakpoint",
                     "multiplier": 3.0
                 }
@@ -100392,27 +100325,6 @@
                 "head": {
                     "type": "weakpoint",
                     "multiplier": 3.0
-                }
-            },
-            "modifiers": {
-                "corrosive": 1.5,
-                "impact": 1.5
-            }
-        },
-        "Grineer Queens": {
-            "name": "Grineer Queens",
-            "faction": "Grineer",
-            "base_level": 1,
-            "stats": {
-                "health": 0,
-                "shields": 0,
-                "armor": 0,
-                "overguard": 0
-            },
-            "bodyparts": {
-                "body": {
-                    "type": "normal",
-                    "multiplier": 1.0
                 }
             },
             "modifiers": {
@@ -103225,27 +103137,6 @@
             "stats": {
                 "health": 750,
                 "shields": 150,
-                "armor": 0,
-                "overguard": 0
-            },
-            "bodyparts": {
-                "body": {
-                    "type": "normal",
-                    "multiplier": 1.0
-                }
-            },
-            "modifiers": {
-                "puncture": 1.5,
-                "magnetic": 1.5
-            }
-        },
-        "Cryo Sentry": {
-            "name": "Cryo Turret",
-            "faction": "Corpus",
-            "base_level": 1,
-            "stats": {
-                "health": 0,
-                "shields": 0,
                 "armor": 0,
                 "overguard": 0
             },
@@ -113105,28 +112996,6 @@
                 "magnetic": 0.5
             }
         },
-        "Narmer Coildrive": {
-            "name": "Narmer Coildrive",
-            "faction": "Narmer",
-            "base_level": 1,
-            "stats": {
-                "health": 0,
-                "shields": 0,
-                "armor": 0,
-                "overguard": 0
-            },
-            "bodyparts": {
-                "body": {
-                    "type": "normal",
-                    "multiplier": 1.0
-                }
-            },
-            "modifiers": {
-                "slash": 1.5,
-                "toxin": 1.5,
-                "magnetic": 0.5
-            }
-        },
         "Narmer Raknoid": {
             "name": "Narmer Raknoid",
             "faction": "Narmer",
@@ -113353,28 +113222,6 @@
                 "head": {
                     "type": "weakpoint",
                     "multiplier": 3.0
-                }
-            },
-            "modifiers": {
-                "slash": 1.5,
-                "toxin": 1.5,
-                "magnetic": 0.5
-            }
-        },
-        "Narmer Bolkor": {
-            "name": "Narmer Bolkor",
-            "faction": "Narmer",
-            "base_level": 1,
-            "stats": {
-                "health": 0,
-                "shields": 0,
-                "armor": 0,
-                "overguard": 0
-            },
-            "bodyparts": {
-                "body": {
-                    "type": "normal",
-                    "multiplier": 1.0
                 }
             },
             "modifiers": {
@@ -113859,28 +113706,6 @@
                 "health": 17500,
                 "shields": 4000,
                 "armor": 100,
-                "overguard": 0
-            },
-            "bodyparts": {
-                "body": {
-                    "type": "normal",
-                    "multiplier": 1.0
-                }
-            },
-            "modifiers": {
-                "slash": 1.5,
-                "toxin": 1.5,
-                "magnetic": 0.5
-            }
-        },
-        "Narmer Firbolg": {
-            "name": "Narmer Firbolg",
-            "faction": "Narmer",
-            "base_level": 1,
-            "stats": {
-                "health": 0,
-                "shields": 0,
-                "armor": 0,
                 "overguard": 0
             },
             "bodyparts": {
@@ -114889,28 +114714,6 @@
                 "head": {
                     "type": "weakpoint",
                     "multiplier": 3.0
-                }
-            },
-            "modifiers": {
-                "corrosive": 1.5,
-                "impact": 1.5,
-                "gas": 0.5
-            }
-        },
-        "H-04 Efervon Tank": {
-            "name": "H-04 Efervon Tank",
-            "faction": "Scaldra",
-            "base_level": 1,
-            "stats": {
-                "health": 0,
-                "shields": 0,
-                "armor": 0,
-                "overguard": 0
-            },
-            "bodyparts": {
-                "body": {
-                    "type": "normal",
-                    "multiplier": 1.0
                 }
             },
             "modifiers": {
@@ -117113,24 +116916,6 @@
             },
             "modifiers": {}
         },
-        "Liminus": {
-            "name": "Liminus",
-            "faction": "?",
-            "base_level": 1,
-            "stats": {
-                "health": 0,
-                "shields": 0,
-                "armor": 0,
-                "overguard": 0
-            },
-            "bodyparts": {
-                "body": {
-                    "type": "normal",
-                    "multiplier": 1.0
-                }
-            },
-            "modifiers": {}
-        },
         "Clem": {
             "name": "Clem",
             "faction": "Tenno",
@@ -117271,24 +117056,6 @@
                 "health": 1000,
                 "shields": 0,
                 "armor": 50,
-                "overguard": 0
-            },
-            "bodyparts": {
-                "body": {
-                    "type": "normal",
-                    "multiplier": 1.0
-                }
-            },
-            "modifiers": {}
-        },
-        "Persecutor Liminus": {
-            "name": "Persecutor Liminus",
-            "faction": "?",
-            "base_level": 1,
-            "stats": {
-                "health": 0,
-                "shields": 0,
-                "armor": 0,
                 "overguard": 0
             },
             "bodyparts": {

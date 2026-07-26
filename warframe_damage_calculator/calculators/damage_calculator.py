@@ -15,6 +15,7 @@ from ..core.dist import Dist
 from ..utils.constants import DOT_MULTIPLIERS
 from ..utils.types import Number
 from . import formulas
+from . import target_calculator
 
 
 def compute_modded_damage(*, attack: Attack, base: CalculatedStats, original_damage: Dist, build: ResolvedStat, evolutions: ResolvedEvolutionStat, modded: ModdedStats) -> None:
@@ -49,13 +50,14 @@ def max_faction_damage(average: AverageStats) -> float:
     return max(average.corpus_damage, average.grineer_damage, average.infested_damage, average.orokin_damage, average.murmur_damage, average.sentient_damage)
 
 
-def flat_dotph(*, base: CalculatedStats, effective: CalculatedStats, average: AverageStats, status_attempts_per_attack: float, weakpoint: bool = False, hits: Number | None = None, damage_multiplier: Number = 1, extra_damage: Number = 0, faction_damage: Number | None = None, continuous: bool = False) -> float:
+def flat_dotph(*, base: CalculatedStats, effective: CalculatedStats, average: AverageStats, status_attempts_per_attack: float, weakpoint: bool = False, resistant: bool = False, hits: Number | None = None, damage_multiplier: Number = 1, extra_damage: Number = 0, faction_damage: Number | None = None, continuous: bool = False, target: object | None = None, weakpoint_bonus: float = 0) -> float:
     # Beam: random DoT ×MS² (merged tick damage × status); forced procs ×MS once after merge.
     if faction_damage is None: faction_damage = max_faction_damage(average)
     if effective.damage.total_damage() <= 0: return 0.0
     multiplier = formulas.hit_multiplier(average.weakpoint_crit_chance if weakpoint else average.crit_chance, effective.crit_damage, effective.non_crit_bonus_damage, effective.non_crit_bonus_chance)
-    regular = sum(factor * effective.damage.get(damage_type) * effective.damage.weight(damage_type) for damage_type, factor in DOT_MULTIPLIERS) * effective.status_chance
-    forced = sum(factor * base.forced_procs.get(damage_type) * effective.damage.get(damage_type) for damage_type, factor in DOT_MULTIPLIERS)
+    zone = "weakpoint" if weakpoint else "resistant" if resistant else "normal"
+    regular = sum(factor * effective.damage.get(damage_type) * effective.damage.weight(damage_type) * target_calculator.damage_type_multiplier(target, damage_type, dot=True, zone=zone, weakpoint_bonus=weakpoint_bonus) for damage_type, factor in DOT_MULTIPLIERS) * effective.status_chance
+    forced = sum(factor * base.forced_procs.get(damage_type) * effective.damage.get(damage_type) * target_calculator.damage_type_multiplier(target, damage_type, dot=True, zone=zone, weakpoint_bonus=weakpoint_bonus) for damage_type, factor in DOT_MULTIPLIERS)
     shot_hits = effective.multishot if hits is None else hits
     regular_hits = shot_hits * shot_hits if continuous else shot_hits
     forced_hits = shot_hits
@@ -63,6 +65,6 @@ def flat_dotph(*, base: CalculatedStats, effective: CalculatedStats, average: Av
     return (regular * regular_hits + forced * forced_hits) * shared + extra_damage
 
 
-def flat_dotph_from_result(result: AttackResult, *, status_attempts_per_attack: float, weakpoint: bool = False, hits: Number | None = None, damage_multiplier: Number = 1, extra_damage: Number = 0, faction_damage: Number | None = None) -> float:
+def flat_dotph_from_result(result: AttackResult, *, status_attempts_per_attack: float, weakpoint: bool = False, resistant: bool = False, hits: Number | None = None, damage_multiplier: Number = 1, extra_damage: Number = 0, faction_damage: Number | None = None, target: object | None = None, weakpoint_bonus: float = 0) -> float:
     continuous = (result.attack.delivery or "") == "beam"
-    return flat_dotph(base=result.base, effective=result.effective, average=result.average, status_attempts_per_attack=status_attempts_per_attack, weakpoint=weakpoint, hits=hits, damage_multiplier=damage_multiplier, extra_damage=extra_damage, faction_damage=faction_damage, continuous=continuous)
+    return flat_dotph(base=result.base, effective=result.effective, average=result.average, status_attempts_per_attack=status_attempts_per_attack, weakpoint=weakpoint, resistant=resistant, hits=hits, damage_multiplier=damage_multiplier, extra_damage=extra_damage, faction_damage=faction_damage, continuous=continuous, target=target, weakpoint_bonus=weakpoint_bonus)

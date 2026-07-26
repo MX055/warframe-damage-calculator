@@ -186,7 +186,8 @@ class PublicApiTests(unittest.TestCase):
 
     def test_bundled_database_contains_normalized_enemy_data(self):
         enemies = arsenal.database["enemies"]
-        self.assertEqual(len(enemies), 989)
+        self.assertEqual(len(enemies), 978)
+        self.assertTrue({"Kuva", "Elite Exo Ramsled", "Ogma Elite", "Grineer Queens", "Cryo Sentry", "Narmer Coildrive", "Narmer Bolkor", "Narmer Firbolg", "H-04 Efervon Tank", "Liminus", "Persecutor Liminus"}.isdisjoint(enemies))
         heavy = enemies["Arid Heavy Gunner"]
         self.assertEqual(heavy["name"], "Arid Heavy Gunner")
         self.assertEqual(heavy["faction"], "Grineer")
@@ -246,9 +247,9 @@ class PublicApiTests(unittest.TestCase):
 
         self.assertIsInstance(variant, Enemy)
         self.assertEqual(variant.data.name, "Senta Turret")
-        self.assertEqual(len(enemies), 989)
+        self.assertEqual(len(enemies), 978)
         self.assertTrue(all(isinstance(enemy, Enemy) for enemy in enemies.values()))
-        self.assertEqual(len(grineer), 252)
+        self.assertEqual(len(grineer), 248)
         self.assertTrue(all(enemy.data.faction == "Grineer" for enemy in grineer.values()))
         self.assertEqual(arsenal.get("Arid Heavy Gunner", attribute="health"), 83815.99)
         self.assertEqual(arsenal.get("Arid Heavy Gunner", attribute="impact"), 1.5)
