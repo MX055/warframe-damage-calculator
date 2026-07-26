@@ -7,8 +7,6 @@ from ..utils.types import JsonValue
 
 
 class Enemy:
-    results: EnemyCalculator
-
     def __init__(self, data: Mapping[str, JsonValue] | None = None) -> None:
         self.data = EnemyData(data or {})
         self.results = EnemyCalculator(self)
