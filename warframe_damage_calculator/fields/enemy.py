@@ -6,7 +6,7 @@ from ..utils.types import JsonValue, Number
 
 
 class EnemyStats(Data):
-    health: Number = 0
+    health: Number = 1
     shields: Number = 0
     armor: Number = 0
     overguard: Number = 0
@@ -28,16 +28,16 @@ class EnemyModifiers(Data):
 
 
 class EnemyRuntime(Data):
-    level: Number
-    steel_path: bool
-    empowered: bool
+    level: Number = 1
+    steel_path: bool = False
+    empowered: bool = False
 
 
 class EnemyData(Data):
-    name: str = ""
-    faction: str = ""
+    name: str = "Enemy"
+    faction: str = "Unknown"
     base_level: Number = 1
-    stats: EnemyStats = {}
-    bodyparts: BodyParts = {}
+    stats: EnemyStats = EnemyStats()
+    bodyparts: BodyParts = {"body": BodyPart()}
     modifiers: EnemyModifiers = {}
     runtime: EnemyRuntime = EnemyRuntime()

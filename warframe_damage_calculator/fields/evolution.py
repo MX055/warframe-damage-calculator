@@ -92,11 +92,15 @@ class ResolvedEvolutionModeStats(Data):
     zoom: Number = 0.0
 
 
+class ResolvedEvolutionMultiplicativeFamilies(Data):
+    pass
+
+
 class ResolvedEvolutionStat(Data):
     proportional: ResolvedEvolutionModeStats = ResolvedEvolutionModeStats()
     base: ResolvedEvolutionModeStats = ResolvedEvolutionModeStats()
     flat: ResolvedEvolutionModeStats = ResolvedEvolutionModeStats()
-    multiplicative_families: Data = Data()
+    multiplicative_families: ResolvedEvolutionMultiplicativeFamilies = ResolvedEvolutionMultiplicativeFamilies()
     magazine_position: list = []
     stacking_reset: list = []
     application_chance: list = []

@@ -75,20 +75,32 @@ class StanceCombos(Data):
         super().__setitem__(key, value)
 
 
+class UpgradeCompatibility(Data):
+    pass
+
+
+class UpgradeRuntime(Data):
+    pass
+
+
 class UpgradeData(Data):
     name: str = ""
     type: str | None = None
     max_rank: int = 0
-    compatibility: Data = {}
+    compatibility: UpgradeCompatibility = UpgradeCompatibility()
     incompatibility: list[str] = []
     stats: UpgradeStats = {}
     combos: StanceCombos = {}
-    runtime: Data = Data()
+    runtime: UpgradeRuntime = UpgradeRuntime()
+
+
+class ResolvedElements(Data):
+    pass
 
 
 class ResolvedModeStats(Data):
     damage: Dist = Dist()
-    elements: Data = Data()
+    elements: ResolvedElements = ResolvedElements()
     accuracy: Number = 0.0
     ammo_efficiency: Number = 0.0
     ammo_maximum: Number = 0.0
@@ -130,12 +142,16 @@ class ResolvedModeStats(Data):
     zoom: Number = 0.0
 
 
+class ResolvedMultiplicativeFamilies(Data):
+    pass
+
+
 class ResolvedStat(Data):
     proportional: ResolvedModeStats = ResolvedModeStats()
     base: ResolvedModeStats = ResolvedModeStats()
     flat: ResolvedModeStats = ResolvedModeStats()
     # Named product families (bonus, chamber, charge, status, …). Same family adds; different multiply.
-    multiplicative_families: Data = Data()
+    multiplicative_families: ResolvedMultiplicativeFamilies = ResolvedMultiplicativeFamilies()
     magazine_position: list = []
     stacking_reset: list = []
     application_chance: list = []

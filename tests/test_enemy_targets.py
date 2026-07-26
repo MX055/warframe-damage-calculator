@@ -26,7 +26,19 @@ def upgrade(name, stats):
 
 
 class EnemyTargetTests(unittest.TestCase):
-    def test_weapon_configure_copies_preserves_and_clears_target(self):
+    def test_default_enemy_is_a_neutral_calculation_target(self):
+        target = Enemy()
+        self.assertEqual(Enemy({}).data, target.data)
+        self.assertEqual(target.data.name, "Enemy")
+        self.assertEqual(dict(target.data.runtime), {"level": 1, "steel_path": False, "empowered": False})
+        self.assertEqual(dict(target.results.effective), {"health": 1.0, "shields": 0.0, "armor": 0, "overguard": 0.0})
+        untargeted = weapon({"impact": 100})
+        targeted = weapon({"impact": 100}).configure(target=target)
+        self.assertAlmostEqual(targeted.results.main.final.flat_dph, untargeted.results.main.final.flat_dph)
+        self.assertEqual(targeted.results.main.final.flat_weakpoint_dph, 0)
+        self.assertEqual(targeted.results.main.final.flat_resistant_dph, 0)
+
+    def test_weapon_configure_copies_and_preserves_target(self):
         source = enemy(health=100, armor=100)
         configured = weapon({"impact": 100}).configure(target=source)
         self.assertIsNot(configured.target, source)
@@ -35,8 +47,9 @@ class EnemyTargetTests(unittest.TestCase):
         self.assertIsNotNone(configured.target)
         copied = configured.copy()
         self.assertIsNot(copied.target, configured.target)
+        preserved = configured.target
         configured.configure(target=None)
-        self.assertIsNone(configured.target)
+        self.assertIs(configured.target, preserved)
         self.assertIsNotNone(copied.target)
 
     def test_target_runtime_mutation_recomputes_weapon_results(self):

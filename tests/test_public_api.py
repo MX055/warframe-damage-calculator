@@ -220,7 +220,8 @@ class PublicApiTests(unittest.TestCase):
 
         direct = Enemy({"name": "Direct Enemy"})
         self.assertIn("runtime", direct.data)
-        self.assertEqual(dict(direct.data.runtime), {})
+        self.assertEqual(dict(direct.data.runtime), {"level": 1, "steel_path": False, "empowered": False})
+        self.assertEqual(dict(direct.data.stats), {"health": 1, "shields": 0, "armor": 0, "overguard": 0})
 
     def test_enemy_calculator_scales_level_and_runtime_modifiers(self):
         enemy = arsenal.get("Arid Heavy Gunner")
@@ -1025,7 +1026,7 @@ class PublicApiTests(unittest.TestCase):
         beam_synth = runtime_weapon(Secondary, beam_data).configure(Build(arsenal.get("Synth Charge")))
         self.assertAlmostEqual(selected(beam_synth).average.flat_dph, selected(beam).average.flat_dph)
 
-    def test_calculator_uses_largest_faction_damage_bonus(self):
+    def test_calculator_uses_target_faction_damage_bonus(self):
         corpus = arsenal.get("Primed Bane of Corpus")
         grineer = arsenal.get("Bane of Grineer")
         weapon = arsenal.get("Braton").configure(Build(corpus, grineer))
@@ -1037,7 +1038,10 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(attack.effective.corpus_damage, 1.55)
         self.assertEqual(attack.average.corpus_damage, 1.55)
         self.assertEqual(attack.modded.proportional.grineer_damage, 1.3)
-        self.assertEqual(weapon.results._max_average_faction_damage(attack), 1.55)
+        self.assertEqual(weapon.results._max_average_faction_damage(attack), 1)
+        corpus_target = arsenal.get("Corpus Tech")
+        weapon.configure(target=corpus_target)
+        self.assertEqual(weapon.results._max_average_faction_damage(weapon.results.main), 1.55)
 
     def test_upgrade_stats_accept_scalar_and_single_record_shorthand(self):
         scalar = runtime_upgrade({"name": "Scalar", "type": "mod", "max_rank": 0, "stats": {"damage_bonus": 1.5}})

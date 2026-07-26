@@ -26,6 +26,14 @@ class Attacks(Data):
         super().__setitem__(key, value)
 
 
+class WeaponAmmo(Data):
+    pass
+
+
+class WeaponRuntime(Data):
+    pass
+
+
 class WeaponData(Data):
     name: str = ""
     type: str | None = None
@@ -35,10 +43,10 @@ class WeaponData(Data):
     pseudo_exalted: bool = False
     progenitor: bool = False
     companion: bool = False
-    ammo: Data = {}
+    ammo: WeaponAmmo = WeaponAmmo()
     attacks: Attacks = Attacks()
     evolutions: Evolutions = Evolutions()
-    runtime: Data = Data()
+    runtime: WeaponRuntime = WeaponRuntime()
 
     @property
     def selected_attack(self) -> str:

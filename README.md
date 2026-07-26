@@ -855,6 +855,8 @@ enemy runtime. Update it with `enemy.set(...)`; `enemy.results.effective`
 contains the level-scaled health, shields, armor, and overguard. Steel Path
 multiplies health, shields, and armor by 2.5. Empowered uses its solo 2.5
 health/shield multiplier and does not affect armor or overguard.
+Bare `Enemy()` constructs a neutral level-1 target with one health, no defenses
+or modifiers, and a 1x normal bodypart.
 
 Configure an enemy target to apply its faction, damage-type modifiers, effective
 armor/shield/overguard pools, and averaged normal/weakpoint/resistant bodyparts:

@@ -61,12 +61,16 @@ class CalculatedStats(CalculatedValues):
     pass
 
 
+class CalculatedMultiplicativeFamilies(Data):
+    pass
+
+
 class ModdedStats(Data):
     proportional: CalculatedModeStats = CalculatedModeStats()
     base: CalculatedModeStats = CalculatedModeStats()
     flat: CalculatedModeStats = CalculatedModeStats()
     # Runtime product-family bonuses (e.g. melee CO), folded with build/evo families.
-    multiplicative_families: Data = Data()
+    multiplicative_families: CalculatedMultiplicativeFamilies = CalculatedMultiplicativeFamilies()
 
 
 class AverageStats(Data):
