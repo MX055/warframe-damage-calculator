@@ -35,8 +35,8 @@ class EnemyTargetTests(unittest.TestCase):
         untargeted = weapon({"impact": 100})
         targeted = weapon({"impact": 100}).configure(target=target)
         self.assertAlmostEqual(targeted.results.main.final.flat_dph, untargeted.results.main.final.flat_dph)
-        self.assertEqual(targeted.results.main.final.flat_weakpoint_dph, 0)
-        self.assertEqual(targeted.results.main.final.flat_resistant_dph, 0)
+        self.assertIsNone(targeted.results.main.final.flat_weakpoint_dph)
+        self.assertIsNone(targeted.results.main.final.flat_resistant_dph)
 
     def test_weapon_configure_copies_and_preserves_target(self):
         source = enemy(health=100, armor=100)
@@ -86,10 +86,26 @@ class EnemyTargetTests(unittest.TestCase):
         self.assertAlmostEqual(final.flat_weakpoint_dph, 520)
         self.assertAlmostEqual(final.flat_resistant_dph, 37.5)
 
-    def test_missing_hit_zone_categories_are_zero(self):
+    def test_missing_hit_zone_categories_are_none_and_omitted_from_summary(self):
         final = weapon({"impact": 100}).configure(target=enemy()).results.main.final
-        self.assertEqual(final.flat_weakpoint_dph, 0)
-        self.assertEqual(final.flat_resistant_dph, 0)
+        self.assertIsNone(final.flat_weakpoint_dph)
+        self.assertIsNone(final.flat_resistant_dph)
+        summary = weapon({"impact": 100}).configure(target=enemy()).format.summary()
+        self.assertNotIn("None", summary)
+        self.assertIn("(normal)", summary)
+        total_dps = next(line for line in summary.splitlines() if line.startswith("TOTAL DPS"))
+        self.assertNotIn("|", total_dps.split("|", 3)[-1])
+
+    def test_normal_metrics_are_none_without_normal_bodyparts(self):
+        parts = {"head": {"type": "weakpoint", "multiplier": 3}, "shell": {"type": "resistant", "multiplier": 0.5}}
+        configured = weapon({"impact": 100}).configure(target=enemy(bodyparts=parts))
+        final = configured.results.main.final
+        self.assertIsNone(final.flat_dph)
+        self.assertAlmostEqual(final.flat_weakpoint_dph, 300)
+        self.assertAlmostEqual(final.flat_resistant_dph, 50)
+        summary = configured.format.summary()
+        self.assertNotIn("None", summary)
+        self.assertIn("(weakpoint | resistant)", summary)
 
     def test_dot_damage_uses_hit_zones_and_overguard_immunity(self):
         parts = {"body": {"type": "normal", "multiplier": 1}, "head": {"type": "weakpoint", "multiplier": 3}, "legs": {"type": "resistant", "multiplier": 0.5}}

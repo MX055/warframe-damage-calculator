@@ -72,6 +72,7 @@ class WeaponCalculator:
         self._compute_effective(result)
         result.status_effects = non_dot_status_effects(model)
         self._compute_average(result)
+        target_calculator.mask_missing_bodypart_metrics(result.average, self.weapon.target)
         return result
 
     def _ability_strength_multiplier(self) -> float | None:

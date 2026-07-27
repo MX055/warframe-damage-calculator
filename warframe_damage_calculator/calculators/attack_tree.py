@@ -46,28 +46,23 @@ def walk_tree(name: str, results: Mapping[str, AttackResult], ancestors: frozens
 def fold_attack_tree(root: AttackResult, tree: list[AttackResult], *, attack_rate: float) -> AverageStats:
     """Sum per-attack average damage; scale DPS by the root attack's sustained rate."""
     final = root.average.copy()
-    final.flat_dph = sum(item.average.get("flat_dph", 0) for item in tree)
-    final.flat_dotph = sum(item.average.get("flat_dotph", 0) for item in tree)
-    final.total_dph = final.flat_dph + final.flat_dotph
 
-    final.flat_dps = final.flat_dph * attack_rate
-    final.flat_dotps = final.flat_dotph * attack_rate
-    final.total_dps = final.total_dph * attack_rate
+    def fold_zone(flat_dph: str, flat_dotph: str, total_dph: str, flat_dps: str, flat_dotps: str, total_dps: str) -> None:
+        direct = [item.average.get(flat_dph) for item in tree]
+        dots = [item.average.get(flat_dotph) for item in tree]
+        if not any(value is not None for value in direct + dots):
+            for key in (flat_dph, flat_dotph, total_dph, flat_dps, flat_dotps, total_dps): final[key] = None
+            return
+        final[flat_dph] = sum(float(value or 0) for value in direct)
+        final[flat_dotph] = sum(float(value or 0) for value in dots)
+        final[total_dph] = final[flat_dph] + final[flat_dotph]
+        final[flat_dps] = final[flat_dph] * attack_rate
+        final[flat_dotps] = final[flat_dotph] * attack_rate
+        final[total_dps] = final[total_dph] * attack_rate
 
-    if any("flat_weakpoint_dph" in item.average for item in tree):
-        final.flat_weakpoint_dph = sum(item.average.get("flat_weakpoint_dph", 0) for item in tree)
-        final.flat_weakpoint_dotph = sum(item.average.get("flat_weakpoint_dotph", 0) for item in tree)
-        final.total_weakpoint_dph = final.flat_weakpoint_dph + final.flat_weakpoint_dotph
-        final.flat_weakpoint_dps = final.flat_weakpoint_dph * attack_rate
-        final.flat_weakpoint_dotps = final.flat_weakpoint_dotph * attack_rate
-        final.total_weakpoint_dps = final.total_weakpoint_dph * attack_rate
-    if any("flat_resistant_dph" in item.average for item in tree):
-        final.flat_resistant_dph = sum(item.average.get("flat_resistant_dph", 0) for item in tree)
-        final.flat_resistant_dotph = sum(item.average.get("flat_resistant_dotph", 0) for item in tree)
-        final.total_resistant_dph = final.flat_resistant_dph + final.flat_resistant_dotph
-        final.flat_resistant_dps = final.flat_resistant_dph * attack_rate
-        final.flat_resistant_dotps = final.flat_resistant_dotph * attack_rate
-        final.total_resistant_dps = final.total_resistant_dph * attack_rate
+    fold_zone("flat_dph", "flat_dotph", "total_dph", "flat_dps", "flat_dotps", "total_dps")
+    fold_zone("flat_weakpoint_dph", "flat_weakpoint_dotph", "total_weakpoint_dph", "flat_weakpoint_dps", "flat_weakpoint_dotps", "total_weakpoint_dps")
+    fold_zone("flat_resistant_dph", "flat_resistant_dotph", "total_resistant_dph", "flat_resistant_dps", "flat_resistant_dotps", "total_resistant_dps")
     return final
 
 

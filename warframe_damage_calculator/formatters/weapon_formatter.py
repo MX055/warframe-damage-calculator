@@ -8,43 +8,52 @@ class WeaponFormatter:
         self.weapon = weapon
 
     @staticmethod
-    def _with_weakpoint(value: str, weakpoint: str | None = None) -> str:
+    def _with_weakpoint(value: str | None, weakpoint: str | None = None) -> str:
+        if value is None: return weakpoint or ""
         return value if weakpoint is None else f"{value} | {weakpoint}"
 
-    def _with_hit_zones(self, normal: str, weakpoint: str, resistant: str) -> str:
-        return f"{normal} | {weakpoint} | {resistant}" if getattr(self.weapon, "target", None) is not None else self._with_weakpoint(normal, weakpoint)
+    def _with_hit_zones(self, normal: str | None, weakpoint: str | None, resistant: str | None) -> str:
+        if getattr(self.weapon, "target", None) is None: return self._with_weakpoint(normal, weakpoint)
+        return " | ".join(value for value in (normal, weakpoint, resistant) if value is not None)
 
     @staticmethod
-    def _fmt_number(value: Number) -> str:
-        return f"{float(value):.2f}"
+    def _fmt_number(value: Number | None) -> str | None:
+        return None if value is None else f"{float(value):.2f}"
 
     @staticmethod
-    def _fmt_percent(value: Number) -> str:
-        return f"{float(value):.2%}"
+    def _fmt_percent(value: Number | None) -> str | None:
+        return None if value is None else f"{float(value):.2%}"
 
     @staticmethod
-    def _fmt_bonus_percent(value: Number) -> str:
-        return f"+{float(value):.2%}"
+    def _fmt_bonus_percent(value: Number | None) -> str | None:
+        return None if value is None else f"+{float(value):.2%}"
 
     @staticmethod
-    def _fmt_multiplier(value: Number) -> str:
-        return f"{float(value):.2f}x"
+    def _fmt_multiplier(value: Number | None) -> str | None:
+        return None if value is None else f"{float(value):.2f}x"
 
     @staticmethod
-    def _fmt_rate(value: Number) -> str:
-        return f"{float(value):.2f}rps"
+    def _fmt_rate(value: Number | None) -> str | None:
+        return None if value is None else f"{float(value):.2f}rps"
 
     @staticmethod
-    def _fmt_seconds(value: Number) -> str:
-        return f"{float(value):.2f}s"
+    def _fmt_seconds(value: Number | None) -> str | None:
+        return None if value is None else f"{float(value):.2f}s"
 
     @staticmethod
-    def _fmt_rounds(value: Number) -> str:
-        return f"{float(value):.0f}r"
+    def _fmt_rounds(value: Number | None) -> str | None:
+        return None if value is None else f"{float(value):.0f}r"
 
     @staticmethod
-    def _fmt_meters(value: Number) -> str:
-        return f"{float(value):g}m"
+    def _fmt_meters(value: Number | None) -> str | None:
+        return None if value is None else f"{float(value):g}m"
+
+    def _hit_zone_label(self) -> str:
+        target = getattr(self.weapon, "target", None)
+        if target is None: return "normal | weakpoint"
+        zones = ("normal", "weakpoint", "resistant")
+        present = [zone for zone in zones if any(part.type == zone for part in target.data.bodyparts.values())]
+        return " | ".join(present)
 
     @staticmethod
     def _attack_label(name: str) -> str:

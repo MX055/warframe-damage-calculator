@@ -9,6 +9,11 @@ from ..utils.types import DamageType
 
 
 type HitZone = Literal["normal", "weakpoint", "resistant"]
+ZONE_METRICS = {
+    "normal": ("flat_dph", "flat_dotph", "total_dph", "flat_dps", "flat_dotps", "total_dps"),
+    "weakpoint": ("flat_weakpoint_dph", "flat_weakpoint_dotph", "total_weakpoint_dph", "flat_weakpoint_dps", "flat_weakpoint_dotps", "total_weakpoint_dps"),
+    "resistant": ("flat_resistant_dph", "flat_resistant_dotph", "total_resistant_dph", "flat_resistant_dps", "flat_resistant_dotps", "total_resistant_dps"),
+}
 FACTION_STATS = {
     "Corpus": "corpus_damage",
     "Corpus Amalgam": "corpus_damage",
@@ -25,6 +30,17 @@ FACTION_STATS = {
 
 def fingerprint(target: Any | None) -> object:
     return None if target is None else (id(target), repr(target.data))
+
+
+def has_bodypart_type(target: Any | None, zone: HitZone) -> bool:
+    return target is None or any(part.type == zone for part in target.data.bodyparts.values())
+
+
+def mask_missing_bodypart_metrics(average: AverageStats, target: Any | None) -> None:
+    if target is None: return
+    for zone, metrics in ZONE_METRICS.items():
+        if has_bodypart_type(target, zone): continue
+        for metric in metrics: average[metric] = None
 
 
 def faction_damage(average: AverageStats, target: Any | None) -> float:
