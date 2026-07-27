@@ -225,10 +225,46 @@ class UpgradeCalculator:
         if condition is None: return ResolvableEffect(stat, value, mode, "static", exclude=exclude, family=family, scales_with_rank=scales, behavior=behavior)
         return ResolvableEffect(stat, value, mode, "conditional", condition=condition, exclude=exclude, family=family, scales_with_rank=scales, behavior=behavior)
 
+    @staticmethod
+    def _legacy_behavior_effect(stat: str, effect: Data) -> tuple[str, Data]:
+        """Translate deprecated pseudo-stats into the canonical behavior schema.
+
+        Bundled data is behavior-based, but this keeps older/custom databases
+        compatible without preserving a second calculation path.
+        """
+        value = effect.get("value")
+        if stat == "primed_chamber":
+            return "damage_bonus", Data({**effect, "value": value, "mode": "proportional", "behavior": BEHAVIOR_FIRST_SHOT, "family": "chamber", "behavior_data": {}})
+        if stat == "hunter_munitions":
+            return "slash_proc", Data({**effect, "value": value, "behavior": BEHAVIOR_ON_CRIT, "automatic": True, "behavior_data": {}})
+        if stat == "internal_bleeding":
+            return "slash_proc", Data({**effect, "value": value, "behavior": BEHAVIOR_ON_IMPACT_FR, "automatic": True, "behavior_data": {"fire_rate_threshold": 2.5}})
+        if stat == "secondary_encumber":
+            return "random_proc", Data({**effect, "value": value, "behavior": BEHAVIOR_ON_ANY_PROC, "automatic": True, "behavior_data": {}})
+        if stat == "secondary_enervate":
+            return "crit_reset_charges", Data({**effect, "value": value, "behavior": BEHAVIOR_STACK_RESET_CRIT_2_PLUS, "automatic": True, "behavior_data": {"stat": "crit_chance", "mode": "flat", "per_stack": ENERVATE_PER_STACK}})
+        if stat == "melee_duplicate":
+            return "duplicated_hit", Data({**effect, "value": value, "behavior": BEHAVIOR_NEAR_YELLOW, "automatic": True, "behavior_data": {}})
+        if stat == "melee_doughty":
+            return "crit_damage", Data({**effect, "value": value, "behavior": BEHAVIOR_FROM_PUNCTURE_X_STATUS, "automatic": True, "behavior_data": {"mode": "flat", "per": 0.1}})
+        if stat == "vigilante_bonus":
+            return "crit_chance", Data({**effect, "value": value, "behavior": BEHAVIOR_ON_HIT, "automatic": True, "behavior_data": {"mode": "flat"}})
+        if stat == "condition_overload":
+            stacks = effect.get("stacks")
+            behavior_data: dict[str, object] = {}
+            converted = Data({**effect, "value": value, "family": "status", "behavior": BEHAVIOR_UNIQUE_STATUS, "automatic": True, "behavior_data": behavior_data})
+            if isinstance(stacks, Mapping) and stacks.get("when") == "status_type":
+                if stacks.get("max") is not None:
+                    behavior_data["max_stacks"] = stacks["max"]
+                converted.pop("stacks", None)
+            return "damage_bonus", converted
+        return stat, effect
+
     def _normalize_effects(self) -> tuple[ResolvableEffect, ...]:
         effects: list[ResolvableEffect] = []
         for stat, raw in self.upgrade.data.stats.items():
             for effect in raw_effects(raw):
+                stat, effect = self._legacy_behavior_effect(stat, effect)
                 normalized = self._normalize_effect(stat, effect)
                 behavior = behavior_of(effect)
                 if behavior == BEHAVIOR_DOUBLE_FOR_BOWS:

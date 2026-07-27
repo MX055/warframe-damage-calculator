@@ -72420,9 +72420,13 @@
                 "exilus": false
             },
             "stats": {
-                "primed_chamber": [
+                "damage_bonus": [
                     {
-                        "value": 0.4
+                        "value": 0.4,
+                        "mode": "proportional",
+                        "behavior": "FIRST_SHOT",
+                        "family": "chamber",
+                        "behavior_data": {}
                     }
                 ]
             }
@@ -72871,12 +72875,13 @@
                 "exilus": false
             },
             "stats": {
-                "condition_overload": [
+                "damage_bonus": [
                     {
                         "value": 0.8,
-                        "stacks": {
-                            "when": "status_type"
-                        }
+                        "family": "status",
+                        "behavior": "UNIQUE_STATUS",
+                        "automatic": true,
+                        "behavior_data": {}
                     }
                 ]
             }
@@ -73365,18 +73370,22 @@
                 "exilus": false
             },
             "stats": {
-                "condition_overload": [
+                "damage_bonus": [
                     {
                         "value": 0.6,
-                        "stacks": {
-                            "when": "status_type",
-                            "max": 3
+                        "family": "status",
+                        "behavior": "UNIQUE_STATUS",
+                        "automatic": true,
+                        "behavior_data": {
+                            "max_stacks": 3
                         }
-                    }
-                ],
-                "non_crit_bonus_damage": [
+                    },
                     {
-                        "value": 2.4
+                        "value": 2.4,
+                        "family": "non_crit",
+                        "behavior": "ON_NON_CRIT",
+                        "automatic": true,
+                        "behavior_data": {}
                     }
                 ]
             }
@@ -74808,13 +74817,17 @@
                         "value": 0.8
                     }
                 ],
-                "condition_overload": [
+                "damage_bonus": [
                     {
                         "value": 0.4,
+                        "family": "status",
+                        "behavior": "UNIQUE_STATUS",
                         "stacks": {
                             "when": "on_kill",
                             "max": 2
-                        }
+                        },
+                        "automatic": true,
+                        "behavior_data": {}
                     }
                 ]
             },
@@ -75017,13 +75030,17 @@
                         "value": 0.8
                     }
                 ],
-                "condition_overload": [
+                "damage_bonus": [
                     {
                         "value": 0.4,
+                        "family": "status",
+                        "behavior": "UNIQUE_STATUS",
                         "stacks": {
                             "when": "on_kill",
                             "max": 2
-                        }
+                        },
+                        "automatic": true,
+                        "behavior_data": {}
                     }
                 ]
             },
@@ -75076,13 +75093,17 @@
                         "value": 0.8
                     }
                 ],
-                "condition_overload": [
+                "damage_bonus": [
                     {
                         "value": 0.4,
+                        "family": "status",
+                        "behavior": "UNIQUE_STATUS",
                         "stacks": {
                             "when": "on_kill",
                             "max": 3
-                        }
+                        },
+                        "automatic": true,
+                        "behavior_data": {}
                     }
                 ]
             },
@@ -75560,9 +75581,14 @@
                 "exilus": false
             },
             "stats": {
-                "internal_bleeding": [
+                "slash_proc": [
                     {
-                        "value": 0.35
+                        "value": 0.35,
+                        "behavior": "ON_IMPACT_DOUBLE_BELOW_2_5_FR",
+                        "automatic": true,
+                        "behavior_data": {
+                            "fire_rate_threshold": 2.5
+                        }
                     }
                 ]
             }
@@ -75687,9 +75713,12 @@
                 "exilus": false
             },
             "stats": {
-                "hunter_munitions": [
+                "slash_proc": [
                     {
-                        "value": 0.3
+                        "value": 0.3,
+                        "behavior": "ON_CRIT",
+                        "automatic": true,
+                        "behavior_data": {}
                     }
                 ]
             }
@@ -76034,9 +76063,14 @@
                 "exilus": false
             },
             "stats": {
-                "internal_bleeding": [
+                "slash_proc": [
                     {
-                        "value": 0.35
+                        "value": 0.35,
+                        "behavior": "ON_IMPACT_DOUBLE_BELOW_2_5_FR",
+                        "automatic": true,
+                        "behavior_data": {
+                            "fire_rate_threshold": 2.5
+                        }
                     }
                 ]
             }
@@ -77778,12 +77812,12 @@
             "stats": {
                 "weakpoint_damage": [
                     {
-                        "value": 3.498
+                        "value": 3.5
                     }
                 ],
                 "weakpoint_crit_chance": [
                     {
-                        "value": 3.498,
+                        "value": 3.5,
                         "family": "bonus"
                     }
                 ],
@@ -78125,12 +78159,12 @@
             "stats": {
                 "weakpoint_damage": [
                     {
-                        "value": 3.498
+                        "value": 3.5
                     }
                 ],
                 "weakpoint_crit_chance": [
                     {
-                        "value": 3.498,
+                        "value": 3.5,
                         "family": "bonus"
                     }
                 ],
@@ -78282,9 +78316,13 @@
                 "exilus": false
             },
             "stats": {
-                "primed_chamber": [
+                "damage_bonus": [
                     {
-                        "value": 1
+                        "value": 1,
+                        "mode": "proportional",
+                        "behavior": "FIRST_SHOT",
+                        "family": "chamber",
+                        "behavior_data": {}
                     }
                 ]
             }
@@ -81677,7 +81715,21 @@
                 ],
                 "exilus": false
             },
-            "stats": {}
+            "stats": {
+                "damage_bonus": [
+                    {
+                        "value": 2,
+                        "mode": "proportional",
+                        "exclude": [
+                            "continuous",
+                            "incarnon"
+                        ],
+                        "behavior": "LAST_SHOT",
+                        "family": "charge",
+                        "behavior_data": {}
+                    }
+                ]
+            }
         },
         "Tactical Pump": {
             "name": "Tactical Pump",
@@ -82277,9 +82329,14 @@
                         "value": 0.6
                     }
                 ],
-                "vigilante_bonus": [
+                "crit_chance": [
                     {
-                        "value": 0.05
+                        "value": 0.05,
+                        "behavior": "ON_HIT",
+                        "automatic": true,
+                        "behavior_data": {
+                            "mode": "flat"
+                        }
                     }
                 ]
             }
@@ -82300,9 +82357,14 @@
                         "value": 0.45
                     }
                 ],
-                "vigilante_bonus": [
+                "crit_chance": [
                     {
-                        "value": 0.05
+                        "value": 0.05,
+                        "behavior": "ON_HIT",
+                        "automatic": true,
+                        "behavior_data": {
+                            "mode": "flat"
+                        }
                     }
                 ]
             }
@@ -82323,9 +82385,14 @@
                         "value": 1.5
                     }
                 ],
-                "vigilante_bonus": [
+                "crit_chance": [
                     {
-                        "value": 0.05
+                        "value": 0.05,
+                        "behavior": "ON_HIT",
+                        "automatic": true,
+                        "behavior_data": {
+                            "mode": "flat"
+                        }
                     }
                 ]
             }
@@ -82341,9 +82408,14 @@
                 "exilus": true
             },
             "stats": {
-                "vigilante_bonus": [
+                "crit_chance": [
                     {
-                        "value": 0.05
+                        "value": 0.05,
+                        "behavior": "ON_HIT",
+                        "automatic": true,
+                        "behavior_data": {
+                            "mode": "flat"
+                        }
                     }
                 ]
             }
@@ -89738,9 +89810,15 @@
                 "exilus": false
             },
             "stats": {
-                "melee_doughty": [
+                "crit_damage": [
                     {
-                        "value": 1
+                        "value": 1,
+                        "behavior": "FROM_PUNCTURE_X_STATUS",
+                        "automatic": true,
+                        "behavior_data": {
+                            "mode": "flat",
+                            "per": 0.1
+                        }
                     }
                 ]
             }
@@ -89756,9 +89834,12 @@
                 "exilus": false
             },
             "stats": {
-                "melee_duplicate": [
+                "duplicated_hit": [
                     {
-                        "value": 1
+                        "value": 1,
+                        "behavior": "NEAR_YELLOW",
+                        "automatic": true,
+                        "behavior_data": {}
                     }
                 ]
             }
@@ -90303,9 +90384,12 @@
                 "exilus": false
             },
             "stats": {
-                "secondary_encumber": [
+                "random_proc": [
                     {
-                        "value": 0.24
+                        "value": 0.24,
+                        "behavior": "ON_ANY_PROC",
+                        "automatic": true,
+                        "behavior_data": {}
                     }
                 ]
             }
@@ -90321,9 +90405,16 @@
                 "exilus": false
             },
             "stats": {
-                "secondary_enervate": [
+                "crit_reset_charges": [
                     {
-                        "value": 6
+                        "value": 6,
+                        "behavior": "STACK_RESET_CRIT_2_PLUS",
+                        "automatic": true,
+                        "behavior_data": {
+                            "stat": "crit_chance",
+                            "mode": "flat",
+                            "per_stack": 0.1
+                        }
                     }
                 ]
             }
