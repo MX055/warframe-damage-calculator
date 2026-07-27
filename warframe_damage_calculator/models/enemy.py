@@ -1,8 +1,8 @@
 from collections.abc import Mapping
 from typing import Self
 
-from ..calculators.enemy_calculator import EnemyCalculator
-from ..fields.enemy import EnemyData
+from ..engine.enemy_calculator import EnemyCalculator
+from ..fields.enemy_data import EnemyData
 from ..utils.types import JsonValue
 
 

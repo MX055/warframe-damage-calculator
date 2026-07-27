@@ -5,8 +5,8 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping
 from typing import Any
 
-from ..fields.evolution import ConversionBonus, ResolvedEvolutionModeStats, ResolvedEvolutionStat
-from ..fields.upgrade import ResolvedModeStats, ResolvedStat
+from ..fields.evolution_data import ConversionBonus, ResolvedEvolutionModeStats, ResolvedEvolutionStat
+from ..fields.upgrade_data import ResolvedModeStats, ResolvedStat
 from ..core.data import Data
 from ..core.dist import Dist
 from ..utils.constants import DAMAGE_TYPES, EFFECT_MODES

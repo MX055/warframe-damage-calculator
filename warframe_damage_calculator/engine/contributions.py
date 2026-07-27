@@ -6,8 +6,8 @@ from collections.abc import Callable, Sequence
 from math import factorial
 
 from ..core.data import Data
-from ..fields.evolution import ResolvedEvolutionStat
-from ..fields.upgrade import ResolvedStat
+from ..fields.evolution_data import ResolvedEvolutionStat
+from ..fields.upgrade_data import ResolvedStat
 from ..protocols import BuildUpgradeOwner
 from .stat_aggregation import merge_resolved_stat
 

@@ -24,7 +24,7 @@ class CoreLocationTests(unittest.TestCase):
 
     def test_core_does_not_import_higher_layers(self):
         core_root = Path(__file__).resolve().parents[1] / "warframe_damage_calculator" / "core"
-        forbidden = {"models", "fields", "calculators", "formatters", "loader"}
+        forbidden = {"models", "fields", "engine", "formatters", "loader"}
         for path in core_root.glob("*.py"):
             tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
             for node in ast.walk(tree):

@@ -1,8 +1,8 @@
 from collections.abc import Mapping
 from typing import Any, Self
 
-from ..calculators.upgrade_calculator import UpgradeCalculator
-from ..fields.upgrade import UpgradeData
+from ..engine.upgrade_calculator import UpgradeCalculator
+from ..fields.upgrade_data import UpgradeData
 from ..utils.types import JsonValue
 
 

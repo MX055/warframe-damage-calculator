@@ -1,9 +1,8 @@
-from collections.abc import Mapping
-
 from ..core.data import Data
-from ..utils.types import JsonValue, Number
-from .evolution import Evolutions
+from ..utils.types import Number
+from .evolution_data import Evolutions
 from .weapon_input import AttackStats
+from .typed_mapping import NamedTypedMapping
 
 
 class Attack(Data):
@@ -14,16 +13,11 @@ class Attack(Data):
     category: str = "normal"
     aoe: bool = False
     children: list[str] = []
-    stats: AttackStats = {}
+    stats: AttackStats = AttackStats()
 
 
-class Attacks(Data):
-    def __setitem__(self, key: str, value: JsonValue) -> None:
-        if isinstance(value, Mapping) and not isinstance(value, Attack):
-            value = Attack(value)
-        if isinstance(value, Attack) and not value.name:
-            value.name = key
-        super().__setitem__(key, value)
+class Attacks(NamedTypedMapping):
+    _item_type = Attack
 
 
 class WeaponAmmo(Data):

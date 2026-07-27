@@ -1,4 +1,4 @@
-from ..calculators.secondary_calculator import SecondaryCalculator
+from ..engine.secondary_calculator import SecondaryCalculator
 from ..formatters.secondary_formatter import SecondaryFormatter
 from ..fields.weapon_data import SecondaryData
 from ..fields.weapon_input import SecondaryStats

@@ -6,8 +6,8 @@ import unittest
 from warframe_damage_calculator import fields
 from warframe_damage_calculator.core.data import Data
 from warframe_damage_calculator.fields.calculated import CalculatedMultiplicativeFamilies, ModdedStats
-from warframe_damage_calculator.fields.evolution import ResolvedEvolutionMultiplicativeFamilies, ResolvedEvolutionStat
-from warframe_damage_calculator.fields.upgrade import ResolvedElements, ResolvedModeStats, ResolvedMultiplicativeFamilies, ResolvedStat, UpgradeCompatibility, UpgradeData, UpgradeRuntime
+from warframe_damage_calculator.fields.evolution_data import ResolvedEvolutionMultiplicativeFamilies, ResolvedEvolutionStat
+from warframe_damage_calculator.fields.upgrade_data import ResolvedElements, ResolvedModeStats, ResolvedMultiplicativeFamilies, ResolvedStat, UpgradeCompatibility, UpgradeData, UpgradeRuntime
 from warframe_damage_calculator.fields.weapon_data import WeaponAmmo, WeaponData, WeaponRuntime
 
 

@@ -1,5 +1,5 @@
 from .weapon_formatter import WeaponFormatter
-from ..calculators import formulas
+from ..engine import formulas
 from ..utils.constants import HEAVY_ATTACK_CATEGORIES, SLAM_ATTACK_CATEGORIES, SLIDE_ATTACK_CATEGORIES
 
 
@@ -19,67 +19,23 @@ class MeleeFormatter(WeaponFormatter):
         self._append(rows, "CRIT CHANCE", self._fmt_percent(base.crit_chance), self._fmt_percent(effective.crit_chance), self._fmt_percent(average.crit_chance))
         self._append(rows, "CRIT DAMAGE", self._fmt_multiplier(base.crit_damage), self._fmt_multiplier(effective.crit_damage), self._fmt_multiplier(effective.crit_damage))
         self._append(rows, "STATUS CHANCE", self._fmt_percent(base.status_chance), self._fmt_percent(effective.status_chance), self._fmt_percent(effective.status_chance))
-        self._append(
-            rows,
-            "INITIAL COMBO",
-            "",
-            self._fmt_number(effective.get("initial_combo", 0)),
-            self._fmt_number(effective.get("initial_combo", 0)),
-            when=float(effective.get("initial_combo", 0) or 0) > 0,
-        )
-        self._append(
-            rows,
-            "SLAM DAMAGE",
-            "",
-            self._fmt_multiplier(effective.get("slam_damage", 1)),
-            self._fmt_multiplier(effective.get("slam_damage", 1)),
-            when=category in SLAM_ATTACK_CATEGORIES and float(effective.get("slam_damage", 1) or 1) != 1,
-        )
-        self._append(
-            rows,
-            "SLIDE CRIT CHANCE",
-            "",
-            self._fmt_multiplier(effective.get("slide_crit_chance", 1)),
-            self._fmt_multiplier(effective.get("slide_crit_chance", 1)),
-            when=category in SLIDE_ATTACK_CATEGORIES and float(effective.get("slide_crit_chance", 1) or 1) != 1,
-        )
+        self._append(rows, "INITIAL COMBO", "", self._fmt_number(effective.get("initial_combo", 0)), self._fmt_number(effective.get("initial_combo", 0)), when=float(effective.get("initial_combo", 0) or 0) > 0)
+        self._append(rows, "SLAM DAMAGE", "", self._fmt_multiplier(effective.get("slam_damage", 1)), self._fmt_multiplier(effective.get("slam_damage", 1)), when=category in SLAM_ATTACK_CATEGORIES and float(effective.get("slam_damage", 1) or 1) != 1)
+        self._append(rows, "SLIDE CRIT CHANCE", "", self._fmt_multiplier(effective.get("slide_crit_chance", 1)), self._fmt_multiplier(effective.get("slide_crit_chance", 1)), when=category in SLIDE_ATTACK_CATEGORIES and float(effective.get("slide_crit_chance", 1) or 1) != 1)
 
         section_breaks: list[int] = []
         damage_at = len(rows)
         self._append_damage_type_rows(rows, base.damage, effective.damage)
-        self._append(
-            rows,
-            "TOTAL DAMAGE",
-            self._fmt_number(base.damage.total_damage()),
-            self._fmt_number(effective.damage.total_damage()),
-            self._with_hit_zones(self._fmt_number(final.flat_dph), self._fmt_number(final.flat_weakpoint_dph), self._fmt_number(final.flat_resistant_dph)) if self.weapon.target is not None else self._fmt_number(final.flat_dph),
-        )
+        self._append(rows, "TOTAL DAMAGE", self._fmt_number(base.damage.total_damage()), self._fmt_number(effective.damage.total_damage()), self._fmt_zone_metric(final.flat_dph, final.flat_weakpoint_dph, final.flat_resistant_dph))
         if damage_at < len(rows):
             section_breaks.append(damage_at)
 
         averages_at = len(rows)
         self._append(rows, "HIT MULTIPLIER", "", "", self._fmt_multiplier(hit_multiplier))
-        self._append(
-            rows,
-            "COMBO MULTIPLIER",
-            "",
-            "",
-            self._fmt_multiplier(average.get("combo_multiplier", 1)),
-            when=category in HEAVY_ATTACK_CATEGORIES,
-        )
+        self._append(rows, "COMBO MULTIPLIER", "", "", self._fmt_multiplier(average.get("combo_multiplier", 1)), when=category in HEAVY_ATTACK_CATEGORIES)
         self._append(rows, "MELEE DUPLICATE MULTIPLIER", "", "", self._fmt_multiplier(average.get("melee_duplicate_multiplier", 1)), when=float(average.get("melee_duplicate_multiplier", 1) or 1) != 1)
         self._append(rows, "MELEE DOUGHTY BONUS", "", "", self._fmt_number(average.get("melee_doughty_bonus", 0)), when=float(average.get("melee_doughty_bonus", 0) or 0) > 0)
         section_breaks.append(averages_at)
 
-        dps_at = len(rows)
-        self._append(rows, "FLAT DPH", "", "", self._with_hit_zones(self._fmt_number(final.flat_dph), self._fmt_number(final.flat_weakpoint_dph), self._fmt_number(final.flat_resistant_dph)) if self.weapon.target is not None else self._fmt_number(final.flat_dph))
-        self._append(rows, "FLAT DOTPH", "", "", self._with_hit_zones(self._fmt_number(final.flat_dotph), self._fmt_number(final.flat_weakpoint_dotph), self._fmt_number(final.flat_resistant_dotph)) if self.weapon.target is not None else self._fmt_number(final.flat_dotph))
-        self._append(rows, "TOTAL DPH", "", "", self._with_hit_zones(self._fmt_number(final.total_dph), self._fmt_number(final.total_weakpoint_dph), self._fmt_number(final.total_resistant_dph)) if self.weapon.target is not None else self._fmt_number(final.total_dph))
-        self._append(rows, "FLAT DPS", "", "", self._with_hit_zones(self._fmt_number(final.flat_dps), self._fmt_number(final.flat_weakpoint_dps), self._fmt_number(final.flat_resistant_dps)) if self.weapon.target is not None else self._fmt_number(final.flat_dps))
-        self._append(rows, "FLAT DOTPS", "", "", self._with_hit_zones(self._fmt_number(final.flat_dotps), self._fmt_number(final.flat_weakpoint_dotps), self._fmt_number(final.flat_resistant_dotps)) if self.weapon.target is not None else self._fmt_number(final.flat_dotps))
-        self._append(rows, "TOTAL DPS", "", "", self._with_hit_zones(self._fmt_number(final.total_dps), self._fmt_number(final.total_weakpoint_dps), self._fmt_number(final.total_resistant_dps)) if self.weapon.target is not None else self._fmt_number(final.total_dps))
-        section_breaks.append(dps_at)
-
-        title = f"{self.weapon.data.name} - {selected.name.replace('_', ' ').title()}"
-        if self.weapon.target is not None: title += f" vs {self.weapon.target.data.name} (bodypart: {self._hit_zone_label()})"
-        return self._table(("stat", "base", "effective", "final"), rows, title=title, border="=", section_at=tuple(section_breaks))
+        section_breaks.append(self._append_zone_metrics_section(rows, final))
+        return self._table(("stat", "base", "effective", "final"), rows, title=self._summary_title(selected), border="=", section_at=tuple(section_breaks))

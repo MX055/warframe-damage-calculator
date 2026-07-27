@@ -1,4 +1,4 @@
-from ..calculators.melee_calculator import MeleeCalculator
+from ..engine.melee_calculator import MeleeCalculator
 from ..formatters.melee_formatter import MeleeFormatter
 from ..fields.weapon_data import MeleeData
 from ..fields.weapon_input import MeleeStats

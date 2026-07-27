@@ -1,9 +1,9 @@
 from ..fields.attack_result import AttackResult
-from ..fields.upgrade import StanceCombo
+from ..fields.upgrade_data import StanceCombo
 from ..utils.constants import COMBO_HIT_INTERVAL, HEAVY_ATTACK_CATEGORIES, MAX_COMBO_MULTIPLIER, SLAM_ATTACK_CATEGORIES, SLIDE_ATTACK_CATEGORIES
 from ..utils.functions import clamp, true_round
 from ..utils.types import Number
-from . import application_chance, formulas
+from . import application_chance, damage, formulas
 from .weapon_calculator import WeaponCalculator
 
 
@@ -114,27 +114,16 @@ class MeleeCalculator(WeaponCalculator):
         average.combo_multiplier = combo
         average.melee_doughty_bonus = self._doughty_bonus(result)
         average.melee_duplicate_multiplier = 1 + effective.melee_duplicate * max(0, 1 - abs(effective.crit_chance - 1))
+        average.fire_rate = effective.attack_speed
         faction = self._max_average_faction_damage(result)
         shared = faction * hit_mult * average.melee_duplicate_multiplier * combo
-        average.flat_dph = self._direct_damage(result) * shared
-        average.flat_dps = effective.attack_speed * average.flat_dph
-        average.flat_dotph = self._flat_dotph(result) * combo
-        average.flat_dotps = effective.attack_speed * average.flat_dotph
-        average.flat_weakpoint_dph = average.flat_weakpoint_dotph = average.flat_resistant_dph = average.flat_resistant_dotph = 0.0
-        if self.weapon.target is not None:
+        if self.weapon.target is None:
+            average.flat_dph = self._direct_damage(result) * shared
+            average.flat_dotph = self._flat_dotph(result) * combo
+            average.flat_weakpoint_dph = average.flat_weakpoint_dotph = average.flat_resistant_dph = average.flat_resistant_dotph = 0.0
+        else:
             average.weakpoint_crit_chance = average.crit_chance
             average.weakpoint_crit_multiplier = average.crit_multiplier
-            average.flat_weakpoint_dph = self._direct_damage(result, "weakpoint") * shared
-            average.flat_resistant_dph = self._direct_damage(result, "resistant") * shared
-            average.flat_weakpoint_dotph = self._flat_dotph(result, weakpoint=True) * combo
-            average.flat_resistant_dotph = self._flat_dotph(result, resistant=True) * combo
-        average.flat_weakpoint_dotps = effective.attack_speed * average.flat_weakpoint_dotph
-        average.flat_resistant_dotps = effective.attack_speed * average.flat_resistant_dotph
-        average.flat_weakpoint_dps = effective.attack_speed * average.flat_weakpoint_dph
-        average.flat_resistant_dps = effective.attack_speed * average.flat_resistant_dph
-        average.total_dph = average.flat_dph + average.flat_dotph
-        average.total_weakpoint_dph = average.flat_weakpoint_dph + average.flat_weakpoint_dotph
-        average.total_resistant_dph = average.flat_resistant_dph + average.flat_resistant_dotph
-        average.total_dps = average.flat_dps + average.flat_dotps
-        average.total_weakpoint_dps = average.flat_weakpoint_dps + average.flat_weakpoint_dotps
-        average.total_resistant_dps = average.flat_resistant_dps + average.flat_resistant_dotps
+            for key, value in damage.zone_dph_metrics(compute_direct=lambda zone="normal": self._direct_damage(result, zone), compute_dotph=lambda **kwargs: self._flat_dotph(result, **kwargs), normal_scale=shared, weakpoint_scale=shared, resistant_scale=shared, dot_scale=combo).items():
+                average[key] = value
+        formulas.refresh_dps_from_dph(average)

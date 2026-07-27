@@ -1,7 +1,7 @@
 from collections.abc import Mapping
 from typing import Any, Self
 
-from ..calculators.weapon_calculator import WeaponCalculator
+from ..engine.weapon_calculator import WeaponCalculator
 from ..formatters.weapon_formatter import WeaponFormatter
 from ..utils.types import JsonValue
 from .build import Build

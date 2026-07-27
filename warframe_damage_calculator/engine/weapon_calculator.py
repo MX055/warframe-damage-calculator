@@ -8,12 +8,12 @@ from __future__ import annotations
 
 from ..fields.attack_result import AttackResult
 from ..fields.calculated import ModdedStats
-from ..fields.evolution import ResolvedEvolutionStat
-from ..fields.upgrade import ResolvedStat
+from ..fields.evolution_data import ResolvedEvolutionStat
+from ..fields.upgrade_data import ResolvedStat
 from ..fields.weapon_data import Attack
 from ..protocols import BuildUpgradeOwner, ConfigurableWeaponOwner
 from ..utils.types import ContributionTarget, Number
-from . import attack_tree, damage_calculator, formulas, scalar_calculator, target_calculator
+from . import attack_tree, damage, formulas, scalars, target
 from .contributions import ContributionCalculator
 from .evolution_calculator import EvolutionCalculator
 from .status_model import SustainedStatusModel, apply_condition_overload, build_sustained_status_model, condition_overload_bonus, non_dot_status_effects, status_effect_stack_bonuses
@@ -52,7 +52,7 @@ class WeaponCalculator:
     def _fingerprint_runtime(self) -> tuple:
         """Capture runtime/build inputs so direct runtime mutations recompute results."""
         runtime = self.weapon.data.runtime
-        return (id(self.weapon.build), tuple(sorted((str(key), repr(runtime[key])) for key in runtime)), target_calculator.fingerprint(self.weapon.target))
+        return (id(self.weapon.build), tuple(sorted((str(key), repr(runtime[key])) for key in runtime)), target.fingerprint(self.weapon.target))
 
     def _ensure_resolved(self) -> None:
         fingerprint = self._fingerprint_runtime()
@@ -72,7 +72,7 @@ class WeaponCalculator:
         self._compute_effective(result)
         result.status_effects = non_dot_status_effects(model)
         self._compute_average(result)
-        target_calculator.mask_missing_bodypart_metrics(result.average, self.weapon.target)
+        target.mask_missing_bodypart_metrics(result.average, self.weapon.target)
         return result
 
     def _ability_strength_multiplier(self) -> float | None:
@@ -87,13 +87,13 @@ class WeaponCalculator:
         return max(float(data.runtime.ability_strength), 0.0)
 
     def _compute_base(self, result: AttackResult) -> None:
-        result.base, result.original_damage = scalar_calculator.seed_base_stats(attack=result.attack, ammo=self.weapon.data.ammo, stats_type=self.weapon.stats_type, evolutions=result.evolutions, distribute_flat=formulas.distribute_flat_damage, ability_strength=self._ability_strength_multiplier())
+        result.base, result.original_damage = scalars.seed_base_stats(attack=result.attack, ammo=self.weapon.data.ammo, stats_type=self.weapon.stats_type, evolutions=result.evolutions, distribute_flat=formulas.distribute_flat_damage, ability_strength=self._ability_strength_multiplier())
 
     def _apply_evolution_conversions(self, result: AttackResult) -> None:
-        scalar_calculator.apply_evolution_conversions(base=result.base, build=result.build, evolutions=result.evolutions, crit_upgrade_multiplier=self._crit_upgrade_multiplier(result))
+        scalars.apply_evolution_conversions(base=result.base, build=result.build, evolutions=result.evolutions, crit_upgrade_multiplier=self._crit_upgrade_multiplier(result))
 
     def _compute_modded_scalars(self, result: AttackResult) -> None:
-        scalar_calculator.compute_shared_modded_scalars(base=result.base, build=result.build, evolutions=result.evolutions, modded=result.modded, attack=result.attack, crit_upgrade_multiplier=self._crit_upgrade_multiplier(result))
+        scalars.compute_shared_modded_scalars(base=result.base, build=result.build, evolutions=result.evolutions, modded=result.modded, attack=result.attack, crit_upgrade_multiplier=self._crit_upgrade_multiplier(result))
 
     def _status_hits(self, result: AttackResult) -> float:
         """Status attempts per attack (typically multishot; melee may add duplicate hits)."""
@@ -147,31 +147,31 @@ class WeaponCalculator:
         apply_condition_overload(modded=result.modded, model=model, value_per_status=result.build.proportional.condition_overload.value, co_factor=result.attack.stats.co_factor, co_effect=result.attack.stats.co_effect)
 
     def _compute_modded_damage(self, result: AttackResult) -> None:
-        damage_calculator.compute_modded_damage(attack=result.attack, base=result.base, original_damage=result.original_damage, build=result.build, evolutions=result.evolutions, modded=result.modded)
+        damage.compute_modded_damage(attack=result.attack, base=result.base, original_damage=result.original_damage, build=result.build, evolutions=result.evolutions, modded=result.modded)
 
     def _compute_effective(self, result: AttackResult) -> None:
-        scalar_calculator.compute_shared_effective(base=result.base, modded=result.modded, effective=result.effective, build=result.build, evolutions=result.evolutions)
+        scalars.compute_shared_effective(base=result.base, modded=result.modded, effective=result.effective, build=result.build, evolutions=result.evolutions)
 
     def _max_average_faction_damage(self, result: AttackResult) -> float:
-        return target_calculator.faction_damage(result.average, self.weapon.target)
+        return target.faction_damage(result.average, self.weapon.target)
 
     def _weakpoint_damage_bonus(self, result: AttackResult) -> float:
         return 0.0
 
-    def _direct_damage(self, result: AttackResult, zone: target_calculator.HitZone = "normal") -> float:
+    def _direct_damage(self, result: AttackResult, zone: target.HitZone = "normal") -> float:
         if self.weapon.target is None: return float(result.effective.damage.total_damage()) if zone == "normal" else 0.0
-        return target_calculator.damage_total(result.effective.damage, self.weapon.target, status_effects=result.status_effects, zone=zone, weakpoint_bonus=self._weakpoint_damage_bonus(result))
+        return target.damage_total(result.effective.damage, self.weapon.target, status_effects=result.status_effects, zone=zone, weakpoint_bonus=self._weakpoint_damage_bonus(result))
 
     def _compute_average(self, result: AttackResult) -> None:
-        damage_calculator.apply_shared_average_factions(effective=result.effective, average=result.average)
-        damage_calculator.apply_shared_average_crit(effective=result.effective, average=result.average)
+        damage.apply_shared_average_factions(effective=result.effective, average=result.average)
+        damage.apply_shared_average_crit(effective=result.effective, average=result.average)
 
     def _flat_dotph(self, result: AttackResult, *, weakpoint: bool = False, resistant: bool = False, hits: Number | None = None, damage_multiplier: Number = 1, extra_damage: Number = 0, faction_damage: Number | None = None) -> float:
         # Allow unbound helper-test calls with self=None (status attempts unused when damage is empty).
         if resistant and self is not None and self.weapon.target is None: return 0.0
         if self is None: status_attempts = max(result.modded.proportional.multishot if "multishot" in result.modded.proportional else result.attack.stats.multishot, 1)
         else: status_attempts = self._status_hits(result)
-        return damage_calculator.flat_dotph_from_result(result, status_attempts_per_attack=status_attempts, weakpoint=weakpoint, resistant=resistant, hits=hits, damage_multiplier=damage_multiplier, extra_damage=extra_damage, faction_damage=faction_damage, target=None if self is None else self.weapon.target, status_effects=None if self is None else result.status_effects, weakpoint_bonus=0 if self is None else self._weakpoint_damage_bonus(result))
+        return damage.flat_dotph_from_result(result, status_attempts_per_attack=status_attempts, weakpoint=weakpoint, resistant=resistant, hits=hits, damage_multiplier=damage_multiplier, extra_damage=extra_damage, faction_damage=faction_damage, target=None if self is None else self.weapon.target, status_effects=None if self is None else result.status_effects, weakpoint_bonus=0 if self is None else self._weakpoint_damage_bonus(result))
 
     # --- tree + resolve ---
 

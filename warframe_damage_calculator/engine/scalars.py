@@ -5,8 +5,8 @@ from __future__ import annotations
 from collections.abc import Callable
 
 from ..fields.calculated import CalculatedStats, ModdedStats
-from ..fields.evolution import ConversionBonus, ResolvedEvolutionStat
-from ..fields.upgrade import ResolvedStat
+from ..fields.evolution_data import ConversionBonus, ResolvedEvolutionStat
+from ..fields.upgrade_data import ResolvedStat
 from ..fields.weapon_data import Attack
 from ..core.dist import Dist
 from ..utils.types import Number

@@ -8,7 +8,7 @@ from typing import Any, cast
 
 from ..core.data import Data
 from ..core.dist import Dist
-from ..fields.upgrade import ResolvedModeStats, ResolvedStat
+from ..fields.upgrade_data import ResolvedModeStats, ResolvedStat
 from ..loader.matching import MELEE_TYPES, PRIMARY_TYPES, SECONDARY_TYPES
 from ..protocols import UpgradeOwner
 from ..utils.types import EffectMode, Number

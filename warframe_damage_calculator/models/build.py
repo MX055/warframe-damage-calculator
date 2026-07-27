@@ -1,7 +1,7 @@
 from collections.abc import Iterator, Mapping
 from typing import Any, Self
 
-from ..calculators.build_calculator import BuildCalculator
+from ..engine.build_calculator import BuildCalculator
 from .upgrade import Upgrade
 
 

@@ -1,9 +1,9 @@
 import unittest
 
-from warframe_damage_calculator.calculators import formulas
-from warframe_damage_calculator.calculators.damage_calculator import flat_dotph, flat_dotph_from_result
-from warframe_damage_calculator.calculators.melee_calculator import MeleeCalculator
-from warframe_damage_calculator.calculators.weapon_calculator import WeaponCalculator
+from warframe_damage_calculator.engine import formulas
+from warframe_damage_calculator.engine.damage import flat_dotph, flat_dotph_from_result
+from warframe_damage_calculator.engine.melee_calculator import MeleeCalculator
+from warframe_damage_calculator.engine.weapon_calculator import WeaponCalculator
 from warframe_damage_calculator.core.dist import Dist
 from warframe_damage_calculator.fields.attack_result import AttackResult
 from warframe_damage_calculator.fields.calculated import AverageStats, CalculatedStats

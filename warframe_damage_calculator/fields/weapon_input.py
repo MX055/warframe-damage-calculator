@@ -5,19 +5,6 @@ from ..core.dist import Dist
 from ..utils.types import JsonValue, Number
 
 
-class GlobalWeaponStats(Data):
-    reload_time: Number = 0.0
-    magazine_size: Number = 1
-    ammo_maximum: Number = 0.0
-    recharge_rate: Number = 0.0
-    incarnon_charges: Number = 0
-    incarnon_recharge_count: Number = 0
-    disposition: Number = 0.0
-    is_incarnon: bool = False
-    is_progenitor: bool = False
-    is_battery: bool = False
-
-
 class AttackStats(Data):
     ammo_cost: Number = 1
     punch_through: Number | str = 0.0

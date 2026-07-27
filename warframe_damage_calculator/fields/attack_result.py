@@ -1,8 +1,8 @@
 from ..core.data import Data
 from ..core.dist import Dist
 from .calculated import AverageStats, CalculatedStats, ModdedStats, StatusEffects
-from .evolution import ResolvedEvolutionStat
-from .upgrade import ResolvedStat
+from .evolution_data import ResolvedEvolutionStat
+from .upgrade_data import ResolvedStat
 from .weapon_data import Attack
 
 

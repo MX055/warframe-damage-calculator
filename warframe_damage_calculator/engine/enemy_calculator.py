@@ -1,6 +1,6 @@
 from math import floor
 
-from ..fields.enemy import EnemyStats
+from ..fields.enemy_data import EnemyStats
 from ..protocols import EnemyOwner
 
 

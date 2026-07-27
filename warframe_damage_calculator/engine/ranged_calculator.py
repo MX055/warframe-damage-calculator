@@ -2,7 +2,7 @@ from ..fields.attack_result import AttackResult
 from ..utils.constants import DOT_MULTIPLIERS
 from ..utils.functions import clamp, true_round
 from ..utils.types import Number
-from . import application_chance, formulas, target_calculator
+from . import application_chance, damage, formulas, target
 from .magazine_position import apply_magazine_position_mixture
 from .weapon_calculator import WeaponCalculator
 
@@ -134,8 +134,8 @@ class RangedCalculator(WeaponCalculator):
 
     def _ib_slash_dot_per_proc(self, result: AttackResult, *, hit_multiplier: Number, faction_damage: Number, damage_multiplier: Number = 1, weakpoint: bool = False, resistant: bool = False) -> float:
         zone = "weakpoint" if weakpoint else "resistant" if resistant else "normal"
-        target = target_calculator.damage_type_multiplier(self.weapon.target, "slash", dot=True, status_effects=result.status_effects, zone=zone, weakpoint_bonus=self._weakpoint_damage_bonus(result))
-        return self._slash_dot_factor(result) * result.effective.damage.total_damage() * hit_multiplier * result.effective.status_damage * faction_damage ** 2 * damage_multiplier * target
+        slash_target = target.damage_type_multiplier(self.weapon.target, "slash", dot=True, status_effects=result.status_effects, zone=zone, weakpoint_bonus=self._weakpoint_damage_bonus(result))
+        return self._slash_dot_factor(result) * result.effective.damage.total_damage() * hit_multiplier * result.effective.status_damage * faction_damage ** 2 * damage_multiplier * slash_target
 
     def _average_crit_chances(self, result: AttackResult) -> tuple[float, float]:
         """Authoritative average crit chances for body and weakpoint hits."""
@@ -166,14 +166,8 @@ class RangedCalculator(WeaponCalculator):
         hit_mult = formulas.hit_multiplier(crit_chance, effective.crit_damage, effective.non_crit_bonus_damage, effective.non_crit_bonus_chance)
         weakpoint_hit_mult = formulas.hit_multiplier(weakpoint_crit_chance, effective.crit_damage, effective.non_crit_bonus_damage, effective.non_crit_bonus_chance)
         faction = self._max_average_faction_damage(result)
-        average.flat_dph = self._direct_damage(result) * effective.multishot * faction * hit_mult
-        average.flat_weakpoint_dph = self._direct_damage(result, "weakpoint") * effective.multishot * weakpoint_hit_mult * faction
-        average.flat_resistant_dph = self._direct_damage(result, "resistant") * effective.multishot * hit_mult * faction
-        average.flat_dotph = self._flat_dotph(result)
-        average.flat_weakpoint_dotph = self._flat_dotph(result, weakpoint=True)
-        average.flat_resistant_dotph = self._flat_dotph(result, resistant=True)
-        average.flat_dotps = average.fire_rate * average.flat_dotph
-        average.flat_weakpoint_dotps = average.fire_rate * average.flat_weakpoint_dotph
-        average.flat_resistant_dotps = average.fire_rate * average.flat_resistant_dotph
+        scale = effective.multishot * faction
+        for key, value in damage.zone_dph_metrics(compute_direct=lambda zone="normal": self._direct_damage(result, zone), compute_dotph=lambda **kwargs: self._flat_dotph(result, **kwargs), normal_scale=scale * hit_mult, weakpoint_scale=scale * weakpoint_hit_mult, resistant_scale=scale * hit_mult).items():
+            average[key] = value
         formulas.refresh_dps_from_dph(average)
         apply_magazine_position_mixture(result, compute_dotph=self._flat_dotph, compute_direct=self._direct_damage, faction_damage=faction)

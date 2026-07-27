@@ -9,7 +9,7 @@ from typing import Any
 from ..fields.attack_result import AttackResult
 from ..fields.calculated import AverageStats
 from ..utils.types import Number
-from . import formulas
+from . import damage, formulas
 from .effect_schema import COMMON_FAMILY
 
 MAGAZINE_POSITION_WHEN = frozenset({"first_shot", "last_shot"})
@@ -84,23 +84,11 @@ def _class_metrics(result: AttackResult, *, entries: Sequence[PositionEntry], co
     if damage_multiplier != 1:
         effective.damage = effective.damage * damage_multiplier
     try:
-        flat_dotph = float(compute_dotph(result))
-        flat_weakpoint_dotph = float(compute_dotph(result, weakpoint=True))
-        flat_resistant_dotph = float(compute_dotph(result, resistant=True))
-        flat_dph = float(compute_direct(result)) * multishot * faction_damage * hit_mult
-        flat_weakpoint_dph = float(compute_direct(result, "weakpoint")) * multishot * faction_damage * weakpoint_hit_mult
-        flat_resistant_dph = float(compute_direct(result, "resistant")) * multishot * faction_damage * hit_mult
+        scale = multishot * faction_damage
+        return damage.zone_dph_metrics(compute_direct=lambda zone="normal": compute_direct(result, zone), compute_dotph=lambda **kwargs: compute_dotph(result, **kwargs), normal_scale=scale * hit_mult, weakpoint_scale=scale * weakpoint_hit_mult, resistant_scale=scale * hit_mult)
     finally:
         effective.multishot = saved_ms
         effective.damage = saved_damage
-    return {
-        "flat_dph": flat_dph,
-        "flat_weakpoint_dph": flat_weakpoint_dph,
-        "flat_resistant_dph": flat_resistant_dph,
-        "flat_dotph": flat_dotph,
-        "flat_weakpoint_dotph": flat_weakpoint_dotph,
-        "flat_resistant_dotph": flat_resistant_dotph,
-    }
 
 
 def apply_magazine_position_mixture(result: AttackResult, *, compute_dotph, compute_direct, faction_damage: float) -> None:
@@ -122,9 +110,6 @@ def apply_magazine_position_mixture(result: AttackResult, *, compute_dotph, comp
     average: AverageStats = result.average
     for key, value in mixed.items():
         average[key] = value
-    average.flat_dotps = average.fire_rate * average.flat_dotph
-    average.flat_weakpoint_dotps = average.fire_rate * average.flat_weakpoint_dotph
-    average.flat_resistant_dotps = average.fire_rate * average.flat_resistant_dotph
     first_weight = next((weight for when, weight in weights if "first_shot" in when), 0.0)
     first_factor = _overlay_damage_multiplier(iter_applicable(entries, when=frozenset({"first_shot"}), delivery=delivery, form=form))
     average.first_shot_damage_multiplier = 1.0 + (first_factor - 1.0) * first_weight

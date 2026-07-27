@@ -4,8 +4,8 @@ from collections.abc import Mapping, Sequence
 from typing import Any, Protocol, runtime_checkable
 
 from .fields.attack_result import AttackResult
-from .fields.enemy import EnemyData
-from .fields.upgrade import ResolvedStat, UpgradeData
+from .fields.enemy_data import EnemyData
+from .fields.upgrade_data import ResolvedStat, UpgradeData
 from .fields.weapon_data import WeaponData
 from .fields.weapon_input import WeaponStats
 

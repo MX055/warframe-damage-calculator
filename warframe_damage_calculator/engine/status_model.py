@@ -23,7 +23,7 @@ from typing import Literal
 
 from ..core.dist import Dist
 from ..fields.calculated import CalculatedStats, ModdedStats, StatusEffects
-from ..fields.upgrade import ResolvedStat
+from ..fields.upgrade_data import ResolvedStat
 from ..fields.weapon_data import Attack
 from ..utils.types import Number
 

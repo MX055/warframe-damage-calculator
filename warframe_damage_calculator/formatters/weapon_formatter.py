@@ -55,6 +55,24 @@ class WeaponFormatter:
         present = [zone for zone in zones if any(part.type == zone for part in target.data.bodyparts.values())]
         return " | ".join(present)
 
+    def _summary_title(self, selected) -> str:
+        title = f"{self.weapon.data.name} - {selected.name.replace('_', ' ').title()}"
+        if self.weapon.target is not None: title += f" vs {self.weapon.target.data.name} (bodypart: {self._hit_zone_label()})"
+        return title
+
+    def _fmt_zone_metric(self, normal, weakpoint, resistant) -> str:
+        return self._with_hit_zones(self._fmt_number(normal), self._fmt_number(weakpoint), self._fmt_number(resistant))
+
+    def _append_zone_metrics_section(self, rows: list[tuple[str, ...]], final) -> int:
+        section_at = len(rows)
+        self._append(rows, "FLAT DPH", "", "", self._fmt_zone_metric(final.flat_dph, final.flat_weakpoint_dph, final.flat_resistant_dph))
+        self._append(rows, "FLAT DOTPH", "", "", self._fmt_zone_metric(final.flat_dotph, final.flat_weakpoint_dotph, final.flat_resistant_dotph))
+        self._append(rows, "TOTAL DPH", "", "", self._fmt_zone_metric(final.total_dph, final.total_weakpoint_dph, final.total_resistant_dph))
+        self._append(rows, "FLAT DPS", "", "", self._fmt_zone_metric(final.flat_dps, final.flat_weakpoint_dps, final.flat_resistant_dps))
+        self._append(rows, "FLAT DOTPS", "", "", self._fmt_zone_metric(final.flat_dotps, final.flat_weakpoint_dotps, final.flat_resistant_dotps))
+        self._append(rows, "TOTAL DPS", "", "", self._fmt_zone_metric(final.total_dps, final.total_weakpoint_dps, final.total_resistant_dps))
+        return section_at
+
     @staticmethod
     def _attack_label(name: str) -> str:
         return name.replace("_", " ").upper()

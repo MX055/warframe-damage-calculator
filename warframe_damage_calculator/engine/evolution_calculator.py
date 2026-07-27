@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from typing import Any, cast
 
-from ..fields.evolution import EvolutionPerk, ResolvedEvolutionModeStats, ResolvedEvolutionStat
+from ..fields.evolution_data import EvolutionPerk, ResolvedEvolutionModeStats, ResolvedEvolutionStat
 from ..core.data import Data
 from ..protocols import WeaponCalculatorOwner
 from ..utils.types import EffectMode

@@ -1,8 +1,8 @@
-from collections.abc import Mapping
 from typing import Literal
 
 from ..core.data import Data
-from ..utils.types import JsonValue, Number
+from ..utils.types import Number
+from .typed_mapping import TypedMapping
 
 
 class EnemyStats(Data):
@@ -17,10 +17,8 @@ class BodyPart(Data):
     multiplier: Number = 1.0
 
 
-class BodyParts(Data):
-    def __setitem__(self, key: str, value: JsonValue) -> None:
-        if isinstance(value, Mapping) and not isinstance(value, BodyPart): value = BodyPart(value)
-        super().__setitem__(key, value)
+class BodyParts(TypedMapping):
+    _item_type = BodyPart
 
 
 class EnemyModifiers(Data):
@@ -39,5 +37,5 @@ class EnemyData(Data):
     base_level: Number = 1
     stats: EnemyStats = EnemyStats()
     bodyparts: BodyParts = {"body": BodyPart()}
-    modifiers: EnemyModifiers = {}
+    modifiers: EnemyModifiers = EnemyModifiers()
     runtime: EnemyRuntime = EnemyRuntime()

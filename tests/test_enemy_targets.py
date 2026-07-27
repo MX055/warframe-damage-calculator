@@ -2,7 +2,7 @@ import unittest
 
 from database_builder.reconstruct_database import validate_enemies
 from warframe_damage_calculator import Build, Enemy, Melee, Primary, Upgrade, arsenal
-from warframe_damage_calculator.calculators import target_calculator
+from warframe_damage_calculator.engine import target
 from warframe_damage_calculator.loader.construction import DatabaseFactory
 
 
@@ -145,15 +145,15 @@ class EnemyTargetTests(unittest.TestCase):
 
     def test_type_aware_defense_bypass_and_overguard(self):
         mixed = enemy(health=50, shields=50, armor=300)
-        self.assertAlmostEqual(target_calculator.defense_multiplier(mixed, "impact"), 0.6)
-        self.assertAlmostEqual(target_calculator.defense_multiplier(mixed, "toxin"), 0.7)
-        self.assertAlmostEqual(target_calculator.defense_multiplier(mixed, "true"), 1)
+        self.assertAlmostEqual(target.defense_multiplier(mixed, "impact"), 0.6)
+        self.assertAlmostEqual(target.defense_multiplier(mixed, "toxin"), 0.7)
+        self.assertAlmostEqual(target.defense_multiplier(mixed, "true"), 1)
         armored = enemy(health=100, armor=300)
-        self.assertAlmostEqual(target_calculator.defense_multiplier(armored, "slash", dot=True), 1)
+        self.assertAlmostEqual(target.defense_multiplier(armored, "slash", dot=True), 1)
         guarded = enemy(health=0, overguard=100)
-        self.assertAlmostEqual(target_calculator.defense_multiplier(guarded, "impact"), 1)
-        self.assertAlmostEqual(target_calculator.defense_multiplier(guarded, "void"), 1.5)
-        self.assertAlmostEqual(target_calculator.defense_multiplier(guarded, "heat", dot=True), 0)
+        self.assertAlmostEqual(target.defense_multiplier(guarded, "impact"), 1)
+        self.assertAlmostEqual(target.defense_multiplier(guarded, "void"), 1.5)
+        self.assertAlmostEqual(target.defense_multiplier(guarded, "heat", dot=True), 0)
 
     def test_viral_status_amplifies_health_but_not_shields(self):
         health = weapon({"impact": 100}, forced_procs={"viral": 1}).configure(target=enemy(health=100)).results.main
@@ -177,22 +177,22 @@ class EnemyTargetTests(unittest.TestCase):
         combined = weapon({"impact": 100}, forced_procs={"corrosive": 1, "heat": 1}).configure(target=enemy(health=100, armor=300)).results.main
         self.assertEqual(corrosive.status_effects.corrosive, 8)
         self.assertEqual(heat.status_effects.heat, 1)
-        self.assertAlmostEqual(target_calculator.remaining_armor_multiplier(corrosive.status_effects), 0.32)
-        self.assertAlmostEqual(target_calculator.remaining_armor_multiplier(heat.status_effects), 0.5)
-        self.assertAlmostEqual(target_calculator.remaining_armor_multiplier(combined.status_effects), 0.16)
+        self.assertAlmostEqual(target.remaining_armor_multiplier(corrosive.status_effects), 0.32)
+        self.assertAlmostEqual(target.remaining_armor_multiplier(heat.status_effects), 0.5)
+        self.assertAlmostEqual(target.remaining_armor_multiplier(combined.status_effects), 0.16)
         self.assertGreater(corrosive.final.flat_dph, 70)
         self.assertGreater(heat.final.flat_dph, 70)
         self.assertGreater(combined.final.flat_dph, corrosive.final.flat_dph)
         self.assertGreater(combined.final.flat_dph, heat.final.flat_dph)
 
     def test_status_vulnerability_and_armor_strip_caps(self):
-        self.assertEqual(target_calculator.status_vulnerability(0), 1)
-        self.assertEqual(target_calculator.status_vulnerability(1), 2)
-        self.assertEqual(target_calculator.status_vulnerability(10), 4.25)
-        self.assertEqual(target_calculator.status_vulnerability(20), 4.25)
-        self.assertEqual(target_calculator.corrosive_armor_strip(0), 0)
-        self.assertEqual(target_calculator.corrosive_armor_strip(1), 0.26)
-        self.assertAlmostEqual(target_calculator.corrosive_armor_strip(10), 0.8)
+        self.assertEqual(target.status_vulnerability(0), 1)
+        self.assertEqual(target.status_vulnerability(1), 2)
+        self.assertEqual(target.status_vulnerability(10), 4.25)
+        self.assertEqual(target.status_vulnerability(20), 4.25)
+        self.assertEqual(target.corrosive_armor_strip(0), 0)
+        self.assertEqual(target.corrosive_armor_strip(1), 0.26)
+        self.assertAlmostEqual(target.corrosive_armor_strip(10), 0.8)
 
     def test_zero_pool_enemy_validation_fails(self):
         invalid = {"Unknown": {"name": "Unknown", "faction": "Unknown", "base_level": 1, "stats": {"health": 0, "shields": 0, "armor": 0, "overguard": 0}, "bodyparts": {"body": {"type": "normal", "multiplier": 1}}, "modifiers": {}}}

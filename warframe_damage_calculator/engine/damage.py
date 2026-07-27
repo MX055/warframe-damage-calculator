@@ -8,14 +8,14 @@ from __future__ import annotations
 
 from ..fields.attack_result import AttackResult
 from ..fields.calculated import AverageStats, CalculatedStats, ModdedStats, StatusEffects
-from ..fields.evolution import ResolvedEvolutionStat
-from ..fields.upgrade import ResolvedStat
+from ..fields.evolution_data import ResolvedEvolutionStat
+from ..fields.upgrade_data import ResolvedStat
 from ..fields.weapon_data import Attack
 from ..core.dist import Dist
 from ..utils.constants import DOT_MULTIPLIERS
 from ..utils.types import Number
 from . import formulas
-from . import target_calculator
+from . import target as target_metrics
 
 
 def compute_modded_damage(*, attack: Attack, base: CalculatedStats, original_damage: Dist, build: ResolvedStat, evolutions: ResolvedEvolutionStat, modded: ModdedStats) -> None:
@@ -47,18 +47,26 @@ def apply_shared_average_crit(*, effective: CalculatedStats, average: AverageSta
     average.crit_multiplier = formulas.crit_multiplier(average.crit_chance, effective.crit_damage)
 
 
-def max_faction_damage(average: AverageStats) -> float:
-    return max(average.corpus_damage, average.grineer_damage, average.infested_damage, average.orokin_damage, average.murmur_damage, average.sentient_damage)
+def zone_dph_metrics(*, compute_direct, compute_dotph, normal_scale: float, weakpoint_scale: float, resistant_scale: float, dot_scale: float = 1.0) -> dict[str, float]:
+    """Assemble normal/weakpoint/resistant direct and DoT per-hit metrics."""
+    return {
+        "flat_dph": float(compute_direct()) * normal_scale,
+        "flat_weakpoint_dph": float(compute_direct("weakpoint")) * weakpoint_scale,
+        "flat_resistant_dph": float(compute_direct("resistant")) * resistant_scale,
+        "flat_dotph": float(compute_dotph()) * dot_scale,
+        "flat_weakpoint_dotph": float(compute_dotph(weakpoint=True)) * dot_scale,
+        "flat_resistant_dotph": float(compute_dotph(resistant=True)) * dot_scale,
+    }
 
 
 def flat_dotph(*, base: CalculatedStats, effective: CalculatedStats, average: AverageStats, status_attempts_per_attack: float, weakpoint: bool = False, resistant: bool = False, hits: Number | None = None, damage_multiplier: Number = 1, extra_damage: Number = 0, faction_damage: Number | None = None, continuous: bool = False, target: object | None = None, status_effects: StatusEffects | None = None, weakpoint_bonus: float = 0) -> float:
     # Beam: random DoT ×MS² (merged tick damage × status); forced procs ×MS once after merge.
-    if faction_damage is None: faction_damage = max_faction_damage(average)
+    if faction_damage is None: faction_damage = target_metrics.faction_damage(average, None)
     if effective.damage.total_damage() <= 0: return 0.0
     multiplier = formulas.hit_multiplier(average.weakpoint_crit_chance if weakpoint else average.crit_chance, effective.crit_damage, effective.non_crit_bonus_damage, effective.non_crit_bonus_chance)
     zone = "weakpoint" if weakpoint else "resistant" if resistant else "normal"
-    regular = sum(factor * effective.damage.get(damage_type) * effective.damage.weight(damage_type) * target_calculator.damage_type_multiplier(target, damage_type, dot=True, status_effects=status_effects, zone=zone, weakpoint_bonus=weakpoint_bonus) for damage_type, factor in DOT_MULTIPLIERS) * effective.status_chance
-    forced = sum(factor * base.forced_procs.get(damage_type) * effective.damage.get(damage_type) * target_calculator.damage_type_multiplier(target, damage_type, dot=True, status_effects=status_effects, zone=zone, weakpoint_bonus=weakpoint_bonus) for damage_type, factor in DOT_MULTIPLIERS)
+    regular = sum(factor * effective.damage.get(damage_type) * effective.damage.weight(damage_type) * target_metrics.damage_type_multiplier(target, damage_type, dot=True, status_effects=status_effects, zone=zone, weakpoint_bonus=weakpoint_bonus) for damage_type, factor in DOT_MULTIPLIERS) * effective.status_chance
+    forced = sum(factor * base.forced_procs.get(damage_type) * effective.damage.get(damage_type) * target_metrics.damage_type_multiplier(target, damage_type, dot=True, status_effects=status_effects, zone=zone, weakpoint_bonus=weakpoint_bonus) for damage_type, factor in DOT_MULTIPLIERS)
     shot_hits = effective.multishot if hits is None else hits
     regular_hits = shot_hits * shot_hits if continuous else shot_hits
     forced_hits = shot_hits

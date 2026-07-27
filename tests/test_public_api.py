@@ -4,18 +4,18 @@ from types import MappingProxyType
 from typing import get_args
 
 from warframe_damage_calculator import Build, Enemy, Melee, Primary, Secondary, Upgrade, Weapon, arsenal
-from warframe_damage_calculator.calculators import application_chance, formulas
-from warframe_damage_calculator.calculators.build_calculator import BuildCalculator
-from warframe_damage_calculator.calculators.upgrade_calculator import UpgradeCalculator
-from warframe_damage_calculator.calculators.weapon_calculator import WeaponCalculator
+from warframe_damage_calculator.engine import application_chance, formulas
+from warframe_damage_calculator.engine.build_calculator import BuildCalculator
+from warframe_damage_calculator.engine.upgrade_calculator import UpgradeCalculator
+from warframe_damage_calculator.engine.weapon_calculator import WeaponCalculator
 from warframe_damage_calculator.loader.bundled_names import EnemyName, MeleeName, PrimaryName, SecondaryName, UpgradeName
 from warframe_damage_calculator.core.data import Data
 from warframe_damage_calculator.core.dist import Dist
 from warframe_damage_calculator.core.dist_data import DistData
 from warframe_damage_calculator.fields.attack_result import AttackResult
 from warframe_damage_calculator.fields.calculated import CalculatedStats
-from warframe_damage_calculator.fields.enemy import BodyPart, BodyParts, EnemyData, EnemyModifiers, EnemyRuntime, EnemyStats
-from warframe_damage_calculator.fields.upgrade import ResolvedStat
+from warframe_damage_calculator.fields.enemy_data import BodyPart, BodyParts, EnemyData, EnemyModifiers, EnemyRuntime, EnemyStats
+from warframe_damage_calculator.fields.upgrade_data import ResolvedStat
 from warframe_damage_calculator.fields.weapon_data import Attack, Attacks, Evolutions
 from warframe_damage_calculator.loader.construction import DatabaseFactory
 
@@ -1016,7 +1016,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(build.results.total.proportional.crit_damage, 0)
 
     def test_special_upgrades_keep_calculator_values(self):
-        from warframe_damage_calculator.calculators import application_chance, stacking_reset
+        from warframe_damage_calculator.engine import application_chance, stacking_reset
 
         self.assertAlmostEqual(application_chance.hunter_munitions_chance(arsenal.get("Hunter Munitions").results.total.application_chance), 0.3)
         self.assertAlmostEqual(application_chance.internal_bleeding_chance(arsenal.get("Internal Bleeding").results.total.application_chance), 0.35)
@@ -1525,7 +1525,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertAlmostEqual(alone.results.total.proportional.damage_bonus, 0.95)
 
     def test_condition_overload_applies_before_modded_damage(self):
-        from warframe_damage_calculator.calculators.weapon_calculator import WeaponCalculator
+        from warframe_damage_calculator.engine.weapon_calculator import WeaponCalculator
 
         condition_overload = runtime_upgrade({
             "name": "CO",
@@ -1569,7 +1569,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertGreater(damage_assignments[0], 1)
 
     def test_modded_scalars_do_not_assign_damage(self):
-        from warframe_damage_calculator.calculators.weapon_calculator import WeaponCalculator
+        from warframe_damage_calculator.engine.weapon_calculator import WeaponCalculator
 
         weapon = arsenal.get("Braton")
         result = weapon.results.main
