@@ -26,7 +26,7 @@ from .effect_schema import (
     BEHAVIOR_MULTISHOT_CONSUMES_AMMO,
     BEHAVIOR_ON_NON_CRIT,
     BEHAVIOR_STACK_RESET_CRIT_2_PLUS,
-    BEHAVIOR_STATUS_PROC_STACKS,
+    BEHAVIOR_STATUS_EFFECT_STACKS,
     BEHAVIOR_UNIQUE_STATUS,
     BEHAVIOR_WEAPON_COMBO,
     COMMON_FAMILY,
@@ -198,12 +198,12 @@ class UpgradeCalculator:
             bucket = "static" if condition is None else "conditional"
             return ResolvableEffect(stat="damage_bonus", value=value, mode="proportional", bucket=bucket, condition=condition, exclude=exclude, family=family, scales_with_rank=scales, behavior=behavior)
 
-        if behavior == BEHAVIOR_STATUS_PROC_STACKS:
-            if not is_automatic(effect, behavior=behavior): raise ValueError("STATUS_PROC_STACKS requires automatic: true")
+        if behavior == BEHAVIOR_STATUS_EFFECT_STACKS:
+            if not is_automatic(effect, behavior=behavior): raise ValueError("STATUS_EFFECT_STACKS requires automatic: true")
             status = data.get("status")
-            if not status: raise ValueError("STATUS_PROC_STACKS behavior_data requires status")
+            if not status: raise ValueError("STATUS_EFFECT_STACKS behavior_data requires status")
             maximum = data.get("max_stacks")
-            if maximum is None: raise ValueError("STATUS_PROC_STACKS behavior_data requires max_stacks")
+            if maximum is None: raise ValueError("STATUS_EFFECT_STACKS behavior_data requires max_stacks")
             payload = {"value": value, "stat": stat, "status": status, "max_stacks": maximum, "mode": "proportional", "automatic": True, "behavior_data": data}
             if data.get("duration") is not None: payload["duration"] = data["duration"]
             return ResolvableEffect(stat="status_effect_stacks", value=payload, bucket="static", mode="proportional", scales_with_rank=scales, behavior=behavior)
