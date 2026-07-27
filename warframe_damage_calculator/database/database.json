@@ -12850,8 +12850,8 @@
                 }
             },
             "combo": {
-                "max_combo": 12,
-                "combo_interval": 20
+                "max_combo": 11,
+                "combo_interval": 11
             },
             "disposition": 1.1
         },
@@ -53304,7 +53304,7 @@
                 }
             },
             "combo": {
-                "max_combo": 12,
+                "max_combo": 13,
                 "combo_interval": 20
             },
             "disposition": 0.85
