@@ -180,7 +180,7 @@ class UpgradeCalculator:
         if behavior == BEHAVIOR_UNIQUE_STATUS:
             if not is_automatic(effect, behavior=behavior): raise ValueError("UNIQUE_STATUS requires automatic: true")
             # Unique-status cap lives in behavior_data; ordinary value stacking may still use top-level stacks.
-            co_max = data.get("max_stacks", "inf")
+            co_max = data.get("max_stacks") or "inf"
             if isinstance(stacks, Mapping):
                 return ResolvableEffect(stat="condition_overload", value=value, bucket="stacking", stacks_on=stacks["when"], max_stacks=stacks.get("max"), scales_with_rank=scales, co_max_stacks=co_max, behavior=behavior)
             return ResolvableEffect(stat="condition_overload", value=value, bucket="static", mode="proportional", scales_with_rank=scales, co_max_stacks=co_max, behavior=behavior)

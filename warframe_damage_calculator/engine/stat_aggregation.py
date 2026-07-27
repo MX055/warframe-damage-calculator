@@ -39,10 +39,34 @@ def _merge_damage(stats: Data, stat: str, value: Any) -> None:
     stats._values[stat] = current + value
 
 
+def _condition_overload_max(value: Any) -> int | str:
+    """Normalize a Condition Overload stack cap.
+
+    ``None`` and ``"inf"`` both mean that the effect has no finite cap.
+    Numeric values are clamped to non-negative integers so aggregation never
+    compares incompatible values such as ``None`` and ``int``.
+    """
+    if value is None or value == "inf":
+        return "inf"
+    try:
+        return max(int(value), 0)
+    except (TypeError, ValueError):
+        return "inf"
+
+
 def _merge_condition_overload(stats: Data, stat: str, value: Mapping[str, Any]) -> None:
-    current = stats.get(stat) or {}
-    maximums = {current.get("max_stacks", 0), value.get("max_stacks", 0)}
-    stats[stat] = {"value": current.get("value", 0) + value.get("value", 0), "max_stacks": "inf" if "inf" in maximums else max(maximums)}
+    current = stats.get(stat)
+    if not isinstance(current, Mapping):
+        current = {}
+
+    current_max = _condition_overload_max(current.get("max_stacks"))
+    incoming_max = _condition_overload_max(value.get("max_stacks"))
+    max_stacks = "inf" if "inf" in (current_max, incoming_max) else max(current_max, incoming_max)
+
+    stats[stat] = {
+        "value": current.get("value", 0) + value.get("value", 0),
+        "max_stacks": max_stacks,
+    }
 
 
 def _merge_status_effect_stacks(stats: Data, stat: str, value: Any) -> None:
