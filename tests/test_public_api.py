@@ -186,11 +186,11 @@ class PublicApiTests(unittest.TestCase):
 
     def test_bundled_database_contains_normalized_enemy_data(self):
         enemies = arsenal.database["enemies"]
-        self.assertEqual(len(enemies), 978)
+        self.assertEqual(len(enemies), 877)
         self.assertTrue({"Kuva", "Elite Exo Ramsled", "Ogma Elite", "Grineer Queens", "Cryo Sentry", "Narmer Coildrive", "Narmer Bolkor", "Narmer Firbolg", "H-04 Efervon Tank", "Liminus", "Persecutor Liminus"}.isdisjoint(enemies))
         heavy = enemies["Arid Heavy Gunner"]
         self.assertEqual(heavy["name"], "Arid Heavy Gunner")
-        self.assertEqual(heavy["faction"], "Grineer")
+        self.assertEqual(heavy["faction"], "grineer")
         self.assertEqual(heavy["base_level"], 8)
         self.assertEqual(heavy["stats"], {"health": 300, "shields": 0, "armor": 500, "overguard": 0})
         self.assertEqual(heavy["bodyparts"]["head"], {"type": "weakpoint", "multiplier": 3.0})
@@ -232,7 +232,7 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(dict(configured.data.runtime), {"level": 8, "steel_path": False, "empowered": True})
         self.assertEqual(arsenal.get("Arid Heavy Gunner", attribute="level"), 100)
 
-        base = Enemy({"name": "Base", "faction": "Grineer", "base_level": 1, "stats": {"health": 100, "shields": 100, "armor": 100, "overguard": 100}, "runtime": {"level": 1, "steel_path": False, "empowered": False}})
+        base = Enemy({"name": "Base", "faction": "grineer", "base_level": 1, "stats": {"health": 100, "shields": 100, "armor": 100, "overguard": 100}, "runtime": {"level": 1, "steel_path": False, "empowered": False}})
         self.assertEqual(dict(base.results.effective), {"health": 100.0, "shields": 100.0, "armor": 100, "overguard": 100.0})
         base.set({"steel_path": True})
         self.assertEqual(dict(base.results.effective), {"health": 250.0, "shields": 250.0, "armor": 250, "overguard": 100.0})
@@ -248,10 +248,10 @@ class PublicApiTests(unittest.TestCase):
 
         self.assertIsInstance(variant, Enemy)
         self.assertEqual(variant.data.name, "Senta Turret")
-        self.assertEqual(len(enemies), 978)
+        self.assertEqual(len(enemies), 877)
         self.assertTrue(all(isinstance(enemy, Enemy) for enemy in enemies.values()))
-        self.assertEqual(len(grineer), 248)
-        self.assertTrue(all(enemy.data.faction == "Grineer" for enemy in grineer.values()))
+        self.assertEqual(len(grineer), 277)
+        self.assertTrue(all(enemy.data.faction == "grineer" for enemy in grineer.values()))
         self.assertEqual(arsenal.get("Arid Heavy Gunner", attribute="health"), 83815.99)
         self.assertEqual(arsenal.get("Arid Heavy Gunner", attribute="impact"), 1.5)
 

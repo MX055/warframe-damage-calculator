@@ -15,16 +15,12 @@ ZONE_METRICS = {
     "resistant": ("flat_resistant_dph", "flat_resistant_dotph", "total_resistant_dph", "flat_resistant_dps", "flat_resistant_dotps", "total_resistant_dps"),
 }
 FACTION_STATS = {
-    "Corpus": "corpus_damage",
-    "Corpus Amalgam": "corpus_damage",
-    "Grineer": "grineer_damage",
-    "Kuva Grineer": "grineer_damage",
-    "Infestation": "infested_damage",
-    "Infested": "infested_damage",
-    "Infested Deimos": "infested_damage",
-    "Orokin": "orokin_damage",
-    "The Murmur": "murmur_damage",
-    "Sentient": "sentient_damage",
+    "corpus": "corpus_damage",
+    "grineer": "grineer_damage",
+    "infested": "infested_damage",
+    "orokin": "orokin_damage",
+    "murmur": "murmur_damage",
+    "sentient": "sentient_damage",
 }
 
 

@@ -15,7 +15,7 @@ def weapon(damage, *, status_chance=0, forced_procs=None):
     return Primary(data)
 
 
-def enemy(*, health=100, shields=0, armor=0, overguard=0, faction="Neutral", bodyparts=None, modifiers=None):
+def enemy(*, health=100, shields=0, armor=0, overguard=0, faction="stalker", bodyparts=None, modifiers=None):
     return Enemy({"name": "Target", "faction": faction, "base_level": 1, "stats": {"health": health, "shields": shields, "armor": armor, "overguard": overguard}, "bodyparts": bodyparts or {"body": {"type": "normal", "multiplier": 1}}, "modifiers": modifiers or {}, "runtime": {"level": 1, "steel_path": False, "empowered": False}})
 
 
@@ -68,7 +68,7 @@ class EnemyTargetTests(unittest.TestCase):
 
     def test_target_selects_matching_faction_bonus(self):
         bonuses = Build(upgrade("Banes", {"grineer_damage": [{"value": 0.5}], "corpus_damage": [{"value": 1.0}]}))
-        configured = weapon({"impact": 100}).configure(bonuses, enemy(faction="Grineer"))
+        configured = weapon({"impact": 100}).configure(bonuses, enemy(faction="grineer"))
         self.assertAlmostEqual(configured.results.main.final.flat_dph, 150)
 
     def test_bodypart_averages_and_weakpoint_bonus(self):
@@ -195,7 +195,7 @@ class EnemyTargetTests(unittest.TestCase):
         self.assertAlmostEqual(target.corrosive_armor_strip(10), 0.8)
 
     def test_zero_pool_enemy_validation_fails(self):
-        invalid = {"Unknown": {"name": "Unknown", "faction": "Unknown", "base_level": 1, "stats": {"health": 0, "shields": 0, "armor": 0, "overguard": 0}, "bodyparts": {"body": {"type": "normal", "multiplier": 1}}, "modifiers": {}}}
+        invalid = {"Unknown": {"name": "Unknown", "faction": "grineer", "base_level": 1, "stats": {"health": 0, "shields": 0, "armor": 0, "overguard": 0}, "bodyparts": {"body": {"type": "normal", "multiplier": 1}}, "modifiers": {}}}
         with self.assertRaisesRegex(ValueError, "nonzero health, shields, or overguard"):
             validate_enemies(invalid)
 

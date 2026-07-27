@@ -5,6 +5,16 @@ from ..utils.types import Number
 from .typed_mapping import TypedMapping
 
 
+FACTION_TAGS = frozenset({"grineer", "corpus", "infested", "orokin", "sentient", "stalker", "narmer", "murmur", "scaldra", "techrot", "wild"})
+FACTION_TAG_ALIASES = {"grineer": "grineer", "kuva grineer": "grineer", "corpus": "corpus", "corpus amalgam": "corpus", "infested": "infested", "infestation": "infested", "infested deimos": "infested", "orokin": "orokin", "sentient": "sentient", "stalker": "stalker", "narmer": "narmer", "the murmur": "murmur", "murmur": "murmur", "scaldra": "scaldra", "techrot": "techrot", "wild": "wild"}
+
+
+def faction_tag(value: object) -> str | None:
+    key = " ".join(str(value or "").strip().casefold().split())
+    if key in FACTION_TAGS: return key
+    return FACTION_TAG_ALIASES.get(key)
+
+
 class EnemyStats(Data):
     health: Number = 1
     shields: Number = 0
@@ -33,7 +43,7 @@ class EnemyRuntime(Data):
 
 class EnemyData(Data):
     name: str = "Enemy"
-    faction: str = "Unknown"
+    faction: str = ""
     base_level: Number = 1
     stats: EnemyStats = EnemyStats()
     bodyparts: BodyParts = {"body": BodyPart()}

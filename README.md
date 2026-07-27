@@ -782,7 +782,7 @@ The file uses the same top-level schema as the bundled database:
   "enemies": {
     "Example Enemy": {
       "name": "Example Enemy",
-      "faction": "Grineer",
+      "faction": "grineer",
       "base_level": 1,
       "stats": {"health": 100, "shields": 0, "armor": 50, "overguard": 0},
       "bodyparts": {
