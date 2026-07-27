@@ -1,6 +1,6 @@
 from ..fields.attack_result import AttackResult
 from ..fields.upgrade_data import StanceCombo
-from ..utils.constants import COMBO_HIT_INTERVAL, HEAVY_ATTACK_CATEGORIES, MAX_COMBO_MULTIPLIER, SLAM_ATTACK_CATEGORIES, SLIDE_ATTACK_CATEGORIES
+from ..utils.constants import HEAVY_ATTACK_CATEGORIES, SLAM_ATTACK_CATEGORIES, SLIDE_ATTACK_CATEGORIES
 from ..utils.functions import clamp, true_round
 from ..utils.types import Number
 from . import application_chance, damage, formulas
@@ -8,9 +8,14 @@ from .weapon_calculator import WeaponCalculator
 
 
 class MeleeCalculator(WeaponCalculator):
-    @staticmethod
-    def _combo_multiplier_from_hits(hits: Number) -> int:
-        return max(1, min(MAX_COMBO_MULTIPLIER, int(hits) // COMBO_HIT_INTERVAL + 1))
+    def _max_combo(self) -> int:
+        return max(int(getattr(self.weapon.data.combo, "max_combo", 12) or 12), 1)
+
+    def _combo_interval(self) -> int:
+        return max(int(getattr(self.weapon.data.combo, "combo_interval", 20) or 20), 1)
+
+    def _combo_multiplier_from_hits(self, hits: Number) -> int:
+        return max(1, min(self._max_combo(), int(hits) // self._combo_interval() + 1))
 
     def _crit_upgrade_multiplier(self, result: AttackResult) -> float:
         return 2.0 if result.category in HEAVY_ATTACK_CATEGORIES else 1.0
@@ -91,7 +96,7 @@ class MeleeCalculator(WeaponCalculator):
 
     def _combo_multiplier(self, result: AttackResult) -> int:
         if result.category not in HEAVY_ATTACK_CATEGORIES: return 1
-        return max(1, min(MAX_COMBO_MULTIPLIER, int(self.weapon.data.runtime.combo)))
+        return max(1, min(self._max_combo(), int(self.weapon.data.runtime.combo)))
 
     def _status_hits(self, result: AttackResult) -> float:
         hits = super()._status_hits(result)

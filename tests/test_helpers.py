@@ -8,6 +8,7 @@ from warframe_damage_calculator.core.dist import Dist
 from warframe_damage_calculator.fields.attack_result import AttackResult
 from warframe_damage_calculator.fields.calculated import AverageStats, CalculatedStats
 from warframe_damage_calculator.fields.weapon_data import Attack
+from warframe_damage_calculator.models.melee import Melee
 
 
 def _dot_stats(*, heat: float = 100.0, status_chance: float = 1.0, multishot: float = 2.0, forced_heat: float = 0.0):
@@ -24,11 +25,18 @@ class HelperTests(unittest.TestCase):
         self.assertAlmostEqual(formulas.crit_multiplier(2.0, 2.0), 3.0)
 
     def test_combo_multiplier_from_hits(self):
-        self.assertEqual(MeleeCalculator._combo_multiplier_from_hits(0), 1)
-        self.assertEqual(MeleeCalculator._combo_multiplier_from_hits(19), 1)
-        self.assertEqual(MeleeCalculator._combo_multiplier_from_hits(20), 2)
-        self.assertEqual(MeleeCalculator._combo_multiplier_from_hits(220), 12)
-        self.assertEqual(MeleeCalculator._combo_multiplier_from_hits(999), 12)
+        default = MeleeCalculator(Melee({"name": "Default", "type": "melee", "runtime": {"attack": "normal_attack"}, "attacks": {"normal_attack": {"trigger": "melee", "delivery": "melee", "category": "normal", "stats": {"damage": {"slash": 100}, "attack_speed": 1, "crit_chance": 0, "crit_damage": 2, "status_chance": 0, "co_factor": 1, "co_effect": "adds"}}}}))
+        self.assertEqual(default._combo_multiplier_from_hits(0), 1)
+        self.assertEqual(default._combo_multiplier_from_hits(19), 1)
+        self.assertEqual(default._combo_multiplier_from_hits(20), 2)
+        self.assertEqual(default._combo_multiplier_from_hits(220), 12)
+        self.assertEqual(default._combo_multiplier_from_hits(999), 12)
+
+        custom = MeleeCalculator(Melee({"name": "Custom", "type": "melee", "combo": {"max_combo": 6, "combo_interval": 10}, "runtime": {"attack": "normal_attack"}, "attacks": {"normal_attack": {"trigger": "melee", "delivery": "melee", "category": "normal", "stats": {"damage": {"slash": 100}, "attack_speed": 1, "crit_chance": 0, "crit_damage": 2, "status_chance": 0, "co_factor": 1, "co_effect": "adds"}}}}))
+        self.assertEqual(custom._combo_multiplier_from_hits(9), 1)
+        self.assertEqual(custom._combo_multiplier_from_hits(10), 2)
+        self.assertEqual(custom._combo_multiplier_from_hits(50), 6)
+        self.assertEqual(custom._combo_multiplier_from_hits(999), 6)
 
     def test_hit_multiplier_includes_non_crit_bonus(self):
         # 12% crit @ 2.2x, Attrition +2000% @ 50% → expected non-crit bonus 10

@@ -431,6 +431,7 @@ weapon = Melee(
     {
         "name": "Example Sword",
         "type": "melee",
+        "combo": {"max_combo": 12, "combo_interval": 20},
         "runtime": {"attack": "normal_attack", "combo": 12, "stance_combo": "neutral"},
         "subtype": "sword",
         "attacks": {
@@ -1293,7 +1294,7 @@ Melee DPS is calculated as expected damage per selected attack multiplied by its
 effective attack speed (hits/sec when a stance combo is equipped). Attack
 `category` drives heavy/slam/slide rules:
 
-- `heavy` / `heavy_slam`: wind-up speed uses `heavy_attack_speed` mods, not `attack_speed`. Hit and DoT damage use `weapon.data.runtime.combo`, clamped to `1`–`12`. Critical chance bonuses from upgrades (additive and flat) are doubled.
+- `heavy` / `heavy_slam`: wind-up speed uses `heavy_attack_speed` mods, not `attack_speed`. Hit and DoT damage use `weapon.data.runtime.combo`, clamped to `1`–`weapon.data.combo.max_combo`. Hits-to-multiplier conversion uses `weapon.data.combo.combo_interval`. Critical chance bonuses from upgrades (additive and flat) are doubled.
 - `slam` / `heavy_slam`: effective damage is multiplied by `slam_damage`.
 - `slide`: effective crit chance is multiplied by `slide_crit_chance`.
 - Combo-scaling mods use `behavior: "WEAPON_COMBO"` and read `weapon.data.runtime.combo`, capped by `behavior_data.max_stacks`.

@@ -8,7 +8,7 @@ from warframe_damage_calculator.core.data import Data
 from warframe_damage_calculator.fields.calculated import CalculatedMultiplicativeFamilies, ModdedStats
 from warframe_damage_calculator.fields.evolution_data import ResolvedEvolutionMultiplicativeFamilies, ResolvedEvolutionStat
 from warframe_damage_calculator.fields.upgrade_data import ResolvedElements, ResolvedModeStats, ResolvedMultiplicativeFamilies, ResolvedStat, UpgradeCompatibility, UpgradeData, UpgradeRuntime
-from warframe_damage_calculator.fields.weapon_data import WeaponAmmo, WeaponData, WeaponRuntime
+from warframe_damage_calculator.fields.weapon_data import MeleeData, WeaponAmmo, WeaponCombo, WeaponData, WeaponRuntime
 
 
 class FieldDataTypeTests(unittest.TestCase):
@@ -28,6 +28,8 @@ class FieldDataTypeTests(unittest.TestCase):
         modded = ModdedStats({"multiplicative_families": {"bonus": {"damage": {"slash": 1.0}}}})
         self.assertIsInstance(weapon.ammo, WeaponAmmo)
         self.assertIsInstance(weapon.runtime, WeaponRuntime)
+        melee = MeleeData({"combo": {"max_combo": 12, "combo_interval": 20}})
+        self.assertIsInstance(melee.combo, WeaponCombo)
         self.assertIsInstance(upgrade.compatibility, UpgradeCompatibility)
         self.assertIsInstance(upgrade.runtime, UpgradeRuntime)
         self.assertIsInstance(resolved_mode.elements, ResolvedElements)

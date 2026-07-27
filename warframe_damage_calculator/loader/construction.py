@@ -30,7 +30,9 @@ class DatabaseFactory:
     @classmethod
     def _default_weapon_runtime(cls, data: Mapping[str, Any]) -> dict[str, Any]:
         runtime: dict[str, Any] = {"attack": next(iter(data["attacks"]))}
-        if data.get("type") == "melee": runtime.update({"combo": 12, "stance_combo": "neutral"})
+        if data.get("type") == "melee":
+            combo = data.get("combo") or {}
+            runtime.update({"combo": int(combo.get("max_combo", 12)), "stance_combo": "neutral"})
         if data.get("evolutions"):
             runtime["evolutions"] = {}
         if data.get("exalted") or data.get("pseudo_exalted"): runtime["ability_strength"] = 1.0

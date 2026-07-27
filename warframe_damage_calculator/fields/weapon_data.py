@@ -24,6 +24,11 @@ class WeaponAmmo(Data):
     pass
 
 
+class WeaponCombo(Data):
+    max_combo: int = 12
+    combo_interval: int = 20
+
+
 class WeaponRuntime(Data):
     pass
 
@@ -69,7 +74,7 @@ class RangedData(WeaponData):
 
 
 class MeleeData(WeaponData):
-    pass
+    combo: WeaponCombo = WeaponCombo()
 
 
 class PrimaryData(RangedData):
