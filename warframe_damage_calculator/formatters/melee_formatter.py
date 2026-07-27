@@ -81,5 +81,5 @@ class MeleeFormatter(WeaponFormatter):
         section_breaks.append(dps_at)
 
         title = f"{self.weapon.data.name} - {selected.name.replace('_', ' ').title()}"
-        if self.weapon.target is not None: title += f" vs {self.weapon.target.data.name} ({self._hit_zone_label()})"
+        if self.weapon.target is not None: title += f" vs {self.weapon.target.data.name} (bodypart: {self._hit_zone_label()})"
         return self._table(("stat", "base", "effective", "final"), rows, title=title, border="=", section_at=tuple(section_breaks))

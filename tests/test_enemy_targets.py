@@ -92,7 +92,7 @@ class EnemyTargetTests(unittest.TestCase):
         self.assertIsNone(final.flat_resistant_dph)
         summary = weapon({"impact": 100}).configure(target=enemy()).format.summary()
         self.assertNotIn("None", summary)
-        self.assertIn("(normal)", summary)
+        self.assertIn("(bodypart: normal)", summary)
         total_dps = next(line for line in summary.splitlines() if line.startswith("TOTAL DPS"))
         self.assertNotIn("|", total_dps.split("|", 3)[-1])
 
@@ -105,7 +105,7 @@ class EnemyTargetTests(unittest.TestCase):
         self.assertAlmostEqual(final.flat_resistant_dph, 50)
         summary = configured.format.summary()
         self.assertNotIn("None", summary)
-        self.assertIn("(weakpoint | resistant)", summary)
+        self.assertIn("(bodypart: weakpoint | resistant)", summary)
 
     def test_dot_damage_uses_hit_zones_and_overguard_immunity(self):
         parts = {"body": {"type": "normal", "multiplier": 1}, "head": {"type": "weakpoint", "multiplier": 3}, "legs": {"type": "resistant", "multiplier": 0.5}}

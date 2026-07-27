@@ -1,3 +1,5 @@
+from math import isclose
+
 from ..calculators import formulas
 from .weapon_formatter import WeaponFormatter
 
@@ -16,6 +18,9 @@ class RangedFormatter(WeaponFormatter):
         total_effective = effective.damage.total_damage() * effective.multishot
         hit_multiplier = formulas.hit_multiplier(average.crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
         weakpoint_hit_multiplier = formulas.hit_multiplier(average.weakpoint_crit_chance, effective.crit_damage, effective.get("non_crit_bonus_damage", 0), effective.get("non_crit_bonus_chance", 0))
+        weakpoint_crit_modifier = any(float(bucket.get("weakpoint_crit_chance", 0) or 0) != 0 for source in (selected.build, selected.evolutions) for bucket in (source.proportional, source.base, source.flat)) or not isclose(formulas.fold_multiplicative_families(selected.build, selected.evolutions, stat="weakpoint_crit_chance"), 1)
+        show_weakpoint_crit = weakpoint_crit_modifier and not isclose(float(effective.crit_chance), float(effective.weakpoint_crit_chance))
+        show_weakpoint_hit = weakpoint_crit_modifier and not isclose(hit_multiplier, weakpoint_hit_multiplier)
 
         rows: list[tuple[str, ...]] = []
         self._falloff_row(rows, base, effective)
@@ -39,8 +44,8 @@ class RangedFormatter(WeaponFormatter):
             rows,
             "CRIT CHANCE",
             self._fmt_percent(base.crit_chance),
-            self._with_weakpoint(self._fmt_percent(effective.crit_chance), self._fmt_percent(effective.weakpoint_crit_chance)),
-            self._with_weakpoint(self._fmt_percent(average.crit_chance), self._fmt_percent(average.weakpoint_crit_chance)),
+            self._with_weakpoint(self._fmt_percent(effective.crit_chance), self._fmt_percent(effective.weakpoint_crit_chance) if show_weakpoint_crit else None),
+            self._with_weakpoint(self._fmt_percent(average.crit_chance), self._fmt_percent(average.weakpoint_crit_chance) if show_weakpoint_crit else None),
         )
         self._append(rows, "CRIT DAMAGE", self._fmt_multiplier(base.crit_damage), self._fmt_multiplier(effective.crit_damage), self._fmt_multiplier(effective.crit_damage))
         self._append(rows, "STATUS CHANCE", self._fmt_percent(base.status_chance), self._fmt_percent(effective.status_chance), self._fmt_percent(effective.status_chance))
@@ -71,7 +76,7 @@ class RangedFormatter(WeaponFormatter):
             section_breaks.append(damage_at)
 
         averages_at = len(rows)
-        self._append(rows, "HIT MULTIPLIER", "", "", self._with_weakpoint(self._fmt_multiplier(hit_multiplier), self._fmt_multiplier(weakpoint_hit_multiplier)))
+        self._append(rows, "HIT MULTIPLIER", "", "", self._with_weakpoint(self._fmt_multiplier(hit_multiplier), self._fmt_multiplier(weakpoint_hit_multiplier) if show_weakpoint_hit else None))
         self._append(rows, "EXPECTED PROCS PER SHOT", "", "", self._fmt_number(average.procs_per_shot))
         self._append_unique_average_rows(rows, average)
         section_breaks.append(averages_at)
@@ -86,5 +91,5 @@ class RangedFormatter(WeaponFormatter):
         section_breaks.append(dps_at)
 
         title = f"{self.weapon.data.name} - {selected.name.replace('_', ' ').title()}"
-        if self.weapon.target is not None: title += f" vs {self.weapon.target.data.name} ({self._hit_zone_label()})"
+        if self.weapon.target is not None: title += f" vs {self.weapon.target.data.name} (bodypart: {self._hit_zone_label()})"
         return self._table(("stat", "base", "effective", "final"), rows, title=title, border="=", section_at=tuple(section_breaks))

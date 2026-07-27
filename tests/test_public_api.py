@@ -1389,6 +1389,19 @@ class PublicApiTests(unittest.TestCase):
         self.assertIn("shapley", upgrades)
         self.assertIn("removal", upgrades)
 
+    def test_formatter_only_shows_distinct_modified_weakpoint_crit_values(self):
+        base = arsenal.get("Braton").format.summary()
+        base_crit = next(line for line in base.splitlines() if line.startswith("CRIT CHANCE"))
+        base_hit = next(line for line in base.splitlines() if line.startswith("HIT MULTIPLIER"))
+        self.assertEqual(base_crit.count("12.00%"), 3)
+        self.assertEqual(base_hit.count("1.07x"), 1)
+
+        modified = arsenal.get("Braton").configure(Build(arsenal.get("Primary Acuity"))).format.summary()
+        modified_crit = next(line for line in modified.splitlines() if line.startswith("CRIT CHANCE"))
+        modified_hit = next(line for line in modified.splitlines() if line.startswith("HIT MULTIPLIER"))
+        self.assertEqual(modified_crit.count("53.98%"), 2)
+        self.assertIn("1.07x | 1.32x", modified_hit)
+
     def test_projectile_speed_scales_falloff_without_changing_dps(self):
         base = arsenal.get("Corinth Prime").set({"attack": "buckshot"})
         modded = arsenal.get("Corinth Prime").configure(Build(arsenal.get("Fatal Acceleration"))).set({"attack": "buckshot"})
