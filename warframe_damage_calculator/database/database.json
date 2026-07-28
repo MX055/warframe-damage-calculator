@@ -72546,7 +72546,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": true,
                 "stance": false,
@@ -72591,7 +72593,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": true,
                 "stance": false,
@@ -72791,7 +72795,9 @@
             "max_rank": 10,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -72945,7 +72951,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": true,
                 "stance": false,
@@ -73018,7 +73026,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -73059,7 +73069,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -73281,7 +73293,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -73305,7 +73319,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -73329,7 +73345,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -73353,7 +73371,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -73376,7 +73396,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -73571,7 +73593,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -74140,7 +74164,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -74162,7 +74188,9 @@
             "max_rank": 10,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": true,
                 "stance": false,
@@ -74653,7 +74681,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -74847,7 +74877,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -74985,7 +75017,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -75083,7 +75117,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -75242,7 +75278,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -75438,7 +75476,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -75766,7 +75806,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": true,
                 "stance": false,
@@ -76271,7 +76313,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -76311,7 +76355,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -76452,7 +76498,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -76918,7 +76966,9 @@
             "max_rank": 10,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -76955,7 +77005,9 @@
             "max_rank": 10,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -77182,7 +77234,9 @@
             "max_rank": 10,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -77534,7 +77588,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -77675,7 +77731,9 @@
             "max_rank": 10,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -77759,7 +77817,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -77834,7 +77894,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -78012,7 +78074,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": true,
                 "stance": false,
@@ -78116,7 +78180,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -78282,7 +78348,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -78331,7 +78399,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -78902,7 +78972,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -78962,7 +79034,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -79000,7 +79074,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -79051,7 +79127,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -79326,7 +79404,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -79445,7 +79525,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -79569,7 +79651,9 @@
             "max_rank": 10,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "aoe": false,
                 "exilus": true,
@@ -79627,7 +79711,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -80287,7 +80373,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -80308,7 +80396,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -80503,7 +80593,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -80719,7 +80811,9 @@
             "max_rank": 10,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -80776,7 +80870,9 @@
             "max_rank": 10,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -80800,7 +80896,9 @@
             "max_rank": 10,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -80824,7 +80922,9 @@
             "max_rank": 10,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -80848,7 +80948,9 @@
             "max_rank": 10,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -80871,7 +80973,9 @@
             "max_rank": 10,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -81130,7 +81234,9 @@
             "max_rank": 10,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -81316,7 +81422,9 @@
             "max_rank": 10,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -81364,7 +81472,9 @@
             "max_rank": 10,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -81484,7 +81594,9 @@
             "max_rank": 10,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -81729,7 +81841,9 @@
             "max_rank": 10,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -81985,7 +82099,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -82173,7 +82289,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -82358,7 +82476,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -82537,7 +82657,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -82561,7 +82683,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -82602,7 +82726,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -82628,7 +82754,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -82709,7 +82837,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -82832,7 +82962,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -83154,7 +83286,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "triggers": [
@@ -83336,7 +83470,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -83354,7 +83490,9 @@
             "max_rank": 10,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -83770,7 +83908,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -84101,7 +84241,9 @@
             "max_rank": 10,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -84128,7 +84270,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -84151,7 +84295,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -84340,7 +84486,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": true,
                 "stance": false,
@@ -84476,7 +84624,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -84975,7 +85125,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": true,
                 "stance": false,
@@ -85032,7 +85184,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -85266,7 +85420,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": true,
                 "stance": false,
@@ -85306,7 +85462,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -85559,7 +85717,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -85600,7 +85760,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": true,
                 "stance": false,
@@ -85652,7 +85814,9 @@
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -85926,7 +86090,9 @@
             "max_rank": 3,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": false,
                 "stance": false,
@@ -86034,7 +86200,9 @@
             "max_rank": 10,
             "compatibility": {
                 "subtypes": [
-                    "rifle"
+                    "rifle",
+                    "bow",
+                    "sniper"
                 ],
                 "exilus": true,
                 "stance": false,

@@ -184,6 +184,19 @@ class PublicApiTests(unittest.TestCase):
                 for effect in effects:
                     self.assertIn(effect.get("mode"), allowed_modes)
 
+    def test_rifle_upgrade_compatibility_includes_bows_and_snipers(self):
+        shared = ["rifle", "bow", "sniper"]
+        for name in ("Serration", "Split Chamber", "Point Strike", "Vital Sense", "Galvanized Aptitude"):
+            with self.subTest(name=name):
+                self.assertEqual(list(arsenal.get(name).data.compatibility.subtypes), shared)
+                self.assertIsInstance(arsenal.get(name, type="bow"), Upgrade)
+                self.assertIsInstance(arsenal.get(name, type="sniper"), Upgrade)
+        rifle_only = {"Guided Ordnance", "Gun Glide", "Overview", "Rifle Ammo Mutation", "Primed Rifle Ammo Mutation", "Spring-Loaded Chamber", "Tainted Mag", "Tactical Reload"}
+        actual = {name for name, data in arsenal.upgrades.items() if data.get("compatibility", {}).get("subtypes") == ["rifle"]}
+        self.assertEqual(actual, rifle_only)
+        self.assertIsNone(arsenal.get("Rifle Ammo Mutation", type="bow"))
+        self.assertIsNone(arsenal.get("Tactical Reload", type="sniper"))
+
     def test_bundled_database_contains_normalized_enemy_data(self):
         enemies = arsenal.database["enemies"]
         self.assertEqual(len(enemies), 877)
