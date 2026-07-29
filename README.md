@@ -62,24 +62,26 @@ Automatic behavior stays flat. `on` names an event, `when` names a condition, `c
 
 ```python
 slash_proc = [
-    Effect(properties={"value": 1}, automatic={"on": "impact_proc", "chance": 0.35}),
-    Effect(properties={"value": 1}, automatic={"on": "impact_proc", "when": "fire_rate_below_2.5", "chance": 0.35}),
+    Effect(properties={"value": 1}, automatic={"on": "impact_status_proc", "chance": 0.35}),
+    Effect(properties={"value": 1}, automatic={"on": "impact_status_proc", "when": "fire_rate_below_2.5", "chance": 0.35}),
 ]
 fire_rate = [
     Effect(properties={"value": 0.6}),
-    Effect(properties={"value": 0.6}, automatic={"when": "bow"}),
+    Effect(properties={"value": 0.6}, automatic={"when": "bow_weapon"}),
 ]
 synth_charge = Effect(
-    properties={"value": 2, "family": "last_shot"},
-    automatic={"on": "last_shot", "when": ["not_continuous", "not_incarnon", "magazine_5_plus"]},
+    properties={"value": 2, "family": "magazine_last_shot"},
+    automatic={"on": "magazine_last_shot", "when": ["non_continuous_fire", "normal_form", "magazine_at_least_5"]},
 )
 vigilante_bonus = Effect(
     properties={"value": 1, "mode": "flat"},
-    automatic={"on": "crit", "chance": 0.05},
+    automatic={"on": "critical_hit", "chance": 0.05},
 )
 ```
 
-Proc and result identity are expressed by the stat name (`slash_proc`, `puncture_proc`, `crit_tier`, and so on); effects do not use a generic `target` field. An attack's intrinsic `forced_procs` distribution remains part of its attack data. Form applicability also uses `when`, such as `{"when": "incarnon"}`; there is no separate scope language.
+Tags follow one vocabulary: manual events begin with `on_`, ongoing states begin with `while_`, status events end in `_status_proc`, comparisons use words such as `_below_`, `_above_`, or `_at_least_`, and units are written out (`10_meters`, `0.2_seconds`, `90_percent`). The `on` field omits the redundant `on_` prefix because the field already supplies it.
+
+Proc and result identity are expressed by the stat name (`slash_proc`, `puncture_proc`, `crit_tier`, and so on); effects do not use a generic `target` field. An attack's intrinsic `forced_procs` distribution remains part of its attack data. Form applicability also uses `when`, such as `{"when": "incarnon_form"}`; there is no separate scope language.
 
 Runtime state retains the value supplied by the caller. Each effect applies its own stack cap during resolution.
 

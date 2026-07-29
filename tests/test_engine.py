@@ -19,14 +19,14 @@ class EngineTests(unittest.TestCase):
         self.assertEqual(result.effective.damage.total, 400)
 
     def test_condition_overload_is_engine_managed(self):
-        condition_overload = Upgrade(name="CO", stats=UpgradeStats(damage_bonus=Effect(properties={"value": 1, "family": "status"}, automatic={"with": "unique_status_count"})))
+        condition_overload = Upgrade(name="CO", stats=UpgradeStats(damage_bonus=Effect(properties={"value": 1, "family": "unique_status"}, automatic={"with": "unique_status_count"})))
         inactive = weapon(damage=Dist(impact=100), status=0).configure(condition_overload)
         active = weapon(damage=Dist(heat=100), status=1, fire_rate=10).configure(condition_overload)
         self.assertEqual(inactive.results.main.effective.damage.total, 100)
         self.assertGreater(active.results.main.effective.damage.total, 100)
 
     def test_hunter_munitions_adds_expected_slash_dot(self):
-        hunter = Upgrade(name="Hunter", stats=UpgradeStats(slash_proc=Effect(properties={"value": 1}, automatic={"on": "crit", "chance": 0.3})))
+        hunter = Upgrade(name="Hunter", stats=UpgradeStats(slash_proc=Effect(properties={"value": 1}, automatic={"on": "critical_hit", "chance": 0.3})))
         bare = weapon(crit=1)
         modded = weapon(crit=1).configure(hunter)
         self.assertGreater(modded.results.main.average.flat_dotph, bare.results.main.average.flat_dotph)

@@ -12,10 +12,10 @@ class DistTests(unittest.TestCase):
 
 class EffectTests(unittest.TestCase):
     def test_channels_compile_into_a_typed_program(self):
-        effect = Effect(properties={"value": 0.4, "mode": "flat", "family": "status"}, manual={"when": "on_kill", "stacks": 2, "for": 20}, automatic={"with": "unique_status_count", "stacks": "inf"})
+        effect = Effect(properties={"value": 0.4, "mode": "flat", "family": "unique_status"}, manual={"when": "on_kill", "stacks": 2, "for": 20}, automatic={"with": "unique_status_count", "stacks": "inf"})
         self.assertEqual(effect.program.value, 0.4)
         self.assertEqual(effect.program.mode, "flat")
-        self.assertEqual(effect.program.family, "status")
+        self.assertEqual(effect.program.family, "unique_status")
         self.assertEqual(effect.program.manual_value("stacks"), 2)
         self.assertEqual(effect.program.automatic_values("with"), ("unique_status_count",))
 
@@ -25,13 +25,13 @@ class EffectTests(unittest.TestCase):
         with self.assertRaises(ValueError): Effect(properties={"value": 1}, automatic={"target": "slash"})
 
     def test_channel_values_preserve_native_scalar_types(self):
-        effect = Effect(properties={"value": 1}, manual={"stacks": 2, "for": 20}, automatic={"on": "CRIT"})
+        effect = Effect(properties={"value": 1}, manual={"stacks": 2, "for": 20}, automatic={"on": "CRITICAL_HIT"})
         self.assertEqual(effect.manual, {"stacks": 2, "for": 20})
-        self.assertEqual(effect.automatic, {"on": "crit"})
+        self.assertEqual(effect.automatic, {"on": "critical_hit"})
 
     def test_repeatable_automatic_fields_use_lists(self):
-        effect = Effect(properties={"value": 2}, automatic={"when": ["NOT_CONTINUOUS", "NOT_INCARNON"], "on": "LAST_SHOT"})
-        self.assertEqual(effect.automatic, {"when": ["not_continuous", "not_incarnon"], "on": "last_shot"})
+        effect = Effect(properties={"value": 2}, automatic={"when": ["NON_CONTINUOUS_FIRE", "NORMAL_FORM"], "on": "MAGAZINE_LAST_SHOT"})
+        self.assertEqual(effect.automatic, {"when": ["non_continuous_fire", "normal_form"], "on": "magazine_last_shot"})
 
 
 class UpgradeTests(unittest.TestCase):

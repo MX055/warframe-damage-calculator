@@ -20,7 +20,7 @@ def _effects(stats: Any, path: str) -> None:
 def validate_database(database: dict[str, Any]) -> None:
     allowed_root = {"schema_version", "weapons", "upgrades", "enemies", "riven_stats"}
     if set(database) != allowed_root: raise ValueError(f"database: invalid fields {sorted(set(database) - allowed_root)}")
-    if database.get("schema_version") != 8: raise ValueError("schema version 8 is required")
+    if database.get("schema_version") != 9: raise ValueError("schema version 9 is required")
     for section in ("weapons", "upgrades", "enemies", "riven_stats"):
         if not isinstance(database.get(section), dict): raise ValueError(f"{section}: expected an object")
     for name, weapon in database["weapons"].items():

@@ -25,7 +25,7 @@ def enervate_parameters(effects: list[ResolvedEffect]) -> tuple[float, float]:
     per_stack = 0.0
     charges = 0.0
     for effect in effects_for(effects, stat="crit_reset_charges"):
-        if automatic_value(effect, "when") != "crit_tier_2_plus" or automatic_value(effect, "reset") != "at_limit": continue
+        if automatic_value(effect, "when") != "critical_tier_at_least_2" or automatic_value(effect, "reset") != "at_stack_limit": continue
         per_stack += float(automatic_value(effect, "per", 0.02))
         charges = max(charges, float(effect.value))
     return per_stack, charges

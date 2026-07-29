@@ -1,5 +1,5 @@
 {
-    "schema_version": 8,
+    "schema_version": 9,
     "weapons": {
         "Euphona Prime": {
             "name": "Euphona Prime",
@@ -481,7 +481,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -492,7 +492,7 @@
                                         "value": 0.4
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -564,7 +564,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -1948,7 +1948,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "overshields"
+                                        "when": "while_overshields_active"
                                     },
                                     "automatic": {}
                                 }
@@ -1974,7 +1974,7 @@
                                         "value": 0.4
                                     },
                                     "manual": {
-                                        "when": "on_hitting_enemies_affected_by_electricity_status",
+                                        "when": "on_hit_against_electrified_enemy",
                                         "stacks": 3
                                     },
                                     "automatic": {}
@@ -2009,7 +2009,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -3095,7 +3095,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -3106,7 +3106,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -3117,7 +3117,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -3128,7 +3128,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -3139,7 +3139,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -3199,7 +3199,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "melee_weapon"
+                                        "when": "while_melee_weapon_equipped"
                                     },
                                     "automatic": {}
                                 }
@@ -3602,7 +3602,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -3613,7 +3613,7 @@
                                         "value": 0.4
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -3685,7 +3685,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -3969,7 +3969,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -3980,7 +3980,7 @@
                                         "value": 0.4
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -4052,7 +4052,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -4360,7 +4360,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -4371,7 +4371,7 @@
                                         "value": 0.5
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -4785,7 +4785,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -4985,7 +4985,7 @@
                                         "value": 0.4
                                     },
                                     "manual": {
-                                        "when": "below_half_health"
+                                        "when": "target_health_below_50_percent"
                                     },
                                     "automatic": {}
                                 }
@@ -5076,7 +5076,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -5278,7 +5278,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -5364,7 +5364,7 @@
                                 {
                                     "properties": {
                                         "value": 0.4,
-                                        "family": "status"
+                                        "family": "unique_status"
                                     },
                                     "manual": {},
                                     "automatic": {
@@ -5513,7 +5513,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -5599,7 +5599,7 @@
                                 {
                                     "properties": {
                                         "value": 0.4,
-                                        "family": "status"
+                                        "family": "unique_status"
                                     },
                                     "manual": {},
                                     "automatic": {
@@ -5844,7 +5844,7 @@
                                         "value": 0.25
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -5918,7 +5918,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -6488,7 +6488,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -6499,7 +6499,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -6510,7 +6510,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -6629,7 +6629,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "primary"
+                                        "when": "on_first_attack_with_primary_equipped"
                                     },
                                     "automatic": {}
                                 }
@@ -8167,7 +8167,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "overshields"
+                                        "when": "while_overshields_active"
                                     },
                                     "automatic": {}
                                 }
@@ -8312,7 +8312,7 @@
                                 {
                                     "properties": {
                                         "value": 0.4,
-                                        "family": "status"
+                                        "family": "unique_status"
                                     },
                                     "manual": {},
                                     "automatic": {
@@ -8908,7 +8908,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -8919,7 +8919,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -8930,7 +8930,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -14265,7 +14265,7 @@
                                         "value": 0.05
                                     },
                                     "manual": {
-                                        "when": "on_status_effect",
+                                        "when": "on_status_proc",
                                         "stacks": 6
                                     },
                                     "automatic": {}
@@ -14300,7 +14300,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -14736,7 +14736,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -14747,7 +14747,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -14758,7 +14758,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -14768,11 +14768,11 @@
                                         "value": 0.1
                                     },
                                     "manual": {
-                                        "when": "heavy_attack_kill",
+                                        "when": "on_heavy_attack_kill",
                                         "stacks": 30
                                     },
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -14803,7 +14803,7 @@
                                         "value": 0.2
                                     },
                                     "manual": {
-                                        "when": "on_puncture_status_effect",
+                                        "when": "on_puncture_status_proc",
                                         "stacks": 5
                                     },
                                     "automatic": {}
@@ -15250,7 +15250,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -17615,7 +17615,7 @@
                                         "value": 0.05
                                     },
                                     "manual": {
-                                        "when": "on_status_effect",
+                                        "when": "on_status_proc",
                                         "stacks": 6
                                     },
                                     "automatic": {}
@@ -17650,7 +17650,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -18084,7 +18084,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -18095,7 +18095,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -18106,7 +18106,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -18436,7 +18436,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -18468,7 +18468,7 @@
                                         "when": "on_kill"
                                     },
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -18537,7 +18537,7 @@
                                         "stacks": 4
                                     },
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -19299,7 +19299,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -19310,7 +19310,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -19321,7 +19321,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -19348,7 +19348,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "melee_weapon"
+                                        "when": "while_melee_weapon_equipped"
                                     },
                                     "automatic": {}
                                 }
@@ -19374,7 +19374,7 @@
                                         "value": 0.1
                                     },
                                     "manual": {
-                                        "when": "activation",
+                                        "when": "enemies_within_6_meters",
                                         "stacks": 5
                                     },
                                     "automatic": {}
@@ -20224,7 +20224,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -20235,7 +20235,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -20246,7 +20246,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -20273,7 +20273,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "melee_weapon"
+                                        "when": "while_melee_weapon_equipped"
                                     },
                                     "automatic": {}
                                 }
@@ -20299,7 +20299,7 @@
                                         "value": 0.1
                                     },
                                     "manual": {
-                                        "when": "activation",
+                                        "when": "enemies_within_6_meters",
                                         "stacks": 5
                                     },
                                     "automatic": {}
@@ -21491,7 +21491,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -21502,7 +21502,7 @@
                                         "value": 0.4
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -21550,7 +21550,7 @@
                                         "stacks": 3
                                     },
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -22663,7 +22663,7 @@
                                         "stacks": 3
                                     },
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -23273,7 +23273,7 @@
                                         "value": 0.7
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -23350,7 +23350,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -23368,7 +23368,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -25295,7 +25295,7 @@
                                         "stacks": 7
                                     },
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -27529,7 +27529,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -28100,7 +28100,7 @@
                                         "value": 0.6
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -28149,7 +28149,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -28338,7 +28338,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -28349,7 +28349,7 @@
                                         "value": 0.4
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -28397,7 +28397,7 @@
                                         "stacks": 3
                                     },
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -28723,7 +28723,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "overshields"
+                                        "when": "while_overshields_active"
                                     },
                                     "automatic": {}
                                 }
@@ -29186,7 +29186,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -29197,7 +29197,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -29208,7 +29208,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -29219,7 +29219,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -29329,7 +29329,7 @@
                                         "value": 15
                                     },
                                     "manual": {
-                                        "when": "on_killing_enemy_with_3_cold_stacks",
+                                        "when": "on_kill_against_enemy_with_3_cold_stacks",
                                         "stacks": 4
                                     },
                                     "automatic": {}
@@ -29362,7 +29362,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "primary"
+                                        "when": "on_first_attack_with_primary_equipped"
                                     },
                                     "automatic": {}
                                 }
@@ -31535,7 +31535,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -31546,7 +31546,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -31557,7 +31557,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -31608,7 +31608,7 @@
                                         "value": 0.3
                                     },
                                     "manual": {
-                                        "when": "on_striking_target_with_final_move_of_neutral_combo"
+                                        "when": "on_neutral_combo_final_hit"
                                     },
                                     "automatic": {}
                                 }
@@ -31685,7 +31685,7 @@
                                         "value": 33
                                     },
                                     "manual": {
-                                        "when": "on_killing_an_enemy_with_3_toxin_stacks"
+                                        "when": "on_kill_against_enemy_with_3_toxin_stacks"
                                     },
                                     "automatic": {}
                                 }
@@ -31915,7 +31915,7 @@
                                 {
                                     "properties": {
                                         "value": 0.33,
-                                        "family": "status"
+                                        "family": "unique_status"
                                     },
                                     "manual": {},
                                     "automatic": {
@@ -33624,7 +33624,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -33658,7 +33658,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -35367,7 +35367,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "overshields"
+                                        "when": "while_overshields_active"
                                     },
                                     "automatic": {}
                                 }
@@ -35392,7 +35392,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty_magazine"
+                                        "when": "on_reload_from_empty"
                                     },
                                     "automatic": {}
                                 }
@@ -35436,7 +35436,7 @@
                                         "when": "on_headshot"
                                     },
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ],
@@ -35449,7 +35449,7 @@
                                         "when": "on_headshot"
                                     },
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -35539,7 +35539,7 @@
                                 {
                                     "properties": {
                                         "value": 0.4,
-                                        "family": "status"
+                                        "family": "unique_status"
                                     },
                                     "manual": {},
                                     "automatic": {
@@ -35678,7 +35678,7 @@
                                 {
                                     "properties": {
                                         "value": 0.3,
-                                        "family": "status"
+                                        "family": "unique_status"
                                     },
                                     "manual": {},
                                     "automatic": {
@@ -35715,7 +35715,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -35872,7 +35872,7 @@
                                         "value": 0.6
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -35921,7 +35921,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -36572,7 +36572,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -36583,7 +36583,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -36594,7 +36594,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -36621,7 +36621,7 @@
                                         "value": 0.8
                                     },
                                     "manual": {
-                                        "when": "overshields"
+                                        "when": "while_overshields_active"
                                     },
                                     "automatic": {}
                                 }
@@ -37156,7 +37156,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -37190,7 +37190,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -37406,7 +37406,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "overshields"
+                                        "when": "while_overshields_active"
                                     },
                                     "automatic": {}
                                 }
@@ -38356,7 +38356,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -38367,7 +38367,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -38378,7 +38378,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -38389,7 +38389,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -38400,7 +38400,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -38427,7 +38427,7 @@
                                         "value": 0.4
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -38453,7 +38453,7 @@
                                         "value": 0.4
                                     },
                                     "manual": {
-                                        "when": "melee_weapon"
+                                        "when": "while_melee_weapon_equipped"
                                     },
                                     "automatic": {}
                                 }
@@ -39301,7 +39301,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -39312,7 +39312,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -39323,7 +39323,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -39334,7 +39334,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -39394,7 +39394,7 @@
                                         "value": 0.6
                                     },
                                     "manual": {
-                                        "when": "melee_weapon"
+                                        "when": "while_melee_weapon_equipped"
                                     },
                                     "automatic": {}
                                 }
@@ -40350,7 +40350,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -40361,7 +40361,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -40372,7 +40372,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -41565,7 +41565,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -41576,7 +41576,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -41587,7 +41587,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -41598,7 +41598,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -41609,7 +41609,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -41636,7 +41636,7 @@
                                         "value": 0.4
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -41662,7 +41662,7 @@
                                         "value": 0.4
                                     },
                                     "manual": {
-                                        "when": "melee_weapon"
+                                        "when": "while_melee_weapon_equipped"
                                     },
                                     "automatic": {}
                                 }
@@ -42285,7 +42285,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "overshields"
+                                        "when": "while_overshields_active"
                                     },
                                     "automatic": {}
                                 }
@@ -42643,7 +42643,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -42654,7 +42654,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -42665,7 +42665,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -42675,10 +42675,10 @@
                                         "value": 3
                                     },
                                     "manual": {
-                                        "when": "slide_attack_hit"
+                                        "when": "on_slide_attack_hit"
                                     },
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -42688,10 +42688,10 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "slide_attack_hit"
+                                        "when": "on_slide_attack_hit"
                                     },
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -42718,7 +42718,7 @@
                                         "value": 0.4
                                     },
                                     "manual": {
-                                        "when": "melee_weapon"
+                                        "when": "while_melee_weapon_equipped"
                                     },
                                     "automatic": {}
                                 }
@@ -42744,7 +42744,7 @@
                                         "value": 0.8
                                     },
                                     "manual": {
-                                        "when": "overshields"
+                                        "when": "while_overshields_active"
                                     },
                                     "automatic": {}
                                 }
@@ -43031,7 +43031,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "overshields"
+                                        "when": "while_overshields_active"
                                     },
                                     "automatic": {}
                                 }
@@ -43056,7 +43056,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty_magazine"
+                                        "when": "on_reload_from_empty"
                                     },
                                     "automatic": {}
                                 }
@@ -43100,7 +43100,7 @@
                                         "when": "on_headshot"
                                     },
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ],
@@ -43113,7 +43113,7 @@
                                         "when": "on_headshot"
                                     },
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -43203,7 +43203,7 @@
                                 {
                                     "properties": {
                                         "value": 0.4,
-                                        "family": "status"
+                                        "family": "unique_status"
                                     },
                                     "manual": {},
                                     "automatic": {
@@ -43573,7 +43573,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "overshields"
+                                        "when": "while_overshields_active"
                                     },
                                     "automatic": {}
                                 }
@@ -43718,7 +43718,7 @@
                                 {
                                     "properties": {
                                         "value": 0.4,
-                                        "family": "status"
+                                        "family": "unique_status"
                                     },
                                     "manual": {},
                                     "automatic": {
@@ -44026,7 +44026,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -44037,7 +44037,7 @@
                                         "value": 0.4
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -44085,7 +44085,7 @@
                                         "stacks": 3
                                     },
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -44701,7 +44701,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -44712,7 +44712,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -44723,7 +44723,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -45191,7 +45191,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -45202,7 +45202,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -45213,7 +45213,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -45240,7 +45240,7 @@
                                         "value": 0.8
                                     },
                                     "manual": {
-                                        "when": "overshields"
+                                        "when": "while_overshields_active"
                                     },
                                     "automatic": {}
                                 }
@@ -47311,7 +47311,7 @@
                                         "value": 0.25
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -47385,7 +47385,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -47910,7 +47910,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -47921,7 +47921,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -47932,7 +47932,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -48483,7 +48483,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -48494,7 +48494,7 @@
                                         "value": 0.5
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -48550,7 +48550,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -48591,7 +48591,7 @@
                                         "when": "on_punch_through_hit"
                                     },
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -49312,7 +49312,7 @@
                                 {
                                     "properties": {
                                         "value": 0.3,
-                                        "family": "status"
+                                        "family": "unique_status"
                                     },
                                     "manual": {},
                                     "automatic": {
@@ -49349,7 +49349,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -50015,7 +50015,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -50233,7 +50233,7 @@
                                         "value": 0.4
                                     },
                                     "manual": {
-                                        "when": "below_half_health"
+                                        "when": "target_health_below_50_percent"
                                     },
                                     "automatic": {}
                                 }
@@ -50324,7 +50324,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -51007,7 +51007,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -51018,7 +51018,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -51029,7 +51029,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -51056,7 +51056,7 @@
                                         "value": 0.8
                                     },
                                     "manual": {
-                                        "when": "overshields"
+                                        "when": "while_overshields_active"
                                     },
                                     "automatic": {}
                                 }
@@ -51453,7 +51453,7 @@
                                 {
                                     "properties": {
                                         "value": 0.4,
-                                        "family": "status"
+                                        "family": "unique_status"
                                     },
                                     "manual": {},
                                     "automatic": {
@@ -51765,7 +51765,7 @@
                                         "value": 10
                                     },
                                     "manual": {
-                                        "when": "hate_and_despair",
+                                        "when": "while_hate_and_despair_equipped",
                                         "stacks": 5
                                     },
                                     "automatic": {}
@@ -51987,7 +51987,7 @@
                                 {
                                     "properties": {
                                         "value": 0.4,
-                                        "family": "status"
+                                        "family": "unique_status"
                                     },
                                     "manual": {},
                                     "automatic": {
@@ -52017,7 +52017,7 @@
                                         "family": "multishot_ammo"
                                     },
                                     "manual": {
-                                        "when": "dread_and_hate"
+                                        "when": "while_dread_and_hate_equipped"
                                     },
                                     "automatic": {
                                         "with": "effective_multishot"
@@ -52030,7 +52030,7 @@
                                         "value": 0.3
                                     },
                                     "manual": {
-                                        "when": "dread_and_hate"
+                                        "when": "while_dread_and_hate_equipped"
                                     },
                                     "automatic": {}
                                 }
@@ -52442,7 +52442,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -52453,7 +52453,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -52464,7 +52464,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -52491,7 +52491,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "melee_weapon"
+                                        "when": "while_melee_weapon_equipped"
                                     },
                                     "automatic": {}
                                 }
@@ -52517,7 +52517,7 @@
                                         "value": 30
                                     },
                                     "manual": {
-                                        "when": "dread_and_despair"
+                                        "when": "while_dread_and_despair_equipped"
                                     },
                                     "automatic": {}
                                 }
@@ -53184,7 +53184,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -53440,7 +53440,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -54255,7 +54255,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -54503,7 +54503,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -54604,7 +54604,7 @@
                                 {
                                     "properties": {
                                         "value": 0.4,
-                                        "family": "status"
+                                        "family": "unique_status"
                                     },
                                     "manual": {},
                                     "automatic": {
@@ -55120,7 +55120,7 @@
                                 {
                                     "properties": {
                                         "value": 0.4,
-                                        "family": "status"
+                                        "family": "unique_status"
                                     },
                                     "manual": {},
                                     "automatic": {
@@ -55886,7 +55886,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -56197,7 +56197,7 @@
                                         "value": 40
                                     },
                                     "manual": {
-                                        "when": "no_primary"
+                                        "when": "while_no_primary_weapon_equipped"
                                     },
                                     "automatic": {}
                                 }
@@ -56209,10 +56209,10 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "no_primary"
+                                        "when": "while_no_primary_weapon_equipped"
                                     },
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -56266,7 +56266,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -56354,7 +56354,7 @@
                                         "when": "on_headshot"
                                     },
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -56656,7 +56656,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -56667,7 +56667,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -56678,7 +56678,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -61435,7 +61435,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -61446,7 +61446,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -61457,7 +61457,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -61467,11 +61467,11 @@
                                         "value": 0.1
                                     },
                                     "manual": {
-                                        "when": "heavy_attack_kill",
+                                        "when": "on_heavy_attack_kill",
                                         "stacks": 30
                                     },
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -61502,7 +61502,7 @@
                                         "value": 0.2
                                     },
                                     "manual": {
-                                        "when": "on_puncture_status_effect",
+                                        "when": "on_puncture_status_proc",
                                         "stacks": 5
                                     },
                                     "automatic": {}
@@ -61827,7 +61827,7 @@
                                         "mode": "flat"
                                     },
                                     "manual": {
-                                        "when": "last_shot"
+                                        "when": "on_magazine_last_shot"
                                     },
                                     "automatic": {}
                                 }
@@ -61904,7 +61904,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -62427,7 +62427,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "overshields"
+                                        "when": "while_overshields_active"
                                     },
                                     "automatic": {}
                                 }
@@ -62452,7 +62452,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty_magazine"
+                                        "when": "on_reload_from_empty"
                                     },
                                     "automatic": {}
                                 }
@@ -62496,7 +62496,7 @@
                                         "when": "on_headshot"
                                     },
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ],
@@ -62509,7 +62509,7 @@
                                         "when": "on_headshot"
                                     },
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -62599,7 +62599,7 @@
                                 {
                                     "properties": {
                                         "value": 0.4,
-                                        "family": "status"
+                                        "family": "unique_status"
                                     },
                                     "manual": {},
                                     "automatic": {
@@ -62713,7 +62713,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -62724,7 +62724,7 @@
                                         "value": 0.5
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -63076,7 +63076,7 @@
                                         "value": 40
                                     },
                                     "manual": {
-                                        "when": "no_primary"
+                                        "when": "while_no_primary_weapon_equipped"
                                     },
                                     "automatic": {}
                                 }
@@ -63088,10 +63088,10 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "no_primary"
+                                        "when": "while_no_primary_weapon_equipped"
                                     },
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -63145,7 +63145,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -63233,7 +63233,7 @@
                                         "when": "on_headshot"
                                     },
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -63378,7 +63378,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -64439,7 +64439,7 @@
                                 {
                                     "properties": {
                                         "value": 0.3,
-                                        "family": "status"
+                                        "family": "unique_status"
                                     },
                                     "manual": {},
                                     "automatic": {
@@ -64476,7 +64476,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -65039,7 +65039,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -65050,7 +65050,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -65374,7 +65374,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -65390,7 +65390,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -65450,11 +65450,11 @@
                                 {
                                     "properties": {
                                         "value": 20,
-                                        "family": "non_crit"
+                                        "family": "non_critical_hit"
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "on": "non_crit",
+                                        "on": "non_critical_hit",
                                         "chance": 0.5
                                     }
                                 }
@@ -65473,7 +65473,7 @@
                                         "when": "on_headshot"
                                     },
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -65488,7 +65488,7 @@
                                         "value": 4
                                     },
                                     "manual": {
-                                        "when": "on_hit_that_is_neither_critical_nor_applies_a_status_effect",
+                                        "when": "on_non_critical_non_status_hit",
                                         "stacks": 3
                                     },
                                     "automatic": {}
@@ -65657,7 +65657,7 @@
                                         "value": 0.1
                                     },
                                     "manual": {
-                                        "when": "activation",
+                                        "when": "on_shell_reloaded",
                                         "stacks": 99
                                     },
                                     "automatic": {}
@@ -65740,11 +65740,11 @@
                                 {
                                     "properties": {
                                         "value": 20,
-                                        "family": "non_crit"
+                                        "family": "non_critical_hit"
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "on": "non_crit",
+                                        "on": "non_critical_hit",
                                         "chance": 0.5
                                     }
                                 }
@@ -65901,7 +65901,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -65935,7 +65935,7 @@
                                         "when": "on_headshot_kill"
                                     },
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -66016,11 +66016,11 @@
                                 {
                                     "properties": {
                                         "value": 20,
-                                        "family": "non_crit"
+                                        "family": "non_critical_hit"
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "on": "non_crit",
+                                        "on": "non_critical_hit",
                                         "chance": 0.5
                                     }
                                 }
@@ -66306,7 +66306,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -66317,7 +66317,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -66708,7 +66708,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "normal"
+                                        "when": "normal_form"
                                     }
                                 }
                             ]
@@ -66809,7 +66809,7 @@
                                 {
                                     "properties": {
                                         "value": 0.4,
-                                        "family": "status"
+                                        "family": "unique_status"
                                     },
                                     "manual": {},
                                     "automatic": {
@@ -69344,7 +69344,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -69355,7 +69355,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -69366,7 +69366,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -69377,7 +69377,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -69388,7 +69388,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -69448,7 +69448,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "melee_weapon"
+                                        "when": "while_melee_weapon_equipped"
                                     },
                                     "automatic": {}
                                 }
@@ -73484,7 +73484,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ],
@@ -73495,7 +73495,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "when": "incarnon"
+                                        "when": "incarnon_form"
                                     }
                                 }
                             ]
@@ -73512,7 +73512,7 @@
                                         "value": 0.1
                                     },
                                     "manual": {
-                                        "when": "on_weapon_status_effect",
+                                        "when": "on_weapon_status_proc",
                                         "stacks": 20
                                     },
                                     "automatic": {}
@@ -73777,7 +73777,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "channeled_ability"
+                                        "when": "while_channeling_ability"
                                     },
                                     "automatic": {}
                                 }
@@ -78080,7 +78080,7 @@
                             "value": 0.35
                         },
                         "manual": {
-                            "when": "kill",
+                            "when": "on_kill",
                             "stacks": 2
                         },
                         "automatic": {}
@@ -78136,7 +78136,7 @@
                             "value": 1.5
                         },
                         "manual": {
-                            "when": "weak_point_kill"
+                            "when": "on_weakpoint_kill"
                         },
                         "automatic": {}
                     }
@@ -78147,7 +78147,7 @@
                             "value": 1.5
                         },
                         "manual": {
-                            "when": "weak_point_kill"
+                            "when": "on_weakpoint_kill"
                         },
                         "automatic": {}
                     }
@@ -78158,7 +78158,7 @@
                             "value": 1.5
                         },
                         "manual": {
-                            "when": "weak_point_kill"
+                            "when": "on_weakpoint_kill"
                         },
                         "automatic": {}
                     }
@@ -78728,7 +78728,7 @@
                             "value": 1.2
                         },
                         "manual": {
-                            "when": "on_damaging_enemies_with_heat",
+                            "when": "on_heat_damage",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -78962,11 +78962,11 @@
                     {
                         "properties": {
                             "value": 0.4,
-                            "family": "first_shot"
+                            "family": "magazine_first_shot"
                         },
                         "manual": {},
                         "automatic": {
-                            "on": "first_shot"
+                            "on": "magazine_first_shot"
                         }
                     }
                 ]
@@ -79302,7 +79302,7 @@
                             "value": 1.2
                         },
                         "manual": {
-                            "when": "on_5_pellet_headshot",
+                            "when": "on_headshot_with_5_pellets",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -79535,7 +79535,7 @@
                     {
                         "properties": {
                             "value": 0.8,
-                            "family": "status"
+                            "family": "unique_status"
                         },
                         "manual": {},
                         "automatic": {
@@ -79991,7 +79991,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "when": "bow"
+                            "when": "bow_weapon"
                         }
                     }
                 ]
@@ -80201,7 +80201,7 @@
                     {
                         "properties": {
                             "value": 0.6,
-                            "family": "status"
+                            "family": "unique_status"
                         },
                         "manual": {},
                         "automatic": {
@@ -80212,11 +80212,11 @@
                     {
                         "properties": {
                             "value": 2.4,
-                            "family": "non_crit"
+                            "family": "non_critical_hit"
                         },
                         "manual": {},
                         "automatic": {
-                            "on": "non_crit"
+                            "on": "non_critical_hit"
                         }
                     }
                 ]
@@ -80314,7 +80314,7 @@
                     {
                         "properties": {
                             "value": 4,
-                            "family": "bonus"
+                            "family": "weakpoint"
                         },
                         "manual": {
                             "when": "on_dodge",
@@ -80651,7 +80651,7 @@
                             "value": 0.01
                         },
                         "manual": {
-                            "when": "n_a",
+                            "when": "warframe_health",
                             "stacks": 360
                         },
                         "automatic": {}
@@ -81075,7 +81075,7 @@
                             "value": 6
                         },
                         "manual": {
-                            "when": "on_headshot_kill_on_eximus",
+                            "when": "on_eximus_headshot_kill",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -81453,7 +81453,7 @@
                             "value": 1
                         },
                         "manual": {
-                            "when": "on_4_hits_within_0_05s",
+                            "when": "on_4_hits_within_0.05_seconds",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -82060,7 +82060,7 @@
                     {
                         "properties": {
                             "value": 0.4,
-                            "family": "status"
+                            "family": "unique_status"
                         },
                         "manual": {
                             "when": "on_kill",
@@ -82330,7 +82330,7 @@
                     {
                         "properties": {
                             "value": 0.4,
-                            "family": "status"
+                            "family": "unique_status"
                         },
                         "manual": {
                             "when": "on_kill",
@@ -82410,7 +82410,7 @@
                     {
                         "properties": {
                             "value": 0.4,
-                            "family": "status"
+                            "family": "unique_status"
                         },
                         "manual": {
                             "when": "on_kill",
@@ -83041,7 +83041,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "on": "impact_proc",
+                            "on": "impact_status_proc",
                             "chance": 0.35
                         }
                     },
@@ -83051,7 +83051,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "on": "impact_proc",
+                            "on": "impact_status_proc",
                             "when": "fire_rate_below_2.5",
                             "chance": 0.35
                         }
@@ -83226,7 +83226,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "on": "crit",
+                            "on": "critical_hit",
                             "chance": 0.3
                         }
                     }
@@ -83290,7 +83290,7 @@
                             "value": 0.6
                         },
                         "manual": {
-                            "when": "downed_enemy"
+                            "when": "target_downed"
                         },
                         "automatic": {}
                     }
@@ -83704,7 +83704,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "on": "impact_proc",
+                            "on": "impact_status_proc",
                             "chance": 0.35
                         }
                     },
@@ -83714,7 +83714,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "on": "impact_proc",
+                            "on": "impact_status_proc",
                             "when": "fire_rate_below_2.5",
                             "chance": 0.35
                         }
@@ -84108,7 +84108,7 @@
                             "value": 3
                         },
                         "manual": {
-                            "when": "weak_point_hit"
+                            "when": "on_weakpoint_hit"
                         },
                         "automatic": {}
                     }
@@ -84119,7 +84119,7 @@
                             "value": 3
                         },
                         "manual": {
-                            "when": "weak_point_hit"
+                            "when": "on_weakpoint_hit"
                         },
                         "automatic": {}
                     }
@@ -85589,7 +85589,7 @@
                             "value": 0.01
                         },
                         "manual": {
-                            "when": "health_drain",
+                            "when": "health_drained",
                             "stacks": 360
                         },
                         "automatic": {}
@@ -85818,7 +85818,7 @@
                             "value": 0.6
                         },
                         "manual": {
-                            "when": "on_weak_point_hit",
+                            "when": "on_weakpoint_hit",
                             "stacks": 10
                         },
                         "automatic": {}
@@ -86022,7 +86022,7 @@
                     {
                         "properties": {
                             "value": 3.5,
-                            "family": "bonus"
+                            "family": "weakpoint"
                         },
                         "manual": {},
                         "automatic": {}
@@ -86305,7 +86305,7 @@
                             "value": 1
                         },
                         "manual": {
-                            "when": "consecutive_throw",
+                            "when": "on_consecutive_throw",
                             "stacks": 3
                         },
                         "automatic": {}
@@ -86472,7 +86472,7 @@
                     {
                         "properties": {
                             "value": 3.5,
-                            "family": "bonus"
+                            "family": "weakpoint"
                         },
                         "manual": {},
                         "automatic": {}
@@ -86676,11 +86676,11 @@
                     {
                         "properties": {
                             "value": 1,
-                            "family": "first_shot"
+                            "family": "magazine_first_shot"
                         },
                         "manual": {},
                         "automatic": {
-                            "on": "first_shot"
+                            "on": "magazine_first_shot"
                         }
                     }
                 ]
@@ -87626,7 +87626,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "when": "bow"
+                            "when": "bow_weapon"
                         }
                     }
                 ],
@@ -87918,7 +87918,7 @@
                             "value": 1.2
                         },
                         "manual": {
-                            "when": "wall_latch"
+                            "when": "while_wall_latching"
                         },
                         "automatic": {}
                     }
@@ -87929,7 +87929,7 @@
                             "value": 1.2
                         },
                         "manual": {
-                            "when": "wall_latch"
+                            "when": "while_wall_latching"
                         },
                         "automatic": {}
                     }
@@ -87955,7 +87955,7 @@
                             "value": 0.5
                         },
                         "manual": {
-                            "when": "wall_latch"
+                            "when": "while_wall_latching"
                         },
                         "automatic": {}
                     }
@@ -87966,7 +87966,7 @@
                             "value": 1
                         },
                         "manual": {
-                            "when": "wall_latch"
+                            "when": "while_wall_latching"
                         },
                         "automatic": {}
                     }
@@ -88211,7 +88211,7 @@
                             "value": 3
                         },
                         "manual": {
-                            "when": "no_enemies_within_10m",
+                            "when": "no_enemies_within_10_meters",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -89409,7 +89409,7 @@
                             "value": 0.6
                         },
                         "manual": {
-                            "when": "each_tendril_active",
+                            "when": "active_tendrils",
                             "stacks": 4
                         },
                         "automatic": {}
@@ -90007,7 +90007,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "when": "bow"
+                            "when": "bow_weapon"
                         }
                     }
                 ],
@@ -90377,7 +90377,7 @@
                             "value": 3.3
                         },
                         "manual": {
-                            "when": "invisible"
+                            "when": "while_invisible"
                         },
                         "automatic": {}
                     }
@@ -90418,7 +90418,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "when": "bow"
+                            "when": "bow_weapon"
                         }
                     }
                 ]
@@ -90475,7 +90475,7 @@
                             "value": 1
                         },
                         "manual": {
-                            "when": "hit"
+                            "when": "on_hit"
                         },
                         "automatic": {}
                     }
@@ -90591,7 +90591,7 @@
                             "value": 0.4002
                         },
                         "manual": {
-                            "when": "target_15m",
+                            "when": "target_beyond_15_meters",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -90934,7 +90934,7 @@
                             "value": 0.3
                         },
                         "manual": {
-                            "when": "on_2_hits_within_0_2s",
+                            "when": "on_2_hits_within_0.2_seconds",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -91089,15 +91089,15 @@
                     {
                         "properties": {
                             "value": 2,
-                            "family": "last_shot"
+                            "family": "magazine_last_shot"
                         },
                         "manual": {},
                         "automatic": {
-                            "on": "last_shot",
+                            "on": "magazine_last_shot",
                             "when": [
-                                "not_continuous",
-                                "not_incarnon",
-                                "magazine_5_plus"
+                                "non_continuous_fire",
+                                "normal_form",
+                                "magazine_at_least_5"
                             ]
                         }
                     }
@@ -91601,7 +91601,7 @@
                             "value": 0.4
                         },
                         "manual": {
-                            "when": "on_2_hits_within_0_02s",
+                            "when": "on_2_hits_within_0.02_seconds",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -91902,7 +91902,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "on": "crit",
+                            "on": "critical_hit",
                             "chance": 0.05
                         }
                     }
@@ -91936,7 +91936,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "when": "bow"
+                            "when": "bow_weapon"
                         }
                     }
                 ],
@@ -91948,7 +91948,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "on": "crit",
+                            "on": "critical_hit",
                             "chance": 0.05
                         }
                     }
@@ -91985,7 +91985,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "on": "crit",
+                            "on": "critical_hit",
                             "chance": 0.05
                         }
                     }
@@ -92013,7 +92013,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "on": "crit",
+                            "on": "critical_hit",
                             "chance": 0.05
                         }
                     }
@@ -92049,7 +92049,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "when": "bow"
+                            "when": "bow_weapon"
                         }
                     }
                 ],
@@ -92116,7 +92116,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "when": "bow"
+                            "when": "bow_weapon"
                         }
                     }
                 ]
@@ -99360,7 +99360,7 @@
                             "value": 3
                         },
                         "manual": {
-                            "when": "roll"
+                            "when": "on_roll"
                         },
                         "automatic": {}
                     }
@@ -99386,7 +99386,7 @@
                             "value": 750
                         },
                         "manual": {
-                            "when": "on_proc"
+                            "when": "on_status_proc"
                         },
                         "automatic": {}
                     }
@@ -99413,7 +99413,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "when": "heat_proc",
+                            "when": "heat_status_proc",
                             "stacks": 40,
                             "for": 10
                         }
@@ -99440,7 +99440,7 @@
                             "value": 3
                         },
                         "manual": {
-                            "when": "overshields_active",
+                            "when": "while_overshields_active",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -99468,7 +99468,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "when": "electricity_proc",
+                            "when": "electricity_status_proc",
                             "stacks": 40,
                             "for": 12
                         }
@@ -99481,7 +99481,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "when": "electricity_proc",
+                            "when": "electricity_status_proc",
                             "stacks": 40,
                             "for": 12
                         }
@@ -99675,7 +99675,7 @@
                             "value": 6
                         },
                         "manual": {
-                            "when": "on_proc"
+                            "when": "on_status_proc"
                         },
                         "automatic": {}
                     }
@@ -99715,7 +99715,7 @@
                             "value": 1.5
                         },
                         "manual": {
-                            "when": "shield_break"
+                            "when": "on_shield_break"
                         },
                         "automatic": {}
                     }
@@ -99799,7 +99799,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "on": "near_yellow_crit"
+                            "on": "near_yellow_critical_hit"
                         }
                     }
                 ]
@@ -99824,7 +99824,7 @@
                             "value": 0.6
                         },
                         "manual": {
-                            "when": "ability_cast",
+                            "when": "on_ability_cast",
                             "stacks": 4
                         },
                         "automatic": {}
@@ -99964,7 +99964,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "when": "toxin_proc",
+                            "when": "toxin_status_proc",
                             "stacks": 40,
                             "for": 12
                         }
@@ -99977,7 +99977,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "when": "toxin_proc",
+                            "when": "toxin_status_proc",
                             "stacks": 40,
                             "for": 12
                         }
@@ -100004,7 +100004,7 @@
                             "value": 0.06
                         },
                         "manual": {
-                            "when": "activation",
+                            "when": "armor_above_1000",
                             "stacks": 500
                         },
                         "automatic": {}
@@ -100125,7 +100125,7 @@
                             "value": 1
                         },
                         "manual": {
-                            "when": "on_combined_status_at_10_stacks"
+                            "when": "on_combined_status_reaching_10_stacks"
                         },
                         "automatic": {}
                     }
@@ -100194,7 +100194,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "when": "cold_proc",
+                            "when": "cold_status_proc",
                             "stacks": 40,
                             "for": 12
                         }
@@ -100207,7 +100207,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "when": "cold_proc",
+                            "when": "cold_status_proc",
                             "stacks": 40,
                             "for": 12
                         }
@@ -100287,7 +100287,7 @@
                             "value": 0.06
                         },
                         "manual": {
-                            "when": "activation",
+                            "when": "energy_at_least_90_percent",
                             "stacks": 350
                         },
                         "automatic": {}
@@ -100466,7 +100466,7 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "on": "any_proc",
+                            "on": "any_status_proc",
                             "chance": 0.24
                         }
                     }
@@ -100494,8 +100494,8 @@
                         },
                         "manual": {},
                         "automatic": {
-                            "when": "crit_tier_2_plus",
-                            "reset": "at_limit",
+                            "when": "critical_tier_at_least_2",
+                            "reset": "at_stack_limit",
                             "per": 0.1
                         }
                     }
@@ -100614,7 +100614,7 @@
                             "value": 0.2
                         },
                         "manual": {
-                            "when": "combo_consumed",
+                            "when": "on_combo_consumed",
                             "stacks": 12,
                             "for": 30
                         },
@@ -100627,7 +100627,7 @@
                             "value": 0.2
                         },
                         "manual": {
-                            "when": "combo_consumed",
+                            "when": "on_combo_consumed",
                             "stacks": 12,
                             "for": 30
                         },
@@ -100655,7 +100655,7 @@
                             "value": 0.45
                         },
                         "manual": {
-                            "when": "cold_proc",
+                            "when": "on_cold_status_proc",
                             "stacks": 10
                         },
                         "automatic": {}
