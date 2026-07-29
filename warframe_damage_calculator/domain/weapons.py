@@ -94,11 +94,11 @@ class Weapon:
             for perk in tiers.values():
                 for effects in perk.get("stats", {}).values():
                     for effect in effects:
-                        manual = {token.split(":", 1)[0]: token.split(":", 1)[1] for token in effect.get("manual", [])}
-                        if "WHEN" not in manual: continue
-                        condition = manual["WHEN"].lower()
-                        maximum = manual.get("STACKS")
-                        value = int(maximum) if maximum not in (None, "INF") else True
+                        manual = effect.get("manual", {})
+                        if "when" not in manual: continue
+                        condition = str(manual["when"])
+                        maximum = manual.get("stacks")
+                        value = int(maximum) if maximum not in (None, "inf") else True
                         if isinstance(value, int) and not isinstance(value, bool): condition_defaults[condition] = max(int(condition_defaults.get(condition, 0)), value)
                         else: condition_defaults.setdefault(condition, value)
         conditions = set(condition_defaults)

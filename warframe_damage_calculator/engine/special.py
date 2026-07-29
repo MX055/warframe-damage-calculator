@@ -2,23 +2,31 @@ from __future__ import annotations
 
 from math import inf
 
+from ..domain.effects import Scalar
 from ..domain.upgrades import ResolvedEffect
 
 
-def token_value(effect: ResolvedEffect, op: str, default: str | None = None) -> str | None:
-    return next((token.value for token in effect.automatic if token.op == op), default)
+def automatic_values(effect: ResolvedEffect, key: str) -> tuple[Scalar, ...]:
+    value = effect.automatic.get(key.lower())
+    if value is None: return ()
+    return tuple(value) if isinstance(value, list) else (value,)
+
+
+def automatic_value(effect: ResolvedEffect, key: str, default: Scalar | None = None) -> Scalar | None:
+    values = automatic_values(effect, key)
+    return values[0] if values else default
 
 
 def effects_for(effects: list[ResolvedEffect], *, stat: str, event: str | None = None) -> list[ResolvedEffect]:
-    return [effect for effect in effects if effect.stat == stat and (event is None or token_value(effect, "ON") == event)]
+    return [effect for effect in effects if effect.stat == stat and (event is None or automatic_value(effect, "on") == event)]
 
 
 def enervate_parameters(effects: list[ResolvedEffect]) -> tuple[float, float]:
     per_stack = 0.0
     charges = 0.0
     for effect in effects_for(effects, stat="crit_reset_charges"):
-        if token_value(effect, "WHEN") != "CRIT_TIER_2_PLUS" or token_value(effect, "RESET") != "AT_LIMIT": continue
-        per_stack += float(token_value(effect, "PER", "0.02"))
+        if automatic_value(effect, "when") != "crit_tier_2_plus" or automatic_value(effect, "reset") != "at_limit": continue
+        per_stack += float(automatic_value(effect, "per", 0.02))
         charges = max(charges, float(effect.value))
     return per_stack, charges
 

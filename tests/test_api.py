@@ -7,7 +7,7 @@ from warframe_damage_calculator import Attack, AttackStats, Build, Compatibility
 class ApiTests(unittest.TestCase):
     def test_direct_objects_calculate_without_data_wrappers(self):
         weapon = Primary(name="Example", subtype="rifle", attacks=[Attack(name="shot", stats=AttackStats(damage=Dist(impact=100), crit_chance=0.2, crit_damage=2, fire_rate=2))], magazine_size=10, reload_time=1)
-        upgrade = Upgrade(name="Damage", stats=UpgradeStats(damage_bonus=Effect(properties=["VALUE:1"])))
+        upgrade = Upgrade(name="Damage", stats=UpgradeStats(damage_bonus=Effect(properties={"value": 1})))
         weapon.configure(Build(upgrade))
         self.assertFalse(hasattr(weapon, "data"))
         self.assertFalse(hasattr(upgrade, "data"))
@@ -29,7 +29,7 @@ class ApiTests(unittest.TestCase):
         self.assertGreater(weapon.results.main.final.total_dps, 0)
 
     def test_incompatible_effects_warn_but_apply(self):
-        upgrade = Upgrade(name="Rifle", compatibility=Compatibility(subtypes=["rifle"]), stats=UpgradeStats(damage_bonus=Effect(properties=["VALUE:1"])))
+        upgrade = Upgrade(name="Rifle", compatibility=Compatibility(subtypes=["rifle"]), stats=UpgradeStats(damage_bonus=Effect(properties={"value": 1})))
         weapon = arsenal.weapon.get("Lato")
         baseline = weapon.results.main.effective.damage.total
         with warnings.catch_warnings(record=True) as caught:

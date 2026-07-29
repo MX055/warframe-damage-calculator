@@ -14,14 +14,13 @@ def _effects(stats: Any, path: str) -> None:
             if set(effect) != {"properties", "manual", "automatic"}: raise ValueError(f"{location}: invalid effect channels")
             try: Effect.from_record(effect)
             except (TypeError, ValueError) as error: raise ValueError(f"{location}: {error}") from error
-            value = next(source.split(":", 1)[1].lstrip() for source in effect["properties"] if source.upper().startswith("VALUE:"))
-            if value.startswith(("{", "[")): raise ValueError(f"{location}: VALUE must be scalar")
+            if isinstance(effect["properties"].get("value"), (dict, list)): raise ValueError(f"{location}: value must be scalar")
 
 
 def validate_database(database: dict[str, Any]) -> None:
     allowed_root = {"schema_version", "weapons", "upgrades", "enemies", "riven_stats"}
     if set(database) != allowed_root: raise ValueError(f"database: invalid fields {sorted(set(database) - allowed_root)}")
-    if database.get("schema_version") != 5: raise ValueError("schema version 5 is required")
+    if database.get("schema_version") != 6: raise ValueError("schema version 6 is required")
     for section in ("weapons", "upgrades", "enemies", "riven_stats"):
         if not isinstance(database.get(section), dict): raise ValueError(f"{section}: expected an object")
     for name, weapon in database["weapons"].items():

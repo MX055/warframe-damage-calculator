@@ -44,23 +44,23 @@ print(damage.combine_elements())  # Dist(impact=100.0, viral=180.0)
 
 ## Effects
 
-Effects contain exactly three token channels:
+Effects contain exactly three dictionary channels:
 
 ```python
 from warframe_damage_calculator import Effect
 
 effect = Effect(
-    properties=["VALUE:0.4", "FAMILY:STATUS"],
-    manual=["WHEN:ON_KILL", "STACKS:2", "FOR:20"],
-    automatic=["WITH:UNIQUE_STATUS_COUNT", "STACKS:INF"],
+    properties={"value": 0.4, "family": "status"},
+    manual={"when": "on_kill", "stacks": 2, "for": 20},
+    automatic={"with": "unique_status_count", "stacks": "inf"},
 )
 ```
 
-`properties` owns scalar value, mode, family, rank scaling, and caps. `manual` owns conditions supplied by the caller. `automatic` owns combat state calculated by the engine. The compiler enforces separate opcode vocabularies for the two behavior channels. Durations and stack limits are unitless token operands (`FOR:20`, `STACKS:2`).
+`properties` owns scalar value, mode, family, rank scaling, and caps. `manual` owns conditions supplied by the caller. `automatic` owns combat state calculated by the engine. Values use their native JSON/Python types, so stack counts and durations are numbers rather than encoded strings. Fields that can contain several values, such as `exclude`, use a list.
 
 Runtime state retains the value supplied by the caller. Each effect applies its own stack cap during resolution.
 
-Compatibility metadata only produces warnings. Effects still resolve; `SCOPE` and `EXCLUDE` automatic tokens define where an effect actually applies.
+Compatibility metadata only produces warnings. Effects still resolve; the `scope` and `exclude` automatic fields define where an effect actually applies.
 
 ## Calculation coverage
 
@@ -74,4 +74,4 @@ Run from this directory:
 python -P -B -m unittest discover -s tests -v
 ```
 
-The suite validates direct construction, token boundaries, repositories, all 656 weapons, all 779 upgrades against primary/secondary/melee engines, all 877 enemies, every selectable evolution and attack, and fixed combat-parity scenarios.
+The suite validates direct construction, effect-channel boundaries, repositories, all 656 weapons, all 779 upgrades against primary/secondary/melee engines, all 877 enemies, every selectable evolution and attack, and fixed combat-parity scenarios.

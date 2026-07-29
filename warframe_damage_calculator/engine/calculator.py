@@ -9,14 +9,14 @@ from ..domain.upgrades import ResolvedEffect, Upgrade, UpgradeStats
 from .aggregation import DAMAGE_TYPES, aggregate, merge
 from .effects import evaluate
 from .formulas import DOT_MULTIPLIERS, clamp, crit_multiplier, family_bonus, family_factor, hit_multiplier, refresh_metrics, true_round
-from .special import average_enervate_bonus, enervate_parameters, token_value
+from .special import automatic_value, automatic_values, average_enervate_bonus, enervate_parameters
 from .status import StatusModel
 from .targets import ZONE_FIELDS, damage_multiplier, damage_total
 
 
 HEAVY_CATEGORIES = frozenset({"heavy", "heavy_slam"})
 SLAM_CATEGORIES = frozenset({"slam", "heavy_slam"})
-POSITION_EVENTS = frozenset({"FIRST_SHOT", "LAST_SHOT"})
+POSITION_EVENTS = frozenset({"first_shot", "last_shot"})
 DEFERRED_STATS = frozenset({"duplicated_hit", "random_proc", "crit_reset_charges"})
 DEFERRED_FAMILIES = frozenset({"chamber", "charge"})
 
@@ -181,7 +181,7 @@ def _resolve_effects(weapon: Any, attack: Any, source: tuple[ResolvedEffect, ...
     for effect in source:
         current = evaluate(effect, weapon=weapon, attack=attack, stats=provisional, status=model, equipped=equipped)
         if current is None: continue
-        event = token_value(current, "ON")
+        event = automatic_value(current, "on")
         if event in POSITION_EVENTS:
             positions.append(current)
         elif current.stat not in DEFERRED_STATS:
@@ -195,14 +195,14 @@ def _forced_procs(attack: Any, effects: Iterable[ResolvedEffect]) -> Dist:
     forced = attack.stats.forced_procs
     for effect in effects:
         if effect.stat != "forced_procs": continue
-        target = token_value(effect, "TARGET")
-        if target is not None: forced += Dist({target.lower(): float(effect.value)})
+        target = automatic_value(effect, "target")
+        if target is not None: forced += Dist({str(target): float(effect.value)})
         elif isinstance(effect.value, dict): forced += Dist(effect.value)
     return forced
 
 
 def _special_value(effects: Iterable[ResolvedEffect], stat: str, event: str | None = None) -> float:
-    return sum(float(effect.value) for effect in effects if effect.stat == stat and (event is None or token_value(effect, "ON") == event))
+    return sum(float(effect.value) for effect in effects if effect.stat == stat and (event is None or automatic_value(effect, "on") == event))
 
 
 def _faction_factor(weapon: Any, total: ResolvedStats) -> float:
@@ -237,9 +237,9 @@ def _dot_value(weapon: Any, result: AttackResult, zone: str, *, multishot: float
     tick_scale = shots if result.attack.delivery == "beam" else 1
     slash_per_proc = slash_factor * damage.total * crit * float(effective.status_damage) * faction ** 2 * tick_scale * slash_target
     hunter_per_proc = slash_factor * damage.total * max(float(effective.crit_damage), crit) * float(effective.status_damage) * faction ** 2 * tick_scale * slash_target
-    hunter = _special_value(source_effects, "slash_proc", "CRIT")
+    hunter = _special_value(source_effects, "slash_proc", "crit")
     hunter_procs = hunter * min(chance, 1)
-    impact_chance = _special_value(source_effects, "slash_proc", "IMPACT_PROC")
+    impact_chance = _special_value(source_effects, "slash_proc", "impact_proc")
     impact_probability = damage.weight("impact") + float(effective.forced_procs.get("impact", 0))
     internal_procs = impact_probability * float(effective.status_chance) * impact_chance
     guaranteed, fractional = divmod(float(effective.status_chance), 1)
@@ -249,7 +249,7 @@ def _dot_value(weapon: Any, result: AttackResult, zone: str, *, multishot: float
     extra = hunter_procs * hunter_per_proc + internal_procs * slash_per_proc - overlap
     value += extra * (1 if result.attack.delivery == "beam" else shots)
     if weapon.type == "secondary":
-        encumber = _special_value(source_effects, "random_proc", "ANY_PROC")
+        encumber = _special_value(source_effects, "random_proc", "any_proc")
         proc_chance = 1 - (1 - encumber * min(float(effective.status_chance), 1)) ** shots
         random_target = sum(factor * float(damage_multiplier(weapon.target, kind, zone=zone, dot=True, weakpoint_bonus=weakpoint_bonus, status_effects=result.status_effects) or 0) for kind, factor in DOT_MULTIPLIERS.items())
         value += proc_chance * damage.total * tick_scale * random_target / 13 * float(effective.status_duration) * crit * float(effective.status_damage) * faction ** 2
@@ -260,14 +260,14 @@ def _position_weights(magazine: float, ammo_cost: float, efficiency: float) -> l
     if ammo_cost <= 0: return [(frozenset(), 1)]
     shots = max(magazine / ammo_cost, 1)
     if shots <= 1: return [(frozenset(POSITION_EVENTS), 1)]
-    if efficiency >= 1: return [(frozenset({"FIRST_SHOT"}), 1)]
+    if efficiency >= 1: return [(frozenset({"first_shot"}), 1)]
     weight = 1 / shots
-    return [(frozenset({"FIRST_SHOT"}), weight), (frozenset({"LAST_SHOT"}), weight), (frozenset(), max(0, 1 - 2 * weight))]
+    return [(frozenset({"first_shot"}), weight), (frozenset({"last_shot"}), weight), (frozenset(), max(0, 1 - 2 * weight))]
 
 
 def _position_effect_applies(effect: ResolvedEffect, attack: Any) -> bool:
-    excluded = {token.value for token in effect.automatic if token.op == "EXCLUDE"}
-    return not (("CONTINUOUS" in excluded and attack.delivery == "beam") or ("INCARNON" in excluded and attack.form == "incarnon"))
+    excluded = {str(value) for value in automatic_values(effect, "exclude")}
+    return not (("continuous" in excluded and attack.delivery == "beam") or ("incarnon" in excluded and attack.form == "incarnon"))
 
 
 def _apply_position_mixture(weapon: Any, result: AttackResult, effects: list[ResolvedEffect]) -> None:
@@ -278,7 +278,7 @@ def _apply_position_mixture(weapon: Any, result: AttackResult, effects: list[Res
     mixed = {fields[index]: 0.0 for fields in ZONE_FIELDS.values() for index in (0, 1)}
     weights = _position_weights(float(effective.magazine_capacity), float(effective.ammo_cost), float(effective.ammo_efficiency))
     for events, weight in weights:
-        active = [effect for effect in effects if token_value(effect, "ON") in events]
+        active = [effect for effect in effects if automatic_value(effect, "on") in events]
         family_bonuses: dict[str, float] = {}
         multishot_bonus = 0.0
         for effect in active:
@@ -295,10 +295,10 @@ def _apply_position_mixture(weapon: Any, result: AttackResult, effects: list[Res
             mixed[fields[0]] += direct * weight
             mixed[fields[1]] += _dot_value(weapon, result, zone, multishot=multishot, damage_factor=damage_factor) * weight
     for field, value in mixed.items(): setattr(average, field, value)
-    first = [effect for effect in effects if token_value(effect, "ON") == "FIRST_SHOT" and effect.stat == "damage_bonus"]
+    first = [effect for effect in effects if automatic_value(effect, "on") == "first_shot" and effect.stat == "damage_bonus"]
     first_factor = 1.0
     for family in {effect.family for effect in first}: first_factor *= 1 + sum(float(effect.value) for effect in first if effect.family == family)
-    first_weight = next((weight for events, weight in weights if "FIRST_SHOT" in events), 0)
+    first_weight = next((weight for events, weight in weights if "first_shot" in events), 0)
     average.first_shot_damage_multiplier = 1 + (first_factor - 1) * first_weight
     refresh_metrics(average)
 
@@ -309,7 +309,7 @@ def _calculate_attack(weapon: Any, attack: Any, build_effects: tuple[ResolvedEff
     all_source = (*build_effects, *evolution_effects)
     initial_build_effects, _ = _resolve_effects(weapon, attack, build_effects, provisional, provisional_model, equipped)
     initial_evolution_effects, _ = _resolve_effects(weapon, attack, evolution_effects, provisional, provisional_model, equipped)
-    stable = lambda effect: not any(token.op == "WHEN" and token.value.endswith("_PROC") for token in effect.automatic)
+    stable = lambda effect: not (isinstance(automatic_value(effect, "when"), str) and str(automatic_value(effect, "when")).endswith("_proc"))
     initial_build = aggregate(effect for effect in initial_build_effects if stable(effect) and effect.stat not in DEFERRED_STATS)
     initial_evolutions = aggregate(effect for effect in initial_evolution_effects if stable(effect) and effect.stat not in DEFERRED_STATS)
     initial_total = _combined(initial_build, initial_evolutions)
@@ -333,8 +333,8 @@ def _calculate_attack(weapon: Any, attack: Any, build_effects: tuple[ResolvedEff
     automatic_model = StatusModel(provisional_model.damage, provisional_model.forced_procs, initial_status, acquisition_attempts, initial_rate, initial_duration, random_acquisition)
     build_resolved, build_positions = _resolve_effects(weapon, attack, build_effects, provisional, automatic_model, equipped)
     evolution_resolved, evolution_positions = _resolve_effects(weapon, attack, evolution_effects, provisional, automatic_model, equipped)
-    build = aggregate(effect for effect in build_resolved if token_value(effect, "ON") not in POSITION_EVENTS and effect.stat not in DEFERRED_STATS and not (effect.stat == "crit_damage" and token_value(effect, "WITH") == "PUNCTURE_STATUS_COUNT"))
-    evolutions = aggregate(effect for effect in evolution_resolved if token_value(effect, "ON") not in POSITION_EVENTS and effect.stat not in DEFERRED_STATS)
+    build = aggregate(effect for effect in build_resolved if automatic_value(effect, "on") not in POSITION_EVENTS and effect.stat not in DEFERRED_STATS and not (effect.stat == "crit_damage" and automatic_value(effect, "with") == "puncture_status_count"))
+    evolutions = aggregate(effect for effect in evolution_resolved if automatic_value(effect, "on") not in POSITION_EVENTS and effect.stat not in DEFERRED_STATS)
     total = _combined(build, evolutions)
     base_damage, original = _base_damage(weapon, attack, evolutions)
     damage = _damage(weapon, attack, base_damage, original, build, evolutions)
@@ -346,10 +346,10 @@ def _calculate_attack(weapon: Any, attack: Any, build_effects: tuple[ResolvedEff
     crit, status = _derived_chances(crit, status, total)
     if weapon.type == "melee" and attack.category == "slide": crit *= max(1 + float(total.proportional.get("slide_crit_chance", 0)), 0)
     crit_damage = _scalar(float(attack.stats.crit_damage), "crit_damage", total, minimum=1)
-    doughty = next((effect for effect in (*build_resolved, *evolution_resolved) if effect.stat == "crit_damage" and token_value(effect, "WITH") == "PUNCTURE_STATUS_COUNT"), None)
+    doughty = next((effect for effect in (*build_resolved, *evolution_resolved) if effect.stat == "crit_damage" and automatic_value(effect, "with") == "puncture_status_count"), None)
     doughty_bonus = 0.0
     if doughty is not None:
-        per = float(token_value(doughty, "PER", "0.1") or 0.1)
+        per = float(automatic_value(doughty, "per", 0.1) or 0.1)
         doughty_bonus = true_round(min(damage.weight("puncture") * status / per * float(doughty.value), 50), 1)
         crit_damage += doughty_bonus
     weakpoint_common = float(total.proportional.get("weakpoint_crit_chance", 0))
@@ -377,7 +377,7 @@ def _calculate_attack(weapon: Any, attack: Any, build_effects: tuple[ResolvedEff
     status_effects = status_model.non_damage_effects()
     faction = _faction_factor(weapon, total)
     non_crit_damage = family_bonus(total, "non_crit", "damage_bonus") + float(total.proportional.get("non_crit_bonus_damage", 0))
-    non_crit_chance = max((float(token_value(effect, "CHANCE", "0") or 0) for effect in (*build_resolved, *evolution_resolved) if effect.family == "non_crit"), default=0)
+    non_crit_chance = max((float(automatic_value(effect, "chance", 0) or 0) for effect in (*build_resolved, *evolution_resolved) if effect.family == "non_crit"), default=0)
     weakpoint_bonus = max(float(total.proportional.get("weakpoint_damage", 0)), 0)
     effective = Stats(damage=damage, forced_procs=forced, crit_chance=crit, weakpoint_crit_chance=weakpoint_crit, crit_damage=crit_damage, status_chance=status, status_duration=duration, status_damage=max(1 + float(total.proportional.get("status_damage", 0)), 1), multishot=multishot, fire_rate=instant_rate, sustained_rate=fire_rate, faction_damage=faction, non_crit_bonus_damage=non_crit_damage, non_crit_bonus_chance=non_crit_chance, weakpoint_damage_bonus=weakpoint_bonus, special_effects=tuple((*build_resolved, *evolution_resolved)), **category_stats)
     for stat in ("projectile_speed", "range", "punch_through", "accuracy", "recoil", "zoom", "ammo_maximum"):

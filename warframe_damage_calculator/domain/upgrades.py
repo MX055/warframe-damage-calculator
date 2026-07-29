@@ -5,7 +5,7 @@ from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import Any, Self
 
-from .effects import Effect, EffectMode, Scalar, Token
+from .effects import ChannelValue, Effect, EffectChannel, EffectMode, Scalar
 
 
 class Runtime:
@@ -65,13 +65,13 @@ class UpgradeStats(Mapping[str, tuple[Effect, ...]]):
 
     @property
     def manual_fields(self) -> frozenset[str]:
-        return frozenset(token.value.lower() for effects in self.values() for effect in effects for token in effect.program.manual if token.op == "WHEN")
+        return frozenset(str(condition) for effects in self.values() for effect in effects if (condition := effect.program.manual_value("when")) is not None)
 
     def copy(self) -> UpgradeStats:
         return UpgradeStats(**{stat: tuple(deepcopy(effect) for effect in effects) for stat, effects in self.items()})
 
     @classmethod
-    def from_record(cls, record: Mapping[str, list[dict[str, list[str]]]]) -> UpgradeStats:
+    def from_record(cls, record: Mapping[str, list[dict[str, dict[str, ChannelValue]]]]) -> UpgradeStats:
         return cls(**{stat: tuple(Effect.from_record(effect) for effect in effects) for stat, effects in record.items()})
 
 
@@ -100,7 +100,7 @@ class ResolvedEffect:
     mode: EffectMode
     family: str
     maximum: float | None
-    automatic: tuple[Token, ...]
+    automatic: EffectChannel
 
 
 class Upgrade:
@@ -118,11 +118,11 @@ class Upgrade:
         defaults: dict[str, Any] = {"rank": self.max_rank}
         for effects in self.stats.values():
             for effect in effects:
-                condition = effect.program.manual_value("WHEN")
+                condition = effect.program.manual_value("when")
                 if condition is None: continue
-                maximum = effect.program.manual_value("STACKS")
-                value = int(maximum) if maximum not in (None, "INF") else True
-                key = condition.lower()
+                maximum = effect.program.manual_value("stacks")
+                value = int(maximum) if maximum not in (None, "inf") else True
+                key = str(condition)
                 if isinstance(value, int) and not isinstance(value, bool): defaults[key] = max(int(defaults.get(key, 0)), value)
                 else: defaults.setdefault(key, value)
         defaults.update(runtime or {})
@@ -155,17 +155,17 @@ class Upgrade:
         for stat, effects in self.stats.items():
             for effect in effects:
                 program = effect.program
-                required_rank = program.manual_value("REQUIRES_RANK")
+                required_rank = program.manual_value("requires_rank")
                 if required_rank is not None and rank < int(required_rank): continue
                 value = program.value
                 if program.scales_with_rank and required_rank is None and isinstance(value, (int, float)) and not isinstance(value, bool): value *= rank_scale
-                condition = program.manual_value("WHEN")
+                condition = program.manual_value("when")
                 if condition is not None:
-                    supplied = getattr(self.runtime, condition.lower())
+                    supplied = getattr(self.runtime, str(condition))
                     if not supplied: continue
                     stacks = 1 if isinstance(supplied, bool) else int(supplied)
-                    maximum = program.manual_value("STACKS")
-                    if maximum not in (None, "INF"): stacks = min(stacks, int(maximum))
+                    maximum = program.manual_value("stacks")
+                    if maximum not in (None, "inf"): stacks = min(stacks, int(maximum))
                     if isinstance(value, (int, float)) and not isinstance(value, bool): value *= stacks
                 resolved.append(ResolvedEffect(self.name, stat, value, program.mode, program.family, program.maximum, program.automatic))
         return tuple(resolved)

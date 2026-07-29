@@ -12,21 +12,21 @@ def weapon(*, damage=None, children=None, status=0, crit=0, fire_rate=1, multish
 class EngineTests(unittest.TestCase):
     def test_different_families_multiply(self):
         build = Build(
-            Upgrade(name="First", stats=UpgradeStats(damage_bonus=Effect(properties=["VALUE:1", "FAMILY:FIRST"]))),
-            Upgrade(name="Second", stats=UpgradeStats(damage_bonus=Effect(properties=["VALUE:1", "FAMILY:SECOND"]))),
+            Upgrade(name="First", stats=UpgradeStats(damage_bonus=Effect(properties={"value": 1, "family": "first"}))),
+            Upgrade(name="Second", stats=UpgradeStats(damage_bonus=Effect(properties={"value": 1, "family": "second"}))),
         )
         result = weapon().configure(build).results.main
         self.assertEqual(result.effective.damage.total, 400)
 
     def test_condition_overload_is_engine_managed(self):
-        condition_overload = Upgrade(name="CO", stats=UpgradeStats(damage_bonus=Effect(properties=["VALUE:1", "FAMILY:STATUS"], automatic=["WITH:UNIQUE_STATUS_COUNT"])))
+        condition_overload = Upgrade(name="CO", stats=UpgradeStats(damage_bonus=Effect(properties={"value": 1, "family": "status"}, automatic={"with": "unique_status_count"})))
         inactive = weapon(damage=Dist(impact=100), status=0).configure(condition_overload)
         active = weapon(damage=Dist(heat=100), status=1, fire_rate=10).configure(condition_overload)
         self.assertEqual(inactive.results.main.effective.damage.total, 100)
         self.assertGreater(active.results.main.effective.damage.total, 100)
 
     def test_hunter_munitions_adds_expected_slash_dot(self):
-        hunter = Upgrade(name="Hunter", stats=UpgradeStats(slash_proc=Effect(properties=["VALUE:0.3"], automatic=["ON:CRIT"])))
+        hunter = Upgrade(name="Hunter", stats=UpgradeStats(slash_proc=Effect(properties={"value": 0.3}, automatic={"on": "crit"})))
         bare = weapon(crit=1)
         modded = weapon(crit=1).configure(hunter)
         self.assertGreater(modded.results.main.average.flat_dotph, bare.results.main.average.flat_dotph)
@@ -43,7 +43,7 @@ class EngineTests(unittest.TestCase):
         self.assertEqual(result.average.flat_weakpoint_dph, 140)
 
     def test_fire_rate_and_multishot_locks(self):
-        lock = Upgrade(name="Lock", stats=UpgradeStats(fire_rate_lock=Effect(properties=["VALUE:TRUE"]), multishot_lock=Effect(properties=["VALUE:TRUE"]), fire_rate=Effect(properties=["VALUE:2"]), multishot=Effect(properties=["VALUE:2"])))
+        lock = Upgrade(name="Lock", stats=UpgradeStats(fire_rate_lock=Effect(properties={"value": True}), multishot_lock=Effect(properties={"value": True}), fire_rate=Effect(properties={"value": 2}), multishot=Effect(properties={"value": 2})))
         result = weapon(fire_rate=2, multishot=2).configure(lock).results.main
         self.assertEqual(result.effective.fire_rate, 2)
         self.assertEqual(result.effective.multishot, 2)

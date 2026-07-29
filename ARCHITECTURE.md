@@ -8,7 +8,7 @@ The package uses three directional layers:
 2. `engine`: effect resolution, aggregation, evolutions, status, damage, targets, attack trees, and contributions.
 3. package API: repositories, configuration, formatting, and public exports.
 
-Domain objects contain definition and caller-managed runtime state. Engine-managed combat conditions never enter public runtime state; they are evaluated from automatic effect tokens inside the engine.
+Domain objects contain definition and caller-managed runtime state. Engine-managed combat conditions never enter public runtime state; they are evaluated from the automatic effect dictionary inside the engine.
 
 Calculation is a staged pipeline:
 
@@ -24,4 +24,4 @@ Calculation is a staged pipeline:
 
 Automatic status acquisition is deliberately non-recursive: a bonus produced from sustained status stacks does not feed back into the status model that produced it. This keeps Condition Overload and stack effects deterministic.
 
-The package owns its models, engine, repositories, schema-v5 database, formatters, tests, documentation, and packaging. Its test suite passes with only this directory on `PYTHONPATH`.
+The package owns its models, engine, repositories, schema-v6 database, formatters, tests, documentation, and packaging. Its test suite passes with only this directory on `PYTHONPATH`.

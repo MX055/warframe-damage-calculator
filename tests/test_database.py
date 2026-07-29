@@ -8,7 +8,16 @@ from warframe_damage_calculator.schema import validate_database
 
 class DatabaseTests(unittest.TestCase):
     def test_catalog_counts(self):
+        self.assertEqual(arsenal.database["schema_version"], 6)
         self.assertEqual((len(arsenal.weapon), len(arsenal.upgrade), len(arsenal.enemy)), (656, 779, 877))
+
+    def test_every_effect_channel_is_a_dictionary(self):
+        effects = [effect for upgrade in arsenal.database["upgrades"].values() for values in upgrade.get("stats", {}).values() for effect in values]
+        effects.extend(effect for weapon in arsenal.database["weapons"].values() for tier in weapon.get("evolutions", {}).values() for perk in tier.values() for values in perk.get("stats", {}).values() for effect in values)
+        self.assertEqual(len(effects), 1783)
+        for effect in effects:
+            self.assertEqual(set(effect), {"properties", "manual", "automatic"})
+            self.assertTrue(all(isinstance(effect[channel], dict) for channel in effect))
 
     def test_every_record_constructs_and_calculates(self):
         for name in arsenal.weapon: arsenal.weapon.get(name)
