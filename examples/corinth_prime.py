@@ -1,24 +1,19 @@
-from warframe_damage_calculator import Build, Upgrade, arsenal
+from warframe_damage_calculator import Build, arsenal
 
 
 def main() -> None:
-    weapon = arsenal.get("Corinth Prime")
-    mod1 = Upgrade({"name": "Riven", "type": "mod", "max_rank": 0, "compatibility": {"names": ["Corinth Prime"]}, "stats": {"impact": -0.886, "crit_damage": 0.855, "multishot": 1.126, "crit_chance": 0.887}, "runtime": {"rank": 0}})
-    mod2 = arsenal.get("Galvanized Hell")
-    mod3 = arsenal.get("Semi-Shotgun Cannonade")
-    mod4 = arsenal.get("Hunter Munitions")
-    mod5 = arsenal.get("Primed Chilling Grasp")
-    mod6 = arsenal.get("Primed Ravage")
-    mod7 = arsenal.get("Critical Delay")
-    mod8 = arsenal.get("Toxic Barrage")
-    exilus = arsenal.get("Vigilante Supplies")
-    arcane = arsenal.get("Primary Merciless")
-    buff = Upgrade({"name": "Buff", "type": "buff", "stats": {"crit_damage": {"value": 1.2, "mode": "flat"}}, "runtime": {"rank": 0}})
-    build = Build(mod1, mod2, mod3, mod4, mod5, mod6, mod7, mod8, exilus, arcane, buff)
-    weapon.configure(build)
+    mod1 = arsenal.upgrade.get("Galvanized Hell").set(on_kill=4),
+    mod2 = arsenal.upgrade.get("Critical Deceleration"),
+    mod3 = arsenal.upgrade.get("Primed Ravage"),
+    mod4 = arsenal.upgrade.get("Hunter Munitions"),
+    mod5 = arsenal.upgrade.get("Primed Chilling Grasp"),
+    mod6 = arsenal.upgrade.get("Toxic Barrage"),
+    build = Build(mod1, mod2, mod3, mod4, mod5, mod6)
+    target = arsenal.enemy.get("Heavy Gunner").set(level=100, steel_path=True)
+    weapon = arsenal.weapon.get("Corinth Prime").set(attack="air_burst_projectile")
+    weapon.configure(build, target)
 
     print(weapon.format.summary())
 
 
-if __name__ == "__main__":
-    main()
+if __name__ == "__main__": main()

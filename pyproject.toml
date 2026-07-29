@@ -4,44 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "warframe-damage-calculator"
-dynamic = ["version"]
-description = "Average DPS/DPH calculator for Warframe weapons."
-readme = "README.md"
+version = "1.0.0"
+description = "Warframe damage calculator rewrite."
 requires-python = ">=3.14"
-license = "MIT"
-license-files = ["LICENSE"]
-
-authors = [
-    { name = "Marcos Escobar Sánchez-Ocaña" }
-]
-
-keywords = [
-    "warframe",
-    "damage",
-    "dps",
-    "calculator"
-]
-
-classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Intended Audience :: Developers",
-    "Topic :: Scientific/Engineering",
-    "Topic :: Games/Entertainment",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.14",
-    "Operating System :: OS Independent",
-]
 
 [tool.setuptools.packages.find]
+where = ["."]
 include = ["warframe_damage_calculator*"]
 namespaces = true
 
 [tool.setuptools.package-data]
 "warframe_damage_calculator.database" = ["database.json"]
-
-[tool.setuptools.dynamic]
-version = {attr = "warframe_damage_calculator.__version__"}
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-python_files = ["test_*.py"]
