@@ -49,7 +49,7 @@ class BehavioralParityTests(unittest.TestCase):
         synth = arsenal.weapon.get("Lato").configure(Build(arsenal.upgrade.get("Synth Charge"))).results.main
         self.assertAlmostEqual(synth.average.flat_dph, 48.96)
 
-    def test_incarnon_scope_and_multishot_ammo_mechanics(self):
+    def test_incarnon_form_condition_and_multishot_ammo_mechanics(self):
         result = arsenal.weapon.get("Braton").set(attack="incarnon_form", evolutions={2: 2}).results.main
         self.assertAlmostEqual(result.effective.multishot, 1.2)
         self.assertAlmostEqual(result.effective.ammo_cost, 1.2)
@@ -63,7 +63,7 @@ class BehavioralParityTests(unittest.TestCase):
         self.assertAlmostEqual(result.average.flat_weakpoint_dph, 23.8286304)
         self.assertAlmostEqual(result.final.total_dps, 57.21186062985365)
 
-    def test_evolution_base_stats_and_form_scope(self):
+    def test_evolution_base_stats_and_form_condition(self):
         result = arsenal.weapon.get("Braton").set(attack="incarnon_form", evolutions={2: 1, 3: 1, 4: 1}).results.main
         self.assertAlmostEqual(result.effective.damage.total, 104)
         self.assertAlmostEqual(result.effective.crit_chance, 0.46)
@@ -91,8 +91,29 @@ class BehavioralParityTests(unittest.TestCase):
         self.assertAlmostEqual(result.average.flat_dotph, 241.2039168)
         self.assertAlmostEqual(result.final.total_dps, 3171.457344)
 
-    def test_continuous_exclusion_prevents_last_shot_overlay(self):
+    def test_not_continuous_condition_prevents_last_shot_overlay(self):
         bare = arsenal.weapon.get("Amprex").results.main.average.flat_dph
         synth = arsenal.weapon.get("Amprex").configure(Build(arsenal.upgrade.get("Synth Charge"))).results.main
         self.assertAlmostEqual(synth.average.flat_dph, bare)
         self.assertEqual(synth.average.first_shot_damage_multiplier, 1)
+
+    def test_synth_charge_requires_a_base_magazine_of_five(self):
+        bare = arsenal.weapon.get("Knell").results.main.average.flat_dph
+        synth = arsenal.weapon.get("Knell").configure(Build(arsenal.upgrade.get("Synth Charge"))).results.main.average.flat_dph
+        self.assertAlmostEqual(synth, bare)
+
+    def test_synth_charge_does_not_apply_to_incarnon_form(self):
+        bare = arsenal.weapon.get("Laetum").set(attack="incarnon_form").results.main.average.flat_dph
+        synth = arsenal.weapon.get("Laetum").set(attack="incarnon_form").configure(Build(arsenal.upgrade.get("Synth Charge"))).results.main.average.flat_dph
+        self.assertAlmostEqual(synth, bare)
+
+    def test_bow_fire_rate_effect_is_an_additional_application(self):
+        speed_trigger = arsenal.upgrade.get("Speed Trigger")
+        bow = arsenal.weapon.get("Paris")
+        rifle = arsenal.weapon.get("Braton")
+        bare_bow_rate = bow.results.main.effective.fire_rate
+        bare_rifle_rate = rifle.results.main.effective.fire_rate
+        bow_rate = bow.configure(speed_trigger).results.main.effective.fire_rate
+        rifle_rate = rifle.configure(speed_trigger).results.main.effective.fire_rate
+        self.assertAlmostEqual(bow_rate / bare_bow_rate, 2.2)
+        self.assertAlmostEqual(rifle_rate / bare_rifle_rate, 1.6)

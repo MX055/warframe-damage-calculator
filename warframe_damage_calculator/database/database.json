@@ -1,5 +1,5 @@
 {
-    "schema_version": 6,
+    "schema_version": 8,
     "weapons": {
         "Euphona Prime": {
             "name": "Euphona Prime",
@@ -564,7 +564,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -2009,7 +2009,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -3095,7 +3095,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -3106,7 +3106,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -3117,7 +3117,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -3128,7 +3128,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -3139,7 +3139,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -3685,7 +3685,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -4052,7 +4052,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -4785,7 +4785,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -5076,7 +5076,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -5278,7 +5278,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -5513,7 +5513,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -5918,7 +5918,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -6488,7 +6488,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -6499,7 +6499,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -6510,7 +6510,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -8908,7 +8908,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -8919,7 +8919,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -8930,7 +8930,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -14300,7 +14300,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -14736,7 +14736,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -14747,7 +14747,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -14758,7 +14758,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -14772,7 +14772,7 @@
                                         "stacks": 30
                                     },
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -15250,7 +15250,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -17650,7 +17650,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -18084,7 +18084,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -18095,7 +18095,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -18106,7 +18106,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -18436,7 +18436,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -18468,7 +18468,7 @@
                                         "when": "on_kill"
                                     },
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -18537,7 +18537,7 @@
                                         "stacks": 4
                                     },
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -19299,7 +19299,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -19310,7 +19310,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -19321,7 +19321,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -20224,7 +20224,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -20235,7 +20235,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -20246,7 +20246,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -21550,7 +21550,7 @@
                                         "stacks": 3
                                     },
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -22663,7 +22663,7 @@
                                         "stacks": 3
                                     },
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -23350,7 +23350,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -23368,7 +23368,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -25295,7 +25295,7 @@
                                         "stacks": 7
                                     },
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -27529,7 +27529,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -28149,7 +28149,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -28397,7 +28397,7 @@
                                         "stacks": 3
                                     },
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -29186,7 +29186,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -29197,7 +29197,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -29208,7 +29208,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -29219,7 +29219,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -31535,7 +31535,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -31546,7 +31546,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -31557,7 +31557,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -33658,7 +33658,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -35436,7 +35436,7 @@
                                         "when": "on_headshot"
                                     },
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ],
@@ -35449,7 +35449,7 @@
                                         "when": "on_headshot"
                                     },
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -35715,7 +35715,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -35921,7 +35921,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -36572,7 +36572,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -36583,7 +36583,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -36594,7 +36594,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -37190,7 +37190,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -38356,7 +38356,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -38367,7 +38367,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -38378,7 +38378,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -38389,7 +38389,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -38400,7 +38400,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -39301,7 +39301,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -39312,7 +39312,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -39323,7 +39323,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -39334,7 +39334,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -40350,7 +40350,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -40361,7 +40361,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -40372,7 +40372,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -41565,7 +41565,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -41576,7 +41576,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -41587,7 +41587,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -41598,7 +41598,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -41609,7 +41609,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -42643,7 +42643,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -42654,7 +42654,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -42665,7 +42665,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -42678,11 +42678,11 @@
                                         "when": "slide_attack_hit"
                                     },
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
-                            "forced_procs": [
+                            "slash_proc": [
                                 {
                                     "properties": {
                                         "value": 1
@@ -42691,8 +42691,7 @@
                                         "when": "slide_attack_hit"
                                     },
                                     "automatic": {
-                                        "scope": "incarnon",
-                                        "target": "slash"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -43101,7 +43100,7 @@
                                         "when": "on_headshot"
                                     },
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ],
@@ -43114,7 +43113,7 @@
                                         "when": "on_headshot"
                                     },
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -44086,7 +44085,7 @@
                                         "stacks": 3
                                     },
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -44702,7 +44701,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -44713,7 +44712,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -44724,7 +44723,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -45192,7 +45191,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -45203,7 +45202,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -45214,7 +45213,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -47386,7 +47385,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -47911,7 +47910,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -47922,7 +47921,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -47933,7 +47932,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -48551,7 +48550,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -48592,7 +48591,7 @@
                                         "when": "on_punch_through_hit"
                                     },
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -49350,7 +49349,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -50325,7 +50324,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -51008,7 +51007,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -51019,7 +51018,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -51030,7 +51029,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -52443,7 +52442,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -52454,7 +52453,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -52465,7 +52464,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -54256,7 +54255,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -54504,7 +54503,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -55887,7 +55886,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -56213,7 +56212,7 @@
                                         "when": "no_primary"
                                     },
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -56267,7 +56266,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -56355,7 +56354,7 @@
                                         "when": "on_headshot"
                                     },
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -56657,7 +56656,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -56668,7 +56667,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -56679,7 +56678,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -61436,7 +61435,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -61447,7 +61446,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -61458,7 +61457,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -61472,7 +61471,7 @@
                                         "stacks": 30
                                     },
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -61905,7 +61904,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -62497,7 +62496,7 @@
                                         "when": "on_headshot"
                                     },
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ],
@@ -62510,7 +62509,7 @@
                                         "when": "on_headshot"
                                     },
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -63092,7 +63091,7 @@
                                         "when": "no_primary"
                                     },
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -63146,7 +63145,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -63234,7 +63233,7 @@
                                         "when": "on_headshot"
                                     },
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -64477,7 +64476,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -65040,7 +65039,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -65051,7 +65050,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -65375,7 +65374,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -65391,7 +65390,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -65474,7 +65473,7 @@
                                         "when": "on_headshot"
                                     },
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -65902,7 +65901,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -65936,7 +65935,7 @@
                                         "when": "on_headshot_kill"
                                     },
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -66307,7 +66306,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -66318,7 +66317,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -66709,7 +66708,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "normal"
+                                        "when": "normal"
                                     }
                                 }
                             ]
@@ -69345,7 +69344,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -69356,7 +69355,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -69367,7 +69366,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -69378,7 +69377,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -69389,7 +69388,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -73485,7 +73484,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ],
@@ -73496,7 +73495,7 @@
                                     },
                                     "manual": {},
                                     "automatic": {
-                                        "scope": "incarnon"
+                                        "when": "incarnon"
                                     }
                                 }
                             ]
@@ -78963,7 +78962,7 @@
                     {
                         "properties": {
                             "value": 0.4,
-                            "family": "chamber"
+                            "family": "first_shot"
                         },
                         "manual": {},
                         "automatic": {
@@ -79985,6 +79984,15 @@
                         },
                         "manual": {},
                         "automatic": {}
+                    },
+                    {
+                        "properties": {
+                            "value": -0.2
+                        },
+                        "manual": {},
+                        "automatic": {
+                            "when": "bow"
+                        }
                     }
                 ]
             },
@@ -83029,13 +83037,23 @@
                 "slash_proc": [
                     {
                         "properties": {
-                            "value": 0.35
+                            "value": 1
                         },
                         "manual": {},
                         "automatic": {
                             "on": "impact_proc",
-                            "if": "fire_rate_below_2.5",
-                            "multiply": 2
+                            "chance": 0.35
+                        }
+                    },
+                    {
+                        "properties": {
+                            "value": 1
+                        },
+                        "manual": {},
+                        "automatic": {
+                            "on": "impact_proc",
+                            "when": "fire_rate_below_2.5",
+                            "chance": 0.35
                         }
                     }
                 ]
@@ -83204,11 +83222,12 @@
                 "slash_proc": [
                     {
                         "properties": {
-                            "value": 0.3
+                            "value": 1
                         },
                         "manual": {},
                         "automatic": {
-                            "on": "crit"
+                            "on": "crit",
+                            "chance": 0.3
                         }
                     }
                 ]
@@ -83681,13 +83700,23 @@
                 "slash_proc": [
                     {
                         "properties": {
-                            "value": 0.35
+                            "value": 1
                         },
                         "manual": {},
                         "automatic": {
                             "on": "impact_proc",
-                            "if": "fire_rate_below_2.5",
-                            "multiply": 2
+                            "chance": 0.35
+                        }
+                    },
+                    {
+                        "properties": {
+                            "value": 1
+                        },
+                        "manual": {},
+                        "automatic": {
+                            "on": "impact_proc",
+                            "when": "fire_rate_below_2.5",
+                            "chance": 0.35
                         }
                     }
                 ]
@@ -86647,7 +86676,7 @@
                     {
                         "properties": {
                             "value": 1,
-                            "family": "chamber"
+                            "family": "first_shot"
                         },
                         "manual": {},
                         "automatic": {
@@ -87590,6 +87619,15 @@
                         },
                         "manual": {},
                         "automatic": {}
+                    },
+                    {
+                        "properties": {
+                            "value": 0.55
+                        },
+                        "manual": {},
+                        "automatic": {
+                            "when": "bow"
+                        }
                     }
                 ],
                 "punch_through": [
@@ -89962,6 +90000,15 @@
                         },
                         "manual": {},
                         "automatic": {}
+                    },
+                    {
+                        "properties": {
+                            "value": 0.3
+                        },
+                        "manual": {},
+                        "automatic": {
+                            "when": "bow"
+                        }
                     }
                 ],
                 "punch_through": [
@@ -90364,6 +90411,15 @@
                         },
                         "manual": {},
                         "automatic": {}
+                    },
+                    {
+                        "properties": {
+                            "value": 0.6
+                        },
+                        "manual": {},
+                        "automatic": {
+                            "when": "bow"
+                        }
                     }
                 ]
             },
@@ -91033,15 +91089,16 @@
                     {
                         "properties": {
                             "value": 2,
-                            "family": "charge"
+                            "family": "last_shot"
                         },
                         "manual": {},
                         "automatic": {
-                            "exclude": [
-                                "continuous",
-                                "incarnon"
-                            ],
-                            "on": "last_shot"
+                            "on": "last_shot",
+                            "when": [
+                                "not_continuous",
+                                "not_incarnon",
+                                "magazine_5_plus"
+                            ]
                         }
                     }
                 ]
@@ -91837,15 +91894,16 @@
                         "automatic": {}
                     }
                 ],
-                "crit_chance": [
+                "crit_tier": [
                     {
                         "properties": {
-                            "value": 0.05
+                            "value": 1,
+                            "mode": "flat"
                         },
                         "manual": {},
                         "automatic": {
-                            "on": "hit",
-                            "apply_mode": "flat"
+                            "on": "crit",
+                            "chance": 0.05
                         }
                     }
                 ]
@@ -91871,17 +91929,27 @@
                         },
                         "manual": {},
                         "automatic": {}
-                    }
-                ],
-                "crit_chance": [
+                    },
                     {
                         "properties": {
-                            "value": 0.05
+                            "value": 0.45
                         },
                         "manual": {},
                         "automatic": {
-                            "on": "hit",
-                            "apply_mode": "flat"
+                            "when": "bow"
+                        }
+                    }
+                ],
+                "crit_tier": [
+                    {
+                        "properties": {
+                            "value": 1,
+                            "mode": "flat"
+                        },
+                        "manual": {},
+                        "automatic": {
+                            "on": "crit",
+                            "chance": 0.05
                         }
                     }
                 ]
@@ -91909,15 +91977,16 @@
                         "automatic": {}
                     }
                 ],
-                "crit_chance": [
+                "crit_tier": [
                     {
                         "properties": {
-                            "value": 0.05
+                            "value": 1,
+                            "mode": "flat"
                         },
                         "manual": {},
                         "automatic": {
-                            "on": "hit",
-                            "apply_mode": "flat"
+                            "on": "crit",
+                            "chance": 0.05
                         }
                     }
                 ]
@@ -91936,15 +92005,16 @@
                 "aoe": false
             },
             "stats": {
-                "crit_chance": [
+                "crit_tier": [
                     {
                         "properties": {
-                            "value": 0.05
+                            "value": 1,
+                            "mode": "flat"
                         },
                         "manual": {},
                         "automatic": {
-                            "on": "hit",
-                            "apply_mode": "flat"
+                            "on": "crit",
+                            "chance": 0.05
                         }
                     }
                 ]
@@ -91972,6 +92042,15 @@
                         },
                         "manual": {},
                         "automatic": {}
+                    },
+                    {
+                        "properties": {
+                            "value": 0.9
+                        },
+                        "manual": {},
+                        "automatic": {
+                            "when": "bow"
+                        }
                     }
                 ],
                 "damage_bonus": [
@@ -92030,6 +92109,15 @@
                         },
                         "manual": {},
                         "automatic": {}
+                    },
+                    {
+                        "properties": {
+                            "value": -0.36
+                        },
+                        "manual": {},
+                        "automatic": {
+                            "when": "bow"
+                        }
                     }
                 ]
             },
@@ -99678,12 +99766,13 @@
                 "crit_damage": [
                     {
                         "properties": {
-                            "value": 1
+                            "value": 1,
+                            "mode": "flat",
+                            "max": 50
                         },
                         "manual": {},
                         "automatic": {
-                            "with": "puncture_status_count",
-                            "apply_mode": "flat",
+                            "with": "puncture_status_chance",
                             "per": 0.1
                         }
                     }
@@ -100373,11 +100462,12 @@
                 "random_proc": [
                     {
                         "properties": {
-                            "value": 0.24
+                            "value": 1
                         },
                         "manual": {},
                         "automatic": {
-                            "on": "any_proc"
+                            "on": "any_proc",
+                            "chance": 0.24
                         }
                     }
                 ]
@@ -100399,14 +100489,13 @@
                 "crit_reset_charges": [
                     {
                         "properties": {
-                            "value": 6
+                            "value": 6,
+                            "mode": "flat"
                         },
                         "manual": {},
                         "automatic": {
                             "when": "crit_tier_2_plus",
                             "reset": "at_limit",
-                            "target": "crit_chance",
-                            "apply_mode": "flat",
                             "per": 0.1
                         }
                     }

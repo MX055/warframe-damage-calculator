@@ -56,6 +56,8 @@ class Metrics:
     combo_multiplier: float = 1
     melee_duplicate_multiplier: float = 1
     melee_doughty_bonus: float = 0
+    crit_tier_bonus: float = 0
+    weakpoint_crit_tier_bonus: float = 0
     secondary_enervate_bonus: float = 0
     weakpoint_secondary_enervate_bonus: float = 0
 

@@ -26,10 +26,26 @@ class EngineTests(unittest.TestCase):
         self.assertGreater(active.results.main.effective.damage.total, 100)
 
     def test_hunter_munitions_adds_expected_slash_dot(self):
-        hunter = Upgrade(name="Hunter", stats=UpgradeStats(slash_proc=Effect(properties={"value": 0.3}, automatic={"on": "crit"})))
+        hunter = Upgrade(name="Hunter", stats=UpgradeStats(slash_proc=Effect(properties={"value": 1}, automatic={"on": "crit", "chance": 0.3})))
         bare = weapon(crit=1)
         modded = weapon(crit=1).configure(hunter)
         self.assertGreater(modded.results.main.average.flat_dotph, bare.results.main.average.flat_dotph)
+
+    def test_internal_bleeding_uses_an_additional_low_fire_rate_effect(self):
+        upgrade = arsenal.upgrade.get("Internal Bleeding")
+        low_rate = weapon(status=1, fire_rate=2).configure(upgrade).results.main.average.flat_dotph
+        high_rate = weapon(status=1, fire_rate=3).configure(upgrade).results.main.average.flat_dotph
+        self.assertAlmostEqual(low_rate, high_rate * 2)
+
+    def test_vigilante_upgrades_existing_crits_without_creating_crits(self):
+        vigilante = arsenal.upgrade.get("Vigilante Supplies")
+        non_critical = weapon(crit=0).configure(vigilante).results.main
+        critical = weapon(crit=0.2).configure(vigilante).results.main
+        self.assertEqual(non_critical.average.crit_tier_bonus, 0)
+        self.assertEqual(non_critical.average.flat_dph, 100)
+        self.assertAlmostEqual(critical.effective.crit_chance, 0.2)
+        self.assertAlmostEqual(critical.average.crit_tier_bonus, 0.01)
+        self.assertAlmostEqual(critical.average.flat_dph, 121)
 
     def test_attack_children_fold_once(self):
         result = weapon(children=["blast"]).results.main

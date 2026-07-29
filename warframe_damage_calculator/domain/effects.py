@@ -12,8 +12,8 @@ type EffectMode = Literal["proportional", "base", "flat"]
 
 PROPERTY_FIELDS = frozenset({"value", "mode", "family", "max", "rank_scale"})
 MANUAL_FIELDS = frozenset({"when", "stacks", "for", "requires_rank"})
-AUTOMATIC_FIELDS = frozenset({"when", "on", "with", "stacks", "for", "chance", "if", "multiply", "reset", "equipped", "scope", "exclude", "target", "apply_mode", "per"})
-REPEATABLE_AUTOMATIC_FIELDS = frozenset({"equipped", "scope", "exclude"})
+AUTOMATIC_FIELDS = frozenset({"when", "on", "with", "stacks", "for", "chance", "multiply", "reset", "equipped", "per"})
+REPEATABLE_AUTOMATIC_FIELDS = frozenset({"when", "equipped"})
 
 
 def _normalize_scalar(value: Scalar, channel: str, key: str) -> Scalar:

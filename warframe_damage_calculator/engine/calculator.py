@@ -17,8 +17,9 @@ from .targets import ZONE_FIELDS, damage_multiplier, damage_total
 HEAVY_CATEGORIES = frozenset({"heavy", "heavy_slam"})
 SLAM_CATEGORIES = frozenset({"slam", "heavy_slam"})
 POSITION_EVENTS = frozenset({"first_shot", "last_shot"})
-DEFERRED_STATS = frozenset({"duplicated_hit", "random_proc", "crit_reset_charges"})
-DEFERRED_FAMILIES = frozenset({"chamber", "charge"})
+DEFERRED_STATS = frozenset({"duplicated_hit", "random_proc", "crit_reset_charges", "crit_tier"})
+DEFERRED_FAMILIES = frozenset({"first_shot", "last_shot"})
+PROC_STATS = frozenset(f"{damage_type}_proc" for damage_type in DAMAGE_TYPES)
 
 
 def _scalar(base: float, stat: str, build: ResolvedStats, *, minimum: float = 0) -> float:
@@ -194,15 +195,17 @@ def _resolve_effects(weapon: Any, attack: Any, source: tuple[ResolvedEffect, ...
 def _forced_procs(attack: Any, effects: Iterable[ResolvedEffect]) -> Dist:
     forced = attack.stats.forced_procs
     for effect in effects:
-        if effect.stat != "forced_procs": continue
-        target = automatic_value(effect, "target")
-        if target is not None: forced += Dist({str(target): float(effect.value)})
-        elif isinstance(effect.value, dict): forced += Dist(effect.value)
+        if effect.stat not in PROC_STATS or automatic_value(effect, "on") is not None: continue
+        forced += Dist({effect.stat.removesuffix("_proc"): float(effect.value)})
     return forced
 
 
 def _special_value(effects: Iterable[ResolvedEffect], stat: str, event: str | None = None) -> float:
     return sum(float(effect.value) for effect in effects if effect.stat == stat and (event is None or automatic_value(effect, "on") == event))
+
+
+def _hit_multiplier(chance: float, tier_bonus: float, damage: float, non_crit_damage: float = 0, non_crit_chance: float = 0) -> float:
+    return hit_multiplier(chance, damage, non_crit_damage, non_crit_chance) + tier_bonus * (damage - 1)
 
 
 def _faction_factor(weapon: Any, total: ResolvedStats) -> float:
@@ -218,7 +221,8 @@ def _dot_value(weapon: Any, result: AttackResult, zone: str, *, multishot: float
     if damage.total <= 0: return 0.0
     shots = float(effective.multishot if multishot is None else multishot)
     chance = average.weakpoint_crit_chance if zone == "weakpoint" else average.crit_chance
-    crit = hit_multiplier(chance, float(effective.crit_damage), float(effective.non_crit_bonus_damage), float(effective.non_crit_bonus_chance))
+    tier_bonus = average.weakpoint_crit_tier_bonus if zone == "weakpoint" else average.crit_tier_bonus
+    crit = _hit_multiplier(chance, tier_bonus, float(effective.crit_damage), float(effective.non_crit_bonus_damage), float(effective.non_crit_bonus_chance))
     faction = float(effective.faction_damage)
     weakpoint_bonus = float(effective.weakpoint_damage_bonus)
     regular = 0.0
@@ -265,14 +269,8 @@ def _position_weights(magazine: float, ammo_cost: float, efficiency: float) -> l
     return [(frozenset({"first_shot"}), weight), (frozenset({"last_shot"}), weight), (frozenset(), max(0, 1 - 2 * weight))]
 
 
-def _position_effect_applies(effect: ResolvedEffect, attack: Any) -> bool:
-    excluded = {str(value) for value in automatic_values(effect, "exclude")}
-    return not (("continuous" in excluded and attack.delivery == "beam") or ("incarnon" in excluded and attack.form == "incarnon"))
-
-
 def _apply_position_mixture(weapon: Any, result: AttackResult, effects: list[ResolvedEffect]) -> None:
     if weapon.type == "melee": return
-    effects = [effect for effect in effects if _position_effect_applies(effect, result.attack)]
     if not effects: return
     effective, average = result.effective, result.average
     mixed = {fields[index]: 0.0 for fields in ZONE_FIELDS.values() for index in (0, 1)}
@@ -291,7 +289,8 @@ def _apply_position_mixture(weapon: Any, result: AttackResult, effects: list[Res
             direct_total = damage_total(effective.damage * damage_factor, weapon.target, zone=zone, weakpoint_bonus=float(effective.weakpoint_damage_bonus), status_effects=result.status_effects)
             if direct_total is None: continue
             chance = average.weakpoint_crit_chance if zone == "weakpoint" else average.crit_chance
-            direct = direct_total * multishot * float(effective.faction_damage) * hit_multiplier(chance, float(effective.crit_damage), float(effective.non_crit_bonus_damage), float(effective.non_crit_bonus_chance))
+            tier_bonus = average.weakpoint_crit_tier_bonus if zone == "weakpoint" else average.crit_tier_bonus
+            direct = direct_total * multishot * float(effective.faction_damage) * _hit_multiplier(chance, tier_bonus, float(effective.crit_damage), float(effective.non_crit_bonus_damage), float(effective.non_crit_bonus_chance))
             mixed[fields[0]] += direct * weight
             mixed[fields[1]] += _dot_value(weapon, result, zone, multishot=multishot, damage_factor=damage_factor) * weight
     for field, value in mixed.items(): setattr(average, field, value)
@@ -309,7 +308,7 @@ def _calculate_attack(weapon: Any, attack: Any, build_effects: tuple[ResolvedEff
     all_source = (*build_effects, *evolution_effects)
     initial_build_effects, _ = _resolve_effects(weapon, attack, build_effects, provisional, provisional_model, equipped)
     initial_evolution_effects, _ = _resolve_effects(weapon, attack, evolution_effects, provisional, provisional_model, equipped)
-    stable = lambda effect: not (isinstance(automatic_value(effect, "when"), str) and str(automatic_value(effect, "when")).endswith("_proc"))
+    stable = lambda effect: not any(str(value).endswith("_proc") for value in automatic_values(effect, "when"))
     initial_build = aggregate(effect for effect in initial_build_effects if stable(effect) and effect.stat not in DEFERRED_STATS)
     initial_evolutions = aggregate(effect for effect in initial_evolution_effects if stable(effect) and effect.stat not in DEFERRED_STATS)
     initial_total = _combined(initial_build, initial_evolutions)
@@ -333,7 +332,7 @@ def _calculate_attack(weapon: Any, attack: Any, build_effects: tuple[ResolvedEff
     automatic_model = StatusModel(provisional_model.damage, provisional_model.forced_procs, initial_status, acquisition_attempts, initial_rate, initial_duration, random_acquisition)
     build_resolved, build_positions = _resolve_effects(weapon, attack, build_effects, provisional, automatic_model, equipped)
     evolution_resolved, evolution_positions = _resolve_effects(weapon, attack, evolution_effects, provisional, automatic_model, equipped)
-    build = aggregate(effect for effect in build_resolved if automatic_value(effect, "on") not in POSITION_EVENTS and effect.stat not in DEFERRED_STATS and not (effect.stat == "crit_damage" and automatic_value(effect, "with") == "puncture_status_count"))
+    build = aggregate(effect for effect in build_resolved if automatic_value(effect, "on") not in POSITION_EVENTS and effect.stat not in DEFERRED_STATS and not (effect.stat == "crit_damage" and automatic_value(effect, "with") == "puncture_status_chance"))
     evolutions = aggregate(effect for effect in evolution_resolved if automatic_value(effect, "on") not in POSITION_EVENTS and effect.stat not in DEFERRED_STATS)
     total = _combined(build, evolutions)
     base_damage, original = _base_damage(weapon, attack, evolutions)
@@ -346,15 +345,17 @@ def _calculate_attack(weapon: Any, attack: Any, build_effects: tuple[ResolvedEff
     crit, status = _derived_chances(crit, status, total)
     if weapon.type == "melee" and attack.category == "slide": crit *= max(1 + float(total.proportional.get("slide_crit_chance", 0)), 0)
     crit_damage = _scalar(float(attack.stats.crit_damage), "crit_damage", total, minimum=1)
-    doughty = next((effect for effect in (*build_resolved, *evolution_resolved) if effect.stat == "crit_damage" and automatic_value(effect, "with") == "puncture_status_count"), None)
+    doughty = next((effect for effect in (*build_resolved, *evolution_resolved) if effect.stat == "crit_damage" and automatic_value(effect, "with") == "puncture_status_chance"), None)
     doughty_bonus = 0.0
     if doughty is not None:
         per = float(automatic_value(doughty, "per", 0.1) or 0.1)
-        doughty_bonus = true_round(min(damage.weight("puncture") * status / per * float(doughty.value), 50), 1)
+        maximum = 50 if doughty.maximum is None else float(doughty.maximum)
+        doughty_bonus = true_round(min(damage.weight("puncture") * status / per * float(doughty.value), maximum), 1)
         crit_damage += doughty_bonus
     weakpoint_common = float(total.proportional.get("weakpoint_crit_chance", 0))
     weakpoint_family = sum(float(family.get("weakpoint_crit_chance", 0)) for family in total.families.values())
     weakpoint_crit = 0.0 if weapon.type == "melee" else max(crit + float(attack.stats.crit_chance) * (weakpoint_common + weakpoint_family) + float(total.flat.get("weakpoint_crit_chance", 0)), 0)
+    crit_tier_chance = clamp(_special_value((*build_resolved, *evolution_resolved), "crit_tier", "crit"), 0, 1)
     ms_bonus = 0 if weapon.type == "melee" or total.proportional.get("multishot_lock") else float(total.proportional.get("multishot", 0))
     ms_ammo_bonus = _multishot_ammo_bonus(total)
     if attack.delivery == "beam" and ms_ammo_bonus and not total.proportional.get("multishot_lock"): ms_bonus *= 1 + ms_ammo_bonus
@@ -399,7 +400,9 @@ def _calculate_attack(weapon: Any, attack: Any, build_effects: tuple[ResolvedEff
         weak_crit += weak_bonus
     else:
         body_bonus = weak_bonus = 0
-    average = Metrics(crit_chance=body_crit, crit_multiplier=crit_multiplier(body_crit, crit_damage), weakpoint_crit_chance=weak_crit, weakpoint_crit_multiplier=crit_multiplier(weak_crit, crit_damage), fire_rate=fire_rate, procs_per_shot=status * status_attempts, melee_duplicate_multiplier=duplicate_multiplier, melee_doughty_bonus=doughty_bonus, secondary_enervate_bonus=body_bonus, weakpoint_secondary_enervate_bonus=weak_bonus)
+    body_tier_bonus = min(body_crit, 1) * crit_tier_chance
+    weak_tier_bonus = min(weak_crit, 1) * crit_tier_chance
+    average = Metrics(crit_chance=body_crit, crit_multiplier=crit_multiplier(body_crit + body_tier_bonus, crit_damage), weakpoint_crit_chance=weak_crit, weakpoint_crit_multiplier=crit_multiplier(weak_crit + weak_tier_bonus, crit_damage), fire_rate=fire_rate, procs_per_shot=status * status_attempts, melee_duplicate_multiplier=duplicate_multiplier, melee_doughty_bonus=doughty_bonus, crit_tier_bonus=body_tier_bonus, weakpoint_crit_tier_bonus=weak_tier_bonus, secondary_enervate_bonus=body_bonus, weakpoint_secondary_enervate_bonus=weak_bonus)
     result = AttackResult(attack.name, attack, base, modded, effective, build, evolutions, average, deepcopy(average), status_effects, list(attack.children), original)
     combo_multiplier = 1
     if heavy:
@@ -412,8 +415,9 @@ def _calculate_attack(weapon: Any, attack: Any, build_effects: tuple[ResolvedEff
             setattr(average, fields[1], None)
             continue
         chance = weak_crit if zone == "weakpoint" else body_crit
+        tier_bonus = weak_tier_bonus if zone == "weakpoint" else body_tier_bonus
         direct_hits = 1 if weapon.type == "melee" else multishot
-        direct = direct_total * direct_hits * faction * hit_multiplier(chance, crit_damage, non_crit_damage, non_crit_chance) * duplicate_multiplier * combo_multiplier
+        direct = direct_total * direct_hits * faction * _hit_multiplier(chance, tier_bonus, crit_damage, non_crit_damage, non_crit_chance) * duplicate_multiplier * combo_multiplier
         setattr(average, fields[0], direct)
         setattr(average, fields[1], _dot_value(weapon, result, zone) * combo_multiplier)
     refresh_metrics(average)

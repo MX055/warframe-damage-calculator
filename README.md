@@ -56,15 +56,38 @@ effect = Effect(
 )
 ```
 
-`properties` owns scalar value, mode, family, rank scaling, and caps. `manual` owns conditions supplied by the caller. `automatic` owns combat state calculated by the engine. Values use their native JSON/Python types, so stack counts and durations are numbers rather than encoded strings. Fields that can contain several values, such as `exclude`, use a list.
+`properties` owns scalar value, mode, family, rank scaling, and caps. `manual` owns conditions supplied by the caller. `automatic` owns combat state calculated by the engine. Values use their native JSON/Python types, so stack counts and durations are numbers rather than encoded strings. Multiple simultaneous conditions use a list in `when`.
+
+Automatic behavior stays flat. `on` names an event, `when` names a condition, `chance` is its probability, and `with` names a multiplier calculated by the engine. Multiple applications are separate effects:
+
+```python
+slash_proc = [
+    Effect(properties={"value": 1}, automatic={"on": "impact_proc", "chance": 0.35}),
+    Effect(properties={"value": 1}, automatic={"on": "impact_proc", "when": "fire_rate_below_2.5", "chance": 0.35}),
+]
+fire_rate = [
+    Effect(properties={"value": 0.6}),
+    Effect(properties={"value": 0.6}, automatic={"when": "bow"}),
+]
+synth_charge = Effect(
+    properties={"value": 2, "family": "last_shot"},
+    automatic={"on": "last_shot", "when": ["not_continuous", "not_incarnon", "magazine_5_plus"]},
+)
+vigilante_bonus = Effect(
+    properties={"value": 1, "mode": "flat"},
+    automatic={"on": "crit", "chance": 0.05},
+)
+```
+
+Proc and result identity are expressed by the stat name (`slash_proc`, `puncture_proc`, `crit_tier`, and so on); effects do not use a generic `target` field. An attack's intrinsic `forced_procs` distribution remains part of its attack data. Form applicability also uses `when`, such as `{"when": "incarnon"}`; there is no separate scope language.
 
 Runtime state retains the value supplied by the caller. Each effect applies its own stack cap during resolution.
 
-Compatibility metadata only produces warnings. Effects still resolve; the `scope` and `exclude` automatic fields define where an effect actually applies.
+Compatibility metadata only produces warnings. Automatic `when` conditions define where an effect actually applies.
 
 ## Calculation coverage
 
-The engine includes ranged and melee rates, charge/burst/reload/battery cycles, Incarnon charge pools and scoped evolutions, elemental ordering, additive and multiplicative Condition Overload, status uptime and stack windows, forced procs, damage-over-time effects, first/last magazine mixtures, nested attack trees, stance and combo calculations, special arcane/mod behaviors, enemy scaling and defenses, hit zones, and removal/Shapley contribution analysis.
+The engine includes ranged and melee rates, charge/burst/reload/battery cycles, Incarnon charge pools and form-conditioned evolutions, elemental ordering, additive and multiplicative Condition Overload, status uptime and stack windows, forced procs, damage-over-time effects, first/last magazine mixtures, nested attack trees, stance and combo calculations, special arcane/mod behaviors, enemy scaling and defenses, hit zones, and removal/Shapley contribution analysis.
 
 ## Isolated validation
 

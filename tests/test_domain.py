@@ -22,6 +22,7 @@ class EffectTests(unittest.TestCase):
     def test_manual_and_automatic_fields_are_separate(self):
         with self.assertRaises(ValueError): Effect(properties={"value": 1}, manual={"with": "weapon_combo"})
         with self.assertRaises(ValueError): Effect(properties={"value": 1}, automatic={"requires_rank": 5})
+        with self.assertRaises(ValueError): Effect(properties={"value": 1}, automatic={"target": "slash"})
 
     def test_channel_values_preserve_native_scalar_types(self):
         effect = Effect(properties={"value": 1}, manual={"stacks": 2, "for": 20}, automatic={"on": "CRIT"})
@@ -29,8 +30,8 @@ class EffectTests(unittest.TestCase):
         self.assertEqual(effect.automatic, {"on": "crit"})
 
     def test_repeatable_automatic_fields_use_lists(self):
-        effect = Effect(properties={"value": 2}, automatic={"exclude": ["CONTINUOUS", "INCARNON"], "on": "LAST_SHOT"})
-        self.assertEqual(effect.automatic, {"exclude": ["continuous", "incarnon"], "on": "last_shot"})
+        effect = Effect(properties={"value": 2}, automatic={"when": ["NOT_CONTINUOUS", "NOT_INCARNON"], "on": "LAST_SHOT"})
+        self.assertEqual(effect.automatic, {"when": ["not_continuous", "not_incarnon"], "on": "last_shot"})
 
 
 class UpgradeTests(unittest.TestCase):
