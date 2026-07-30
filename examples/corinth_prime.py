@@ -20,6 +20,7 @@ def main() -> None:
     weapon.configure(build, target)
 
     print(weapon.format.summary())
+    print(arsenal.weapon.get("Skana").set(attack="slam_attack").format.summary())
 
 
 if __name__ == "__main__": main()

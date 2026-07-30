@@ -6,7 +6,32 @@ from typing import Any
 from ..domain.effects import ChannelValue, Scalar
 from ..domain.results import Stats
 from ..domain.upgrades import ResolvedEffect
-from .status import StatusModel
+from .status import STATUS_TYPES, StatusModel
+
+
+STATUS_PROC_STATS = frozenset(f"{kind}_proc" for kind in STATUS_TYPES)
+HANDLED_EFFECT_STATS = frozenset({
+    "accuracy", "afflictions_proc_multiplier", "ammo_efficiency", "ammo_maximum", "area_of_effect", "armor_reduction", "attack_speed", "bleed_on_impact",
+    "cascadia_empowered_proc", "cold", "condition_overload", "corpus_damage", "corrosive", "crit_chance", "crit_damage", "crit_from_status",
+    "crit_reset_charges", "crit_tier", "damage", "damage_bonus", "debilitate_proc_chance", "duplicated_hit", "electricity", "explosion_radius",
+    "fire_rate", "fire_rate_lock", "gas", "grineer_damage", "heat", "heavy_attack_efficiency", "heavy_attack_speed", "impact",
+    "impact_to_puncture_conversion", "infested_damage", "initial_combo", "magazine_capacity", "magnetic", "multishot", "multishot_lock",
+    "murmur_damage", "noise_level", "orokin_damage", "overguard_damage_multiplier", "projectile_speed", "puncture", "puncture_proc",
+    "punch_through", "radiation", "random_proc", "range", "recoil", "reload_speed", "sentient_damage", "sharpshot_bonus", "slam_damage",
+    "slam_radius", "slash", "slash_proc", "status_chance", "status_damage", "status_duration", "status_from_crit", "status_vulnerability",
+    "toxin", "unique_enemy_vulnerability_multiplier", "viral", "weakpoint_crit_chance", "weakpoint_damage", "zoom",
+})
+NON_CALCULATION_EFFECT_STATS = frozenset({
+    "aerial_melee_attack_range", "ammo_efficiency_chance", "ammo_replenish_chance", "ammo_restore", "body_shot_crit_chance_multiplier",
+    "bullet_jump", "combo_count", "combo_duration", "combo_gain_chance", "combo_on_ammo_pickup", "combo_on_finisher", "combo_timer_pause",
+    "damage_field_duration", "double_jump_strength", "extra_jump", "finisher_damage", "follow_through", "health_regen", "holstered_reload",
+    "incarnon_charge_rate", "instant_reload_chance", "magazine_restore_chance", "movement_speed", "movement_speed_while_aiming", "overshield",
+    "parkour_velocity", "parry_angle", "slide", "slide_attack_range", "sprint_speed", "stun_on_finisher",
+})
+
+
+def unclassified_effect_stats(stats: set[str]) -> set[str]:
+    return stats - HANDLED_EFFECT_STATS - NON_CALCULATION_EFFECT_STATS
 
 
 def _values(channel: dict[str, ChannelValue], key: str) -> tuple[Scalar, ...]:
@@ -31,7 +56,8 @@ def evaluate(effect: ResolvedEffect, *, weapon: Any, attack: Any, stats: Stats, 
     if source == "unique_status_count": multiplier *= status.expected_unique(stack_limit) * float(attack.stats.co_factor)
     elif source == "weapon_combo": multiplier *= min(float(weapon.runtime.combo), stack_limit) if stack_limit is not None else float(weapon.runtime.combo)
     elif source == "effective_multishot" and effect.family != "multishot_ammo": multiplier *= float(stats.multishot)
-    elif source == "puncture_status_chance" and effect.stat != "crit_damage": multiplier *= status.status_chance * status.damage.weight("puncture")
+    elif source == "puncture_status_chance" and effect.stat != "crit_damage":
+        multiplier *= min(status.proc_count_per_attack("puncture") / max(status.attempts_per_attack, 1), 1)
     for condition_value in _values(behavior, "when"):
         condition = str(condition_value)
         if condition in {"normal_form", "incarnon_form"} and attack.form != condition.removesuffix("_form"): return None
@@ -47,11 +73,11 @@ def evaluate(effect: ResolvedEffect, *, weapon: Any, attack: Any, stats: Stats, 
         elif condition == "critical_tier_at_least_2" and effect.stat != "crit_reset_charges":
             multiplier *= max(float(stats.crit_chance) - 1, 0)
     event = _value(behavior, "on")
-    if event == "critical_hit" and effect.stat not in {"slash_proc", "crit_tier"}: multiplier *= min(max(float(stats.crit_chance), 0), 1)
+    if event == "critical_hit" and effect.stat not in STATUS_PROC_STATS | {"crit_tier"}: multiplier *= min(max(float(stats.crit_chance), 0), 1)
     elif event == "near_yellow_critical_hit" and effect.stat != "duplicated_hit": multiplier *= max(1 - abs(float(stats.crit_chance) - 1), 0)
     elif event == "non_critical_hit" and effect.family != "non_critical_hit": multiplier *= max(1 - float(stats.crit_chance), 0)
-    elif event == "any_status_proc" and effect.stat != "random_proc": multiplier *= min(status.status_chance * status.attempts_per_attack, 1)
-    elif event == "impact_status_proc" and effect.stat != "slash_proc": multiplier *= min(status.status_chance * status.attempts_per_attack * status.damage.weight("impact"), 1)
+    elif event == "any_status_proc" and effect.stat not in STATUS_PROC_STATS | {"random_proc"}: multiplier *= status.any_proc_probability_per_attack()
+    elif event == "impact_status_proc" and effect.stat not in STATUS_PROC_STATS: multiplier *= status.per_attack_probability("impact")
     chance = _value(behavior, "chance")
     if chance is not None and effect.family != "non_critical_hit": multiplier *= float(chance)
     literal_multiplier = _value(behavior, "multiply")
@@ -59,4 +85,8 @@ def evaluate(effect: ResolvedEffect, *, weapon: Any, attack: Any, stats: Stats, 
     per = _value(behavior, "per")
     if per is not None and effect.stat not in {"crit_damage", "crit_reset_charges"}: multiplier *= float(per)
     value = effect.value * multiplier if isinstance(effect.value, (int, float)) and not isinstance(effect.value, bool) else effect.value
+    if effect.stat == "condition_overload":
+        value = float(value) * status.expected_unique() * float(attack.stats.co_factor)
+        return replace(effect, stat="damage_bonus", value=value, family="unique_status")
+    if effect.stat == "area_of_effect": return replace(effect, stat="explosion_radius", value=value)
     return replace(effect, value=value)

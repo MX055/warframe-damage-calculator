@@ -41,18 +41,37 @@ def hit_multiplier(chance: float, damage: float, non_crit_damage: float = 0, non
 
 def average_falloff_multiplier(start_range: float, end_range: float, final_multiplier: float) -> float:
     if end_range <= 0: return 1.0
-    return (1 - final_multiplier) / 2 * start_range / end_range + (1 + final_multiplier) / 2
+    return cumulative_falloff(end_range, start_range, end_range, final_multiplier) / end_range
+
+
+def cumulative_falloff(distance: float, start_range: float, end_range: float, final_multiplier: float) -> float:
+    distance = max(distance, 0)
+    if distance <= start_range: return distance
+    if end_range <= start_range: return distance if distance <= end_range else end_range + final_multiplier * (distance - end_range)
+    if distance <= end_range: return distance - (1 - final_multiplier) * (distance - start_range) ** 2 / (2 * (end_range - start_range))
+    return final_multiplier * distance + (1 - final_multiplier) * (end_range + start_range) / 2
+
+
+def ranged_falloff_multiplier(start_range: float, end_range: float, max_range: float, final_multiplier: float) -> float:
+    if max_range <= 0: return 1.0
+    return cumulative_falloff(max_range, start_range, end_range, final_multiplier) / max_range
 
 
 def aoe_damage_mass(start_range: float, end_range: float, final_multiplier: float) -> float:
     return 4 / 3 * pi * end_range ** 3 - pi / 3 * (1 - final_multiplier) * (end_range - start_range) * (3 * end_range ** 2 + 2 * end_range * start_range + start_range ** 2)
 
 
-def punch_through_damage_mass(start_range: float, end_range: float, final_multiplier: float, punch_through: float) -> float:
-    limit = min(max(punch_through, 0), end_range)
-    if limit <= 0: return 0.0
-    if limit <= start_range or end_range <= start_range: return limit
-    return limit - (1 - final_multiplier) * (limit - start_range) ** 2 / (2 * (end_range - start_range))
+def punch_through_falloff_multiplier(start_range: float, end_range: float, max_range: float, final_multiplier: float, punch_through: float) -> float:
+    if max_range <= 0 or punch_through <= 0: return 0.0
+    limit = min(punch_through, max_range)
+    if limit == max_range:
+        endpoint_multiplier = 1.0 if max_range <= start_range else final_multiplier if max_range >= end_range else 1 - (1 - final_multiplier) * (max_range - start_range) / (end_range - start_range)
+        return (1 + endpoint_multiplier) / 2
+    return (cumulative_falloff(max_range - limit, start_range, end_range, final_multiplier) + cumulative_falloff(max_range, start_range, end_range, final_multiplier) - cumulative_falloff(limit, start_range, end_range, final_multiplier)) / (2 * (max_range - limit))
+
+
+def punch_through_damage_mass(start_range: float, end_range: float, max_range: float, final_multiplier: float, punch_through: float) -> float:
+    return max_range * punch_through_falloff_multiplier(start_range, end_range, max_range, final_multiplier, punch_through)
 
 
 def distribute_flat(damage: Dist, value: float) -> Dist:

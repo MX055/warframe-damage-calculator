@@ -60,7 +60,8 @@ class WeaponFormatter:
         return None if value is None else f"{float(value):g}m"
 
     @staticmethod
-    def _fmt_damage_mass(value: float, aoe: bool) -> str:
+    def _fmt_damage_mass(value: float | None, aoe: bool) -> str:
+        if value is None: return "-"
         return f"{float(value):.2f}{'m³' if aoe else 'm'}"
 
     def _hit_zone_label(self) -> str:
@@ -128,7 +129,11 @@ class WeaponFormatter:
         effective = selected.effective
         effective_text = format_falloff(effective.start_range, effective.end_range, effective.final_multiplier)
         self._append(rows, "FALLOFF", base_text, effective_text, effective_text)
-        self._append(rows, "DAMAGE MASS", "", "", self._fmt_damage_mass(selected.density.damage_mass, selected.attack.aoe), when=float(selected.density.damage_mass) > 0)
+        is_aoe = selected.attack.aoe or selected.attack.category in SLAM_ATTACK_CATEGORIES
+        self._append(rows, "DAMAGE MASS", "", "", self._fmt_damage_mass(selected.density.damage_mass, is_aoe), when=selected.density.damage_mass is not None and selected.density.damage_mass > 0)
+
+    def _append_falloff_multiplier(self, rows: list[tuple[str, ...]], selected: Any) -> None:
+        self._append(rows, "AVERAGE FALLOFF MULTIPLIER", "", "", self._fmt_multiplier(selected.average.falloff_multiplier), when=bool(selected.attack.stats.falloff))
 
     @staticmethod
     def _resolved_proportional(selected: Any, stat: str) -> float:
@@ -207,11 +212,8 @@ class WeaponFormatter:
 
         averages_at = len(rows)
         self._append(rows, "HIT MULTIPLIER", "", "", self._with_weakpoint(self._fmt_multiplier(body_hit), self._fmt_multiplier(weakpoint_hit) if show_weakpoint_hit else None))
-        self._append(rows, "AVERAGE FALLOFF MULTIPLIER", "", "", self._fmt_multiplier(average.falloff_multiplier), when=bool(attack.stats.falloff))
+        self._append_falloff_multiplier(rows, selected)
         self._append(rows, "EXPECTED PROCS PER SHOT", "", "", self._fmt_number(average.procs_per_shot))
-        density = selected.density
-        self._append(rows, "DAMAGE DENSITY DPH", "", "", self._fmt_zone_metric(density.damage_density, density.weakpoint_damage_density, density.resistant_damage_density), when=density.damage_density is not None)
-        self._append(rows, "DAMAGE DENSITY DPS", "", "", self._fmt_zone_metric(density.damage_density_per_second, density.weakpoint_damage_density_per_second, density.resistant_damage_density_per_second), when=density.damage_density_per_second is not None)
         if self.weapon.type == "primary":
             self._append(rows, "FIRST SHOT DAMAGE MULTIPLIER", "", "", self._fmt_multiplier(average.first_shot_damage_multiplier), when=float(average.first_shot_damage_multiplier) != 1)
         elif self.weapon.type == "secondary":
@@ -232,6 +234,7 @@ class WeaponFormatter:
         slide_crit = 1 + self._resolved_proportional(selected, "slide_crit_chance")
 
         rows: list[tuple[str, ...]] = []
+        self._falloff_row(rows, selected)
         self._append(rows, "RANGE", self._fmt_meters(attack.stats.range), self._fmt_meters(effective.range), self._fmt_meters(effective.range), when=float(effective.range) > 0)
         self._append(rows, "ATTACK SPEED", self._fmt_multiplier(base_speed), self._fmt_multiplier(effective.attack_speed), self._fmt_multiplier(effective.attack_speed))
         self._append(rows, "CRIT CHANCE", self._fmt_percent(base.crit_chance), self._fmt_percent(effective.crit_chance), self._fmt_percent(average.crit_chance))
@@ -249,6 +252,8 @@ class WeaponFormatter:
 
         averages_at = len(rows)
         self._append(rows, "HIT MULTIPLIER", "", "", self._fmt_multiplier(body_hit))
+        self._append_falloff_multiplier(rows, selected)
+        self._append(rows, "EXPECTED PROCS PER HIT", "", "", self._fmt_number(average.procs_per_shot))
         self._append(rows, "COMBO MULTIPLIER", "", "", self._fmt_multiplier(average.combo_multiplier), when=category in HEAVY_ATTACK_CATEGORIES)
         self._append(rows, "MELEE DUPLICATE MULTIPLIER", "", "", self._fmt_multiplier(average.melee_duplicate_multiplier), when=not isclose(float(average.melee_duplicate_multiplier), 1))
         self._append(rows, "MELEE DOUGHTY BONUS", "", "", self._fmt_number(average.melee_doughty_bonus), when=float(average.melee_doughty_bonus) > 0)

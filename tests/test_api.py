@@ -1,7 +1,7 @@
 import unittest
 import warnings
 
-from warframe_damage_calculator import Attack, AttackStats, Build, Compatibility, Dist, Effect, Enemy, EnemyStats, Primary, Upgrade, UpgradeStats, arsenal
+from warframe_damage_calculator import Attack, AttackStats, Build, Compatibility, Dist, Effect, Enemy, EnemyStats, Melee, Primary, Upgrade, UpgradeStats, arsenal
 
 
 class ApiTests(unittest.TestCase):
@@ -42,12 +42,37 @@ class ApiTests(unittest.TestCase):
         weapon = arsenal.weapon.get("Gorgon")
         self.assertEqual(weapon.runtime.reload_from_empty, 3)
 
+    def test_expected_procs_include_forced_and_damage_proc_effects(self):
+        attack = Attack(name="shot", stats=AttackStats(damage=Dist(impact=100), forced_procs=Dist(impact=0.25), crit_chance=0.2, status_chance=0.5, multishot=2))
+        upgrade = Upgrade(name="Proc effects", stats=UpgradeStats(
+            puncture_proc=Effect(properties={"value": 0.5}),
+            slash_proc=(
+                Effect(properties={"value": 1}, automatic={"on": "critical_hit", "chance": 0.3}),
+                Effect(properties={"value": 1}, automatic={"on": "impact_status_proc", "chance": 0.35}),
+            ),
+        ))
+        result = Primary(name="Example", subtype="rifle", attacks=[attack]).configure(upgrade).results.main
+        self.assertAlmostEqual(result.average.procs_per_shot, 3.2075)
+
     def test_formatters_cover_ranged_melee_and_contributions(self):
         ranged = arsenal.weapon.get("Braton").configure(Build(arsenal.upgrade.get("Serration")))
         melee = arsenal.weapon.get("Bo Prime")
         self.assertIn("TOTAL DPS", ranged.format.summary())
         self.assertIn("ATTACK SPEED", melee.format.summary())
+        self.assertIn("EXPECTED PROCS PER HIT", melee.format.summary())
         self.assertIn("Serration", ranged.format.upgrades())
+
+    def test_melee_slams_use_aoe_mass_and_show_density(self):
+        for category in ("slam", "heavy_slam"):
+            with self.subTest(category=category):
+                slam = Melee(name="Slam", attacks=[Attack(name=category, category=category, stats=AttackStats(damage=Dist(impact=100), falloff={"start_range": 0, "end_range": 6, "final_multiplier": 0.5}))])
+                result = slam.results.main
+                summary = slam.format.summary()
+                self.assertGreater(result.density.damage_mass, 0)
+                self.assertIsNotNone(result.density.damage_density)
+                self.assertIn("DAMAGE MASS", summary)
+                self.assertNotIn("DAMAGE DENSITY", summary)
+                self.assertIn("m³", summary)
 
     def test_summary_preserves_the_original_table_format(self):
         ranged = arsenal.weapon.get("Corinth Prime")

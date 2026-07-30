@@ -4,6 +4,7 @@ from copy import deepcopy
 import re
 
 from warframe_damage_calculator import arsenal
+from warframe_damage_calculator.engine.effects import unclassified_effect_stats
 from warframe_damage_calculator.schema import validate_database
 
 
@@ -21,6 +22,11 @@ class DatabaseTests(unittest.TestCase):
             self.assertTrue(all(isinstance(effect[channel], dict) for channel in effect))
             self.assertFalse({"target", "if", "scope", "exclude", "apply_mode"} & effect["automatic"].keys())
             self.assertNotEqual(effect["automatic"].get("with"), "bow_multiplier")
+
+    def test_every_database_effect_is_classified_by_the_engine(self):
+        stats = {stat for upgrade in arsenal.database["upgrades"].values() for stat in upgrade.get("stats", {})}
+        stats |= {stat for weapon in arsenal.database["weapons"].values() for tier in weapon.get("evolutions", {}).values() for perk in tier.values() for stat in perk.get("stats", {})}
+        self.assertEqual(unclassified_effect_stats(stats), set())
 
     def test_proc_chances_and_conditions_use_flat_automatic_fields(self):
         hunter = arsenal.database["upgrades"]["Hunter Munitions"]["stats"]["slash_proc"]

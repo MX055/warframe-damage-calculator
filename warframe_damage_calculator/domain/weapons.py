@@ -30,6 +30,7 @@ class AttackStats:
     co_factor: float = 1
     co_effect: str = "adds"
     range: float = 0
+    max_range: float | None = None
     damage_bonus: float = 0
     initial_combo: float = 0
     heavy_attack_efficiency: float = 0
@@ -38,6 +39,20 @@ class AttackStats:
     recoil: float = 0
     noise_level: str = "alarming"
     falloff: Mapping[str, float] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        self.punch_through = float(self.punch_through)
+        if self.punch_through < 0: raise ValueError("punch_through must be nonnegative")
+        if self.range < 0: raise ValueError("range must be nonnegative")
+        if self.max_range is not None and self.max_range < 0: raise ValueError("max_range must be nonnegative")
+        if not self.falloff: return
+        start_range = float(self.falloff.get("start_range", 0))
+        end_range = float(self.falloff.get("end_range", 0))
+        final_value = self.falloff.get("final_multiplier")
+        final_multiplier = 1.0 if final_value is None else float(final_value)
+        maximum = end_range if self.max_range is None else self.max_range
+        if not 0 <= start_range <= end_range <= maximum: raise ValueError("falloff ranges must satisfy 0 <= start_range <= end_range <= max_range")
+        if not 0 <= final_multiplier <= 1: raise ValueError("falloff final_multiplier must be between 0 and 1")
 
     @classmethod
     def from_record(cls, record: Mapping[str, Any]) -> AttackStats:

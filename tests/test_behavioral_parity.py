@@ -17,59 +17,59 @@ class BehavioralParityTests(unittest.TestCase):
         build = Build(*(arsenal.upgrade.get(name) for name in ("Serration", "Split Chamber", "Point Strike", "Vital Sense", "Hunter Munitions")))
         result = arsenal.weapon.get("Braton").configure(build).results.main
         self.assertAlmostEqual(result.effective.damage.total, 63.6)
-        self.assertAlmostEqual(result.effective.crit_chance, 0.3)
+        self.assertAlmostEqual(result.effective.crit_chance, 0.3722579268292683)
         self.assertAlmostEqual(result.effective.crit_damage, 3.52)
         self.assertAlmostEqual(result.effective.multishot, 1.9)
-        self.assertAlmostEqual(result.average.flat_dph, 212.19504)
-        self.assertAlmostEqual(result.average.flat_dotph, 83.483183274624)
-        self.assertAlmostEqual(result.final.total_dps, 1893.0617953558242)
+        self.assertAlmostEqual(result.average.flat_dph, 234.19879265268293)
+        self.assertAlmostEqual(result.average.flat_dotph, 109.7888138116019)
+        self.assertAlmostEqual(result.final.total_dps, 2202.3596755335307)
 
     def test_melee_combo_status_duplicate_and_doughty(self):
         names = ("Condition Overload", "Blood Rush", "Weeping Wounds", "Melee Duplicate", "Melee Doughty")
         result = arsenal.weapon.get("Bo Prime").configure(Build(*(arsenal.upgrade.get(name) for name in names))).set(combo=12).results.main
-        self.assertAlmostEqual(result.effective.damage.total, 438.55611238543815)
-        self.assertAlmostEqual(result.effective.crit_chance, 1.392)
+        self.assertAlmostEqual(result.effective.damage.total, 457.6)
+        self.assertAlmostEqual(result.effective.crit_chance, 1.4886961152000002)
         self.assertAlmostEqual(result.effective.status_chance, 1.856)
         self.assertAlmostEqual(result.effective.crit_damage, 4.5)
-        self.assertAlmostEqual(result.average.flat_dph, 4140.923999019087)
-        self.assertAlmostEqual(result.final.total_dps, 4472.197918940615)
+        self.assertAlmostEqual(result.average.flat_dph, 4569.768282551748)
+        self.assertAlmostEqual(result.final.total_dps, 4935.349745155888)
 
     def test_enervate_reset_expectation_and_encumber_random_proc(self):
         enervate = arsenal.weapon.get("Laetum").configure(Build(arsenal.upgrade.get("Secondary Enervate"))).results.main
         self.assertGreater(enervate.average.secondary_enervate_bonus, 0)
         self.assertAlmostEqual(enervate.average.flat_dph, 378.6766179484155)
-        self.assertAlmostEqual(enervate.final.total_dps, 828.1089619604925)
+        self.assertAlmostEqual(enervate.final.total_dps, 906.835830831968)
         encumber = arsenal.weapon.get("Lato").configure(Build(arsenal.upgrade.get("Secondary Encumber"))).results.main
-        self.assertAlmostEqual(encumber.average.flat_dotph, 2.035517538461537)
+        self.assertAlmostEqual(encumber.average.flat_dotph, 3.5399275201480167)
 
     def test_magazine_position_effects_use_shot_class_mixture(self):
         charged = arsenal.weapon.get("Braton").configure(Build(arsenal.upgrade.get("Charged Chamber"))).results.main
         self.assertAlmostEqual(charged.average.first_shot_damage_multiplier, 1.008888888888889)
-        self.assertAlmostEqual(charged.average.flat_dph, 25.956693333333337)
+        self.assertAlmostEqual(charged.average.flat_dph, 26.5092002601626)
         synth = arsenal.weapon.get("Lato").configure(Build(arsenal.upgrade.get("Synth Charge"))).results.main
-        self.assertAlmostEqual(synth.average.flat_dph, 48.96)
+        self.assertAlmostEqual(synth.average.flat_dph, 49.555459459459456)
 
     def test_incarnon_form_condition_and_multishot_ammo_mechanics(self):
         result = arsenal.weapon.get("Braton").set(attack="incarnon_form", evolutions={2: 2}).results.main
         self.assertAlmostEqual(result.effective.multishot, 1.2)
         self.assertAlmostEqual(result.effective.ammo_cost, 1.2)
         self.assertAlmostEqual(result.effective.damage.total, 70.4)
-        self.assertAlmostEqual(result.final.total_dps, 1520.3368338216317)
+        self.assertAlmostEqual(result.final.total_dps, 1539.4027259436357)
 
     def test_target_pool_armor_status_and_bodypart_model(self):
         target = arsenal.enemy.get("Heavy Gunner").set(level=100, steel_path=True)
         result = arsenal.weapon.get("Braton").configure(Build(arsenal.upgrade.get("Serration")), target).results.main
-        self.assertAlmostEqual(result.average.flat_dph, 7.9428768)
-        self.assertAlmostEqual(result.average.flat_weakpoint_dph, 23.8286304)
-        self.assertAlmostEqual(result.final.total_dps, 57.21186062985365)
+        self.assertAlmostEqual(result.average.flat_dph, 8.111946657804877)
+        self.assertAlmostEqual(result.average.flat_weakpoint_dph, 24.33583997341463)
+        self.assertAlmostEqual(result.final.total_dps, 71.03451583153777)
 
     def test_evolution_base_stats_and_form_condition(self):
         result = arsenal.weapon.get("Braton").set(attack="incarnon_form", evolutions={2: 1, 3: 1, 4: 1}).results.main
         self.assertAlmostEqual(result.effective.damage.total, 104)
-        self.assertAlmostEqual(result.effective.crit_chance, 0.46)
+        self.assertAlmostEqual(result.effective.crit_chance, 0.46688995215311)
         self.assertAlmostEqual(result.effective.crit_damage, 3.4)
         self.assertAlmostEqual(result.effective.magazine_capacity, 200)
-        self.assertAlmostEqual(result.final.total_dps, 2482.386066005741)
+        self.assertAlmostEqual(result.final.total_dps, 2556.784720408416)
 
     def test_equipped_dependencies_are_case_insensitive(self):
         weapon = arsenal.weapon.get("Bo Prime")
@@ -82,14 +82,14 @@ class BehavioralParityTests(unittest.TestCase):
         result = arsenal.weapon.get("Cycron").results.main
         self.assertAlmostEqual(result.effective.reload_speed, 4)
         self.assertAlmostEqual(result.average.fire_rate, 7.559055118110237)
-        self.assertAlmostEqual(result.final.total_dps, 196.22189661074978)
+        self.assertAlmostEqual(result.final.total_dps, 254.06533493275685)
 
     def test_non_crit_family_uses_event_chance_without_changing_effective_damage(self):
         result = arsenal.weapon.get("Laetum").set(evolutions={5: 1}).results.main
         self.assertAlmostEqual(result.effective.damage.total, 160)
         self.assertAlmostEqual(result.average.flat_dph, 1450.24)
-        self.assertAlmostEqual(result.average.flat_dotph, 241.2039168)
-        self.assertAlmostEqual(result.final.total_dps, 3171.457344)
+        self.assertAlmostEqual(result.average.flat_dotph, 402.006528)
+        self.assertAlmostEqual(result.final.total_dps, 3472.9622400000003)
 
     def test_not_continuous_condition_prevents_last_shot_overlay(self):
         bare = arsenal.weapon.get("Amprex").results.main.average.flat_dph

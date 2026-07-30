@@ -65,7 +65,8 @@ class Metrics:
 
 @dataclass(slots=True)
 class DensityMetrics:
-    damage_mass: float = 0
+    falloff_multiplier: float | None = None
+    damage_mass: float | None = None
     damage_density: float | None = None
     damage_density_per_second: float | None = None
     weakpoint_damage_density: float | None = None

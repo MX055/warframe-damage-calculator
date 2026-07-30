@@ -58495,7 +58495,7 @@
                     "form": "normal",
                     "category": "normal",
                     "stats": {
-                        "punch_through": -1,
+                        "punch_through": 0,
                         "damage": {
                             "viral": 2
                         },
@@ -61785,7 +61785,7 @@
                     "form": "incarnon",
                     "category": "normal",
                     "stats": {
-                        "punch_through": -1,
+                        "punch_through": 0,
                         "damage": {
                             "toxin": 51
                         },
@@ -71042,7 +71042,7 @@
                     "form": "normal",
                     "category": "normal",
                     "stats": {
-                        "punch_through": -1,
+                        "punch_through": 0,
                         "damage": {
                             "impact": 22.5,
                             "puncture": 180,
@@ -71498,7 +71498,7 @@
                     "form": "normal",
                     "category": "normal",
                     "stats": {
-                        "punch_through": -1,
+                        "punch_through": 0,
                         "damage": {
                             "viral": 2
                         },
@@ -71764,7 +71764,7 @@
                     "form": "normal",
                     "category": "normal",
                     "stats": {
-                        "punch_through": -1,
+                        "punch_through": 0,
                         "damage": {
                             "impact": 14,
                             "puncture": 112,

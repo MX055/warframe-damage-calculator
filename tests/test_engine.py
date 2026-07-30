@@ -1,16 +1,27 @@
 import unittest
 from math import pi
 
-from warframe_damage_calculator import Attack, AttackStats, BodyPart, Build, Dist, Effect, Enemy, EnemyStats, Primary, Upgrade, UpgradeStats, arsenal
+from warframe_damage_calculator import Attack, AttackStats, BodyPart, Build, Dist, Effect, Enemy, EnemyStats, Melee, Primary, Secondary, Upgrade, UpgradeStats, arsenal
+from warframe_damage_calculator.engine.formulas import cumulative_falloff, punch_through_falloff_multiplier
+from warframe_damage_calculator.engine.status import StatusModel, attack_proc_chance
 
 
-def weapon(*, damage=None, children=None, status=0, crit=0, fire_rate=1, multishot=1, aoe=False, punch_through=0, falloff=None):
-    attacks = [Attack(name="shot", aoe=aoe, children=list(children or []), stats=AttackStats(damage=damage or Dist(impact=100), status_chance=status, crit_chance=crit, crit_damage=2, fire_rate=fire_rate, multishot=multishot, punch_through=punch_through, falloff=falloff or {}))]
+def weapon(*, damage=None, children=None, status=0, crit=0, fire_rate=1, multishot=1, aoe=False, punch_through=0, falloff=None, max_range=None):
+    attacks = [Attack(name="shot", aoe=aoe, children=list(children or []), stats=AttackStats(damage=damage or Dist(impact=100), status_chance=status, crit_chance=crit, crit_damage=2, fire_rate=fire_rate, multishot=multishot, punch_through=punch_through, falloff=falloff or {}, max_range=max_range))]
     if children: attacks.append(Attack(name="blast", stats=AttackStats(damage=Dist(blast=100), fire_rate=fire_rate)))
     return Primary(name="Test", subtype="rifle", attacks=attacks, magazine_size=100)
 
 
 class EngineTests(unittest.TestCase):
+    def test_fractional_attempts_are_a_discrete_extra_hit(self):
+        self.assertEqual(attack_proc_chance(0.5, 1.5), 0.625)
+
+    def test_sustained_stacks_use_continuous_proc_rates(self):
+        one = StatusModel(Dist(heat=100), Dist(), 1, 1, 0.2, 5)
+        two = StatusModel(Dist(heat=100), Dist(), 1, 1, 0.4, 5)
+        self.assertEqual(one.expected_stacks("heat", 10), 1)
+        self.assertEqual(two.expected_stacks("heat", 10), 2)
+
     def test_different_families_multiply(self):
         build = Build(
             Upgrade(name="First", stats=UpgradeStats(damage_bonus=Effect(properties={"value": 1, "family": "first"}))),
@@ -32,11 +43,75 @@ class EngineTests(unittest.TestCase):
         modded = weapon(crit=1).configure(hunter)
         self.assertGreater(modded.results.main.average.flat_dotph, bare.results.main.average.flat_dotph)
 
+    def test_dot_formulas_use_modded_base_damage(self):
+        natural = weapon(damage=Dist(impact=100, slash=100), status=1).results.main
+        forced = Primary(name="Forced", subtype="rifle", magazine_size=100, attacks=[Attack(name="shot", stats=AttackStats(damage=Dist(impact=100), forced_procs=Dist(slash=1), fire_rate=1))]).results.main
+        heat_mod = Upgrade(name="Heat", stats=UpgradeStats(heat=Effect(properties={"value": 1})))
+        elemental = weapon(damage=Dist(impact=100), status=1).configure(heat_mod).results.main
+        self.assertEqual(natural.average.flat_dotph, 210)
+        self.assertEqual(forced.average.flat_dotph, 210)
+        self.assertEqual(elemental.average.flat_dotph, 300)
+        for kind in ("heat", "toxin", "electricity", "gas"):
+            natural_element = weapon(damage=Dist({kind: 100}), status=1).results.main
+            forced_element = Primary(name="Forced", subtype="rifle", magazine_size=100, attacks=[Attack(name="shot", stats=AttackStats(damage=Dist(impact=100), forced_procs=Dist({kind: 1}), fire_rate=1))]).results.main
+            self.assertEqual(natural_element.average.flat_dotph, 300)
+            self.assertEqual(forced_element.average.flat_dotph, 300)
+
     def test_internal_bleeding_uses_an_additional_low_fire_rate_effect(self):
         upgrade = arsenal.upgrade.get("Internal Bleeding")
         low_rate = weapon(status=1, fire_rate=2).configure(upgrade).results.main.average.flat_dotph
         high_rate = weapon(status=1, fire_rate=3).configure(upgrade).results.main.average.flat_dotph
         self.assertAlmostEqual(low_rate, high_rate * 2)
+
+    def test_random_procs_feed_every_status_consumer(self):
+        attack = Attack(name="shot", stats=AttackStats(damage=Dist(impact=100), status_chance=1, fire_rate=1))
+        encumber = Upgrade(name="Encumber", stats=UpgradeStats(random_proc=Effect(properties={"value": 1}, automatic={"on": "any_status_proc", "chance": 0.24})))
+        heat_bonus = Upgrade(name="Heat consumer", stats=UpgradeStats(damage_bonus=Effect(properties={"value": 1}, automatic={"when": "heat_status_proc", "stacks": 40, "for": 10})))
+        proc_result = Secondary(name="Proc", subtype="pistol", attacks=[attack], magazine_size=100).configure(encumber).results.main
+        consumer_result = Secondary(name="Consumer", subtype="pistol", attacks=[attack], magazine_size=100).configure(Build(encumber, heat_bonus)).results.main
+        self.assertAlmostEqual(proc_result.average.procs_per_shot, 1.24)
+        self.assertGreater(proc_result.average.flat_dotph, 0)
+        for kind in ("viral", "magnetic", "corrosive", "heat"): self.assertGreater(proc_result.status_effects[kind], 0)
+        self.assertGreater(consumer_result.effective.damage.total, proc_result.effective.damage.total)
+
+    def test_forced_procs_trigger_capped_random_procs(self):
+        attack = Attack(name="shot", stats=AttackStats(damage=Dist(impact=100), forced_procs=Dist(slash=1), status_chance=0, multishot=2))
+        encumber = Upgrade(name="Encumber", stats=UpgradeStats(random_proc=Effect(properties={"value": 1}, automatic={"on": "any_status_proc", "chance": 0.24})))
+        result = Secondary(name="Forced", subtype="pistol", attacks=[attack], magazine_size=100).configure(encumber).results.main
+        expected_random_proc = 1 - (1 - 0.24) ** 2
+        self.assertAlmostEqual(result.average.procs_per_shot, 2 + expected_random_proc)
+
+    def test_random_impact_procs_feed_hemorrhage(self):
+        attack = Attack(name="shot", stats=AttackStats(damage=Dist(heat=100), status_chance=1, fire_rate=1))
+        encumber = Upgrade(name="Encumber", stats=UpgradeStats(random_proc=Effect(properties={"value": 1}, automatic={"on": "any_status_proc", "chance": 0.24})))
+        hemorrhage = Upgrade(name="Hemorrhage", stats=UpgradeStats(slash_proc=Effect(properties={"value": 1}, automatic={"on": "impact_status_proc", "chance": 0.35})))
+        encumber_only = Secondary(name="Encumber", subtype="pistol", attacks=[attack], magazine_size=100).configure(encumber).results.main
+        chained = Secondary(name="Chained", subtype="pistol", attacks=[attack], magazine_size=100).configure(Build(encumber, hemorrhage)).results.main
+        self.assertGreater(chained.average.procs_per_shot, encumber_only.average.procs_per_shot)
+        self.assertGreater(chained.average.flat_dotph, encumber_only.average.flat_dotph)
+
+    def test_special_status_effects_use_the_shared_proc_model(self):
+        cascadia = Secondary(name="Cascadia", subtype="pistol", magazine_size=100, attacks=[Attack(name="shot", stats=AttackStats(damage=Dist(impact=100), status_chance=1, fire_rate=1))]).configure(arsenal.upgrade.get("Cascadia Empowered")).results.main
+        afflicted = Melee(name="Afflicted", subtype="scythe", attacks=[Attack(name="shot", stats=AttackStats(damage=Dist(slash=100), forced_procs=Dist(slash=1, knockdown=1), fire_rate=1))]).configure(arsenal.upgrade.get("Melee Afflictions")).results.main
+        bleeding = weapon(damage=Dist(impact=100), status=1).configure(Upgrade(name="Bleed", stats=UpgradeStats(bleed_on_impact=Effect(properties={"value": 0.4})))).results.main
+        debilitated = weapon(damage=Dist(blast=100), status=1, fire_rate=2).configure(arsenal.upgrade.get("Primary Debilitate")).results.main
+        self.assertEqual(cascadia.average.flat_dph, 850)
+        self.assertEqual(afflicted.average.procs_per_shot, 8)
+        self.assertEqual(afflicted.average.flat_dotph, 1470)
+        self.assertAlmostEqual(bleeding.average.procs_per_shot, 1.4)
+        self.assertEqual(debilitated.average.procs_per_shot, 2)
+
+    def test_cold_puncture_blast_void_and_status_vulnerability(self):
+        puncture = weapon(damage=Dist(puncture=100), status=1).results.main
+        cold = weapon(damage=Dist(cold=100), status=1, crit=1).results.main
+        blast = weapon(damage=Dist(blast=100), status=1).results.main
+        void = Primary(name="Void", subtype="rifle", magazine_size=100, attacks=[Attack(name="shot", stats=AttackStats(damage=Dist(impact=100), forced_procs=Dist(void=1), fire_rate=1))]).results.main
+        vulnerable = weapon(status=1).configure(Upgrade(name="Vulnerability", stats=UpgradeStats(status_vulnerability=Effect(properties={"value": 0.5})))).results.main
+        self.assertEqual(puncture.effective.crit_chance, 0.25)
+        self.assertGreater(cold.effective.crit_damage, 2)
+        self.assertEqual(blast.average.flat_dotph, 30)
+        self.assertEqual(void.average.procs_per_shot, 1)
+        self.assertEqual(vulnerable.effective.status_chance, 1.5)
 
     def test_vigilante_upgrades_existing_crits_without_creating_crits(self):
         vigilante = arsenal.upgrade.get("Vigilante Supplies")
@@ -52,6 +127,30 @@ class EngineTests(unittest.TestCase):
         result = weapon(children=["blast"]).results.main
         self.assertEqual(result.average.total_dph, 100)
         self.assertEqual(result.final.total_dph, 200)
+
+    def test_shared_attack_descendants_are_not_folded_twice(self):
+        attacks = [
+            Attack(name="root", children=["left", "right"], stats=AttackStats(damage=Dist(impact=100), fire_rate=1)),
+            Attack(name="left", children=["shared"], stats=AttackStats(damage=Dist(impact=100), fire_rate=1)),
+            Attack(name="right", children=["shared"], stats=AttackStats(damage=Dist(impact=100), fire_rate=1)),
+            Attack(name="shared", stats=AttackStats(damage=Dist(impact=100), fire_rate=1)),
+        ]
+        result = Primary(name="Tree", subtype="rifle", attacks=attacks, magazine_size=100).results.main
+        self.assertEqual(result.final.total_dph, 400)
+
+    def test_parent_and_child_share_sustained_status_and_encumber_cap(self):
+        attacks = [
+            Attack(name="shot", children=["blast"], stats=AttackStats(damage=Dist(impact=100), status_chance=1, fire_rate=1)),
+            Attack(name="blast", stats=AttackStats(damage=Dist(heat=100), status_chance=1, fire_rate=1)),
+        ]
+        bare = Secondary(name="Composite", subtype="pistol", attacks=attacks, magazine_size=100)
+        encumbered = bare.copy().configure(arsenal.upgrade.get("Secondary Encumber")).results.main
+        condition_overload = Upgrade(name="CO", stats=UpgradeStats(damage_bonus=Effect(properties={"value": 1, "family": "unique_status"}, automatic={"with": "unique_status_count"})))
+        overloaded = bare.copy().configure(condition_overload).results.main
+        self.assertEqual(bare.results.main.average.procs_per_shot, 2)
+        self.assertEqual(bare.results.main.status_effects["heat"], 1)
+        self.assertAlmostEqual(encumbered.average.procs_per_shot, 2 + 1 - (1 - 0.24) ** 2)
+        self.assertEqual(overloaded.effective.damage.total, 300)
 
     def test_target_hit_zones_and_armor(self):
         target = Enemy(name="Armored", stats=EnemyStats(health=100, armor=300), bodyparts={"body": BodyPart("normal", 1), "head": BodyPart("weakpoint", 2)})
@@ -81,9 +180,10 @@ class EngineTests(unittest.TestCase):
         shallow = weapon(punch_through=1, falloff=falloff).results.main
         partial = weapon(punch_through=3, falloff=falloff).results.main
         excess = weapon(punch_through=10, falloff=falloff).results.main
-        expected_partial = 3 - (1 - 0.5) * (3 - 2) ** 2 / (2 * (4 - 2))
-        expected_full = (1 - 0.5) / 2 * 2 + (1 + 0.5) / 2 * 4
-        self.assertEqual(shallow.density.damage_mass, 1)
+        expected_shallow = 4 * punch_through_falloff_multiplier(2, 4, 4, 0.5, 1)
+        expected_partial = 4 * punch_through_falloff_multiplier(2, 4, 4, 0.5, 3)
+        expected_full = 4 * punch_through_falloff_multiplier(2, 4, 4, 0.5, 10)
+        self.assertAlmostEqual(shallow.density.damage_mass, expected_shallow)
         self.assertAlmostEqual(partial.density.damage_mass, expected_partial)
         self.assertAlmostEqual(excess.density.damage_mass, expected_full)
         self.assertAlmostEqual(partial.density.damage_density, 100 * expected_partial)
@@ -93,9 +193,33 @@ class EngineTests(unittest.TestCase):
     def test_punch_through_upgrades_add_meters_to_the_density_bound(self):
         upgrade = Upgrade(name="Punch Through", stats=UpgradeStats(punch_through=Effect(properties={"value": 3})))
         result = weapon(falloff={"start_range": 2, "end_range": 4, "final_multiplier": 0.5}).configure(upgrade).results.main
-        expected_mass = 3 - (1 - 0.5) * (3 - 2) ** 2 / (2 * (4 - 2))
+        expected_mass = 4 * punch_through_falloff_multiplier(2, 4, 4, 0.5, 3)
         self.assertEqual(result.effective.punch_through, 3)
         self.assertAlmostEqual(result.density.damage_mass, expected_mass)
+
+    def test_sliding_punch_through_density_and_range_scaling(self):
+        self.assertEqual(cumulative_falloff(3, 3, 6, 0), 3)
+        self.assertEqual(cumulative_falloff(4.5, 3, 6, 0), 4.125)
+        self.assertEqual(cumulative_falloff(6, 3, 6, 0), 4.5)
+        self.assertEqual(cumulative_falloff(9, 3, 6, 0), 4.5)
+        self.assertEqual(punch_through_falloff_multiplier(3, 6, 6, 0, 3), 0.75)
+        supplied = weapon(punch_through=3, falloff={"start_range": 3, "end_range": 6, "final_multiplier": 0}).results.main
+        no_falloff = weapon(punch_through=3, max_range=10).results.main
+        unbounded = weapon(punch_through=3).results.main
+        speed = Upgrade(name="Speed", stats=UpgradeStats(projectile_speed=Effect(properties={"value": 0.5})))
+        scaled = weapon(punch_through=3, falloff={"start_range": 3, "end_range": 6, "final_multiplier": 0}, max_range=9).configure(speed).results.main
+        self.assertEqual(supplied.density.falloff_multiplier, 0.75)
+        self.assertEqual(supplied.density.damage_mass, 4.5)
+        self.assertEqual(no_falloff.density.falloff_multiplier, 1)
+        self.assertEqual(no_falloff.density.damage_mass, 10)
+        self.assertIsNone(unbounded.density.damage_mass)
+        self.assertEqual(scaled.effective.end_range, 9)
+        self.assertEqual(scaled.effective.max_range, 13.5)
+
+    def test_malformed_spatial_ranges_are_rejected(self):
+        with self.assertRaises(ValueError): AttackStats(punch_through=-1)
+        with self.assertRaises(ValueError): AttackStats(max_range=5, falloff={"start_range": 3, "end_range": 6, "final_multiplier": 0.5})
+        with self.assertRaises(ValueError): AttackStats(falloff={"start_range": 0, "end_range": 5, "final_multiplier": 1.1})
 
     def test_zero_final_falloff_multiplier_is_preserved(self):
         result = weapon(falloff={"start_range": 0, "end_range": 4, "final_multiplier": 0}).results.main

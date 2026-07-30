@@ -83,6 +83,8 @@ Tags follow one vocabulary: event conditions use direct names such as `kill` and
 
 Proc and result identity are expressed by the stat name (`slash_proc`, `puncture_proc`, `crit_tier`, and so on); effects do not use a generic `target` field. An attack's intrinsic `forced_procs` distribution remains part of its attack data. Form applicability also uses `when`, such as `{"when": "incarnon_form"}`; there is no separate scope language.
 
+All proc producers feed one status model. Normal status rolls, intrinsic and effect-provided forced procs, conditional damage procs, and capped random procs contribute to expected proc counts, DoT, non-damaging status stacks, unique-status counts, and effects triggered by status events. Random procs are distributed across the 13 physical and elemental status types; a capped `random_proc` effect such as Secondary Encumber contributes at most one additional proc per simultaneous attack.
+
 Runtime state retains the value supplied by the caller. Each effect applies its own stack cap during resolution.
 
 Compatibility metadata only produces warnings. Automatic `when` conditions define where an effect actually applies.
@@ -93,9 +95,9 @@ The engine includes ranged and melee rates, charge/burst/reload/battery cycles, 
 
 `average` and `final` include the average falloff multiplier in ordinary per-hit and attack-tree damage. AoE and punch-through mass calculations live in the separate `density` result pool.
 
-Attacks with falloff expose `average.falloff_multiplier`. AoE attacks also expose a falloff-weighted spherical `density.damage_mass` in cubic meters; attacks with punch through expose a linear mass in meters. `density.damage_density` and `density.damage_density_per_second` multiply pre-falloff damage by that mass, representing expected aggregate damage at a uniform target density of one target per cubic meter or meter respectively. They do not multiply the already falloff-averaged `final` pool, so falloff is counted only once.
+Attacks with falloff expose `average.falloff_multiplier`. AoE attacks also expose a falloff-weighted spherical `density.damage_mass` in cubic meters; attacks with punch through and a finite range expose a linear mass in meters. `density.damage_density` and `density.damage_density_per_second` multiply pre-falloff damage by that mass, representing expected aggregate damage at a uniform target density of one target per cubic meter or meter respectively. They do not multiply the already falloff-averaged `final` pool, so falloff is counted only once.
 
-Punch-through mass is bounded by the effective punch-through distance. With `L = min(punch_through, end_range)`, mass is `L` before falloff starts and `L - (1 - final_multiplier) * (L - start_range) ** 2 / (2 * (end_range - start_range))` within the falloff interval. This is a continuous-material approximation: exact in-game enemy counts also depend on enemy thickness and alignment because empty air does not consume punch through.
+Ranged attacks may provide `max_range`; falloff end is used when no distinct maximum is available. Punch-through density uses sliding hit pairs across that finite range. `density.falloff_multiplier` is the normalized sliding-pair result and `density.damage_mass` is `max_range * density.falloff_multiplier`. Punch-through without falloff uses a multiplier of one. Density remains unavailable when no finite range can be established.
 
 ## Isolated validation
 
