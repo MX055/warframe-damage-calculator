@@ -128,7 +128,6 @@ class WeaponFormatter:
         effective = selected.effective
         effective_text = format_falloff(effective.start_range, effective.end_range, effective.final_multiplier)
         self._append(rows, "FALLOFF", base_text, effective_text, effective_text)
-        self._append(rows, "AVERAGE FALLOFF MULTIPLIER", "", "", self._fmt_multiplier(selected.average.falloff_multiplier))
         self._append(rows, "DAMAGE MASS", "", "", self._fmt_damage_mass(selected.density.damage_mass, selected.attack.aoe), when=float(selected.density.damage_mass) > 0)
 
     @staticmethod
@@ -208,6 +207,7 @@ class WeaponFormatter:
 
         averages_at = len(rows)
         self._append(rows, "HIT MULTIPLIER", "", "", self._with_weakpoint(self._fmt_multiplier(body_hit), self._fmt_multiplier(weakpoint_hit) if show_weakpoint_hit else None))
+        self._append(rows, "AVERAGE FALLOFF MULTIPLIER", "", "", self._fmt_multiplier(average.falloff_multiplier), when=bool(attack.stats.falloff))
         self._append(rows, "EXPECTED PROCS PER SHOT", "", "", self._fmt_number(average.procs_per_shot))
         density = selected.density
         self._append(rows, "DAMAGE DENSITY DPH", "", "", self._fmt_zone_metric(density.damage_density, density.weakpoint_damage_density, density.resistant_damage_density), when=density.damage_density is not None)

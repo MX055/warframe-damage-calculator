@@ -60,6 +60,8 @@ class ApiTests(unittest.TestCase):
         self.assertIn("RELOAD SPEED", summary)
         self.assertIn("MAGAZINE CAPACITY", summary)
         self.assertIn("EXPECTED PROCS PER SHOT", summary)
+        self.assertLess(summary.index("HIT MULTIPLIER"), summary.index("AVERAGE FALLOFF MULTIPLIER"))
+        self.assertLess(summary.index("AVERAGE FALLOFF MULTIPLIER"), summary.index("EXPECTED PROCS PER SHOT"))
         self.assertIn("WEAKPOINT DAMAGE", summary)
         self.assertNotIn("effective", lines[2])
         self.assertNotIn("EXPECTED PROCS/SHOT", summary)
