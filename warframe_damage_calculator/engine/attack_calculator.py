@@ -581,7 +581,7 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     effective.final_multiplier = 1.0 if final_multiplier is None else float(final_multiplier)
     effective.noise_level = total.proportional.get("noise_level", attack.stats.noise_level)
     base = BaseAttackStats(damage=base_damage, forced_procs=attack.stats.forced_procs, crit_chance=attack.stats.crit_chance, crit_damage=attack.stats.crit_damage, status_chance=attack.stats.status_chance, status_duration=attack.stats.status_duration, multishot=attack.stats.multishot, fire_rate=attack.stats.fire_rate)
-    modded = ModdedAttackStats(damage=damage, crit_chance=crit, crit_damage=crit_damage, status_chance=status, status_duration=duration, multishot=multishot, **category_stats)
+    modded = ModdedAttackStats(damage=damage, crit_chance=crit, crit_damage=crit_damage, status_chance=status, status_duration=duration, multishot=multishot, fire_rate=instant_rate, **category_stats)
     body_crit, weak_crit = crit, weakpoint_crit
     if context.weapon.type == "secondary":
         per_stack, reset = enervate_parameters([*upgrades_resolved, *evolution_resolved])

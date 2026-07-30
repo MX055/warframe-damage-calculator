@@ -86,10 +86,10 @@ class ResultFormatter:
         rows.extend((
             self._section("OFFENSE"),
             ("Critical Chance", self._percent(base.crit_chance), self._percent(modded.crit_chance), self._percent(effective.crit_chance), self._percent(average.crit_chance), "—"),
-            ("Critical Damage", self._multiplier(base.crit_damage), self._multiplier(modded.crit_damage), self._multiplier(effective.crit_damage), self._multiplier(average.crit_multiplier), "—"),
+            ("Critical Damage", self._multiplier(base.crit_damage), self._multiplier(modded.crit_damage), self._multiplier(effective.crit_damage), "—", "—"),
             ("Status Chance", self._percent(base.status_chance), self._percent(modded.status_chance), self._percent(effective.status_chance), "—", "—"),
             ("Multishot", self._multiplier(base.multishot), self._multiplier(modded.multishot), self._multiplier(effective.multishot), "—", "—"),
-            ("Fire Rate", self._number(base.fire_rate), self._number(modded.get("fire_rate")), self._number(effective.instantaneous_fire_rate), self._number(average.sustained_fire_rate), "—"),
+            ("Fire Rate", self._number(base.fire_rate), self._number(modded.fire_rate), self._number(effective.instantaneous_fire_rate), self._number(average.sustained_fire_rate), "—"),
             ("Expected Procs", "—", "—", "—", self._number(selected.status.expected_procs_per_attack), "—"),
             self._section("HANDLING"),
             ("Magazine Capacity", self._rounds(self.result.weapon.magazine_size), "—", self._rounds(effective.get("magazine_capacity")), "—", "—"),

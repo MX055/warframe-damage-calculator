@@ -38,6 +38,7 @@ class ModdedAttackStats(Stats):
     status_chance: float
     status_duration: float
     multishot: float
+    fire_rate: float
 
 
 class EffectiveAttackStats(ModdedAttackStats):

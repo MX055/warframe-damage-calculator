@@ -82,6 +82,10 @@ class ApiTests(unittest.TestCase):
         self.assertIn("Elemental Excess", format_perk(perk))
         self.assertIn("Galvanized Hell", format_loadout(loadout))
         self.assertIn("TOTAL DPS", formatter.summary())
+        fire_rate_result = Calculator(weapon).calculate(Loadout(upgrades=[arsenal.upgrade.get("Critical Deceleration")]))
+        fire_rate_attack = fire_rate_result.attacks[fire_rate_result.selected_attack]
+        self.assertAlmostEqual(fire_rate_attack.modded.fire_rate, fire_rate_attack.effective.instantaneous_fire_rate)
+        self.assertIn("1.14", ResultFormatter(fire_rate_result).summary().split("Fire Rate", 1)[1].splitlines()[0])
         targeted = ResultFormatter(Calculator(weapon, arsenal.enemy.get("Heavy Gunner")).calculate(loadout))
         self.assertIn("Corinth Prime · Buckshot vs Heavy Gunner · TOTAL DPS Contributions", targeted.contributions())
         contribution_table = targeted.contributions()
