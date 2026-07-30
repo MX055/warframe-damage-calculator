@@ -129,11 +129,14 @@ class WeaponFormatter:
         effective = selected.effective
         effective_text = format_falloff(effective.start_range, effective.end_range, effective.final_multiplier)
         self._append(rows, "FALLOFF", base_text, effective_text, effective_text)
-        is_aoe = selected.attack.aoe or selected.attack.category in SLAM_ATTACK_CATEGORIES
-        self._append(rows, "DAMAGE MASS", "", "", self._fmt_damage_mass(selected.density.damage_mass, is_aoe), when=selected.density.damage_mass is not None and selected.density.damage_mass > 0)
 
     def _append_falloff_multiplier(self, rows: list[tuple[str, ...]], selected: Any) -> None:
         self._append(rows, "AVERAGE FALLOFF MULTIPLIER", "", "", self._fmt_multiplier(selected.average.falloff_multiplier), when=bool(selected.attack.stats.falloff))
+
+    def _append_damage_mass(self, rows: list[tuple[str, ...]], selected: Any) -> None:
+        is_aoe = selected.attack.aoe or selected.attack.category in SLAM_ATTACK_CATEGORIES
+        damage_mass = selected.density.damage_mass
+        self._append(rows, "DAMAGE MASS", "", "", self._fmt_damage_mass(damage_mass, is_aoe), when=damage_mass is not None and damage_mass > 0)
 
     @staticmethod
     def _resolved_proportional(selected: Any, stat: str) -> float:
@@ -213,6 +216,7 @@ class WeaponFormatter:
         averages_at = len(rows)
         self._append(rows, "HIT MULTIPLIER", "", "", self._with_weakpoint(self._fmt_multiplier(body_hit), self._fmt_multiplier(weakpoint_hit) if show_weakpoint_hit else None))
         self._append_falloff_multiplier(rows, selected)
+        self._append_damage_mass(rows, selected)
         self._append(rows, "EXPECTED PROCS PER SHOT", "", "", self._fmt_number(average.procs_per_shot))
         if self.weapon.type == "primary":
             self._append(rows, "FIRST SHOT DAMAGE MULTIPLIER", "", "", self._fmt_multiplier(average.first_shot_damage_multiplier), when=float(average.first_shot_damage_multiplier) != 1)
@@ -253,6 +257,7 @@ class WeaponFormatter:
         averages_at = len(rows)
         self._append(rows, "HIT MULTIPLIER", "", "", self._fmt_multiplier(body_hit))
         self._append_falloff_multiplier(rows, selected)
+        self._append_damage_mass(rows, selected)
         self._append(rows, "EXPECTED PROCS PER HIT", "", "", self._fmt_number(average.procs_per_shot))
         self._append(rows, "COMBO MULTIPLIER", "", "", self._fmt_multiplier(average.combo_multiplier), when=category in HEAVY_ATTACK_CATEGORIES)
         self._append(rows, "MELEE DUPLICATE MULTIPLIER", "", "", self._fmt_multiplier(average.melee_duplicate_multiplier), when=not isclose(float(average.melee_duplicate_multiplier), 1))

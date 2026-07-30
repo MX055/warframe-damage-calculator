@@ -73,6 +73,9 @@ class ApiTests(unittest.TestCase):
                 self.assertIn("DAMAGE MASS", summary)
                 self.assertNotIn("DAMAGE DENSITY", summary)
                 self.assertIn("m³", summary)
+                self.assertLess(summary.index("HIT MULTIPLIER"), summary.index("DAMAGE MASS"))
+                self.assertLess(summary.index("AVERAGE FALLOFF MULTIPLIER"), summary.index("DAMAGE MASS"))
+                self.assertLess(summary.index("DAMAGE MASS"), summary.index("EXPECTED PROCS PER HIT"))
 
     def test_summary_preserves_the_original_table_format(self):
         ranged = arsenal.weapon.get("Corinth Prime")
