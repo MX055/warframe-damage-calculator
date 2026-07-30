@@ -11,6 +11,6 @@ from .domain.weapons import Attack, AttackStats, LoadoutCompatibilityWarning, Me
 from .engine.calculator import Calculator, PreparedCalculator
 from .formatting import ResultFormatter, format_damage_result, format_loadout, format_perk, format_result, format_spatial, format_status, format_upgrade, format_weapon
 
-__version__ = "1.1.0"
+__version__ = "0.9.0"
 
 __all__ = ["AggregateResult", "Arsenal", "Attack", "AttackStats", "AverageResult", "BodyPart", "CalculatedAttack", "CalculationResult", "Calculator", "Compatibility", "DamageMetrics", "DamageResult", "Dist", "Effect", "Enemy", "EnemyStats", "Loadout", "LoadoutCompatibilityWarning", "Melee", "PLACEHOLDER", "Perk", "PerkValues", "Placeholder", "PreparedCalculator", "Primary", "ResolvedPerk", "ResultFormatter", "removal_contributions", "Secondary", "SpatialDamageMetrics", "SpatialResult", "StatusResult", "UnimplementedUpgradeWarning", "Upgrade", "UpgradeStats", "Weapon", "arsenal", "format_damage_result", "format_loadout", "format_perk", "format_result", "format_spatial", "format_status", "format_upgrade", "format_weapon", "shapley_contributions"]
