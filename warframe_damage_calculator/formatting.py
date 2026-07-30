@@ -219,7 +219,8 @@ class WeaponFormatter:
             self._append(rows, "SECONDARY ENERVATE BONUS", "", "", bonus, when=float(average.secondary_enervate_bonus) > 0)
         section_breaks.append(averages_at)
         section_breaks.append(self._append_zone_metrics_section(rows, final))
-        return self._table(("stat", "base", "effective", "final"), rows, title=self._summary_title(selected), border="=", section_at=tuple(section_breaks))
+        summary_rows = [(name, base, final) for name, base, _effective, final in rows]
+        return self._table(("stat", "base", "final"), summary_rows, title=self._summary_title(selected), border="=", section_at=tuple(section_breaks))
 
     def _melee_summary(self) -> str:
         selected = self.weapon.results.main
@@ -253,4 +254,5 @@ class WeaponFormatter:
         self._append(rows, "MELEE DOUGHTY BONUS", "", "", self._fmt_number(average.melee_doughty_bonus), when=float(average.melee_doughty_bonus) > 0)
         section_breaks.append(averages_at)
         section_breaks.append(self._append_zone_metrics_section(rows, final))
-        return self._table(("stat", "base", "effective", "final"), rows, title=self._summary_title(selected), border="=", section_at=tuple(section_breaks))
+        summary_rows = [(name, base, final) for name, base, _effective, final in rows]
+        return self._table(("stat", "base", "final"), summary_rows, title=self._summary_title(selected), border="=", section_at=tuple(section_breaks))

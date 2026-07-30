@@ -61,6 +61,7 @@ class ApiTests(unittest.TestCase):
         self.assertIn("MAGAZINE CAPACITY", summary)
         self.assertIn("EXPECTED PROCS PER SHOT", summary)
         self.assertIn("WEAKPOINT DAMAGE", summary)
+        self.assertNotIn("effective", lines[2])
         self.assertNotIn("EXPECTED PROCS/SHOT", summary)
         self.assertIn("ATTACK SPEED", arsenal.weapon.get("Bo Prime").format.summary())
 
