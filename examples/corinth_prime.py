@@ -1,8 +1,3 @@
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-
 from warframe_damage_calculator import Build, arsenal
 
 
@@ -20,7 +15,6 @@ def main() -> None:
     weapon.configure(build, target)
 
     print(weapon.format.summary())
-    print(arsenal.weapon.get("Skana").set(attack="slam_attack").format.summary())
 
 
 if __name__ == "__main__": main()
