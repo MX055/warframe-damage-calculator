@@ -16,7 +16,7 @@ def main() -> None:
         arsenal.upgrade.get("Toxic Barrage"),
     )
     target = arsenal.enemy.get("Heavy Gunner").set(level=100, steel_path=True)
-    weapon = arsenal.weapon.get("Corinth Prime").set(attack="air_burst_projectile")
+    weapon = arsenal.weapon.get("Corinth Prime")
     weapon.configure(build, target)
 
     print(weapon.format.summary())
