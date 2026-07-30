@@ -17,7 +17,7 @@ class FullDatabaseParityTests(unittest.TestCase):
             with self.subTest(weapon=weapon_name, reference=REFERENCE_COMMIT):
                 calculation = Calculator(arsenal.weapon.get(weapon_name)).calculate()
                 result = calculation.attacks[calculation.selected_attack]
-                self.assertEqual(result.name, reference["attack"])
+                self.assertEqual(calculation.selected_attack, reference["attack"])
                 for pool_name in ("average", "final"):
                     pool = result.average.normal if pool_name == "average" else calculation.aggregate.average.normal
                     for field in fields:

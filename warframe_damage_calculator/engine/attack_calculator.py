@@ -8,9 +8,9 @@ from ..domain.upgrades import ResolvedEffect, Upgrade
 from ..domain.weapons import Attack
 from .aggregation import DAMAGE_TYPES, aggregate, merge
 from .context import CalculationContext
-from .effects import automatic_value, automatic_values, evaluate
+from .effects import evaluate
 from .formulas import DOT_MULTIPLIERS, aoe_damage_mass, average_falloff_multiplier, clamp, crit_multiplier, family_bonus, family_factor, hit_multiplier, ranged_falloff_multiplier, refresh_metrics, true_round
-from .special import average_enervate_bonus, enervate_parameters
+from .special import automatic_value, automatic_values, average_enervate_bonus, enervate_parameters
 from ..domain.status import COMBINED_STATUS_COMPONENTS, RANDOM_STATUS_TYPES, STATUS_TYPES, StatusModel, attack_proc_chance
 from .targets import ZONE_FIELDS, damage_multiplier, damage_total
 
@@ -420,6 +420,9 @@ def _zone_damage(context: CalculationContext, result: AttackResult, zone: str, *
     tier_bonus = average.weakpoint_crit_tier_bonus if zone == "weakpoint" else average.crit_tier_bonus
     faction = float(effective.faction_damage)
     direct = direct_total * direct_hits * faction * _hit_multiplier(chance, tier_bonus, float(effective.crit_damage), float(effective.non_crit_bonus_damage), float(effective.non_crit_bonus_chance)) * duplicate_multiplier * combo_multiplier * float(effective.target_vulnerability)
+    cascadia = _special_value(effective.special_effects, "cascadia_empowered_proc")
+    if cascadia:
+        direct += sum(effective.status_model.proc_count_per_attack(kind) * cascadia * faction * float(damage_multiplier(context.target, kind, zone=zone, weakpoint_bonus=weakpoint_bonus, status_effects=result.status_effects, overguard_multiplier=float(effective.overguard_damage_multiplier)) or 0) for kind in RANDOM_STATUS_TYPES | {"void"}) * float(effective.target_vulnerability)
     dot = _dot_value(context, result, zone, multishot=dot_multishot, damage_factor=damage_factor) * combo_multiplier
     return direct, dot
 
@@ -592,7 +595,7 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     weak_tier_bonus = min(weak_crit, 1) * crit_tier_chance
     falloff_multiplier, spatial = _spatial_falloff(attack, effective)
     average = AverageAttackStats(crit_chance=body_crit, crit_multiplier=crit_multiplier(body_crit + body_tier_bonus, crit_damage), weakpoint_crit_chance=weak_crit, weakpoint_crit_multiplier=crit_multiplier(weak_crit + weak_tier_bonus, crit_damage), sustained_fire_rate=fire_rate, procs_per_shot=status_model.expected_procs_per_attack, melee_duplicate_multiplier=duplicate_multiplier, melee_doughty_bonus=doughty_bonus, crit_tier_bonus=body_tier_bonus, weakpoint_crit_tier_bonus=weak_tier_bonus, secondary_enervate_bonus=body_bonus, weakpoint_secondary_enervate_bonus=weak_bonus, falloff_multiplier=falloff_multiplier)
-    result = AttackResult(attack.name, attack, base, modded, effective, upgrades, evolutions, average, spatial, status_effects, list(attack.children), original)
+    result = AttackResult(attack, base, modded, effective, upgrades, evolutions, average, spatial, status_effects)
     combo_multiplier = 1
     if heavy:
         combo_multiplier = max(1, min(int(context.weapon.combo.get("max_combo", 12)), int(context.state.combo)))

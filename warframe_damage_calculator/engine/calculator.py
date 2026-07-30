@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import warnings
 from collections.abc import Mapping
-from copy import deepcopy
 
 from ..domain.enemies import Enemy
 from ..domain.loadouts import Loadout
@@ -32,11 +31,14 @@ def _warn_loadout(weapon: Weapon, loadout: Loadout) -> None:
         previous.append(upgrade)
 
 
-def _status(result) -> StatusResult:
-    model = result.effective.status_model
-    kinds = set(model.damage) | set(model.forced_procs) | set(result.status_effects)
+def _status_from_model(model, effects: Mapping[str, float]) -> StatusResult:
+    kinds = set(model.damage) | set(model.forced_procs) | set(effects)
     sustained = {kind: float(model.expected_active_stacks(kind)) for kind in kinds if model.expected_active_stacks(kind)}
-    return StatusResult(float(model.expected_procs_per_attack), sustained, dict(result.status_effects))
+    return StatusResult(float(model.expected_procs_per_attack), sustained, dict(effects))
+
+
+def _status(result) -> StatusResult:
+    return _status_from_model(result.effective.status_model, result.status_effects)
 
 
 def _spatial_metrics(source, prefix: str = "") -> SpatialDamageMetrics | None:
@@ -63,16 +65,15 @@ def _damage_result(source) -> DamageResult:
 
 def _average_result(source) -> AverageResult:
     damage = _damage_result(source)
-    return AverageResult(damage.normal, damage.weakpoint, damage.resistant, float(source.crit_chance), float(source.crit_multiplier), float(source.weakpoint_crit_chance), float(source.weakpoint_crit_multiplier), float(source.sustained_fire_rate), float(source.procs_per_shot), float(source.first_shot_damage_multiplier), float(source.combo_multiplier), float(source.melee_duplicate_multiplier), float(source.melee_doughty_bonus), float(source.crit_tier_bonus), float(source.weakpoint_crit_tier_bonus), float(source.secondary_enervate_bonus), float(source.weakpoint_secondary_enervate_bonus), float(source.falloff_multiplier))
+    return AverageResult(damage.normal, damage.weakpoint, damage.resistant, float(source.crit_chance), float(source.crit_multiplier), float(source.weakpoint_crit_chance), float(source.weakpoint_crit_multiplier), float(source.sustained_fire_rate), float(source.first_shot_damage_multiplier), float(source.combo_multiplier), float(source.melee_duplicate_multiplier), float(source.melee_doughty_bonus), float(source.crit_tier_bonus), float(source.weakpoint_crit_tier_bonus), float(source.secondary_enervate_bonus), float(source.weakpoint_secondary_enervate_bonus), float(source.falloff_multiplier))
 
 
 def _calculated_attack(result) -> CalculatedAttack:
-    return CalculatedAttack(result.name, deepcopy(result.attack), result.base, result.modded, result.effective, result.upgrades, result.evolutions, _average_result(result.average), _status(result), _spatial(result), tuple(result.children), result.original_damage)
+    return CalculatedAttack(result.base, result.modded, result.effective, result.upgrades, result.evolutions, _average_result(result.average), _status(result), _spatial(result))
 
 
-def _aggregate(root, aggregate, attacks: dict[str, CalculatedAttack]) -> AggregateResult:
-    spatial = {name: attack.spatial for name, attack in attacks.items() if attack.spatial is not None}
-    return AggregateResult(root.name, _damage_result(aggregate), _status(root), spatial, tuple(attacks))
+def _aggregate(average, status_model, status_effects: Mapping[str, float]) -> AggregateResult:
+    return AggregateResult(_damage_result(average), _status_from_model(status_model, status_effects))
 
 
 def _resolve_perks(weapon: Weapon, perks: list[Perk], state: Mapping[str, object]) -> tuple[ResolvedPerk, ...]:
@@ -136,6 +137,6 @@ class Calculator:
         resolved_perks = _resolve_perks(self.weapon, loadout.evolutions, calculation_state)
         _warn_loadout(self.weapon, loadout)
         context = CalculationContext(weapon=self.weapon, target=self.target.copy() if self.target is not None else Enemy(), attack=selected, loadout=loadout, resolved_perks=resolved_perks, state=calculation_state)
-        calculated, aggregate = calculate_weapon(context, prepared_names)
+        calculated, aggregate, aggregate_status_model, aggregate_status_effects = calculate_weapon(context, prepared_names)
         attacks = {name: _calculated_attack(result) for name, result in calculated.items()}
-        return CalculationResult(_aggregate(calculated[selected], aggregate, attacks), attacks, selected, self.weapon.copy(), None if self.target is None else self.target.copy(), loadout.copy(), dict(state))
+        return CalculationResult(_aggregate(aggregate, aggregate_status_model, aggregate_status_effects), attacks, selected, self.weapon.copy(), None if self.target is None else self.target.copy(), loadout.copy(), dict(state))

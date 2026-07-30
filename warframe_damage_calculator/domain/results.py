@@ -119,7 +119,6 @@ class AverageResult:
     weakpoint_crit_chance: float
     weakpoint_crit_multiplier: float
     sustained_fire_rate: float
-    expected_procs_per_attack: float
     first_shot_damage_multiplier: float
     combo_multiplier: float
     melee_duplicate_multiplier: float
@@ -195,7 +194,6 @@ class SpatialMetrics(DamagePool):
 
 @dataclass(slots=True)
 class AttackResult:
-    name: str
     attack: Attack
     base: BaseAttackStats
     modded: ModdedAttackStats
@@ -205,8 +203,6 @@ class AttackResult:
     average: AverageResult
     spatial: SpatialMetrics
     status_effects: dict[str, float] = field(default_factory=dict)
-    children: list[str] = field(default_factory=list)
-    original_damage: Dist = field(default_factory=Dist)
 
 
 @dataclass(frozen=True, slots=True)
@@ -238,8 +234,6 @@ class SpatialResult:
 
 @dataclass(frozen=True, slots=True)
 class CalculatedAttack:
-    name: str
-    attack: Attack
     base: BaseAttackStats
     modded: ModdedAttackStats
     effective: EffectiveAttackStats
@@ -248,17 +242,12 @@ class CalculatedAttack:
     average: AverageResult
     status: StatusResult
     spatial: SpatialResult | None
-    children: tuple[str, ...]
-    original_damage: Dist
 
 
 @dataclass(frozen=True, slots=True)
 class AggregateResult:
-    name: str
     average: DamageResult
     status: StatusResult
-    spatial: dict[str, SpatialResult]
-    components: tuple[str, ...]
 
 
 @dataclass(frozen=True, slots=True)

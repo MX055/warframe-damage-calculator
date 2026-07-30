@@ -76,7 +76,9 @@ class ResultFormatter:
         return "\n".join(values)
 
     def summary(self, attack: str | None = None) -> str:
-        selected = self.result.attacks[self.result.selected_attack] if attack is None else self.result.attacks[attack]
+        attack_name = self.result.selected_attack if attack is None else attack
+        selected = self.result.attacks[attack_name]
+        attack_definition = self.result.weapon.attacks[attack_name]
         average_damage = self.result.aggregate.average if attack is None else selected.average
         base, modded, effective, average = selected.base, selected.modded, selected.effective, selected.average
         rows: list[tuple[str, ...]] = [self._section("DAMAGE")]
@@ -94,12 +96,12 @@ class ResultFormatter:
             self._section("HANDLING"),
             ("Magazine Capacity", self._rounds(self.result.weapon.magazine_size), "—", self._rounds(effective.get("magazine_capacity")), "—", "—"),
             ("Reload Time", self._seconds(self.result.weapon.reload_time), "—", self._seconds(effective.reload_time), "—", "—"),
-            ("Ammo Cost", self._number(selected.attack.stats.ammo_cost), "—", self._number(effective.get("ammo_cost")), "—", "—"),
+            ("Ammo Cost", self._number(attack_definition.stats.ammo_cost), "—", self._number(effective.get("ammo_cost")), "—", "—"),
         ))
-        if float(effective.get("punch_through", 0)) > 0: rows.append(("Punch Through", self._meters(selected.attack.stats.punch_through), "—", self._meters(effective.get("punch_through")), "—", "—"))
-        if int(effective.get("burst_count", 1)) > 1: rows.append(("Burst Count", str(int(selected.attack.stats.burst_count)), "—", str(int(effective.get("burst_count"))), "—", "—"))
-        if float(effective.get("burst_delay", 0)) > 0: rows.append(("Burst Delay", self._seconds(selected.attack.stats.burst_delay), "—", self._seconds(effective.get("burst_delay")), "—", "—"))
-        if float(effective.get("charge_time", 0)) > 0: rows.append(("Charge Time", self._seconds(selected.attack.stats.charge_time), "—", self._seconds(effective.get("charge_time")), "—", "—"))
+        if float(effective.get("punch_through", 0)) > 0: rows.append(("Punch Through", self._meters(attack_definition.stats.punch_through), "—", self._meters(effective.get("punch_through")), "—", "—"))
+        if int(effective.get("burst_count", 1)) > 1: rows.append(("Burst Count", str(int(attack_definition.stats.burst_count)), "—", str(int(effective.get("burst_count"))), "—", "—"))
+        if float(effective.get("burst_delay", 0)) > 0: rows.append(("Burst Delay", self._seconds(attack_definition.stats.burst_delay), "—", self._seconds(effective.get("burst_delay")), "—", "—"))
+        if float(effective.get("charge_time", 0)) > 0: rows.append(("Charge Time", self._seconds(attack_definition.stats.charge_time), "—", self._seconds(effective.get("charge_time")), "—", "—"))
         rows.append(self._section("DAMAGE OUTPUT"))
         metrics = (("DIRECT DPH", "direct_dph"), ("DOT DPH", "dot_dph"), ("TOTAL DPH", "total_dph"), ("DIRECT DPS", "direct_dps"), ("DOT DPS", "dot_dps"), ("TOTAL DPS", "total_dps"))
         zones = (("Normal", average_damage.normal), ("Weakpoint", average_damage.weakpoint), ("Resistant", average_damage.resistant))
@@ -111,7 +113,7 @@ class ResultFormatter:
             rows.extend((self._section("SPATIAL"), (f"Damage Mass (m^{selected.spatial.dimension})", "—", "—", "—", self._number(selected.spatial.damage_mass), "—")))
         weapon_name = getattr(self.result.weapon, "name", "Weapon")
         target_name = "" if self.result.target is None else f" vs {getattr(self.result.target, 'name', 'Target')}"
-        title = f"{weapon_name} · {selected.name.replace('_', ' ').title()}{target_name}"
+        title = f"{weapon_name} · {attack_name.replace('_', ' ').title()}{target_name}"
         return self._table(("Stat", "Base", "Modded", "Effective", "Average"), [tuple(cell for index, cell in enumerate(row) if index != 5) for row in rows], title=title)
 
     def contributions(self, metric: str = "total_dps") -> str:

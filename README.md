@@ -87,7 +87,7 @@ projectile.status
 projectile.spatial
 ```
 
-`result.selected_attack` identifies the selected root. `result.aggregate.components` lists the components included in its final damage. Aggregate results intentionally do not expose a combined critical chance or other meaningless cross-component weapon stats.
+`result.selected_attack` identifies the selected root. `result.attacks.keys()` lists the components included in its final damage. Aggregate results intentionally do not expose a combined critical chance or other meaningless cross-component weapon stats.
 
 Damage zones are `normal`, `weakpoint`, and `resistant`. Each available zone exposes:
 

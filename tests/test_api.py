@@ -50,7 +50,13 @@ class ApiTests(unittest.TestCase):
     def test_result_navigation_distinguishes_aggregate_and_components(self):
         result = Calculator(arsenal.weapon.get("Corinth Prime")).calculate(attack="air_burst_projectile")
         root = result.attacks[result.selected_attack]
-        self.assertEqual(result.aggregate.name, result.selected_attack)
+        self.assertFalse(hasattr(result.aggregate, "name"))
+        self.assertFalse(hasattr(root, "name"))
+        self.assertFalse(hasattr(root, "attack"))
+        self.assertFalse(hasattr(root, "children"))
+        self.assertFalse(hasattr(root, "original_damage"))
+        self.assertFalse(hasattr(result.aggregate, "components"))
+        self.assertFalse(hasattr(result.aggregate, "spatial"))
         self.assertGreater(result.aggregate.average.normal.total_dps, root.average.normal.total_dps)
         self.assertGreater(result.attacks["air_burst_explosion"].average.normal.total_dps, 0)
         self.assertFalse(hasattr(result, "main"))
