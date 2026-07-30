@@ -40,7 +40,7 @@ class ApiTests(unittest.TestCase):
 
     def test_evolution_manual_runtime_defaults_to_each_effect_cap(self):
         weapon = arsenal.weapon.get("Gorgon")
-        self.assertEqual(weapon.runtime.on_reload_from_empty, 3)
+        self.assertEqual(weapon.runtime.reload_from_empty, 3)
 
     def test_formatters_cover_ranged_melee_and_contributions(self):
         ranged = arsenal.weapon.get("Braton").configure(Build(arsenal.upgrade.get("Serration")))

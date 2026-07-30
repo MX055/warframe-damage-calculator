@@ -78,7 +78,7 @@ class DatabaseTests(unittest.TestCase):
             self.assertIn(effect["properties"].get("family"), allowed_families | {None})
             manual = effect["manual"].get("when")
             if manual is not None:
-                self.assertRegex(manual, r"^(active|armor|enemies|energy|health|no|on|target|warframe|while)_")
+                self.assertFalse(manual.startswith("on_"))
                 self.assertNotIn("weak_point", manual)
                 self.assertIsNone(re.search(r"\d+_\d+s(?:_|$)", manual))
 

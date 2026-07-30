@@ -12,7 +12,7 @@ class DistTests(unittest.TestCase):
 
 class EffectTests(unittest.TestCase):
     def test_channels_compile_into_a_typed_program(self):
-        effect = Effect(properties={"value": 0.4, "mode": "flat", "family": "unique_status"}, manual={"when": "on_kill", "stacks": 2, "for": 20}, automatic={"with": "unique_status_count", "stacks": "inf"})
+        effect = Effect(properties={"value": 0.4, "mode": "flat", "family": "unique_status"}, manual={"when": "kill", "stacks": 2, "for": 20}, automatic={"with": "unique_status_count", "stacks": "inf"})
         self.assertEqual(effect.program.value, 0.4)
         self.assertEqual(effect.program.mode, "flat")
         self.assertEqual(effect.program.family, "unique_status")
@@ -23,6 +23,7 @@ class EffectTests(unittest.TestCase):
         with self.assertRaises(ValueError): Effect(properties={"value": 1}, manual={"with": "weapon_combo"})
         with self.assertRaises(ValueError): Effect(properties={"value": 1}, automatic={"requires_rank": 5})
         with self.assertRaises(ValueError): Effect(properties={"value": 1}, automatic={"target": "slash"})
+        with self.assertRaisesRegex(ValueError, "must omit"): Effect(properties={"value": 1}, manual={"when": "on_kill"})
 
     def test_channel_values_preserve_native_scalar_types(self):
         effect = Effect(properties={"value": 1}, manual={"stacks": 2, "for": 20}, automatic={"on": "CRITICAL_HIT"})
@@ -41,12 +42,12 @@ class UpgradeTests(unittest.TestCase):
             max_rank=10,
             compatibility=Compatibility(types=["primary"]),
             stats=UpgradeStats(
-                damage_bonus=Effect(properties={"value": 0.4}, manual={"when": "on_kill", "stacks": 2}),
-                multishot=Effect(properties={"value": 0.1}, manual={"when": "on_kill", "stacks": 4}),
+                damage_bonus=Effect(properties={"value": 0.4}, manual={"when": "kill", "stacks": 2}),
+                multishot=Effect(properties={"value": 0.1}, manual={"when": "kill", "stacks": 4}),
             ),
-        ).set(on_kill=4)
+        ).set(kill=4)
         resolved = {effect.stat: effect.value for effect in upgrade.resolve_manual()}
-        self.assertEqual(upgrade.runtime.on_kill, 4)
+        self.assertEqual(upgrade.runtime.kill, 4)
         self.assertAlmostEqual(resolved["damage_bonus"], 0.8)
         self.assertAlmostEqual(resolved["multishot"], 0.4)
 

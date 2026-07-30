@@ -83,6 +83,8 @@ class Effect:
         self.properties = _normalize_channel(self.properties, PROPERTY_FIELDS, "properties")
         self.manual = _normalize_channel(self.manual, MANUAL_FIELDS, "manual")
         self.automatic = _normalize_channel(self.automatic, AUTOMATIC_FIELDS, "automatic", REPEATABLE_AUTOMATIC_FIELDS)
+        manual_condition = _single(self.manual, "when")
+        if isinstance(manual_condition, str) and manual_condition.startswith("on_"): raise ValueError("manual.when must omit the redundant 'on_' prefix")
         if "value" not in self.properties: raise ValueError("effect properties require value")
         mode_value = _single(self.properties, "mode")
         mode = "proportional" if mode_value is None else str(mode_value)

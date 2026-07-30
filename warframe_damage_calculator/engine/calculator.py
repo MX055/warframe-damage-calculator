@@ -4,11 +4,11 @@ from copy import deepcopy
 from typing import Any, Iterable
 
 from ..domain.damage import Dist
-from ..domain.results import AttackResult, Metrics, ResolvedStats, Stats
+from ..domain.results import AttackResult, DensityMetrics, Metrics, ResolvedStats, Stats
 from ..domain.upgrades import ResolvedEffect, Upgrade, UpgradeStats
 from .aggregation import DAMAGE_TYPES, aggregate, merge
 from .effects import evaluate
-from .formulas import DOT_MULTIPLIERS, clamp, crit_multiplier, family_bonus, family_factor, hit_multiplier, refresh_metrics, true_round
+from .formulas import DOT_MULTIPLIERS, aoe_damage_mass, average_falloff_multiplier, clamp, crit_multiplier, family_bonus, family_factor, hit_multiplier, punch_through_damage_mass, refresh_metrics, true_round
 from .special import automatic_value, automatic_values, average_enervate_bonus, enervate_parameters
 from .status import StatusModel
 from .targets import ZONE_FIELDS, damage_multiplier, damage_total
@@ -20,11 +20,16 @@ POSITION_EVENTS = frozenset({"magazine_first_shot", "magazine_last_shot"})
 DEFERRED_STATS = frozenset({"duplicated_hit", "random_proc", "crit_reset_charges", "crit_tier"})
 DEFERRED_FAMILIES = frozenset({"magazine_first_shot", "magazine_last_shot"})
 PROC_STATS = frozenset(f"{damage_type}_proc" for damage_type in DAMAGE_TYPES)
+DENSITY_FIELDS = {"normal": "damage_density", "weakpoint": "weakpoint_damage_density", "resistant": "resistant_damage_density"}
 
 
 def _scalar(base: float, stat: str, build: ResolvedStats, *, minimum: float = 0) -> float:
     value = (base + float(build.base.get(stat, 0))) * (1 + float(build.proportional.get(stat, 0)))
     return max(value * family_factor(build, stat) + float(build.flat.get(stat, 0)), minimum)
+
+
+def _additive_scalar(base: float, stat: str, build: ResolvedStats, *, minimum: float = 0) -> float:
+    return max(base + float(build.proportional.get(stat, 0)) + float(build.base.get(stat, 0)) + float(build.flat.get(stat, 0)), minimum)
 
 
 def _combined(build: ResolvedStats, evolutions: ResolvedStats) -> ResolvedStats:
@@ -215,6 +220,33 @@ def _faction_factor(weapon: Any, total: ResolvedStats) -> float:
     return 1 + float(total.proportional.get(f"{weapon.target.faction}_damage", 0))
 
 
+def _spatial_falloff(attack: Any, effective: Stats) -> tuple[float, float]:
+    falloff = attack.stats.falloff
+    if "end_range" not in falloff: return 1.0, 0.0
+    start_range = float(effective.start_range)
+    end_range = float(effective.end_range)
+    final_multiplier = float(effective.final_multiplier)
+    falloff_multiplier = average_falloff_multiplier(start_range, end_range, final_multiplier)
+    if attack.aoe:
+        return falloff_multiplier, aoe_damage_mass(start_range, end_range, final_multiplier)
+    punch_through = float(effective.punch_through)
+    if punch_through > 0:
+        return falloff_multiplier, punch_through_damage_mass(start_range, end_range, final_multiplier, punch_through)
+    return falloff_multiplier, 0.0
+
+
+def _set_zone_damage(average: Metrics, density: DensityMetrics, zone: str, fields: tuple[str, ...], direct: float, dot: float) -> None:
+    setattr(average, fields[0], direct * average.falloff_multiplier)
+    setattr(average, fields[1], dot * average.falloff_multiplier)
+    setattr(density, DENSITY_FIELDS[zone], (direct + dot) * density.damage_mass if density.damage_mass > 0 else None)
+
+
+def _refresh_density(metrics: DensityMetrics, fire_rate: float) -> None:
+    for prefix in ("", "weakpoint_", "resistant_"):
+        density = getattr(metrics, f"{prefix}damage_density")
+        setattr(metrics, f"{prefix}damage_density_per_second", None if density is None else density * fire_rate)
+
+
 def _dot_value(weapon: Any, result: AttackResult, zone: str, *, multishot: float | None = None, damage_factor: float = 1) -> float:
     effective, average = result.effective, result.average
     damage = effective.damage * damage_factor
@@ -272,7 +304,7 @@ def _position_weights(magazine: float, ammo_cost: float, efficiency: float) -> l
 def _apply_position_mixture(weapon: Any, result: AttackResult, effects: list[ResolvedEffect]) -> None:
     if weapon.type == "melee": return
     if not effects: return
-    effective, average = result.effective, result.average
+    effective, average, density = result.effective, result.average, result.density
     mixed = {fields[index]: 0.0 for fields in ZONE_FIELDS.values() for index in (0, 1)}
     weights = _position_weights(float(effective.magazine_capacity), float(effective.ammo_cost), float(effective.ammo_efficiency))
     for events, weight in weights:
@@ -293,13 +325,14 @@ def _apply_position_mixture(weapon: Any, result: AttackResult, effects: list[Res
             direct = direct_total * multishot * float(effective.faction_damage) * _hit_multiplier(chance, tier_bonus, float(effective.crit_damage), float(effective.non_crit_bonus_damage), float(effective.non_crit_bonus_chance))
             mixed[fields[0]] += direct * weight
             mixed[fields[1]] += _dot_value(weapon, result, zone, multishot=multishot, damage_factor=damage_factor) * weight
-    for field, value in mixed.items(): setattr(average, field, value)
+    for zone, fields in ZONE_FIELDS.items(): _set_zone_damage(average, density, zone, fields, mixed[fields[0]], mixed[fields[1]])
     first = [effect for effect in effects if automatic_value(effect, "on") == "magazine_first_shot" and effect.stat == "damage_bonus"]
     first_factor = 1.0
     for family in {effect.family for effect in first}: first_factor *= 1 + sum(float(effect.value) for effect in first if effect.family == family)
     first_weight = next((weight for events, weight in weights if "magazine_first_shot" in events), 0)
     average.first_shot_damage_multiplier = 1 + (first_factor - 1) * first_weight
     refresh_metrics(average)
+    _refresh_density(density, average.fire_rate)
 
 
 def _calculate_attack(weapon: Any, attack: Any, build_effects: tuple[ResolvedEffect, ...], evolution_effects: tuple[ResolvedEffect, ...]) -> AttackResult:
@@ -383,11 +416,13 @@ def _calculate_attack(weapon: Any, attack: Any, build_effects: tuple[ResolvedEff
     effective = Stats(damage=damage, forced_procs=forced, crit_chance=crit, weakpoint_crit_chance=weakpoint_crit, crit_damage=crit_damage, status_chance=status, status_duration=duration, status_damage=max(1 + float(total.proportional.get("status_damage", 0)), 1), multishot=multishot, fire_rate=instant_rate, sustained_rate=fire_rate, faction_damage=faction, non_crit_bonus_damage=non_crit_damage, non_crit_bonus_chance=non_crit_chance, weakpoint_damage_bonus=weakpoint_bonus, special_effects=tuple((*build_resolved, *evolution_resolved)), **category_stats)
     for stat in ("projectile_speed", "range", "punch_through", "accuracy", "recoil", "zoom", "ammo_maximum"):
         base_value = float(getattr(attack.stats, stat, 0)) if hasattr(attack.stats, stat) else 0
-        effective[stat] = _scalar(base_value, stat, total)
+        effective[stat] = _additive_scalar(base_value, stat, total) if stat == "punch_through" else _scalar(base_value, stat, total)
     projectile_speed = float(effective.projectile_speed)
-    effective.start_range = float(attack.stats.falloff.get("start_range", 0)) * (1 + projectile_speed)
-    effective.end_range = float(attack.stats.falloff.get("end_range", 0)) * (1 + projectile_speed)
-    effective.final_multiplier = float(attack.stats.falloff.get("final_multiplier") or 1)
+    range_scale = max(1 + float(total.proportional.get("explosion_radius", 0)), 0) if attack.aoe else 1 + projectile_speed
+    effective.start_range = float(attack.stats.falloff.get("start_range", 0)) * range_scale
+    effective.end_range = float(attack.stats.falloff.get("end_range", 0)) * range_scale
+    final_multiplier = attack.stats.falloff.get("final_multiplier")
+    effective.final_multiplier = 1.0 if final_multiplier is None else float(final_multiplier)
     effective.noise_level = total.proportional.get("noise_level", attack.stats.noise_level)
     base = Stats(damage=base_damage, forced_procs=attack.stats.forced_procs, crit_chance=attack.stats.crit_chance, crit_damage=attack.stats.crit_damage, status_chance=attack.stats.status_chance, status_duration=attack.stats.status_duration, multishot=attack.stats.multishot, fire_rate=attack.stats.fire_rate)
     modded = Stats(damage=damage, crit_chance=crit, crit_damage=crit_damage, status_chance=status, status_duration=duration, multishot=multishot, **category_stats)
@@ -402,8 +437,10 @@ def _calculate_attack(weapon: Any, attack: Any, build_effects: tuple[ResolvedEff
         body_bonus = weak_bonus = 0
     body_tier_bonus = min(body_crit, 1) * crit_tier_chance
     weak_tier_bonus = min(weak_crit, 1) * crit_tier_chance
-    average = Metrics(crit_chance=body_crit, crit_multiplier=crit_multiplier(body_crit + body_tier_bonus, crit_damage), weakpoint_crit_chance=weak_crit, weakpoint_crit_multiplier=crit_multiplier(weak_crit + weak_tier_bonus, crit_damage), fire_rate=fire_rate, procs_per_shot=status * status_attempts, melee_duplicate_multiplier=duplicate_multiplier, melee_doughty_bonus=doughty_bonus, crit_tier_bonus=body_tier_bonus, weakpoint_crit_tier_bonus=weak_tier_bonus, secondary_enervate_bonus=body_bonus, weakpoint_secondary_enervate_bonus=weak_bonus)
-    result = AttackResult(attack.name, attack, base, modded, effective, build, evolutions, average, deepcopy(average), status_effects, list(attack.children), original)
+    falloff_multiplier, damage_mass = _spatial_falloff(attack, effective)
+    average = Metrics(crit_chance=body_crit, crit_multiplier=crit_multiplier(body_crit + body_tier_bonus, crit_damage), weakpoint_crit_chance=weak_crit, weakpoint_crit_multiplier=crit_multiplier(weak_crit + weak_tier_bonus, crit_damage), fire_rate=fire_rate, procs_per_shot=status * status_attempts, melee_duplicate_multiplier=duplicate_multiplier, melee_doughty_bonus=doughty_bonus, crit_tier_bonus=body_tier_bonus, weakpoint_crit_tier_bonus=weak_tier_bonus, secondary_enervate_bonus=body_bonus, weakpoint_secondary_enervate_bonus=weak_bonus, falloff_multiplier=falloff_multiplier)
+    density = DensityMetrics(damage_mass=damage_mass)
+    result = AttackResult(attack.name, attack, base, modded, effective, build, evolutions, average, deepcopy(average), density, status_effects, list(attack.children), original)
     combo_multiplier = 1
     if heavy:
         combo_multiplier = max(1, min(int(weapon.combo.get("max_combo", 12)), int(weapon.runtime.combo)))
@@ -418,9 +455,10 @@ def _calculate_attack(weapon: Any, attack: Any, build_effects: tuple[ResolvedEff
         tier_bonus = weak_tier_bonus if zone == "weakpoint" else body_tier_bonus
         direct_hits = 1 if weapon.type == "melee" else multishot
         direct = direct_total * direct_hits * faction * _hit_multiplier(chance, tier_bonus, crit_damage, non_crit_damage, non_crit_chance) * duplicate_multiplier * combo_multiplier
-        setattr(average, fields[0], direct)
-        setattr(average, fields[1], _dot_value(weapon, result, zone) * combo_multiplier)
+        dot = _dot_value(weapon, result, zone) * combo_multiplier
+        _set_zone_damage(average, density, zone, fields, direct, dot)
     refresh_metrics(average)
+    _refresh_density(density, average.fire_rate)
     _apply_position_mixture(weapon, result, [*build_positions, *evolution_positions])
     result.final = deepcopy(average)
     return result
@@ -441,27 +479,33 @@ def calculate_weapon(weapon: Any) -> dict[str, AttackResult]:
     collect(str(weapon.runtime.attack))
     results = {name: _calculate_attack(weapon, weapon.attacks[name], build_effects, evolution_effects) for name in needed}
 
-    def fold(name: str, path: frozenset[str] = frozenset()) -> Metrics:
-        if name in path: raise ValueError(f"attack relationship cycle at {name!r}")
-        result = results[name]
-        children: list[Metrics] = []
-        for child in result.children:
-            children.append(fold(child, path | {name}))
+    def fold_metrics(output: Metrics, own: Metrics, children: list[Metrics]) -> None:
         for fields in ZONE_FIELDS.values():
-            direct_values = [getattr(result.average, fields[0]), *(getattr(child, fields[0]) for child in children)]
-            dot_values = [getattr(result.average, fields[1]), *(getattr(child, fields[1]) for child in children)]
+            direct_values = [getattr(own, fields[0]), *(getattr(child, fields[0]) for child in children)]
+            dot_values = [getattr(own, fields[1]), *(getattr(child, fields[1]) for child in children)]
             if not any(value is not None for value in (*direct_values, *dot_values)):
-                for field in fields: setattr(result.final, field, None)
+                for field in fields: setattr(output, field, None)
                 continue
             direct = sum(float(value or 0) for value in direct_values)
             dot = sum(float(value or 0) for value in dot_values)
-            setattr(result.final, fields[0], direct)
-            setattr(result.final, fields[1], dot)
-            setattr(result.final, fields[2], direct + dot)
-            setattr(result.final, fields[3], direct * result.average.fire_rate)
-            setattr(result.final, fields[4], dot * result.average.fire_rate)
-            setattr(result.final, fields[5], (direct + dot) * result.average.fire_rate)
-        return result.final
+            setattr(output, fields[0], direct)
+            setattr(output, fields[1], dot)
+            setattr(output, fields[2], direct + dot)
+            setattr(output, fields[3], direct * own.fire_rate)
+            setattr(output, fields[4], dot * own.fire_rate)
+            setattr(output, fields[5], (direct + dot) * own.fire_rate)
+
+    def fold(name: str, path: frozenset[str] = frozenset()) -> AttackResult:
+        if name in path: raise ValueError(f"attack relationship cycle at {name!r}")
+        result = results[name]
+        children = [fold(child, path | {name}) for child in result.children]
+        fold_metrics(result.final, result.average, [child.final for child in children])
+        for density_field in DENSITY_FIELDS.values():
+            density_values = [getattr(result.density, density_field), *(getattr(child.density, density_field) for child in children)]
+            density = sum(float(value or 0) for value in density_values) if any(value is not None for value in density_values) else None
+            setattr(result.density, density_field, density)
+            setattr(result.density, f"{density_field}_per_second", None if density is None else density * result.average.fire_rate)
+        return result
 
     fold(str(weapon.runtime.attack))
     return results

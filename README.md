@@ -9,7 +9,7 @@ from warframe_damage_calculator import Build, Dist, arsenal
 
 weapon = arsenal.weapon.get("Corinth Prime")
 build = Build(
-    arsenal.upgrade.get("Galvanized Hell").set(on_kill=4),
+    arsenal.upgrade.get("Galvanized Hell").set(kill=4),
     arsenal.upgrade.get("Critical Deceleration"),
     arsenal.upgrade.get("Primed Ravage"),
 )
@@ -51,7 +51,7 @@ from warframe_damage_calculator import Effect
 
 effect = Effect(
     properties={"value": 0.4, "family": "status"},
-    manual={"when": "on_kill", "stacks": 2, "for": 20},
+    manual={"when": "kill", "stacks": 2, "for": 20},
     automatic={"with": "unique_status_count", "stacks": "inf"},
 )
 ```
@@ -79,7 +79,7 @@ vigilante_bonus = Effect(
 )
 ```
 
-Tags follow one vocabulary: manual events begin with `on_`, ongoing states begin with `while_`, status events end in `_status_proc`, comparisons use words such as `_below_`, `_above_`, or `_at_least_`, and units are written out (`10_meters`, `0.2_seconds`, `90_percent`). The `on` field omits the redundant `on_` prefix because the field already supplies it.
+Tags follow one vocabulary: event conditions use direct names such as `kill` and `headshot`, ongoing states begin with `while_`, status events end in `_status_proc`, comparisons use words such as `_below_`, `_above_`, or `_at_least_`, and units are written out (`10_meters`, `0.2_seconds`, `90_percent`). Both manual `when` values and automatic `on` values omit the redundant `on_` prefix because their fields already supply the relationship.
 
 Proc and result identity are expressed by the stat name (`slash_proc`, `puncture_proc`, `crit_tier`, and so on); effects do not use a generic `target` field. An attack's intrinsic `forced_procs` distribution remains part of its attack data. Form applicability also uses `when`, such as `{"when": "incarnon_form"}`; there is no separate scope language.
 
@@ -89,7 +89,13 @@ Compatibility metadata only produces warnings. Automatic `when` conditions defin
 
 ## Calculation coverage
 
-The engine includes ranged and melee rates, charge/burst/reload/battery cycles, Incarnon charge pools and form-conditioned evolutions, elemental ordering, additive and multiplicative Condition Overload, status uptime and stack windows, forced procs, damage-over-time effects, first/last magazine mixtures, nested attack trees, stance and combo calculations, special arcane/mod behaviors, enemy scaling and defenses, hit zones, and removal/Shapley contribution analysis.
+The engine includes ranged and melee rates, charge/burst/reload/battery cycles, Incarnon charge pools and form-conditioned evolutions, elemental ordering, additive and multiplicative Condition Overload, status uptime and stack windows, forced procs, damage-over-time effects, first/last magazine mixtures, nested attack trees, stance and combo calculations, falloff-averaged damage, AoE and punch-through damage density, special arcane/mod behaviors, enemy scaling and defenses, hit zones, and removal/Shapley contribution analysis.
+
+`average` and `final` include the average falloff multiplier in ordinary per-hit and attack-tree damage. AoE and punch-through mass calculations live in the separate `density` result pool.
+
+Attacks with falloff expose `average.falloff_multiplier`. AoE attacks also expose a falloff-weighted spherical `density.damage_mass` in cubic meters; attacks with punch through expose a linear mass in meters. `density.damage_density` and `density.damage_density_per_second` multiply pre-falloff damage by that mass, representing expected aggregate damage at a uniform target density of one target per cubic meter or meter respectively. They do not multiply the already falloff-averaged `final` pool, so falloff is counted only once.
+
+Punch-through mass is bounded by the effective punch-through distance. With `L = min(punch_through, end_range)`, mass is `L` before falloff starts and `L - (1 - final_multiplier) * (L - start_range) ** 2 / (2 * (end_range - start_range))` within the falloff interval. This is a continuous-material approximation: exact in-game enemy counts also depend on enemy thickness and alignment because empty air does not consume punch through.
 
 ## Isolated validation
 

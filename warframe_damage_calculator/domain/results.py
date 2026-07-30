@@ -60,6 +60,18 @@ class Metrics:
     weakpoint_crit_tier_bonus: float = 0
     secondary_enervate_bonus: float = 0
     weakpoint_secondary_enervate_bonus: float = 0
+    falloff_multiplier: float = 1
+
+
+@dataclass(slots=True)
+class DensityMetrics:
+    damage_mass: float = 0
+    damage_density: float | None = None
+    damage_density_per_second: float | None = None
+    weakpoint_damage_density: float | None = None
+    weakpoint_damage_density_per_second: float | None = None
+    resistant_damage_density: float | None = None
+    resistant_damage_density_per_second: float | None = None
 
 
 @dataclass(slots=True)
@@ -73,6 +85,7 @@ class AttackResult:
     evolutions: ResolvedStats
     average: Metrics
     final: Metrics
+    density: DensityMetrics
     status_effects: dict[str, float] = field(default_factory=dict)
     children: list[str] = field(default_factory=list)
     original_damage: Dist = field(default_factory=Dist)

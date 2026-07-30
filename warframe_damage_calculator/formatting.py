@@ -59,6 +59,10 @@ class WeaponFormatter:
     def _fmt_meters(value: float | None) -> str | None:
         return None if value is None else f"{float(value):g}m"
 
+    @staticmethod
+    def _fmt_damage_mass(value: float, aoe: bool) -> str:
+        return f"{float(value):.2f}{'m³' if aoe else 'm'}"
+
     def _hit_zone_label(self) -> str:
         if self.weapon.target is None: return "normal | weakpoint"
         zones = ("normal", "weakpoint", "resistant")
@@ -119,10 +123,13 @@ class WeaponFormatter:
         def format_falloff(start: float, end: float, multiplier: float) -> str:
             return f"{float(start):g}m -> {float(end):g}m @ {float(multiplier):.2%}"
 
-        base_text = format_falloff(falloff["start_range"], falloff["end_range"], falloff["final_multiplier"])
+        final_multiplier = falloff.get("final_multiplier")
+        base_text = format_falloff(falloff["start_range"], falloff["end_range"], 1 if final_multiplier is None else final_multiplier)
         effective = selected.effective
         effective_text = format_falloff(effective.start_range, effective.end_range, effective.final_multiplier)
         self._append(rows, "FALLOFF", base_text, effective_text, effective_text)
+        self._append(rows, "AVERAGE FALLOFF MULTIPLIER", "", "", self._fmt_multiplier(selected.average.falloff_multiplier))
+        self._append(rows, "DAMAGE MASS", "", "", self._fmt_damage_mass(selected.density.damage_mass, selected.attack.aoe), when=float(selected.density.damage_mass) > 0)
 
     @staticmethod
     def _resolved_proportional(selected: Any, stat: str) -> float:
@@ -202,6 +209,9 @@ class WeaponFormatter:
         averages_at = len(rows)
         self._append(rows, "HIT MULTIPLIER", "", "", self._with_weakpoint(self._fmt_multiplier(body_hit), self._fmt_multiplier(weakpoint_hit) if show_weakpoint_hit else None))
         self._append(rows, "EXPECTED PROCS PER SHOT", "", "", self._fmt_number(average.procs_per_shot))
+        density = selected.density
+        self._append(rows, "DAMAGE DENSITY DPH", "", "", self._fmt_zone_metric(density.damage_density, density.weakpoint_damage_density, density.resistant_damage_density), when=density.damage_density is not None)
+        self._append(rows, "DAMAGE DENSITY DPS", "", "", self._fmt_zone_metric(density.damage_density_per_second, density.weakpoint_damage_density_per_second, density.resistant_damage_density_per_second), when=density.damage_density_per_second is not None)
         if self.weapon.type == "primary":
             self._append(rows, "FIRST SHOT DAMAGE MULTIPLIER", "", "", self._fmt_multiplier(average.first_shot_damage_multiplier), when=float(average.first_shot_damage_multiplier) != 1)
         elif self.weapon.type == "secondary":

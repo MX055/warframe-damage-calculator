@@ -517,7 +517,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_kill",
+                                        "when": "kill",
                                         "stacks": 3
                                     },
                                     "automatic": {}
@@ -529,7 +529,7 @@
                                         "value": 0.2
                                     },
                                     "manual": {
-                                        "when": "on_kill",
+                                        "when": "kill",
                                         "stacks": 3
                                     },
                                     "automatic": {}
@@ -1714,7 +1714,7 @@
                                         "value": 0.075
                                     },
                                     "manual": {
-                                        "when": "on_headshot",
+                                        "when": "headshot",
                                         "stacks": 10
                                     },
                                     "automatic": {}
@@ -1974,7 +1974,7 @@
                                         "value": 0.4
                                     },
                                     "manual": {
-                                        "when": "on_hit_against_electrified_enemy",
+                                        "when": "hit_against_electrified_enemy",
                                         "stacks": 3
                                     },
                                     "automatic": {}
@@ -2024,7 +2024,7 @@
                                         "value": 0.1
                                     },
                                     "manual": {
-                                        "when": "on_headshot"
+                                        "when": "headshot"
                                     },
                                     "automatic": {}
                                 }
@@ -2042,7 +2042,7 @@
                                         "value": 0.05
                                     },
                                     "manual": {
-                                        "when": "on_headshot",
+                                        "when": "headshot",
                                         "stacks": 10
                                     },
                                     "automatic": {}
@@ -2162,7 +2162,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty"
+                                        "when": "reload_from_empty"
                                     },
                                     "automatic": {}
                                 }
@@ -2205,7 +2205,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty"
+                                        "when": "reload_from_empty"
                                     },
                                     "automatic": {}
                                 }
@@ -2539,7 +2539,7 @@
                                         "value": 0.075
                                     },
                                     "manual": {
-                                        "when": "on_headshot",
+                                        "when": "headshot",
                                         "stacks": 10
                                     },
                                     "automatic": {}
@@ -3374,7 +3374,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty"
+                                        "when": "reload_from_empty"
                                     },
                                     "automatic": {}
                                 }
@@ -3417,7 +3417,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty"
+                                        "when": "reload_from_empty"
                                     },
                                     "automatic": {}
                                 }
@@ -3638,7 +3638,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_kill",
+                                        "when": "kill",
                                         "stacks": 4
                                     },
                                     "automatic": {}
@@ -3650,7 +3650,7 @@
                                         "value": 0.2
                                     },
                                     "manual": {
-                                        "when": "on_kill",
+                                        "when": "kill",
                                         "stacks": 4
                                     },
                                     "automatic": {}
@@ -4005,7 +4005,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_kill",
+                                        "when": "kill",
                                         "stacks": 3
                                     },
                                     "automatic": {}
@@ -4017,7 +4017,7 @@
                                         "value": 0.2
                                     },
                                     "manual": {
-                                        "when": "on_kill",
+                                        "when": "kill",
                                         "stacks": 3
                                     },
                                     "automatic": {}
@@ -4736,7 +4736,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_50_energy_spent",
+                                        "when": "50_energy_spent",
                                         "stacks": 4
                                     },
                                     "automatic": {}
@@ -5293,7 +5293,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty"
+                                        "when": "reload_from_empty"
                                     },
                                     "automatic": {}
                                 }
@@ -5325,7 +5325,7 @@
                                         "value": 0.2
                                     },
                                     "manual": {
-                                        "when": "on_full_burst_hit",
+                                        "when": "full_burst_hit",
                                         "stacks": 5
                                     },
                                     "automatic": {}
@@ -5528,7 +5528,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty"
+                                        "when": "reload_from_empty"
                                     },
                                     "automatic": {}
                                 }
@@ -5560,7 +5560,7 @@
                                         "value": 0.2
                                     },
                                     "manual": {
-                                        "when": "on_full_burst_hit",
+                                        "when": "full_burst_hit",
                                         "stacks": 5
                                     },
                                     "automatic": {}
@@ -5869,7 +5869,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_50_energy_spent",
+                                        "when": "50_energy_spent",
                                         "stacks": 4
                                     },
                                     "automatic": {}
@@ -6537,7 +6537,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "on_primary_kill",
+                                        "when": "primary_kill",
                                         "stacks": 100
                                     },
                                     "automatic": {}
@@ -6564,7 +6564,7 @@
                                         "value": 80
                                     },
                                     "manual": {
-                                        "when": "on_shield_break"
+                                        "when": "shield_break"
                                     },
                                     "automatic": {}
                                 }
@@ -6610,7 +6610,7 @@
                                         "value": 0.4
                                     },
                                     "manual": {
-                                        "when": "on_kill"
+                                        "when": "kill"
                                     },
                                     "automatic": {}
                                 }
@@ -6629,7 +6629,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_first_attack_with_primary_equipped"
+                                        "when": "first_attack_with_primary_equipped"
                                     },
                                     "automatic": {}
                                 }
@@ -8399,7 +8399,7 @@
                                         "value": 2
                                     },
                                     "manual": {
-                                        "when": "on_shield_overguard_break"
+                                        "when": "shield_overguard_break"
                                     },
                                     "automatic": {}
                                 }
@@ -8455,7 +8455,7 @@
                                         "value": 0.06
                                     },
                                     "manual": {
-                                        "when": "on_hit",
+                                        "when": "hit",
                                         "stacks": 10
                                     },
                                     "automatic": {}
@@ -8467,7 +8467,7 @@
                                         "value": -0.06
                                     },
                                     "manual": {
-                                        "when": "on_hit",
+                                        "when": "hit",
                                         "stacks": 10
                                     },
                                     "automatic": {}
@@ -14238,7 +14238,7 @@
                                         "value": 0.2
                                     },
                                     "manual": {
-                                        "when": "on_kill",
+                                        "when": "kill",
                                         "stacks": 4
                                     },
                                     "automatic": {}
@@ -14265,7 +14265,7 @@
                                         "value": 0.05
                                     },
                                     "manual": {
-                                        "when": "on_status_proc",
+                                        "when": "status_proc",
                                         "stacks": 6
                                     },
                                     "automatic": {}
@@ -14768,7 +14768,7 @@
                                         "value": 0.1
                                     },
                                     "manual": {
-                                        "when": "on_heavy_attack_kill",
+                                        "when": "heavy_attack_kill",
                                         "stacks": 30
                                     },
                                     "automatic": {
@@ -14803,7 +14803,7 @@
                                         "value": 0.2
                                     },
                                     "manual": {
-                                        "when": "on_puncture_status_proc",
+                                        "when": "puncture_status_proc",
                                         "stacks": 5
                                     },
                                     "automatic": {}
@@ -15202,7 +15202,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_consecutive_weakpoint_hits",
+                                        "when": "consecutive_weakpoint_hits",
                                         "stacks": 3
                                     },
                                     "automatic": {}
@@ -15229,7 +15229,7 @@
                                         "value": 0.05
                                     },
                                     "manual": {
-                                        "when": "on_firing",
+                                        "when": "firing",
                                         "stacks": 10
                                     },
                                     "automatic": {}
@@ -15265,7 +15265,7 @@
                                         "value": 0.6
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty"
+                                        "when": "reload_from_empty"
                                     },
                                     "automatic": {}
                                 }
@@ -15312,7 +15312,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "on_full_burst_hit"
+                                        "when": "full_burst_hit"
                                     },
                                     "automatic": {}
                                 }
@@ -17588,7 +17588,7 @@
                                         "value": 0.2
                                     },
                                     "manual": {
-                                        "when": "on_kill",
+                                        "when": "kill",
                                         "stacks": 4
                                     },
                                     "automatic": {}
@@ -17615,7 +17615,7 @@
                                         "value": 0.05
                                     },
                                     "manual": {
-                                        "when": "on_status_proc",
+                                        "when": "status_proc",
                                         "stacks": 6
                                     },
                                     "automatic": {}
@@ -18137,7 +18137,7 @@
                                         "value": 0.15
                                     },
                                     "manual": {
-                                        "when": "on_kill",
+                                        "when": "kill",
                                         "stacks": 3
                                     },
                                     "automatic": {}
@@ -18465,7 +18465,7 @@
                                         "value": 0.1
                                     },
                                     "manual": {
-                                        "when": "on_kill"
+                                        "when": "kill"
                                     },
                                     "automatic": {
                                         "when": "normal_form"
@@ -18486,7 +18486,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_kill"
+                                        "when": "kill"
                                     },
                                     "automatic": {}
                                 }
@@ -18533,7 +18533,7 @@
                                         "value": 0.3
                                     },
                                     "manual": {
-                                        "when": "on_consecutive_weakpoint_hits",
+                                        "when": "consecutive_weakpoint_hits",
                                         "stacks": 4
                                     },
                                     "automatic": {
@@ -18552,7 +18552,7 @@
                                         "value": 2
                                     },
                                     "manual": {
-                                        "when": "on_punch_through_hit"
+                                        "when": "punch_through_hit"
                                     },
                                     "automatic": {}
                                 }
@@ -21527,7 +21527,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_shield_break"
+                                        "when": "shield_break"
                                     },
                                     "automatic": {}
                                 }
@@ -21546,7 +21546,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty",
+                                        "when": "reload_from_empty",
                                         "stacks": 3
                                     },
                                     "automatic": {
@@ -22587,7 +22587,7 @@
                                         "value": 0.05
                                     },
                                     "manual": {
-                                        "when": "on_firing",
+                                        "when": "firing",
                                         "stacks": 10
                                     },
                                     "automatic": {}
@@ -22659,7 +22659,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty",
+                                        "when": "reload_from_empty",
                                         "stacks": 3
                                     },
                                     "automatic": {
@@ -23332,7 +23332,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty"
+                                        "when": "reload_from_empty"
                                     },
                                     "automatic": {}
                                 }
@@ -25243,7 +25243,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_shield_break"
+                                        "when": "shield_break"
                                     },
                                     "automatic": {}
                                 }
@@ -25291,7 +25291,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty",
+                                        "when": "reload_from_empty",
                                         "stacks": 7
                                     },
                                     "automatic": {
@@ -27480,7 +27480,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_50_energy_spent",
+                                        "when": "50_energy_spent",
                                         "stacks": 4
                                     },
                                     "automatic": {}
@@ -28074,7 +28074,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_shield_break"
+                                        "when": "shield_break"
                                     },
                                     "automatic": {}
                                 }
@@ -28118,7 +28118,7 @@
                                         "value": -0.2
                                     },
                                     "manual": {
-                                        "when": "on_headshot",
+                                        "when": "headshot",
                                         "stacks": 4
                                     },
                                     "automatic": {}
@@ -28130,7 +28130,7 @@
                                         "value": 0.2
                                     },
                                     "manual": {
-                                        "when": "on_headshot",
+                                        "when": "headshot",
                                         "stacks": 4
                                     },
                                     "automatic": {}
@@ -28164,7 +28164,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty"
+                                        "when": "reload_from_empty"
                                     },
                                     "automatic": {}
                                 }
@@ -28182,7 +28182,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "on_equip"
+                                        "when": "equip"
                                     },
                                     "automatic": {}
                                 }
@@ -28374,7 +28374,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_shield_break"
+                                        "when": "shield_break"
                                     },
                                     "automatic": {}
                                 }
@@ -28393,7 +28393,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty",
+                                        "when": "reload_from_empty",
                                         "stacks": 3
                                     },
                                     "automatic": {
@@ -28741,7 +28741,7 @@
                                         "value": 0.4
                                     },
                                     "manual": {
-                                        "when": "on_punch_through_hit"
+                                        "when": "punch_through_hit"
                                     },
                                     "automatic": {}
                                 }
@@ -29329,7 +29329,7 @@
                                         "value": 15
                                     },
                                     "manual": {
-                                        "when": "on_kill_against_enemy_with_3_cold_stacks",
+                                        "when": "kill_against_enemy_with_3_cold_stacks",
                                         "stacks": 4
                                     },
                                     "automatic": {}
@@ -29362,7 +29362,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_first_attack_with_primary_equipped"
+                                        "when": "first_attack_with_primary_equipped"
                                     },
                                     "automatic": {}
                                 }
@@ -31608,7 +31608,7 @@
                                         "value": 0.3
                                     },
                                     "manual": {
-                                        "when": "on_neutral_combo_final_hit"
+                                        "when": "neutral_combo_final_hit"
                                     },
                                     "automatic": {}
                                 }
@@ -31685,7 +31685,7 @@
                                         "value": 33
                                     },
                                     "manual": {
-                                        "when": "on_kill_against_enemy_with_3_toxin_stacks"
+                                        "when": "kill_against_enemy_with_3_toxin_stacks"
                                     },
                                     "automatic": {}
                                 }
@@ -31944,7 +31944,7 @@
                                         "value": 0.05
                                     },
                                     "manual": {
-                                        "when": "on_ability_cast",
+                                        "when": "ability_cast",
                                         "stacks": 20
                                     },
                                     "automatic": {}
@@ -31963,7 +31963,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty"
+                                        "when": "reload_from_empty"
                                     },
                                     "automatic": {}
                                 }
@@ -32024,7 +32024,7 @@
                                         "value": 0.7
                                     },
                                     "manual": {
-                                        "when": "on_headshot"
+                                        "when": "headshot"
                                     },
                                     "automatic": {}
                                 }
@@ -32041,7 +32041,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_kill"
+                                        "when": "kill"
                                     },
                                     "automatic": {}
                                 }
@@ -33714,7 +33714,7 @@
                                         "value": 0.2
                                     },
                                     "manual": {
-                                        "when": "on_fire",
+                                        "when": "fire",
                                         "stacks": 5
                                     },
                                     "automatic": {}
@@ -35392,7 +35392,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty"
+                                        "when": "reload_from_empty"
                                     },
                                     "automatic": {}
                                 }
@@ -35433,7 +35433,7 @@
                                         "value": 0.2
                                     },
                                     "manual": {
-                                        "when": "on_headshot"
+                                        "when": "headshot"
                                     },
                                     "automatic": {
                                         "when": "normal_form"
@@ -35446,7 +35446,7 @@
                                         "value": 0.5
                                     },
                                     "manual": {
-                                        "when": "on_headshot"
+                                        "when": "headshot"
                                     },
                                     "automatic": {
                                         "when": "normal_form"
@@ -35464,7 +35464,7 @@
                                         "value": 0.5
                                     },
                                     "manual": {
-                                        "when": "on_kill"
+                                        "when": "kill"
                                     },
                                     "automatic": {}
                                 }
@@ -35846,7 +35846,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_shield_break"
+                                        "when": "shield_break"
                                     },
                                     "automatic": {}
                                 }
@@ -35890,7 +35890,7 @@
                                         "value": -0.2
                                     },
                                     "manual": {
-                                        "when": "on_headshot",
+                                        "when": "headshot",
                                         "stacks": 4
                                     },
                                     "automatic": {}
@@ -35902,7 +35902,7 @@
                                         "value": 0.2
                                     },
                                     "manual": {
-                                        "when": "on_headshot",
+                                        "when": "headshot",
                                         "stacks": 4
                                     },
                                     "automatic": {}
@@ -35936,7 +35936,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty"
+                                        "when": "reload_from_empty"
                                     },
                                     "automatic": {}
                                 }
@@ -37246,7 +37246,7 @@
                                         "value": 0.2
                                     },
                                     "manual": {
-                                        "when": "on_fire",
+                                        "when": "fire",
                                         "stacks": 5
                                     },
                                     "automatic": {}
@@ -37424,7 +37424,7 @@
                                         "value": 0.4
                                     },
                                     "manual": {
-                                        "when": "on_punch_through_hit"
+                                        "when": "punch_through_hit"
                                     },
                                     "automatic": {}
                                 }
@@ -39361,7 +39361,7 @@
                                         "value": 0.3
                                     },
                                     "manual": {
-                                        "when": "on_equip"
+                                        "when": "equip"
                                     },
                                     "automatic": {}
                                 }
@@ -40423,7 +40423,7 @@
                                         "value": 0.06
                                     },
                                     "manual": {
-                                        "when": "on_critical_hit",
+                                        "when": "critical_hit",
                                         "stacks": 5
                                     },
                                     "automatic": {}
@@ -42303,7 +42303,7 @@
                                         "value": 0.4
                                     },
                                     "manual": {
-                                        "when": "on_punch_through_hit"
+                                        "when": "punch_through_hit"
                                     },
                                     "automatic": {}
                                 }
@@ -42675,7 +42675,7 @@
                                         "value": 3
                                     },
                                     "manual": {
-                                        "when": "on_slide_attack_hit"
+                                        "when": "slide_attack_hit"
                                     },
                                     "automatic": {
                                         "when": "incarnon_form"
@@ -42688,7 +42688,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "on_slide_attack_hit"
+                                        "when": "slide_attack_hit"
                                     },
                                     "automatic": {
                                         "when": "incarnon_form"
@@ -43056,7 +43056,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty"
+                                        "when": "reload_from_empty"
                                     },
                                     "automatic": {}
                                 }
@@ -43097,7 +43097,7 @@
                                         "value": 0.2
                                     },
                                     "manual": {
-                                        "when": "on_headshot"
+                                        "when": "headshot"
                                     },
                                     "automatic": {
                                         "when": "normal_form"
@@ -43110,7 +43110,7 @@
                                         "value": 0.5
                                     },
                                     "manual": {
-                                        "when": "on_headshot"
+                                        "when": "headshot"
                                     },
                                     "automatic": {
                                         "when": "normal_form"
@@ -43128,7 +43128,7 @@
                                         "value": 0.5
                                     },
                                     "manual": {
-                                        "when": "on_kill"
+                                        "when": "kill"
                                     },
                                     "automatic": {}
                                 }
@@ -44062,7 +44062,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_shield_break"
+                                        "when": "shield_break"
                                     },
                                     "automatic": {}
                                 }
@@ -44081,7 +44081,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty",
+                                        "when": "reload_from_empty",
                                         "stacks": 3
                                     },
                                     "automatic": {
@@ -46564,7 +46564,7 @@
                                         "value": 0.075
                                     },
                                     "manual": {
-                                        "when": "on_headshot",
+                                        "when": "headshot",
                                         "stacks": 10
                                     },
                                     "automatic": {}
@@ -47336,7 +47336,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_50_energy_spent",
+                                        "when": "50_energy_spent",
                                         "stacks": 4
                                     },
                                     "automatic": {}
@@ -47983,7 +47983,7 @@
                                         "value": 3
                                     },
                                     "manual": {
-                                        "when": "on_shield_break"
+                                        "when": "shield_break"
                                     },
                                     "automatic": {}
                                 }
@@ -48045,7 +48045,7 @@
                                         "value": 0.5
                                     },
                                     "manual": {
-                                        "when": "on_kill"
+                                        "when": "kill"
                                     },
                                     "automatic": {}
                                 }
@@ -48588,7 +48588,7 @@
                                         "value": 0.2
                                     },
                                     "manual": {
-                                        "when": "on_punch_through_hit"
+                                        "when": "punch_through_hit"
                                     },
                                     "automatic": {
                                         "when": "normal_form"
@@ -50041,7 +50041,7 @@
                                         "value": 0.05
                                     },
                                     "manual": {
-                                        "when": "on_firing",
+                                        "when": "firing",
                                         "stacks": 5
                                     },
                                     "automatic": {}
@@ -51366,7 +51366,7 @@
                                         "value": 100
                                     },
                                     "manual": {
-                                        "when": "on_bleed_kill"
+                                        "when": "bleed_kill"
                                     },
                                     "automatic": {}
                                 }
@@ -51429,7 +51429,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty",
+                                        "when": "reload_from_empty",
                                         "stacks": 2
                                     },
                                     "automatic": {}
@@ -53210,7 +53210,7 @@
                                         "value": 0.05
                                     },
                                     "manual": {
-                                        "when": "on_firing",
+                                        "when": "firing",
                                         "stacks": 5
                                     },
                                     "automatic": {}
@@ -53466,7 +53466,7 @@
                                         "value": 0.05
                                     },
                                     "manual": {
-                                        "when": "on_firing",
+                                        "when": "firing",
                                         "stacks": 5
                                     },
                                     "automatic": {}
@@ -54207,7 +54207,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_consecutive_weakpoint_hits",
+                                        "when": "consecutive_weakpoint_hits",
                                         "stacks": 3
                                     },
                                     "automatic": {}
@@ -54234,7 +54234,7 @@
                                         "value": 0.05
                                     },
                                     "manual": {
-                                        "when": "on_firing",
+                                        "when": "firing",
                                         "stacks": 10
                                     },
                                     "automatic": {}
@@ -54270,7 +54270,7 @@
                                         "value": 0.6
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty"
+                                        "when": "reload_from_empty"
                                     },
                                     "automatic": {}
                                 }
@@ -54317,7 +54317,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "on_full_burst_hit"
+                                        "when": "full_burst_hit"
                                     },
                                     "automatic": {}
                                 }
@@ -54454,7 +54454,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_burst_headshots",
+                                        "when": "burst_headshots",
                                         "stacks": 3
                                     },
                                     "automatic": {}
@@ -54482,7 +54482,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty",
+                                        "when": "reload_from_empty",
                                         "stacks": 2
                                     },
                                     "automatic": {}
@@ -55033,7 +55033,7 @@
                                         "value": 100
                                     },
                                     "manual": {
-                                        "when": "on_bleed_kill"
+                                        "when": "bleed_kill"
                                     },
                                     "automatic": {}
                                 }
@@ -55096,7 +55096,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty",
+                                        "when": "reload_from_empty",
                                         "stacks": 2
                                     },
                                     "automatic": {}
@@ -55838,7 +55838,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_consecutive_weakpoint_hits",
+                                        "when": "consecutive_weakpoint_hits",
                                         "stacks": 3
                                     },
                                     "automatic": {}
@@ -55865,7 +55865,7 @@
                                         "value": 0.05
                                     },
                                     "manual": {
-                                        "when": "on_firing",
+                                        "when": "firing",
                                         "stacks": 10
                                     },
                                     "automatic": {}
@@ -55901,7 +55901,7 @@
                                         "value": 0.6
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty"
+                                        "when": "reload_from_empty"
                                     },
                                     "automatic": {}
                                 }
@@ -55948,7 +55948,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "on_full_burst_hit"
+                                        "when": "full_burst_hit"
                                     },
                                     "automatic": {}
                                 }
@@ -56351,7 +56351,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "on_headshot"
+                                        "when": "headshot"
                                     },
                                     "automatic": {
                                         "when": "normal_form"
@@ -56729,7 +56729,7 @@
                                         "value": 0.08
                                     },
                                     "manual": {
-                                        "when": "on_critical_hit",
+                                        "when": "critical_hit",
                                         "stacks": 5
                                     },
                                     "automatic": {}
@@ -61467,7 +61467,7 @@
                                         "value": 0.1
                                     },
                                     "manual": {
-                                        "when": "on_heavy_attack_kill",
+                                        "when": "heavy_attack_kill",
                                         "stacks": 30
                                     },
                                     "automatic": {
@@ -61502,7 +61502,7 @@
                                         "value": 0.2
                                     },
                                     "manual": {
-                                        "when": "on_puncture_status_proc",
+                                        "when": "puncture_status_proc",
                                         "stacks": 5
                                     },
                                     "automatic": {}
@@ -61827,7 +61827,7 @@
                                         "mode": "flat"
                                     },
                                     "manual": {
-                                        "when": "on_magazine_last_shot"
+                                        "when": "magazine_last_shot"
                                     },
                                     "automatic": {}
                                 }
@@ -61886,7 +61886,7 @@
                                         "value": 2
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty"
+                                        "when": "reload_from_empty"
                                     },
                                     "automatic": {}
                                 }
@@ -62452,7 +62452,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty"
+                                        "when": "reload_from_empty"
                                     },
                                     "automatic": {}
                                 }
@@ -62493,7 +62493,7 @@
                                         "value": 0.2
                                     },
                                     "manual": {
-                                        "when": "on_headshot"
+                                        "when": "headshot"
                                     },
                                     "automatic": {
                                         "when": "normal_form"
@@ -62506,7 +62506,7 @@
                                         "value": 0.5
                                     },
                                     "manual": {
-                                        "when": "on_headshot"
+                                        "when": "headshot"
                                     },
                                     "automatic": {
                                         "when": "normal_form"
@@ -62524,7 +62524,7 @@
                                         "value": 0.5
                                     },
                                     "manual": {
-                                        "when": "on_kill"
+                                        "when": "kill"
                                     },
                                     "automatic": {}
                                 }
@@ -63230,7 +63230,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "on_headshot"
+                                        "when": "headshot"
                                     },
                                     "automatic": {
                                         "when": "normal_form"
@@ -65203,7 +65203,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "on_finisher"
+                                        "when": "finisher"
                                     },
                                     "automatic": {}
                                 }
@@ -65356,7 +65356,7 @@
                                         "value": 0.3
                                     },
                                     "manual": {
-                                        "when": "on_headshot",
+                                        "when": "headshot",
                                         "stacks": 3
                                     },
                                     "automatic": {}
@@ -65470,7 +65470,7 @@
                                         "value": 0.4
                                     },
                                     "manual": {
-                                        "when": "on_headshot"
+                                        "when": "headshot"
                                     },
                                     "automatic": {
                                         "when": "normal_form"
@@ -65488,7 +65488,7 @@
                                         "value": 4
                                     },
                                     "manual": {
-                                        "when": "on_non_critical_non_status_hit",
+                                        "when": "non_critical_non_status_hit",
                                         "stacks": 3
                                     },
                                     "automatic": {}
@@ -65657,7 +65657,7 @@
                                         "value": 0.1
                                     },
                                     "manual": {
-                                        "when": "on_shell_reloaded",
+                                        "when": "shell_reloaded",
                                         "stacks": 99
                                     },
                                     "automatic": {}
@@ -65916,7 +65916,7 @@
                                         "value": 1
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty"
+                                        "when": "reload_from_empty"
                                     },
                                     "automatic": {}
                                 }
@@ -65932,7 +65932,7 @@
                                         "value": 0.2
                                     },
                                     "manual": {
-                                        "when": "on_headshot_kill"
+                                        "when": "headshot_kill"
                                     },
                                     "automatic": {
                                         "when": "normal_form"
@@ -66051,7 +66051,7 @@
                                         "value": 0.5
                                     },
                                     "manual": {
-                                        "when": "on_2_headshots_within_2_seconds"
+                                        "when": "2_headshots_within_2_seconds"
                                     },
                                     "automatic": {}
                                 }
@@ -66659,7 +66659,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_burst_headshots",
+                                        "when": "burst_headshots",
                                         "stacks": 3
                                     },
                                     "automatic": {}
@@ -66687,7 +66687,7 @@
                                         "mode": "base"
                                     },
                                     "manual": {
-                                        "when": "on_reload_from_empty",
+                                        "when": "reload_from_empty",
                                         "stacks": 2
                                     },
                                     "automatic": {}
@@ -73512,7 +73512,7 @@
                                         "value": 0.1
                                     },
                                     "manual": {
-                                        "when": "on_weapon_status_proc",
+                                        "when": "weapon_status_proc",
                                         "stacks": 20
                                     },
                                     "automatic": {}
@@ -77647,7 +77647,7 @@
                             "value": 1.35
                         },
                         "manual": {
-                            "when": "on_headshot"
+                            "when": "headshot"
                         },
                         "automatic": {}
                     }
@@ -78080,7 +78080,7 @@
                             "value": 0.35
                         },
                         "manual": {
-                            "when": "on_kill",
+                            "when": "kill",
                             "stacks": 2
                         },
                         "automatic": {}
@@ -78136,7 +78136,7 @@
                             "value": 1.5
                         },
                         "manual": {
-                            "when": "on_weakpoint_kill"
+                            "when": "weakpoint_kill"
                         },
                         "automatic": {}
                     }
@@ -78147,7 +78147,7 @@
                             "value": 1.5
                         },
                         "manual": {
-                            "when": "on_weakpoint_kill"
+                            "when": "weakpoint_kill"
                         },
                         "automatic": {}
                     }
@@ -78158,7 +78158,7 @@
                             "value": 1.5
                         },
                         "manual": {
-                            "when": "on_weakpoint_kill"
+                            "when": "weakpoint_kill"
                         },
                         "automatic": {}
                     }
@@ -78243,7 +78243,7 @@
                             "value": 1.2
                         },
                         "manual": {
-                            "when": "on_kill"
+                            "when": "kill"
                         },
                         "automatic": {}
                     }
@@ -78530,7 +78530,7 @@
                             "value": -1
                         },
                         "manual": {
-                            "when": "on_headshot",
+                            "when": "headshot",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -78728,7 +78728,7 @@
                             "value": 1.2
                         },
                         "manual": {
-                            "when": "on_heat_damage",
+                            "when": "heat_damage",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -78889,7 +78889,7 @@
                             "value": 0.6
                         },
                         "manual": {
-                            "when": "on_ability_cast"
+                            "when": "ability_cast"
                         },
                         "automatic": {}
                     }
@@ -79249,7 +79249,7 @@
                             "value": 0.15
                         },
                         "manual": {
-                            "when": "on_reload",
+                            "when": "reload",
                             "stacks": 15
                         },
                         "automatic": {}
@@ -79302,7 +79302,7 @@
                             "value": 1.2
                         },
                         "manual": {
-                            "when": "on_headshot_with_5_pellets",
+                            "when": "headshot_with_5_pellets",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -80086,7 +80086,7 @@
                             "value": 0.3
                         },
                         "manual": {
-                            "when": "on_kill",
+                            "when": "kill",
                             "stacks": 10
                         },
                         "automatic": {}
@@ -80114,7 +80114,7 @@
                             "value": 0.1
                         },
                         "manual": {
-                            "when": "on_headshot",
+                            "when": "headshot",
                             "stacks": 50
                         },
                         "automatic": {}
@@ -80317,7 +80317,7 @@
                             "family": "weakpoint"
                         },
                         "manual": {
-                            "when": "on_dodge",
+                            "when": "dodge",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -80582,7 +80582,7 @@
                             "value": 0.2
                         },
                         "manual": {
-                            "when": "on_hit",
+                            "when": "hit",
                             "stacks": 20
                         },
                         "automatic": {}
@@ -80853,7 +80853,7 @@
                             "value": 0.9
                         },
                         "manual": {
-                            "when": "on_ability_cast"
+                            "when": "ability_cast"
                         },
                         "automatic": {}
                     }
@@ -81075,7 +81075,7 @@
                             "value": 6
                         },
                         "manual": {
-                            "when": "on_eximus_headshot_kill",
+                            "when": "eximus_headshot_kill",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -81249,7 +81249,7 @@
                             "value": 3
                         },
                         "manual": {
-                            "when": "on_pull",
+                            "when": "pull",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -81453,7 +81453,7 @@
                             "value": 1
                         },
                         "manual": {
-                            "when": "on_4_hits_within_0.05_seconds",
+                            "when": "4_hits_within_0.05_seconds",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -82022,7 +82022,7 @@
                             "value": 0.3
                         },
                         "manual": {
-                            "when": "on_kill",
+                            "when": "kill",
                             "stacks": 2
                         },
                         "automatic": {}
@@ -82063,7 +82063,7 @@
                             "family": "unique_status"
                         },
                         "manual": {
-                            "when": "on_kill",
+                            "when": "kill",
                             "stacks": 2
                         },
                         "automatic": {
@@ -82104,7 +82104,7 @@
                             "value": 0.3
                         },
                         "manual": {
-                            "when": "on_kill",
+                            "when": "kill",
                             "stacks": 5
                         },
                         "automatic": {}
@@ -82142,7 +82142,7 @@
                             "value": 0.4
                         },
                         "manual": {
-                            "when": "on_headshot_kill",
+                            "when": "headshot_kill",
                             "stacks": 5
                         },
                         "automatic": {}
@@ -82178,7 +82178,7 @@
                             "value": 0.3
                         },
                         "manual": {
-                            "when": "on_kill",
+                            "when": "kill",
                             "stacks": 4
                         },
                         "automatic": {}
@@ -82218,7 +82218,7 @@
                             "value": 0.3
                         },
                         "manual": {
-                            "when": "on_kill",
+                            "when": "kill",
                             "stacks": 4
                         },
                         "automatic": {}
@@ -82254,7 +82254,7 @@
                             "value": 0.3
                         },
                         "manual": {
-                            "when": "on_kill",
+                            "when": "kill",
                             "stacks": 4
                         },
                         "automatic": {}
@@ -82293,7 +82293,7 @@
                             "value": 20.35
                         },
                         "manual": {
-                            "when": "on_kill",
+                            "when": "kill",
                             "stacks": 4
                         },
                         "automatic": {}
@@ -82333,7 +82333,7 @@
                             "family": "unique_status"
                         },
                         "manual": {
-                            "when": "on_kill",
+                            "when": "kill",
                             "stacks": 2
                         },
                         "automatic": {
@@ -82374,7 +82374,7 @@
                             "value": 0.4
                         },
                         "manual": {
-                            "when": "on_headshot_kill",
+                            "when": "headshot_kill",
                             "stacks": 5
                         },
                         "automatic": {}
@@ -82413,7 +82413,7 @@
                             "family": "unique_status"
                         },
                         "manual": {
-                            "when": "on_kill",
+                            "when": "kill",
                             "stacks": 3
                         },
                         "automatic": {
@@ -82454,7 +82454,7 @@
                             "value": 0.3
                         },
                         "manual": {
-                            "when": "on_kill",
+                            "when": "kill",
                             "stacks": 4
                         },
                         "automatic": {}
@@ -82633,7 +82633,7 @@
                             "value": 0.3
                         },
                         "manual": {
-                            "when": "on_kill",
+                            "when": "kill",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -82812,7 +82812,7 @@
                             "value": 0.012
                         },
                         "manual": {
-                            "when": "on_hit",
+                            "when": "hit",
                             "stacks": 500
                         },
                         "automatic": {}
@@ -83415,7 +83415,7 @@
                             "value": 1.35
                         },
                         "manual": {
-                            "when": "on_headshot"
+                            "when": "headshot"
                         },
                         "automatic": {}
                     }
@@ -84033,7 +84033,7 @@
                             "value": 1.2
                         },
                         "manual": {
-                            "when": "on_headshot"
+                            "when": "headshot"
                         },
                         "automatic": {}
                     }
@@ -84108,7 +84108,7 @@
                             "value": 3
                         },
                         "manual": {
-                            "when": "on_weakpoint_hit"
+                            "when": "weakpoint_hit"
                         },
                         "automatic": {}
                     }
@@ -84119,7 +84119,7 @@
                             "value": 3
                         },
                         "manual": {
-                            "when": "on_weakpoint_hit"
+                            "when": "weakpoint_hit"
                         },
                         "automatic": {}
                     }
@@ -85486,7 +85486,7 @@
                             "value": 0.9
                         },
                         "manual": {
-                            "when": "on_ability_cast"
+                            "when": "ability_cast"
                         },
                         "automatic": {}
                     }
@@ -85818,7 +85818,7 @@
                             "value": 0.6
                         },
                         "manual": {
-                            "when": "on_weakpoint_hit",
+                            "when": "weakpoint_hit",
                             "stacks": 10
                         },
                         "automatic": {}
@@ -86305,7 +86305,7 @@
                             "value": 1
                         },
                         "manual": {
-                            "when": "on_consecutive_throw",
+                            "when": "consecutive_throw",
                             "stacks": 3
                         },
                         "automatic": {}
@@ -86381,7 +86381,7 @@
                             "value": 1.5
                         },
                         "manual": {
-                            "when": "on_direct_hit",
+                            "when": "direct_hit",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -86437,7 +86437,7 @@
                             "value": 0.9
                         },
                         "manual": {
-                            "when": "on_reload"
+                            "when": "reload"
                         },
                         "automatic": {}
                     }
@@ -88484,7 +88484,7 @@
                             "value": 1.05
                         },
                         "manual": {
-                            "when": "on_reload"
+                            "when": "reload"
                         },
                         "automatic": {}
                     }
@@ -89382,7 +89382,7 @@
                             "value": 3
                         },
                         "manual": {
-                            "when": "on_full_charge",
+                            "when": "full_charge",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -89572,7 +89572,7 @@
                             "value": 0.75
                         },
                         "manual": {
-                            "when": "on_kill"
+                            "when": "kill"
                         },
                         "automatic": {}
                     }
@@ -89971,7 +89971,7 @@
                             "value": 0.99
                         },
                         "manual": {
-                            "when": "on_kill"
+                            "when": "kill"
                         },
                         "automatic": {}
                     }
@@ -90136,7 +90136,7 @@
                             "value": -1
                         },
                         "manual": {
-                            "when": "on_headshot",
+                            "when": "headshot",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -90475,7 +90475,7 @@
                             "value": 1
                         },
                         "manual": {
-                            "when": "on_hit"
+                            "when": "hit"
                         },
                         "automatic": {}
                     }
@@ -90539,7 +90539,7 @@
                             "value": 0.9
                         },
                         "manual": {
-                            "when": "on_orb_strike",
+                            "when": "orb_strike",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -90618,7 +90618,7 @@
                             "value": 0.75
                         },
                         "manual": {
-                            "when": "on_reload"
+                            "when": "reload"
                         },
                         "automatic": {}
                     }
@@ -90934,7 +90934,7 @@
                             "value": 0.3
                         },
                         "manual": {
-                            "when": "on_2_hits_within_0.2_seconds",
+                            "when": "2_hits_within_0.2_seconds",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -91601,7 +91601,7 @@
                             "value": 0.4
                         },
                         "manual": {
-                            "when": "on_2_hits_within_0.02_seconds",
+                            "when": "2_hits_within_0.02_seconds",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -92268,7 +92268,7 @@
                             "value": 0.4998
                         },
                         "manual": {
-                            "when": "on_direct_hit",
+                            "when": "direct_hit",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -92451,7 +92451,7 @@
                             "value": 4.0002
                         },
                         "manual": {
-                            "when": "on_alt_fire",
+                            "when": "alt_fire",
                             "stacks": 1
                         },
                         "automatic": {}
@@ -99360,7 +99360,7 @@
                             "value": 3
                         },
                         "manual": {
-                            "when": "on_roll"
+                            "when": "roll"
                         },
                         "automatic": {}
                     }
@@ -99386,7 +99386,7 @@
                             "value": 750
                         },
                         "manual": {
-                            "when": "on_status_proc"
+                            "when": "status_proc"
                         },
                         "automatic": {}
                     }
@@ -99620,7 +99620,7 @@
                             "value": 2.4
                         },
                         "manual": {
-                            "when": "on_ability_cast",
+                            "when": "ability_cast",
                             "stacks": 1,
                             "for": 5
                         },
@@ -99648,7 +99648,7 @@
                             "value": 1
                         },
                         "manual": {
-                            "when": "on_headshot",
+                            "when": "headshot",
                             "stacks": 3
                         },
                         "automatic": {}
@@ -99675,7 +99675,7 @@
                             "value": 6
                         },
                         "manual": {
-                            "when": "on_status_proc"
+                            "when": "status_proc"
                         },
                         "automatic": {}
                     }
@@ -99715,7 +99715,7 @@
                             "value": 1.5
                         },
                         "manual": {
-                            "when": "on_shield_break"
+                            "when": "shield_break"
                         },
                         "automatic": {}
                     }
@@ -99824,7 +99824,7 @@
                             "value": 0.6
                         },
                         "manual": {
-                            "when": "on_ability_cast",
+                            "when": "ability_cast",
                             "stacks": 4
                         },
                         "automatic": {}
@@ -100045,7 +100045,7 @@
                             "value": 0.3
                         },
                         "manual": {
-                            "when": "on_headshot",
+                            "when": "headshot",
                             "stacks": 10,
                             "for": 10
                         },
@@ -100058,7 +100058,7 @@
                             "value": 0.06
                         },
                         "manual": {
-                            "when": "on_headshot",
+                            "when": "headshot",
                             "stacks": 10,
                             "for": 10
                         },
@@ -100086,7 +100086,7 @@
                             "value": 1.2
                         },
                         "manual": {
-                            "when": "on_headshot_kill",
+                            "when": "headshot_kill",
                             "stacks": 3,
                             "for": 24
                         },
@@ -100125,7 +100125,7 @@
                             "value": 1
                         },
                         "manual": {
-                            "when": "on_combined_status_reaching_10_stacks"
+                            "when": "combined_status_reaching_10_stacks"
                         },
                         "automatic": {}
                     }
@@ -100151,7 +100151,7 @@
                             "value": 0.6
                         },
                         "manual": {
-                            "when": "on_melee_kill",
+                            "when": "melee_kill",
                             "stacks": 6,
                             "for": 20
                         },
@@ -100245,7 +100245,7 @@
                             "value": 0.3
                         },
                         "manual": {
-                            "when": "on_kill",
+                            "when": "kill",
                             "stacks": 12,
                             "for": 20
                         },
@@ -100398,7 +100398,7 @@
                             "value": 1.2
                         },
                         "manual": {
-                            "when": "on_headshot_kill",
+                            "when": "headshot_kill",
                             "stacks": 3,
                             "for": 24
                         },
@@ -100437,7 +100437,7 @@
                             "value": 0.6
                         },
                         "manual": {
-                            "when": "on_melee_kill",
+                            "when": "melee_kill",
                             "stacks": 6,
                             "for": 20
                         },
@@ -100521,7 +100521,7 @@
                             "value": 8
                         },
                         "manual": {
-                            "when": "on_hit"
+                            "when": "hit"
                         },
                         "automatic": {}
                     }
@@ -100586,7 +100586,7 @@
                             "value": 0.3
                         },
                         "manual": {
-                            "when": "on_kill",
+                            "when": "kill",
                             "stacks": 12,
                             "for": 20
                         },
@@ -100614,7 +100614,7 @@
                             "value": 0.2
                         },
                         "manual": {
-                            "when": "on_combo_consumed",
+                            "when": "combo_consumed",
                             "stacks": 12,
                             "for": 30
                         },
@@ -100627,7 +100627,7 @@
                             "value": 0.2
                         },
                         "manual": {
-                            "when": "on_combo_consumed",
+                            "when": "combo_consumed",
                             "stacks": 12,
                             "for": 30
                         },
@@ -100655,7 +100655,7 @@
                             "value": 0.45
                         },
                         "manual": {
-                            "when": "on_cold_status_proc",
+                            "when": "cold_status_proc",
                             "stacks": 10
                         },
                         "automatic": {}
@@ -100696,7 +100696,7 @@
                             "value": 1.8
                         },
                         "manual": {
-                            "when": "on_kill",
+                            "when": "kill",
                             "stacks": 1,
                             "for": 15
                         },
@@ -100709,7 +100709,7 @@
                             "value": 0.75
                         },
                         "manual": {
-                            "when": "on_kill",
+                            "when": "kill",
                             "stacks": 1,
                             "for": 15
                         },

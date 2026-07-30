@@ -8,7 +8,7 @@ from warframe_damage_calculator import Build, arsenal
 
 def main() -> None:
     build = Build(
-        arsenal.upgrade.get("Galvanized Hell").set(on_kill=4),
+        arsenal.upgrade.get("Galvanized Hell").set(kill=4),
         arsenal.upgrade.get("Critical Deceleration"),
         arsenal.upgrade.get("Primed Ravage"),
         arsenal.upgrade.get("Hunter Munitions"),

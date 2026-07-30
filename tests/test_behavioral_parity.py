@@ -54,7 +54,7 @@ class BehavioralParityTests(unittest.TestCase):
         self.assertAlmostEqual(result.effective.multishot, 1.2)
         self.assertAlmostEqual(result.effective.ammo_cost, 1.2)
         self.assertAlmostEqual(result.effective.damage.total, 70.4)
-        self.assertAlmostEqual(result.final.total_dps, 1563.939414466793)
+        self.assertAlmostEqual(result.final.total_dps, 1520.3368338216317)
 
     def test_target_pool_armor_status_and_bodypart_model(self):
         target = arsenal.enemy.get("Heavy Gunner").set(level=100, steel_path=True)
@@ -69,7 +69,7 @@ class BehavioralParityTests(unittest.TestCase):
         self.assertAlmostEqual(result.effective.crit_chance, 0.46)
         self.assertAlmostEqual(result.effective.crit_damage, 3.4)
         self.assertAlmostEqual(result.effective.magazine_capacity, 200)
-        self.assertAlmostEqual(result.final.total_dps, 2553.5797884937797)
+        self.assertAlmostEqual(result.final.total_dps, 2482.386066005741)
 
     def test_equipped_dependencies_are_case_insensitive(self):
         weapon = arsenal.weapon.get("Bo Prime")
