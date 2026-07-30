@@ -8,9 +8,9 @@ from ..domain.upgrades import ResolvedEffect, Upgrade
 from ..domain.weapons import Attack
 from .aggregation import DAMAGE_TYPES, aggregate, merge
 from .context import CalculationContext
-from .effects import evaluate
+from .effects import automatic_value, automatic_values, evaluate
 from .formulas import DOT_MULTIPLIERS, aoe_damage_mass, average_falloff_multiplier, clamp, crit_multiplier, family_bonus, family_factor, hit_multiplier, ranged_falloff_multiplier, refresh_metrics, true_round
-from .special import automatic_value, automatic_values, average_enervate_bonus, enervate_parameters
+from .special import average_enervate_bonus, enervate_parameters
 from ..domain.status import COMBINED_STATUS_COMPONENTS, RANDOM_STATUS_TYPES, STATUS_TYPES, StatusModel, attack_proc_chance
 from .targets import ZONE_FIELDS, damage_multiplier, damage_total
 
@@ -420,9 +420,6 @@ def _zone_damage(context: CalculationContext, result: AttackResult, zone: str, *
     tier_bonus = average.weakpoint_crit_tier_bonus if zone == "weakpoint" else average.crit_tier_bonus
     faction = float(effective.faction_damage)
     direct = direct_total * direct_hits * faction * _hit_multiplier(chance, tier_bonus, float(effective.crit_damage), float(effective.non_crit_bonus_damage), float(effective.non_crit_bonus_chance)) * duplicate_multiplier * combo_multiplier * float(effective.target_vulnerability)
-    cascadia = _special_value(effective.special_effects, "cascadia_empowered_proc")
-    if cascadia:
-        direct += sum(effective.status_model.proc_count_per_attack(kind) * cascadia * faction * float(damage_multiplier(context.target, kind, zone=zone, weakpoint_bonus=weakpoint_bonus, status_effects=result.status_effects, overguard_multiplier=float(effective.overguard_damage_multiplier)) or 0) for kind in RANDOM_STATUS_TYPES | {"void"}) * float(effective.target_vulnerability)
     dot = _dot_value(context, result, zone, multishot=dot_multishot, damage_factor=damage_factor) * combo_multiplier
     return direct, dot
 

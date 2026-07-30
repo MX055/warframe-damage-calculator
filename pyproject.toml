@@ -14,4 +14,5 @@ include = ["warframe_damage_calculator*"]
 namespaces = true
 
 [tool.setuptools.package-data]
+"warframe_damage_calculator" = ["py.typed"]
 "warframe_damage_calculator.database" = ["database.json"]
