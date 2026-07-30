@@ -44,8 +44,6 @@ def main() -> None:
     weapon.configure(build, target)
 
     print(weapon.format.summary())
-    print(weapon.results.main.final.falloff_multiplier)
-    print(weapon.results.main.density.total_dps)
 
 
 if __name__ == "__main__":
