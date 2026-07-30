@@ -20,14 +20,14 @@ def true_round(value: float, decimals: int = 0) -> float:
     return float(Decimal(str(value)).quantize(quantum, rounding=ROUND_HALF_UP))
 
 
-def family_factor(build: object, stat: str) -> float:
+def family_factor(resolved: object, stat: str) -> float:
     factor = 1.0
-    for family in getattr(build, "families", {}).values(): factor *= max(1 + float(family.get(stat, 0)), 1)
+    for family in getattr(resolved, "families", {}).values(): factor *= max(1 + float(family.get(stat, 0)), 1)
     return factor
 
 
-def family_bonus(build: object, family: str, stat: str) -> float:
-    return float(getattr(build, "families", {}).get(family, {}).get(stat, 0))
+def family_bonus(resolved: object, family: str, stat: str) -> float:
+    return float(getattr(resolved, "families", {}).get(family, {}).get(stat, 0))
 
 
 def crit_multiplier(chance: float, damage: float) -> float:
@@ -59,19 +59,6 @@ def ranged_falloff_multiplier(start_range: float, end_range: float, max_range: f
 
 def aoe_damage_mass(start_range: float, end_range: float, final_multiplier: float) -> float:
     return 4 / 3 * pi * end_range ** 3 - pi / 3 * (1 - final_multiplier) * (end_range - start_range) * (3 * end_range ** 2 + 2 * end_range * start_range + start_range ** 2)
-
-
-def punch_through_falloff_multiplier(start_range: float, end_range: float, max_range: float, final_multiplier: float, punch_through: float) -> float:
-    if max_range <= 0 or punch_through <= 0: return 0.0
-    limit = min(punch_through, max_range)
-    if limit == max_range:
-        endpoint_multiplier = 1.0 if max_range <= start_range else final_multiplier if max_range >= end_range else 1 - (1 - final_multiplier) * (max_range - start_range) / (end_range - start_range)
-        return (1 + endpoint_multiplier) / 2
-    return (cumulative_falloff(max_range - limit, start_range, end_range, final_multiplier) + cumulative_falloff(max_range, start_range, end_range, final_multiplier) - cumulative_falloff(limit, start_range, end_range, final_multiplier)) / (2 * (max_range - limit))
-
-
-def punch_through_damage_mass(start_range: float, end_range: float, max_range: float, final_multiplier: float, punch_through: float) -> float:
-    return max_range * punch_through_falloff_multiplier(start_range, end_range, max_range, final_multiplier, punch_through)
 
 
 def distribute_flat(damage: Dist, value: float) -> Dist:

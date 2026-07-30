@@ -1,122 +1,104 @@
 import unittest
-import warnings
 
-from warframe_damage_calculator import Attack, AttackStats, Build, BuildCompatibilityWarning, Compatibility, Dist, Effect, Enemy, EnemyStats, Melee, Primary, UnimplementedUpgradeWarning, Upgrade, UpgradeStats, arsenal
+from warframe_damage_calculator import Attack, AttackStats, Calculator, Dist, Effect, Loadout, PLACEHOLDER, Perk, PerkValues, Primary, ResultFormatter, UpgradeStats, arsenal, format_damage_result, format_loadout, format_perk, format_spatial, format_status, format_upgrade, format_weapon
 
 
 class ApiTests(unittest.TestCase):
-    def test_direct_objects_calculate_without_data_wrappers(self):
-        weapon = Primary(name="Example", subtype="rifle", attacks=[Attack(name="shot", stats=AttackStats(damage=Dist(impact=100), crit_chance=0.2, crit_damage=2, fire_rate=2))], magazine_size=10, reload_time=1)
-        upgrade = Upgrade(name="Damage", stats=UpgradeStats(damage_bonus=Effect(1)))
-        weapon.configure(Build(upgrade))
-        self.assertFalse(hasattr(weapon, "data"))
-        self.assertFalse(hasattr(upgrade, "data"))
-        self.assertGreater(weapon.results.main.final.total_dps, 0)
+    def test_weapon_is_definition_only(self):
+        weapon = arsenal.weapon.get("Phenmor")
+        for field in ("build", "loadout", "target", "runtime", "results", "format", "evolutions"): self.assertFalse(hasattr(weapon, field))
 
-    def test_category_repositories_return_fresh_objects(self):
-        first = arsenal.weapon.get("Corinth Prime")
-        second = arsenal.weapon.get("corinth prime")
-        self.assertIsNot(first, second)
-        self.assertEqual(arsenal.upgrade.get("Serration").name, "Serration")
-        self.assertEqual(arsenal.enemy.get("Heavy Gunner").name, "Heavy Gunner")
+    def test_loadout_contains_upgrades_and_global_perks(self):
+        loadout = Loadout(upgrades=[arsenal.upgrade.get("Serration")], evolutions=[arsenal.perk.get("Elemental Excess")])
+        self.assertEqual(loadout.upgrades[0].name, "Serration")
+        self.assertEqual(loadout.evolutions[0].name, "Elemental Excess")
 
-    def test_configuration_copies_build_and_target(self):
-        build = Build(arsenal.upgrade.get("Serration"))
-        target = Enemy(name="Target", faction="grineer", stats=EnemyStats(health=100, armor=100))
-        weapon = arsenal.weapon.get("Braton").configure(build, target)
-        self.assertIsNot(weapon.build, build)
-        self.assertIsNot(weapon.target, target)
-        self.assertGreater(weapon.results.main.final.total_dps, 0)
+    def test_global_perk_contains_placeholder_stats(self):
+        perk = arsenal.perk.get("Elemental Excess")
+        self.assertTrue(any(effect.value is PLACEHOLDER for effect in perk.stats.status_chance))
 
-    def test_incompatible_effects_warn_but_apply(self):
-        upgrade = Upgrade(name="Rifle", compatibility=Compatibility(subtypes=["rifle"]), stats=UpgradeStats(damage_bonus=Effect(1)))
-        weapon = arsenal.weapon.get("Lato")
-        baseline = weapon.results.main.effective.damage.total
-        with warnings.catch_warnings(record=True) as caught:
-            warnings.simplefilter("always")
-            weapon.configure(upgrade)
-        self.assertTrue(caught)
-        self.assertGreater(weapon.results.main.effective.damage.total, baseline)
+    def test_same_perk_resolves_differently_for_two_weapons(self):
+        perk = arsenal.perk.get("Elemental Balance")
+        telos = arsenal.weapon.get("Telos Boltor").resolve_perk(perk)
+        prime = arsenal.weapon.get("Boltor Prime").resolve_perk(perk)
+        telos_values = tuple(effect.value for effect in telos.effects if effect.stat == "status_chance")
+        prime_values = tuple(effect.value for effect in prime.effects if effect.stat == "status_chance")
+        self.assertNotEqual(telos_values, prime_values)
 
-    def test_compatibility_fields_do_not_match_other_weapon_fields(self):
-        upgrade = Upgrade(name="Name only", compatibility=Compatibility(names=["pistol"]))
-        with self.assertWarns(BuildCompatibilityWarning):
-            arsenal.weapon.get("Lato").configure(upgrade)
+    def test_placeholder_metadata_is_preserved_during_resolution(self):
+        perk = arsenal.perk.get("Devouring Attrition")
+        resolved = arsenal.weapon.get("Phenmor").resolve_perk(perk)
+        template = perk.stats.damage_bonus[0]
+        effect = resolved.effects[0]
+        self.assertEqual((effect.stat, effect.mode, effect.family, effect.maximum, effect.automatic), ("damage_bonus", template.mode, template.family, template.maximum, template.automatic))
+        self.assertIsNot(effect.value, PLACEHOLDER)
 
-    def test_unimplemented_upgrades_warn_once_and_do_not_apply(self):
-        weapon = arsenal.weapon.get("Lato")
-        baseline = weapon.results.main.final.total_dps
-        unsupported = arsenal.upgrade.get("Cascadia Empowered")
-        with warnings.catch_warnings(record=True) as caught:
-            warnings.simplefilter("always")
-            weapon.configure(unsupported)
-            weapon.results.resolve()
-            weapon.results.resolve()
-        unimplemented = [warning for warning in caught if warning.category is UnimplementedUpgradeWarning]
-        self.assertEqual(len(unimplemented), 1)
-        self.assertFalse(unsupported.implemented)
-        self.assertEqual(weapon.build[0].name, unsupported.name)
-        self.assertFalse(weapon.build[0].implemented)
-        self.assertEqual(weapon.results.main.final.total_dps, baseline)
+    def test_missing_and_unknown_weapon_values_are_rejected(self):
+        perk = Perk("Test", stats=UpgradeStats(damage_bonus=Effect(PLACEHOLDER)))
+        attack = Attack("shot", stats=AttackStats(damage=Dist(impact=1)))
+        missing = Primary(name="Missing", attacks=[attack], perks=[PerkValues(perk, 2, 1, {})])
+        with self.assertRaisesRegex(ValueError, "supplies no values"): missing.resolve_perk(perk)
+        unknown = Primary(name="Unknown", attacks=[attack], perks=[PerkValues(perk, 2, 1, {"damage_bonus": (1,), "crit_chance": (1,)})])
+        with self.assertRaisesRegex(ValueError, "unknown values"): unknown.resolve_perk(perk)
 
-    def test_evolution_manual_runtime_defaults_to_each_effect_cap(self):
-        weapon = arsenal.weapon.get("Gorgon")
-        self.assertEqual(weapon.runtime.reload_from_empty, 3)
+    def test_calculator_uses_resolved_global_template(self):
+        perk = Perk("Flat Critical", stats=UpgradeStats(crit_chance=Effect(PLACEHOLDER, mode="flat")))
+        weapon = Primary(name="Template", attacks=[Attack("shot", stats=AttackStats(damage=Dist(impact=10), crit_chance=0.1))], reload_time=1, perks=[PerkValues(perk, 2, 1, {"crit_chance": (0.4,)})])
+        result = Calculator(weapon).calculate(Loadout(evolutions=[perk]))
+        self.assertAlmostEqual(result.attacks["shot"].effective.crit_chance, 0.5)
 
-    def test_expected_procs_include_forced_and_damage_proc_effects(self):
-        attack = Attack(name="shot", stats=AttackStats(damage=Dist(impact=100), forced_procs=Dist(impact=0.25), crit_chance=0.2, status_chance=0.5, multishot=2))
-        upgrade = Upgrade(name="Proc effects", stats=UpgradeStats(
-            puncture_proc=Effect(0.5),
-            slash_proc=(
-                Effect(1).automate(on='critical_hit', chance=0.3),
-                Effect(1).automate(on='impact_status_proc', chance=0.35),
-            ),
-        ))
-        result = Primary(name="Example", subtype="rifle", attacks=[attack]).configure(upgrade).results.main
-        self.assertAlmostEqual(result.average.procs_per_shot, 3.2075)
+    def test_result_navigation_distinguishes_aggregate_and_components(self):
+        result = Calculator(arsenal.weapon.get("Corinth Prime")).calculate(attack="air_burst_projectile")
+        root = result.attacks[result.selected_attack]
+        self.assertEqual(result.aggregate.name, result.selected_attack)
+        self.assertGreater(result.aggregate.final.normal.total_dps, root.final.normal.total_dps)
+        self.assertGreater(result.attacks["air_burst_explosion"].final.normal.total_dps, 0)
+        self.assertFalse(hasattr(result, "main"))
 
-    def test_formatters_cover_ranged_melee_and_contributions(self):
-        ranged = arsenal.weapon.get("Braton").configure(Build(arsenal.upgrade.get("Serration")), Enemy(name="Test Target"))
-        melee = arsenal.weapon.get("Bo Prime")
-        self.assertIn("TOTAL DPS", ranged.format.summary())
-        self.assertIn("ATTACK SPEED", melee.format.summary())
-        self.assertIn("EXPECTED PROCS PER HIT", melee.format.summary())
-        upgrades = ranged.format.upgrades()
-        self.assertIn("Serration", upgrades)
-        self.assertEqual(upgrades.splitlines()[0], "Braton - Normal Attack vs Test Target")
+    def test_prepared_and_ordinary_calculations_are_equal(self):
+        weapon = arsenal.weapon.get("Phenmor")
+        loadout = Loadout(evolutions=[arsenal.perk.get("Devouring Attrition")])
+        calculator = Calculator(weapon)
+        ordinary = calculator.calculate(loadout, attack="incarnon_form")
+        prepared = calculator.prepare(attack="incarnon_form").calculate(loadout)
+        self.assertEqual(prepared.aggregate.final, ordinary.aggregate.final)
+        self.assertEqual(prepared.attacks.keys(), ordinary.attacks.keys())
 
-    def test_melee_slams_use_aoe_mass_and_show_density(self):
-        for category in ("slam", "heavy_slam"):
-            with self.subTest(category=category):
-                slam = Melee(name="Slam", attacks=[Attack(name=category, category=category, stats=AttackStats(damage=Dist(impact=100), falloff={"start_range": 0, "end_range": 6, "final_multiplier": 0.5}))])
-                result = slam.results.main
-                summary = slam.format.summary()
-                self.assertGreater(result.density.damage_mass, 0)
-                self.assertIsNotNone(result.density.total_dph)
-                self.assertIn("DAMAGE MASS", summary)
-                self.assertNotIn("DAMAGE DENSITY", summary)
-                self.assertIn("m³", summary)
-                self.assertLess(summary.index("HIT MULTIPLIER"), summary.index("DAMAGE MASS"))
-                self.assertLess(summary.index("AVERAGE FALLOFF MULTIPLIER"), summary.index("DAMAGE MASS"))
-                self.assertLess(summary.index("DAMAGE MASS"), summary.index("EXPECTED PROCS PER HIT"))
+    def test_calculation_does_not_mutate_weapon_definition(self):
+        weapon = arsenal.weapon.get("Bo Prime")
+        before = (repr(weapon.attacks), repr(weapon.perks), dict(weapon.calculation_defaults))
+        Calculator(weapon).calculate(state={"combo": 5})
+        self.assertEqual((repr(weapon.attacks), repr(weapon.perks), dict(weapon.calculation_defaults)), before)
 
-    def test_summary_preserves_the_original_table_format(self):
-        ranged = arsenal.weapon.get("Corinth Prime")
-        summary = ranged.format.summary()
-        lines = summary.splitlines()
-        self.assertEqual(lines[1], "=" * len(lines[2]))
-        self.assertEqual(lines[-1], lines[1])
-        self.assertIn("FIRE RATE", summary)
-        self.assertIn("rps", summary)
-        self.assertIn("RELOAD TIME", summary)
-        self.assertIn("MAGAZINE CAPACITY", summary)
-        self.assertIn("EXPECTED PROCS PER SHOT", summary)
-        self.assertLess(summary.index("HIT MULTIPLIER"), summary.index("AVERAGE FALLOFF MULTIPLIER"))
-        self.assertLess(summary.index("AVERAGE FALLOFF MULTIPLIER"), summary.index("EXPECTED PROCS PER SHOT"))
-        self.assertIn("WEAKPOINT DAMAGE", summary)
-        self.assertNotIn("effective", lines[2])
-        self.assertNotIn("EXPECTED PROCS/SHOT", summary)
-        self.assertIn("ATTACK SPEED", arsenal.weapon.get("Bo Prime").format.summary())
+    def test_formatter_coverage(self):
+        weapon = arsenal.weapon.get("Corinth Prime")
+        upgrade = arsenal.upgrade.get("Galvanized Hell")
+        perk = arsenal.perk.get("Elemental Excess")
+        loadout = Loadout(upgrades=[upgrade])
+        result = Calculator(weapon).calculate(loadout)
+        formatter = ResultFormatter(result)
+        self.assertIn("Corinth Prime", format_weapon(weapon))
+        self.assertIn("Galvanized Hell", format_upgrade(upgrade))
+        self.assertIn("Elemental Excess", format_perk(perk))
+        self.assertIn("Galvanized Hell", format_loadout(loadout))
+        self.assertIn("TOTAL DPS", formatter.summary())
+        self.assertIn("DPH", format_damage_result(result.aggregate.final))
+        self.assertIn("Expected procs", format_status(result.aggregate.status))
+        aoe = Calculator(weapon).calculate(attack="air_burst_explosion").attacks["air_burst_explosion"].spatial
+        self.assertIsNotNone(aoe)
+        self.assertIn("Damage mass", format_spatial(aoe))
+
+    def test_contributions_include_upgrades_and_evolutions(self):
+        from warframe_damage_calculator import removal_contributions, shapley_contributions
+
+        weapon = arsenal.weapon.get("Phenmor")
+        loadout = Loadout(upgrades=[arsenal.upgrade.get("Serration")], evolutions=[arsenal.perk.get("Devouring Attrition")])
+        calculator = Calculator(weapon)
+        removal = removal_contributions(calculator, loadout, attack="incarnon_form")
+        shapley = shapley_contributions(calculator, loadout, attack="incarnon_form")
+        self.assertEqual(set(removal), {"Serration", "Devouring Attrition"})
+        self.assertEqual(set(shapley), set(removal))
+        self.assertAlmostEqual(sum(shapley.values()), 1)
 
 
 if __name__ == "__main__": unittest.main()

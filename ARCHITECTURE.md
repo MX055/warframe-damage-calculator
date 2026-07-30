@@ -1,27 +1,117 @@
-# Rewrite architecture
+# Architecture
 
-This directory is a self-contained implementation. It does not import, load files from, execute, or require the original `warframe_damage_calculator` package.
+## Dependency direction
 
-The package uses three directional layers:
+```text
+domain
+  ↑
+engine
+  ↑
+analysis
+```
 
-1. `domain`: concrete weapon, upgrade, enemy, damage, effect, and result values.
-2. `engine`: per-attack calculation, weapon-tree orchestration, effect resolution, aggregation, evolutions, status, damage, targets, attack trees, and contributions.
-3. package API: repositories, configuration, formatting, and public exports.
+The domain layer contains concrete definitions and result value objects. The engine imports those concrete types directly. No protocol mirrors `Weapon`, `Attack`, `Loadout`, runtime state, status records, or result records.
 
-Domain objects contain definition and caller-managed runtime state. Engine-managed combat conditions never enter public runtime state; they are evaluated from the automatic effect dictionary inside the engine.
+## Ownership
 
-Calculation is a staged pipeline:
+```text
+Arsenal
+├── weapon definitions
+├── upgrade definitions
+├── global perk templates
+└── enemy definitions
 
-1. resolve rank and caller-managed effect conditions;
-2. select and scope evolution effects;
-3. compute pre-damage scalars and sustained status acquisition;
-4. evaluate engine-managed automatic conditions;
-5. aggregate common stats and multiplicative families;
-6. construct effective damage, crit, status, rates, ammunition, and melee state;
-7. apply target pools, defenses, bodyparts, direct damage, and status damage;
-8. mix magazine-position classes through the shared zone-damage path and fold the selected attack tree;
-9. expose per-attack and final metrics without wrapper objects.
+Weapon
+├── attack definitions
+├── weapon-specific PerkValues
+├── perk tier/choice metadata
+└── immutable calculation defaults
 
-Automatic status acquisition is deliberately non-recursive: a bonus produced from sustained status stacks does not feed back into the status model that produced it. This keeps Condition Overload and stack effects deterministic.
+Loadout
+├── selected upgrades
+└── selected global perks
 
-The package owns its models, engine, repositories, schema-v10 database, formatters, tests, documentation, and packaging. The bundled catalog is initialized lazily, so importing domain utilities does not parse the full database. Its isolated test workflow installs the package before running with Python's safe-path option.
+Calculator
+├── weapon
+└── target
+```
+
+`Weapon` owns no loadout, target, mutable selection, result, formatter, or optimizer state.
+
+## Perk resolution
+
+Global templates are authoritative:
+
+```text
+arsenal.perk.get(name)
+        ↓
+Perk
+  stat identity
+  mode and family
+  conditions
+  automatic behavior
+  placeholder positions
+        +
+Weapon.perks[perk]
+  concrete values only
+        ↓
+ResolvedPerk
+        ↓
+CalculationContext
+```
+
+Every weapon record supplies one concrete value for every placeholder and no unknown value. Named perks whose source records contain multiple mechanical variants use a universal template containing those positions; an inapplicable position receives a zero value. This keeps all effect metadata global while preserving weapon-specific mechanics and numerical behavior.
+
+Tier and choice metadata live in `weapon.perk_choices`. They validate mutually exclusive selections and support search-space generation, but the engine consumes `ResolvedPerk` objects rather than tier-choice instruction mappings.
+
+## Calculation flow
+
+```text
+Weapon + Target + Loadout + selected attack + explicit state
+        ↓
+resolve selected perks
+        ↓
+CalculationContext
+        ↓
+resolve upgrade and evolution effects
+        ↓
+calculate preliminary attack components
+        ↓
+construct the shared analytic status model
+        ↓
+calculate final components
+        ↓
+fold descendant damage into the aggregate
+        ↓
+CalculationResult
+```
+
+`CalculationContext` is internal and contains only the concrete inputs required by the engine. It does not imitate the public `Weapon` interface.
+
+## Result scopes
+
+`CalculationResult` has two distinct scopes:
+
+- `result.aggregate` represents the selected root and all descendants. It exposes aggregate final damage, aggregate status, component names, and per-component spatial outputs.
+- `result.attacks[name]` represents one attack component. It exposes definition, base, modded, effective, upgrade, evolution, average, final, status, spatial, child-name, and original-damage pools.
+
+Canonical damage navigation is:
+
+```python
+result.aggregate.final.normal.total_dps
+result.attacks[name].final.normal.total_dps
+```
+
+The aggregate scope deliberately has no critical chance, multishot, or other cross-component statistic.
+
+## Spatial boundary
+
+Ordinary damage is independent of assumed density, spacing, equivalent extent, and arbitrary target limits. AoE components may expose dimensional analytic damage mass. Punch through remains a mechanical stat and is not converted into a target multiplier.
+
+## Analysis and formatting
+
+Contribution analysis receives `Calculator` and `Loadout` and evaluates new immutable results. It includes both upgrades and selected perks. Formatting consumes definition and result objects and never belongs to `Weapon`.
+
+## Optimizer boundary
+
+`PreparedCalculator` caches validated attack-tree selection for repeated evaluations. Candidate configuration remains one `Loadout`; transient combat state remains an explicit calculation argument.

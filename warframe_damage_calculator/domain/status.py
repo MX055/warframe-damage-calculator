@@ -4,7 +4,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass, field
 from math import expm1, log1p
 
-from ..domain.damage import Dist
+from .damage import Dist
 
 
 RANDOM_STATUS_TYPES = frozenset({"impact", "puncture", "slash", "heat", "cold", "electricity", "toxin", "blast", "radiation", "gas", "magnetic", "viral", "corrosive"})

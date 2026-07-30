@@ -6,7 +6,23 @@ from dataclasses import dataclass, field
 from typing import Literal, Self
 
 
+class Placeholder:
+    __slots__ = ()
+
+    def __repr__(self) -> str:
+        return "PLACEHOLDER"
+
+    def __copy__(self) -> Placeholder:
+        return self
+
+    def __deepcopy__(self, memo: dict) -> Placeholder:
+        return self
+
+
+PLACEHOLDER = Placeholder()
+
 type Scalar = int | float | bool | str
+type EffectValue = Scalar | Placeholder
 type ChannelValue = Scalar | list[Scalar]
 type EffectChannel = dict[str, ChannelValue]
 type EffectMode = Literal["proportional", "base", "flat"]
@@ -22,6 +38,10 @@ def _normalize_scalar(value: Scalar, field_name: str) -> Scalar:
         value = value.strip().lower()
         if not value: raise ValueError(f"{field_name} cannot be empty")
     return value
+
+
+def _normalize_effect_value(value: EffectValue) -> EffectValue:
+    return value if value is PLACEHOLDER else _normalize_scalar(value, "value")
 
 
 def _normalize_repeated(value: Scalar | Iterable[Scalar], field_name: str) -> ChannelValue:
@@ -48,7 +68,7 @@ def _normalize_automatic(source: Mapping[str, ChannelValue]) -> EffectChannel:
 
 @dataclass(slots=True, init=False)
 class Effect:
-    value: Scalar
+    value: EffectValue
     mode: EffectMode
     family: str
     maximum: float | None
@@ -59,14 +79,14 @@ class Effect:
     requires_rank: int | None
     automatic: EffectChannel = field(default_factory=dict)
 
-    def __init__(self, value: Scalar, *, mode: EffectMode = "proportional", family: str = "common", maximum: float | None = None, rank_scale: bool = True, when: str | None = None, stacks: Scalar | None = None, duration: Scalar | None = None, requires_rank: int | None = None) -> None:
+    def __init__(self, value: EffectValue, *, mode: EffectMode = "proportional", family: str = "common", maximum: float | None = None, rank_scale: bool = True, when: str | None = None, stacks: Scalar | None = None, duration: Scalar | None = None, requires_rank: int | None = None) -> None:
         normalized_mode = str(mode).strip().lower()
         if normalized_mode not in {"proportional", "base", "flat"}: raise ValueError(f"unsupported effect mode {normalized_mode!r}")
         normalized_family = str(family).strip().lower()
         if not normalized_family: raise ValueError("family cannot be empty")
         normalized_when = None if when is None else str(_normalize_scalar(when, "when"))
         if normalized_when is not None and normalized_when.startswith("on_"): raise ValueError("when must omit the redundant 'on_' prefix")
-        self.value = _normalize_scalar(value, "value")
+        self.value = _normalize_effect_value(value)
         self.mode = normalized_mode
         self.family = normalized_family
         self.maximum = None if maximum is None else float(maximum)
@@ -114,7 +134,7 @@ class Effect:
         return effect
 
     def to_record(self) -> dict[str, object]:
-        record: dict[str, object] = {"value": deepcopy(self.value)}
+        record: dict[str, object] = {"value": "$weapon" if self.value is PLACEHOLDER else deepcopy(self.value)}
         if self.mode != "proportional": record["mode"] = self.mode
         if self.family != "common": record["family"] = self.family
         if self.maximum is not None: record["max"] = self.maximum

@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from math import sqrt
-from typing import Any, Literal
+from typing import Literal
 
 from ..domain.damage import Dist
+from ..domain.enemies import Enemy
 
 
 type HitZone = Literal["normal", "weakpoint", "resistant"]
@@ -32,7 +33,7 @@ def remaining_armor(statuses: dict[str, float]) -> float:
     return (1 - corrosive_strip) * (1 - heat_strip) * (1 - direct_strip)
 
 
-def bodypart_multiplier(enemy: Any | None, zone: HitZone, weakpoint_bonus: float = 0) -> float | None:
+def bodypart_multiplier(enemy: Enemy | None, zone: HitZone, weakpoint_bonus: float = 0) -> float | None:
     if enemy is None: return 1.0 if zone == "normal" else None
     values = [float(part.multiplier) for part in enemy.bodyparts.values() if part.type == zone]
     if not values: return None
@@ -40,7 +41,7 @@ def bodypart_multiplier(enemy: Any | None, zone: HitZone, weakpoint_bonus: float
     return multiplier * (1 + weakpoint_bonus) if zone == "weakpoint" else multiplier
 
 
-def defense_multiplier(enemy: Any | None, kind: str, *, dot: bool, statuses: dict[str, float], overguard_multiplier: float = 1) -> float:
+def defense_multiplier(enemy: Enemy | None, kind: str, *, dot: bool, statuses: dict[str, float], overguard_multiplier: float = 1) -> float:
     if enemy is None: return 1.0
     effective = enemy.effective
     health, shields, overguard = float(effective.health), float(effective.shields), float(effective.overguard)
@@ -61,13 +62,13 @@ def defense_multiplier(enemy: Any | None, kind: str, *, dot: bool, statuses: dic
     return (health_share * health_taken + shield_share * shield_taken + overguard * overguard_taken) / total
 
 
-def damage_multiplier(enemy: Any | None, kind: str, *, zone: HitZone, dot: bool = False, weakpoint_bonus: float = 0, status_effects: dict[str, float] | None = None, overguard_multiplier: float = 1) -> float | None:
+def damage_multiplier(enemy: Enemy | None, kind: str, *, zone: HitZone, dot: bool = False, weakpoint_bonus: float = 0, status_effects: dict[str, float] | None = None, overguard_multiplier: float = 1) -> float | None:
     part = bodypart_multiplier(enemy, zone, weakpoint_bonus)
     if part is None: return None
     modifier = 1.0 if enemy is None else float(enemy.modifiers.get(kind, 1))
     return modifier * defense_multiplier(enemy, kind, dot=dot, statuses=status_effects or {}, overguard_multiplier=overguard_multiplier) * part
 
 
-def damage_total(damage: Dist, enemy: Any | None, *, zone: HitZone, dot: bool = False, weakpoint_bonus: float = 0, status_effects: dict[str, float] | None = None, overguard_multiplier: float = 1) -> float | None:
+def damage_total(damage: Dist, enemy: Enemy | None, *, zone: HitZone, dot: bool = False, weakpoint_bonus: float = 0, status_effects: dict[str, float] | None = None, overguard_multiplier: float = 1) -> float | None:
     if bodypart_multiplier(enemy, zone, weakpoint_bonus) is None: return None
     return sum(amount * float(damage_multiplier(enemy, kind, zone=zone, dot=dot, weakpoint_bonus=weakpoint_bonus, status_effects=status_effects, overguard_multiplier=overguard_multiplier) or 0) for kind, amount in damage.items())

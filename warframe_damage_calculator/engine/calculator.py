@@ -1,29 +1,116 @@
 from __future__ import annotations
 
-from ..domain.results import AttackResult, AverageAttackStats, FinalAttackStats
-from ..domain.upgrades import ResolvedEffect
-from .attack_calculator import AFFLICTIONS_CATEGORIES, AttackCalculator, _product, _runtime_evolution_effects, _special_value, _status_model, _with_random_proc
-from .protocols import WeaponProtocol
-from .status import StatusModel
-from .targets import ZONE_FIELDS
+import warnings
+from collections.abc import Mapping
+from copy import deepcopy
+
+from ..domain.enemies import Enemy
+from ..domain.loadouts import Loadout
+from ..domain.perks import Perk, ResolvedPerk
+from ..domain.results import AggregateResult, AverageResult, CalculatedAttack, CalculationResult, DamageMetrics, DamageResult, SpatialDamageMetrics, SpatialResult, StatusResult, _damage_metrics
+from ..domain.weapons import LoadoutCompatibilityWarning, UnimplementedUpgradeWarning, Weapon
+from .context import CalculationContext
+from .weapon_calculator import calculate_weapon
 
 
-class WeaponCalculator:
-    __slots__ = ("weapon", "build_effects", "evolution_effects", "attacks", "root_name")
+def _warn_loadout(weapon: Weapon, loadout: Loadout) -> None:
+    previous = []
+    for upgrade in loadout.upgrades:
+        if not upgrade.implemented: warnings.warn(f"{upgrade.name} is not implemented and will not affect calculated results.", UnimplementedUpgradeWarning, stacklevel=3)
+        compatibility = upgrade.compatibility
+        matches_type = not compatibility.types or weapon.type.casefold() in {value.casefold() for value in compatibility.types}
+        matches_subtype = not compatibility.subtypes or weapon.subtype is not None and weapon.subtype.casefold() in {value.casefold() for value in compatibility.subtypes}
+        matches_name = not compatibility.names or weapon.name.casefold() in {value.casefold() for value in compatibility.names}
+        attacks = tuple(weapon.attacks.values())
+        valid = matches_type and matches_subtype and matches_name
+        valid = valid and (not compatibility.categories or any(attack.category in compatibility.categories for attack in attacks))
+        valid = valid and (not compatibility.triggers or any(attack.trigger in compatibility.triggers for attack in attacks))
+        valid = valid and (compatibility.aoe is None or any(attack.aoe is compatibility.aoe for attack in attacks))
+        if not valid: warnings.warn(f"{upgrade.name} is not compatible with {weapon.name}", LoadoutCompatibilityWarning, stacklevel=3)
+        conflicts = {other.name for other in previous if other.name in upgrade.conflicts or upgrade.name in other.conflicts}
+        if conflicts: warnings.warn(f"{upgrade.name} conflicts with {', '.join(sorted(conflicts))}", LoadoutCompatibilityWarning, stacklevel=3)
+        previous.append(upgrade)
 
-    def __init__(self, weapon: WeaponProtocol) -> None:
+
+def _status(result) -> StatusResult:
+    model = result.effective.status_model
+    kinds = set(model.damage) | set(model.forced_procs) | set(result.status_effects)
+    sustained = {kind: float(model.expected_active_stacks(kind)) for kind in kinds if model.expected_active_stacks(kind)}
+    return StatusResult(float(model.expected_procs_per_attack), sustained, dict(result.status_effects))
+
+
+def _spatial_metrics(source, prefix: str = "") -> SpatialDamageMetrics | None:
+    direct_dph = getattr(source, f"flat_{prefix}dph" if prefix else "flat_dph")
+    dot_dph = getattr(source, f"flat_{prefix}dotph" if prefix else "flat_dotph")
+    total_dph = getattr(source, f"total_{prefix}dph" if prefix else "total_dph")
+    direct_dps = getattr(source, f"flat_{prefix}dps" if prefix else "flat_dps")
+    dot_dps = getattr(source, f"flat_{prefix}dotps" if prefix else "flat_dotps")
+    total_dps = getattr(source, f"total_{prefix}dps" if prefix else "total_dps")
+    if all(value is None for value in (direct_dph, dot_dph, total_dph, direct_dps, dot_dps, total_dps)): return None
+    return SpatialDamageMetrics(float(direct_dph or 0), float(dot_dph or 0), float(total_dph or 0), float(direct_dps or 0), float(dot_dps or 0), float(total_dps or 0))
+
+
+def _spatial(result) -> SpatialResult | None:
+    spatial = result.spatial
+    if spatial.dimension is None or spatial.damage_mass is None: return None
+    normal = _spatial_metrics(spatial) or SpatialDamageMetrics(0, 0, 0, 0, 0, 0)
+    return SpatialResult(int(spatial.dimension), float(spatial.falloff_multiplier or 1), float(spatial.damage_mass), normal, _spatial_metrics(spatial, "weakpoint_"), _spatial_metrics(spatial, "resistant_"))
+
+
+def _damage_result(source) -> DamageResult:
+    return DamageResult(_damage_metrics(source) or DamageMetrics(0, 0, 0, 0, 0, 0), _damage_metrics(source, "weakpoint_"), _damage_metrics(source, "resistant_"))
+
+
+def _average_result(source) -> AverageResult:
+    damage = _damage_result(source)
+    return AverageResult(damage.normal, damage.weakpoint, damage.resistant, float(source.crit_chance), float(source.crit_multiplier), float(source.weakpoint_crit_chance), float(source.weakpoint_crit_multiplier), float(source.sustained_fire_rate), float(source.procs_per_shot), float(source.first_shot_damage_multiplier), float(source.combo_multiplier), float(source.melee_duplicate_multiplier), float(source.melee_doughty_bonus), float(source.crit_tier_bonus), float(source.weakpoint_crit_tier_bonus), float(source.secondary_enervate_bonus), float(source.weakpoint_secondary_enervate_bonus), float(source.falloff_multiplier))
+
+
+def _calculated_attack(result) -> CalculatedAttack:
+    return CalculatedAttack(result.name, deepcopy(result.attack), result.base, result.modded, result.effective, result.upgrades, result.evolutions, _average_result(result.average), _damage_result(result.average), _status(result), _spatial(result), tuple(result.children), result.original_damage)
+
+
+def _aggregate(root, attacks: dict[str, CalculatedAttack]) -> AggregateResult:
+    spatial = {name: attack.spatial for name, attack in attacks.items() if attack.spatial is not None}
+    return AggregateResult(root.name, _damage_result(root.final), _status(root), spatial, tuple(attacks))
+
+
+def _resolve_perks(weapon: Weapon, perks: list[Perk], state: Mapping[str, object]) -> tuple[ResolvedPerk, ...]:
+    selected = list(weapon.default_perks)
+    selected.extend(perk for perk in perks if perk not in selected)
+    tiers: dict[int, Perk] = {}
+    resolved: list[ResolvedPerk] = []
+    for perk in selected:
+        result = weapon.resolve_perk(perk, state=state)
+        if result.tier in tiers and tiers[result.tier] != perk: raise ValueError(f"multiple evolution perks selected for tier {result.tier}")
+        tiers[result.tier] = perk
+        resolved.append(result)
+    return tuple(resolved)
+
+
+class PreparedCalculator:
+    __slots__ = ("weapon", "target", "attack", "attack_names")
+
+    def __init__(self, weapon: Weapon, target: Enemy | None, attack: str, attack_names: tuple[str, ...]) -> None:
         self.weapon = weapon
-        self.build_effects: tuple[ResolvedEffect, ...] = ()
-        self.evolution_effects: tuple[ResolvedEffect, ...] = ()
-        self.attacks: AttackCalculator
-        self.root_name = str(weapon.runtime.attack)
+        self.target = target
+        self.attack = attack
+        self.attack_names = attack_names
 
-    def prepare_effects(self) -> None:
-        self.build_effects = tuple(effect for upgrade in self.weapon.build if upgrade.implemented for effect in upgrade.resolve_manual())
-        self.evolution_effects = _runtime_evolution_effects(self.weapon)
-        self.attacks = AttackCalculator(self.weapon, self.build_effects, self.evolution_effects)
+    def calculate(self, loadout: Loadout | None = None, *, state: Mapping[str, object] | None = None) -> CalculationResult:
+        return Calculator(self.weapon, self.target)._calculate(loadout, self.attack, self.attack_names, state or {})
 
-    def collect_attack_tree(self) -> list[str]:
+
+class Calculator:
+    __slots__ = ("weapon", "target")
+
+    def __init__(self, weapon: Weapon, target: Enemy | None = None) -> None:
+        self.weapon = weapon
+        self.target = target
+
+    def prepare(self, *, attack: str | None = None) -> PreparedCalculator:
+        selected = attack or self.weapon.default_attack
+        if selected not in self.weapon.attacks: raise ValueError(f"unknown attack {selected!r}")
         ordered: list[str] = []
 
         def collect(name: str, path: frozenset[str] = frozenset()) -> None:
@@ -33,100 +120,22 @@ class WeaponCalculator:
             ordered.append(name)
             for child in self.weapon.attacks[name].children: collect(child, path | {name})
 
-        collect(self.root_name)
-        return ordered
+        collect(selected)
+        return PreparedCalculator(self.weapon, self.target, selected, tuple(ordered))
 
-    def calculate_preliminary_attacks(self, names: list[str]) -> dict[str, AttackResult]:
-        return {name: self.attacks.calculate(self.weapon.attacks[name]) for name in names}
+    def calculate(self, loadout: Loadout | None = None, *, attack: str | None = None, state: Mapping[str, object] | None = None) -> CalculationResult:
+        selected = attack or self.weapon.default_attack
+        return self._calculate(loadout, selected, None, state or {})
 
-    def build_shared_status_model(self, preliminary: dict[str, AttackResult], names: list[str]) -> tuple[StatusModel, dict[str, float], float, float]:
-        preliminary_models = [preliminary[name].effective.status_model for name in names]
-        root_rate = preliminary[self.root_name].average.sustained_fire_rate
-        root_duration = max((model.duration for model in preliminary_models), default=0)
-        random_probabilities: list[float] = []
-        for name in names:
-            result = preliminary[name]
-            effects = result.effective.special_effects
-            model = _status_model(result.effective.damage, result.effective.forced_procs, float(result.effective.status_chance), float(result.effective.multishot), result.average.sustained_fire_rate, float(result.effective.status_duration), effects, result.average.crit_chance, afflictions=bool(AFFLICTIONS_CATEGORIES & set(result.effective.forced_procs)))
-            random_probabilities.append(model.random_proc_probability)
-        random_probability = 1 - _product(1 - probability for probability in random_probabilities)
-        shared = StatusModel.combine(preliminary_models, root_rate, root_duration)
-        shared = _with_random_proc(shared, preliminary[self.root_name].effective.special_effects, random_probability)
-        return shared, shared.non_damage_effects(), random_probability, root_duration
-
-    def calculate_final_attacks(self, names: list[str], shared: StatusModel, status_effects: dict[str, float], random_probability: float) -> dict[str, AttackResult]:
-        return {
-            name: self.attacks.calculate(
-                self.weapon.attacks[name],
-                automatic_model=shared,
-                status_effects=status_effects,
-                random_proc_probability=random_probability if name == self.root_name else 0,
-            )
-            for name in names
-        }
-
-    @staticmethod
-    def _fold_metrics(output: FinalAttackStats, own: AverageAttackStats, children: list[AverageAttackStats]) -> None:
-        for fields in ZONE_FIELDS.values():
-            direct_values = [getattr(own, fields[0]), *(getattr(child, fields[0]) for child in children)]
-            dot_values = [getattr(own, fields[1]), *(getattr(child, fields[1]) for child in children)]
-            if not any(value is not None for value in (*direct_values, *dot_values)):
-                for field in fields: setattr(output, field, None)
-                continue
-            direct = sum(float(value or 0) for value in direct_values)
-            dot = sum(float(value or 0) for value in dot_values)
-            setattr(output, fields[0], direct)
-            setattr(output, fields[1], dot)
-            setattr(output, fields[2], direct + dot)
-            setattr(output, fields[3], direct * own.sustained_fire_rate)
-            setattr(output, fields[4], dot * own.sustained_fire_rate)
-            setattr(output, fields[5], (direct + dot) * own.sustained_fire_rate)
-
-    def fold_attack_tree(self, results: dict[str, AttackResult], names: list[str], root_duration: float) -> None:
-        root = results[self.root_name]
-        final_group_model = StatusModel.combine([results[name].effective.status_model for name in names], root.average.sustained_fire_rate, root_duration)
-        root.average.procs_per_shot = final_group_model.expected_procs_per_attack
-        root.final.procs_per_shot = final_group_model.expected_procs_per_attack
-        root.status_effects = final_group_model.non_damage_effects()
-        root.status_effects["armor_reduction"] = min(root.status_effects.get("puncture", 0) * _special_value(root.effective.special_effects, "armor_reduction"), 1)
-        own_density = {name: {field: getattr(result.density, field) for fields in ZONE_FIELDS.values() for field in fields[:2]} for name, result in results.items()}
-
-        def descendants(name: str, path: frozenset[str] = frozenset()) -> list[str]:
-            if name in path: raise ValueError(f"attack relationship cycle at {name!r}")
-            collected: list[str] = []
-            for child in results[name].children:
-                if child not in collected: collected.append(child)
-                for descendant in descendants(child, path | {name}):
-                    if descendant not in collected: collected.append(descendant)
-            return collected
-
-        for name, result in results.items():
-            child_names = descendants(name)
-            self._fold_metrics(result.final, result.average, [results[child].average for child in child_names])
-            for fields in ZONE_FIELDS.values():
-                direct_values = [own_density[name][fields[0]], *(own_density[child][fields[0]] for child in child_names)]
-                dot_values = [own_density[name][fields[1]], *(own_density[child][fields[1]] for child in child_names)]
-                if not any(value is not None for value in (*direct_values, *dot_values)):
-                    for field in fields: setattr(result.density, field, None)
-                    continue
-                direct = sum(float(value or 0) for value in direct_values)
-                dot = sum(float(value or 0) for value in dot_values)
-                setattr(result.density, fields[0], direct)
-                setattr(result.density, fields[1], dot)
-                setattr(result.density, fields[2], direct + dot)
-                setattr(result.density, fields[3], direct * result.average.sustained_fire_rate)
-                setattr(result.density, fields[4], dot * result.average.sustained_fire_rate)
-                setattr(result.density, fields[5], (direct + dot) * result.average.sustained_fire_rate)
-
-    def calculate(self) -> dict[str, AttackResult]:
-        self.prepare_effects()
-        names = self.collect_attack_tree()
-        preliminary = self.calculate_preliminary_attacks(names)
-        shared, status_effects, random_probability, root_duration = self.build_shared_status_model(preliminary, names)
-        results = self.calculate_final_attacks(names, shared, status_effects, random_probability)
-        self.fold_attack_tree(results, names, root_duration)
-        return results
-
-
-def calculate_weapon(weapon: WeaponProtocol) -> dict[str, AttackResult]:
-    return WeaponCalculator(weapon).calculate()
+    def _calculate(self, loadout: Loadout | None, selected: str, prepared_names: tuple[str, ...] | None, state: Mapping[str, object]) -> CalculationResult:
+        loadout = Loadout() if loadout is None else loadout.copy()
+        if selected not in self.weapon.attacks: raise ValueError(f"unknown attack {selected!r}")
+        unknown = set(state) - set(self.weapon.calculation_defaults)
+        if unknown: raise TypeError(f"unknown calculation state fields: {', '.join(sorted(unknown))}")
+        calculation_state = dict(self.weapon.calculation_defaults) | dict(state)
+        resolved_perks = _resolve_perks(self.weapon, loadout.evolutions, calculation_state)
+        _warn_loadout(self.weapon, loadout)
+        context = CalculationContext(weapon=self.weapon, target=self.target.copy() if self.target is not None else Enemy(), attack=selected, loadout=loadout, resolved_perks=resolved_perks, state=calculation_state)
+        calculated = calculate_weapon(context, prepared_names)
+        attacks = {name: _calculated_attack(result) for name, result in calculated.items()}
+        return CalculationResult(_aggregate(calculated[selected], attacks), attacks, selected, self.weapon.copy(), None if self.target is None else self.target.copy(), loadout.copy(), dict(state))

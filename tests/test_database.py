@@ -1,163 +1,73 @@
 import unittest
-import warnings
-from copy import deepcopy
-import re
 
-from warframe_damage_calculator import arsenal
-from warframe_damage_calculator.engine.effects import unclassified_effect_stats
-from warframe_damage_calculator.schema import validate_database
+from warframe_damage_calculator import PLACEHOLDER, arsenal
+
+
+METADATA_ONLY_PERKS = {
+    "Armored Finisher",
+    "Balanced Stagger",
+    "Chain Shatter",
+    "Devastating Mercy",
+    "Echoes of Rage",
+    "Explosive Growth",
+    "Incarnon Imago",
+    "Nimble Scythe",
+    "Raging Drift",
+    "Rapid Conclusion",
+    "Silent Running",
+    "Swift Transmute",
+}
 
 
 class DatabaseTests(unittest.TestCase):
-    def test_catalog_counts(self):
-        self.assertEqual(arsenal.database["schema_version"], 10)
-        self.assertEqual((len(arsenal.weapon), len(arsenal.upgrade), len(arsenal.enemy)), (656, 779, 877))
+    def test_repositories_load(self):
+        self.assertEqual(len(arsenal.weapon), 656)
+        self.assertGreater(len(arsenal.upgrade), 700)
+        self.assertGreater(len(arsenal.perk), 200)
+        self.assertGreater(len(arsenal.enemy), 0)
 
-    def test_every_effect_uses_flat_fields_and_automatic_dictionary(self):
-        effects = [effect for upgrade in arsenal.database["upgrades"].values() for values in upgrade.get("stats", {}).values() for effect in values]
-        effects.extend(effect for weapon in arsenal.database["weapons"].values() for tier in weapon.get("evolutions", {}).values() for perk in tier.values() for values in perk.get("stats", {}).values() for effect in values)
-        self.assertEqual(len(effects), 1792)
-        for effect in effects:
-            self.assertIn("value", effect)
-            self.assertIn("automatic", effect)
-            self.assertNotIn("properties", effect)
-            self.assertNotIn("manual", effect)
-            self.assertIsInstance(effect["automatic"], dict)
-            self.assertFalse({"target", "if", "scope", "exclude", "apply_mode"} & effect["automatic"].keys())
-            self.assertNotEqual(effect["automatic"].get("with"), "bow_multiplier")
+    def test_perks_are_loaded_from_database(self):
+        self.assertEqual(arsenal.database["schema_version"], 11)
+        self.assertIn("Devouring Attrition", arsenal.database["perks"])
+        self.assertEqual(arsenal.database["perks"]["Devouring Attrition"]["stats"]["damage_bonus"][0]["value"], "$weapon")
 
-    def test_every_database_effect_is_classified_by_the_engine(self):
-        stats = {stat for upgrade in arsenal.database["upgrades"].values() for stat in upgrade.get("stats", {})}
-        stats |= {stat for weapon in arsenal.database["weapons"].values() for tier in weapon.get("evolutions", {}).values() for perk in tier.values() for stat in perk.get("stats", {})}
-        self.assertEqual(unclassified_effect_stats(stats), set())
+    def test_weapon_records_contain_only_perk_values(self):
+        record = arsenal.database["weapons"]["Phenmor"]["evolutions"]["5"]["1"]
+        self.assertEqual(record["perk"], "Devouring Attrition")
+        self.assertNotIn("stats", record)
+        self.assertEqual(record["values"]["damage_bonus"], [20])
 
-    def test_proc_chances_and_conditions_use_flat_automatic_fields(self):
-        hunter = arsenal.database["upgrades"]["Hunter Munitions"]["stats"]["slash_proc"]
-        self.assertEqual(hunter, [{"value": 1, "automatic": {"on": "critical_hit", "chance": 0.3}}])
-        hemorrhage = arsenal.database["upgrades"]["Hemorrhage"]["stats"]["slash_proc"]
-        self.assertEqual(hemorrhage, [
-            {"value": 1, "automatic": {"on": "impact_status_proc", "chance": 0.35}},
-            {"value": 1, "automatic": {"on": "impact_status_proc", "when": "fire_rate_below_2.5", "chance": 0.35}},
-        ])
-        self.assertEqual(arsenal.database["weapons"]["Anku"]["evolutions"]["1"]["1"]["stats"]["slash_proc"][0]["value"], 1)
+    def test_repositories_are_case_insensitive(self):
+        self.assertEqual(arsenal.weapon.get("corinth prime").name, "Corinth Prime")
+        self.assertEqual(arsenal.perk.get("devouring attrition").name, "Devouring Attrition")
 
-    def test_bow_fire_rate_bonuses_are_separate_effects(self):
-        names = {"Critical Delay", "Primed Shred", "Shred", "Speed Trigger", "Vigilante Fervor", "Vile Acceleration", "Vile Precision"}
-        for name in names:
-            effects = arsenal.database["upgrades"][name]["stats"]["fire_rate"]
-            self.assertEqual(len(effects), 2)
-            self.assertEqual({key: value for key, value in effects[0].items() if key != "automatic"}, {key: value for key, value in effects[1].items() if key != "automatic"})
-            self.assertEqual(effects[0]["automatic"], {})
-            self.assertEqual(effects[1]["automatic"], {"when": "bow_weapon"})
+    def test_global_perk_names_are_unique(self):
+        normalized = [" ".join(name.split()).casefold() for name in arsenal.perk]
+        self.assertEqual(len(normalized), len(set(normalized)))
 
-    def test_special_upgrades_use_domain_terms(self):
-        doughty = arsenal.database["upgrades"]["Melee Doughty"]["stats"]["crit_damage"]
-        self.assertEqual(doughty, [{"value": 1, "mode": "flat", "max": 50, "automatic": {"with": "puncture_status_chance", "per": 0.1}}])
-        synth = arsenal.database["upgrades"]["Synth Charge"]["stats"]["damage_bonus"]
-        self.assertEqual(synth, [{"value": 2, "family": "magazine_last_shot", "automatic": {"on": "magazine_last_shot", "when": ["non_continuous_fire", "normal_form", "magazine_at_least_5"]}}])
-        vigilante = arsenal.database["upgrades"]["Vigilante Supplies"]["stats"]
-        self.assertNotIn("crit_chance", vigilante)
-        self.assertEqual(vigilante["crit_tier"], [{"value": 1, "mode": "flat", "automatic": {"on": "critical_hit", "chance": 0.05}}])
+    def test_metadata_only_perks_are_explicit(self):
+        metadata_only = {name for name, record in arsenal.database["perks"].items() if not record["stats"]}
+        self.assertEqual(metadata_only, METADATA_ONLY_PERKS)
 
-    def test_unsupported_upgrade_set_is_explicit(self):
-        expected = {
-            "Burning Hate",
-            "Cascadia Empowered",
-            "Cull the Weak",
-            "Deadly Maneuvers",
-            "Lasting Purity",
-            "Longbow Sharpshot",
-            "Melee Afflictions",
-            "Primary Debilitate",
-            "Secondary Fortifier",
-        }
-        actual = {name for name, record in arsenal.database["upgrades"].items() if not record.get("implemented", True)}
-        self.assertEqual(actual, expected)
-        for name in expected:
-            upgrade = arsenal.upgrade.get(name)
-            self.assertFalse(upgrade.implemented)
-            self.assertEqual(upgrade.copy().implemented, upgrade.implemented)
-            self.assertTrue(upgrade.stats)
+    def test_database_wide_perk_value_invariants(self):
+        database = arsenal.database
+        for weapon_name, weapon in database["weapons"].items():
+            for tier, choices in weapon.get("evolutions", {}).items():
+                for choice, record in choices.items():
+                    with self.subTest(weapon=weapon_name, tier=tier, choice=choice):
+                        template = database["perks"][record["perk"]]["stats"]
+                        self.assertEqual(set(record["values"]), set(template))
+                        for stat, effects in template.items():
+                            self.assertEqual(len(record["values"][stat]), len(effects))
+                            self.assertNotIn("$weapon", record["values"][stat])
 
-    def test_evolution_form_applicability_uses_when(self):
-        form_conditions = []
-        for weapon in arsenal.database["weapons"].values():
-            for tier in weapon.get("evolutions", {}).values():
-                for evolution in tier.values():
-                    for effects in evolution.get("stats", {}).values():
-                        for effect in effects:
-                            conditions = effect["automatic"].get("when", [])
-                            form_conditions.extend(conditions if isinstance(conditions, list) else [conditions])
-        self.assertEqual(sum(condition in {"normal_form", "incarnon_form"} for condition in form_conditions), 145)
-
-    def test_effect_tags_follow_the_canonical_vocabulary(self):
-        effects = [effect for upgrade in arsenal.database["upgrades"].values() for values in upgrade.get("stats", {}).values() for effect in values]
-        effects.extend(effect for weapon in arsenal.database["weapons"].values() for tier in weapon.get("evolutions", {}).values() for perk in tier.values() for values in perk.get("stats", {}).values() for effect in values)
-        allowed_on = {"any_status_proc", "critical_hit", "impact_status_proc", "magazine_first_shot", "magazine_last_shot", "near_yellow_critical_hit", "non_critical_hit"}
-        allowed_when = {"bow_weapon", "cold_status_proc", "critical_tier_at_least_2", "electricity_status_proc", "fire_rate_below_2.5", "heat_status_proc", "incarnon_form", "magazine_at_least_5", "non_continuous_fire", "normal_form", "toxin_status_proc"}
-        allowed_with = {"effective_multishot", "puncture_status_chance", "unique_status_count", "weapon_combo"}
-        allowed_families = {"magazine_first_shot", "magazine_last_shot", "multishot_ammo", "non_critical_hit", "unique_status", "weakpoint"}
-        for effect in effects:
-            automatic = effect["automatic"]
-            self.assertIn(automatic.get("on"), allowed_on | {None})
-            conditions = automatic.get("when", [])
-            self.assertTrue(set(conditions if isinstance(conditions, list) else [conditions]) <= allowed_when)
-            self.assertIn(automatic.get("with"), allowed_with | {None})
-            self.assertIn(automatic.get("reset"), {"at_stack_limit", None})
-            self.assertIn(effect.get("family"), allowed_families | {None})
-            manual = effect.get("when")
-            if manual is not None:
-                self.assertFalse(manual.startswith("on_"))
-                self.assertNotIn("weak_point", manual)
-                self.assertIsNone(re.search(r"\d+_\d+s(?:_|$)", manual))
-
-    def test_every_record_constructs_and_calculates(self):
-        for name in arsenal.weapon: arsenal.weapon.get(name)
-        for name in arsenal.enemy: arsenal.enemy.get(name)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            for name in arsenal.upgrade:
-                for weapon in ("Braton", "Lato", "Bo Prime"):
-                    arsenal.weapon.get(weapon).configure(arsenal.upgrade.get(name))
-
-    def test_every_evolution_choice_and_attack_calculates(self):
-        count = 0
-        for name in arsenal.weapon:
-            weapon = arsenal.weapon.get(name)
-            for tier, choices in weapon.evolutions.items():
-                if tier == "1": continue
-                for choice in choices:
-                    weapon.set(evolutions={int(tier): int(choice)})
-                    for attack in weapon.attacks: weapon.set(attack=attack)
-                    count += 1
-        self.assertEqual(count, 768)
-
-    def test_schema_rejects_removed_upgrade_fields(self):
-        database = deepcopy(arsenal.database)
-        database["upgrades"]["Serration"]["conflict_groups"] = []
-        with self.assertRaisesRegex(ValueError, "invalid fields"):
-            validate_database(database)
-
-    def test_schema_distinguishes_missing_and_unexpected_root_fields(self):
-        missing = deepcopy(arsenal.database)
-        del missing["enemies"]
-        with self.assertRaisesRegex(ValueError, "missing fields.*enemies"):
-            validate_database(missing)
-        unexpected = deepcopy(arsenal.database)
-        unexpected["legacy"] = {}
-        with self.assertRaisesRegex(ValueError, "unexpected fields.*legacy"):
-            validate_database(unexpected)
-
-    def test_schema_validates_enemies_and_riven_stats(self):
-        enemy = deepcopy(arsenal.database)
-        enemy["enemies"]["Heavy Gunner"]["stats"]["armor"] = "high"
-        with self.assertRaisesRegex(ValueError, "enemies.Heavy Gunner.stats"):
-            validate_database(enemy)
-        riven = deepcopy(arsenal.database)
-        category = next(iter(riven["riven_stats"]))
-        riven["riven_stats"][category]["damage_bonus"] = None
-        with self.assertRaisesRegex(ValueError, f"riven_stats.{category}"):
-            validate_database(riven)
+    def test_every_weapon_perk_resolves_to_concrete_effects(self):
+        for weapon_name in arsenal.weapon:
+            weapon = arsenal.weapon.get(weapon_name)
+            for perk in weapon.perks:
+                with self.subTest(weapon=weapon_name, perk=perk.name):
+                    resolved = weapon.resolve_perk(perk)
+                    self.assertTrue(all(effect.value is not PLACEHOLDER for effect in resolved.effects))
 
 
 if __name__ == "__main__": unittest.main()

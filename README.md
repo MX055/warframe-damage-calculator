@@ -1,126 +1,161 @@
-# Warframe Damage Calculator 1.0
+# Warframe Damage Calculator
 
-This directory contains a complete, independent implementation of the calculator, catalog, public API, formatters, and tests.
+An analytic Python damage calculator for Warframe weapons.
 
-## API
+## Basic use
 
 ```python
-from warframe_damage_calculator import Build, Dist, arsenal
+from warframe_damage_calculator import Calculator, Loadout, arsenal
 
-weapon = arsenal.weapon.get("Corinth Prime")
-build = Build(
-    arsenal.upgrade.get("Galvanized Hell").set(kill=4),
-    arsenal.upgrade.get("Critical Deceleration"),
-    arsenal.upgrade.get("Primed Ravage"),
+weapon = arsenal.weapon.get("Phenmor")
+target = arsenal.enemy.get("Heavy Gunner").set(level=200, steel_path=True)
+
+loadout = Loadout(
+    upgrades=[
+        arsenal.upgrade.get("Galvanized Chamber"),
+        arsenal.upgrade.get("Critical Delay"),
+    ],
+    evolutions=[
+        arsenal.perk.get("Elemental Excess"),
+        arsenal.perk.get("Devouring Attrition"),
+    ],
 )
-target = arsenal.enemy.get("Heavy Gunner").set(level=100, steel_path=True)
 
-weapon.set(attack="air_burst_projectile").configure(build, target)
-
-print(weapon.name)
-print(weapon.attacks[weapon.runtime.attack].stats.damage)
-print(weapon.results.main.final.total_dps)
-print(weapon.format.summary())
+calculator = Calculator(weapon, target)
+result = calculator.calculate(loadout, attack="incarnon_form")
+print(result.aggregate.final.normal.total_dps)
 ```
 
-Repositories are category-specific. Missing records raise `KeyError`:
+`Weapon` and `Enemy` are definitions. `Loadout` owns selected upgrades and global evolution perks. `Calculator` owns the weapon-target pair, while attack selection and temporary state belong to each calculation:
 
 ```python
-arsenal.weapon.get("Braton")
-arsenal.upgrade.get("Serration")
-arsenal.enemy.get("Heavy Gunner")
+result = calculator.calculate(loadout, attack="heavy_attack", state={"combo": 12})
 ```
 
-Definitions expose direct attributes. There is no `.data` wrapper.
+## Global perks
 
-`weapon.set(...)`, `upgrade.set(...)`, `build.set(...)`, and `enemy.set(...)` mutate and return the same object. `weapon.configure(build, target)` stores independent copies of the build and target.
-
-`Dist` is the ordered damage distribution used by attack definitions and results:
+Perks are loaded independently of weapons:
 
 ```python
-damage = Dist(impact=100, toxin=90, cold=90)
-print(damage.combine_elements())  # Dist(impact=100.0, viral=180.0)
+perk = arsenal.perk.get("Devouring Attrition")
 ```
 
-## Effects
+A global `Perk` owns the complete effect template: affected stats, modes, families, conditions, automatic behavior, and placeholder positions. A weapon owns a `PerkValues` entry containing only the concrete values for those positions.
 
-Effect properties and caller-managed conditions are flat. Engine-managed behavior is attached with `automate()`:
+```text
+global Perk template + weapon PerkValues -> ResolvedPerk -> effect pipeline
+```
+
+The same template can resolve to different values:
 
 ```python
-from warframe_damage_calculator import Effect
-
-effect = Effect(0.4, family="unique_status", when="kill", stacks=2, duration=20).automate(with_="unique_status_count", stacks="inf")
+perk = arsenal.perk.get("Elemental Balance")
+telos = arsenal.weapon.get("Telos Boltor").resolve_perk(perk)
+prime = arsenal.weapon.get("Boltor Prime").resolve_perk(perk)
 ```
 
-`value`, `mode`, `family`, rank scaling, caps, and caller-supplied conditions belong to `Effect(...)`. `automate(...)` owns combat state calculated by the engine. Python uses `with_` and `duration` because `with` and `for` are reserved keywords; serialized records retain the keys `"with"` and `"for"`. Multiple simultaneous automatic conditions use a list or tuple in `when`.
+Every selected item in `Loadout.evolutions` is resolved through the weapon before calculation. Missing values, unknown values, duplicate tier selections, and perks unavailable to the weapon are rejected. Tier and choice data are retained in `weapon.perk_choices` for selection and optimizer search spaces; calculation does not convert selected perks back into database instructions.
 
-Simple upgrade stats can use scalar shorthand. Both forms are equivalent:
+## Result navigation
+
+Results use one navigation rule:
+
+```text
+scope -> pool -> target zone -> metric
+```
+
+The aggregate scope is the selected root attack including every descendant:
 
 ```python
-UpgradeStats(damage_bonus=1.5)
-UpgradeStats(damage_bonus=Effect(1.5))
+result.aggregate.final.normal.total_dps
+result.aggregate.final.weakpoint.total_dph
+result.aggregate.status
 ```
 
-Automatic behavior stays flat inside the automation block. `on` names an event, `when` names an engine condition, `chance` is its probability, and `with_` names a multiplier calculated by the engine. Multiple applications are separate effects:
+The attack scope is one individual component:
 
 ```python
-slash_proc = [
-    Effect(1).automate(on="impact_status_proc", chance=0.35),
-    Effect(1).automate(on="impact_status_proc", when="fire_rate_below_2.5", chance=0.35),
-]
-fire_rate = [
-    Effect(0.6),
-    Effect(0.6).automate(when="bow_weapon"),
-]
-synth_charge = Effect(2, family="magazine_last_shot").automate(on="magazine_last_shot", when=("non_continuous_fire", "normal_form", "magazine_at_least_5"))
-vigilante_bonus = Effect(1, mode="flat").automate(on="critical_hit", chance=0.05)
+projectile = result.attacks["air_burst_projectile"]
+projectile.base
+projectile.modded
+projectile.effective
+projectile.upgrades
+projectile.evolutions
+projectile.average
+projectile.final.normal.total_dps
+projectile.status
+projectile.spatial
 ```
 
-Serialized effects use the same flat base/manual fields and retain only `automatic` as a nested object:
+`result.selected_attack` identifies the selected root. `result.aggregate.components` lists the components included in its final damage. Aggregate results intentionally do not expose a combined critical chance or other meaningless cross-component weapon stats.
 
-```json
-{
-    "value": 0.4,
-    "family": "unique_status",
-    "when": "kill",
-    "stacks": 2,
-    "for": 20,
-    "automatic": {
-        "with": "unique_status_count",
-        "stacks": "inf"
-    }
-}
+Damage zones are `normal`, `weakpoint`, and `resistant`. Each available zone exposes:
+
+```python
+direct_dph
+dot_dph
+total_dph
+direct_dps
+dot_dps
+total_dps
 ```
 
-Tags follow one vocabulary: event conditions use direct names such as `kill` and `headshot`, ongoing states begin with `while_`, status events end in `_status_proc`, comparisons use words such as `_below_`, `_above_`, or `_at_least_`, and units are written out (`10_meters`, `0.2_seconds`, `90_percent`). Both caller-managed `when` values and automatic `on` values omit the redundant `on_` prefix because their fields already supply the relationship.
+## Prepared calculations
 
-Proc and result identity are expressed by the stat name (`slash_proc`, `puncture_proc`, `crit_tier`, and so on); effects do not use a generic `target` field. An attack's intrinsic `forced_procs` distribution remains part of its attack data. Form applicability also uses automatic `when`, such as `Effect(...).automate(when="incarnon_form")`; there is no separate scope language.
+Prepare an attack tree once for repeated loadout evaluation:
 
-All proc producers feed one status model. Normal status rolls, intrinsic and effect-provided forced procs, conditional damage procs, and capped random procs contribute to expected proc counts, DoT, non-damaging status stacks, unique-status counts, and effects triggered by status events. Random procs are distributed across the 13 physical and elemental status types; a capped `random_proc` effect such as Secondary Encumber contributes at most one additional proc per simultaneous attack.
-
-Runtime state retains the value supplied by the caller. Each effect applies its own stack cap during resolution.
-
-Compatibility metadata only produces warnings. Automatic `when` conditions define where an effect actually applies.
-
-Upgrades whose mechanics are not modeled remain available for inspection with `upgrade.implemented == False`. Configuring one emits `UnimplementedUpgradeWarning`, preserves it in the build, and excludes its effects from calculated results.
-
-## Calculation coverage
-
-The engine includes ranged and melee rates, charge/burst/reload/battery cycles, Incarnon charge pools and form-conditioned evolutions, elemental ordering, additive and multiplicative Condition Overload, status uptime and stack windows, forced procs, damage-over-time effects, first/last magazine mixtures, nested attack trees, stance and combo calculations, falloff-averaged damage, AoE and punch-through damage density, special arcane/mod behaviors, enemy scaling and defenses, hit zones, and removal/Shapley contribution analysis.
-
-`average` and `final` include the average falloff multiplier in ordinary per-hit and attack-tree damage. `effective.instantaneous_fire_rate` is the mechanical firing rate, `effective.attack_event_rate` and `average.sustained_fire_rate` account for the complete firing cycle, and `effective.reload_time` is a duration in seconds. AoE and punch-through mass calculations live in the separate `density` result pool.
-
-Attacks with falloff expose `average.falloff_multiplier`. AoE attacks also expose a falloff-weighted spherical `density.damage_mass` in cubic meters; attacks with punch through and a finite range expose a linear mass in meters. `density.flat_dph`, `density.flat_dotph`, `density.total_dph`, `density.flat_dps`, `density.flat_dotps`, `density.total_dps`, and their weakpoint/resistant variants multiply pre-falloff damage by that mass, representing expected aggregate damage at a uniform target density of one target per cubic meter or meter respectively. They do not multiply the already falloff-averaged `final` pool, so falloff is counted only once.
-
-Ranged attacks may provide `max_range`; falloff end is used when no distinct maximum is available. Punch-through density uses sliding hit pairs across that finite range. `density.falloff_multiplier` is the normalized sliding-pair result and `density.damage_mass` is `max_range * density.falloff_multiplier`. Punch-through without falloff uses a multiplier of one. Density remains unavailable when no finite range can be established.
-
-## Isolated validation
-
-Run from this directory:
-
-```bash
-python -m pip install -e .
-python -P -B -m unittest discover -s tests -v
+```python
+prepared = calculator.prepare(attack="incarnon_form")
+first = prepared.calculate(first_loadout)
+second = prepared.calculate(second_loadout)
 ```
 
-The suite validates direct construction, flat effect fields and automation boundaries, repositories, all 656 weapons, all 779 upgrades against primary/secondary/melee engines, all 877 enemies, every selectable evolution and attack, and fixed combat-parity scenarios.
+Prepared and ordinary calculations use the same calculation context and return the same result structure.
+
+## Contributions
+
+Both contribution methods evaluate immutable calculator inputs and include selected upgrades and evolution perks:
+
+```python
+from warframe_damage_calculator import removal_contributions, shapley_contributions
+
+removal = removal_contributions(calculator, loadout, attack="incarnon_form")
+shapley = shapley_contributions(calculator, loadout, attack="incarnon_form")
+```
+
+A metric name selects `result.aggregate.final.normal` by default. A dotted path or callable may select another result value.
+
+## Spatial output
+
+Ordinary DPH and DPS never assume enemy density, spacing, alignment, or an arbitrary target cap. Punch through remains an ordinary mechanical stat:
+
+```python
+result.attacks[result.selected_attack].effective.punch_through
+```
+
+An AoE component may expose raw analytic damage mass:
+
+```python
+spatial = result.attacks["air_burst_explosion"].spatial
+spatial.dimension
+spatial.damage_mass
+spatial.normal.total_dph_mass
+spatial.normal.total_dps_mass
+```
+
+The `_mass` suffix and dimension distinguish these values from ordinary damage.
+
+## Formatting
+
+Formatting is separate from definitions and calculation:
+
+```python
+from warframe_damage_calculator import ResultFormatter, format_loadout, format_perk, format_result, format_upgrade, format_weapon
+
+print(format_weapon(weapon))
+print(format_upgrade(loadout.upgrades[0]))
+print(format_perk(loadout.evolutions[0]))
+print(format_loadout(loadout))
+print(format_result(result))
+print(ResultFormatter(result).contributions())
+```
