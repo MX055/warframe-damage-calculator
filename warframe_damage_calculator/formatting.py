@@ -19,72 +19,107 @@ class ResultFormatter:
 
     @staticmethod
     def _number(value: object | None) -> str:
-        return "-" if value is None else f"{float(value):.2f}"
+        return "—" if value is None else f"{float(value):,.2f}"
 
     @staticmethod
     def _percent(value: object | None) -> str:
-        return "-" if value is None else f"{float(value):.2%}"
+        return "—" if value is None else f"{float(value):.2%}"
 
     @staticmethod
     def _multiplier(value: object | None) -> str:
-        return "-" if value is None else f"{float(value):.2f}x"
+        return "—" if value is None else f"{float(value):.2f}×"
 
     @staticmethod
-    def _zones(final: DamageResult, getter: Callable[[DamageMetrics], float]) -> str:
-        values = [getter(final.normal)]
-        if final.weakpoint is not None: values.append(getter(final.weakpoint))
-        if final.resistant is not None: values.append(getter(final.resistant))
-        return " | ".join(f"{value:.2f}" for value in values)
+    def _seconds(value: object | None) -> str:
+        return "—" if value is None else f"{float(value):.2f}s"
+
+    @staticmethod
+    def _rounds(value: object | None) -> str:
+        return "—" if value is None else f"{float(value):.0f}r"
+
+    @staticmethod
+    def _meters(value: object | None) -> str:
+        return "—" if value is None else f"{float(value):g}m"
+
+    @staticmethod
+    def _section(name: str, columns: int = 6) -> tuple[str, ...]:
+        return (f"\0{name}", *("" for _ in range(columns - 1)))
 
     @staticmethod
     def _table(headers: tuple[str, ...], rows: list[tuple[str, ...]], *, title: str) -> str:
-        widths = [max(len(header), *(len(row[index]) for row in rows)) for index, header in enumerate(headers)]
-        line = " | ".join(f"{header:<{widths[index]}}" for index, header in enumerate(headers))
-        rule = "-" * len(line)
-        values = [title, "=" * len(line), line, rule]
-        values.extend(" | ".join(f"{cell:<{widths[index]}}" for index, cell in enumerate(row)) for row in rows)
-        values.append("=" * len(line))
+        content_rows = [row for row in rows if not row[0].startswith("\0")]
+        widths = [max(len(header), *(len(row[index]) for row in content_rows)) for index, header in enumerate(headers)]
+        line = " │ ".join(f"{header:<{widths[index]}}" for index, header in enumerate(headers))
+        rule = "─" * len(line)
+        values = [title, rule, line, rule]
+        for row in rows:
+            if row[0].startswith("\0"):
+                if values[-1] != rule: values.append(rule)
+                continue
+            values.append(" │ ".join(f"{cell:<{widths[index]}}" for index, cell in enumerate(row)))
+        values.append(rule)
         return "\n".join(values)
 
     def summary(self, attack: str | None = None) -> str:
         selected = self.result.attacks[self.result.selected_attack] if attack is None else self.result.attacks[attack]
         final = self.result.aggregate.final if attack is None else selected.final
         base, modded, effective, average = selected.base, selected.modded, selected.effective, selected.average
-        rows: list[tuple[str, ...]] = []
+        rows: list[tuple[str, ...]] = [self._section("DAMAGE")]
         damage_types = dict.fromkeys((*base.damage, *modded.damage, *effective.damage))
-        for damage_type in damage_types: rows.append((damage_type.upper(), self._number(base.damage.get(damage_type, 0)), self._number(modded.damage.get(damage_type, 0)), self._number(effective.damage.get(damage_type, 0)), "", ""))
-        rows.append(("DIRECT DPH", "", "", "", self._number(average.normal.direct_dph), self._zones(final, lambda zone: zone.direct_dph)))
-        rows.append(("DOT DPH", "", "", "", self._number(average.normal.dot_dph), self._zones(final, lambda zone: zone.dot_dph)))
-        rows.append(("TOTAL DPH", "", "", "", self._number(average.normal.total_dph), self._zones(final, lambda zone: zone.total_dph)))
-        rows.append(("DIRECT DPS", "", "", "", self._number(average.normal.direct_dps), self._zones(final, lambda zone: zone.direct_dps)))
-        rows.append(("DOT DPS", "", "", "", self._number(average.normal.dot_dps), self._zones(final, lambda zone: zone.dot_dps)))
-        rows.append(("TOTAL DPS", "", "", "", self._number(average.normal.total_dps), self._zones(final, lambda zone: zone.total_dps)))
-        rows.append(("CRIT CHANCE", self._percent(base.crit_chance), self._percent(modded.crit_chance), self._percent(effective.crit_chance), self._percent(average.crit_chance), ""))
-        rows.append(("CRIT DAMAGE", self._multiplier(base.crit_damage), self._multiplier(modded.crit_damage), self._multiplier(effective.crit_damage), self._multiplier(average.crit_multiplier), ""))
-        rows.append(("STATUS CHANCE", self._percent(base.status_chance), self._percent(modded.status_chance), self._percent(effective.status_chance), "", ""))
-        rows.append(("MULTISHOT", self._multiplier(base.multishot), self._multiplier(modded.multishot), self._multiplier(effective.multishot), "", ""))
-        rows.append(("FIRE RATE", self._number(base.fire_rate), self._number(modded.get("fire_rate")), self._number(effective.instantaneous_fire_rate), self._number(average.sustained_fire_rate), ""))
-        rows.append(("RELOAD TIME", self._number(self.result.weapon.reload_time), "", self._number(effective.reload_time), "", ""))
-        rows.append(("MAGAZINE CAPACITY", self._number(self.result.weapon.magazine_size), "", self._number(effective.get("magazine_capacity")), "", ""))
-        rows.append(("AMMO COST", self._number(selected.attack.stats.ammo_cost), "", self._number(effective.get("ammo_cost")), "", ""))
-        rows.append(("PUNCH THROUGH", self._number(selected.attack.stats.punch_through), "", self._number(effective.get("punch_through")), "", ""))
-        rows.append(("BURST COUNT", self._number(selected.attack.stats.burst_count), "", self._number(effective.get("burst_count")), "", ""))
-        rows.append(("BURST DELAY", self._number(selected.attack.stats.burst_delay), "", self._number(effective.get("burst_delay")), "", ""))
-        rows.append(("CHARGE TIME", self._number(selected.attack.stats.charge_time), "", self._number(effective.get("charge_time")), "", ""))
-        rows.append(("EXPECTED PROCS", "", "", "", self._number(selected.status.expected_procs_per_attack), ""))
-        if selected.spatial is not None: rows.append((f"DAMAGE MASS (m^{selected.spatial.dimension})", "", "", "", "", self._number(selected.spatial.damage_mass)))
+        for damage_type in damage_types:
+            rows.append((damage_type.replace("_", " ").title(), self._number(base.damage.get(damage_type, 0)), self._number(modded.damage.get(damage_type, 0)), self._number(effective.damage.get(damage_type, 0)), "—", "—"))
+        rows.extend((
+            self._section("OFFENSE"),
+            ("Critical Chance", self._percent(base.crit_chance), self._percent(modded.crit_chance), self._percent(effective.crit_chance), self._percent(average.crit_chance), "—"),
+            ("Critical Damage", self._multiplier(base.crit_damage), self._multiplier(modded.crit_damage), self._multiplier(effective.crit_damage), self._multiplier(average.crit_multiplier), "—"),
+            ("Status Chance", self._percent(base.status_chance), self._percent(modded.status_chance), self._percent(effective.status_chance), "—", "—"),
+            ("Multishot", self._multiplier(base.multishot), self._multiplier(modded.multishot), self._multiplier(effective.multishot), "—", "—"),
+            ("Fire Rate", self._number(base.fire_rate), self._number(modded.get("fire_rate")), self._number(effective.instantaneous_fire_rate), self._number(average.sustained_fire_rate), "—"),
+            ("Expected Procs", "—", "—", "—", self._number(selected.status.expected_procs_per_attack), "—"),
+            self._section("HANDLING"),
+            ("Magazine Capacity", self._rounds(self.result.weapon.magazine_size), "—", self._rounds(effective.get("magazine_capacity")), "—", "—"),
+            ("Reload Time", self._seconds(self.result.weapon.reload_time), "—", self._seconds(effective.reload_time), "—", "—"),
+            ("Ammo Cost", self._number(selected.attack.stats.ammo_cost), "—", self._number(effective.get("ammo_cost")), "—", "—"),
+        ))
+        if float(effective.get("punch_through", 0)) > 0: rows.append(("Punch Through", self._meters(selected.attack.stats.punch_through), "—", self._meters(effective.get("punch_through")), "—", "—"))
+        if int(effective.get("burst_count", 1)) > 1: rows.append(("Burst Count", str(int(selected.attack.stats.burst_count)), "—", str(int(effective.get("burst_count"))), "—", "—"))
+        if float(effective.get("burst_delay", 0)) > 0: rows.append(("Burst Delay", self._seconds(selected.attack.stats.burst_delay), "—", self._seconds(effective.get("burst_delay")), "—", "—"))
+        if float(effective.get("charge_time", 0)) > 0: rows.append(("Charge Time", self._seconds(selected.attack.stats.charge_time), "—", self._seconds(effective.get("charge_time")), "—", "—"))
+        rows.append(self._section("DAMAGE OUTPUT"))
+        metrics = (("DIRECT DPH", "direct_dph"), ("DOT DPH", "dot_dph"), ("TOTAL DPH", "total_dph"), ("DIRECT DPS", "direct_dps"), ("DOT DPS", "dot_dps"), ("TOTAL DPS", "total_dps"))
+        zones = (("Normal", final.normal), ("Weakpoint", final.weakpoint), ("Resistant", final.resistant))
+        for label, attribute in metrics:
+            average_value = getattr(average.normal, attribute)
+            first = True
+            for zone_name, zone in zones:
+                if zone is None: continue
+                rows.append((f"{label} — {zone_name}", "—", "—", "—", self._number(average_value) if first else "—", self._number(getattr(zone, attribute))))
+                first = False
+        if selected.spatial is not None:
+            rows.extend((self._section("SPATIAL"), (f"Damage Mass (m^{selected.spatial.dimension})", "—", "—", "—", "—", self._number(selected.spatial.damage_mass))))
         weapon_name = getattr(self.result.weapon, "name", "Weapon")
         target_name = "" if self.result.target is None else f" vs {getattr(self.result.target, 'name', 'Target')}"
-        title = f"{weapon_name} - {selected.name.replace('_', ' ').title()}{target_name}"
-        return self._table(("stat", "base", "modded", "effective", "average", "final normal | weakpoint | resistant"), rows, title=title)
+        title = f"{weapon_name} · {selected.name.replace('_', ' ').title()}{target_name}"
+        return self._table(("Stat", "Base", "Modded", "Effective", "Average", "Final"), rows, title=title)
 
     def contributions(self, metric: str = "total_dps") -> str:
         calculator = Calculator(self.result.weapon, self.result.target)
         shapley = shapley_contributions(calculator, self.result.loadout, attack=self.result.selected_attack, metric=metric, state=self.result.state)
         if not shapley: return ""
         removal = removal_contributions(calculator, self.result.loadout, attack=self.result.selected_attack, metric=metric, state=self.result.state)
-        rows = [(name, f"{share:.2%}", f"{removal[name]:.2f}") for name, share in shapley.items()]
-        return self._table(("component", "shapley", "removal"), rows, title=f"{self.result.weapon.name} - {self.result.selected_attack.replace('_', ' ').title()}")
+        upgrade_names = {upgrade.name for upgrade in self.result.loadout.upgrades}
+        maximum = max((abs(value) for value in shapley.values()), default=0)
+        ordered = sorted(shapley.items(), key=lambda item: item[1], reverse=True)
+        rows = []
+        for rank, (name, share) in enumerate(ordered, 1):
+            kind = "Upgrade" if name in upgrade_names else "Evolution"
+            bar_length = 0 if maximum == 0 else max(1, round(abs(share) / maximum * 10))
+            bar = ("−" if share < 0 else "") + "█" * bar_length
+            rows.append((str(rank), kind, name, f"{share:.2%}", f"{removal[name]:,.2f}", bar))
+        metric_name = metric.replace("_", " ").upper() if isinstance(metric, str) else "Contribution"
+        target_name = "" if self.result.target is None else f" vs {getattr(self.result.target, 'name', 'Target')}"
+        title = f"{self.result.weapon.name} · {self.result.selected_attack.replace('_', ' ').title()}{target_name} · {metric_name} Contributions"
+        return self._table(("Rank", "Type", "Component", "Shapley", f"{metric_name} Loss", "Impact"), rows, title=title)
 
     def loadout(self) -> str:
         return format_loadout(self.result.loadout)

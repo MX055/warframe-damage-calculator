@@ -82,6 +82,8 @@ class ApiTests(unittest.TestCase):
         self.assertIn("Elemental Excess", format_perk(perk))
         self.assertIn("Galvanized Hell", format_loadout(loadout))
         self.assertIn("TOTAL DPS", formatter.summary())
+        targeted = ResultFormatter(Calculator(weapon, arsenal.enemy.get("Heavy Gunner")).calculate(loadout))
+        self.assertIn("Corinth Prime · Buckshot vs Heavy Gunner · TOTAL DPS Contributions", targeted.contributions())
         self.assertIn("DPH", format_damage_result(result.aggregate.final))
         self.assertIn("Expected procs", format_status(result.aggregate.status))
         aoe = Calculator(weapon).calculate(attack="air_burst_explosion").attacks["air_burst_explosion"].spatial
