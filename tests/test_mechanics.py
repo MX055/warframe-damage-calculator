@@ -34,7 +34,7 @@ class MechanicsTests(unittest.TestCase):
         self.assertAlmostEqual(result.effective.multishot, 1.9)
         self.assertAlmostEqual(result.average.normal.direct_dph, 234.19879265268293)
         self.assertAlmostEqual(result.average.normal.dot_dph, 109.7888138116019)
-        self.assertAlmostEqual(result.final.normal.total_dps, 2202.3596755335307)
+        self.assertAlmostEqual(result.average.normal.total_dps, 2202.3596755335307)
 
     def test_melee_combo_status_duplicate_and_doughty(self):
         weapon = arsenal.weapon.get("Bo Prime")
@@ -44,13 +44,13 @@ class MechanicsTests(unittest.TestCase):
         self.assertAlmostEqual(result.effective.status_chance, 1.856)
         self.assertAlmostEqual(result.effective.crit_damage, 4.5)
         self.assertAlmostEqual(result.average.normal.direct_dph, 4569.768282551748)
-        self.assertAlmostEqual(result.final.normal.total_dps, 4935.349745155888)
+        self.assertAlmostEqual(result.average.normal.total_dps, 4935.349745155888)
 
     def test_enervate_reset_expectation_and_encumber_random_proc(self):
         enervate = selected(Calculator(arsenal.weapon.get("Laetum")).calculate(loadout("Secondary Enervate")))
         self.assertGreater(enervate.average.secondary_enervate_bonus, 0)
         self.assertAlmostEqual(enervate.average.normal.direct_dph, 378.6766179484155)
-        self.assertAlmostEqual(enervate.final.normal.total_dps, 906.835830831968)
+        self.assertAlmostEqual(enervate.average.normal.total_dps, 906.835830831968)
         encumber = selected(Calculator(arsenal.weapon.get("Lato")).calculate(loadout("Secondary Encumber")))
         self.assertAlmostEqual(encumber.average.normal.dot_dph, 3.5399275201480167)
 
@@ -68,19 +68,19 @@ class MechanicsTests(unittest.TestCase):
         self.assertAlmostEqual(result.effective.multishot, 1.2)
         self.assertAlmostEqual(result.effective.ammo_cost, 1.2)
         self.assertAlmostEqual(result.effective.damage.total, 70.4)
-        self.assertAlmostEqual(calculation.aggregate.final.normal.total_dps, 1539.4027259436357)
+        self.assertAlmostEqual(calculation.aggregate.average.normal.total_dps, 1539.4027259436357)
 
     def test_target_pool_armor_status_and_bodypart_model(self):
         target = arsenal.enemy.get("Heavy Gunner").set(level=100, steel_path=True)
         result = selected(Calculator(arsenal.weapon.get("Braton"), target).calculate(loadout("Serration")))
         self.assertAlmostEqual(result.average.normal.direct_dph, 8.111946657804877)
         self.assertAlmostEqual(result.average.weakpoint.direct_dph, 24.33583997341463)
-        self.assertAlmostEqual(result.final.normal.total_dps, 71.03451583153777)
+        self.assertAlmostEqual(result.average.normal.total_dps, 71.03451583153777)
 
     def test_health_shield_overguard_and_all_target_zones(self):
         target = Enemy(stats=EnemyStats(health=100, shields=100, overguard=100), bodyparts={"body": BodyPart("normal", 1), "head": BodyPart("weakpoint", 3), "shell": BodyPart("resistant", 0.5)})
         weapon = Primary(name="Pools", attacks=[Attack("shot", stats=AttackStats(damage=Dist(impact=100)))], reload_time=1)
-        result = Calculator(weapon, target).calculate().aggregate.final
+        result = Calculator(weapon, target).calculate().aggregate.average
         self.assertAlmostEqual(result.normal.direct_dph, 100 * (1 + 0.5 + 1) / 3)
         self.assertAlmostEqual(result.weakpoint.direct_dph, result.normal.direct_dph * 3)
         self.assertAlmostEqual(result.resistant.direct_dph, result.normal.direct_dph * 0.5)
@@ -94,7 +94,7 @@ class MechanicsTests(unittest.TestCase):
         self.assertAlmostEqual(result.effective.crit_chance, 0.46688995215311)
         self.assertAlmostEqual(result.effective.crit_damage, 3.4)
         self.assertAlmostEqual(result.effective.magazine_capacity, 200)
-        self.assertAlmostEqual(calculation.aggregate.final.normal.total_dps, 2556.784720408416)
+        self.assertAlmostEqual(calculation.aggregate.average.normal.total_dps, 2556.784720408416)
 
     def test_equipped_dependencies_are_case_insensitive(self):
         weapon = arsenal.weapon.get("Bo Prime")
@@ -108,7 +108,7 @@ class MechanicsTests(unittest.TestCase):
         result = selected(Calculator(arsenal.weapon.get("Cycron")).calculate())
         self.assertAlmostEqual(result.effective.reload_time, 4)
         self.assertAlmostEqual(result.average.sustained_fire_rate, 7.559055118110237)
-        self.assertAlmostEqual(result.final.normal.total_dps, 254.06533493275685)
+        self.assertAlmostEqual(result.average.normal.total_dps, 254.06533493275685)
 
     def test_non_crit_family_uses_event_chance_without_changing_effective_damage(self):
         weapon = arsenal.weapon.get("Laetum")
@@ -116,7 +116,7 @@ class MechanicsTests(unittest.TestCase):
         self.assertAlmostEqual(result.effective.damage.total, 160)
         self.assertAlmostEqual(result.average.normal.direct_dph, 1450.24)
         self.assertAlmostEqual(result.average.normal.dot_dph, 402.006528)
-        self.assertAlmostEqual(result.final.normal.total_dps, 3472.9622400000003)
+        self.assertAlmostEqual(result.average.normal.total_dps, 3472.9622400000003)
 
     def test_not_continuous_condition_prevents_last_shot_overlay(self):
         weapon = arsenal.weapon.get("Amprex")

@@ -8,12 +8,12 @@ class EngineTests(unittest.TestCase):
         weapon = Primary(name="Direct", attacks=[Attack(name="shot", stats=AttackStats(damage=Dist(impact=100), punch_through=5))], reload_time=1)
         result = Calculator(weapon).calculate()
         self.assertIsNone(result.attacks["shot"].spatial)
-        self.assertEqual(result.aggregate.final.normal.total_dph, 100)
+        self.assertEqual(result.aggregate.average.normal.total_dph, 100)
 
     def test_punch_through_does_not_scale_ordinary_damage(self):
         without = Primary(name="Without", attacks=[Attack(name="shot", stats=AttackStats(damage=Dist(impact=100)))], reload_time=1)
         with_punch_through = Primary(name="With", attacks=[Attack(name="shot", stats=AttackStats(damage=Dist(impact=100), punch_through=10))], reload_time=1)
-        self.assertEqual(Calculator(without).calculate().aggregate.final.normal, Calculator(with_punch_through).calculate().aggregate.final.normal)
+        self.assertEqual(Calculator(without).calculate().aggregate.average.normal, Calculator(with_punch_through).calculate().aggregate.average.normal)
 
     def test_aoe_exposes_raw_spatial_damage_mass(self):
         weapon = Primary(name="AOE", attacks=[Attack(name="blast", aoe=True, stats=AttackStats(damage=Dist(impact=100), falloff={"start_range": 0, "end_range": 5, "final_multiplier": 0.5}))], reload_time=1)
@@ -21,7 +21,7 @@ class EngineTests(unittest.TestCase):
         spatial = result.attacks["blast"].spatial
         self.assertIsNotNone(spatial)
         self.assertEqual(spatial.dimension, 3)
-        self.assertGreater(spatial.normal.total_dph_mass, result.aggregate.final.normal.total_dph)
+        self.assertGreater(spatial.normal.total_dph_mass, result.aggregate.average.normal.total_dph)
 
     def test_evolution_values_are_weapon_specific(self):
         perk = arsenal.perk.get("Elemental Balance")

@@ -23,7 +23,7 @@ loadout = Loadout(
 
 calculator = Calculator(weapon, target)
 result = calculator.calculate(loadout, attack="incarnon_form")
-print(result.aggregate.final.normal.total_dps)
+print(result.aggregate.average.normal.total_dps)
 ```
 
 `Weapon` and `Enemy` are definitions. `Loadout` owns selected upgrades and global evolution perks. `Calculator` owns the weapon-target pair, while attack selection and temporary state belong to each calculation:
@@ -67,8 +67,8 @@ scope -> pool -> target zone -> metric
 The aggregate scope is the selected root attack including every descendant:
 
 ```python
-result.aggregate.final.normal.total_dps
-result.aggregate.final.weakpoint.total_dph
+result.aggregate.average.normal.total_dps
+result.aggregate.average.weakpoint.total_dph
 result.aggregate.status
 ```
 
@@ -82,7 +82,7 @@ projectile.effective
 projectile.upgrades
 projectile.evolutions
 projectile.average
-projectile.final.normal.total_dps
+projectile.average.normal.total_dps
 projectile.status
 projectile.spatial
 ```
@@ -123,7 +123,7 @@ removal = removal_contributions(calculator, loadout, attack="incarnon_form")
 shapley = shapley_contributions(calculator, loadout, attack="incarnon_form")
 ```
 
-A metric name selects `result.aggregate.final.normal` by default. A dotted path or callable may select another result value.
+A metric name selects `result.aggregate.average.normal` by default. A dotted path or callable may select another result value.
 
 ## Spatial output
 

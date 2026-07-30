@@ -15,7 +15,7 @@ type Metric = str | Callable[[CalculationResult], float]
 
 def metric_value(result: CalculationResult, metric: Metric = "total_dps") -> float:
     if callable(metric): return float(metric(result))
-    if "." not in metric: return float(getattr(result.aggregate.final.normal, metric))
+    if "." not in metric: return float(getattr(result.aggregate.average.normal, metric))
     value: object = result
     for name in metric.split("."): value = getattr(value, name)
     return float(value)

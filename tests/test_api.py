@@ -51,8 +51,8 @@ class ApiTests(unittest.TestCase):
         result = Calculator(arsenal.weapon.get("Corinth Prime")).calculate(attack="air_burst_projectile")
         root = result.attacks[result.selected_attack]
         self.assertEqual(result.aggregate.name, result.selected_attack)
-        self.assertGreater(result.aggregate.final.normal.total_dps, root.final.normal.total_dps)
-        self.assertGreater(result.attacks["air_burst_explosion"].final.normal.total_dps, 0)
+        self.assertGreater(result.aggregate.average.normal.total_dps, root.average.normal.total_dps)
+        self.assertGreater(result.attacks["air_burst_explosion"].average.normal.total_dps, 0)
         self.assertFalse(hasattr(result, "main"))
 
     def test_prepared_and_ordinary_calculations_are_equal(self):
@@ -61,7 +61,7 @@ class ApiTests(unittest.TestCase):
         calculator = Calculator(weapon)
         ordinary = calculator.calculate(loadout, attack="incarnon_form")
         prepared = calculator.prepare(attack="incarnon_form").calculate(loadout)
-        self.assertEqual(prepared.aggregate.final, ordinary.aggregate.final)
+        self.assertEqual(prepared.aggregate.average, ordinary.aggregate.average)
         self.assertEqual(prepared.attacks.keys(), ordinary.attacks.keys())
 
     def test_calculation_does_not_mutate_weapon_definition(self):
@@ -84,7 +84,9 @@ class ApiTests(unittest.TestCase):
         self.assertIn("TOTAL DPS", formatter.summary())
         targeted = ResultFormatter(Calculator(weapon, arsenal.enemy.get("Heavy Gunner")).calculate(loadout))
         self.assertIn("Corinth Prime · Buckshot vs Heavy Gunner · TOTAL DPS Contributions", targeted.contributions())
-        self.assertIn("DPH", format_damage_result(result.aggregate.final))
+        contribution_table = targeted.contributions()
+        self.assertIn("\x1b[32m", contribution_table)
+        self.assertIn("DPH", format_damage_result(result.aggregate.average))
         self.assertIn("Expected procs", format_status(result.aggregate.status))
         aoe = Calculator(weapon).calculate(attack="air_burst_explosion").attacks["air_burst_explosion"].spatial
         self.assertIsNotNone(aoe)

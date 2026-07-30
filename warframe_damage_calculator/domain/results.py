@@ -193,11 +193,6 @@ class SpatialMetrics(DamagePool):
 
 
 @dataclass(slots=True)
-class FinalAttackStats(AverageAttackStats):
-    pass
-
-
-@dataclass(slots=True)
 class AttackResult:
     name: str
     attack: Attack
@@ -207,7 +202,6 @@ class AttackResult:
     upgrades: ResolvedStats
     evolutions: ResolvedStats
     average: AverageResult
-    final: FinalAttackStats
     spatial: SpatialMetrics
     status_effects: dict[str, float] = field(default_factory=dict)
     children: list[str] = field(default_factory=list)
@@ -251,7 +245,6 @@ class CalculatedAttack:
     upgrades: ResolvedStats
     evolutions: ResolvedStats
     average: AverageResult
-    final: DamageResult
     status: StatusResult
     spatial: SpatialResult | None
     children: tuple[str, ...]
@@ -261,7 +254,7 @@ class CalculatedAttack:
 @dataclass(frozen=True, slots=True)
 class AggregateResult:
     name: str
-    final: DamageResult
+    average: DamageResult
     status: StatusResult
     spatial: dict[str, SpatialResult]
     components: tuple[str, ...]

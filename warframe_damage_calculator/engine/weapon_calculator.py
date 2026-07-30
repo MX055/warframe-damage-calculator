@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from ..domain.results import AttackResult, AverageAttackStats, FinalAttackStats
+from copy import deepcopy
+
+from ..domain.results import AttackResult, AverageAttackStats
 from ..domain.status import StatusModel
 from ..domain.upgrades import ResolvedEffect
 from .attack_calculator import AFFLICTIONS_CATEGORIES, AttackCalculator, _product, _special_value, _status_model, _with_random_proc
@@ -67,7 +69,7 @@ class WeaponCalculator:
         }
 
     @staticmethod
-    def _fold_metrics(output: FinalAttackStats, own: AverageAttackStats, children: list[AverageAttackStats]) -> None:
+    def _fold_metrics(output: AverageAttackStats, own: AverageAttackStats, children: list[AverageAttackStats]) -> None:
         for fields in ZONE_FIELDS.values():
             direct_values = [getattr(own, fields[0]), *(getattr(child, fields[0]) for child in children)]
             dot_values = [getattr(own, fields[1]), *(getattr(child, fields[1]) for child in children)]
@@ -83,36 +85,33 @@ class WeaponCalculator:
             setattr(output, fields[4], dot * own.sustained_fire_rate)
             setattr(output, fields[5], (direct + dot) * own.sustained_fire_rate)
 
-    def fold_attack_tree(self, results: dict[str, AttackResult], names: list[str], root_duration: float) -> None:
+    def aggregate_attack_tree(self, results: dict[str, AttackResult], names: list[str], root_duration: float) -> AverageAttackStats:
         root = results[self.root_name]
-        final_group_model = StatusModel.combine([results[name].effective.status_model for name in names], root.average.sustained_fire_rate, root_duration)
-        root.average.procs_per_shot = final_group_model.expected_procs_per_attack
-        root.final.procs_per_shot = final_group_model.expected_procs_per_attack
-        root.status_effects = final_group_model.non_damage_effects()
+        group_model = StatusModel.combine([results[name].effective.status_model for name in names], root.average.sustained_fire_rate, root_duration)
+        root.average.procs_per_shot = group_model.expected_procs_per_attack
+        root.status_effects = group_model.non_damage_effects()
         root.status_effects["armor_reduction"] = min(root.status_effects.get("puncture", 0) * _special_value(root.effective.special_effects, "armor_reduction"), 1)
+        aggregate = AverageAttackStats(**{name: deepcopy(getattr(root.average, name)) for name in root.average.__dataclass_fields__})
+        descendants: list[str] = []
 
-        def descendants(name: str, path: frozenset[str] = frozenset()) -> list[str]:
+        def collect(name: str, path: frozenset[str] = frozenset()) -> None:
             if name in path: raise ValueError(f"attack relationship cycle at {name!r}")
-            collected: list[str] = []
             for child in results[name].children:
-                if child not in collected: collected.append(child)
-                for descendant in descendants(child, path | {name}):
-                    if descendant not in collected: collected.append(descendant)
-            return collected
+                if child not in descendants: descendants.append(child)
+                collect(child, path | {name})
 
-        for name, result in results.items():
-            child_names = descendants(name)
-            self._fold_metrics(result.final, result.average, [results[child].average for child in child_names])
+        collect(self.root_name)
+        self._fold_metrics(aggregate, root.average, [results[name].average for name in descendants])
+        return aggregate
 
-    def calculate(self) -> dict[str, AttackResult]:
+    def calculate(self) -> tuple[dict[str, AttackResult], AverageAttackStats]:
         self.prepare_effects()
         names = list(self.prepared_names) if self.prepared_names is not None else self.collect_attack_tree()
         preliminary = self.calculate_preliminary_attacks(names)
         shared, status_effects, random_probability, root_duration = self.build_shared_status_model(preliminary, names)
         results = self.calculate_final_attacks(names, shared, status_effects, random_probability)
-        self.fold_attack_tree(results, names, root_duration)
-        return results
+        return results, self.aggregate_attack_tree(results, names, root_duration)
 
 
-def calculate_weapon(context: CalculationContext, prepared_names: tuple[str, ...] | None = None) -> dict[str, AttackResult]:
+def calculate_weapon(context: CalculationContext, prepared_names: tuple[str, ...] | None = None) -> tuple[dict[str, AttackResult], AverageAttackStats]:
     return WeaponCalculator(context, prepared_names).calculate()

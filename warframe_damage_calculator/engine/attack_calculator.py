@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-from copy import deepcopy
 from typing import Any, Iterable, Mapping
 
 from ..domain.damage import Dist
-from ..domain.results import AttackResult, AverageAttackStats, BaseAttackStats, EffectiveAttackStats, FinalAttackStats, ModdedAttackStats, ResolvedStats, SpatialMetrics, Stats
+from ..domain.results import AttackResult, AverageAttackStats, BaseAttackStats, EffectiveAttackStats, ModdedAttackStats, ResolvedStats, SpatialMetrics, Stats
 from ..domain.upgrades import ResolvedEffect, Upgrade
 from ..domain.weapons import Attack
 from .aggregation import DAMAGE_TYPES, aggregate, merge
@@ -596,7 +595,7 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     weak_tier_bonus = min(weak_crit, 1) * crit_tier_chance
     falloff_multiplier, spatial = _spatial_falloff(attack, effective)
     average = AverageAttackStats(crit_chance=body_crit, crit_multiplier=crit_multiplier(body_crit + body_tier_bonus, crit_damage), weakpoint_crit_chance=weak_crit, weakpoint_crit_multiplier=crit_multiplier(weak_crit + weak_tier_bonus, crit_damage), sustained_fire_rate=fire_rate, procs_per_shot=status_model.expected_procs_per_attack, melee_duplicate_multiplier=duplicate_multiplier, melee_doughty_bonus=doughty_bonus, crit_tier_bonus=body_tier_bonus, weakpoint_crit_tier_bonus=weak_tier_bonus, secondary_enervate_bonus=body_bonus, weakpoint_secondary_enervate_bonus=weak_bonus, falloff_multiplier=falloff_multiplier)
-    result = AttackResult(attack.name, attack, base, modded, effective, upgrades, evolutions, average, FinalAttackStats(**{name: deepcopy(getattr(average, name)) for name in average.__dataclass_fields__}), spatial, status_effects, list(attack.children), original)
+    result = AttackResult(attack.name, attack, base, modded, effective, upgrades, evolutions, average, spatial, status_effects, list(attack.children), original)
     combo_multiplier = 1
     if heavy:
         combo_multiplier = max(1, min(int(context.weapon.combo.get("max_combo", 12)), int(context.state.combo)))
@@ -612,7 +611,6 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     refresh_metrics(average)
     _refresh_spatial(spatial, average.sustained_fire_rate)
     _apply_position_mixture(context, result, [*upgrade_positions, *evolution_positions])
-    result.final = FinalAttackStats(**{name: deepcopy(getattr(average, name)) for name in average.__dataclass_fields__})
     return result
 
 

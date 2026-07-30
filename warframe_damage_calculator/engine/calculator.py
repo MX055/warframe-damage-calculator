@@ -67,12 +67,12 @@ def _average_result(source) -> AverageResult:
 
 
 def _calculated_attack(result) -> CalculatedAttack:
-    return CalculatedAttack(result.name, deepcopy(result.attack), result.base, result.modded, result.effective, result.upgrades, result.evolutions, _average_result(result.average), _damage_result(result.average), _status(result), _spatial(result), tuple(result.children), result.original_damage)
+    return CalculatedAttack(result.name, deepcopy(result.attack), result.base, result.modded, result.effective, result.upgrades, result.evolutions, _average_result(result.average), _status(result), _spatial(result), tuple(result.children), result.original_damage)
 
 
-def _aggregate(root, attacks: dict[str, CalculatedAttack]) -> AggregateResult:
+def _aggregate(root, aggregate, attacks: dict[str, CalculatedAttack]) -> AggregateResult:
     spatial = {name: attack.spatial for name, attack in attacks.items() if attack.spatial is not None}
-    return AggregateResult(root.name, _damage_result(root.final), _status(root), spatial, tuple(attacks))
+    return AggregateResult(root.name, _damage_result(aggregate), _status(root), spatial, tuple(attacks))
 
 
 def _resolve_perks(weapon: Weapon, perks: list[Perk], state: Mapping[str, object]) -> tuple[ResolvedPerk, ...]:
@@ -136,6 +136,6 @@ class Calculator:
         resolved_perks = _resolve_perks(self.weapon, loadout.evolutions, calculation_state)
         _warn_loadout(self.weapon, loadout)
         context = CalculationContext(weapon=self.weapon, target=self.target.copy() if self.target is not None else Enemy(), attack=selected, loadout=loadout, resolved_perks=resolved_perks, state=calculation_state)
-        calculated = calculate_weapon(context, prepared_names)
+        calculated, aggregate = calculate_weapon(context, prepared_names)
         attacks = {name: _calculated_attack(result) for name, result in calculated.items()}
-        return CalculationResult(_aggregate(calculated[selected], attacks), attacks, selected, self.weapon.copy(), None if self.target is None else self.target.copy(), loadout.copy(), dict(state))
+        return CalculationResult(_aggregate(calculated[selected], aggregate, attacks), attacks, selected, self.weapon.copy(), None if self.target is None else self.target.copy(), loadout.copy(), dict(state))

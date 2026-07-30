@@ -98,8 +98,8 @@ CalculationResult
 Canonical damage navigation is:
 
 ```python
-result.aggregate.final.normal.total_dps
-result.attacks[name].final.normal.total_dps
+result.aggregate.average.normal.total_dps
+result.attacks[name].average.normal.total_dps
 ```
 
 The aggregate scope deliberately has no critical chance, multishot, or other cross-component statistic.

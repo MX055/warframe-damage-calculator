@@ -16,7 +16,7 @@ class BehavioralParityTests(unittest.TestCase):
     def test_reference_outputs_remain_stable(self):
         for name, expected in EXPECTED.items():
             with self.subTest(name=name):
-                actual = Calculator(arsenal.weapon.get(name)).calculate().aggregate.final.normal.total_dps
+                actual = Calculator(arsenal.weapon.get(name)).calculate().aggregate.average.normal.total_dps
                 self.assertTrue(math.isclose(actual, expected, rel_tol=1e-12, abs_tol=1e-9), (name, actual, expected))
 
 
