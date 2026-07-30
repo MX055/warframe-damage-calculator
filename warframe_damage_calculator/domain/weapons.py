@@ -142,10 +142,9 @@ class Weapon:
             for perk in tiers.values():
                 for effects in perk.get("stats", {}).values():
                     for effect in effects:
-                        manual = effect.get("manual", {})
-                        if "when" not in manual: continue
-                        condition = str(manual["when"])
-                        maximum = manual.get("stacks")
+                        if "when" not in effect: continue
+                        condition = str(effect["when"])
+                        maximum = effect.get("stacks")
                         value = int(maximum) if maximum not in (None, "inf") else True
                         if isinstance(value, int) and not isinstance(value, bool): condition_defaults[condition] = max(int(condition_defaults.get(condition, 0)), value)
                         else: condition_defaults.setdefault(condition, value)
@@ -159,8 +158,11 @@ class Weapon:
         self.results = _results_factory(self, resolve=_resolve)
         self.format = _formatter_factory(self)
 
-    def set(self, **values: Any) -> Self:
-        if "attack" in values and values["attack"] not in self.attacks: raise ValueError(f"unknown attack {values['attack']!r}")
+    def set(self, *, attack: str | None = None, evolutions: Mapping[int | str, int | str] | None = None, **values: Any) -> Self:
+        if attack is not None:
+            if attack not in self.attacks: raise ValueError(f"unknown attack {attack!r}")
+            values["attack"] = attack
+        if evolutions is not None: values["evolutions"] = dict(evolutions)
         self.runtime.set(**values)
         self.results.resolve()
         return self

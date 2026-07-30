@@ -8,10 +8,10 @@ def build_riven() -> Upgrade:
         max_rank=8,
         compatibility=Compatibility(names=["Corinth Prime"]), 
         stats=UpgradeStats(
-            impact=Effect(properties={"value": -0.886}),
-            crit_damage=Effect(properties={"value": 0.855}),
-            multishot=Effect(properties={"value": 1.126}),
-            crit_chance=Effect(properties={"value": 0.887})
+            impact=-0.886,
+            crit_damage=0.855,
+            multishot=1.126,
+            crit_chance=0.887
         )
     )
 
@@ -21,7 +21,7 @@ def build_buff() -> Upgrade:
         kind="buff",
         slot="buff",
         stats=UpgradeStats(
-            crit_damage=Effect(properties={"value": 1.2, "mode": "flat"})
+            crit_damage=Effect(1.2, mode='flat')
         )
     )
 
@@ -44,7 +44,8 @@ def main() -> None:
     weapon.configure(build, target)
 
     print(weapon.format.summary())
-    print(weapon.format.upgrades())
+    print(weapon.results.main.final.falloff_multiplier)
+    print(weapon.results.main.density.total_dps)
 
 
 if __name__ == "__main__":

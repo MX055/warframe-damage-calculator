@@ -4,7 +4,7 @@ import json
 from collections.abc import Callable, Iterator, Mapping
 from importlib.resources import files
 from pathlib import Path
-from typing import Generic, Self, TypeVar
+from typing import Generic, Self, TypeVar, cast
 
 from .domain.enemies import Enemy
 from .domain.upgrades import Upgrade
@@ -12,6 +12,7 @@ from .domain.weapons import Melee, Primary, Secondary, Weapon
 from .schema import validate_database
 
 
+type ArsenalWeapon = Primary | Secondary | Melee
 T = TypeVar("T", Weapon, Upgrade, Enemy)
 
 
@@ -43,22 +44,27 @@ class Repository(Generic[T]):
         return tuple(sorted(self._records, key=str.casefold))
 
 
-def _weapon(record: Mapping) -> Weapon:
+def _weapon(record: Mapping) -> ArsenalWeapon:
     category = record["type"]
     cls = Primary if category in {"primary", "archgun"} else Secondary if category == "secondary" else Melee if category == "melee" else None
     if cls is None: raise ValueError(f"unsupported weapon type {category!r}")
     return cls.from_record(record)
 
 
+class WeaponRepository(Repository[Weapon]):
+    def get(self, name: str) -> ArsenalWeapon:
+        return cast(ArsenalWeapon, super().get(name))
+
+
 class Arsenal:
     __slots__ = ("database", "weapon", "upgrade", "enemy")
 
     def __init__(self, database: Mapping) -> None:
-        self.database = dict(database)
+        self.database: dict = dict(database)
         validate_database(self.database)
-        self.weapon = Repository(self.database["weapons"], _weapon)
-        self.upgrade = Repository(self.database["upgrades"], Upgrade.from_record)
-        self.enemy = Repository(self.database["enemies"], lambda record: Enemy.from_record(record, loaded=True))
+        self.weapon = WeaponRepository(self.database["weapons"], _weapon)
+        self.upgrade = Repository[Upgrade](self.database["upgrades"], Upgrade.from_record)
+        self.enemy = Repository[Enemy](self.database["enemies"], lambda record: Enemy.from_record(record, loaded=True))
 
     @classmethod
     def from_file(cls, path: str | Path) -> Self:
@@ -80,8 +86,21 @@ class _LazyArsenal:
         if self._loaded is None: self._loaded = Arsenal.bundled()
         return self._loaded
 
-    def __getattr__(self, name: str):
-        return getattr(self._get(), name)
+    @property
+    def database(self) -> dict:
+        return self._get().database
+
+    @property
+    def weapon(self) -> WeaponRepository:
+        return self._get().weapon
+
+    @property
+    def upgrade(self) -> Repository[Upgrade]:
+        return self._get().upgrade
+
+    @property
+    def enemy(self) -> Repository[Enemy]:
+        return self._get().enemy
 
 
 arsenal = _LazyArsenal()

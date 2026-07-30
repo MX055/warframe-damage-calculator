@@ -22,9 +22,6 @@ POSITION_EVENTS = frozenset({"magazine_first_shot", "magazine_last_shot"})
 DEFERRED_STATS = frozenset({"duplicated_hit", "random_proc", "crit_reset_charges", "crit_tier"})
 DEFERRED_FAMILIES = frozenset({"magazine_first_shot", "magazine_last_shot"})
 PROC_STATS = frozenset(f"{damage_type}_proc" for damage_type in STATUS_TYPES)
-DENSITY_FIELDS = {"normal": "damage_density", "weakpoint": "weakpoint_damage_density", "resistant": "resistant_damage_density"}
-
-
 def _scalar(base: float, stat: str, build: ResolvedStats, *, minimum: float = 0) -> float:
     value = (base + float(build.base.get(stat, 0))) * (1 + float(build.proportional.get(stat, 0)))
     return max(value * family_factor(build, stat) + float(build.flat.get(stat, 0)), minimum)
@@ -371,13 +368,22 @@ def _spatial_falloff(attack: AttackProtocol, effective: EffectiveAttackStats) ->
 def _set_zone_damage(average: AverageAttackStats, density: DensityMetrics, zone: str, fields: tuple[str, ...], direct: float, dot: float) -> None:
     setattr(average, fields[0], direct * average.falloff_multiplier)
     setattr(average, fields[1], dot * average.falloff_multiplier)
-    setattr(density, DENSITY_FIELDS[zone], (direct + dot) * density.damage_mass if density.damage_mass is not None and density.damage_mass > 0 else None)
+    mass = density.damage_mass if density.damage_mass is not None and density.damage_mass > 0 else None
+    setattr(density, fields[0], None if mass is None else direct * mass)
+    setattr(density, fields[1], None if mass is None else dot * mass)
 
 
 def _refresh_density(metrics: DensityMetrics, fire_rate: float) -> None:
-    for prefix in ("", "weakpoint_", "resistant_"):
-        density = getattr(metrics, f"{prefix}damage_density")
-        setattr(metrics, f"{prefix}damage_density_per_second", None if density is None else density * fire_rate)
+    for fields in ZONE_FIELDS.values():
+        direct = getattr(metrics, fields[0])
+        dot = getattr(metrics, fields[1])
+        if direct is None or dot is None:
+            for field in fields: setattr(metrics, field, None)
+            continue
+        setattr(metrics, fields[2], direct + dot)
+        setattr(metrics, fields[3], direct * fire_rate)
+        setattr(metrics, fields[4], dot * fire_rate)
+        setattr(metrics, fields[5], (direct + dot) * fire_rate)
 
 
 def _dot_value(weapon: WeaponProtocol, result: AttackResult, zone: str, *, multishot: float | None = None, damage_factor: float = 1) -> float:

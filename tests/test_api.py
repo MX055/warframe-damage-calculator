@@ -7,7 +7,7 @@ from warframe_damage_calculator import Attack, AttackStats, Build, BuildCompatib
 class ApiTests(unittest.TestCase):
     def test_direct_objects_calculate_without_data_wrappers(self):
         weapon = Primary(name="Example", subtype="rifle", attacks=[Attack(name="shot", stats=AttackStats(damage=Dist(impact=100), crit_chance=0.2, crit_damage=2, fire_rate=2))], magazine_size=10, reload_time=1)
-        upgrade = Upgrade(name="Damage", stats=UpgradeStats(damage_bonus=Effect(properties={"value": 1})))
+        upgrade = Upgrade(name="Damage", stats=UpgradeStats(damage_bonus=Effect(1)))
         weapon.configure(Build(upgrade))
         self.assertFalse(hasattr(weapon, "data"))
         self.assertFalse(hasattr(upgrade, "data"))
@@ -29,7 +29,7 @@ class ApiTests(unittest.TestCase):
         self.assertGreater(weapon.results.main.final.total_dps, 0)
 
     def test_incompatible_effects_warn_but_apply(self):
-        upgrade = Upgrade(name="Rifle", compatibility=Compatibility(subtypes=["rifle"]), stats=UpgradeStats(damage_bonus=Effect(properties={"value": 1})))
+        upgrade = Upgrade(name="Rifle", compatibility=Compatibility(subtypes=["rifle"]), stats=UpgradeStats(damage_bonus=Effect(1)))
         weapon = arsenal.weapon.get("Lato")
         baseline = weapon.results.main.effective.damage.total
         with warnings.catch_warnings(record=True) as caught:
@@ -66,10 +66,10 @@ class ApiTests(unittest.TestCase):
     def test_expected_procs_include_forced_and_damage_proc_effects(self):
         attack = Attack(name="shot", stats=AttackStats(damage=Dist(impact=100), forced_procs=Dist(impact=0.25), crit_chance=0.2, status_chance=0.5, multishot=2))
         upgrade = Upgrade(name="Proc effects", stats=UpgradeStats(
-            puncture_proc=Effect(properties={"value": 0.5}),
+            puncture_proc=Effect(0.5),
             slash_proc=(
-                Effect(properties={"value": 1}, automatic={"on": "critical_hit", "chance": 0.3}),
-                Effect(properties={"value": 1}, automatic={"on": "impact_status_proc", "chance": 0.35}),
+                Effect(1).automate(on='critical_hit', chance=0.3),
+                Effect(1).automate(on='impact_status_proc', chance=0.35),
             ),
         ))
         result = Primary(name="Example", subtype="rifle", attacks=[attack]).configure(upgrade).results.main
@@ -92,7 +92,7 @@ class ApiTests(unittest.TestCase):
                 result = slam.results.main
                 summary = slam.format.summary()
                 self.assertGreater(result.density.damage_mass, 0)
-                self.assertIsNotNone(result.density.damage_density)
+                self.assertIsNotNone(result.density.total_dph)
                 self.assertIn("DAMAGE MASS", summary)
                 self.assertNotIn("DAMAGE DENSITY", summary)
                 self.assertIn("m³", summary)

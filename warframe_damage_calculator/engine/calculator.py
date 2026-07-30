@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from ..domain.results import AttackResult, AverageAttackStats, FinalAttackStats
 from ..domain.upgrades import ResolvedEffect
-from .attack_calculator import AFFLICTIONS_CATEGORIES, DENSITY_FIELDS, AttackCalculator, _product, _runtime_evolution_effects, _special_value, _status_model, _with_random_proc
+from .attack_calculator import AFFLICTIONS_CATEGORIES, AttackCalculator, _product, _runtime_evolution_effects, _special_value, _status_model, _with_random_proc
 from .protocols import WeaponProtocol
 from .status import StatusModel
 from .targets import ZONE_FIELDS
@@ -89,7 +89,7 @@ class WeaponCalculator:
         root.final.procs_per_shot = final_group_model.expected_procs_per_attack
         root.status_effects = final_group_model.non_damage_effects()
         root.status_effects["armor_reduction"] = min(root.status_effects.get("puncture", 0) * _special_value(root.effective.special_effects, "armor_reduction"), 1)
-        own_density = {name: {field: getattr(result.density, field) for field in DENSITY_FIELDS.values()} for name, result in results.items()}
+        own_density = {name: {field: getattr(result.density, field) for fields in ZONE_FIELDS.values() for field in fields[:2]} for name, result in results.items()}
 
         def descendants(name: str, path: frozenset[str] = frozenset()) -> list[str]:
             if name in path: raise ValueError(f"attack relationship cycle at {name!r}")
@@ -103,11 +103,20 @@ class WeaponCalculator:
         for name, result in results.items():
             child_names = descendants(name)
             self._fold_metrics(result.final, result.average, [results[child].average for child in child_names])
-            for density_field in DENSITY_FIELDS.values():
-                density_values = [own_density[name][density_field], *(own_density[child][density_field] for child in child_names)]
-                density = sum(float(value or 0) for value in density_values) if any(value is not None for value in density_values) else None
-                setattr(result.density, density_field, density)
-                setattr(result.density, f"{density_field}_per_second", None if density is None else density * result.average.sustained_fire_rate)
+            for fields in ZONE_FIELDS.values():
+                direct_values = [own_density[name][fields[0]], *(own_density[child][fields[0]] for child in child_names)]
+                dot_values = [own_density[name][fields[1]], *(own_density[child][fields[1]] for child in child_names)]
+                if not any(value is not None for value in (*direct_values, *dot_values)):
+                    for field in fields: setattr(result.density, field, None)
+                    continue
+                direct = sum(float(value or 0) for value in direct_values)
+                dot = sum(float(value or 0) for value in dot_values)
+                setattr(result.density, fields[0], direct)
+                setattr(result.density, fields[1], dot)
+                setattr(result.density, fields[2], direct + dot)
+                setattr(result.density, fields[3], direct * result.average.sustained_fire_rate)
+                setattr(result.density, fields[4], dot * result.average.sustained_fire_rate)
+                setattr(result.density, fields[5], (direct + dot) * result.average.sustained_fire_rate)
 
     def calculate(self) -> dict[str, AttackResult]:
         self.prepare_effects()

@@ -5,7 +5,7 @@ from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import Any, Self
 
-from .effects import ChannelValue, Effect, EffectChannel, EffectMode, Scalar
+from .effects import Effect, EffectChannel, EffectMode, Scalar
 
 
 class Runtime:
@@ -40,12 +40,12 @@ class Runtime:
 class UpgradeStats(Mapping[str, tuple[Effect, ...]]):
     __slots__ = ("_effects",)
 
-    def __init__(self, **stats: Effect | Iterable[Effect]) -> None:
+    def __init__(self, **stats: Effect | Scalar | Iterable[Effect | Scalar]) -> None:
         effects: dict[str, tuple[Effect, ...]] = {}
         for stat, source in stats.items():
-            values = (source,) if isinstance(source, Effect) else tuple(source)
-            if not values or not all(isinstance(value, Effect) for value in values): raise TypeError(f"{stat} requires one or more Effect values")
-            effects[stat] = values
+            values = (source,) if isinstance(source, (Effect, int, float, bool, str)) else tuple(source)
+            if not values: raise TypeError(f"{stat} requires one or more effect values")
+            effects[stat] = tuple(value if isinstance(value, Effect) else Effect(value) for value in values)
         self._effects = effects
 
     def __getitem__(self, stat: str) -> tuple[Effect, ...]:
@@ -65,13 +65,13 @@ class UpgradeStats(Mapping[str, tuple[Effect, ...]]):
 
     @property
     def manual_fields(self) -> frozenset[str]:
-        return frozenset(str(condition) for effects in self.values() for effect in effects if (condition := effect.program.manual_value("when")) is not None)
+        return frozenset(effect.when for effects in self.values() for effect in effects if effect.when is not None)
 
     def copy(self) -> UpgradeStats:
         return UpgradeStats(**{stat: tuple(deepcopy(effect) for effect in effects) for stat, effects in self.items()})
 
     @classmethod
-    def from_record(cls, record: Mapping[str, list[dict[str, dict[str, ChannelValue]]]]) -> UpgradeStats:
+    def from_record(cls, record: Mapping[str, list[Mapping[str, object]]]) -> UpgradeStats:
         return cls(**{stat: tuple(Effect.from_record(effect) for effect in effects) for stat, effects in record.items()})
 
 
@@ -119,9 +119,9 @@ class Upgrade:
         defaults: dict[str, Any] = {"rank": self.max_rank}
         for effects in self.stats.values():
             for effect in effects:
-                condition = effect.program.manual_value("when")
+                condition = effect.when
                 if condition is None: continue
-                maximum = effect.program.manual_value("stacks")
+                maximum = effect.stacks
                 value = int(maximum) if maximum not in (None, "inf") else True
                 key = str(condition)
                 if isinstance(value, int) and not isinstance(value, bool): defaults[key] = max(int(defaults.get(key, 0)), value)
@@ -155,20 +155,17 @@ class Upgrade:
         resolved: list[ResolvedEffect] = []
         for stat, effects in self.stats.items():
             for effect in effects:
-                program = effect.program
-                required_rank = program.manual_value("requires_rank")
-                if required_rank is not None and rank < int(required_rank): continue
-                value = program.value
-                if program.scales_with_rank and required_rank is None and isinstance(value, (int, float)) and not isinstance(value, bool): value *= rank_scale
-                condition = program.manual_value("when")
-                if condition is not None:
-                    supplied = getattr(self.runtime, str(condition))
+                required_rank = effect.requires_rank
+                if required_rank is not None and rank < required_rank: continue
+                value = effect.value
+                if effect.scales_with_rank and required_rank is None and isinstance(value, (int, float)) and not isinstance(value, bool): value *= rank_scale
+                if effect.when is not None:
+                    supplied = getattr(self.runtime, effect.when)
                     if not supplied: continue
                     stacks = 1 if isinstance(supplied, bool) else int(supplied)
-                    maximum = program.manual_value("stacks")
-                    if maximum not in (None, "inf"): stacks = min(stacks, int(maximum))
+                    if effect.stacks not in (None, "inf"): stacks = min(stacks, int(effect.stacks))
                     if isinstance(value, (int, float)) and not isinstance(value, bool): value *= stacks
-                resolved.append(ResolvedEffect(self.name, stat, value, program.mode, program.family, program.maximum, program.automatic))
+                resolved.append(ResolvedEffect(self.name, stat, value, effect.mode, effect.family, effect.maximum, deepcopy(effect.automatic)))
         return tuple(resolved)
 
 

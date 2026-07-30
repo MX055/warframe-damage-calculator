@@ -112,12 +112,24 @@ class AverageAttackStats:
 class DensityMetrics:
     falloff_multiplier: float | None = None
     damage_mass: float | None = None
-    damage_density: float | None = None
-    damage_density_per_second: float | None = None
-    weakpoint_damage_density: float | None = None
-    weakpoint_damage_density_per_second: float | None = None
-    resistant_damage_density: float | None = None
-    resistant_damage_density_per_second: float | None = None
+    flat_dph: float | None = None
+    flat_dotph: float | None = None
+    total_dph: float | None = None
+    flat_dps: float | None = None
+    flat_dotps: float | None = None
+    total_dps: float | None = None
+    flat_weakpoint_dph: float | None = None
+    flat_weakpoint_dotph: float | None = None
+    total_weakpoint_dph: float | None = None
+    flat_weakpoint_dps: float | None = None
+    flat_weakpoint_dotps: float | None = None
+    total_weakpoint_dps: float | None = None
+    flat_resistant_dph: float | None = None
+    flat_resistant_dotph: float | None = None
+    total_resistant_dph: float | None = None
+    flat_resistant_dps: float | None = None
+    flat_resistant_dotps: float | None = None
+    total_resistant_dps: float | None = None
 
 
 @dataclass(slots=True)

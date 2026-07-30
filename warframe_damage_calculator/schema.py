@@ -3,7 +3,15 @@ from __future__ import annotations
 from math import isfinite
 from typing import Any
 
-from .domain.effects import Effect
+from .domain.effects import AUTOMATIC_FIELDS, EFFECT_FIELDS, REPEATABLE_AUTOMATIC_FIELDS, Effect
+
+
+def _validate_automatic(automatic: Any, path: str) -> None:
+    if not isinstance(automatic, dict) or not set(automatic) <= AUTOMATIC_FIELDS: raise ValueError(f"{path}: invalid automatic fields")
+    for key, value in automatic.items():
+        values = value if isinstance(value, list) else [value]
+        if isinstance(value, list) and (key not in REPEATABLE_AUTOMATIC_FIELDS or not value): raise ValueError(f"{path}.{key}: invalid repeated values")
+        if any(not isinstance(item, (int, float, bool, str)) or isinstance(item, str) and not item for item in values): raise ValueError(f"{path}.{key}: expected scalar values")
 
 
 def _effects(stats: Any, path: str) -> None:
@@ -12,10 +20,11 @@ def _effects(stats: Any, path: str) -> None:
         if not isinstance(effects, list) or not effects: raise ValueError(f"{path}.{stat}: expected effects")
         for index, effect in enumerate(effects):
             location = f"{path}.{stat}[{index}]"
-            if set(effect) != {"properties", "manual", "automatic"}: raise ValueError(f"{location}: invalid effect channels")
+            if not isinstance(effect, dict) or not set(effect) <= EFFECT_FIELDS or "value" not in effect or "automatic" not in effect: raise ValueError(f"{location}: invalid effect fields")
             try: Effect.from_record(effect)
             except (TypeError, ValueError) as error: raise ValueError(f"{location}: {error}") from error
-            if isinstance(effect["properties"].get("value"), (dict, list)): raise ValueError(f"{location}: value must be scalar")
+            if isinstance(effect["value"], (dict, list)): raise ValueError(f"{location}: value must be scalar")
+            _validate_automatic(effect["automatic"], f"{location}.automatic")
 
 
 def validate_database(database: dict[str, Any]) -> None:
@@ -24,7 +33,7 @@ def validate_database(database: dict[str, Any]) -> None:
     unexpected_root = set(database) - allowed_root
     if missing_root: raise ValueError(f"database: missing fields {sorted(missing_root)}")
     if unexpected_root: raise ValueError(f"database: unexpected fields {sorted(unexpected_root)}")
-    if database.get("schema_version") != 9: raise ValueError("schema version 9 is required")
+    if database.get("schema_version") != 10: raise ValueError("schema version 10 is required")
     for section in ("weapons", "upgrades", "enemies", "riven_stats"):
         if not isinstance(database.get(section), dict): raise ValueError(f"{section}: expected an object")
     for name, weapon in database["weapons"].items():
