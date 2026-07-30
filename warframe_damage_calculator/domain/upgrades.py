@@ -104,13 +104,14 @@ class ResolvedEffect:
 
 
 class Upgrade:
-    __slots__ = ("name", "kind", "slot", "max_rank", "compatibility", "conflicts", "stats", "combos", "runtime")
+    __slots__ = ("name", "kind", "slot", "max_rank", "implemented", "compatibility", "conflicts", "stats", "combos", "runtime")
 
-    def __init__(self, *, name: str, kind: str = "mod", slot: str = "normal", max_rank: int = 0, compatibility: Compatibility | None = None, conflicts: Iterable[str] = (), stats: UpgradeStats | None = None, combos: Mapping[str, Any] | None = None, runtime: Mapping[str, Any] | None = None) -> None:
+    def __init__(self, *, name: str, kind: str = "mod", slot: str = "normal", max_rank: int = 0, implemented: bool = True, compatibility: Compatibility | None = None, conflicts: Iterable[str] = (), stats: UpgradeStats | None = None, combos: Mapping[str, Any] | None = None, runtime: Mapping[str, Any] | None = None) -> None:
         self.name = name
         self.kind = kind
         self.slot = slot
         self.max_rank = int(max_rank)
+        self.implemented = implemented
         self.compatibility = compatibility or Compatibility()
         self.conflicts = list(conflicts)
         self.stats = stats or UpgradeStats()
@@ -134,13 +135,13 @@ class Upgrade:
 
     @classmethod
     def from_record(cls, record: Mapping[str, Any]) -> Upgrade:
-        allowed = {"name", "kind", "slot", "max_rank", "compatibility", "conflicts", "stats", "combos"}
+        allowed = {"name", "kind", "slot", "max_rank", "implemented", "compatibility", "conflicts", "stats", "combos"}
         unknown = set(record) - allowed
         if unknown: raise TypeError(f"unknown upgrade fields: {', '.join(sorted(unknown))}")
-        return cls(name=str(record["name"]), kind=str(record.get("kind", "mod")), slot=str(record.get("slot", "normal")), max_rank=int(record.get("max_rank", 0)), compatibility=Compatibility.from_record(record.get("compatibility", {})), conflicts=record.get("conflicts", []), stats=UpgradeStats.from_record(record.get("stats", {})), combos=record.get("combos", {}))
+        return cls(name=str(record["name"]), kind=str(record.get("kind", "mod")), slot=str(record.get("slot", "normal")), max_rank=int(record.get("max_rank", 0)), implemented=bool(record.get("implemented", True)), compatibility=Compatibility.from_record(record.get("compatibility", {})), conflicts=record.get("conflicts", []), stats=UpgradeStats.from_record(record.get("stats", {})), combos=record.get("combos", {}))
 
     def copy(self) -> Upgrade:
-        return Upgrade(name=self.name, kind=self.kind, slot=self.slot, max_rank=self.max_rank, compatibility=deepcopy(self.compatibility), conflicts=self.conflicts, stats=self.stats.copy(), combos=self.combos, runtime=self.runtime.as_dict())
+        return Upgrade(name=self.name, kind=self.kind, slot=self.slot, max_rank=self.max_rank, implemented=self.implemented, compatibility=deepcopy(self.compatibility), conflicts=self.conflicts, stats=self.stats.copy(), combos=self.combos, runtime=self.runtime.as_dict())
 
     def __eq__(self, other: object) -> bool:
         return isinstance(other, Upgrade) and self.name == other.name and self.kind == other.kind and self.slot == other.slot

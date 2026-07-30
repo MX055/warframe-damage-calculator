@@ -1,7 +1,9 @@
 import unittest
 from math import pi
+from unittest.mock import patch
 
 from warframe_damage_calculator import Attack, AttackStats, BodyPart, Build, Dist, Effect, Enemy, EnemyStats, Melee, Primary, Secondary, Upgrade, UpgradeStats, arsenal
+from warframe_damage_calculator.engine import contributions
 from warframe_damage_calculator.engine.formulas import cumulative_falloff, punch_through_falloff_multiplier
 from warframe_damage_calculator.engine.status import StatusModel, attack_proc_chance
 
@@ -21,6 +23,10 @@ class EngineTests(unittest.TestCase):
         two = StatusModel(Dist(heat=100), Dist(), 1, 1, 0.4, 5)
         self.assertEqual(one.expected_stacks("heat", 10), 1)
         self.assertEqual(two.expected_stacks("heat", 10), 2)
+        self.assertEqual(one.expected_active_stacks("heat"), 1)
+        self.assertEqual(one.expected_active_types(), 1)
+        rare = StatusModel(Dist(heat=100), Dist(), 0.1, 1, 0.4, 5)
+        self.assertLess(rare.probability_active("heat"), rare.expected_active_types())
 
     def test_different_families_multiply(self):
         build = Build(
@@ -90,16 +96,9 @@ class EngineTests(unittest.TestCase):
         self.assertGreater(chained.average.procs_per_shot, encumber_only.average.procs_per_shot)
         self.assertGreater(chained.average.flat_dotph, encumber_only.average.flat_dotph)
 
-    def test_special_status_effects_use_the_shared_proc_model(self):
-        cascadia = Secondary(name="Cascadia", subtype="pistol", magazine_size=100, attacks=[Attack(name="shot", stats=AttackStats(damage=Dist(impact=100), status_chance=1, fire_rate=1))]).configure(arsenal.upgrade.get("Cascadia Empowered")).results.main
-        afflicted = Melee(name="Afflicted", subtype="scythe", attacks=[Attack(name="shot", stats=AttackStats(damage=Dist(slash=100), forced_procs=Dist(slash=1, knockdown=1), fire_rate=1))]).configure(arsenal.upgrade.get("Melee Afflictions")).results.main
+    def test_supported_special_status_effects_use_the_shared_proc_model(self):
         bleeding = weapon(damage=Dist(impact=100), status=1).configure(Upgrade(name="Bleed", stats=UpgradeStats(bleed_on_impact=Effect(properties={"value": 0.4})))).results.main
-        debilitated = weapon(damage=Dist(blast=100), status=1, fire_rate=2).configure(arsenal.upgrade.get("Primary Debilitate")).results.main
-        self.assertEqual(cascadia.average.flat_dph, 850)
-        self.assertEqual(afflicted.average.procs_per_shot, 8)
-        self.assertEqual(afflicted.average.flat_dotph, 1470)
         self.assertAlmostEqual(bleeding.average.procs_per_shot, 1.4)
-        self.assertEqual(debilitated.average.procs_per_shot, 2)
 
     def test_cold_puncture_blast_void_and_status_vulnerability(self):
         puncture = weapon(damage=Dist(puncture=100), status=1).results.main
@@ -152,6 +151,24 @@ class EngineTests(unittest.TestCase):
         self.assertAlmostEqual(encumbered.average.procs_per_shot, 2 + 1 - (1 - 0.24) ** 2)
         self.assertEqual(overloaded.effective.damage.total, 300)
 
+    def test_siblings_share_statuses_from_deeper_descendants(self):
+        attacks = [
+            Attack(name="root", children=["left", "right"], stats=AttackStats(damage=Dist(impact=100), fire_rate=1)),
+            Attack(name="left", children=["grandchild"], stats=AttackStats(damage=Dist(impact=100), fire_rate=1)),
+            Attack(name="right", stats=AttackStats(damage=Dist(toxin=100), status_chance=1, fire_rate=1)),
+            Attack(name="grandchild", stats=AttackStats(damage=Dist(heat=100), status_chance=1, fire_rate=1)),
+        ]
+        consumers = Build(
+            Upgrade(name="Heat consumer", stats=UpgradeStats(damage_bonus=Effect(properties={"value": 1, "family": "heat"}, automatic={"when": "heat_status_proc"}))),
+            Upgrade(name="Toxin consumer", stats=UpgradeStats(damage_bonus=Effect(properties={"value": 1, "family": "toxin"}, automatic={"when": "toxin_status_proc"}))),
+        )
+        shared = Primary(name="Tree", subtype="rifle", attacks=attacks, magazine_size=100).configure(consumers)
+        isolated_right = weapon(damage=Dist(toxin=100), status=1).configure(consumers).results.main
+        isolated_grandchild = weapon(damage=Dist(heat=100), status=1).configure(consumers).results.main
+        self.assertGreater(shared.results.attacks["right"].effective.damage.total, isolated_right.effective.damage.total)
+        self.assertGreater(shared.results.attacks["grandchild"].effective.damage.total, isolated_grandchild.effective.damage.total)
+        self.assertAlmostEqual(shared.results.main.average.procs_per_shot, 2)
+
     def test_target_hit_zones_and_armor(self):
         target = Enemy(name="Armored", stats=EnemyStats(health=100, armor=300), bodyparts={"body": BodyPart("normal", 1), "head": BodyPart("weakpoint", 2)})
         result = weapon().configure(target=target).results.main
@@ -161,7 +178,7 @@ class EngineTests(unittest.TestCase):
     def test_fire_rate_and_multishot_locks(self):
         lock = Upgrade(name="Lock", stats=UpgradeStats(fire_rate_lock=Effect(properties={"value": True}), multishot_lock=Effect(properties={"value": True}), fire_rate=Effect(properties={"value": 2}), multishot=Effect(properties={"value": 2})))
         result = weapon(fire_rate=2, multishot=2).configure(lock).results.main
-        self.assertEqual(result.effective.fire_rate, 2)
+        self.assertEqual(result.effective.instantaneous_fire_rate, 2)
         self.assertEqual(result.effective.multishot, 2)
 
     def test_aoe_density_uses_spherical_damage_mass_and_average_falloff(self):
@@ -173,7 +190,7 @@ class EngineTests(unittest.TestCase):
         self.assertAlmostEqual(result.average.flat_dph, 100 * expected_multiplier)
         self.assertAlmostEqual(result.final.flat_dph, 100 * expected_multiplier)
         self.assertAlmostEqual(result.density.damage_density, 100 * expected_mass)
-        self.assertAlmostEqual(result.density.damage_density_per_second, 100 * expected_mass * result.average.fire_rate)
+        self.assertAlmostEqual(result.density.damage_density_per_second, 100 * expected_mass * result.average.sustained_fire_rate)
 
     def test_punch_through_density_is_bounded_by_actual_punch_through(self):
         falloff = {"start_range": 2, "end_range": 4, "final_multiplier": 0.5}
@@ -238,6 +255,37 @@ class EngineTests(unittest.TestCase):
         values = configured.results.shapley_contributions()
         self.assertAlmostEqual(sum(values.values()), 1)
         self.assertEqual(set(values), {"Serration", "Point Strike"})
+
+    def test_nested_mutations_invalidate_results_on_access(self):
+        configured = weapon().configure(Upgrade(name="Conditional", stats=UpgradeStats(damage_bonus=Effect(properties={"value": 1}, manual={"when": "active"}))).set(active=False))
+        baseline = configured.results.main.final.total_dps
+        configured.build[0].set(active=True)
+        upgraded = configured.results.main.final.total_dps
+        configured.attacks["shot"].stats.damage = Dist(impact=200)
+        mutated_attack = configured.results.main.final.total_dps
+        configured.target.stats.armor = 1000
+        armored = configured.results.main.final.total_dps
+        self.assertGreater(upgraded, baseline)
+        self.assertGreater(mutated_attack, upgraded)
+        self.assertLess(armored, mutated_attack)
+
+    def test_shapley_calculates_each_coalition_once(self):
+        configured = weapon().configure(Build(
+            Upgrade(name="Damage", stats=UpgradeStats(damage_bonus=Effect(properties={"value": 1}))),
+            Upgrade(name="Critical", stats=UpgradeStats(crit_chance=Effect(properties={"value": 1}))),
+            Upgrade(name="Multishot", stats=UpgradeStats(multishot=Effect(properties={"value": 1}))),
+        ))
+        original = contributions._metric
+        evaluations = 0
+
+        def counted(source, upgrades, target):
+            nonlocal evaluations
+            evaluations += 1
+            return original(source, upgrades, target)
+
+        with patch.object(contributions, "_metric", counted):
+            configured.results.shapley_contributions()
+        self.assertEqual(evaluations, 8)
 
 
 if __name__ == "__main__": unittest.main()

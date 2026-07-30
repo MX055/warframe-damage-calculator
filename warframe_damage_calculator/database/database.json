@@ -78714,6 +78714,7 @@
         },
         "Burning Hate": {
             "name": "Burning Hate",
+            "implemented": false,
             "max_rank": 5,
             "compatibility": {
                 "names": [
@@ -80189,6 +80190,7 @@
         },
         "Cull the Weak": {
             "name": "Cull the Weak",
+            "implemented": false,
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
@@ -80301,6 +80303,7 @@
         },
         "Deadly Maneuvers": {
             "name": "Deadly Maneuvers",
+            "implemented": false,
             "max_rank": 3,
             "compatibility": {
                 "names": [
@@ -84045,6 +84048,7 @@
         },
         "Lasting Purity": {
             "name": "Lasting Purity",
+            "implemented": false,
             "max_rank": 3,
             "compatibility": {
                 "names": [
@@ -99372,6 +99376,7 @@
         },
         "Cascadia Empowered": {
             "name": "Cascadia Empowered",
+            "implemented": false,
             "max_rank": 5,
             "compatibility": {
                 "types": [
@@ -99634,6 +99639,7 @@
         },
         "Longbow Sharpshot": {
             "name": "Longbow Sharpshot",
+            "implemented": false,
             "max_rank": 5,
             "compatibility": {
                 "types": [
@@ -99661,6 +99667,7 @@
         },
         "Melee Afflictions": {
             "name": "Melee Afflictions",
+            "implemented": false,
             "max_rank": 5,
             "compatibility": {
                 "types": [
@@ -100111,6 +100118,7 @@
         },
         "Primary Debilitate": {
             "name": "Primary Debilitate",
+            "implemented": false,
             "max_rank": 5,
             "compatibility": {
                 "types": [
@@ -100507,6 +100515,7 @@
         },
         "Secondary Fortifier": {
             "name": "Secondary Fortifier",
+            "implemented": false,
             "max_rank": 5,
             "compatibility": {
                 "types": [

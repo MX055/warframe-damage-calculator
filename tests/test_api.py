@@ -1,7 +1,7 @@
 import unittest
 import warnings
 
-from warframe_damage_calculator import Attack, AttackStats, Build, Compatibility, Dist, Effect, Enemy, EnemyStats, Melee, Primary, Upgrade, UpgradeStats, arsenal
+from warframe_damage_calculator import Attack, AttackStats, Build, BuildCompatibilityWarning, Compatibility, Dist, Effect, Enemy, EnemyStats, Melee, Primary, UnimplementedUpgradeWarning, Upgrade, UpgradeStats, arsenal
 
 
 class ApiTests(unittest.TestCase):
@@ -38,6 +38,27 @@ class ApiTests(unittest.TestCase):
         self.assertTrue(caught)
         self.assertGreater(weapon.results.main.effective.damage.total, baseline)
 
+    def test_compatibility_fields_do_not_match_other_weapon_fields(self):
+        upgrade = Upgrade(name="Name only", compatibility=Compatibility(names=["pistol"]))
+        with self.assertWarns(BuildCompatibilityWarning):
+            arsenal.weapon.get("Lato").configure(upgrade)
+
+    def test_unimplemented_upgrades_warn_once_and_do_not_apply(self):
+        weapon = arsenal.weapon.get("Lato")
+        baseline = weapon.results.main.final.total_dps
+        unsupported = arsenal.upgrade.get("Cascadia Empowered")
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            weapon.configure(unsupported)
+            weapon.results.resolve()
+            weapon.results.resolve()
+        unimplemented = [warning for warning in caught if warning.category is UnimplementedUpgradeWarning]
+        self.assertEqual(len(unimplemented), 1)
+        self.assertFalse(unsupported.implemented)
+        self.assertEqual(weapon.build[0].name, unsupported.name)
+        self.assertFalse(weapon.build[0].implemented)
+        self.assertEqual(weapon.results.main.final.total_dps, baseline)
+
     def test_evolution_manual_runtime_defaults_to_each_effect_cap(self):
         weapon = arsenal.weapon.get("Gorgon")
         self.assertEqual(weapon.runtime.reload_from_empty, 3)
@@ -55,12 +76,14 @@ class ApiTests(unittest.TestCase):
         self.assertAlmostEqual(result.average.procs_per_shot, 3.2075)
 
     def test_formatters_cover_ranged_melee_and_contributions(self):
-        ranged = arsenal.weapon.get("Braton").configure(Build(arsenal.upgrade.get("Serration")))
+        ranged = arsenal.weapon.get("Braton").configure(Build(arsenal.upgrade.get("Serration")), Enemy(name="Test Target"))
         melee = arsenal.weapon.get("Bo Prime")
         self.assertIn("TOTAL DPS", ranged.format.summary())
         self.assertIn("ATTACK SPEED", melee.format.summary())
         self.assertIn("EXPECTED PROCS PER HIT", melee.format.summary())
-        self.assertIn("Serration", ranged.format.upgrades())
+        upgrades = ranged.format.upgrades()
+        self.assertIn("Serration", upgrades)
+        self.assertEqual(upgrades.splitlines()[0], "Braton - Normal Attack vs Test Target")
 
     def test_melee_slams_use_aoe_mass_and_show_density(self):
         for category in ("slam", "heavy_slam"):
@@ -85,7 +108,7 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(lines[-1], lines[1])
         self.assertIn("FIRE RATE", summary)
         self.assertIn("rps", summary)
-        self.assertIn("RELOAD SPEED", summary)
+        self.assertIn("RELOAD TIME", summary)
         self.assertIn("MAGAZINE CAPACITY", summary)
         self.assertIn("EXPECTED PROCS PER SHOT", summary)
         self.assertLess(summary.index("HIT MULTIPLIER"), summary.index("AVERAGE FALLOFF MULTIPLIER"))

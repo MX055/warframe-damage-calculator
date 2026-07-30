@@ -89,11 +89,13 @@ Runtime state retains the value supplied by the caller. Each effect applies its 
 
 Compatibility metadata only produces warnings. Automatic `when` conditions define where an effect actually applies.
 
+Upgrades whose mechanics are not modeled remain available for inspection with `upgrade.implemented == False`. Configuring one emits `UnimplementedUpgradeWarning`, preserves it in the build, and excludes its effects from calculated results.
+
 ## Calculation coverage
 
 The engine includes ranged and melee rates, charge/burst/reload/battery cycles, Incarnon charge pools and form-conditioned evolutions, elemental ordering, additive and multiplicative Condition Overload, status uptime and stack windows, forced procs, damage-over-time effects, first/last magazine mixtures, nested attack trees, stance and combo calculations, falloff-averaged damage, AoE and punch-through damage density, special arcane/mod behaviors, enemy scaling and defenses, hit zones, and removal/Shapley contribution analysis.
 
-`average` and `final` include the average falloff multiplier in ordinary per-hit and attack-tree damage. AoE and punch-through mass calculations live in the separate `density` result pool.
+`average` and `final` include the average falloff multiplier in ordinary per-hit and attack-tree damage. `effective.instantaneous_fire_rate` is the mechanical firing rate, `effective.attack_event_rate` and `average.sustained_fire_rate` account for the complete firing cycle, and `effective.reload_time` is a duration in seconds. AoE and punch-through mass calculations live in the separate `density` result pool.
 
 Attacks with falloff expose `average.falloff_multiplier`. AoE attacks also expose a falloff-weighted spherical `density.damage_mass` in cubic meters; attacks with punch through and a finite range expose a linear mass in meters. `density.damage_density` and `density.damage_density_per_second` multiply pre-falloff damage by that mass, representing expected aggregate damage at a uniform target density of one target per cubic meter or meter respectively. They do not multiply the already falloff-averaged `final` pool, so falloff is counted only once.
 
@@ -104,6 +106,7 @@ Ranged attacks may provide `max_range`; falloff end is used when no distinct max
 Run from this directory:
 
 ```bash
+python -m pip install -e .
 python -P -B -m unittest discover -s tests -v
 ```
 

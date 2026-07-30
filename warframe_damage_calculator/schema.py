@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from math import isfinite
 from typing import Any
 
 from .domain.effects import Effect
@@ -19,7 +20,10 @@ def _effects(stats: Any, path: str) -> None:
 
 def validate_database(database: dict[str, Any]) -> None:
     allowed_root = {"schema_version", "weapons", "upgrades", "enemies", "riven_stats"}
-    if set(database) != allowed_root: raise ValueError(f"database: invalid fields {sorted(set(database) - allowed_root)}")
+    missing_root = allowed_root - set(database)
+    unexpected_root = set(database) - allowed_root
+    if missing_root: raise ValueError(f"database: missing fields {sorted(missing_root)}")
+    if unexpected_root: raise ValueError(f"database: unexpected fields {sorted(unexpected_root)}")
     if database.get("schema_version") != 9: raise ValueError("schema version 9 is required")
     for section in ("weapons", "upgrades", "enemies", "riven_stats"):
         if not isinstance(database.get(section), dict): raise ValueError(f"{section}: expected an object")
@@ -33,9 +37,34 @@ def validate_database(database: dict[str, Any]) -> None:
         for tier, perks in weapon.get("evolutions", {}).items():
             for perk, record in perks.items(): _effects(record.get("stats", {}), f"weapons.{name}.evolutions.{tier}.{perk}")
     for name, upgrade in database["upgrades"].items():
-        if set(upgrade) - {"name", "kind", "slot", "max_rank", "compatibility", "conflicts", "stats", "combos"}: raise ValueError(f"upgrades.{name}: invalid fields {sorted(set(upgrade) - {'name', 'kind', 'slot', 'max_rank', 'compatibility', 'conflicts', 'stats', 'combos'})}")
+        allowed_upgrade = {"name", "kind", "slot", "max_rank", "implemented", "compatibility", "conflicts", "stats", "combos"}
+        if set(upgrade) - allowed_upgrade: raise ValueError(f"upgrades.{name}: invalid fields {sorted(set(upgrade) - allowed_upgrade)}")
         if upgrade.get("name") != name: raise ValueError(f"upgrades.{name}: invalid name")
+        if "implemented" in upgrade and not isinstance(upgrade["implemented"], bool): raise ValueError(f"upgrades.{name}.implemented: expected a boolean")
         if upgrade.get("kind") not in {"mod", "arcane", "buff"}: raise ValueError(f"upgrades.{name}: invalid kind")
         if upgrade.get("slot") not in {"normal", "exilus", "stance", "arcane"}: raise ValueError(f"upgrades.{name}: invalid slot")
         if set(upgrade.get("compatibility", {})) - {"types", "subtypes", "names", "categories", "triggers", "aoe"}: raise ValueError(f"upgrades.{name}.compatibility: invalid fields")
         _effects(upgrade.get("stats", {}), f"upgrades.{name}.stats")
+    allowed_enemy = {"name", "faction", "base_level", "stats", "bodyparts", "modifiers"}
+    allowed_enemy_stats = {"health", "shields", "armor", "overguard"}
+    allowed_bodypart = {"type", "multiplier"}
+    for name, enemy in database["enemies"].items():
+        path = f"enemies.{name}"
+        if not isinstance(enemy, dict): raise ValueError(f"{path}: expected an object")
+        if set(enemy) - allowed_enemy: raise ValueError(f"{path}: invalid fields {sorted(set(enemy) - allowed_enemy)}")
+        if not isinstance(enemy.get("name"), str) or not enemy["name"]: raise ValueError(f"{path}: invalid name")
+        stats = enemy.get("stats")
+        if not isinstance(stats, dict) or set(stats) != allowed_enemy_stats: raise ValueError(f"{path}.stats: expected {sorted(allowed_enemy_stats)}")
+        if not all(isinstance(value, (int, float)) and not isinstance(value, bool) and isfinite(value) and value >= 0 for value in stats.values()): raise ValueError(f"{path}.stats: values must be finite nonnegative numbers")
+        bodyparts = enemy.get("bodyparts")
+        if not isinstance(bodyparts, dict) or not bodyparts: raise ValueError(f"{path}.bodyparts: expected a nonempty object")
+        for bodypart_name, bodypart in bodyparts.items():
+            if not isinstance(bodypart, dict) or set(bodypart) != allowed_bodypart: raise ValueError(f"{path}.bodyparts.{bodypart_name}: invalid fields")
+            if bodypart.get("type") not in {"normal", "weakpoint", "resistant"}: raise ValueError(f"{path}.bodyparts.{bodypart_name}.type: invalid type")
+            if not isinstance(bodypart.get("multiplier"), (int, float)) or isinstance(bodypart.get("multiplier"), bool) or not isfinite(bodypart["multiplier"]) or bodypart["multiplier"] < 0: raise ValueError(f"{path}.bodyparts.{bodypart_name}.multiplier: expected a finite nonnegative number")
+        modifiers = enemy.get("modifiers")
+        if not isinstance(modifiers, dict) or not all(isinstance(value, (int, float)) and not isinstance(value, bool) and isfinite(value) and value >= 0 for value in modifiers.values()): raise ValueError(f"{path}.modifiers: expected nonnegative numeric values")
+    for category, stats in database["riven_stats"].items():
+        path = f"riven_stats.{category}"
+        if not isinstance(stats, dict) or not stats: raise ValueError(f"{path}: expected a nonempty object")
+        if not all(isinstance(stat, str) and isinstance(value, (int, float)) and not isinstance(value, bool) and isfinite(value) and value >= 0 for stat, value in stats.items()): raise ValueError(f"{path}: expected finite nonnegative numeric stats")

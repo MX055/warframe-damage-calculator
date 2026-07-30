@@ -3,11 +3,11 @@ from __future__ import annotations
 import warnings
 from copy import deepcopy
 from dataclasses import dataclass, field
-from typing import Any, ClassVar, Mapping, Self
+from typing import Any, ClassVar, Mapping, Protocol, Self
 
 from .damage import Dist
 from .enemies import Enemy
-from .results import WeaponResults
+from .results import AttackResult
 from .upgrades import Build, Runtime, Upgrade
 
 
@@ -85,10 +85,43 @@ class BuildCompatibilityWarning(UserWarning):
     pass
 
 
+class UnimplementedUpgradeWarning(UserWarning):
+    pass
+
+
+class ResultsService(Protocol):
+    main: AttackResult
+
+    def resolve(self) -> None: ...
+
+
+class FormatterService(Protocol):
+    def summary(self) -> str: ...
+    def upgrades(self) -> str: ...
+
+
+class ResultsFactory(Protocol):
+    def __call__(self, weapon: Weapon, *, resolve: bool = True) -> ResultsService: ...
+
+
+class FormatterFactory(Protocol):
+    def __call__(self, weapon: Weapon) -> FormatterService: ...
+
+
+_results_factory: ResultsFactory | None = None
+_formatter_factory: FormatterFactory | None = None
+
+
+def configure_weapon_services(results_factory: ResultsFactory, formatter_factory: FormatterFactory) -> None:
+    global _results_factory, _formatter_factory
+    _results_factory = results_factory
+    _formatter_factory = formatter_factory
+
+
 class Weapon:
     default_type: ClassVar[str] = "weapon"
 
-    def __init__(self, *, name: str, type: str | None = None, subtype: str | None = None, attacks: list[Attack], disposition: float = 0, reload_time: float = 0, magazine_size: float = 1, recharge_delay: float | None = None, recharge_rate: float | None = None, incarnon_charges: float | None = None, incarnon_recharge_count: float | None = None, evolutions: Mapping[str, Any] | None = None, traits: set[str] | None = None, combo: Mapping[str, Any] | None = None, runtime: Mapping[str, Any] | None = None) -> None:
+    def __init__(self, *, name: str, type: str | None = None, subtype: str | None = None, attacks: list[Attack], disposition: float = 0, reload_time: float = 0, magazine_size: float = 1, recharge_delay: float | None = None, recharge_rate: float | None = None, incarnon_charges: float | None = None, incarnon_recharge_count: float | None = None, evolutions: Mapping[str, Any] | None = None, traits: set[str] | None = None, combo: Mapping[str, Any] | None = None, runtime: Mapping[str, Any] | None = None, _resolve: bool = True) -> None:
         if not attacks: raise ValueError("weapon requires at least one attack")
         self.name = name
         self.type = type or self.default_type
@@ -122,9 +155,9 @@ class Weapon:
         self.runtime = Runtime({"attack", "evolutions", "combo", "stance_combo", "ability_strength", *conditions}, defaults)
         self.build = Build()
         self.target: Enemy | None = Enemy()
-        self.results = WeaponResults(self)
-        from ..formatting import WeaponFormatter
-        self.format = WeaponFormatter(self)
+        if _results_factory is None or _formatter_factory is None: raise RuntimeError("weapon services are not configured")
+        self.results = _results_factory(self, resolve=_resolve)
+        self.format = _formatter_factory(self)
 
     def set(self, **values: Any) -> Self:
         if "attack" in values and values["attack"] not in self.attacks: raise ValueError(f"unknown attack {values['attack']!r}")
@@ -151,10 +184,12 @@ class Weapon:
     def _warn_build(self) -> None:
         previous: list[Upgrade] = []
         for upgrade in self.build:
+            if not upgrade.implemented: warnings.warn(f"{upgrade.name} is not implemented and will not affect calculated results.", UnimplementedUpgradeWarning, stacklevel=3)
             compatibility = upgrade.compatibility
-            identity = {str(value).casefold() for value in compatibility.types + compatibility.subtypes + compatibility.names}
-            actual = {str(value).casefold() for value in (self.type, self.subtype, self.name) if value is not None}
-            if identity and not identity & actual: warnings.warn(f"{upgrade.name} is not compatible with {self.name}", BuildCompatibilityWarning, stacklevel=3)
+            matches_type = not compatibility.types or self.type.casefold() in {value.casefold() for value in compatibility.types}
+            matches_subtype = not compatibility.subtypes or self.subtype is not None and self.subtype.casefold() in {value.casefold() for value in compatibility.subtypes}
+            matches_name = not compatibility.names or self.name.casefold() in {value.casefold() for value in compatibility.names}
+            if not (matches_type and matches_subtype and matches_name): warnings.warn(f"{upgrade.name} is not compatible with {self.name}", BuildCompatibilityWarning, stacklevel=3)
             attacks = tuple(self.attacks.values())
             if compatibility.categories and not any(attack.category in compatibility.categories for attack in attacks): warnings.warn(f"{upgrade.name} has no compatible attack category on {self.name}", BuildCompatibilityWarning, stacklevel=3)
             if compatibility.triggers and not any(attack.trigger in compatibility.triggers for attack in attacks): warnings.warn(f"{upgrade.name} has no compatible trigger on {self.name}", BuildCompatibilityWarning, stacklevel=3)
@@ -163,11 +198,11 @@ class Weapon:
             if conflicts: warnings.warn(f"{upgrade.name} conflicts with {', '.join(sorted(conflicts))}", BuildCompatibilityWarning, stacklevel=3)
             previous.append(upgrade)
 
-    def copy(self) -> Self:
-        copied = type(self)(name=self.name, type=self.type, subtype=self.subtype, attacks=deepcopy(list(self.attacks.values())), disposition=self.disposition, reload_time=self.reload_time, magazine_size=self.magazine_size, recharge_delay=self.recharge_delay, recharge_rate=self.recharge_rate, incarnon_charges=self.incarnon_charges, incarnon_recharge_count=self.incarnon_recharge_count, evolutions=self.evolutions, traits=self.traits, combo=self.combo, runtime=self.runtime.as_dict())
+    def copy(self, *, resolve: bool = True) -> Self:
+        copied = type(self)(name=self.name, type=self.type, subtype=self.subtype, attacks=deepcopy(list(self.attacks.values())), disposition=self.disposition, reload_time=self.reload_time, magazine_size=self.magazine_size, recharge_delay=self.recharge_delay, recharge_rate=self.recharge_rate, incarnon_charges=self.incarnon_charges, incarnon_recharge_count=self.incarnon_recharge_count, evolutions=self.evolutions, traits=self.traits, combo=self.combo, runtime=self.runtime.as_dict(), _resolve=False)
         copied.build = self.build.copy()
         copied.target = self.target.copy() if self.target is not None else None
-        copied.results.resolve()
+        if resolve: copied.results.resolve()
         return copied
 
 

@@ -90,7 +90,7 @@ class StatusModel:
     def proc_rate(self, kind: str) -> float:
         return self.proc_count_per_attack(kind) * max(self.attacks_per_second, 0)
 
-    def expected_active(self, kind: str, *, duration: float | None = None) -> float:
+    def expected_active_stacks(self, kind: str, *, duration: float | None = None) -> float:
         lifetime = self.duration if duration is None else duration
         return self.proc_rate(kind) * max(lifetime, 0)
 
@@ -99,15 +99,14 @@ class StatusModel:
         window = self.duration if duration is None else duration
         return sustained_proc_chance(probability, self.attacks_per_second * max(window, 0))
 
-    def expected_unique(self, maximum: int | None = None) -> float:
+    def expected_active_types(self, maximum: int | None = None) -> float:
         kinds = (set(self.damage) | set(self.forced_procs) | set(self.extra_proc_counts)) & STATUS_TYPES
         if self.random_proc_probability > 0: kinds = kinds | RANDOM_STATUS_TYPES
-        expected = sum(min(self.expected_active(kind), 1) for kind in kinds)
+        expected = sum(min(self.expected_active_stacks(kind), 1) for kind in kinds)
         return min(expected, maximum) if maximum is not None else expected
 
     def expected_stacks(self, kind: str, maximum: int | None, duration: float | None = None) -> float:
-        window = self.duration if duration is None else max(duration, 0)
-        expected = self.proc_rate(kind) * window
+        expected = self.expected_active_stacks(kind, duration=duration)
         return min(expected, maximum) if maximum is not None else expected
 
     def non_damage_effects(self) -> dict[str, float]:

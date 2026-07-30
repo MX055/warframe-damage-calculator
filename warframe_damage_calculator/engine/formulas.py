@@ -79,7 +79,7 @@ def distribute_flat(damage: Dist, value: float) -> Dist:
 
 
 def refresh_metrics(metrics: object) -> None:
-    rate = float(getattr(metrics, "fire_rate"))
+    rate = float(getattr(metrics, "sustained_fire_rate"))
     for prefix in ("", "weakpoint_", "resistant_"):
         direct = getattr(metrics, f"flat_{prefix}dph")
         dot = getattr(metrics, f"flat_{prefix}dotph")

@@ -70,4 +70,18 @@ class Arsenal:
         with resource.open(encoding="utf-8") as stream: return cls(json.load(stream))
 
 
-arsenal = Arsenal.bundled()
+class _LazyArsenal:
+    __slots__ = ("_loaded",)
+
+    def __init__(self) -> None:
+        self._loaded: Arsenal | None = None
+
+    def _get(self) -> Arsenal:
+        if self._loaded is None: self._loaded = Arsenal.bundled()
+        return self._loaded
+
+    def __getattr__(self, name: str):
+        return getattr(self._get(), name)
+
+
+arsenal = _LazyArsenal()

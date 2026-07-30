@@ -56,6 +56,26 @@ class DatabaseTests(unittest.TestCase):
         self.assertNotIn("crit_chance", vigilante)
         self.assertEqual(vigilante["crit_tier"], [{"properties": {"value": 1, "mode": "flat"}, "manual": {}, "automatic": {"on": "critical_hit", "chance": 0.05}}])
 
+    def test_unsupported_upgrade_set_is_explicit(self):
+        expected = {
+            "Burning Hate",
+            "Cascadia Empowered",
+            "Cull the Weak",
+            "Deadly Maneuvers",
+            "Lasting Purity",
+            "Longbow Sharpshot",
+            "Melee Afflictions",
+            "Primary Debilitate",
+            "Secondary Fortifier",
+        }
+        actual = {name for name, record in arsenal.database["upgrades"].items() if not record.get("implemented", True)}
+        self.assertEqual(actual, expected)
+        for name in expected:
+            upgrade = arsenal.upgrade.get(name)
+            self.assertFalse(upgrade.implemented)
+            self.assertEqual(upgrade.copy().implemented, upgrade.implemented)
+            self.assertTrue(upgrade.stats)
+
     def test_evolution_form_applicability_uses_when(self):
         form_conditions = []
         for weapon in arsenal.database["weapons"].values():
@@ -114,6 +134,27 @@ class DatabaseTests(unittest.TestCase):
         database["upgrades"]["Serration"]["conflict_groups"] = []
         with self.assertRaisesRegex(ValueError, "invalid fields"):
             validate_database(database)
+
+    def test_schema_distinguishes_missing_and_unexpected_root_fields(self):
+        missing = deepcopy(arsenal.database)
+        del missing["enemies"]
+        with self.assertRaisesRegex(ValueError, "missing fields.*enemies"):
+            validate_database(missing)
+        unexpected = deepcopy(arsenal.database)
+        unexpected["legacy"] = {}
+        with self.assertRaisesRegex(ValueError, "unexpected fields.*legacy"):
+            validate_database(unexpected)
+
+    def test_schema_validates_enemies_and_riven_stats(self):
+        enemy = deepcopy(arsenal.database)
+        enemy["enemies"]["Heavy Gunner"]["stats"]["armor"] = "high"
+        with self.assertRaisesRegex(ValueError, "enemies.Heavy Gunner.stats"):
+            validate_database(enemy)
+        riven = deepcopy(arsenal.database)
+        category = next(iter(riven["riven_stats"]))
+        riven["riven_stats"][category]["damage_bonus"] = None
+        with self.assertRaisesRegex(ValueError, f"riven_stats.{category}"):
+            validate_database(riven)
 
 
 if __name__ == "__main__": unittest.main()

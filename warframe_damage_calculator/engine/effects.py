@@ -53,7 +53,7 @@ def evaluate(effect: ResolvedEffect, *, weapon: Any, attack: Any, stats: Stats, 
     source = _value(behavior, "with")
     maximum = _value(behavior, "stacks")
     stack_limit = None if maximum in (None, "inf") else int(maximum)
-    if source == "unique_status_count": multiplier *= status.expected_unique(stack_limit) * float(attack.stats.co_factor)
+    if source == "unique_status_count": multiplier *= status.expected_active_types(stack_limit) * float(attack.stats.co_factor)
     elif source == "weapon_combo": multiplier *= min(float(weapon.runtime.combo), stack_limit) if stack_limit is not None else float(weapon.runtime.combo)
     elif source == "effective_multishot" and effect.family != "multishot_ammo": multiplier *= float(stats.multishot)
     elif source == "puncture_status_chance" and effect.stat != "crit_damage":
@@ -86,7 +86,7 @@ def evaluate(effect: ResolvedEffect, *, weapon: Any, attack: Any, stats: Stats, 
     if per is not None and effect.stat not in {"crit_damage", "crit_reset_charges"}: multiplier *= float(per)
     value = effect.value * multiplier if isinstance(effect.value, (int, float)) and not isinstance(effect.value, bool) else effect.value
     if effect.stat == "condition_overload":
-        value = float(value) * status.expected_unique() * float(attack.stats.co_factor)
+        value = float(value) * status.expected_active_types() * float(attack.stats.co_factor)
         return replace(effect, stat="damage_bonus", value=value, family="unique_status")
     if effect.stat == "area_of_effect": return replace(effect, stat="explosion_radius", value=value)
     return replace(effect, value=value)

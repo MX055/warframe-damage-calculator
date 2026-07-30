@@ -152,6 +152,7 @@ class WeaponFormatter:
         removal = self.weapon.results.removal_contributions()
         rows = [(name, f"{share:.2%}", f"{removal[name]:.2f}") for name, share in shapley.items()]
         title = f"{self.weapon.name} - {self.weapon.results.main.name.replace('_', ' ').title()}"
+        if self.weapon.target is not None: title += f" vs {self.weapon.target.name}"
         return self._table(("upgrade", "shapley", "removal"), rows, title=title, border="=")
 
     def summary(self) -> str:
@@ -186,8 +187,8 @@ class WeaponFormatter:
         rows: list[tuple[str, ...]] = []
         self._falloff_row(rows, selected)
         self._append(rows, "RANGE", self._fmt_meters(attack.stats.range), self._fmt_meters(effective.range), self._fmt_meters(effective.range), when=float(effective.range) > 0)
-        self._append(rows, "FIRE RATE", self._fmt_rate(base.fire_rate), self._fmt_rate(effective.fire_rate), self._fmt_rate(final.fire_rate))
-        self._append(rows, "RELOAD SPEED", self._fmt_seconds(self.weapon.reload_time), self._fmt_seconds(effective.reload_speed), self._fmt_seconds(effective.reload_speed))
+        self._append(rows, "FIRE RATE", self._fmt_rate(base.fire_rate), self._fmt_rate(effective.instantaneous_fire_rate), self._fmt_rate(final.sustained_fire_rate))
+        self._append(rows, "RELOAD TIME", self._fmt_seconds(self.weapon.reload_time), self._fmt_seconds(effective.reload_time), self._fmt_seconds(effective.reload_time))
         self._append(rows, "RECHARGE RATE", self._fmt_rate(self.weapon.recharge_rate), self._fmt_rate(self.weapon.recharge_rate), self._fmt_rate(self.weapon.recharge_rate), when=self.weapon.recharge_rate is not None and self.weapon.recharge_rate > 0)
         self._append(rows, "MAGAZINE CAPACITY", self._fmt_rounds(magazine_base), self._fmt_rounds(effective.magazine_capacity), self._fmt_rounds(effective.magazine_capacity))
         self._append(rows, "AMMO MAXIMUM", self._fmt_rounds(getattr(attack.stats, "ammo_maximum", 0)), self._fmt_rounds(effective.ammo_maximum), self._fmt_rounds(effective.ammo_maximum), when=float(effective.ammo_maximum) > 0)
