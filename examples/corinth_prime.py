@@ -11,7 +11,7 @@ loadout = Loadout(
     ]
 )
 calculator = Calculator(weapon, target, loadout)
-result = calculator.calculate()
+result = calculator.resolve()
 formatter = ResultFormatter(result)
 print(formatter.summary())
 print(formatter.contributions())

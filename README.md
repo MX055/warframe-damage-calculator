@@ -22,14 +22,14 @@ loadout = Loadout(
 )
 
 calculator = Calculator(weapon, target, loadout)
-result = calculator.calculate(attack="incarnon_form", bodypart="head")
+result = calculator.resolve(attack="incarnon_form", body_part="head")
 print(result.aggregate.average.total_dps)
 ```
 
 `Weapon` and `Enemy` are definitions. `Loadout` owns selected mods, arcanes, and global evolution perks. `Calculator` owns one weapon-target-loadout combination, while attack selection, body-part selection, and temporary state belong to each calculation:
 
 ```python
-result = calculator.calculate(attack="heavy_attack", bodypart="head", state={"combo": 12})
+result = calculator.resolve(attack="heavy_attack", body_part="head", state={"combo": 12})
 ```
 
 ## Global perks
@@ -106,21 +106,22 @@ A calculator keeps one loadout fixed while allowing repeated attack and body-par
 
 ```python
 calculator = Calculator(weapon, target, loadout)
-body = calculator.calculate(attack="incarnon_form", bodypart="body")
-head = calculator.calculate(attack="incarnon_form", bodypart="head")
+body = calculator.resolve(attack="incarnon_form", body_part="body")
+head = calculator.resolve(attack="incarnon_form", body_part="head")
 ```
 
 Each result records its selected attack and body part. Loadout optimizers can reuse the lower-level calculation engine without changing this public API.
 
 ## Contributions
 
-Both contribution methods evaluate immutable calculator inputs and include selected upgrades and evolution perks:
+Contribution analysis is part of the calculator workflow and includes selected upgrades, evolution perks, and progenitor bonuses:
 
 ```python
-from warframe_damage_calculator import removal_contributions, shapley_contributions
+calculator = Calculator(weapon, target, loadout)
+contributions = calculator.contributions(attack="incarnon_form", body_part="weakpoint")
 
-removal = removal_contributions(calculator, loadout, attack="incarnon_form", bodypart="weakpoint")
-shapley = shapley_contributions(calculator, loadout, attack="incarnon_form", bodypart="weakpoint")
+removal = contributions.removal
+shapley = contributions.shapley
 ```
 
 A metric name selects the chosen aggregate-average body part. `bodypart` accepts `"normal"`, `"weakpoint"`, or `"resistant"` and defaults to `"normal"`. A dotted path or callable may select another result value.

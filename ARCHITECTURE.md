@@ -7,7 +7,6 @@ domain
   ↑
 engine
   ↑
-analysis
 ```
 
 The domain layer contains concrete definitions and result value objects. The engine imports those concrete types directly. No protocol mirrors `Weapon`, `Attack`, `Loadout`, runtime state, status records, or result records.
@@ -110,7 +109,7 @@ Ordinary damage is independent of assumed density, spacing, equivalent extent, a
 
 ## Analysis and formatting
 
-Contribution analysis receives `Calculator` and `Loadout` and evaluates new immutable results. It includes both upgrades and selected perks. Formatting consumes definition and result objects and never belongs to `Weapon`.
+Contribution resolution is part of the engine and evaluates configured loadouts through `Calculator`. It includes upgrades, selected perks, and progenitor bonuses. Formatting consumes definition and result objects and never belongs to `Weapon`.
 
 ## Optimizer boundary
 

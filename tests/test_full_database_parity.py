@@ -21,7 +21,7 @@ class FullDatabaseParityTests(unittest.TestCase):
         fields = ("flat_dph", "flat_dotph", "total_dph", "flat_dps", "flat_dotps", "total_dps")
         for weapon_name, reference in expected.items():
             with self.subTest(weapon=weapon_name, reference=REFERENCE_COMMIT):
-                calculation = Calculator(get_weapon(weapon_name)).calculate()
+                calculation = Calculator(get_weapon(weapon_name)).resolve()
                 result = calculation.attacks[calculation.selected_attack]
                 self.assertEqual(calculation.selected_attack, reference["attack"])
                 for pool_name in ("average", "final"):

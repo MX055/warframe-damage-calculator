@@ -45,11 +45,11 @@ class ApiTests(unittest.TestCase):
     def test_calculator_uses_resolved_global_template(self):
         perk = Perk("Flat Critical", stats=UpgradeStats(crit_chance=Effect(PLACEHOLDER, mode="flat")))
         weapon = Primary(name="Template", attacks=[Attack("shot", stats=AttackStats(damage=Dist(impact=10), crit_chance=0.1))], reload_time=1, perks=[PerkValues(perk, 2, 1, {"crit_chance": (0.4,)})])
-        result = Calculator(weapon, loadout=Loadout(evolutions=[perk])).calculate()
+        result = Calculator(weapon, loadout=Loadout(evolutions=[perk])).resolve()
         self.assertAlmostEqual(result.attacks["shot"].effective.crit_chance, 0.5)
 
     def test_result_navigation_distinguishes_aggregate_and_components(self):
-        result = Calculator(arsenal.primary.get("Corinth Prime")).calculate(attack="air_burst_projectile")
+        result = Calculator(arsenal.primary.get("Corinth Prime")).resolve(attack="air_burst_projectile")
         root = result.attacks[result.selected_attack]
         self.assertFalse(hasattr(result.aggregate, "name"))
         self.assertFalse(hasattr(root, "name"))
@@ -66,37 +66,37 @@ class ApiTests(unittest.TestCase):
         weapon = arsenal.primary.get("Phenmor")
         loadout = Loadout(evolutions=[arsenal.perk.get("Devouring Attrition")])
         calculator = Calculator(weapon, loadout=loadout)
-        ordinary = calculator.calculate(attack="incarnon_form")
-        repeated = calculator.calculate(attack="incarnon_form")
+        ordinary = calculator.resolve(attack="incarnon_form")
+        repeated = calculator.resolve(attack="incarnon_form")
         self.assertEqual(repeated.aggregate.average, ordinary.aggregate.average)
         self.assertEqual(repeated.attacks.keys(), ordinary.attacks.keys())
 
     def test_calculation_does_not_mutate_weapon_definition(self):
         weapon = arsenal.melee.get("Bo Prime")
         before = (repr(weapon.attacks), repr(weapon.perks), dict(weapon.calculation_defaults))
-        Calculator(weapon).calculate(state={"combo": 5})
+        Calculator(weapon).resolve(state={"combo": 5})
         self.assertEqual((repr(weapon.attacks), repr(weapon.perks), dict(weapon.calculation_defaults)), before)
 
 
     def test_implementation_status_and_progenitor_loadout(self):
         self.assertEqual(arsenal.primary.get("Kuva Chakkhurr").implementation_status, ImplementationStatus("partial", ("multiplicative_weakpoint_crit_chance",)))
         loadout = Loadout(progenitor=Progenitor("heat", 0.6))
-        result = Calculator(arsenal.primary.get("Kuva Chakkhurr"), loadout=loadout).calculate()
+        result = Calculator(arsenal.primary.get("Kuva Chakkhurr"), loadout=loadout).resolve()
         self.assertEqual(result.loadout.progenitor, loadout.progenitor)
         attack = result.attacks[result.selected_attack]
-        without_progenitor = Calculator(arsenal.primary.get("Kuva Chakkhurr")).calculate().attacks["normal_attack"]
+        without_progenitor = Calculator(arsenal.primary.get("Kuva Chakkhurr")).resolve().attacks["normal_attack"]
         self.assertEqual(attack.base.damage, without_progenitor.base.damage)
         self.assertGreater(attack.modded.damage.total, without_progenitor.modded.damage.total)
 
     def test_progenitor_is_excluded_from_base_and_included_in_modded_damage(self):
         weapon = arsenal.melee.get("Tenet Exec")
-        result = Calculator(weapon, loadout=Loadout(progenitor=Progenitor("electricity", 0.6))).calculate(attack="heavy_slam_attack")
+        result = Calculator(weapon, loadout=Loadout(progenitor=Progenitor("electricity", 0.6))).resolve(attack="heavy_slam_attack")
         attack = result.attacks["heavy_slam_attack"]
         self.assertEqual(attack.base.damage, Dist(impact=570))
         self.assertEqual(attack.base.status_chance, 0.22)
         self.assertEqual(attack.modded.damage, Dist(impact=570, electricity=342))
         self.assertEqual(attack.effective.damage, attack.modded.damage)
-        modded = Calculator(weapon, loadout=Loadout(mods=[arsenal.mod.get("Fever Strike")], progenitor=Progenitor("electricity", 0.6))).calculate(attack="heavy_slam_attack").attacks["heavy_slam_attack"]
+        modded = Calculator(weapon, loadout=Loadout(mods=[arsenal.mod.get("Fever Strike")], progenitor=Progenitor("electricity", 0.6))).resolve(attack="heavy_slam_attack").attacks["heavy_slam_attack"]
         self.assertEqual(modded.base.damage, Dist(impact=570))
         self.assertEqual(modded.modded.damage, Dist(impact=570, corrosive=855))
 
@@ -105,7 +105,7 @@ class ApiTests(unittest.TestCase):
         weapon = arsenal.melee.get("Tenet Exec")
         target = arsenal.enemy.get("Heavy Gunner").set(level=100, steel_path=True)
         loadout = Loadout(mods=[arsenal.mod.get("Rending Crane"), arsenal.mod.get("Galvanized Steel"), arsenal.mod.get("Primed Pressure Point")], progenitor=Progenitor("electricity", 0.6))
-        attack = Calculator(weapon, target, loadout).calculate(attack="heavy_slam_attack", state={"stance_combo": "heavy"}).attacks["heavy_slam_attack"]
+        attack = Calculator(weapon, target, loadout).resolve(attack="heavy_slam_attack", state={"stance_combo": "heavy"}).attacks["heavy_slam_attack"]
         self.assertEqual(attack.base.damage, Dist(impact=570))
         self.assertEqual(attack.modded.damage, Dist(impact=1510.5, electricity=906.3))
         self.assertEqual(attack.effective.damage, Dist(impact=6042, electricity=3625.2))
@@ -117,7 +117,7 @@ class ApiTests(unittest.TestCase):
         upgrade = arsenal.mod.get("Galvanized Hell")
         perk = arsenal.perk.get("Elemental Excess")
         loadout = Loadout(mods=[upgrade])
-        result = Calculator(weapon, loadout=loadout).calculate()
+        result = Calculator(weapon, loadout=loadout).resolve()
         formatter = ResultFormatter(result)
         self.assertIn("Corinth Prime", format_weapon(weapon))
         self.assertIn("Galvanized Hell", format_upgrade(upgrade))
@@ -130,7 +130,7 @@ class ApiTests(unittest.TestCase):
         self.assertIn("├", summary)
         self.assertIn("┬", summary.splitlines()[2])
         self.assertIn("┼", summary)
-        fire_rate_result = Calculator(weapon, loadout=Loadout(mods=[arsenal.mod.get("Critical Deceleration")])).calculate()
+        fire_rate_result = Calculator(weapon, loadout=Loadout(mods=[arsenal.mod.get("Critical Deceleration")])).resolve()
         fire_rate_attack = fire_rate_result.attacks[fire_rate_result.selected_attack]
         self.assertAlmostEqual(fire_rate_attack.modded.fire_rate, fire_rate_attack.effective.fire_rate)
         fire_rate_summary = ResultFormatter(fire_rate_result).summary()
@@ -143,16 +143,16 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(fire_rate_attack.average.multishot, fire_rate_attack.effective.multishot)
         self.assertEqual(fire_rate_attack.average.fire_rate, fire_rate_attack.effective.fire_rate)
         self.assertIn(f"{fire_rate_attack.average.crit_damage:.2f}×", fire_rate_summary.split("Critical Damage", 1)[1].splitlines()[0])
-        spatial_summary = ResultFormatter(Calculator(weapon).calculate(attack="air_burst_explosion")).summary()
+        spatial_summary = ResultFormatter(Calculator(weapon).resolve(attack="air_burst_explosion")).summary()
         self.assertIn("Damage Mass", spatial_summary)
         self.assertIn("m³", spatial_summary.split("Damage Mass", 1)[1].splitlines()[0])
         self.assertNotIn("Damage Mass (m³)", spatial_summary)
-        targeted = ResultFormatter(Calculator(weapon, arsenal.enemy.get("Heavy Gunner"), loadout).calculate())
+        targeted = ResultFormatter(Calculator(weapon, arsenal.enemy.get("Heavy Gunner"), loadout).resolve())
         self.assertIn("Total DPS Contributions: Corinth Prime Buckshot vs Heavy Gunner Body", targeted.contributions())
-        self.assertIn("Total DPS Contributions: Corinth Prime Buckshot vs Heavy Gunner Head", targeted.contributions(bodypart="head"))
+        self.assertIn("Total DPS Contributions: Corinth Prime Buckshot vs Heavy Gunner Head", targeted.contributions(body_part="head"))
         resistant_target = Enemy(name="Heavy Gunner", bodyparts={"armor": BodyPart("resistant", 0.5)})
-        resistant = ResultFormatter(Calculator(weapon, resistant_target, loadout).calculate())
-        self.assertIn("Total DPS Contributions: Corinth Prime Buckshot vs Heavy Gunner Armor", resistant.contributions(bodypart="armor"))
+        resistant = ResultFormatter(Calculator(weapon, resistant_target, loadout).resolve())
+        self.assertIn("Total DPS Contributions: Corinth Prime Buckshot vs Heavy Gunner Armor", resistant.contributions(body_part="armor"))
         self.assertEqual(ResultFormatter._metric_name("dot_dps"), "DoT DPS")
         contribution_table = targeted.contributions()
         self.assertNotIn("\x1b[", contribution_table)
@@ -162,13 +162,13 @@ class ApiTests(unittest.TestCase):
         self.assertIn("··········│", contribution_table)
         self.assertIn("Contribution Rank", contribution_table)
         self.assertIn("Regular Mod", contribution_table)
-        self.assertIn("Regular Arcane", ResultFormatter(Calculator(arsenal.primary.get("Phenmor"), arsenal.enemy.get("Heavy Gunner"), Loadout(arcanes=[arsenal.arcane.get("Primary Merciless")])).calculate()).contributions())
+        self.assertIn("Regular Arcane", ResultFormatter(Calculator(arsenal.primary.get("Phenmor"), arsenal.enemy.get("Heavy Gunner"), Loadout(arcanes=[arsenal.arcane.get("Primary Merciless")])).resolve()).contributions())
         self.assertIn("DPH", format_damage_result(result.aggregate.average))
         self.assertIn("Expected procs", format_status(result.aggregate.status))
-        aoe = Calculator(weapon).calculate(attack="air_burst_explosion").attacks["air_burst_explosion"].spatial
+        aoe = Calculator(weapon).resolve(attack="air_burst_explosion").attacks["air_burst_explosion"].spatial
         self.assertIsNotNone(aoe)
         self.assertIn("Damage mass", format_spatial(aoe))
-        melee_result = Calculator(arsenal.melee.get("Tenet Exec")).calculate()
+        melee_result = Calculator(arsenal.melee.get("Tenet Exec")).resolve()
         melee_summary = ResultFormatter(melee_result).summary()
         self.assertIn("Tenet Exec", melee_summary)
         self.assertIn("Attack Speed", melee_summary)
@@ -185,15 +185,14 @@ class ApiTests(unittest.TestCase):
         self.assertIn("×", melee_summary.split("Expected Procs", 1)[1].splitlines()[0])
 
     def test_contributions_include_upgrades_and_evolutions(self):
-        from warframe_damage_calculator import removal_contributions, shapley_contributions
-
         weapon = arsenal.primary.get("Phenmor")
         loadout = Loadout(mods=[arsenal.mod.get("Serration")], evolutions=[arsenal.perk.get("Devouring Attrition")])
-        calculator = Calculator(weapon)
-        removal = removal_contributions(calculator, loadout, attack="incarnon_form")
-        shapley = shapley_contributions(calculator, loadout, attack="incarnon_form")
-        weakpoint_removal = removal_contributions(Calculator(weapon, arsenal.enemy.get("Heavy Gunner")), loadout, attack="incarnon_form", bodypart="head")
-        weakpoint_shapley = shapley_contributions(Calculator(weapon, arsenal.enemy.get("Heavy Gunner")), loadout, attack="incarnon_form", bodypart="head")
+        contributions = Calculator(weapon, loadout=loadout).contributions(attack="incarnon_form")
+        removal = contributions.removal
+        shapley = contributions.shapley
+        weakpoint_contributions = Calculator(weapon, arsenal.enemy.get("Heavy Gunner"), loadout).contributions(attack="incarnon_form", body_part="head")
+        weakpoint_removal = weakpoint_contributions.removal
+        weakpoint_shapley = weakpoint_contributions.shapley
         self.assertEqual(set(removal), {"Serration", "Devouring Attrition"})
         self.assertEqual(set(shapley), set(removal))
         self.assertAlmostEqual(sum(shapley.values()), 1)
@@ -204,13 +203,14 @@ class ApiTests(unittest.TestCase):
         self.assertAlmostEqual(sum(weakpoint_shapley.values()), 1)
 
         progenitor_loadout = Loadout(mods=[arsenal.mod.get("Primed Pressure Point")], progenitor=Progenitor("electricity", 0.6))
-        progenitor_calculator = Calculator(arsenal.melee.get("Tenet Exec"))
-        progenitor_removal = removal_contributions(progenitor_calculator, progenitor_loadout, attack="heavy_slam_attack", state={"stance_combo": "heavy"})
-        progenitor_shapley = shapley_contributions(progenitor_calculator, progenitor_loadout, attack="heavy_slam_attack", state={"stance_combo": "heavy"})
+        progenitor_calculator = Calculator(arsenal.melee.get("Tenet Exec"), loadout=progenitor_loadout)
+        progenitor_contributions = progenitor_calculator.contributions(attack="heavy_slam_attack", state={"stance_combo": "heavy"})
+        progenitor_removal = progenitor_contributions.removal
+        progenitor_shapley = progenitor_contributions.shapley
         progenitor_name = "Electricity Progenitor (60%)"
         self.assertIn(progenitor_name, progenitor_removal)
         self.assertIn(progenitor_name, progenitor_shapley)
-        progenitor_table = ResultFormatter(Calculator(progenitor_calculator.weapon, loadout=progenitor_loadout).calculate(attack="heavy_slam_attack", state={"stance_combo": "heavy"})).contributions()
+        progenitor_table = ResultFormatter(Calculator(progenitor_calculator.weapon, loadout=progenitor_loadout).resolve(attack="heavy_slam_attack", state={"stance_combo": "heavy"})).contributions()
         self.assertIn("Progenitor", progenitor_table)
         self.assertIn(progenitor_name, progenitor_table)
 

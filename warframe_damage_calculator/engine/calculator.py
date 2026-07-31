@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import warnings
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 
+from .contributions import calculate_contributions
 from ..domain.enemies import Enemy
 from ..domain.loadouts import Loadout
 from ..domain.implementation import ImplementationWarning
 from ..domain.upgrades import Perk, ResolvedPerk
-from ..domain.results import AggregateResult, AverageResult, CalculatedAttack, CalculationResult, DamageMetrics, DamageResult, SpatialDamageMetrics, SpatialResult, StatusResult, _damage_metrics
+from ..domain.results import AggregateResult, AverageResult, CalculatedAttack, CalculationResult, ContributionResult, DamageMetrics, DamageResult, SpatialDamageMetrics, SpatialResult, StatusResult, _damage_metrics
 from ..domain.weapons import LoadoutCompatibilityWarning, PerkCompatibilityWarning, ProgenitorCompatibilityWarning, UnimplementedUpgradeWarning, Weapon
 from .context import CalculationContext
 from .weapon_calculator import calculate_weapon
@@ -103,22 +104,36 @@ class Calculator:
         self.target = target
         self.loadout = Loadout() if loadout is None else loadout.copy()
 
-    def calculate(self, *, attack: str | None = None, bodypart: str | None = None, state: Mapping[str, object] | None = None) -> CalculationResult:
+    def resolve(self, *, attack: str | None = None, body_part: str | None = None, state: Mapping[str, object] | None = None) -> CalculationResult:
         selected_attack = attack or self.weapon.default_attack
-        selected_bodypart, target = self._select_bodypart(bodypart)
+        selected_bodypart, target = self._select_bodypart(body_part)
         return self._calculate(selected_attack, selected_bodypart, target, state or {})
 
-    def _select_bodypart(self, bodypart: str | None) -> tuple[str, Enemy | None]:
+    def contributions(self, *, attack: str | None = None, metric: str | Callable[[CalculationResult], float] = "total_dps", body_part: str | None = None, state: Mapping[str, object] | None = None) -> ContributionResult:
+        selected_attack = attack or self.weapon.default_attack
+        selected_bodypart, _ = self._select_bodypart(body_part)
+        calculation_state = state or {}
+
+        def evaluate(loadout: Loadout) -> float:
+            result = Calculator(self.weapon, self.target, loadout).resolve(attack=selected_attack, body_part=selected_bodypart, state=calculation_state)
+            if callable(metric): return float(metric(result))
+            value: object = result
+            for name in metric.split(".") if "." in metric else ("aggregate", "average", metric): value = getattr(value, name)
+            return float(value)
+
+        return calculate_contributions(self.loadout, evaluate)
+
+    def _select_bodypart(self, body_part: str | None) -> tuple[str, Enemy | None]:
         if self.target is None:
-            if bodypart not in (None, "body"): raise ValueError(f"unknown body part {bodypart!r}")
+            if body_part not in (None, "body"): raise ValueError(f"unknown body part {body_part!r}")
             return "body", None
-        selected = bodypart or next(iter(self.target.bodyparts))
+        selected = body_part or next(iter(self.target.bodyparts))
         if selected not in self.target.bodyparts: raise ValueError(f"unknown body part {selected!r}")
         target = self.target.copy()
         target.bodyparts = {selected: target.bodyparts[selected]}
         return selected, target
 
-    def _calculate(self, selected_attack: str, selected_bodypart: str, target: Enemy | None, state: Mapping[str, object]) -> CalculationResult:
+    def _calculate(self, selected_attack: str, selected_body_part: str, target: Enemy | None, state: Mapping[str, object]) -> CalculationResult:
         if selected_attack not in self.weapon.attacks: raise ValueError(f"unknown attack {selected_attack!r}")
         unknown = set(state) - set(self.weapon.calculation_defaults)
         if unknown: raise TypeError(f"unknown calculation state fields: {', '.join(sorted(unknown))}")
@@ -128,4 +143,4 @@ class Calculator:
         context = CalculationContext(weapon=self.weapon, target=target.copy() if target is not None else Enemy(), attack=selected_attack, loadout=self.loadout.copy(), resolved_perks=resolved_perks, state=calculation_state)
         calculated, aggregate, aggregate_status_model, aggregate_status_effects = calculate_weapon(context)
         attacks = {name: _calculated_attack(result) for name, result in calculated.items()}
-        return CalculationResult(_aggregate(aggregate, aggregate_status_model, aggregate_status_effects), attacks, selected_attack, selected_bodypart, self.weapon.copy(), None if self.target is None else self.target.copy(), self.loadout.copy(), dict(state))
+        return CalculationResult(_aggregate(aggregate, aggregate_status_model, aggregate_status_effects), attacks, selected_attack, selected_body_part, self.weapon.copy(), None if self.target is None else self.target.copy(), self.loadout.copy(), dict(state))

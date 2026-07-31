@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 
-from ..analysis.contributions import progenitor_component_name, removal_contributions, shapley_contributions
+from ..engine.contributions import progenitor_component_name
 from ..domain.results import CalculationResult, DamageResult, SpatialResult, StatusResult
 from ..engine.calculator import Calculator
 from .objects import format_loadout
@@ -132,12 +132,12 @@ class ResultFormatter:
         title = f"Summary: {weapon_name} {attack_name.replace('_', ' ').title()} {target_name}"
         return self._table(("Stat", "Base", "Modded", "Effective", "Average"), [tuple(cell for index, cell in enumerate(row) if index != 5) for row in rows], title=title)
 
-    def contributions(self, metric: str = "total_dps", bodypart: str | None = None) -> str:
-        selected_bodypart = bodypart or self.result.selected_bodypart
-        calculator = Calculator(self.result.weapon, self.result.target)
-        shapley = shapley_contributions(calculator, self.result.loadout, attack=self.result.selected_attack, metric=metric, bodypart=selected_bodypart, state=self.result.state)
+    def contributions(self, metric: str = "total_dps", body_part: str | None = None) -> str:
+        selected_bodypart = body_part or self.result.selected_bodypart
+        contributions = Calculator(self.result.weapon, self.result.target, self.result.loadout).contributions(attack=self.result.selected_attack, metric=metric, body_part=selected_bodypart, state=self.result.state)
+        shapley = contributions.shapley
         if not shapley: return ""
-        removal = removal_contributions(calculator, self.result.loadout, attack=self.result.selected_attack, metric=metric, bodypart=selected_bodypart, state=self.result.state)
+        removal = contributions.removal
         component_types = {upgrade.name: upgrade.slot.replace("_", " ").title() for upgrade in self.result.loadout.ranked_upgrades}
         component_types.update({perk.name: "Perk" for perk in self.result.loadout.evolutions})
         if self.result.loadout.progenitor is not None: component_types[progenitor_component_name(self.result.loadout.progenitor)] = "Progenitor"

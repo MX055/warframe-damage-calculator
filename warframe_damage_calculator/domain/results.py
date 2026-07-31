@@ -67,6 +67,12 @@ class ResolvedStats:
 
 
 @dataclass(frozen=True, slots=True)
+class ContributionResult:
+    shapley: dict[str, float]
+    removal: dict[str, float]
+
+
+@dataclass(frozen=True, slots=True)
 class DamageMetrics:
     direct_dph: float
     dot_dph: float
