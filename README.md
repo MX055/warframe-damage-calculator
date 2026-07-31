@@ -12,8 +12,8 @@ target = arsenal.enemy.get("Heavy Gunner").set(level=200, steel_path=True)
 
 loadout = Loadout(
     upgrades=[
-        arsenal.upgrade.get("Galvanized Chamber"),
-        arsenal.upgrade.get("Critical Delay"),
+        arsenal.mod.get("Galvanized Chamber"),
+        arsenal.mod.get("Critical Delay"),
     ],
     evolutions=[
         arsenal.perk.get("Elemental Excess"),
@@ -23,7 +23,7 @@ loadout = Loadout(
 
 calculator = Calculator(weapon, target, loadout)
 result = calculator.calculate(attack="incarnon_form", bodypart="head")
-print(result.aggregate.average.normal.total_dps)
+print(result.aggregate.average.total_dps)
 ```
 
 `Weapon` and `Enemy` are definitions. `Loadout` owns selected upgrades and global evolution perks. `Calculator` owns one weapon-target-loadout combination, while attack selection, body-part selection, and temporary state belong to each calculation:

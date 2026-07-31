@@ -5,10 +5,10 @@ weapon = arsenal.weapon.get("Tenet Exec")
 target = arsenal.enemy.get("Heavy Gunner").set(level=100, steel_path=True)
 loadout = Loadout(
     upgrades=[
-        arsenal.upgrade.get("Rending Crane"),
-        arsenal.upgrade.get("Galvanized Steel"),
-        arsenal.upgrade.get("Primed Pressure Point"),
-        arsenal.upgrade.get("Melee Duplicate")
+        arsenal.mod.get("Rending Crane"),
+        arsenal.mod.get("Galvanized Steel"),
+        arsenal.mod.get("Primed Pressure Point"),
+        arsenal.arcane.get("Melee Duplicate")
     ],
     progenitor=Progenitor("electricity", 0.60)
 )

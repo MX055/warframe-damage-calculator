@@ -140,11 +140,11 @@ class Upgrade:
         return self
 
     @classmethod
-    def from_record(cls, record: Mapping[str, Any]) -> Upgrade:
-        allowed = {"name", "kind", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats", "combos"}
+    def from_record(cls, record: Mapping[str, Any], *, kind: str = "mod") -> Upgrade:
+        allowed = {"name", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats", "combos"}
         unknown = set(record) - allowed
         if unknown: raise TypeError(f"unknown upgrade fields: {', '.join(sorted(unknown))}")
-        return cls(name=str(record["name"]), kind=str(record.get("kind", "mod")), slot=str(record.get("slot", "regular_mod")), max_rank=int(record.get("max_rank", 0)), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")), compatibility=Compatibility.from_record(record.get("compatibility", {})), conflicts=record.get("conflicts", []), stats=UpgradeStats.from_record(record.get("stats", {})), combos=record.get("combos", {}))
+        return cls(name=str(record["name"]), kind=kind, slot=str(record.get("slot", "regular_mod")), max_rank=int(record.get("max_rank", 0)), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")), compatibility=Compatibility.from_record(record.get("compatibility", {})), conflicts=record.get("conflicts", []), stats=UpgradeStats.from_record(record.get("stats", {})), combos=record.get("combos", {}))
 
     def copy(self) -> Upgrade:
         return Upgrade(name=self.name, kind=self.kind, slot=self.slot, max_rank=self.max_rank, implementation_status=self.implementation_status, compatibility=deepcopy(self.compatibility), conflicts=self.conflicts, stats=self.stats.copy(), combos=self.combos, runtime=self.runtime.as_dict())

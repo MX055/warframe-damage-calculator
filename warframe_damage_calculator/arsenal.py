@@ -58,14 +58,15 @@ class WeaponRepository(Repository[Weapon]):
 
 
 class Arsenal:
-    __slots__ = ("database", "weapon", "upgrade", "perk", "enemy")
+    __slots__ = ("database", "weapon", "mod", "arcane", "perk", "enemy")
 
     def __init__(self, database: Mapping) -> None:
         self.database: dict = dict(database)
         validate_database(self.database)
         perk_definitions = {name: Perk.from_record(record) for name, record in self.database["perks"].items()}
         self.weapon = WeaponRepository(self.database["weapons"], lambda record: _weapon(record, perk_definitions))
-        self.upgrade = Repository[Upgrade](self.database["upgrades"], Upgrade.from_record)
+        self.mod = Repository[Upgrade](self.database["mods"], lambda record: Upgrade.from_record(record, kind="mod"))
+        self.arcane = Repository[Upgrade](self.database["arcanes"], lambda record: Upgrade.from_record(record, kind="arcane"))
         self.perk = Repository[Perk](self.database["perks"], Perk.from_record)
         self.enemy = Repository[Enemy](self.database["enemies"], lambda record: Enemy.from_record(record, loaded=True))
 
@@ -98,8 +99,12 @@ class _LazyArsenal:
         return self._get().weapon
 
     @property
-    def upgrade(self) -> Repository[Upgrade]:
-        return self._get().upgrade
+    def mod(self) -> Repository[Upgrade]:
+        return self._get().mod
+
+    @property
+    def arcane(self) -> Repository[Upgrade]:
+        return self._get().arcane
 
     @property
     def perk(self) -> Repository[Perk]:

@@ -9,7 +9,7 @@ def perk(weapon, tier, choice):
 
 
 def loadout(*names, evolutions=()):
-    return Loadout(upgrades=[arsenal.upgrade.get(name) for name in names], evolutions=evolutions)
+    return Loadout(upgrades=[arsenal.arcane.get(name) if name in arsenal.arcane.names else arsenal.mod.get(name) for name in names], evolutions=evolutions)
 
 
 def selected(calculation):

@@ -5,9 +5,9 @@ weapon = arsenal.weapon.get("Phenmor")
 target = arsenal.enemy.get("Heavy Gunner").set(level=100, steel_path=True)
 loadout = Loadout(
     upgrades=[
-        arsenal.upgrade.get("Galvanized Chamber"),
-        arsenal.upgrade.get("Galvanized Aptitude"),
-        arsenal.upgrade.get("Primed Cryo Rounds")
+        arsenal.mod.get("Galvanized Chamber"),
+        arsenal.mod.get("Galvanized Aptitude"),
+        arsenal.mod.get("Primed Cryo Rounds")
     ],
     evolutions=[
         arsenal.perk.get("Incarnon Transmutation"),
