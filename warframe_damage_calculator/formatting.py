@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Callable
+from typing import Callable, Literal
 import re
 
 from .analysis.contributions import progenitor_component_name, removal_contributions, shapley_contributions
@@ -20,6 +20,11 @@ class ResultFormatter:
 
     def __init__(self, result: CalculationResult) -> None:
         self.result = result
+
+    @staticmethod
+    def _metric_name(metric: str) -> str:
+        labels = {"direct": "Direct", "dot": "DoT", "total": "Total", "dph": "DPH", "dps": "DPS"}
+        return " ".join(labels.get(part, part.title()) for part in metric.split("_"))
 
     @staticmethod
     def _number(value: object | None) -> str:
@@ -124,11 +129,11 @@ class ResultFormatter:
         title = f"Summary: {weapon_name} {attack_name.replace('_', ' ').title()} {target_name}"
         return self._table(("Stat", "Base", "Modded", "Effective", "Average"), [tuple(cell for index, cell in enumerate(row) if index != 5) for row in rows], title=title)
 
-    def contributions(self, metric: str = "total_dps") -> str:
+    def contributions(self, metric: str = "total_dps", bodypart: Literal["normal", "weakpoint", "resistant"] = "normal") -> str:
         calculator = Calculator(self.result.weapon, self.result.target)
-        shapley = shapley_contributions(calculator, self.result.loadout, attack=self.result.selected_attack, metric=metric, state=self.result.state)
+        shapley = shapley_contributions(calculator, self.result.loadout, attack=self.result.selected_attack, metric=metric, bodypart=bodypart, state=self.result.state)
         if not shapley: return ""
-        removal = removal_contributions(calculator, self.result.loadout, attack=self.result.selected_attack, metric=metric, state=self.result.state)
+        removal = removal_contributions(calculator, self.result.loadout, attack=self.result.selected_attack, metric=metric, bodypart=bodypart, state=self.result.state)
         component_types = {upgrade.name: upgrade.slot.replace("_", " ").title() for upgrade in self.result.loadout.upgrades}
         component_types.update({perk.name: "Perk" for perk in self.result.loadout.evolutions})
         if self.result.loadout.progenitor is not None: component_types[progenitor_component_name(self.result.loadout.progenitor)] = "Progenitor"
@@ -144,8 +149,8 @@ class ResultFormatter:
             left = "·" * (10 - bar_length) + "█" * bar_length if share < 0 else "·" * 10
             right = "█" * bar_length + "·" * (10 - bar_length) if share > 0 else "·" * 10
             rows.append((str(rank), kind, name, f"{display_share:+.2%}", f"{-display_removal:+,.2f}", f"{left}│{right}"))
-        metric_name = metric.replace("_", " ").upper() if isinstance(metric, str) else "Contribution"
-        target_name = "" if self.result.target is None else f" vs {getattr(self.result.target, 'name', 'Target')}"
+        metric_name = self._metric_name(metric) if isinstance(metric, str) else "Contribution"
+        target_name = "" if self.result.target is None else f" vs {getattr(self.result.target, 'name', 'Target')} {bodypart.title()}"
         title = f"{metric_name} Contributions: {self.result.weapon.name} {self.result.selected_attack.replace('_', ' ').title()}{target_name}"
         return self._table(("Contribution Rank", "Type", "Component", "Shapley", f"Removal Loss", "Impact"), rows, title=title)
 

@@ -119,11 +119,11 @@ Both contribution methods evaluate immutable calculator inputs and include selec
 ```python
 from warframe_damage_calculator import removal_contributions, shapley_contributions
 
-removal = removal_contributions(calculator, loadout, attack="incarnon_form")
-shapley = shapley_contributions(calculator, loadout, attack="incarnon_form")
+removal = removal_contributions(calculator, loadout, attack="incarnon_form", bodypart="weakpoint")
+shapley = shapley_contributions(calculator, loadout, attack="incarnon_form", bodypart="weakpoint")
 ```
 
-A metric name selects `result.aggregate.average.normal` by default. A dotted path or callable may select another result value.
+A metric name selects the chosen aggregate-average body part. `bodypart` accepts `"normal"`, `"weakpoint"`, or `"resistant"` and defaults to `"normal"`. A dotted path or callable may select another result value.
 
 ## Spatial output
 

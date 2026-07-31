@@ -1,6 +1,6 @@
 import unittest
 
-from warframe_damage_calculator import Attack, AttackStats, Calculator, Dist, Effect, ImplementationStatus, Loadout, Progenitor, PLACEHOLDER, Perk, PerkValues, Primary, ResultFormatter, UpgradeStats, arsenal, format_damage_result, format_loadout, format_perk, format_spatial, format_status, format_upgrade, format_weapon
+from warframe_damage_calculator import Attack, AttackStats, BodyPart, Calculator, Dist, Effect, Enemy, ImplementationStatus, Loadout, Progenitor, PLACEHOLDER, Perk, PerkValues, Primary, ResultFormatter, UpgradeStats, arsenal, format_damage_result, format_loadout, format_perk, format_spatial, format_status, format_upgrade, format_weapon
 
 
 class ApiTests(unittest.TestCase):
@@ -133,7 +133,12 @@ class ApiTests(unittest.TestCase):
         self.assertAlmostEqual(fire_rate_attack.modded.fire_rate, fire_rate_attack.effective.instantaneous_fire_rate)
         self.assertIn("1.14", ResultFormatter(fire_rate_result).summary().split("Fire Rate", 1)[1].splitlines()[0])
         targeted = ResultFormatter(Calculator(weapon, arsenal.enemy.get("Heavy Gunner")).calculate(loadout))
-        self.assertIn("Corinth Prime · Buckshot vs Heavy Gunner · TOTAL DPS Contributions", targeted.contributions())
+        self.assertIn("Total DPS Contributions: Corinth Prime Buckshot vs Heavy Gunner Normal", targeted.contributions())
+        self.assertIn("Total DPS Contributions: Corinth Prime Buckshot vs Heavy Gunner Weakpoint", targeted.contributions(bodypart="weakpoint"))
+        resistant_target = Enemy(name="Heavy Gunner", bodyparts={"armor": BodyPart("resistant", 0.5)})
+        resistant = ResultFormatter(Calculator(weapon, resistant_target).calculate(loadout))
+        self.assertIn("Total DPS Contributions: Corinth Prime Buckshot vs Heavy Gunner Resistant", resistant.contributions(bodypart="resistant"))
+        self.assertEqual(ResultFormatter._metric_name("dot_dps"), "DoT DPS")
         contribution_table = targeted.contributions()
         self.assertNotIn("\x1b[", contribution_table)
         self.assertIn("+100.00%", contribution_table)
@@ -162,9 +167,14 @@ class ApiTests(unittest.TestCase):
         calculator = Calculator(weapon)
         removal = removal_contributions(calculator, loadout, attack="incarnon_form")
         shapley = shapley_contributions(calculator, loadout, attack="incarnon_form")
+        weakpoint_removal = removal_contributions(Calculator(weapon, arsenal.enemy.get("Heavy Gunner")), loadout, attack="incarnon_form", bodypart="weakpoint")
+        weakpoint_shapley = shapley_contributions(Calculator(weapon, arsenal.enemy.get("Heavy Gunner")), loadout, attack="incarnon_form", bodypart="weakpoint")
         self.assertEqual(set(removal), {"Serration", "Devouring Attrition"})
         self.assertEqual(set(shapley), set(removal))
         self.assertAlmostEqual(sum(shapley.values()), 1)
+        self.assertEqual(set(weakpoint_removal), set(removal))
+        self.assertEqual(set(weakpoint_shapley), set(removal))
+        self.assertAlmostEqual(sum(weakpoint_shapley.values()), 1)
 
         progenitor_loadout = Loadout(upgrades=[arsenal.upgrade.get("Primed Pressure Point")], progenitor=Progenitor("electricity", 0.6))
         progenitor_calculator = Calculator(arsenal.weapon.get("Tenet Exec"))
