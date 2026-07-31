@@ -7269,7 +7269,11 @@
                     "stats": {
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.2,
+                        "crit_damage": 2.3,
+                        "status_chance": 0.35,
+                        "fire_rate": 0.67
                     }
                 },
                 "slide_attack": {
@@ -10016,7 +10020,8 @@
                         "fire_rate": 1,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1
+                        "attack_speed": 1,
+                        "status_chance": 0.22
                     }
                 },
                 "heavy_attack": {
@@ -10994,7 +10999,11 @@
                     "stats": {
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.2,
+                        "crit_damage": 2.4,
+                        "status_chance": 0.18,
+                        "fire_rate": 1.17
                     }
                 },
                 "slide_attack": {
@@ -11286,7 +11295,11 @@
                     "stats": {
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.12,
+                        "crit_damage": 1.6,
+                        "status_chance": 0.34,
+                        "fire_rate": 0.83
                     }
                 },
                 "slide_attack": {
@@ -20744,7 +20757,11 @@
                     "stats": {
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.22,
+                        "crit_damage": 2,
+                        "status_chance": 0.3,
+                        "fire_rate": 1.25
                     }
                 },
                 "slide_attack": {
@@ -23426,7 +23443,11 @@
                     "stats": {
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.17,
+                        "crit_damage": 2,
+                        "status_chance": 0.29,
+                        "fire_rate": 1.17
                     }
                 },
                 "slide_attack": {
@@ -26848,7 +26869,11 @@
                     "stats": {
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.19,
+                        "crit_damage": 2.3,
+                        "status_chance": 0.35,
+                        "fire_rate": 1.17
                     }
                 },
                 "slide_attack": {
@@ -29315,7 +29340,11 @@
                     "stats": {
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.15,
+                        "crit_damage": 2.1,
+                        "status_chance": 0.3,
+                        "fire_rate": 0.67
                     }
                 },
                 "slide_attack": {
@@ -32690,7 +32719,11 @@
                     "stats": {
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.1,
+                        "crit_damage": 2,
+                        "status_chance": 0.1,
+                        "fire_rate": 1.08
                     }
                 },
                 "slide_attack": {
@@ -35766,7 +35799,11 @@
                     "stats": {
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.12,
+                        "crit_damage": 2,
+                        "status_chance": 0.12,
+                        "fire_rate": 1
                     }
                 },
                 "slide_attack": {
@@ -44867,7 +44904,11 @@
                     "stats": {
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.15,
+                        "crit_damage": 2,
+                        "status_chance": 0.3,
+                        "fire_rate": 1
                     }
                 },
                 "slide_attack": {
@@ -55954,7 +55995,11 @@
                     "stats": {
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.18,
+                        "crit_damage": 2,
+                        "status_chance": 0.18,
+                        "fire_rate": 0.75
                     }
                 },
                 "slide_attack": {
@@ -65051,7 +65096,10 @@
                         },
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.01,
+                        "status_chance": 0.01,
+                        "fire_rate": 1
                     }
                 },
                 "heavy_slam_attack": {
@@ -65087,7 +65135,8 @@
                         "status_chance": 0.01,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "fire_rate": 1
                     }
                 },
                 "slide_attack": {
@@ -65101,7 +65150,8 @@
                         "status_chance": 0.01,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "fire_rate": 1
                     }
                 }
             },
@@ -65206,7 +65256,10 @@
                         },
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.01,
+                        "status_chance": 0.01,
+                        "fire_rate": 1
                     }
                 },
                 "heavy_slam_attack": {
@@ -65242,7 +65295,8 @@
                         "status_chance": 0.01,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "fire_rate": 1
                     }
                 },
                 "slide_attack": {
@@ -65256,7 +65310,8 @@
                         "status_chance": 0.01,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "fire_rate": 1
                     }
                 }
             },
@@ -65361,7 +65416,10 @@
                         },
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.01,
+                        "status_chance": 0.01,
+                        "fire_rate": 1
                     }
                 },
                 "heavy_slam_attack": {
@@ -65397,7 +65455,8 @@
                         "status_chance": 0.01,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "fire_rate": 1
                     }
                 },
                 "slide_attack": {
@@ -65411,7 +65470,8 @@
                         "status_chance": 0.01,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "fire_rate": 1
                     }
                 }
             },
@@ -65516,7 +65576,10 @@
                         },
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.01,
+                        "status_chance": 0.01,
+                        "fire_rate": 1
                     }
                 },
                 "heavy_slam_attack": {
@@ -65552,7 +65615,8 @@
                         "status_chance": 0.01,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "fire_rate": 1
                     }
                 },
                 "slide_attack": {
@@ -65566,7 +65630,8 @@
                         "status_chance": 0.01,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "fire_rate": 1
                     }
                 }
             },
@@ -65670,7 +65735,10 @@
                         },
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.01,
+                        "status_chance": 0.01,
+                        "fire_rate": 1
                     }
                 },
                 "heavy_slam_attack": {
@@ -65706,7 +65774,8 @@
                         "status_chance": 0.01,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "fire_rate": 1
                     }
                 },
                 "slide_attack": {
@@ -65720,7 +65789,8 @@
                         "status_chance": 0.01,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "fire_rate": 1
                     }
                 }
             },
@@ -65825,7 +65895,10 @@
                         },
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.01,
+                        "status_chance": 0.01,
+                        "fire_rate": 1
                     }
                 },
                 "heavy_slam_attack": {
@@ -65861,7 +65934,8 @@
                         "status_chance": 0.01,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "fire_rate": 1
                     }
                 },
                 "slide_attack": {
@@ -65875,7 +65949,8 @@
                         "status_chance": 0.01,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "fire_rate": 1
                     }
                 }
             },
@@ -65980,7 +66055,10 @@
                         },
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.01,
+                        "status_chance": 0.01,
+                        "fire_rate": 1
                     }
                 },
                 "heavy_slam_attack": {
@@ -66016,7 +66094,8 @@
                         "status_chance": 0.01,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "fire_rate": 1
                     }
                 },
                 "slide_attack": {
@@ -66030,7 +66109,8 @@
                         "status_chance": 0.01,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "fire_rate": 1
                     }
                 }
             },
@@ -66135,7 +66215,10 @@
                         },
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.01,
+                        "status_chance": 0.01,
+                        "fire_rate": 1
                     }
                 },
                 "heavy_slam_attack": {
@@ -66171,7 +66254,8 @@
                         "status_chance": 0.01,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "fire_rate": 1
                     }
                 },
                 "slide_attack": {
@@ -66185,7 +66269,8 @@
                         "status_chance": 0.01,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "fire_rate": 1
                     }
                 }
             },
@@ -66290,7 +66375,10 @@
                         },
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.01,
+                        "status_chance": 0.01,
+                        "fire_rate": 1
                     }
                 },
                 "heavy_slam_attack": {
@@ -66326,7 +66414,8 @@
                         "status_chance": 0.01,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "fire_rate": 1
                     }
                 },
                 "slide_attack": {
@@ -66340,7 +66429,8 @@
                         "status_chance": 0.01,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "fire_rate": 1
                     }
                 }
             },
@@ -66446,7 +66536,10 @@
                         },
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.01,
+                        "status_chance": 0.01,
+                        "fire_rate": 1
                     }
                 },
                 "heavy_slam_attack": {
@@ -66482,7 +66575,8 @@
                         "status_chance": 0.01,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "fire_rate": 1
                     }
                 },
                 "slide_attack": {
@@ -66496,7 +66590,8 @@
                         "status_chance": 0.01,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "fire_rate": 1
                     }
                 }
             },
@@ -66602,7 +66697,10 @@
                         },
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.01,
+                        "status_chance": 0.01,
+                        "fire_rate": 1
                     }
                 },
                 "heavy_slam_attack": {
@@ -66638,7 +66736,8 @@
                         "status_chance": 0.01,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "fire_rate": 1
                     }
                 },
                 "slide_attack": {
@@ -66652,7 +66751,8 @@
                         "status_chance": 0.01,
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "fire_rate": 1
                     }
                 }
             },
@@ -74190,7 +74290,11 @@
                     "stats": {
                         "co_factor": 1.0,
                         "co_effect": "adds",
-                        "attack_speed": 1.0
+                        "attack_speed": 1.0,
+                        "crit_chance": 0.2,
+                        "crit_damage": 2.2,
+                        "status_chance": 0.4,
+                        "fire_rate": 1.25
                     }
                 },
                 "slide_attack": {

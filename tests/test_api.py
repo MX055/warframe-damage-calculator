@@ -92,6 +92,7 @@ class ApiTests(unittest.TestCase):
         result = Calculator(weapon, loadout=Loadout(progenitor=Progenitor("electricity", 0.6))).calculate(attack="heavy_slam_attack")
         attack = result.attacks["heavy_slam_attack"]
         self.assertEqual(attack.base.damage, Dist(impact=570))
+        self.assertEqual(attack.base.status_chance, 0.22)
         self.assertEqual(attack.modded.damage, Dist(impact=570, electricity=342))
         self.assertEqual(attack.effective.damage, attack.modded.damage)
         modded = Calculator(weapon, loadout=Loadout(upgrades=[arsenal.upgrade.get("Fever Strike")], progenitor=Progenitor("electricity", 0.6))).calculate(attack="heavy_slam_attack").attacks["heavy_slam_attack"]
