@@ -118,14 +118,10 @@ class ResultFormatter:
         rows.append(("Expected Procs", "—", "—", "—", self._number(selected.status.expected_procs_per_attack), "—"))
         if selected.spatial is not None: rows.append((f"Damage Mass (m^{selected.spatial.dimension})", "—", "—", "—", self._number(selected.spatial.damage_mass), "—"))
         rows.append(self._section("DAMAGE OUTPUT"))
-        metrics = (("DIRECT DPH", "direct_dph"), ("DOT DPH", "dot_dph"), ("TOTAL DPH", "total_dph"), ("DIRECT DPS", "direct_dps"), ("DOT DPS", "dot_dps"), ("TOTAL DPS", "total_dps"))
-        zones = (("Normal", average_damage.normal), ("Weakpoint", average_damage.weakpoint), ("Resistant", average_damage.resistant))
-        for label, attribute in metrics:
-            for zone_name, zone in zones:
-                if zone is None: continue
-                rows.append((f"{label} — {zone_name}", "—", "—", "—", self._number(getattr(zone, attribute)), "—"))
+        metrics = (("Direct DPH", "direct_dph"), ("DoT DPH", "dot_dph"), ("Total DPH", "total_dph"), ("Direct DPS", "direct_dps"), ("DoT DPS", "dot_dps"), ("Total DPS", "total_dps"))
+        for label, attribute in metrics: rows.append((label, "—", "—", "—", self._number(getattr(average_damage, attribute)), "—"))
         weapon_name = getattr(self.result.weapon, "name", "Weapon")
-        target_name = "" if self.result.target is None else f"vs {getattr(self.result.target, 'name', 'Target')}"
+        target_name = "" if self.result.target is None else f"vs {getattr(self.result.target, 'name', 'Target')} {self.result.selected_bodypart.replace('_', ' ').title()}"
         title = f"Summary: {weapon_name} {attack_name.replace('_', ' ').title()} {target_name}"
         return self._table(("Stat", "Base", "Modded", "Effective", "Average"), [tuple(cell for index, cell in enumerate(row) if index != 5) for row in rows], title=title)
 
@@ -200,8 +196,7 @@ def format_loadout(loadout: Loadout) -> str:
 
 
 def format_damage_result(result: DamageResult) -> str:
-    zones = (("normal", result.normal), ("weakpoint", result.weakpoint), ("resistant", result.resistant))
-    return "\n".join(f"{name}: {metrics.total_dph:.2f} DPH, {metrics.total_dps:.2f} DPS" for name, metrics in zones if metrics is not None)
+    return f"{result.total_dph:.2f} DPH, {result.total_dps:.2f} DPS"
 
 
 def format_status(status: StatusResult) -> str:
@@ -211,4 +206,4 @@ def format_status(status: StatusResult) -> str:
 
 
 def format_spatial(spatial: SpatialResult) -> str:
-    return f"Dimension: {spatial.dimension}\nDamage mass: {spatial.damage_mass:.2f} m^{spatial.dimension}\nTotal DPS mass: {spatial.normal.total_dps_mass:.2f}"
+    return f"Dimension: {spatial.dimension}\nDamage mass: {spatial.damage_mass:.2f} m^{spatial.dimension}\nTotal DPS mass: {spatial.total_dps_mass:.2f}"

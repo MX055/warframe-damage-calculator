@@ -13,7 +13,7 @@ from .effects import evaluate
 from .formulas import DOT_MULTIPLIERS, aoe_damage_mass, average_falloff_multiplier, clamp, crit_multiplier, family_bonus, family_factor, hit_multiplier, ranged_falloff_multiplier, refresh_metrics, true_round
 from .special import automatic_value, automatic_values, average_enervate_bonus, enervate_parameters
 from ..domain.status import COMBINED_STATUS_COMPONENTS, RANDOM_STATUS_TYPES, STATUS_TYPES, StatusModel, attack_proc_chance
-from .targets import ZONE_FIELDS, damage_multiplier, damage_total
+from .targets import damage_multiplier, damage_total
 
 
 HEAVY_CATEGORIES = frozenset({"heavy", "heavy_slam"})
@@ -361,30 +361,28 @@ def _spatial_falloff(attack: Attack, effective: EffectiveAttackStats) -> tuple[f
     return falloff_multiplier, SpatialMetrics(falloff_multiplier=falloff_multiplier)
 
 
-def _set_zone_damage(average: AverageAttackStats, spatial: SpatialMetrics, zone: str, fields: tuple[str, ...], direct: float, dot: float) -> None:
+def _set_damage(average: AverageAttackStats, spatial: SpatialMetrics, direct: float, dot: float) -> None:
     average_direct = direct * average.falloff_multiplier
     average_dot = dot * average.falloff_multiplier
-    setattr(average, fields[0], average_direct)
-    setattr(average, fields[1], average_dot)
+    average.flat_dph = average_direct
+    average.flat_dotph = average_dot
     if spatial.damage_mass is None:
-        setattr(spatial, fields[0], None)
-        setattr(spatial, fields[1], None)
+        spatial.flat_dph = None
+        spatial.flat_dotph = None
     else:
-        setattr(spatial, fields[0], direct * spatial.damage_mass)
-        setattr(spatial, fields[1], dot * spatial.damage_mass)
+        spatial.flat_dph = direct * spatial.damage_mass
+        spatial.flat_dotph = dot * spatial.damage_mass
 
 
 def _refresh_spatial(metrics: SpatialMetrics, fire_rate: float) -> None:
-    for fields in ZONE_FIELDS.values():
-        direct = getattr(metrics, fields[0])
-        dot = getattr(metrics, fields[1])
-        if direct is None or dot is None:
-            for field in fields: setattr(metrics, field, None)
-            continue
-        setattr(metrics, fields[2], direct + dot)
-        setattr(metrics, fields[3], direct * fire_rate)
-        setattr(metrics, fields[4], dot * fire_rate)
-        setattr(metrics, fields[5], (direct + dot) * fire_rate)
+    direct, dot = metrics.flat_dph, metrics.flat_dotph
+    if direct is None or dot is None:
+        metrics.total_dph = metrics.flat_dps = metrics.flat_dotps = metrics.total_dps = None
+        return
+    metrics.total_dph = direct + dot
+    metrics.flat_dps = direct * fire_rate
+    metrics.flat_dotps = dot * fire_rate
+    metrics.total_dps = (direct + dot) * fire_rate
 
 
 def _dot_value(context: CalculationContext, result: AttackResult, zone: str, *, multishot: float | None = None, damage_factor: float = 1) -> float:
@@ -454,7 +452,8 @@ def _apply_position_mixture(context: CalculationContext, result: AttackResult, e
     if context.weapon.type == "melee": return
     if not effects: return
     effective, average, spatial = result.effective, result.average, result.spatial
-    mixed = {fields[index]: 0.0 for fields in ZONE_FIELDS.values() for index in (0, 1)}
+    mixed_direct = 0.0
+    mixed_dot = 0.0
     weights = _position_weights(float(effective.magazine_capacity), float(effective.ammo_cost), float(effective.ammo_efficiency))
     for events, weight in weights:
         active = [effect for effect in effects if automatic_value(effect, "on") in events]
@@ -466,13 +465,13 @@ def _apply_position_mixture(context: CalculationContext, result: AttackResult, e
         damage_factor = 1.0
         for value in family_bonuses.values(): damage_factor *= max(1 + value, 1)
         multishot = max(float(effective.multishot) + multishot_bonus, 1)
-        for zone, fields in ZONE_FIELDS.items():
-            damage = _zone_damage(context, result, zone, direct_hits=multishot, dot_multishot=multishot, damage_factor=damage_factor)
-            if damage is None: continue
-            direct, dot = damage
-            mixed[fields[0]] += direct * weight
-            mixed[fields[1]] += dot * weight
-    for zone, fields in ZONE_FIELDS.items(): _set_zone_damage(average, spatial, zone, fields, mixed[fields[0]], mixed[fields[1]])
+        zone = next(iter(context.target.bodyparts.values())).type
+        damage = _zone_damage(context, result, zone, direct_hits=multishot, dot_multishot=multishot, damage_factor=damage_factor)
+        if damage is None: continue
+        direct, dot = damage
+        mixed_direct += direct * weight
+        mixed_dot += dot * weight
+    _set_damage(average, spatial, mixed_direct, mixed_dot)
     first = [effect for effect in effects if automatic_value(effect, "on") == "magazine_first_shot" and effect.stat == "damage_bonus"]
     first_factor = 1.0
     for family in {effect.family for effect in first}: first_factor *= 1 + sum(float(effect.value) for effect in first if effect.family == family)
@@ -633,14 +632,11 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     if heavy:
         combo_multiplier = max(1, min(int(context.weapon.combo.get("max_combo", 12)), int(context.state.combo)))
     average.combo_multiplier = combo_multiplier
-    for zone, fields in ZONE_FIELDS.items():
-        zone_damage = _zone_damage(context, result, zone, direct_hits=1 if context.weapon.type == "melee" else multishot, duplicate_multiplier=duplicate_multiplier, combo_multiplier=combo_multiplier)
-        if zone_damage is None:
-            setattr(average, fields[0], None)
-            setattr(average, fields[1], None)
-            continue
+    zone = next(iter(context.target.bodyparts.values())).type
+    zone_damage = _zone_damage(context, result, zone, direct_hits=1 if context.weapon.type == "melee" else multishot, duplicate_multiplier=duplicate_multiplier, combo_multiplier=combo_multiplier)
+    if zone_damage is not None:
         direct, dot = zone_damage
-        _set_zone_damage(average, spatial, zone, fields, direct, dot)
+        _set_damage(average, spatial, direct, dot)
     refresh_metrics(average)
     _refresh_spatial(spatial, average.sustained_fire_rate)
     _apply_position_mixture(context, result, [*upgrade_positions, *evolution_positions])

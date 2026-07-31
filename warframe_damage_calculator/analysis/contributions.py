@@ -25,11 +25,7 @@ def component_name(component: ContributionComponent) -> str:
 
 def metric_value(result: CalculationResult, metric: Metric = "total_dps") -> float:
     if callable(metric): return float(metric(result))
-    if "." not in metric:
-        zone = "normal" if result.target is None else result.target.bodyparts[result.selected_bodypart].type
-        damage = getattr(result.aggregate.average, zone)
-        if damage is None: raise ValueError(f"Target body part {result.selected_bodypart!r} has no calculated damage")
-        return float(getattr(damage, metric))
+    if "." not in metric: return float(getattr(result.aggregate.average, metric))
     value: object = result
     for name in metric.split("."): value = getattr(value, name)
     return float(value)

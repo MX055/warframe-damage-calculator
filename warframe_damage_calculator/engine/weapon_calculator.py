@@ -7,7 +7,6 @@ from ..domain.status import StatusModel
 from ..domain.upgrades import ResolvedEffect
 from .attack_calculator import AFFLICTIONS_CATEGORIES, AttackCalculator, _product, _special_value, _status_model, _with_random_proc
 from .context import CalculationContext
-from .targets import ZONE_FIELDS
 
 
 class WeaponCalculator:
@@ -70,20 +69,19 @@ class WeaponCalculator:
 
     @staticmethod
     def _fold_metrics(output: AverageAttackStats, own: AverageAttackStats, children: list[AverageAttackStats]) -> None:
-        for fields in ZONE_FIELDS.values():
-            direct_values = [getattr(own, fields[0]), *(getattr(child, fields[0]) for child in children)]
-            dot_values = [getattr(own, fields[1]), *(getattr(child, fields[1]) for child in children)]
-            if not any(value is not None for value in (*direct_values, *dot_values)):
-                for field in fields: setattr(output, field, None)
-                continue
-            direct = sum(float(value or 0) for value in direct_values)
-            dot = sum(float(value or 0) for value in dot_values)
-            setattr(output, fields[0], direct)
-            setattr(output, fields[1], dot)
-            setattr(output, fields[2], direct + dot)
-            setattr(output, fields[3], direct * own.sustained_fire_rate)
-            setattr(output, fields[4], dot * own.sustained_fire_rate)
-            setattr(output, fields[5], (direct + dot) * own.sustained_fire_rate)
+        direct_values = [own.flat_dph, *(child.flat_dph for child in children)]
+        dot_values = [own.flat_dotph, *(child.flat_dotph for child in children)]
+        if not any(value is not None for value in (*direct_values, *dot_values)):
+            output.flat_dph = output.flat_dotph = output.total_dph = output.flat_dps = output.flat_dotps = output.total_dps = None
+            return
+        direct = sum(float(value or 0) for value in direct_values)
+        dot = sum(float(value or 0) for value in dot_values)
+        output.flat_dph = direct
+        output.flat_dotph = dot
+        output.total_dph = direct + dot
+        output.flat_dps = direct * own.sustained_fire_rate
+        output.flat_dotps = dot * own.sustained_fire_rate
+        output.total_dps = (direct + dot) * own.sustained_fire_rate
 
     def aggregate_attack_tree(self, results: dict[str, AttackResult], names: list[str], root_duration: float) -> tuple[AverageAttackStats, StatusModel, dict[str, float]]:
         root = results[self.root_name]

@@ -57,8 +57,8 @@ class ApiTests(unittest.TestCase):
         self.assertFalse(hasattr(root, "original_damage"))
         self.assertFalse(hasattr(result.aggregate, "components"))
         self.assertFalse(hasattr(result.aggregate, "spatial"))
-        self.assertGreater(result.aggregate.average.normal.total_dps, root.average.normal.total_dps)
-        self.assertGreater(result.attacks["air_burst_explosion"].average.normal.total_dps, 0)
+        self.assertGreater(result.aggregate.average.total_dps, root.average.total_dps)
+        self.assertGreater(result.attacks["air_burst_explosion"].average.total_dps, 0)
         self.assertFalse(hasattr(result, "main"))
 
     def test_prepared_and_ordinary_calculations_are_equal(self):
@@ -122,7 +122,7 @@ class ApiTests(unittest.TestCase):
         self.assertIn("Elemental Excess", format_perk(perk))
         self.assertIn("Galvanized Hell", format_loadout(loadout))
         summary = formatter.summary()
-        self.assertIn("TOTAL DPS", summary)
+        self.assertIn("Total DPS", summary)
         self.assertTrue(summary.startswith("┌"))
         self.assertTrue(summary.endswith("┘"))
         self.assertIn("├", summary)
@@ -142,7 +142,7 @@ class ApiTests(unittest.TestCase):
         contribution_table = targeted.contributions()
         self.assertNotIn("\x1b[", contribution_table)
         self.assertIn("+100.00%", contribution_table)
-        self.assertIn("-460.51", contribution_table)
+        self.assertIn("+460.51", contribution_table)
         self.assertIn("··········│", contribution_table)
         self.assertIn("Contribution Rank", contribution_table)
         self.assertIn("Regular Mod", contribution_table)

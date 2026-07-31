@@ -77,43 +77,30 @@ class DamageMetrics:
     total_dps: float
 
 
-def _damage_metrics(source: object, prefix: str = "") -> DamageMetrics | None:
-    direct_dph = getattr(source, f"flat_{prefix}dph" if prefix else "flat_dph")
-    dot_dph = getattr(source, f"flat_{prefix}dotph" if prefix else "flat_dotph")
-    total_dph = getattr(source, f"total_{prefix}dph" if prefix else "total_dph")
-    direct_dps = getattr(source, f"flat_{prefix}dps" if prefix else "flat_dps")
-    dot_dps = getattr(source, f"flat_{prefix}dotps" if prefix else "flat_dotps")
-    total_dps = getattr(source, f"total_{prefix}dps" if prefix else "total_dps")
+def _damage_metrics(source: object) -> DamageMetrics | None:
+    direct_dph = getattr(source, "flat_dph")
+    dot_dph = getattr(source, "flat_dotph")
+    total_dph = getattr(source, "total_dph")
+    direct_dps = getattr(source, "flat_dps")
+    dot_dps = getattr(source, "flat_dotps")
+    total_dps = getattr(source, "total_dps")
     if all(value is None for value in (direct_dph, dot_dph, total_dph, direct_dps, dot_dps, total_dps)): return None
     return DamageMetrics(float(direct_dph or 0), float(dot_dph or 0), float(total_dph or 0), float(direct_dps or 0), float(dot_dps or 0), float(total_dps or 0))
 
 
-class DamagePool:
-    @property
-    def normal(self) -> DamageMetrics:
-        return _damage_metrics(self) or DamageMetrics(0, 0, 0, 0, 0, 0)
-
-    @property
-    def weakpoint(self) -> DamageMetrics | None:
-        return _damage_metrics(self, "weakpoint_")
-
-    @property
-    def resistant(self) -> DamageMetrics | None:
-        return _damage_metrics(self, "resistant_")
-
-
 @dataclass(frozen=True, slots=True)
-class DamageResult:
-    normal: DamageMetrics
-    weakpoint: DamageMetrics | None
-    resistant: DamageMetrics | None
+class DamageResult(DamageMetrics):
+    pass
 
 
 @dataclass(frozen=True, slots=True)
 class AverageResult:
-    normal: DamageMetrics
-    weakpoint: DamageMetrics | None
-    resistant: DamageMetrics | None
+    direct_dph: float
+    dot_dph: float
+    total_dph: float
+    direct_dps: float
+    dot_dps: float
+    total_dps: float
     crit_chance: float
     crit_multiplier: float
     weakpoint_crit_chance: float
@@ -131,7 +118,7 @@ class AverageResult:
 
 
 @dataclass(slots=True)
-class AverageAttackStats(DamagePool):
+class AverageAttackStats:
     crit_chance: float = 0
     crit_multiplier: float = 1
     weakpoint_crit_chance: float = 0
@@ -144,18 +131,6 @@ class AverageAttackStats(DamagePool):
     flat_dotps: float | None = None
     total_dph: float | None = None
     total_dps: float | None = None
-    flat_weakpoint_dph: float | None = None
-    flat_weakpoint_dps: float | None = None
-    flat_weakpoint_dotph: float | None = None
-    flat_weakpoint_dotps: float | None = None
-    total_weakpoint_dph: float | None = None
-    total_weakpoint_dps: float | None = None
-    flat_resistant_dph: float | None = None
-    flat_resistant_dps: float | None = None
-    flat_resistant_dotph: float | None = None
-    flat_resistant_dotps: float | None = None
-    total_resistant_dph: float | None = None
-    total_resistant_dps: float | None = None
     first_shot_damage_multiplier: float = 1
     combo_multiplier: float = 1
     melee_duplicate_multiplier: float = 1
@@ -168,7 +143,7 @@ class AverageAttackStats(DamagePool):
 
 
 @dataclass(slots=True)
-class SpatialMetrics(DamagePool):
+class SpatialMetrics:
     falloff_multiplier: float | None = None
     damage_mass: float | None = None
     dimension: int | None = None
@@ -178,18 +153,6 @@ class SpatialMetrics(DamagePool):
     flat_dps: float | None = None
     flat_dotps: float | None = None
     total_dps: float | None = None
-    flat_weakpoint_dph: float | None = None
-    flat_weakpoint_dotph: float | None = None
-    total_weakpoint_dph: float | None = None
-    flat_weakpoint_dps: float | None = None
-    flat_weakpoint_dotps: float | None = None
-    total_weakpoint_dps: float | None = None
-    flat_resistant_dph: float | None = None
-    flat_resistant_dotph: float | None = None
-    total_resistant_dph: float | None = None
-    flat_resistant_dps: float | None = None
-    flat_resistant_dotps: float | None = None
-    total_resistant_dps: float | None = None
 
 
 @dataclass(slots=True)
@@ -227,9 +190,12 @@ class SpatialResult:
     dimension: int
     falloff_multiplier: float
     damage_mass: float
-    normal: SpatialDamageMetrics
-    weakpoint: SpatialDamageMetrics | None
-    resistant: SpatialDamageMetrics | None
+    direct_dph_mass: float
+    dot_dph_mass: float
+    total_dph_mass: float
+    direct_dps_mass: float
+    dot_dps_mass: float
+    total_dps_mass: float
 
 
 @dataclass(frozen=True, slots=True)

@@ -67,16 +67,12 @@ def distribute_flat(damage: Dist, value: float) -> Dist:
 
 def refresh_metrics(metrics: object) -> None:
     rate = float(getattr(metrics, "sustained_fire_rate"))
-    for prefix in ("", "weakpoint_", "resistant_"):
-        direct = getattr(metrics, f"flat_{prefix}dph")
-        dot = getattr(metrics, f"flat_{prefix}dotph")
-        if direct is None or dot is None:
-            for suffix in ("dph", "dotph", "dps", "dotps"):
-                setattr(metrics, f"flat_{prefix}{suffix}", None)
-            setattr(metrics, f"total_{prefix}dph", None)
-            setattr(metrics, f"total_{prefix}dps", None)
-            continue
-        setattr(metrics, f"flat_{prefix}dps", direct * rate)
-        setattr(metrics, f"flat_{prefix}dotps", dot * rate)
-        setattr(metrics, f"total_{prefix}dph", direct + dot)
-        setattr(metrics, f"total_{prefix}dps", (direct + dot) * rate)
+    direct = getattr(metrics, "flat_dph")
+    dot = getattr(metrics, "flat_dotph")
+    if direct is None or dot is None:
+        for field in ("flat_dph", "flat_dotph", "flat_dps", "flat_dotps", "total_dph", "total_dps"): setattr(metrics, field, None)
+        return
+    setattr(metrics, "flat_dps", direct * rate)
+    setattr(metrics, "flat_dotps", dot * rate)
+    setattr(metrics, "total_dph", direct + dot)
+    setattr(metrics, "total_dps", (direct + dot) * rate)

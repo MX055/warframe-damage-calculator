@@ -19,7 +19,7 @@ class FullDatabaseParityTests(unittest.TestCase):
                 result = calculation.attacks[calculation.selected_attack]
                 self.assertEqual(calculation.selected_attack, reference["attack"])
                 for pool_name in ("average", "final"):
-                    pool = result.average.normal if pool_name == "average" else calculation.aggregate.average.normal
+                    pool = result.average if pool_name == "average" else calculation.aggregate.average
                     for field in fields:
                         canonical = {"flat_dph": "direct_dph", "flat_dotph": "dot_dph", "flat_dps": "direct_dps", "flat_dotps": "dot_dps"}.get(field, field)
                         actual = getattr(pool, canonical)

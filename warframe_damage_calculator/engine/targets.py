@@ -9,11 +9,6 @@ from ..domain.enemies import Enemy
 
 type HitZone = Literal["normal", "weakpoint", "resistant"]
 
-ZONE_FIELDS = {
-    "normal": ("flat_dph", "flat_dotph", "total_dph", "flat_dps", "flat_dotps", "total_dps"),
-    "weakpoint": ("flat_weakpoint_dph", "flat_weakpoint_dotph", "total_weakpoint_dph", "flat_weakpoint_dps", "flat_weakpoint_dotps", "total_weakpoint_dps"),
-    "resistant": ("flat_resistant_dph", "flat_resistant_dotph", "total_resistant_dph", "flat_resistant_dps", "flat_resistant_dotps", "total_resistant_dps"),
-}
 
 
 def status_vulnerability(stacks: float) -> float:
