@@ -4,10 +4,13 @@ from warframe_damage_calculator import Calculator, Loadout, ResultFormatter, Pro
 weapon = arsenal.melee.get("Tenet Exec")
 target = arsenal.enemy.get("Heavy Gunner").set(level=100, steel_path=True)
 loadout = Loadout(
-    upgrades=[
+    mods=[
         arsenal.mod.get("Rending Crane"),
         arsenal.mod.get("Galvanized Steel"),
         arsenal.mod.get("Primed Pressure Point")
+    ],
+    arcanes=[
+        arsenal.arcane.get("Melee Duplicate")
     ],
     progenitor=Progenitor("electricity", 0.60)
 )
