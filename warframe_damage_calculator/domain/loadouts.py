@@ -4,7 +4,7 @@ from collections.abc import Iterable
 from typing import Self
 
 from .damage import BASE_ELEMENT_TYPES
-from .perks import Perk
+from .upgrades import Perk
 from .upgrades import Arcane, Mod, Upgrade
 
 
@@ -48,7 +48,11 @@ class Loadout:
         if len(set(self.evolutions)) != len(self.evolutions): raise ValueError("loadout contains duplicate evolution perks")
 
     @property
-    def upgrades(self) -> tuple[Mod | Arcane, ...]:
+    def upgrades(self) -> tuple[Upgrade, ...]:
+        return (*self.mods, *self.arcanes, *self.evolutions)
+
+    @property
+    def ranked_upgrades(self) -> tuple[Mod | Arcane, ...]:
         return (*self.mods, *self.arcanes)
 
     def __len__(self) -> int:
@@ -70,7 +74,7 @@ class Loadout:
 
     def set(self, **values: object) -> Self:
         consumed: set[str] = set()
-        for upgrade in self.upgrades:
+        for upgrade in self.ranked_upgrades:
             accepted = ({"rank"} | set(upgrade.stats.manual_fields)) & values.keys()
             if accepted:
                 upgrade.set(**{key: values[key] for key in accepted})

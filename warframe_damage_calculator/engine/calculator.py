@@ -6,7 +6,7 @@ from collections.abc import Mapping
 from ..domain.enemies import Enemy
 from ..domain.loadouts import Loadout
 from ..domain.implementation import ImplementationWarning
-from ..domain.perks import Perk, ResolvedPerk
+from ..domain.upgrades import Perk, ResolvedPerk
 from ..domain.results import AggregateResult, AverageResult, CalculatedAttack, CalculationResult, DamageMetrics, DamageResult, SpatialDamageMetrics, SpatialResult, StatusResult, _damage_metrics
 from ..domain.weapons import LoadoutCompatibilityWarning, PerkCompatibilityWarning, ProgenitorCompatibilityWarning, UnimplementedUpgradeWarning, Weapon
 from .context import CalculationContext
@@ -22,7 +22,7 @@ def _warn_implementation(name: str, status, *, stacklevel: int = 3) -> None:
 def _warn_loadout(weapon: Weapon, loadout: Loadout) -> None:
     _warn_implementation(weapon.name, weapon.implementation_status, stacklevel=4)
     previous = []
-    for upgrade in loadout.upgrades:
+    for upgrade in loadout.ranked_upgrades:
         if not upgrade.implemented:
             _warn_implementation(upgrade.name, upgrade.implementation_status, stacklevel=4)
             if upgrade.implementation_status.state == "not_implemented": warnings.warn(f"{upgrade.name} is not implemented and may not affect calculated results.", UnimplementedUpgradeWarning, stacklevel=3)

@@ -21,7 +21,8 @@ class DomainTests(unittest.TestCase):
         first = Loadout(evolutions=[perk])
         combined = first + Mod(name="Damage")
         self.assertEqual(combined.evolutions, [perk])
-        self.assertEqual(combined.upgrades[0].name, "Damage")
+        self.assertEqual([upgrade.name for upgrade in combined.upgrades], ["Damage", "Example"])
+        self.assertEqual([upgrade.name for upgrade in combined.ranked_upgrades], ["Damage"])
 
     def test_loadout_operators_support_perks(self):
         perk = Perk("Example")

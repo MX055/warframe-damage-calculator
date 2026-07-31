@@ -5,7 +5,7 @@ import re
 
 from .analysis.contributions import progenitor_component_name, removal_contributions, shapley_contributions
 from .domain.loadouts import Loadout
-from .domain.perks import Perk
+from .domain.upgrades import Perk
 from .domain.results import CalculationResult, DamageMetrics, DamageResult, SpatialResult, StatusResult
 from .domain.upgrades import Upgrade
 from .domain.weapons import Weapon
@@ -142,7 +142,7 @@ class ResultFormatter:
         shapley = shapley_contributions(calculator, self.result.loadout, attack=self.result.selected_attack, metric=metric, bodypart=selected_bodypart, state=self.result.state)
         if not shapley: return ""
         removal = removal_contributions(calculator, self.result.loadout, attack=self.result.selected_attack, metric=metric, bodypart=selected_bodypart, state=self.result.state)
-        component_types = {upgrade.name: upgrade.slot.replace("_", " ").title() for upgrade in self.result.loadout.upgrades}
+        component_types = {upgrade.name: upgrade.slot.replace("_", " ").title() for upgrade in self.result.loadout.ranked_upgrades}
         component_types.update({perk.name: "Perk" for perk in self.result.loadout.evolutions})
         if self.result.loadout.progenitor is not None: component_types[progenitor_component_name(self.result.loadout.progenitor)] = "Progenitor"
         maximum = max((abs(value) for value in shapley.values()), default=0)
@@ -201,9 +201,10 @@ def format_perk(perk: Perk) -> str:
 
 
 def format_loadout(loadout: Loadout) -> str:
-    upgrades = "\n".join(f"- {upgrade.name}" for upgrade in loadout.upgrades) or "- None"
-    evolutions = "\n".join(f"- {perk.name}" for perk in loadout.evolutions) or "- None"
-    return f"Upgrades:\n{upgrades}\n\nEvolutions:\n{evolutions}"
+    mods = "\n".join(f"- {mod.name}" for mod in loadout.mods) or "- None"
+    arcanes = "\n".join(f"- {arcane.name}" for arcane in loadout.arcanes) or "- None"
+    perks = "\n".join(f"- {perk.name}" for perk in loadout.evolutions) or "- None"
+    return f"Mods:\n{mods}\n\nArcanes:\n{arcanes}\n\nPerks:\n{perks}"
 
 
 def format_damage_result(result: DamageResult) -> str:

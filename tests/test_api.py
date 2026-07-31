@@ -1,6 +1,6 @@
 import unittest
 
-from warframe_damage_calculator import Attack, AttackStats, BodyPart, Calculator, Dist, Effect, Enemy, ImplementationStatus, Loadout, Progenitor, PLACEHOLDER, Perk, PerkValues, Primary, ResultFormatter, UpgradeStats, arsenal, format_damage_result, format_loadout, format_perk, format_spatial, format_status, format_upgrade, format_weapon
+from warframe_damage_calculator import Attack, AttackStats, BodyPart, Calculator, Dist, Effect, Enemy, ImplementationStatus, Loadout, Progenitor, PLACEHOLDER, Perk, PerkValues, Primary, ResultFormatter, Upgrade, UpgradeStats, arsenal, format_damage_result, format_loadout, format_perk, format_spatial, format_status, format_upgrade, format_weapon
 
 
 class ApiTests(unittest.TestCase):
@@ -10,7 +10,8 @@ class ApiTests(unittest.TestCase):
 
     def test_loadout_contains_upgrades_and_global_perks(self):
         loadout = Loadout(mods=[arsenal.mod.get("Serration")], evolutions=[arsenal.perk.get("Elemental Excess")])
-        self.assertEqual(loadout.upgrades[0].name, "Serration")
+        self.assertEqual([upgrade.name for upgrade in loadout.upgrades], ["Serration", "Elemental Excess"])
+        self.assertTrue(all(isinstance(upgrade, Upgrade) for upgrade in loadout.upgrades))
         self.assertEqual(loadout.evolutions[0].name, "Elemental Excess")
 
     def test_global_perk_contains_placeholder_stats(self):

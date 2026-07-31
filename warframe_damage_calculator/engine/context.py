@@ -4,7 +4,7 @@ from collections.abc import Mapping
 
 from ..domain.enemies import Enemy
 from ..domain.loadouts import Loadout
-from ..domain.perks import ResolvedPerk
+from ..domain.upgrades import ResolvedPerk
 from ..domain.weapons import Weapon
 
 

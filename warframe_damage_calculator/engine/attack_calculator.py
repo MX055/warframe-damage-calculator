@@ -124,7 +124,7 @@ def _derived_chances(crit: float, status: float, total: ResolvedStats) -> tuple[
 
 
 def _stance(context: CalculationContext) -> Upgrade | None:
-    return next((upgrade for upgrade in context.loadout.upgrades if upgrade.slot == "stance_mod"), None)
+    return next((upgrade for upgrade in context.loadout.ranked_upgrades if upgrade.slot == "stance_mod"), None)
 
 
 def _stance_combo(context: CalculationContext, attack: Attack) -> Mapping[str, Any] | None:
@@ -483,7 +483,7 @@ def _apply_position_mixture(context: CalculationContext, result: AttackResult, e
 
 def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effects: tuple[ResolvedEffect, ...], evolution_effects: tuple[ResolvedEffect, ...], *, automatic_model_override: StatusModel | None = None, status_effects_override: dict[str, float] | None = None, random_proc_probability: float = 0) -> AttackResult:
     provisional, provisional_model = _provisional(context, attack, upgrade_effects, evolution_effects)
-    equipped = {upgrade.name for upgrade in context.loadout.upgrades}
+    equipped = {upgrade.name for upgrade in context.loadout.ranked_upgrades}
     initial_upgrade_effects, _ = _resolve_effects(context, attack, upgrade_effects, provisional, provisional_model, equipped)
     initial_evolution_effects, _ = _resolve_effects(context, attack, evolution_effects, provisional, provisional_model, equipped)
     stable = lambda effect: not any(str(value).endswith("_status_proc") for value in automatic_values(effect, "when"))

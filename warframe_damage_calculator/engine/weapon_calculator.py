@@ -21,7 +21,7 @@ class WeaponCalculator:
         self.prepared_names = prepared_names
 
     def prepare_effects(self) -> None:
-        self.upgrade_effects = tuple(effect for upgrade in self.context.loadout.upgrades if upgrade.implemented for effect in upgrade.resolve_manual())
+        self.upgrade_effects = tuple(effect for upgrade in self.context.loadout.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual())
         self.evolution_effects = tuple(effect for perk in self.context.resolved_perks for effect in perk.effects)
         self.attacks = AttackCalculator(self.context, self.upgrade_effects, self.evolution_effects)
 

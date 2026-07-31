@@ -4,7 +4,7 @@ from collections.abc import Callable, Mapping
 from math import factorial
 
 from ..domain.loadouts import Loadout, Progenitor
-from ..domain.perks import Perk
+from ..domain.upgrades import Perk
 from ..domain.results import CalculationResult
 from ..domain.upgrades import Arcane, Mod, Upgrade
 from ..engine.calculator import Calculator
@@ -12,7 +12,7 @@ from ..engine.calculator import Calculator
 
 type Metric = str | Callable[[CalculationResult], float]
 type BodyPart = str
-type ContributionComponent = Upgrade | Perk | Progenitor
+type ContributionComponent = Upgrade | Progenitor
 
 
 def progenitor_component_name(progenitor: Progenitor) -> str:
@@ -39,7 +39,7 @@ def removal_contributions(calculator: Calculator, loadout: Loadout, *, attack: s
     selected = attack or calculator.weapon.default_attack
     state = state or {}
     baseline = _evaluate(calculator, loadout, selected, metric, bodypart, state)
-    contributions = {upgrade.name: _evaluate(calculator, Loadout(mods=[candidate for candidate in loadout.mods if candidate is not upgrade], arcanes=[candidate for candidate in loadout.arcanes if candidate is not upgrade], evolutions=loadout.evolutions, progenitor=loadout.progenitor), selected, metric, bodypart, state) - baseline for upgrade in loadout.upgrades}
+    contributions = {upgrade.name: _evaluate(calculator, Loadout(mods=[candidate for candidate in loadout.mods if candidate is not upgrade], arcanes=[candidate for candidate in loadout.arcanes if candidate is not upgrade], evolutions=loadout.evolutions, progenitor=loadout.progenitor), selected, metric, bodypart, state) - baseline for upgrade in loadout.ranked_upgrades}
     contributions.update({perk.name: _evaluate(calculator, Loadout(mods=loadout.mods, arcanes=loadout.arcanes, evolutions=[candidate for candidate in loadout.evolutions if candidate != perk], progenitor=loadout.progenitor), selected, metric, bodypart, state) - baseline for perk in loadout.evolutions})
     if loadout.progenitor is not None: contributions[progenitor_component_name(loadout.progenitor)] = _evaluate(calculator, Loadout(mods=loadout.mods, arcanes=loadout.arcanes, evolutions=loadout.evolutions), selected, metric, bodypart, state) - baseline
     return contributions
@@ -48,7 +48,7 @@ def removal_contributions(calculator: Calculator, loadout: Loadout, *, attack: s
 def shapley_contributions(calculator: Calculator, loadout: Loadout, *, attack: str | None = None, metric: Metric = "total_dps", bodypart: BodyPart | None = None, state: Mapping[str, object] | None = None) -> dict[str, float]:
     selected = attack or calculator.weapon.default_attack
     state = state or {}
-    components: list[ContributionComponent] = [*loadout.upgrades, *loadout.evolutions]
+    components: list[ContributionComponent] = [*loadout.upgrades]
     if loadout.progenitor is not None: components.append(loadout.progenitor)
     size = len(components)
     if not size: return {}

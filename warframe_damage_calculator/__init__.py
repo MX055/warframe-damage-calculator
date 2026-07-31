@@ -5,7 +5,7 @@ from .domain.effects import Effect
 from .domain.enemies import BodyPart, Enemy, EnemyStats
 from .domain.implementation import ImplementationStatus, ImplementationWarning
 from .domain.loadouts import Loadout, Progenitor
-from .domain.perks import PLACEHOLDER, Perk, PerkValues, Placeholder, ResolvedPerk
+from .domain.upgrades import PLACEHOLDER, Perk, PerkValues, Placeholder, ResolvedPerk
 from .domain.results import AggregateResult, AverageResult, CalculatedAttack, CalculationResult, DamageMetrics, DamageResult, SpatialDamageMetrics, SpatialResult, StatusResult
 from .domain.upgrades import Arcane, Compatibility, Mod, Upgrade, UpgradeStats
 from .domain.weapons import Archgun, Attack, AttackStats, LoadoutCompatibilityWarning, Melee, PerkCompatibilityWarning, Primary, ProgenitorCompatibilityWarning, Secondary, UnimplementedUpgradeWarning, Weapon

@@ -7,7 +7,7 @@ from typing import Any, ClassVar, Mapping, Self
 
 from .damage import Dist
 from .implementation import ImplementationStatus
-from .perks import Perk, PerkValues, ResolvedPerk, resolve_perk
+from .upgrades import Perk, PerkValues, ResolvedPerk, resolve_perk
 
 
 @dataclass(slots=True)
