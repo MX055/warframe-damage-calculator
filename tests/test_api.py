@@ -130,8 +130,18 @@ class ApiTests(unittest.TestCase):
         self.assertIn("┼", summary)
         fire_rate_result = Calculator(weapon, loadout=Loadout(upgrades=[arsenal.upgrade.get("Critical Deceleration")])).calculate()
         fire_rate_attack = fire_rate_result.attacks[fire_rate_result.selected_attack]
-        self.assertAlmostEqual(fire_rate_attack.modded.fire_rate, fire_rate_attack.effective.instantaneous_fire_rate)
-        self.assertIn("1.14", ResultFormatter(fire_rate_result).summary().split("Fire Rate", 1)[1].splitlines()[0])
+        self.assertAlmostEqual(fire_rate_attack.modded.fire_rate, fire_rate_attack.effective.fire_rate)
+        fire_rate_summary = ResultFormatter(fire_rate_result).summary()
+        self.assertIn("1.14", fire_rate_summary.split("Fire Rate", 1)[1].splitlines()[0])
+        self.assertIn("Attacks per Second", fire_rate_summary)
+        self.assertIn(f"{fire_rate_attack.average.attacks_per_second:,.2f}", fire_rate_summary.split("Attacks per Second", 1)[1].splitlines()[0])
+        self.assertEqual(fire_rate_attack.average.damage, fire_rate_attack.effective.damage)
+        self.assertEqual(fire_rate_attack.average.crit_damage, fire_rate_attack.effective.crit_damage)
+        self.assertEqual(fire_rate_attack.average.status_chance, fire_rate_attack.effective.status_chance)
+        self.assertEqual(fire_rate_attack.average.multishot, fire_rate_attack.effective.multishot)
+        self.assertEqual(fire_rate_attack.average.fire_rate, fire_rate_attack.effective.fire_rate)
+        self.assertIn(f"{fire_rate_attack.average.crit_damage:.2f}×", fire_rate_summary.split("Critical Damage", 1)[1].splitlines()[0])
+        self.assertIn("Damage Mass (m³)", ResultFormatter(Calculator(weapon).calculate(attack="air_burst_explosion")).summary())
         targeted = ResultFormatter(Calculator(weapon, arsenal.enemy.get("Heavy Gunner"), loadout).calculate())
         self.assertIn("Total DPS Contributions: Corinth Prime Buckshot vs Heavy Gunner Body", targeted.contributions())
         self.assertIn("Total DPS Contributions: Corinth Prime Buckshot vs Heavy Gunner Head", targeted.contributions(bodypart="head"))
@@ -142,7 +152,8 @@ class ApiTests(unittest.TestCase):
         contribution_table = targeted.contributions()
         self.assertNotIn("\x1b[", contribution_table)
         self.assertIn("+100.00%", contribution_table)
-        self.assertIn("+460.51", contribution_table)
+        self.assertIn("-460.51", contribution_table)
+        self.assertIn("Removal Difference", contribution_table)
         self.assertIn("··········│", contribution_table)
         self.assertIn("Contribution Rank", contribution_table)
         self.assertIn("Regular Mod", contribution_table)
@@ -158,6 +169,12 @@ class ApiTests(unittest.TestCase):
         self.assertIn("Attack Speed", melee_summary)
         self.assertNotIn("Fire Rate", melee_summary)
         self.assertIn("Reload Time", melee_summary)
+        magazine_row = melee_summary.split("Magazine Capacity", 1)[1].splitlines()[0]
+        reload_row = melee_summary.split("Reload Time", 1)[1].splitlines()[0]
+        ammo_row = melee_summary.split("Ammo Cost", 1)[1].splitlines()[0]
+        self.assertEqual(magazine_row.count("1r"), 4)
+        self.assertEqual(reload_row.count("0.00s"), 4)
+        self.assertEqual(ammo_row.count("1.00"), 4)
 
     def test_contributions_include_upgrades_and_evolutions(self):
         from warframe_damage_calculator import removal_contributions, shapley_contributions
@@ -172,6 +189,8 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(set(removal), {"Serration", "Devouring Attrition"})
         self.assertEqual(set(shapley), set(removal))
         self.assertAlmostEqual(sum(shapley.values()), 1)
+        self.assertLess(removal["Serration"], 0)
+        self.assertLess(removal["Devouring Attrition"], 0)
         self.assertEqual(set(weakpoint_removal), set(removal))
         self.assertEqual(set(weakpoint_shapley), set(removal))
         self.assertAlmostEqual(sum(weakpoint_shapley.values()), 1)

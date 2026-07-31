@@ -46,7 +46,6 @@ class EffectiveAttackStats(ModdedAttackStats):
     dot_elemental_bonuses: Stats
     forced_procs: Dist
     status_model: StatusModel
-    instantaneous_fire_rate: float
     attack_event_rate: float
     reload_time: float
     faction_damage: float
@@ -95,17 +94,35 @@ class DamageResult(DamageMetrics):
 
 @dataclass(frozen=True, slots=True)
 class AverageResult:
+    damage: Dist
+    crit_chance: float
+    crit_damage: float
+    status_chance: float
+    status_duration: float
+    multishot: float
+    fire_rate: float
+    magazine_capacity: float
+    reload_time: float
+    ammo_cost: float
+    ammo_efficiency: float
+    punch_through: float
+    burst_count: float
+    burst_delay: float
+    charge_time: float
+    attack_speed: float
+    heavy_attack_speed: float
+    heavy_attack_efficiency: float
+    initial_combo: float
     direct_dph: float
     dot_dph: float
     total_dph: float
     direct_dps: float
     dot_dps: float
     total_dps: float
-    crit_chance: float
     crit_multiplier: float
     weakpoint_crit_chance: float
     weakpoint_crit_multiplier: float
-    sustained_fire_rate: float
+    attacks_per_second: float
     first_shot_damage_multiplier: float
     combo_multiplier: float
     melee_duplicate_multiplier: float
@@ -119,11 +136,29 @@ class AverageResult:
 
 @dataclass(slots=True)
 class AverageAttackStats:
+    damage: Dist = field(default_factory=Dist)
     crit_chance: float = 0
+    crit_damage: float = 1
+    status_chance: float = 0
+    status_duration: float = 0
+    multishot: float = 1
+    fire_rate: float = 0
+    magazine_capacity: float = 0
+    reload_time: float = 0
+    ammo_cost: float = 0
+    ammo_efficiency: float = 0
+    punch_through: float = 0
+    burst_count: float = 1
+    burst_delay: float = 0
+    charge_time: float = 0
+    attack_speed: float = 0
+    heavy_attack_speed: float = 1
+    heavy_attack_efficiency: float = 0
+    initial_combo: float = 0
     crit_multiplier: float = 1
     weakpoint_crit_chance: float = 0
     weakpoint_crit_multiplier: float = 1
-    sustained_fire_rate: float = 0
+    attacks_per_second: float = 0
     procs_per_shot: float = 0
     flat_dph: float | None = None
     flat_dps: float | None = None

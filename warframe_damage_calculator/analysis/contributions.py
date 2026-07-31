@@ -39,9 +39,9 @@ def removal_contributions(calculator: Calculator, loadout: Loadout, *, attack: s
     selected = attack or calculator.weapon.default_attack
     state = state or {}
     baseline = _evaluate(calculator, loadout, selected, metric, bodypart, state)
-    contributions = {upgrade.name: baseline - _evaluate(calculator, Loadout(upgrades=[candidate for candidate in loadout.upgrades if candidate is not upgrade], evolutions=loadout.evolutions, progenitor=loadout.progenitor), selected, metric, bodypart, state) for upgrade in loadout.upgrades}
-    contributions.update({perk.name: baseline - _evaluate(calculator, Loadout(upgrades=loadout.upgrades, evolutions=[candidate for candidate in loadout.evolutions if candidate != perk], progenitor=loadout.progenitor), selected, metric, bodypart, state) for perk in loadout.evolutions})
-    if loadout.progenitor is not None: contributions[progenitor_component_name(loadout.progenitor)] = baseline - _evaluate(calculator, Loadout(upgrades=loadout.upgrades, evolutions=loadout.evolutions), selected, metric, bodypart, state)
+    contributions = {upgrade.name: _evaluate(calculator, Loadout(upgrades=[candidate for candidate in loadout.upgrades if candidate is not upgrade], evolutions=loadout.evolutions, progenitor=loadout.progenitor), selected, metric, bodypart, state) - baseline for upgrade in loadout.upgrades}
+    contributions.update({perk.name: _evaluate(calculator, Loadout(upgrades=loadout.upgrades, evolutions=[candidate for candidate in loadout.evolutions if candidate != perk], progenitor=loadout.progenitor), selected, metric, bodypart, state) - baseline for perk in loadout.evolutions})
+    if loadout.progenitor is not None: contributions[progenitor_component_name(loadout.progenitor)] = _evaluate(calculator, Loadout(upgrades=loadout.upgrades, evolutions=loadout.evolutions), selected, metric, bodypart, state) - baseline
     return contributions
 
 

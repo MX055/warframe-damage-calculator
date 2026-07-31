@@ -66,7 +66,7 @@ def distribute_flat(damage: Dist, value: float) -> Dist:
 
 
 def refresh_metrics(metrics: object) -> None:
-    rate = float(getattr(metrics, "sustained_fire_rate"))
+    rate = float(getattr(metrics, "attacks_per_second"))
     direct = getattr(metrics, "flat_dph")
     dot = getattr(metrics, "flat_dotph")
     if direct is None or dot is None:

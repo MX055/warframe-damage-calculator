@@ -111,7 +111,7 @@ class MechanicsTests(unittest.TestCase):
     def test_battery_reload_cycle_uses_capacity_and_recharge_rate(self):
         result = selected(Calculator(arsenal.weapon.get("Cycron")).calculate())
         self.assertAlmostEqual(result.effective.reload_time, 4)
-        self.assertAlmostEqual(result.average.sustained_fire_rate, 7.559055118110237)
+        self.assertAlmostEqual(result.average.attacks_per_second, 7.559055118110237)
         self.assertAlmostEqual(result.average.total_dps, 254.06533493275685)
 
     def test_non_crit_family_uses_event_chance_without_changing_effective_damage(self):
@@ -145,10 +145,10 @@ class MechanicsTests(unittest.TestCase):
         speed_trigger = loadout("Speed Trigger")
         bow = arsenal.weapon.get("Paris")
         rifle = arsenal.weapon.get("Braton")
-        bare_bow_rate = selected(Calculator(bow).calculate()).effective.instantaneous_fire_rate
-        bare_rifle_rate = selected(Calculator(rifle).calculate()).effective.instantaneous_fire_rate
-        bow_rate = selected(Calculator(bow, loadout=speed_trigger).calculate()).effective.instantaneous_fire_rate
-        rifle_rate = selected(Calculator(rifle, loadout=speed_trigger).calculate()).effective.instantaneous_fire_rate
+        bare_bow_rate = selected(Calculator(bow).calculate()).effective.fire_rate
+        bare_rifle_rate = selected(Calculator(rifle).calculate()).effective.fire_rate
+        bow_rate = selected(Calculator(bow, loadout=speed_trigger).calculate()).effective.fire_rate
+        rifle_rate = selected(Calculator(rifle, loadout=speed_trigger).calculate()).effective.fire_rate
         self.assertAlmostEqual(bow_rate / bare_bow_rate, 2.2)
         self.assertAlmostEqual(rifle_rate / bare_rifle_rate, 1.6)
 
