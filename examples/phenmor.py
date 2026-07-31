@@ -18,7 +18,8 @@ loadout = Loadout(
     ]
 )
 calculator = Calculator(weapon, target, loadout)
-result = calculator.resolve(attack="incarnon_form", body_part="body")
+result = calculator.resolve(attack="incarnon_form")
+
 formatter = Formatter(result)
 print(formatter.summary())
 print(formatter.contributions())

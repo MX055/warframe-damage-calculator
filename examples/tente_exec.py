@@ -15,7 +15,8 @@ loadout = Loadout(
     progenitor=Progenitor("electricity", 0.60)
 )
 calculator = Calculator(weapon, target, loadout)
-result = calculator.resolve(attack="heavy_slam_attack", body_part="body", state={"stance_combo": "heavy"})
+result = calculator.resolve(attack="heavy_slam_attack", state={"stance_combo": "heavy"})
+
 formatter = Formatter(result)
 print(formatter.summary())
 print(formatter.contributions())
