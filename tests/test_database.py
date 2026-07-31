@@ -31,19 +31,19 @@ class DatabaseTests(unittest.TestCase):
 
     def test_upgrade_collections_are_subdivided(self):
         self.assertIn("upgrades", arsenal.database)
-        self.assertEqual(set(arsenal.database["upgrades"]), {"mod", "arcane", "perk"})
-        self.assertTrue(all("kind" not in record for record in arsenal.database["upgrades"]["mod"].values()))
-        self.assertTrue(all("kind" not in record for record in arsenal.database["upgrades"]["arcane"].values()))
+        self.assertEqual(set(arsenal.database["upgrades"]), {"mods", "arcanes", "perks"})
+        self.assertTrue(all("kind" not in record for record in arsenal.database["upgrades"]["mods"].values()))
+        self.assertTrue(all("kind" not in record for record in arsenal.database["upgrades"]["arcanes"].values()))
         self.assertTrue(all(arsenal.mod.get(name).type == "mod" for name in arsenal.mod))
         self.assertTrue(all(arsenal.arcane.get(name).type == "arcane" for name in arsenal.arcane))
 
     def test_perks_are_loaded_from_database(self):
-        self.assertEqual(arsenal.database["schema_version"], 18)
-        self.assertIn("Devouring Attrition", arsenal.database["upgrades"]["perk"])
-        self.assertEqual(arsenal.database["upgrades"]["perk"]["Devouring Attrition"]["stats"]["damage_bonus"][0]["value"], "$weapon")
+        self.assertEqual(arsenal.database["schema_version"], 19)
+        self.assertIn("Devouring Attrition", arsenal.database["upgrades"]["perks"])
+        self.assertEqual(arsenal.database["upgrades"]["perks"]["Devouring Attrition"]["stats"]["damage_bonus"][0]["value"], "$weapon")
 
     def test_weapon_records_contain_only_perk_values(self):
-        record = arsenal.database["weapons"]["primary"]["Phenmor"]["evolutions"]["5"]["1"]
+        record = arsenal.database["weapons"]["primaries"]["Phenmor"]["evolutions"]["5"]["1"]
         self.assertEqual(record["perk"], "Devouring Attrition")
         self.assertNotIn("stats", record)
         self.assertEqual(record["values"]["damage_bonus"], [20])
@@ -59,7 +59,7 @@ class DatabaseTests(unittest.TestCase):
         self.assertEqual(len(normalized), len(set(normalized)))
 
     def test_metadata_only_perks_are_explicit(self):
-        metadata_only = {name for name, record in arsenal.database["upgrades"]["perk"].items() if not record["stats"]}
+        metadata_only = {name for name, record in arsenal.database["upgrades"]["perks"].items() if not record["stats"]}
         self.assertEqual(metadata_only, METADATA_ONLY_PERKS)
 
     def test_database_wide_perk_value_invariants(self):
@@ -69,7 +69,7 @@ class DatabaseTests(unittest.TestCase):
                 for tier, choices in weapon.get("evolutions", {}).items():
                     for choice, record in choices.items():
                         with self.subTest(weapon=weapon_name, tier=tier, choice=choice):
-                            template = database["upgrades"]["perk"][record["perk"]]["stats"]
+                            template = database["upgrades"]["perks"][record["perk"]]["stats"]
                             self.assertEqual(set(record["values"]), set(template))
                             for stat, effects in template.items():
                                 self.assertEqual(len(record["values"][stat]), len(effects))

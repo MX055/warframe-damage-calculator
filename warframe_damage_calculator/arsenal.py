@@ -51,15 +51,15 @@ class Arsenal:
         self.database: dict = dict(database)
         validate_database(self.database)
         upgrades = self.database["upgrades"]
-        perk_definitions = {name: Perk.from_record(record) for name, record in upgrades["perk"].items()}
+        perk_definitions = {name: Perk.from_record(record) for name, record in upgrades["perks"].items()}
         weapons = self.database["weapons"]
-        self.primary = Repository[Primary](weapons["primary"], lambda record: Primary.from_record(record, perk_definitions))
-        self.secondary = Repository[Secondary](weapons["secondary"], lambda record: Secondary.from_record(record, perk_definitions))
-        self.melee = Repository[Melee](weapons["melee"], lambda record: Melee.from_record(record, perk_definitions))
-        self.archgun = Repository[Archgun](weapons["archgun"], lambda record: Archgun.from_record(record, perk_definitions))
-        self.mod = Repository[Mod](upgrades["mod"], Mod.from_record)
-        self.arcane = Repository[Arcane](upgrades["arcane"], Arcane.from_record)
-        self.perk = Repository[Perk](upgrades["perk"], Perk.from_record)
+        self.primary = Repository[Primary](weapons["primaries"], lambda record: Primary.from_record(record, perk_definitions))
+        self.secondary = Repository[Secondary](weapons["secondaries"], lambda record: Secondary.from_record(record, perk_definitions))
+        self.melee = Repository[Melee](weapons["melees"], lambda record: Melee.from_record(record, perk_definitions))
+        self.archgun = Repository[Archgun](weapons["archguns"], lambda record: Archgun.from_record(record, perk_definitions))
+        self.mod = Repository[Mod](upgrades["mods"], Mod.from_record)
+        self.arcane = Repository[Arcane](upgrades["arcanes"], Arcane.from_record)
+        self.perk = Repository[Perk](upgrades["perks"], Perk.from_record)
         self.enemy = Repository[Enemy](self.database["enemies"], lambda record: Enemy.from_record(record, loaded=True))
 
     @classmethod

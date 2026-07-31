@@ -1,7 +1,7 @@
 {
-  "schema_version": 18,
+  "schema_version": 19,
   "weapons": {
-    "primary": {
+    "primaries": {
       "Coda Bassocyst": {
         "name": "Coda Bassocyst",
         "subtype": "shotgun",
@@ -18394,7 +18394,7 @@
         "evolutions": {}
       }
     },
-    "secondary": {
+    "secondaries": {
       "Euphona Prime": {
         "name": "Euphona Prime",
         "subtype": "pistol",
@@ -30703,7 +30703,7 @@
         "evolutions": {}
       }
     },
-    "melee": {
+    "melees": {
       "Telos Boltace": {
         "name": "Telos Boltace",
         "subtype": "tonfa",
@@ -73314,7 +73314,7 @@
         "evolutions": {}
       }
     },
-    "archgun": {
+    "archguns": {
       "Arquebex": {
         "name": "Arquebex",
         "subtype": "archgun",
@@ -97825,7 +97825,7 @@
     }
   },
   "upgrades": {
-    "mod": {
+    "mods": {
       "Accelerated Blast": {
         "name": "Accelerated Blast",
         "max_rank": 3,
@@ -117559,7 +117559,7 @@
         "conflicts": []
       }
     },
-    "arcane": {
+    "arcanes": {
       "Akimbo Slip Shot": {
         "name": "Akimbo Slip Shot",
         "max_rank": 5,
@@ -118780,7 +118780,7 @@
         "conflicts": []
       }
     },
-    "perk": {
+    "perks": {
       "Abiding Hold": {
         "name": "Abiding Hold",
         "description": "",
