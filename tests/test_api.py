@@ -142,7 +142,7 @@ class ApiTests(unittest.TestCase):
         contribution_table = targeted.contributions()
         self.assertNotIn("\x1b[", contribution_table)
         self.assertIn("+100.00%", contribution_table)
-        self.assertIn("+460.51", contribution_table)
+        self.assertIn("-460.51", contribution_table)
         self.assertIn("··········│", contribution_table)
         self.assertIn("Contribution Rank", contribution_table)
         self.assertIn("Regular Mod", contribution_table)
