@@ -7,6 +7,7 @@ from types import MappingProxyType
 from typing import Any
 
 from .effects import PLACEHOLDER, Effect, Placeholder, Scalar
+from .implementation import ImplementationStatus
 from .upgrades import ResolvedEffect, UpgradeStats
 
 
@@ -28,10 +29,11 @@ class Perk:
     name: str
     description: str = ""
     stats: UpgradeStats = field(default_factory=UpgradeStats, compare=False, hash=False)
+    implementation_status: ImplementationStatus = field(default_factory=ImplementationStatus, compare=False, hash=False)
 
     @classmethod
     def from_record(cls, record: Mapping[str, Any]) -> Perk:
-        return cls(name=str(record["name"]), description=str(record.get("description", "")), stats=placeholder_stats(record.get("stats", {})))
+        return cls(name=str(record["name"]), description=str(record.get("description", "")), stats=placeholder_stats(record.get("stats", {})), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")))
 
 
 @dataclass(frozen=True, slots=True)

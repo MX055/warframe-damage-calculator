@@ -1,5 +1,5 @@
 {
-    "schema_version": 11,
+    "schema_version": 12,
     "weapons": {
         "Euphona Prime": {
             "name": "Euphona Prime",
@@ -22005,7 +22005,13 @@
             "disposition": 1.45,
             "reload_time": 2,
             "magazine_size": 50,
-            "evolutions": {}
+            "evolutions": {},
+            "implementation_status": {
+                "state": "partial",
+                "missing_features": [
+                    "microwave_status"
+                ]
+            }
         },
         "Miter": {
             "name": "Miter",
@@ -24339,7 +24345,13 @@
             "progenitor": true,
             "reload_time": 3.3,
             "magazine_size": 11,
-            "evolutions": {}
+            "evolutions": {},
+            "implementation_status": {
+                "state": "partial",
+                "missing_features": [
+                    "multiplicative_weakpoint_crit_chance"
+                ]
+            }
         },
         "Gotva Prime": {
             "name": "Gotva Prime",
@@ -32703,7 +32715,13 @@
             "progenitor": true,
             "reload_time": 2,
             "magazine_size": 77,
-            "evolutions": {}
+            "evolutions": {},
+            "implementation_status": {
+                "state": "partial",
+                "missing_features": [
+                    "microwave_status"
+                ]
+            }
         },
         "Kuva Ogris": {
             "name": "Kuva Ogris",
@@ -74548,7 +74566,6 @@
         },
         "Burning Hate": {
             "name": "Burning Hate",
-            "implemented": false,
             "max_rank": 5,
             "compatibility": {
                 "names": [
@@ -74568,7 +74585,13 @@
             },
             "kind": "mod",
             "slot": "normal",
-            "conflicts": []
+            "conflicts": [],
+            "implementation_status": {
+                "state": "not_implemented",
+                "missing_features": [
+                    "upgrade_effects"
+                ]
+            }
         },
         "Bursting Mass": {
             "name": "Bursting Mass",
@@ -75832,7 +75855,6 @@
         },
         "Cull the Weak": {
             "name": "Cull the Weak",
-            "implemented": false,
             "max_rank": 5,
             "compatibility": {
                 "subtypes": [
@@ -75861,7 +75883,13 @@
             },
             "kind": "mod",
             "slot": "normal",
-            "conflicts": []
+            "conflicts": [],
+            "implementation_status": {
+                "state": "not_implemented",
+                "missing_features": [
+                    "upgrade_effects"
+                ]
+            }
         },
         "Cutting Edge": {
             "name": "Cutting Edge",
@@ -75930,7 +75958,6 @@
         },
         "Deadly Maneuvers": {
             "name": "Deadly Maneuvers",
-            "implemented": false,
             "max_rank": 3,
             "compatibility": {
                 "names": [
@@ -75952,7 +75979,13 @@
             },
             "kind": "mod",
             "slot": "normal",
-            "conflicts": []
+            "conflicts": [],
+            "implementation_status": {
+                "state": "not_implemented",
+                "missing_features": [
+                    "upgrade_effects"
+                ]
+            }
         },
         "Deadly Sequence": {
             "name": "Deadly Sequence",
@@ -79201,7 +79234,6 @@
         },
         "Lasting Purity": {
             "name": "Lasting Purity",
-            "implemented": false,
             "max_rank": 3,
             "compatibility": {
                 "names": [
@@ -79220,7 +79252,13 @@
             },
             "kind": "mod",
             "slot": "normal",
-            "conflicts": []
+            "conflicts": [],
+            "implementation_status": {
+                "state": "not_implemented",
+                "missing_features": [
+                    "upgrade_effects"
+                ]
+            }
         },
         "Lasting Sting": {
             "name": "Lasting Sting",
@@ -93474,7 +93512,6 @@
         },
         "Cascadia Empowered": {
             "name": "Cascadia Empowered",
-            "implemented": false,
             "max_rank": 5,
             "compatibility": {
                 "types": [
@@ -93493,7 +93530,13 @@
             },
             "kind": "arcane",
             "slot": "arcane",
-            "conflicts": []
+            "conflicts": [],
+            "implementation_status": {
+                "state": "not_implemented",
+                "missing_features": [
+                    "upgrade_effects"
+                ]
+            }
         },
         "Cascadia Flare": {
             "name": "Cascadia Flare",
@@ -93716,7 +93759,6 @@
         },
         "Longbow Sharpshot": {
             "name": "Longbow Sharpshot",
-            "implemented": false,
             "max_rank": 5,
             "compatibility": {
                 "types": [
@@ -93736,11 +93778,16 @@
             },
             "kind": "arcane",
             "slot": "arcane",
-            "conflicts": []
+            "conflicts": [],
+            "implementation_status": {
+                "state": "not_implemented",
+                "missing_features": [
+                    "upgrade_effects"
+                ]
+            }
         },
         "Melee Afflictions": {
             "name": "Melee Afflictions",
-            "implemented": false,
             "max_rank": 5,
             "compatibility": {
                 "types": [
@@ -93759,7 +93806,13 @@
             },
             "kind": "arcane",
             "slot": "arcane",
-            "conflicts": []
+            "conflicts": [],
+            "implementation_status": {
+                "state": "not_implemented",
+                "missing_features": [
+                    "upgrade_effects"
+                ]
+            }
         },
         "Melee Animosity": {
             "name": "Melee Animosity",
@@ -94147,7 +94200,6 @@
         },
         "Primary Debilitate": {
             "name": "Primary Debilitate",
-            "implemented": false,
             "max_rank": 5,
             "compatibility": {
                 "types": [
@@ -94166,7 +94218,13 @@
             },
             "kind": "arcane",
             "slot": "arcane",
-            "conflicts": []
+            "conflicts": [],
+            "implementation_status": {
+                "state": "not_implemented",
+                "missing_features": [
+                    "upgrade_effects"
+                ]
+            }
         },
         "Primary Dexterity": {
             "name": "Primary Dexterity",
@@ -94500,7 +94558,6 @@
         },
         "Secondary Fortifier": {
             "name": "Secondary Fortifier",
-            "implemented": false,
             "max_rank": 5,
             "compatibility": {
                 "types": [
@@ -94519,7 +94576,13 @@
             },
             "kind": "arcane",
             "slot": "arcane",
-            "conflicts": []
+            "conflicts": [],
+            "implementation_status": {
+                "state": "not_implemented",
+                "missing_features": [
+                    "upgrade_effects"
+                ]
+            }
         },
         "Secondary Irradiate": {
             "name": "Secondary Irradiate",
@@ -116278,7 +116341,13 @@
         "Armored Finisher": {
             "name": "Armored Finisher",
             "description": "",
-            "stats": {}
+            "stats": {},
+            "implementation_status": {
+                "state": "not_implemented",
+                "missing_features": [
+                    "perk_effects"
+                ]
+            }
         },
         "Attuned Accuracy": {
             "name": "Attuned Accuracy",
@@ -116308,12 +116377,24 @@
                         }
                     }
                 ]
+            },
+            "implementation_status": {
+                "state": "partial",
+                "missing_features": [
+                    "automatic_holstered_reload"
+                ]
             }
         },
         "Balanced Stagger": {
             "name": "Balanced Stagger",
             "description": "",
-            "stats": {}
+            "stats": {},
+            "implementation_status": {
+                "state": "not_implemented",
+                "missing_features": [
+                    "perk_effects"
+                ]
+            }
         },
         "Blade Twister": {
             "name": "Blade Twister",
@@ -116493,7 +116574,13 @@
         "Chain Shatter": {
             "name": "Chain Shatter",
             "description": "",
-            "stats": {}
+            "stats": {},
+            "implementation_status": {
+                "state": "not_implemented",
+                "missing_features": [
+                    "perk_effects"
+                ]
+            }
         },
         "Commodore's Fortune": {
             "name": "Commodore's Fortune",
@@ -116758,7 +116845,13 @@
         "Devastating Mercy": {
             "name": "Devastating Mercy",
             "description": "",
-            "stats": {}
+            "stats": {},
+            "implementation_status": {
+                "state": "not_implemented",
+                "missing_features": [
+                    "perk_effects"
+                ]
+            }
         },
         "Devastation Cascade": {
             "name": "Devastation Cascade",
@@ -116848,7 +116941,13 @@
         "Echoes of Rage": {
             "name": "Echoes of Rage",
             "description": "",
-            "stats": {}
+            "stats": {},
+            "implementation_status": {
+                "state": "not_implemented",
+                "missing_features": [
+                    "perk_effects"
+                ]
+            }
         },
         "Edge of Justice": {
             "name": "Edge of Justice",
@@ -117006,12 +117105,24 @@
                         }
                     }
                 ]
+            },
+            "implementation_status": {
+                "state": "partial",
+                "missing_features": [
+                    "automatic_instant_reload"
+                ]
             }
         },
         "Explosive Growth": {
             "name": "Explosive Growth",
             "description": "",
-            "stats": {}
+            "stats": {},
+            "implementation_status": {
+                "state": "not_implemented",
+                "missing_features": [
+                    "perk_effects"
+                ]
+            }
         },
         "Extended Volley": {
             "name": "Extended Volley",
@@ -117339,6 +117450,12 @@
                         }
                     }
                 ]
+            },
+            "implementation_status": {
+                "state": "partial",
+                "missing_features": [
+                    "automatic_ammo_restore"
+                ]
             }
         },
         "Haven Foray": {
@@ -117536,6 +117653,12 @@
                         }
                     }
                 ]
+            },
+            "implementation_status": {
+                "state": "partial",
+                "missing_features": [
+                    "automatic_ammo_replenishment"
+                ]
             }
         },
         "Impaler's Ferocity": {
@@ -117578,7 +117701,13 @@
         "Incarnon Imago": {
             "name": "Incarnon Imago",
             "description": "",
-            "stats": {}
+            "stats": {},
+            "implementation_status": {
+                "state": "not_implemented",
+                "missing_features": [
+                    "perk_effects"
+                ]
+            }
         },
         "Incarnon Transmutation": {
             "name": "Incarnon Transmutation",
@@ -118018,6 +118147,12 @@
                         }
                     }
                 ]
+            },
+            "implementation_status": {
+                "state": "partial",
+                "missing_features": [
+                    "automatic_ammo_efficiency_chance"
+                ]
             }
         },
         "Marksman's Hand": {
@@ -118190,7 +118325,13 @@
         "Nimble Scythe": {
             "name": "Nimble Scythe",
             "description": "",
-            "stats": {}
+            "stats": {},
+            "implementation_status": {
+                "state": "not_implemented",
+                "missing_features": [
+                    "perk_effects"
+                ]
+            }
         },
         "Orokin Reach": {
             "name": "Orokin Reach",
@@ -118456,7 +118597,13 @@
         "Raging Drift": {
             "name": "Raging Drift",
             "description": "",
-            "stats": {}
+            "stats": {},
+            "implementation_status": {
+                "state": "not_implemented",
+                "missing_features": [
+                    "perk_effects"
+                ]
+            }
         },
         "Rain of Lead": {
             "name": "Rain of Lead",
@@ -118473,7 +118620,13 @@
         "Rapid Conclusion": {
             "name": "Rapid Conclusion",
             "description": "",
-            "stats": {}
+            "stats": {},
+            "implementation_status": {
+                "state": "not_implemented",
+                "missing_features": [
+                    "perk_effects"
+                ]
+            }
         },
         "Rapid Reinforcement": {
             "name": "Rapid Reinforcement",
@@ -118875,7 +119028,13 @@
         "Silent Running": {
             "name": "Silent Running",
             "description": "",
-            "stats": {}
+            "stats": {},
+            "implementation_status": {
+                "state": "not_implemented",
+                "missing_features": [
+                    "perk_effects"
+                ]
+            }
         },
         "Skyborne Hunter": {
             "name": "Skyborne Hunter",
@@ -119274,7 +119433,13 @@
         "Swift Transmute": {
             "name": "Swift Transmute",
             "description": "",
-            "stats": {}
+            "stats": {},
+            "implementation_status": {
+                "state": "not_implemented",
+                "missing_features": [
+                    "perk_effects"
+                ]
+            }
         },
         "Swooping Lunge": {
             "name": "Swooping Lunge",

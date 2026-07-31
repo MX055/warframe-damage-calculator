@@ -5,17 +5,27 @@ from collections.abc import Mapping
 
 from ..domain.enemies import Enemy
 from ..domain.loadouts import Loadout
+from ..domain.implementation import ImplementationWarning
 from ..domain.perks import Perk, ResolvedPerk
 from ..domain.results import AggregateResult, AverageResult, CalculatedAttack, CalculationResult, DamageMetrics, DamageResult, SpatialDamageMetrics, SpatialResult, StatusResult, _damage_metrics
-from ..domain.weapons import LoadoutCompatibilityWarning, UnimplementedUpgradeWarning, Weapon
+from ..domain.weapons import LoadoutCompatibilityWarning, PerkCompatibilityWarning, ProgenitorCompatibilityWarning, UnimplementedUpgradeWarning, Weapon
 from .context import CalculationContext
 from .weapon_calculator import calculate_weapon
 
 
+def _warn_implementation(name: str, status, *, stacklevel: int = 3) -> None:
+    if status.state == "implemented": return
+    details = ", ".join(status.missing_features)
+    warnings.warn(f"{name} implementation is {status.state}; missing features: {details}.", ImplementationWarning, stacklevel=stacklevel)
+
+
 def _warn_loadout(weapon: Weapon, loadout: Loadout) -> None:
+    _warn_implementation(weapon.name, weapon.implementation_status, stacklevel=4)
     previous = []
     for upgrade in loadout.upgrades:
-        if not upgrade.implemented: warnings.warn(f"{upgrade.name} is not implemented and will not affect calculated results.", UnimplementedUpgradeWarning, stacklevel=3)
+        if not upgrade.implemented:
+            _warn_implementation(upgrade.name, upgrade.implementation_status, stacklevel=4)
+            if upgrade.implementation_status.state == "not_implemented": warnings.warn(f"{upgrade.name} is not implemented and may not affect calculated results.", UnimplementedUpgradeWarning, stacklevel=3)
         compatibility = upgrade.compatibility
         matches_type = not compatibility.types or weapon.type.casefold() in {value.casefold() for value in compatibility.types}
         matches_subtype = not compatibility.subtypes or weapon.subtype is not None and weapon.subtype.casefold() in {value.casefold() for value in compatibility.subtypes}
@@ -29,6 +39,8 @@ def _warn_loadout(weapon: Weapon, loadout: Loadout) -> None:
         conflicts = {other.name for other in previous if other.name in upgrade.conflicts or upgrade.name in other.conflicts}
         if conflicts: warnings.warn(f"{upgrade.name} conflicts with {', '.join(sorted(conflicts))}", LoadoutCompatibilityWarning, stacklevel=3)
         previous.append(upgrade)
+    supports_progenitor = "progenitor" in weapon.traits
+    if loadout.progenitor is not None and not supports_progenitor: warnings.warn(f"{weapon.name} does not support progenitor bonuses; the selected progenitor will be ignored.", ProgenitorCompatibilityWarning, stacklevel=3)
 
 
 def _status_from_model(model, effects: Mapping[str, float]) -> StatusResult:
@@ -82,6 +94,10 @@ def _resolve_perks(weapon: Weapon, perks: list[Perk], state: Mapping[str, object
     tiers: dict[int, Perk] = {}
     resolved: list[ResolvedPerk] = []
     for perk in selected:
+        if perk not in weapon.perks:
+            warnings.warn(f"{perk.name} is not compatible with {weapon.name} and will be ignored.", PerkCompatibilityWarning, stacklevel=4)
+            continue
+        _warn_implementation(perk.name, perk.implementation_status, stacklevel=5)
         result = weapon.resolve_perk(perk, state=state)
         if result.tier in tiers and tiers[result.tier] != perk: raise ValueError(f"multiple evolution perks selected for tier {result.tier}")
         tiers[result.tier] = perk

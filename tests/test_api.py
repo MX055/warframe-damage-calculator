@@ -1,6 +1,6 @@
 import unittest
 
-from warframe_damage_calculator import Attack, AttackStats, Calculator, Dist, Effect, Loadout, PLACEHOLDER, Perk, PerkValues, Primary, ResultFormatter, UpgradeStats, arsenal, format_damage_result, format_loadout, format_perk, format_spatial, format_status, format_upgrade, format_weapon
+from warframe_damage_calculator import Attack, AttackStats, Calculator, Dist, Effect, ImplementationStatus, Loadout, Progenitor, PLACEHOLDER, Perk, PerkValues, Primary, ResultFormatter, UpgradeStats, arsenal, format_damage_result, format_loadout, format_perk, format_spatial, format_status, format_upgrade, format_weapon
 
 
 class ApiTests(unittest.TestCase):
@@ -75,6 +75,14 @@ class ApiTests(unittest.TestCase):
         before = (repr(weapon.attacks), repr(weapon.perks), dict(weapon.calculation_defaults))
         Calculator(weapon).calculate(state={"combo": 5})
         self.assertEqual((repr(weapon.attacks), repr(weapon.perks), dict(weapon.calculation_defaults)), before)
+
+
+    def test_implementation_status_and_progenitor_loadout(self):
+        self.assertEqual(arsenal.weapon.get("Kuva Chakkhurr").implementation_status, ImplementationStatus("partial", ("multiplicative_weakpoint_crit_chance",)))
+        loadout = Loadout(progenitor=Progenitor("heat", 0.6))
+        result = Calculator(arsenal.weapon.get("Kuva Chakkhurr")).calculate(loadout)
+        self.assertEqual(result.loadout.progenitor, loadout.progenitor)
+        self.assertGreater(result.attacks[result.selected_attack].base.damage.total, Calculator(arsenal.weapon.get("Kuva Chakkhurr")).calculate().attacks["normal_attack"].base.damage.total)
 
     def test_formatter_coverage(self):
         weapon = arsenal.weapon.get("Corinth Prime")

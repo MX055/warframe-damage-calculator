@@ -41,6 +41,8 @@ def _combined(upgrades: ResolvedStats, evolutions: ResolvedStats) -> ResolvedSta
 def _base_damage(context: CalculationContext, attack: Attack, evolutions: ResolvedStats) -> tuple[Dist, Dist]:
     strength = float(context.state.ability_strength) if {"exalted", "pseudo_exalted"} & context.weapon.traits else 1.0
     raw = attack.stats.damage * max(strength, 0)
+    progenitor = context.loadout.progenitor if "progenitor" in context.weapon.traits else None
+    if progenitor is not None and raw.total: raw += Dist({progenitor.element: raw.total * progenitor.bonus})
     conversion = sum(float(bucket.get("impact_to_puncture_conversion", 0)) for bucket in (evolutions.proportional, evolutions.base, evolutions.flat))
     if conversion > 0 and raw.get("impact", 0):
         moved = raw.get("impact", 0) * min(conversion, 1)

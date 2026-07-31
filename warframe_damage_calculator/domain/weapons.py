@@ -6,6 +6,7 @@ from types import MappingProxyType
 from typing import Any, ClassVar, Mapping, Self
 
 from .damage import Dist
+from .implementation import ImplementationStatus
 from .perks import Perk, PerkValues, ResolvedPerk, resolve_perk
 
 
@@ -83,6 +84,14 @@ class LoadoutCompatibilityWarning(UserWarning):
     pass
 
 
+class PerkCompatibilityWarning(LoadoutCompatibilityWarning):
+    pass
+
+
+class ProgenitorCompatibilityWarning(LoadoutCompatibilityWarning):
+    pass
+
+
 class UnimplementedUpgradeWarning(UserWarning):
     pass
 
@@ -90,9 +99,10 @@ class UnimplementedUpgradeWarning(UserWarning):
 class Weapon:
     default_type: ClassVar[str] = "weapon"
 
-    def __init__(self, *, name: str, type: str | None = None, subtype: str | None = None, attacks: list[Attack], disposition: float = 0, reload_time: float = 0, magazine_size: float = 1, recharge_delay: float | None = None, recharge_rate: float | None = None, incarnon_charges: float | None = None, incarnon_recharge_count: float | None = None, perks: list[PerkValues] | None = None, traits: set[str] | None = None, combo: Mapping[str, Any] | None = None, calculation_defaults: Mapping[str, Any] | None = None) -> None:
+    def __init__(self, *, name: str, type: str | None = None, subtype: str | None = None, attacks: list[Attack], disposition: float = 0, reload_time: float = 0, magazine_size: float = 1, recharge_delay: float | None = None, recharge_rate: float | None = None, incarnon_charges: float | None = None, incarnon_recharge_count: float | None = None, perks: list[PerkValues] | None = None, traits: set[str] | None = None, combo: Mapping[str, Any] | None = None, calculation_defaults: Mapping[str, Any] | None = None, implementation_status: ImplementationStatus | None = None) -> None:
         if not attacks: raise ValueError("weapon requires at least one attack")
         self.name = name
+        self.implementation_status = implementation_status or ImplementationStatus()
         self.type = type or self.default_type
         self.subtype = subtype
         self.attacks = {attack.name: attack for attack in attacks}
@@ -141,17 +151,17 @@ class Weapon:
 
     @classmethod
     def from_record(cls, record: Mapping[str, Any], perks: Mapping[str, Perk] | None = None) -> Weapon:
-        allowed = {"name", "type", "subtype", "attacks", "disposition", "reload_time", "magazine_size", "recharge_delay", "recharge_rate", "incarnon_charges", "incarnon_recharge_count", "evolutions", "exalted", "pseudo_exalted", "progenitor", "companion", "combo"}
+        allowed = {"name", "type", "subtype", "attacks", "disposition", "reload_time", "magazine_size", "recharge_delay", "recharge_rate", "incarnon_charges", "incarnon_recharge_count", "evolutions", "exalted", "pseudo_exalted", "progenitor", "companion", "combo", "implementation_status"}
         unknown = set(record) - allowed
         if unknown: raise TypeError(f"unknown weapon fields: {', '.join(sorted(unknown))}")
         attacks = [Attack.from_record(name, attack) for name, attack in record["attacks"].items()]
         traits = {name for name in ("exalted", "pseudo_exalted", "progenitor", "companion") if record.get(name)}
         perk_index = perks or {}
         perk_values = [PerkValues.from_record(perk_index[str(choice["perk"])], int(tier), int(choice_number), choice) for tier, choices in record.get("evolutions", {}).items() for choice_number, choice in choices.items()]
-        return cls(name=str(record["name"]), type=str(record["type"]), subtype=record.get("subtype"), attacks=attacks, disposition=float(record.get("disposition", 0)), reload_time=float(record.get("reload_time", 0)), magazine_size=float(record.get("magazine_size", 1)), recharge_delay=record.get("recharge_delay"), recharge_rate=record.get("recharge_rate"), incarnon_charges=record.get("incarnon_charges"), incarnon_recharge_count=record.get("incarnon_recharge_count"), perks=perk_values, traits=traits, combo=record.get("combo"))
+        return cls(name=str(record["name"]), type=str(record["type"]), subtype=record.get("subtype"), attacks=attacks, disposition=float(record.get("disposition", 0)), reload_time=float(record.get("reload_time", 0)), magazine_size=float(record.get("magazine_size", 1)), recharge_delay=record.get("recharge_delay"), recharge_rate=record.get("recharge_rate"), incarnon_charges=record.get("incarnon_charges"), incarnon_recharge_count=record.get("incarnon_recharge_count"), perks=perk_values, traits=traits, combo=record.get("combo"), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")))
 
     def copy(self) -> Self:
-        return type(self)(name=self.name, type=self.type, subtype=self.subtype, attacks=deepcopy(list(self.attacks.values())), disposition=self.disposition, reload_time=self.reload_time, magazine_size=self.magazine_size, recharge_delay=self.recharge_delay, recharge_rate=self.recharge_rate, incarnon_charges=self.incarnon_charges, incarnon_recharge_count=self.incarnon_recharge_count, perks=list(self.perks.values()), traits=self.traits, combo=self.combo, calculation_defaults=self.calculation_defaults)
+        return type(self)(name=self.name, type=self.type, subtype=self.subtype, attacks=deepcopy(list(self.attacks.values())), disposition=self.disposition, reload_time=self.reload_time, magazine_size=self.magazine_size, recharge_delay=self.recharge_delay, recharge_rate=self.recharge_rate, incarnon_charges=self.incarnon_charges, incarnon_recharge_count=self.incarnon_recharge_count, perks=list(self.perks.values()), traits=self.traits, combo=self.combo, calculation_defaults=self.calculation_defaults, implementation_status=self.implementation_status)
 
 
 class Primary(Weapon):
