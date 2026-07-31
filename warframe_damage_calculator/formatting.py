@@ -127,7 +127,7 @@ class ResultFormatter:
         rows.append(self._section("CALCULATED AVERAGES"))
         rows.append(("Attack Rate", "—", "—", "—", self._attack_rate(average.attack_rate), "—"))
         rows.append(("Expected Procs", "—", "—", "—", self._multiplier(selected.status.expected_procs_per_attack), "—"))
-        if selected.spatial is not None: rows.append((f"Damage Mass (m{self._superscript(selected.spatial.dimension)})", "—", "—", "—", self._number(selected.spatial.damage_mass), "—"))
+        if selected.spatial is not None: rows.append(("Damage Mass", "—", "—", "—", f"{self._number(selected.spatial.damage_mass)}m{self._superscript(selected.spatial.dimension)}", "—"))
         rows.append(self._section("DAMAGE OUTPUT"))
         metrics = (("Direct DPH", "direct_dph"), ("DoT DPH", "dot_dph"), ("Total DPH", "total_dph"), ("Direct DPS", "direct_dps"), ("DoT DPS", "dot_dps"), ("Total DPS", "total_dps"))
         for label, attribute in metrics: rows.append((label, "—", "—", "—", self._number(getattr(average_damage, attribute)), "—"))
