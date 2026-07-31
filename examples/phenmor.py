@@ -1,4 +1,4 @@
-from warframe_damage_calculator import Loadout, Progenitor, Calculator, Formatter, arsenal
+from warframe_damage_calculator import Loadout, Calculator, Formatter, arsenal
 
 
 weapon = arsenal.primary.get("Phenmor")
