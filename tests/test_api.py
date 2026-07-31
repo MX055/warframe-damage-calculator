@@ -1,9 +1,15 @@
 import unittest
+from warframe_damage_calculator import Formatter
 
-from warframe_damage_calculator import Attack, AttackStats, BodyPart, Calculator, Dist, Effect, Enemy, ImplementationStatus, Loadout, Progenitor, PLACEHOLDER, Perk, PerkValues, Primary, ResultFormatter, Upgrade, UpgradeStats, arsenal, format_damage_result, format_loadout, format_perk, format_spatial, format_status, format_upgrade, format_weapon
+from warframe_damage_calculator import Attack, AttackStats, BodyPart, Calculator, Dist, Effect, Enemy, ImplementationStatus, Loadout, Progenitor, PLACEHOLDER, Perk, PerkValues, Primary, Upgrade, UpgradeStats, arsenal, format_damage_result, format_loadout, format_perk, format_spatial, format_status, format_upgrade, format_weapon
 
 
 class ApiTests(unittest.TestCase):
+    def test_root_api_hides_internal_classes(self):
+        import warframe_damage_calculator as package
+        for name in ("Arsenal", "Weapon"): self.assertFalse(hasattr(package, name))
+        self.assertIs(package.Formatter, Formatter)
+
     def test_weapon_is_definition_only(self):
         weapon = arsenal.primary.get("Phenmor")
         for field in ("build", "loadout", "target", "runtime", "results", "format", "evolutions"): self.assertFalse(hasattr(weapon, field))
@@ -118,7 +124,7 @@ class ApiTests(unittest.TestCase):
         perk = arsenal.perk.get("Elemental Excess")
         loadout = Loadout(mods=[upgrade])
         result = Calculator(weapon, loadout=loadout).resolve()
-        formatter = ResultFormatter(result)
+        formatter = Formatter(result)
         self.assertIn("Corinth Prime", format_weapon(weapon))
         self.assertIn("Galvanized Hell", format_upgrade(upgrade))
         self.assertIn("Elemental Excess", format_perk(perk))
@@ -133,7 +139,7 @@ class ApiTests(unittest.TestCase):
         fire_rate_result = Calculator(weapon, loadout=Loadout(mods=[arsenal.mod.get("Critical Deceleration")])).resolve()
         fire_rate_attack = fire_rate_result.attacks[fire_rate_result.selected_attack]
         self.assertAlmostEqual(fire_rate_attack.modded.fire_rate, fire_rate_attack.effective.fire_rate)
-        fire_rate_summary = ResultFormatter(fire_rate_result).summary()
+        fire_rate_summary = Formatter(fire_rate_result).summary()
         self.assertIn("1.14a/s", fire_rate_summary.split("Fire Rate", 1)[1].splitlines()[0])
         self.assertIn("Attack Rate", fire_rate_summary)
         self.assertIn(f"{fire_rate_attack.average.attack_rate:,.2f}a/s", fire_rate_summary.split("Attack Rate", 1)[1].splitlines()[0])
@@ -143,17 +149,17 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(fire_rate_attack.average.multishot, fire_rate_attack.effective.multishot)
         self.assertEqual(fire_rate_attack.average.fire_rate, fire_rate_attack.effective.fire_rate)
         self.assertIn(f"{fire_rate_attack.average.crit_damage:.2f}×", fire_rate_summary.split("Critical Damage", 1)[1].splitlines()[0])
-        spatial_summary = ResultFormatter(Calculator(weapon).resolve(attack="air_burst_explosion")).summary()
+        spatial_summary = Formatter(Calculator(weapon).resolve(attack="air_burst_explosion")).summary()
         self.assertIn("Damage Mass", spatial_summary)
         self.assertIn("m³", spatial_summary.split("Damage Mass", 1)[1].splitlines()[0])
         self.assertNotIn("Damage Mass (m³)", spatial_summary)
-        targeted = ResultFormatter(Calculator(weapon, arsenal.enemy.get("Heavy Gunner"), loadout).resolve())
+        targeted = Formatter(Calculator(weapon, arsenal.enemy.get("Heavy Gunner"), loadout).resolve())
         self.assertIn("Total DPS Contributions: Corinth Prime Buckshot vs Heavy Gunner Body", targeted.contributions())
         self.assertIn("Total DPS Contributions: Corinth Prime Buckshot vs Heavy Gunner Head", targeted.contributions(body_part="head"))
         resistant_target = Enemy(name="Heavy Gunner", bodyparts={"armor": BodyPart("resistant", 0.5)})
-        resistant = ResultFormatter(Calculator(weapon, resistant_target, loadout).resolve())
+        resistant = Formatter(Calculator(weapon, resistant_target, loadout).resolve())
         self.assertIn("Total DPS Contributions: Corinth Prime Buckshot vs Heavy Gunner Armor", resistant.contributions(body_part="armor"))
-        self.assertEqual(ResultFormatter._metric_name("dot_dps"), "DoT DPS")
+        self.assertEqual(Formatter._metric_name("dot_dps"), "DoT DPS")
         contribution_table = targeted.contributions()
         self.assertNotIn("\x1b[", contribution_table)
         self.assertIn("+100.00%", contribution_table)
@@ -162,14 +168,14 @@ class ApiTests(unittest.TestCase):
         self.assertIn("··········│", contribution_table)
         self.assertIn("Contribution Rank", contribution_table)
         self.assertIn("Regular Mod", contribution_table)
-        self.assertIn("Regular Arcane", ResultFormatter(Calculator(arsenal.primary.get("Phenmor"), arsenal.enemy.get("Heavy Gunner"), Loadout(arcanes=[arsenal.arcane.get("Primary Merciless")])).resolve()).contributions())
+        self.assertIn("Regular Arcane", Formatter(Calculator(arsenal.primary.get("Phenmor"), arsenal.enemy.get("Heavy Gunner"), Loadout(arcanes=[arsenal.arcane.get("Primary Merciless")])).resolve()).contributions())
         self.assertIn("DPH", format_damage_result(result.aggregate.average))
         self.assertIn("Expected procs", format_status(result.aggregate.status))
         aoe = Calculator(weapon).resolve(attack="air_burst_explosion").attacks["air_burst_explosion"].spatial
         self.assertIsNotNone(aoe)
         self.assertIn("Damage mass", format_spatial(aoe))
         melee_result = Calculator(arsenal.melee.get("Tenet Exec")).resolve()
-        melee_summary = ResultFormatter(melee_result).summary()
+        melee_summary = Formatter(melee_result).summary()
         self.assertIn("Tenet Exec", melee_summary)
         self.assertIn("Attack Speed", melee_summary)
         self.assertNotIn("Fire Rate", melee_summary)
@@ -210,7 +216,7 @@ class ApiTests(unittest.TestCase):
         progenitor_name = "Electricity Progenitor (60%)"
         self.assertIn(progenitor_name, progenitor_removal)
         self.assertIn(progenitor_name, progenitor_shapley)
-        progenitor_table = ResultFormatter(Calculator(progenitor_calculator.weapon, loadout=progenitor_loadout).resolve(attack="heavy_slam_attack", state={"stance_combo": "heavy"})).contributions()
+        progenitor_table = Formatter(Calculator(progenitor_calculator.weapon, loadout=progenitor_loadout).resolve(attack="heavy_slam_attack", state={"stance_combo": "heavy"})).contributions()
         self.assertIn("Progenitor", progenitor_table)
         self.assertIn(progenitor_name, progenitor_table)
 

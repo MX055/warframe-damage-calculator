@@ -1,4 +1,4 @@
-from warframe_damage_calculator import Calculator, Loadout, ResultFormatter, arsenal
+from warframe_damage_calculator import Loadout, Progenitor, Calculator, Formatter, arsenal
 
 
 weapon = arsenal.primary.get("Phenmor")
@@ -19,6 +19,6 @@ loadout = Loadout(
 )
 calculator = Calculator(weapon, target, loadout)
 result = calculator.resolve(attack="incarnon_form", body_part="body")
-formatter = ResultFormatter(result)
+formatter = Formatter(result)
 print(formatter.summary())
 print(formatter.contributions())

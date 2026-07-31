@@ -1,4 +1,4 @@
-from warframe_damage_calculator import Calculator, Loadout, ResultFormatter, Progenitor, arsenal
+from warframe_damage_calculator import Loadout, Progenitor, Calculator, Formatter, arsenal
 
 
 weapon = arsenal.melee.get("Tenet Exec")
@@ -16,6 +16,6 @@ loadout = Loadout(
 )
 calculator = Calculator(weapon, target, loadout)
 result = calculator.resolve(attack="heavy_slam_attack", body_part="body", state={"stance_combo": "heavy"})
-formatter = ResultFormatter(result)
+formatter = Formatter(result)
 print(formatter.summary())
 print(formatter.contributions())

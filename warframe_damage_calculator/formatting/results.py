@@ -11,7 +11,7 @@ from .objects import format_loadout
 ANSI_PATTERN = re.compile(r"\x1b\[[0-9;]*m")
 
 
-class ResultFormatter:
+class Formatter:
     __slots__ = ("result",)
 
     def __init__(self, result: CalculationResult) -> None:
@@ -177,7 +177,7 @@ class ResultFormatter:
 
 
 def format_result(result: CalculationResult, *, attack: str | None = None) -> str:
-    return ResultFormatter(result).summary(attack)
+    return Formatter(result).summary(attack)
 
 
 
@@ -192,5 +192,5 @@ def format_status(status: StatusResult) -> str:
 
 
 def format_spatial(spatial: SpatialResult) -> str:
-    dimension = ResultFormatter._superscript(spatial.dimension)
+    dimension = Formatter._superscript(spatial.dimension)
     return f"Dimension: {spatial.dimension}\nDamage mass: {spatial.damage_mass:.2f} m{dimension}\nTotal DPS mass: {spatial.total_dps_mass:.2f}"

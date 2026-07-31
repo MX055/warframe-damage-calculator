@@ -151,12 +151,13 @@ The `_mass` suffix and dimension distinguish these values from ordinary damage.
 Formatting is separate from definitions and calculation:
 
 ```python
-from warframe_damage_calculator import ResultFormatter, format_loadout, format_perk, format_result, format_upgrade, format_weapon
+from warframe_damage_calculator import format_loadout, format_perk, format_result, format_upgrade, format_weapon
+from warframe_damage_calculator import Formatter
 
 print(format_weapon(weapon))
 print(format_upgrade(loadout.upgrades[0]))
 print(format_perk(loadout.evolutions[0]))
 print(format_loadout(loadout))
 print(format_result(result))
-print(ResultFormatter(result).contributions())
+print(Formatter(result).contributions())
 ```
