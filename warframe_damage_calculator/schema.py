@@ -42,19 +42,23 @@ def _implementation_status(value: Any, path: str) -> None:
 
 
 def validate_database(database: dict[str, Any]) -> None:
-    allowed_root = {"schema_version", "weapons", "mods", "arcanes", "perks", "enemies", "riven_stats"}
+    allowed_root = {"schema_version", "weapons", "upgrades", "enemies", "riven_stats"}
     missing_root = allowed_root - set(database)
     unexpected_root = set(database) - allowed_root
     if missing_root: raise ValueError(f"database: missing fields {sorted(missing_root)}")
     if unexpected_root: raise ValueError(f"database: unexpected fields {sorted(unexpected_root)}")
-    if database.get("schema_version") != 17: raise ValueError("schema version 17 is required")
-    for section in ("weapons", "mods", "arcanes", "perks", "enemies", "riven_stats"):
+    if database.get("schema_version") != 18: raise ValueError("schema version 18 is required")
+    for section in ("weapons", "upgrades", "enemies", "riven_stats"):
         if not isinstance(database.get(section), dict): raise ValueError(f"{section}: expected an object")
-    for name, perk in database["perks"].items():
-        if not isinstance(perk, dict) or set(perk) - {"name", "description", "stats", "implementation_status"}: raise ValueError(f"perks.{name}: invalid fields")
-        if perk.get("name") != name: raise ValueError(f"perks.{name}: invalid name")
-        _implementation_status(perk.get("implementation_status"), f"perks.{name}.implementation_status")
-        _effects(perk.get("stats", {}), f"perks.{name}.stats", placeholders=True)
+    upgrade_categories = {"mod", "arcane", "perk"}
+    if set(database["upgrades"]) != upgrade_categories: raise ValueError(f"upgrades: expected categories {sorted(upgrade_categories)}")
+    for category in upgrade_categories:
+        if not isinstance(database["upgrades"][category], dict): raise ValueError(f"upgrades.{category}: expected an object")
+    for name, perk in database["upgrades"]["perk"].items():
+        if not isinstance(perk, dict) or set(perk) - {"name", "description", "stats", "implementation_status"}: raise ValueError(f"upgrades.perk.{name}: invalid fields")
+        if perk.get("name") != name: raise ValueError(f"upgrades.perk.{name}: invalid name")
+        _implementation_status(perk.get("implementation_status"), f"upgrades.perk.{name}.implementation_status")
+        _effects(perk.get("stats", {}), f"upgrades.perk.{name}.stats", placeholders=True)
     weapon_categories = {"primary", "secondary", "melee", "archgun"}
     if set(database["weapons"]) != weapon_categories: raise ValueError(f"weapons: expected categories {sorted(weapon_categories)}")
     for category, weapons in database["weapons"].items():
@@ -72,9 +76,9 @@ def validate_database(database: dict[str, Any]) -> None:
                     path = f"weapons.{category}.{name}.evolutions.{tier}.{choice}"
                     if not isinstance(record, dict) or set(record) - {"perk", "description", "values"}: raise ValueError(f"{path}: invalid fields")
                     perk_name = record.get("perk")
-                    if perk_name not in database["perks"]: raise ValueError(f"{path}: unknown perk {perk_name!r}")
+                    if perk_name not in database["upgrades"]["perk"]: raise ValueError(f"{path}: unknown perk {perk_name!r}")
                     values = record.get("values")
-                    templates = database["perks"][perk_name].get("stats", {})
+                    templates = database["upgrades"]["perk"][perk_name].get("stats", {})
                     if not isinstance(values, dict): raise ValueError(f"{path}.values: expected an object")
                     missing = set(templates) - set(values)
                     unknown = set(values) - set(templates)
@@ -84,9 +88,9 @@ def validate_database(database: dict[str, Any]) -> None:
                         if not isinstance(stat_values, list) or len(stat_values) != len(templates[stat]): raise ValueError(f"{path}.values.{stat}: expected {len(templates[stat])} values")
                         if any(not isinstance(value, (int, float, bool, str)) or isinstance(value, str) and not value or value == "$weapon" for value in stat_values): raise ValueError(f"{path}.values.{stat}: invalid concrete value")
     allowed_upgrade = {"name", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats", "combos"}
-    for section, expected_slots in (("mods", {"regular_mod", "exilus_mod", "stance_mod"}), ("arcanes", {"regular_arcane"})):
-        for name, upgrade in database[section].items():
-            path = f"{section}.{name}"
+    for section, expected_slots in (("mod", {"regular_mod", "exilus_mod", "stance_mod"}), ("arcane", {"regular_arcane"})):
+        for name, upgrade in database["upgrades"][section].items():
+            path = f"upgrades.{section}.{name}"
             if set(upgrade) - allowed_upgrade: raise ValueError(f"{path}: invalid fields {sorted(set(upgrade) - allowed_upgrade)}")
             _implementation_status(upgrade.get("implementation_status"), f"{path}.implementation_status")
             if upgrade.get("name") != name: raise ValueError(f"{path}: invalid name")

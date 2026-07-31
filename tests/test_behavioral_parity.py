@@ -12,11 +12,17 @@ EXPECTED = {
 }
 
 
+def get_weapon(name: str):
+    for repository in (arsenal.primary, arsenal.secondary, arsenal.melee, arsenal.archgun):
+        if name in repository.names: return repository.get(name)
+    raise KeyError(name)
+
+
 class BehavioralParityTests(unittest.TestCase):
     def test_reference_outputs_remain_stable(self):
         for name, expected in EXPECTED.items():
             with self.subTest(name=name):
-                actual = Calculator(arsenal.weapon.get(name)).calculate().aggregate.average.total_dps
+                actual = Calculator(get_weapon(name)).calculate().aggregate.average.total_dps
                 self.assertTrue(math.isclose(actual, expected, rel_tol=1e-12, abs_tol=1e-9), (name, actual, expected))
 
 

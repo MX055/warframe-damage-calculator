@@ -39,9 +39,9 @@ def removal_contributions(calculator: Calculator, loadout: Loadout, *, attack: s
     selected = attack or calculator.weapon.default_attack
     state = state or {}
     baseline = _evaluate(calculator, loadout, selected, metric, bodypart, state)
-    contributions = {upgrade.name: _evaluate(calculator, Loadout(upgrades=[candidate for candidate in loadout.upgrades if candidate is not upgrade], evolutions=loadout.evolutions, progenitor=loadout.progenitor), selected, metric, bodypart, state) - baseline for upgrade in loadout.upgrades}
-    contributions.update({perk.name: _evaluate(calculator, Loadout(upgrades=loadout.upgrades, evolutions=[candidate for candidate in loadout.evolutions if candidate != perk], progenitor=loadout.progenitor), selected, metric, bodypart, state) - baseline for perk in loadout.evolutions})
-    if loadout.progenitor is not None: contributions[progenitor_component_name(loadout.progenitor)] = _evaluate(calculator, Loadout(upgrades=loadout.upgrades, evolutions=loadout.evolutions), selected, metric, bodypart, state) - baseline
+    contributions = {upgrade.name: _evaluate(calculator, Loadout(mods=[candidate for candidate in loadout.mods if candidate is not upgrade], arcanes=[candidate for candidate in loadout.arcanes if candidate is not upgrade], evolutions=loadout.evolutions, progenitor=loadout.progenitor), selected, metric, bodypart, state) - baseline for upgrade in loadout.upgrades}
+    contributions.update({perk.name: _evaluate(calculator, Loadout(mods=loadout.mods, arcanes=loadout.arcanes, evolutions=[candidate for candidate in loadout.evolutions if candidate != perk], progenitor=loadout.progenitor), selected, metric, bodypart, state) - baseline for perk in loadout.evolutions})
+    if loadout.progenitor is not None: contributions[progenitor_component_name(loadout.progenitor)] = _evaluate(calculator, Loadout(mods=loadout.mods, arcanes=loadout.arcanes, evolutions=loadout.evolutions), selected, metric, bodypart, state) - baseline
     return contributions
 
 
@@ -57,7 +57,7 @@ def shapley_contributions(calculator: Calculator, loadout: Loadout, *, attack: s
     def coalition_value(mask: int) -> float:
         if mask not in coalition_values:
             selected_components = [component for index, component in enumerate(components) if mask & (1 << index)]
-            candidate = Loadout(upgrades=[component for component in selected_components if isinstance(component, (Mod, Arcane))], evolutions=[component for component in selected_components if isinstance(component, Perk)], progenitor=next((component for component in selected_components if isinstance(component, Progenitor)), None))
+            candidate = Loadout(mods=[component for component in selected_components if isinstance(component, Mod)], arcanes=[component for component in selected_components if isinstance(component, Arcane)], evolutions=[component for component in selected_components if isinstance(component, Perk)], progenitor=next((component for component in selected_components if isinstance(component, Progenitor)), None))
             coalition_values[mask] = _evaluate(calculator, candidate, selected, metric, bodypart, state)
         return coalition_values[mask]
 

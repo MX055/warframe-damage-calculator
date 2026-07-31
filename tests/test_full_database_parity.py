@@ -9,13 +9,19 @@ from warframe_damage_calculator import Calculator, arsenal
 REFERENCE_COMMIT = "c60ff0f"
 
 
+def get_weapon(name: str):
+    for repository in (arsenal.primary, arsenal.secondary, arsenal.melee, arsenal.archgun):
+        if name in repository.names: return repository.get(name)
+    raise KeyError(name)
+
+
 class FullDatabaseParityTests(unittest.TestCase):
     def test_default_results_match_v140_reference(self):
         expected = json.loads((Path(__file__).parent / "data" / "parity_v140.json").read_text())
         fields = ("flat_dph", "flat_dotph", "total_dph", "flat_dps", "flat_dotps", "total_dps")
         for weapon_name, reference in expected.items():
             with self.subTest(weapon=weapon_name, reference=REFERENCE_COMMIT):
-                calculation = Calculator(arsenal.weapon.get(weapon_name)).calculate()
+                calculation = Calculator(get_weapon(weapon_name)).calculate()
                 result = calculation.attacks[calculation.selected_attack]
                 self.assertEqual(calculation.selected_attack, reference["attack"])
                 for pool_name in ("average", "final"):

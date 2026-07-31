@@ -25,14 +25,14 @@ class EngineTests(unittest.TestCase):
 
     def test_evolution_values_are_weapon_specific(self):
         perk = arsenal.perk.get("Elemental Balance")
-        telos = arsenal.weapon.get("Telos Boltor").resolve_perk(perk)
-        prime = arsenal.weapon.get("Boltor Prime").resolve_perk(perk)
+        telos = arsenal.primary.get("Telos Boltor").resolve_perk(perk)
+        prime = arsenal.primary.get("Boltor Prime").resolve_perk(perk)
         telos_value = next(effect.value for effect in telos.effects if effect.stat == "status_chance")
         prime_value = next(effect.value for effect in prime.effects if effect.stat == "status_chance")
         self.assertNotEqual(telos_value, prime_value)
 
     def test_loadout_evolutions_change_results(self):
-        weapon = arsenal.weapon.get("Phenmor")
+        weapon = arsenal.primary.get("Phenmor")
         baseline = Calculator(weapon).calculate(attack="incarnon_form")
         evolved = Calculator(weapon, loadout=Loadout(evolutions=[arsenal.perk.get("Elemental Excess")])).calculate(attack="incarnon_form")
         self.assertNotEqual(baseline.attacks["incarnon_form"].effective.status_chance, evolved.attacks["incarnon_form"].effective.status_chance)

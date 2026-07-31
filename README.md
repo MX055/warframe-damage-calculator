@@ -7,11 +7,11 @@ An analytic Python damage calculator for Warframe weapons.
 ```python
 from warframe_damage_calculator import Calculator, Loadout, arsenal
 
-weapon = arsenal.weapon.get("Phenmor")
+weapon = arsenal.primary.get("Phenmor")
 target = arsenal.enemy.get("Heavy Gunner").set(level=200, steel_path=True)
 
 loadout = Loadout(
-    upgrades=[
+    mods=[
         arsenal.mod.get("Galvanized Chamber"),
         arsenal.mod.get("Critical Delay"),
     ],
@@ -26,7 +26,7 @@ result = calculator.calculate(attack="incarnon_form", bodypart="head")
 print(result.aggregate.average.total_dps)
 ```
 
-`Weapon` and `Enemy` are definitions. `Loadout` owns selected upgrades and global evolution perks. `Calculator` owns one weapon-target-loadout combination, while attack selection, body-part selection, and temporary state belong to each calculation:
+`Weapon` and `Enemy` are definitions. `Loadout` owns selected mods, arcanes, and global evolution perks. `Calculator` owns one weapon-target-loadout combination, while attack selection, body-part selection, and temporary state belong to each calculation:
 
 ```python
 result = calculator.calculate(attack="heavy_attack", bodypart="head", state={"combo": 12})
@@ -50,8 +50,8 @@ The same template can resolve to different values:
 
 ```python
 perk = arsenal.perk.get("Elemental Balance")
-telos = arsenal.weapon.get("Telos Boltor").resolve_perk(perk)
-prime = arsenal.weapon.get("Boltor Prime").resolve_perk(perk)
+telos = arsenal.primary.get("Telos Boltor").resolve_perk(perk)
+prime = arsenal.primary.get("Boltor Prime").resolve_perk(perk)
 ```
 
 Every selected item in `Loadout.evolutions` is resolved through the weapon before calculation. Missing values, unknown values, duplicate tier selections, and perks unavailable to the weapon are rejected. Tier and choice data are retained in `weapon.perk_choices` for selection and optimizer search spaces; calculation does not convert selected perks back into database instructions.

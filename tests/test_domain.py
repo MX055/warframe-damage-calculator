@@ -4,9 +4,12 @@ from warframe_damage_calculator import Effect, Loadout, Mod, Perk, UpgradeStats
 
 
 class DomainTests(unittest.TestCase):
+    def test_loadout_rejects_combined_upgrades_argument(self):
+        with self.assertRaises(TypeError): Loadout(upgrades=[])
+
     def test_loadout_copies_upgrades(self):
         upgrade = Mod(name="Damage", stats=UpgradeStats(damage_bonus=Effect(1)))
-        loadout = Loadout(upgrades=[upgrade])
+        loadout = Loadout(mods=[upgrade])
         self.assertIsNot(loadout.upgrades[0], upgrade)
 
     def test_loadout_rejects_duplicate_perks(self):
@@ -22,7 +25,7 @@ class DomainTests(unittest.TestCase):
 
     def test_loadout_operators_support_perks(self):
         perk = Perk("Example")
-        loadout = Loadout(upgrades=[Mod(name="Damage")]) + perk
+        loadout = Loadout(mods=[Mod(name="Damage")]) + perk
         self.assertEqual(len(loadout), 2)
         self.assertEqual((loadout - perk).evolutions, [])
 

@@ -31,33 +31,42 @@ class Progenitor:
 
 
 class Loadout:
-    __slots__ = ("upgrades", "evolutions", "progenitor")
+    __slots__ = ("mods", "arcanes", "evolutions", "progenitor")
 
-    def __init__(self, *, upgrades: Iterable[Upgrade] | None = None, evolutions: Iterable[Perk] | None = None, progenitor: Progenitor | None = None) -> None:
-        supplied_upgrades = list(upgrades or ())
+    def __init__(self, *, mods: Iterable[Mod] | None = None, arcanes: Iterable[Arcane] | None = None, evolutions: Iterable[Perk] | None = None, progenitor: Progenitor | None = None) -> None:
+        supplied_mods = list(mods or ())
+        supplied_arcanes = list(arcanes or ())
         supplied_perks = list(evolutions or ())
-        if any(not isinstance(upgrade, (Mod, Arcane)) for upgrade in supplied_upgrades): raise TypeError("upgrades must contain Mod or Arcane objects")
+        if any(not isinstance(mod, Mod) for mod in supplied_mods): raise TypeError("mods must contain Mod objects")
+        if any(not isinstance(arcane, Arcane) for arcane in supplied_arcanes): raise TypeError("arcanes must contain Arcane objects")
         if any(not isinstance(perk, Perk) for perk in supplied_perks): raise TypeError("evolutions must contain Perk objects")
-        self.upgrades = [upgrade.copy() for upgrade in supplied_upgrades]
+        self.mods = [mod.copy() for mod in supplied_mods]
+        self.arcanes = [arcane.copy() for arcane in supplied_arcanes]
         self.evolutions = supplied_perks
         if progenitor is not None and not isinstance(progenitor, Progenitor): raise TypeError("progenitor must be a Progenitor object")
         self.progenitor = progenitor
         if len(set(self.evolutions)) != len(self.evolutions): raise ValueError("loadout contains duplicate evolution perks")
 
+    @property
+    def upgrades(self) -> tuple[Mod | Arcane, ...]:
+        return (*self.mods, *self.arcanes)
+
     def __len__(self) -> int:
-        return len(self.upgrades) + len(self.evolutions)
+        return len(self.mods) + len(self.arcanes) + len(self.evolutions)
 
     def __add__(self, other: Upgrade | Loadout) -> Loadout:
-        if isinstance(other, Loadout): return Loadout(upgrades=[*self.upgrades, *other.upgrades], evolutions=[*self.evolutions, *other.evolutions], progenitor=other.progenitor or self.progenitor)
-        if isinstance(other, Perk): return Loadout(upgrades=self.upgrades, evolutions=[*self.evolutions, other], progenitor=self.progenitor)
-        if isinstance(other, (Mod, Arcane)): return Loadout(upgrades=[*self.upgrades, other], evolutions=self.evolutions, progenitor=self.progenitor)
+        if isinstance(other, Loadout): return Loadout(mods=[*self.mods, *other.mods], arcanes=[*self.arcanes, *other.arcanes], evolutions=[*self.evolutions, *other.evolutions], progenitor=other.progenitor or self.progenitor)
+        if isinstance(other, Perk): return Loadout(mods=self.mods, arcanes=self.arcanes, evolutions=[*self.evolutions, other], progenitor=self.progenitor)
+        if isinstance(other, Mod): return Loadout(mods=[*self.mods, other], arcanes=self.arcanes, evolutions=self.evolutions, progenitor=self.progenitor)
+        if isinstance(other, Arcane): return Loadout(mods=self.mods, arcanes=[*self.arcanes, other], evolutions=self.evolutions, progenitor=self.progenitor)
         return NotImplemented
 
     def __sub__(self, other: Upgrade | Loadout) -> Loadout:
-        upgrades = set(other.upgrades if isinstance(other, Loadout) else [other] if isinstance(other, (Mod, Arcane)) else ())
-        evolutions = set(other.evolutions if isinstance(other, Loadout) else [other] if isinstance(other, Perk) else ())
         if not isinstance(other, (Mod, Arcane, Perk, Loadout)): return NotImplemented
-        return Loadout(upgrades=[upgrade for upgrade in self.upgrades if upgrade not in upgrades], evolutions=[perk for perk in self.evolutions if perk not in evolutions], progenitor=self.progenitor)
+        mods = set(other.mods if isinstance(other, Loadout) else [other] if isinstance(other, Mod) else ())
+        arcanes = set(other.arcanes if isinstance(other, Loadout) else [other] if isinstance(other, Arcane) else ())
+        evolutions = set(other.evolutions if isinstance(other, Loadout) else [other] if isinstance(other, Perk) else ())
+        return Loadout(mods=[mod for mod in self.mods if mod not in mods], arcanes=[arcane for arcane in self.arcanes if arcane not in arcanes], evolutions=[perk for perk in self.evolutions if perk not in evolutions], progenitor=self.progenitor)
 
     def set(self, **values: object) -> Self:
         consumed: set[str] = set()
@@ -71,4 +80,4 @@ class Loadout:
         return self
 
     def copy(self) -> Loadout:
-        return Loadout(upgrades=self.upgrades, evolutions=self.evolutions, progenitor=self.progenitor)
+        return Loadout(mods=self.mods, arcanes=self.arcanes, evolutions=self.evolutions, progenitor=self.progenitor)
