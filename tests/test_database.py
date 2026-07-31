@@ -32,16 +32,16 @@ class DatabaseTests(unittest.TestCase):
         self.assertNotIn("upgrades", arsenal.database)
         self.assertTrue(all("kind" not in record for record in arsenal.database["mods"].values()))
         self.assertTrue(all("kind" not in record for record in arsenal.database["arcanes"].values()))
-        self.assertTrue(all(arsenal.mod.get(name).kind == "mod" for name in arsenal.mod))
-        self.assertTrue(all(arsenal.arcane.get(name).kind == "arcane" for name in arsenal.arcane))
+        self.assertTrue(all(arsenal.mod.get(name).type == "mod" for name in arsenal.mod))
+        self.assertTrue(all(arsenal.arcane.get(name).type == "arcane" for name in arsenal.arcane))
 
     def test_perks_are_loaded_from_database(self):
-        self.assertEqual(arsenal.database["schema_version"], 16)
+        self.assertEqual(arsenal.database["schema_version"], 17)
         self.assertIn("Devouring Attrition", arsenal.database["perks"])
         self.assertEqual(arsenal.database["perks"]["Devouring Attrition"]["stats"]["damage_bonus"][0]["value"], "$weapon")
 
     def test_weapon_records_contain_only_perk_values(self):
-        record = arsenal.database["weapons"]["Phenmor"]["evolutions"]["5"]["1"]
+        record = arsenal.database["weapons"]["primary"]["Phenmor"]["evolutions"]["5"]["1"]
         self.assertEqual(record["perk"], "Devouring Attrition")
         self.assertNotIn("stats", record)
         self.assertEqual(record["values"]["damage_bonus"], [20])
@@ -62,15 +62,16 @@ class DatabaseTests(unittest.TestCase):
 
     def test_database_wide_perk_value_invariants(self):
         database = arsenal.database
-        for weapon_name, weapon in database["weapons"].items():
-            for tier, choices in weapon.get("evolutions", {}).items():
-                for choice, record in choices.items():
-                    with self.subTest(weapon=weapon_name, tier=tier, choice=choice):
-                        template = database["perks"][record["perk"]]["stats"]
-                        self.assertEqual(set(record["values"]), set(template))
-                        for stat, effects in template.items():
-                            self.assertEqual(len(record["values"][stat]), len(effects))
-                            self.assertNotIn("$weapon", record["values"][stat])
+        for category, weapons in database["weapons"].items():
+            for weapon_name, weapon in weapons.items():
+                for tier, choices in weapon.get("evolutions", {}).items():
+                    for choice, record in choices.items():
+                        with self.subTest(weapon=weapon_name, tier=tier, choice=choice):
+                            template = database["perks"][record["perk"]]["stats"]
+                            self.assertEqual(set(record["values"]), set(template))
+                            for stat, effects in template.items():
+                                self.assertEqual(len(record["values"][stat]), len(effects))
+                                self.assertNotIn("$weapon", record["values"][stat])
 
     def test_every_weapon_perk_resolves_to_concrete_effects(self):
         for weapon_name in arsenal.weapon:

@@ -8,13 +8,13 @@ from typing import Generic, Self, TypeVar, cast
 
 from .domain.enemies import Enemy
 from .domain.perks import Perk
-from .domain.upgrades import Upgrade
-from .domain.weapons import Melee, Primary, Secondary, Weapon
+from .domain.upgrades import Arcane, Mod, Upgrade
+from .domain.weapons import Archgun, Melee, Primary, Secondary, Weapon
 from .schema import validate_database
 
 
-type ArsenalWeapon = Primary | Secondary | Melee
-T = TypeVar("T", Weapon, Upgrade, Enemy, Perk)
+type ArsenalWeapon = Primary | Secondary | Melee | Archgun
+T = TypeVar("T", Weapon, Upgrade, Enemy)
 
 
 def _key(value: str) -> str:
@@ -45,10 +45,10 @@ class Repository(Generic[T]):
         return tuple(sorted(self._records, key=str.casefold))
 
 
-def _weapon(record: Mapping, perks: Mapping[str, Perk]) -> ArsenalWeapon:
-    category = record["type"]
-    cls = Primary if category in {"primary", "archgun"} else Secondary if category == "secondary" else Melee if category == "melee" else None
-    if cls is None: raise ValueError(f"unsupported weapon type {category!r}")
+def _weapon(record: Mapping, category: str, perks: Mapping[str, Perk]) -> ArsenalWeapon:
+    classes = {"primary": Primary, "secondary": Secondary, "melee": Melee, "archgun": Archgun}
+    try: cls = classes[category]
+    except KeyError: raise ValueError(f"unsupported weapon category {category!r}") from None
     return cls.from_record(record, perks)
 
 
@@ -64,9 +64,16 @@ class Arsenal:
         self.database: dict = dict(database)
         validate_database(self.database)
         perk_definitions = {name: Perk.from_record(record) for name, record in self.database["perks"].items()}
-        self.weapon = WeaponRepository(self.database["weapons"], lambda record: _weapon(record, perk_definitions))
-        self.mod = Repository[Upgrade](self.database["mods"], lambda record: Upgrade.from_record(record, kind="mod"))
-        self.arcane = Repository[Upgrade](self.database["arcanes"], lambda record: Upgrade.from_record(record, kind="arcane"))
+        weapon_records: dict[str, Mapping] = {}
+        weapon_categories: dict[int, str] = {}
+        for category, records in self.database["weapons"].items():
+            for name, record in records.items():
+                if name in weapon_records: raise ValueError(f"duplicate weapon name {name!r}")
+                weapon_records[name] = record
+                weapon_categories[id(record)] = category
+        self.weapon = WeaponRepository(weapon_records, lambda record: _weapon(record, weapon_categories[id(record)], perk_definitions))
+        self.mod = Repository[Mod](self.database["mods"], Mod.from_record)
+        self.arcane = Repository[Arcane](self.database["arcanes"], Arcane.from_record)
         self.perk = Repository[Perk](self.database["perks"], Perk.from_record)
         self.enemy = Repository[Enemy](self.database["enemies"], lambda record: Enemy.from_record(record, loaded=True))
 
@@ -99,11 +106,11 @@ class _LazyArsenal:
         return self._get().weapon
 
     @property
-    def mod(self) -> Repository[Upgrade]:
+    def mod(self) -> Repository[Mod]:
         return self._get().mod
 
     @property
-    def arcane(self) -> Repository[Upgrade]:
+    def arcane(self) -> Repository[Arcane]:
         return self._get().arcane
 
     @property

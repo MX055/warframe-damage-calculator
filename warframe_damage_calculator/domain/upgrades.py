@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections.abc import Iterable, Iterator, Mapping
 from copy import deepcopy
 from dataclasses import dataclass, field
-from typing import Any, Self
+from typing import Any, ClassVar, Self
 
 from .effects import Effect, EffectChannel, EffectMode, Scalar
 from .implementation import ImplementationStatus
@@ -49,14 +49,9 @@ class UpgradeStats(Mapping[str, tuple[Effect, ...]]):
             effects[stat] = tuple(value if isinstance(value, Effect) else Effect(value) for value in values)
         self._effects = effects
 
-    def __getitem__(self, stat: str) -> tuple[Effect, ...]:
-        return self._effects[stat]
-
-    def __iter__(self) -> Iterator[str]:
-        return iter(self._effects)
-
-    def __len__(self) -> int:
-        return len(self._effects)
+    def __getitem__(self, stat: str) -> tuple[Effect, ...]: return self._effects[stat]
+    def __iter__(self) -> Iterator[str]: return iter(self._effects)
+    def __len__(self) -> int: return len(self._effects)
 
     def __getattr__(self, stat: str) -> tuple[Effect, ...]:
         try: effects = object.__getattribute__(self, "_effects")
@@ -105,55 +100,62 @@ class ResolvedEffect:
 
 
 class Upgrade:
-    __slots__ = ("name", "kind", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats", "combos", "runtime")
+    type: ClassVar[str] = "upgrade"
+    __slots__ = ("name", "implementation_status", "stats")
 
-    def __init__(self, *, name: str, kind: str = "mod", slot: str = "regular_mod", max_rank: int = 0, implementation_status: ImplementationStatus | None = None, compatibility: Compatibility | None = None, conflicts: Iterable[str] = (), stats: UpgradeStats | None = None, combos: Mapping[str, Any] | None = None, runtime: Mapping[str, Any] | None = None) -> None:
+    def __init__(self, *, name: str, implementation_status: ImplementationStatus | None = None, stats: UpgradeStats | None = None) -> None:
         self.name = name
-        self.kind = kind
-        self.slot = slot
-        self.max_rank = int(max_rank)
         self.implementation_status = implementation_status or ImplementationStatus()
+        self.stats = stats or UpgradeStats()
+
+    @property
+    def implemented(self) -> bool: return self.implementation_status.implemented
+
+    def __eq__(self, other: object) -> bool: return type(self) is type(other) and isinstance(other, Upgrade) and self.name == other.name
+    def __hash__(self) -> int: return hash((type(self), self.name))
+
+
+class _RankedUpgrade(Upgrade):
+    default_slot: ClassVar[str]
+    __slots__ = ("slot", "max_rank", "compatibility", "conflicts", "combos", "runtime")
+
+    def __init__(self, *, name: str, slot: str | None = None, max_rank: int = 0, implementation_status: ImplementationStatus | None = None, compatibility: Compatibility | None = None, conflicts: Iterable[str] = (), stats: UpgradeStats | None = None, combos: Mapping[str, Any] | None = None, runtime: Mapping[str, Any] | None = None) -> None:
+        super().__init__(name=name, implementation_status=implementation_status, stats=stats)
+        self.slot = slot or self.default_slot
+        self.max_rank = int(max_rank)
         self.compatibility = compatibility or Compatibility()
         self.conflicts = list(conflicts)
-        self.stats = stats or UpgradeStats()
         self.combos = deepcopy(dict(combos or {}))
         defaults: dict[str, Any] = {"rank": self.max_rank}
         for effects in self.stats.values():
             for effect in effects:
-                condition = effect.when
-                if condition is None: continue
+                if effect.when is None: continue
                 maximum = effect.stacks
                 value = int(maximum) if maximum not in (None, "inf") else True
-                key = str(condition)
+                key = str(effect.when)
                 if isinstance(value, int) and not isinstance(value, bool): defaults[key] = max(int(defaults.get(key, 0)), value)
                 else: defaults.setdefault(key, value)
         defaults.update(runtime or {})
         self.runtime = Runtime({"rank", *self.stats.manual_fields}, defaults)
-
-
-    @property
-    def implemented(self) -> bool:
-        return self.implementation_status.implemented
 
     def set(self, **values: Any) -> Self:
         self.runtime.set(**values)
         return self
 
     @classmethod
-    def from_record(cls, record: Mapping[str, Any], *, kind: str = "mod") -> Upgrade:
+    def from_record(cls, record: Mapping[str, Any]) -> Self:
         allowed = {"name", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats", "combos"}
         unknown = set(record) - allowed
-        if unknown: raise TypeError(f"unknown upgrade fields: {', '.join(sorted(unknown))}")
-        return cls(name=str(record["name"]), kind=kind, slot=str(record.get("slot", "regular_mod")), max_rank=int(record.get("max_rank", 0)), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")), compatibility=Compatibility.from_record(record.get("compatibility", {})), conflicts=record.get("conflicts", []), stats=UpgradeStats.from_record(record.get("stats", {})), combos=record.get("combos", {}))
+        if unknown: raise TypeError(f"unknown {cls.type} fields: {', '.join(sorted(unknown))}")
+        return cls(name=str(record["name"]), slot=record.get("slot"), max_rank=int(record.get("max_rank", 0)), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")), compatibility=Compatibility.from_record(record.get("compatibility", {})), conflicts=record.get("conflicts", []), stats=UpgradeStats.from_record(record.get("stats", {})), combos=record.get("combos", {}))
 
-    def copy(self) -> Upgrade:
-        return Upgrade(name=self.name, kind=self.kind, slot=self.slot, max_rank=self.max_rank, implementation_status=self.implementation_status, compatibility=deepcopy(self.compatibility), conflicts=self.conflicts, stats=self.stats.copy(), combos=self.combos, runtime=self.runtime.as_dict())
+    def copy(self) -> Self:
+        return type(self)(name=self.name, slot=self.slot, max_rank=self.max_rank, implementation_status=self.implementation_status, compatibility=deepcopy(self.compatibility), conflicts=self.conflicts, stats=self.stats.copy(), combos=self.combos, runtime=self.runtime.as_dict())
 
     def __eq__(self, other: object) -> bool:
-        return isinstance(other, Upgrade) and self.name == other.name and self.kind == other.kind and self.slot == other.slot
+        return type(self) is type(other) and isinstance(other, _RankedUpgrade) and self.name == other.name and self.slot == other.slot
 
-    def __hash__(self) -> int:
-        return hash((self.name, self.kind, self.slot))
+    def __hash__(self) -> int: return hash((type(self), self.name, self.slot))
 
     def resolve_manual(self) -> tuple[ResolvedEffect, ...]:
         rank = min(max(int(self.runtime.rank), 0), self.max_rank)
@@ -161,10 +163,9 @@ class Upgrade:
         resolved: list[ResolvedEffect] = []
         for stat, effects in self.stats.items():
             for effect in effects:
-                required_rank = effect.requires_rank
-                if required_rank is not None and rank < required_rank: continue
+                if effect.requires_rank is not None and rank < effect.requires_rank: continue
                 value = effect.value
-                if effect.scales_with_rank and required_rank is None and isinstance(value, (int, float)) and not isinstance(value, bool): value *= rank_scale
+                if effect.scales_with_rank and effect.requires_rank is None and isinstance(value, (int, float)) and not isinstance(value, bool): value *= rank_scale
                 if effect.when is not None:
                     supplied = getattr(self.runtime, effect.when)
                     if not supplied: continue
@@ -173,3 +174,13 @@ class Upgrade:
                     if isinstance(value, (int, float)) and not isinstance(value, bool): value *= stacks
                 resolved.append(ResolvedEffect(self.name, stat, value, effect.mode, effect.family, effect.maximum, deepcopy(effect.automatic)))
         return tuple(resolved)
+
+
+class Mod(_RankedUpgrade):
+    type = "mod"
+    default_slot = "regular_mod"
+
+
+class Arcane(_RankedUpgrade):
+    type = "arcane"
+    default_slot = "regular_arcane"

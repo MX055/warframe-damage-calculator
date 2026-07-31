@@ -8,7 +8,7 @@ from typing import Any
 
 from .effects import PLACEHOLDER, Effect, Placeholder, Scalar
 from .implementation import ImplementationStatus
-from .upgrades import ResolvedEffect, UpgradeStats
+from .upgrades import ResolvedEffect, Upgrade, UpgradeStats
 
 
 def placeholder_stats(record: Mapping[str, list[Mapping[str, Any]]]) -> UpgradeStats:
@@ -24,12 +24,13 @@ def placeholder_stats(record: Mapping[str, list[Mapping[str, Any]]]) -> UpgradeS
     return UpgradeStats(**stats)
 
 
-@dataclass(frozen=True, slots=True)
-class Perk:
-    name: str
-    description: str = ""
-    stats: UpgradeStats = field(default_factory=UpgradeStats, compare=False, hash=False)
-    implementation_status: ImplementationStatus = field(default_factory=ImplementationStatus, compare=False, hash=False)
+class Perk(Upgrade):
+    type = "perk"
+    __slots__ = ("description",)
+
+    def __init__(self, name: str, description: str = "", stats: UpgradeStats | None = None, implementation_status: ImplementationStatus | None = None) -> None:
+        super().__init__(name=name, stats=stats, implementation_status=implementation_status)
+        self.description = description
 
     @classmethod
     def from_record(cls, record: Mapping[str, Any]) -> Perk:

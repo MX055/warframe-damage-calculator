@@ -6,7 +6,7 @@ from math import factorial
 from ..domain.loadouts import Loadout, Progenitor
 from ..domain.perks import Perk
 from ..domain.results import CalculationResult
-from ..domain.upgrades import Upgrade
+from ..domain.upgrades import Arcane, Mod, Upgrade
 from ..engine.calculator import Calculator
 
 
@@ -57,7 +57,7 @@ def shapley_contributions(calculator: Calculator, loadout: Loadout, *, attack: s
     def coalition_value(mask: int) -> float:
         if mask not in coalition_values:
             selected_components = [component for index, component in enumerate(components) if mask & (1 << index)]
-            candidate = Loadout(upgrades=[component for component in selected_components if isinstance(component, Upgrade)], evolutions=[component for component in selected_components if isinstance(component, Perk)], progenitor=next((component for component in selected_components if isinstance(component, Progenitor)), None))
+            candidate = Loadout(upgrades=[component for component in selected_components if isinstance(component, (Mod, Arcane))], evolutions=[component for component in selected_components if isinstance(component, Perk)], progenitor=next((component for component in selected_components if isinstance(component, Progenitor)), None))
             coalition_values[mask] = _evaluate(calculator, candidate, selected, metric, bodypart, state)
         return coalition_values[mask]
 

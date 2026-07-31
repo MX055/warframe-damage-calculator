@@ -192,7 +192,7 @@ def format_weapon(weapon: Weapon) -> str:
 
 def format_upgrade(upgrade: Upgrade) -> str:
     stats = ", ".join(upgrade.stats) or "None"
-    return f"{upgrade.name}\nKind: {upgrade.kind}\nSlot: {upgrade.slot}\nStats: {stats}"
+    return f"{upgrade.name}\nType: {upgrade.type}\nSlot: {upgrade.slot}\nStats: {stats}"
 
 
 def format_perk(perk: Perk) -> str:
