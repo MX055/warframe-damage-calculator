@@ -120,8 +120,8 @@ class ResultFormatter:
                 if zone is None: continue
                 rows.append((f"{label} — {zone_name}", "—", "—", "—", self._number(getattr(zone, attribute)), "—"))
         weapon_name = getattr(self.result.weapon, "name", "Weapon")
-        target_name = "" if self.result.target is None else f" vs {getattr(self.result.target, 'name', 'Target')}"
-        title = f"{weapon_name} · {attack_name.replace('_', ' ').title()}{target_name}"
+        target_name = "" if self.result.target is None else f"vs {getattr(self.result.target, 'name', 'Target')}"
+        title = f"Summary: {weapon_name} {attack_name.replace('_', ' ').title()} {target_name}"
         return self._table(("Stat", "Base", "Modded", "Effective", "Average"), [tuple(cell for index, cell in enumerate(row) if index != 5) for row in rows], title=title)
 
     def contributions(self, metric: str = "total_dps") -> str:
@@ -143,11 +143,11 @@ class ResultFormatter:
             bar_length = 0 if maximum == 0 or share == 0 else max(1, round(abs(share) / maximum * 5))
             left = "·" * (10 - bar_length) + "█" * bar_length if share < 0 else "·" * 10
             right = "█" * bar_length + "·" * (10 - bar_length) if share > 0 else "·" * 10
-            rows.append((str(rank), kind, name, f"{display_share:+.2%}", f"{display_removal:+,.2f}", f"{left}│{right}"))
+            rows.append((str(rank), kind, name, f"{display_share:+.2%}", f"{-display_removal:+,.2f}", f"{left}│{right}"))
         metric_name = metric.replace("_", " ").upper() if isinstance(metric, str) else "Contribution"
         target_name = "" if self.result.target is None else f" vs {getattr(self.result.target, 'name', 'Target')}"
-        title = f"{self.result.weapon.name} · {self.result.selected_attack.replace('_', ' ').title()}{target_name} · {metric_name} Contributions"
-        return self._table(("Contribution Rank", "Type", "Component", "Shapley", f"{metric_name} Loss", "Impact"), rows, title=title)
+        title = f"{metric_name} Contributions: {self.result.weapon.name} {self.result.selected_attack.replace('_', ' ').title()}{target_name}"
+        return self._table(("Contribution Rank", "Type", "Component", "Shapley", f"Removal Loss", "Impact"), rows, title=title)
 
     def loadout(self) -> str:
         return format_loadout(self.result.loadout)
