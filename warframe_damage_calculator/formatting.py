@@ -95,7 +95,7 @@ class ResultFormatter:
             ("Expected Procs", "—", "—", "—", self._number(selected.status.expected_procs_per_attack), "—"),
             self._section("HANDLING"),
             ("Magazine Capacity", self._rounds(self.result.weapon.magazine_size), "—", self._rounds(effective.get("magazine_capacity")), "—", "—"),
-            ("Reload Time", self._seconds(self.result.weapon.reload_time), "—", self._seconds(effective.reload_time), "—", "—"),
+            ("Reload Time", self._seconds(self.result.weapon.reload_time), "—", self._seconds(effective.get("reload_time")), "—", "—"),
             ("Ammo Cost", self._number(attack_definition.stats.ammo_cost), "—", self._number(effective.get("ammo_cost")), "—", "—"),
         ))
         if float(effective.get("punch_through", 0)) > 0: rows.append(("Punch Through", self._meters(attack_definition.stats.punch_through), "—", self._meters(effective.get("punch_through")), "—", "—"))

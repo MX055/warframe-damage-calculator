@@ -109,6 +109,10 @@ class ApiTests(unittest.TestCase):
         aoe = Calculator(weapon).calculate(attack="air_burst_explosion").attacks["air_burst_explosion"].spatial
         self.assertIsNotNone(aoe)
         self.assertIn("Damage mass", format_spatial(aoe))
+        melee_result = Calculator(arsenal.weapon.get("Tenet Exec")).calculate()
+        melee_summary = ResultFormatter(melee_result).summary()
+        self.assertIn("Tenet Exec", melee_summary)
+        self.assertIn("Reload Time", melee_summary)
 
     def test_contributions_include_upgrades_and_evolutions(self):
         from warframe_damage_calculator import removal_contributions, shapley_contributions
