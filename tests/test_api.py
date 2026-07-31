@@ -132,9 +132,9 @@ class ApiTests(unittest.TestCase):
         fire_rate_attack = fire_rate_result.attacks[fire_rate_result.selected_attack]
         self.assertAlmostEqual(fire_rate_attack.modded.fire_rate, fire_rate_attack.effective.fire_rate)
         fire_rate_summary = ResultFormatter(fire_rate_result).summary()
-        self.assertIn("1.14", fire_rate_summary.split("Fire Rate", 1)[1].splitlines()[0])
-        self.assertIn("Attacks per Second", fire_rate_summary)
-        self.assertIn(f"{fire_rate_attack.average.attacks_per_second:,.2f}", fire_rate_summary.split("Attacks per Second", 1)[1].splitlines()[0])
+        self.assertIn("1.14a/s", fire_rate_summary.split("Fire Rate", 1)[1].splitlines()[0])
+        self.assertIn("Attack Rate", fire_rate_summary)
+        self.assertIn(f"{fire_rate_attack.average.attack_rate:,.2f}a/s", fire_rate_summary.split("Attack Rate", 1)[1].splitlines()[0])
         self.assertEqual(fire_rate_attack.average.damage, fire_rate_attack.effective.damage)
         self.assertEqual(fire_rate_attack.average.crit_damage, fire_rate_attack.effective.crit_damage)
         self.assertEqual(fire_rate_attack.average.status_chance, fire_rate_attack.effective.status_chance)
@@ -168,13 +168,11 @@ class ApiTests(unittest.TestCase):
         self.assertIn("Tenet Exec", melee_summary)
         self.assertIn("Attack Speed", melee_summary)
         self.assertNotIn("Fire Rate", melee_summary)
-        self.assertIn("Reload Time", melee_summary)
-        magazine_row = melee_summary.split("Magazine Capacity", 1)[1].splitlines()[0]
-        reload_row = melee_summary.split("Reload Time", 1)[1].splitlines()[0]
-        ammo_row = melee_summary.split("Ammo Cost", 1)[1].splitlines()[0]
-        self.assertEqual(magazine_row.count("1r"), 4)
-        self.assertEqual(reload_row.count("0.00s"), 4)
-        self.assertEqual(ammo_row.count("1.00"), 4)
+        self.assertIn("a/s", melee_summary.split("Attack Speed", 1)[1].splitlines()[0])
+        self.assertNotIn("Magazine Capacity", melee_summary)
+        self.assertNotIn("Reload Time", melee_summary)
+        self.assertNotIn("Ammo Cost", melee_summary)
+        self.assertIn("×", melee_summary.split("Expected Procs", 1)[1].splitlines()[0])
 
     def test_contributions_include_upgrades_and_evolutions(self):
         from warframe_damage_calculator import removal_contributions, shapley_contributions

@@ -111,7 +111,7 @@ class MechanicsTests(unittest.TestCase):
     def test_battery_reload_cycle_uses_capacity_and_recharge_rate(self):
         result = selected(Calculator(arsenal.weapon.get("Cycron")).calculate())
         self.assertAlmostEqual(result.effective.reload_time, 4)
-        self.assertAlmostEqual(result.average.attacks_per_second, 7.559055118110237)
+        self.assertAlmostEqual(result.average.attack_rate, 7.559055118110237)
         self.assertAlmostEqual(result.average.total_dps, 254.06533493275685)
 
     def test_non_crit_family_uses_event_chance_without_changing_effective_damage(self):

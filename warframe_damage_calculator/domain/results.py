@@ -122,7 +122,7 @@ class AverageResult:
     crit_multiplier: float
     weakpoint_crit_chance: float
     weakpoint_crit_multiplier: float
-    attacks_per_second: float
+    attack_rate: float
     first_shot_damage_multiplier: float
     combo_multiplier: float
     melee_duplicate_multiplier: float
@@ -158,7 +158,7 @@ class AverageAttackStats:
     crit_multiplier: float = 1
     weakpoint_crit_chance: float = 0
     weakpoint_crit_multiplier: float = 1
-    attacks_per_second: float = 0
+    attack_rate: float = 0
     procs_per_shot: float = 0
     flat_dph: float | None = None
     flat_dps: float | None = None

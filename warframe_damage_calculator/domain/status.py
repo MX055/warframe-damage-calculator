@@ -39,7 +39,7 @@ class StatusModel:
     forced_procs: Dist
     status_chance: float
     attempts_per_attack: float
-    attacks_per_second: float
+    attack_rate: float
     duration: float
     extra_proc_counts: Dist = field(default_factory=Dist)
     extra_proc_probabilities: Dist = field(default_factory=Dist)
@@ -50,7 +50,7 @@ class StatusModel:
 
     @property
     def attempts_per_second(self) -> float:
-        return max(self.attempts_per_attack * self.attacks_per_second, 0)
+        return max(self.attempts_per_attack * self.attack_rate, 0)
 
     def base_proc_count_per_attempt(self, kind: str) -> float:
         return max(self.status_chance, 0) * self.damage.weight(kind) + max(self.forced_procs.get(kind, 0), 0)
@@ -88,7 +88,7 @@ class StatusModel:
         return 1 - (1 - base) * (1 - min(max(self.extra_any_proc_probability, 0), 1))
 
     def proc_rate(self, kind: str) -> float:
-        return self.proc_count_per_attack(kind) * max(self.attacks_per_second, 0)
+        return self.proc_count_per_attack(kind) * max(self.attack_rate, 0)
 
     def expected_active_stacks(self, kind: str, *, duration: float | None = None) -> float:
         lifetime = self.duration if duration is None else duration
@@ -97,7 +97,7 @@ class StatusModel:
     def probability_active(self, kind: str, *, duration: float | None = None) -> float:
         probability = self.per_attack_probability(kind)
         window = self.duration if duration is None else duration
-        return sustained_proc_chance(probability, self.attacks_per_second * max(window, 0))
+        return sustained_proc_chance(probability, self.attack_rate * max(window, 0))
 
     def expected_active_types(self, maximum: int | None = None) -> float:
         kinds = (set(self.damage) | set(self.forced_procs) | set(self.extra_proc_counts)) & STATUS_TYPES
@@ -122,7 +122,7 @@ class StatusModel:
         }
 
     @classmethod
-    def combine(cls, models: list[StatusModel], attacks_per_second: float, duration: float, random_proc_probability: float = 0, random_triggered_procs: Dist | None = None) -> StatusModel:
+    def combine(cls, models: list[StatusModel], attack_rate: float, duration: float, random_proc_probability: float = 0, random_triggered_procs: Dist | None = None) -> StatusModel:
         triggered = random_triggered_procs or Dist()
         counts = Dist({kind: sum(model.proc_count_per_attack(kind) for model in models) + triggered.get(kind, 0) for kind in STATUS_TYPES})
         probabilities = Dist({
@@ -131,7 +131,7 @@ class StatusModel:
         })
         any_probability = 1 - _product(1 - model.any_proc_probability_per_attack() for model in models)
         critical_counts = Dist({kind: sum(model.critical_proc_counts.get(kind, 0) for model in models) for kind in STATUS_TYPES})
-        return cls(Dist(), Dist(), 0, 0, attacks_per_second, duration, counts, probabilities + triggered, any_probability, random_proc_probability, triggered, critical_counts)
+        return cls(Dist(), Dist(), 0, 0, attack_rate, duration, counts, probabilities + triggered, any_probability, random_proc_probability, triggered, critical_counts)
 
 
 def _product(values: Iterable[float]) -> float:

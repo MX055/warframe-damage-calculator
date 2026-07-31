@@ -226,9 +226,9 @@ def _forced_procs(attack: Attack, effects: Iterable[ResolvedEffect]) -> Dist:
     return forced
 
 
-def _status_model(damage: Dist, forced_procs: Dist, status_chance: float, attempts: float, attacks_per_second: float, duration: float, effects: Iterable[ResolvedEffect], crit_chance: float, *, include_random: bool = True, afflictions: bool = False) -> StatusModel:
+def _status_model(damage: Dist, forced_procs: Dist, status_chance: float, attempts: float, attack_rate: float, duration: float, effects: Iterable[ResolvedEffect], crit_chance: float, *, include_random: bool = True, afflictions: bool = False) -> StatusModel:
     effects = tuple(effects)
-    base = StatusModel(damage, forced_procs, status_chance, attempts, attacks_per_second, duration)
+    base = StatusModel(damage, forced_procs, status_chance, attempts, attack_rate, duration)
     direct_counts: dict[str, float] = {}
     direct_probabilities: dict[str, float] = {}
     critical_counts: dict[str, float] = {}
@@ -288,7 +288,7 @@ def _status_model(damage: Dist, forced_procs: Dist, status_chance: float, attemp
     extra_counts += random_triggered_procs
     extra_probabilities += random_triggered_procs
 
-    provisional = StatusModel(damage, forced_procs, status_chance, attempts, attacks_per_second, duration, extra_counts, extra_probabilities, extra_any_probability, random_probability, random_triggered_procs, Dist(critical_counts))
+    provisional = StatusModel(damage, forced_procs, status_chance, attempts, attack_rate, duration, extra_counts, extra_probabilities, extra_any_probability, random_probability, random_triggered_procs, Dist(critical_counts))
     debilitate = clamp(sum(float(effect.value) for effect in effects if effect.stat == "debilitate_proc_chance"), 0, 1)
     if debilitate:
         additions: dict[str, float] = {}
@@ -301,12 +301,12 @@ def _status_model(damage: Dist, forced_procs: Dist, status_chance: float, attemp
 
     if afflictions:
         multiplier = sum(float(effect.value) for effect in effects if effect.stat == "afflictions_proc_multiplier")
-        existing = StatusModel(damage, forced_procs, status_chance, attempts, attacks_per_second, duration, extra_counts, extra_probabilities, extra_any_probability, random_probability, random_triggered_procs, Dist(critical_counts))
+        existing = StatusModel(damage, forced_procs, status_chance, attempts, attack_rate, duration, extra_counts, extra_probabilities, extra_any_probability, random_probability, random_triggered_procs, Dist(critical_counts))
         copied = Dist({kind: existing.proc_count_per_attack(kind) * multiplier for kind in RANDOM_STATUS_TYPES | {"void"}})
         extra_counts += copied
         critical_counts = {kind: value * (1 + multiplier) for kind, value in critical_counts.items()}
 
-    return StatusModel(damage, forced_procs, status_chance, attempts, attacks_per_second, duration, extra_counts, extra_probabilities, extra_any_probability, random_probability, random_triggered_procs, Dist(critical_counts))
+    return StatusModel(damage, forced_procs, status_chance, attempts, attack_rate, duration, extra_counts, extra_probabilities, extra_any_probability, random_probability, random_triggered_procs, Dist(critical_counts))
 
 
 def _product(values: Iterable[float]) -> float:
@@ -326,7 +326,7 @@ def _with_random_proc(model: StatusModel, effects: Iterable[ResolvedEffect], pro
         kind = effect.stat.removesuffix("_proc")
         triggered[kind] = triggered.get(kind, 0) + probability / len(RANDOM_STATUS_TYPES) * clamp(float(effect.value), 0, 1)
     random_triggered = Dist(triggered)
-    return StatusModel(model.damage, model.forced_procs, model.status_chance, model.attempts_per_attack, model.attacks_per_second, model.duration, model.extra_proc_counts + random_triggered, model.extra_proc_probabilities + random_triggered, model.extra_any_proc_probability, probability, random_triggered, model.critical_proc_counts)
+    return StatusModel(model.damage, model.forced_procs, model.status_chance, model.attempts_per_attack, model.attack_rate, model.duration, model.extra_proc_counts + random_triggered, model.extra_proc_probabilities + random_triggered, model.extra_any_proc_probability, probability, random_triggered, model.critical_proc_counts)
 
 
 def _special_value(effects: Iterable[ResolvedEffect], stat: str, event: str | None = None) -> float:
@@ -400,7 +400,7 @@ def _dot_value(context: CalculationContext, result: AttackResult, zone: str, *, 
     if multishot is None and damage_factor == 1:
         proc_model = effective.status_model
     else:
-        proc_model = _status_model(damage, effective.forced_procs, float(effective.status_chance), shots, average.attacks_per_second, float(effective.status_duration), source_effects, chance, include_random=False, afflictions=afflictions)
+        proc_model = _status_model(damage, effective.forced_procs, float(effective.status_chance), shots, average.attack_rate, float(effective.status_duration), source_effects, chance, include_random=False, afflictions=afflictions)
         if effective.status_model.random_proc_probability: proc_model = _with_random_proc(proc_model, source_effects, effective.status_model.random_proc_probability)
     value = 0.0
     dot_base = float(effective.dot_base_damage) * damage_factor
@@ -409,8 +409,8 @@ def _dot_value(context: CalculationContext, result: AttackResult, zone: str, *, 
         target_factor = damage_multiplier(context.target, kind, zone=zone, dot=True, weakpoint_bonus=weakpoint_bonus, status_effects=result.status_effects)
         if target_factor is None: continue
         proc_count = proc_model.proc_count_per_attack(kind)
-        if kind == "gas" and average.attacks_per_second > 0 and effective.status_duration > 0:
-            proc_count = min(proc_model.proc_rate(kind) * float(effective.status_duration), 10) / (average.attacks_per_second * float(effective.status_duration))
+        if kind == "gas" and average.attack_rate > 0 and effective.status_duration > 0:
+            proc_count = min(proc_model.proc_rate(kind) * float(effective.status_duration), 10) / (average.attack_rate * float(effective.status_duration))
         critical_count = min(proc_model.critical_proc_counts.get(kind, 0), proc_count)
         critical_multiplier = max(float(effective.crit_damage), crit)
         weighted_crit = (proc_count - critical_count) * crit + critical_count * critical_multiplier
@@ -478,7 +478,7 @@ def _apply_position_mixture(context: CalculationContext, result: AttackResult, e
     first_weight = next((weight for events, weight in weights if "magazine_first_shot" in events), 0)
     average.first_shot_damage_multiplier = 1 + (first_factor - 1) * first_weight
     refresh_metrics(average)
-    _refresh_spatial(spatial, average.attacks_per_second)
+    _refresh_spatial(spatial, average.attack_rate)
 
 
 def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effects: tuple[ResolvedEffect, ...], evolution_effects: tuple[ResolvedEffect, ...], *, automatic_model_override: StatusModel | None = None, status_effects_override: dict[str, float] | None = None, random_proc_probability: float = 0) -> AttackResult:
@@ -628,7 +628,7 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     body_tier_bonus = min(body_crit, 1) * crit_tier_chance
     weak_tier_bonus = min(weak_crit, 1) * crit_tier_chance
     falloff_multiplier, spatial = _spatial_falloff(attack, effective)
-    average = AverageAttackStats(damage=damage, crit_chance=body_crit, crit_damage=crit_damage, status_chance=status, status_duration=duration, multishot=multishot, fire_rate=instant_rate, magazine_capacity=float(category_stats.get("magazine_capacity", 0)), reload_time=float(category_stats.get("reload_time", 0)), ammo_cost=float(category_stats.get("ammo_cost", 0)), ammo_efficiency=float(category_stats.get("ammo_efficiency", 0)), punch_through=float(effective.get("punch_through", 0)), burst_count=float(category_stats.get("burst_count", 1)), burst_delay=float(category_stats.get("burst_delay", 0)), charge_time=float(category_stats.get("charge_time", 0)), attack_speed=float(category_stats.get("attack_speed", instant_rate if context.weapon.type == "melee" else 0)), heavy_attack_speed=float(category_stats.get("heavy_attack_speed", 1)), heavy_attack_efficiency=float(category_stats.get("heavy_attack_efficiency", 0)), initial_combo=float(category_stats.get("initial_combo", 0)), crit_multiplier=crit_multiplier(body_crit + body_tier_bonus, crit_damage), weakpoint_crit_chance=weak_crit, weakpoint_crit_multiplier=crit_multiplier(weak_crit + weak_tier_bonus, crit_damage), attacks_per_second=fire_rate, procs_per_shot=status_model.expected_procs_per_attack, melee_duplicate_multiplier=duplicate_multiplier, melee_doughty_bonus=doughty_bonus, crit_tier_bonus=body_tier_bonus, weakpoint_crit_tier_bonus=weak_tier_bonus, secondary_enervate_bonus=body_bonus, weakpoint_secondary_enervate_bonus=weak_bonus, falloff_multiplier=falloff_multiplier)
+    average = AverageAttackStats(damage=damage, crit_chance=body_crit, crit_damage=crit_damage, status_chance=status, status_duration=duration, multishot=multishot, fire_rate=instant_rate, magazine_capacity=float(category_stats.get("magazine_capacity", 0)), reload_time=float(category_stats.get("reload_time", 0)), ammo_cost=float(category_stats.get("ammo_cost", 0)), ammo_efficiency=float(category_stats.get("ammo_efficiency", 0)), punch_through=float(effective.get("punch_through", 0)), burst_count=float(category_stats.get("burst_count", 1)), burst_delay=float(category_stats.get("burst_delay", 0)), charge_time=float(category_stats.get("charge_time", 0)), attack_speed=float(category_stats.get("attack_speed", instant_rate if context.weapon.type == "melee" else 0)), heavy_attack_speed=float(category_stats.get("heavy_attack_speed", 1)), heavy_attack_efficiency=float(category_stats.get("heavy_attack_efficiency", 0)), initial_combo=float(category_stats.get("initial_combo", 0)), crit_multiplier=crit_multiplier(body_crit + body_tier_bonus, crit_damage), weakpoint_crit_chance=weak_crit, weakpoint_crit_multiplier=crit_multiplier(weak_crit + weak_tier_bonus, crit_damage), attack_rate=fire_rate, procs_per_shot=status_model.expected_procs_per_attack, melee_duplicate_multiplier=duplicate_multiplier, melee_doughty_bonus=doughty_bonus, crit_tier_bonus=body_tier_bonus, weakpoint_crit_tier_bonus=weak_tier_bonus, secondary_enervate_bonus=body_bonus, weakpoint_secondary_enervate_bonus=weak_bonus, falloff_multiplier=falloff_multiplier)
     result = AttackResult(attack, base, modded, effective, upgrades, evolutions, average, spatial, status_effects)
     combo_multiplier = 1
     if heavy:
@@ -640,7 +640,7 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
         direct, dot = zone_damage
         _set_damage(average, spatial, direct, dot)
     refresh_metrics(average)
-    _refresh_spatial(spatial, average.attacks_per_second)
+    _refresh_spatial(spatial, average.attack_rate)
     _apply_position_mixture(context, result, [*upgrade_positions, *evolution_positions])
     return result
 

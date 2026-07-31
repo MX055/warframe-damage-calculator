@@ -43,13 +43,13 @@ class WeaponCalculator:
 
     def build_shared_status_model(self, preliminary: dict[str, AttackResult], names: list[str]) -> tuple[StatusModel, dict[str, float], float, float]:
         preliminary_models = [preliminary[name].effective.status_model for name in names]
-        root_rate = preliminary[self.root_name].average.attacks_per_second
+        root_rate = preliminary[self.root_name].average.attack_rate
         root_duration = max((model.duration for model in preliminary_models), default=0)
         random_probabilities: list[float] = []
         for name in names:
             result = preliminary[name]
             effects = result.effective.special_effects
-            model = _status_model(result.effective.damage, result.effective.forced_procs, float(result.effective.status_chance), float(result.effective.multishot), result.average.attacks_per_second, float(result.effective.status_duration), effects, result.average.crit_chance, afflictions=bool(AFFLICTIONS_CATEGORIES & set(result.effective.forced_procs)))
+            model = _status_model(result.effective.damage, result.effective.forced_procs, float(result.effective.status_chance), float(result.effective.multishot), result.average.attack_rate, float(result.effective.status_duration), effects, result.average.crit_chance, afflictions=bool(AFFLICTIONS_CATEGORIES & set(result.effective.forced_procs)))
             random_probabilities.append(model.random_proc_probability)
         random_probability = 1 - _product(1 - probability for probability in random_probabilities)
         shared = StatusModel.combine(preliminary_models, root_rate, root_duration)
@@ -79,13 +79,13 @@ class WeaponCalculator:
         output.flat_dph = direct
         output.flat_dotph = dot
         output.total_dph = direct + dot
-        output.flat_dps = direct * own.attacks_per_second
-        output.flat_dotps = dot * own.attacks_per_second
-        output.total_dps = (direct + dot) * own.attacks_per_second
+        output.flat_dps = direct * own.attack_rate
+        output.flat_dotps = dot * own.attack_rate
+        output.total_dps = (direct + dot) * own.attack_rate
 
     def aggregate_attack_tree(self, results: dict[str, AttackResult], names: list[str], root_duration: float) -> tuple[AverageAttackStats, StatusModel, dict[str, float]]:
         root = results[self.root_name]
-        group_model = StatusModel.combine([results[name].effective.status_model for name in names], root.average.attacks_per_second, root_duration)
+        group_model = StatusModel.combine([results[name].effective.status_model for name in names], root.average.attack_rate, root_duration)
         status_effects = group_model.non_damage_effects()
         status_effects["armor_reduction"] = min(status_effects.get("puncture", 0) * _special_value(root.effective.special_effects, "armor_reduction"), 1)
         aggregate = AverageAttackStats(**{name: deepcopy(getattr(root.average, name)) for name in root.average.__dataclass_fields__})
