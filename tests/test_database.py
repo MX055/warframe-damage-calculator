@@ -27,7 +27,7 @@ class DatabaseTests(unittest.TestCase):
         self.assertGreater(len(arsenal.enemy), 0)
 
     def test_perks_are_loaded_from_database(self):
-        self.assertEqual(arsenal.database["schema_version"], 12)
+        self.assertEqual(arsenal.database["schema_version"], 15)
         self.assertIn("Devouring Attrition", arsenal.database["perks"])
         self.assertEqual(arsenal.database["perks"]["Devouring Attrition"]["stats"]["damage_bonus"][0]["value"], "$weapon")
 

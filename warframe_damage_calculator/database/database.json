@@ -1,5 +1,5 @@
 {
-    "schema_version": 12,
+    "schema_version": 15,
     "weapons": {
         "Euphona Prime": {
             "name": "Euphona Prime",
@@ -73040,7 +73040,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Accelerated Isotope": {
@@ -73067,7 +73067,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Acid Shells": {
@@ -73082,7 +73082,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Adhesive Blast": {
@@ -73096,7 +73096,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Aerial Ace": {
@@ -73112,7 +73112,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Aero Agility": {
@@ -73126,7 +73126,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Aero Periphery": {
@@ -73140,7 +73140,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Agile Aim": {
@@ -73156,7 +73156,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Air Recon": {
@@ -73170,7 +73170,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Amalgam Argonak Metal Auger": {
@@ -73191,7 +73191,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Metal Auger",
                 "Metal Auger"
@@ -73215,7 +73215,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Galvanized Diffusion",
                 "Flawed Barrel Diffusion",
@@ -73241,7 +73241,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Amalgam Furax Body Count": {
@@ -73257,7 +73257,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Body Count"
             ]
@@ -73280,7 +73280,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Magazine Warp",
                 "Magazine Warp",
@@ -73311,7 +73311,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Organ Shatter",
                 "Flawed Organ Shatter"
@@ -73335,7 +73335,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed True Steel",
                 "Galvanized Steel",
@@ -73363,7 +73363,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Serration",
                 "Spectral Serration",
@@ -73389,7 +73389,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Shotgun Barrage",
                 "Shotgun Barrage"
@@ -73413,7 +73413,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Pressure Point",
                 "Pressure Point",
@@ -73445,7 +73445,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Ambush Optics": {
@@ -73467,7 +73467,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Ammo Chain": {
@@ -73481,7 +73481,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Primed Ammo Chain": {
@@ -73495,7 +73495,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Ammo Drum": {
@@ -73518,7 +73518,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Flawed Ammo Drum"
             ]
@@ -73541,7 +73541,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Ammo Stock",
                 "Flawed Ammo Stock"
@@ -73571,7 +73571,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Apex Predator": {
@@ -73587,7 +73587,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Archgun Ace": {
@@ -73614,7 +73614,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Argon Scope": {
@@ -73638,7 +73638,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Galvanized Scope"
             ]
@@ -73654,7 +73654,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Astral Autopsy": {
@@ -73668,7 +73668,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Astral Slash": {
@@ -73689,7 +73689,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Atomic Fallout": {
@@ -73716,7 +73716,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Auger Strike": {
@@ -73737,7 +73737,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Augur Pact": {
@@ -73758,7 +73758,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Augur Seeker": {
@@ -73779,7 +73779,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Automatic Trigger": {
@@ -73800,7 +73800,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Avenging Truth": {
@@ -73815,7 +73815,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Ballista Measure": {
@@ -73836,7 +73836,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Bane of Corpus": {
@@ -73859,7 +73859,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Bane of Corpus",
                 "Primed Bane of Corpus"
@@ -73885,7 +73885,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Bane of Grineer",
                 "Flawed Bane of Grineer"
@@ -73911,7 +73911,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Bane of Infested",
                 "Flawed Bane of Infested"
@@ -73937,7 +73937,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Bane of Orokin"
             ]
@@ -73962,7 +73962,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Bane of The Murmur"
             ]
@@ -73985,7 +73985,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Amalgam Barrel Diffusion",
                 "Flawed Barrel Diffusion",
@@ -74003,7 +74003,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Berserker Fury": {
@@ -74026,7 +74026,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Fury",
                 "Fury",
@@ -74052,7 +74052,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Biotic Rounds": {
@@ -74088,7 +74088,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Bite": {
@@ -74115,7 +74115,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Blade of Truth": {
@@ -74136,7 +74136,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Bladed Rounds": {
@@ -74160,7 +74160,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Blaze": {
@@ -74187,7 +74187,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Blazing Steel": {
@@ -74208,7 +74208,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Bleeding Edge": {
@@ -74229,7 +74229,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Blind Shot": {
@@ -74243,7 +74243,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Blood Rush": {
@@ -74267,7 +74267,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Bloodthirst": {
@@ -74281,7 +74281,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Blunderbuss": {
@@ -74302,7 +74302,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Critical Deceleration",
                 "Flawed Blunderbuss"
@@ -74326,7 +74326,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Amalgam Furax Body Count"
             ]
@@ -74349,7 +74349,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Boreal's Contempt": {
@@ -74376,7 +74376,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Bounty Hunter": {
@@ -74390,7 +74390,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Brain Storm": {
@@ -74414,7 +74414,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Breach Loader": {
@@ -74435,7 +74435,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Bright Purity": {
@@ -74458,7 +74458,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Broad Eye": {
@@ -74479,7 +74479,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Brute Conditioning": {
@@ -74500,7 +74500,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Disabling Conditioning",
                 "Precision Conditioning"
@@ -74530,7 +74530,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Burning Claws": {
@@ -74557,7 +74557,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Chilling Claws",
                 "Sepsis Claws",
@@ -74584,7 +74584,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [],
             "implementation_status": {
                 "state": "not_implemented",
@@ -74604,7 +74604,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Buzz Kill": {
@@ -74625,7 +74625,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Calculated Victory": {
@@ -74639,7 +74639,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Cannonade": {
@@ -74653,7 +74653,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Carnis Mandible": {
@@ -74680,7 +74680,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Carnis Stinger": {
@@ -74707,7 +74707,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Catalyzer Link": {
@@ -74731,7 +74731,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Cautious Shot": {
@@ -74747,7 +74747,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Charged Bullets": {
@@ -74774,7 +74774,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Charged Chamber": {
@@ -74798,7 +74798,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Charged Shell": {
@@ -74819,7 +74819,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Charged Shell",
                 "Primed Charged Shell"
@@ -74849,7 +74849,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Sepsis Claws",
                 "Shocking Claws",
@@ -74874,7 +74874,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Chilling Grasp",
                 "Flawed Chilling Grasp"
@@ -74904,7 +74904,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Cleanse Corpus": {
@@ -74925,7 +74925,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Cleanse Corpus",
                 "Primed Cleanse Corpus"
@@ -74949,7 +74949,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Cleanse Grineer",
                 "Primed Cleanse Grineer"
@@ -74973,7 +74973,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Cleanse Infested",
                 "Flawed Cleanse Infested"
@@ -74997,7 +74997,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Cleanse Orokin"
             ]
@@ -75020,7 +75020,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Cleanse The Murmur"
             ]
@@ -75046,7 +75046,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Collision Force": {
@@ -75067,7 +75067,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Combat Reload": {
@@ -75092,7 +75092,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Combo Fury": {
@@ -75119,7 +75119,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Combo Killer": {
@@ -75140,7 +75140,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Combustion Beam": {
@@ -75154,7 +75154,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Combustion Rounds": {
@@ -75175,7 +75175,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Combustion Rounds"
             ]
@@ -75198,7 +75198,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Combustion Rounds"
             ]
@@ -75221,7 +75221,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Comet Rounds": {
@@ -75237,7 +75237,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Ripper Rounds",
                 "Serrated Rounds"
@@ -75254,7 +75254,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Energizing Shot"
             ]
@@ -75277,7 +75277,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Concussion Rounds"
             ]
@@ -75303,7 +75303,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Condition's Perfection": {
@@ -75317,7 +75317,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Conductive Blade": {
@@ -75338,7 +75338,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Contagious Spread": {
@@ -75359,7 +75359,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Contagious Spread"
             ]
@@ -75388,7 +75388,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Contamination Casing": {
@@ -75415,7 +75415,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Continuous Misery": {
@@ -75438,7 +75438,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Convulsion": {
@@ -75459,7 +75459,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Convulsion",
                 "Primed Convulsion"
@@ -75489,7 +75489,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Counterbalance": {
@@ -75510,7 +75510,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Counterbalance"
             ]
@@ -75526,7 +75526,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Serrated Edges",
                 "Sharpened Blade"
@@ -75556,7 +75556,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Crash Course": {
@@ -75579,7 +75579,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Crash Shot": {
@@ -75593,7 +75593,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flak Shot",
                 "Shred Shot"
@@ -75623,7 +75623,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Pistol Gambit",
                 "Primed Pistol Gambit",
@@ -75654,7 +75654,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Blunderbuss",
                 "Flawed Blunderbuss"
@@ -75692,7 +75692,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Point Strike",
                 "Flawed Point Strike"
@@ -75722,7 +75722,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Critical Meltdown": {
@@ -75749,7 +75749,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Critical Mutation": {
@@ -75773,7 +75773,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Critical Precision": {
@@ -75797,7 +75797,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Cryo Coating": {
@@ -75824,7 +75824,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Cryo Rounds": {
@@ -75847,7 +75847,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Cryo Rounds",
                 "Flawed Cryo Rounds"
@@ -75882,7 +75882,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [],
             "implementation_status": {
                 "state": "not_implemented",
@@ -75909,7 +75909,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Damzav-Vati": {
@@ -75930,7 +75930,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Deadly Efficiency": {
@@ -75951,7 +75951,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Deadly Efficiency"
             ]
@@ -75978,7 +75978,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [],
             "implementation_status": {
                 "state": "not_implemented",
@@ -76006,7 +76006,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Deep Freeze": {
@@ -76027,7 +76027,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Deep Freeze"
             ]
@@ -76045,7 +76045,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Depleted Reload": {
@@ -76072,7 +76072,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Directed Convergence": {
@@ -76087,7 +76087,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Disabling Conditioning": {
@@ -76108,7 +76108,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Brute Conditioning",
                 "Precision Conditioning"
@@ -76126,7 +76126,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Discipline's Merit": {
@@ -76140,7 +76140,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Dispatch Overdrive": {
@@ -76154,7 +76154,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Disruptor": {
@@ -76175,7 +76175,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Disruptor"
             ]
@@ -76199,7 +76199,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Double Tap": {
@@ -76224,7 +76224,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Hydraulic Gauge",
                 "Maximum Capacity",
@@ -76242,7 +76242,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Draining Gloom": {
@@ -76263,7 +76263,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Dreadful Killshot": {
@@ -76286,7 +76286,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Dreamer's Wrath": {
@@ -76300,7 +76300,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Drifting Contact": {
@@ -76327,7 +76327,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Dual Rounds": {
@@ -76348,7 +76348,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Dual Rounds"
             ]
@@ -76373,7 +76373,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Efficient Beams": {
@@ -76394,7 +76394,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Eject Magazine": {
@@ -76408,7 +76408,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Electrified Barrel": {
@@ -76429,7 +76429,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Electromagnetic Shielding": {
@@ -76443,7 +76443,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Embedded Catalyzer": {
@@ -76465,7 +76465,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Emergent Aftermath": {
@@ -76486,7 +76486,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Enduring Affliction": {
@@ -76507,7 +76507,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Enduring Strike": {
@@ -76528,7 +76528,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Energizing Shot": {
@@ -76542,7 +76542,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Concealed Explosives"
             ]
@@ -76558,7 +76558,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Entropy Burst": {
@@ -76580,7 +76580,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Entropy Detonation": {
@@ -76595,7 +76595,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Entropy Flight": {
@@ -76610,7 +76610,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Entropy Spike": {
@@ -76624,7 +76624,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Eroding Blight": {
@@ -76645,7 +76645,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Eximus Advantage": {
@@ -76669,7 +76669,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Expel Corpus": {
@@ -76690,7 +76690,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Expel Corpus",
                 "Primed Expel Corpus"
@@ -76714,7 +76714,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Expel Grineer",
                 "Primed Expel Grineer"
@@ -76738,7 +76738,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Expel Infested",
                 "Primed Expel Infested"
@@ -76762,7 +76762,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Expel Orokin"
             ]
@@ -76785,7 +76785,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Expel The Murmur"
             ]
@@ -76801,7 +76801,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Exposing Harpoon": {
@@ -76824,7 +76824,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Extend": {
@@ -76845,7 +76845,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Fanged Fusillade": {
@@ -76868,7 +76868,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Fass Canticle": {
@@ -76882,7 +76882,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Lohk Canticle",
                 "Jahu Canticle",
@@ -76909,7 +76909,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Fast Hands",
                 "Primed Fast Hands"
@@ -76933,7 +76933,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Galvanized Acceleration"
             ]
@@ -76956,7 +76956,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Lucky Shot"
             ]
@@ -76979,7 +76979,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Fever Strike",
                 "Primed Fever Strike"
@@ -77006,7 +77006,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Finishing Touch": {
@@ -77027,7 +77027,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Firestorm": {
@@ -77050,7 +77050,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Firestorm"
             ]
@@ -77066,7 +77066,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Crash Shot",
                 "Shred Shot"
@@ -77096,7 +77096,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Flechette": {
@@ -77117,7 +77117,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Flechette"
             ]
@@ -77141,7 +77141,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Focus Energy": {
@@ -77168,7 +77168,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Focus Radon": {
@@ -77195,7 +77195,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Focused Acceleration": {
@@ -77211,7 +77211,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Focused Defense": {
@@ -77225,7 +77225,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Fomorian Accelerant": {
@@ -77240,7 +77240,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Frail Momentum": {
@@ -77267,7 +77267,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Frigid Blast": {
@@ -77294,7 +77294,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Frost Jaw": {
@@ -77321,7 +77321,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Frostbite": {
@@ -77348,7 +77348,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Full Capacity": {
@@ -77375,7 +77375,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Hydraulic Barrel",
                 "Loose Magazine"
@@ -77399,7 +77399,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Fulmination": {
@@ -77420,7 +77420,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Fulmination"
             ]
@@ -77443,7 +77443,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Fury": {
@@ -77464,7 +77464,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Fury",
                 "Primed Fury",
@@ -77496,7 +77496,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Fatal Acceleration"
             ]
@@ -77532,7 +77532,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Rifle Aptitude",
                 "Flawed Rifle Aptitude"
@@ -77564,7 +77564,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Split Chamber",
                 "Split Chamber",
@@ -77595,7 +77595,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Hydraulic Crosshairs"
             ]
@@ -77624,7 +77624,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Amalgam Barrel Diffusion",
                 "Flawed Barrel Diffusion",
@@ -77657,7 +77657,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Melee Elementalist"
             ]
@@ -77686,7 +77686,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Hell's Chamber",
                 "Flawed Hell's Chamber"
@@ -77718,7 +77718,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Reflex Coil",
                 "Flawed Reflex Coil"
@@ -77753,7 +77753,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Shotgun Savvy",
                 "Shotgun Savvy"
@@ -77785,7 +77785,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Argon Scope"
             ]
@@ -77819,7 +77819,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Sure Shot",
                 "Sure Shot"
@@ -77851,7 +77851,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed True Steel",
                 "Amalgam Ripkas True Steel",
@@ -77877,7 +77877,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Glacial Edge": {
@@ -77898,7 +77898,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Gladiator Might": {
@@ -77919,7 +77919,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Gladiator Rush": {
@@ -77940,7 +77940,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Gladiator Vice": {
@@ -77961,7 +77961,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Gleaming Blight": {
@@ -77983,7 +77983,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Gorgon Frenzy": {
@@ -78008,7 +78008,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Grinloked": {
@@ -78023,7 +78023,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Guardian Derision": {
@@ -78044,7 +78044,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Guided Ordnance": {
@@ -78058,7 +78058,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Gun Glide": {
@@ -78079,7 +78079,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Gunslinger": {
@@ -78100,7 +78100,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Gunslinger"
             ]
@@ -78131,7 +78131,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Harkonar Scope": {
@@ -78145,7 +78145,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Hata-Satya": {
@@ -78168,7 +78168,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Hawk Eye": {
@@ -78189,7 +78189,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Healing Return": {
@@ -78203,7 +78203,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Heartseeker": {
@@ -78217,7 +78217,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Heated Charge": {
@@ -78238,7 +78238,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Heated Charge",
                 "Flawed Heated Charge"
@@ -78264,7 +78264,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Heavy Trauma": {
@@ -78285,7 +78285,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Heavy Trauma",
                 "Flawed Heavy Trauma"
@@ -78302,7 +78302,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Hell's Chamber": {
@@ -78323,7 +78323,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Galvanized Hell",
                 "Flawed Hell's Chamber"
@@ -78349,7 +78349,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Hellfire"
             ]
@@ -78383,7 +78383,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Higasa Serration": {
@@ -78404,7 +78404,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Serration",
                 "Amalgam Serration",
@@ -78438,7 +78438,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Hollow Point": {
@@ -78465,7 +78465,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Hollowed Bullets": {
@@ -78486,7 +78486,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Hornet Strike": {
@@ -78507,7 +78507,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Hornet Strike"
             ]
@@ -78533,7 +78533,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Hunter Synergy": {
@@ -78547,7 +78547,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Hunter Track": {
@@ -78568,7 +78568,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Hunter's Bonesaw": {
@@ -78590,7 +78590,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Hush": {
@@ -78614,7 +78614,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Hydraulic Barrel": {
@@ -78641,7 +78641,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Loose Magazine",
                 "Full Capacity"
@@ -78671,7 +78671,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Loose Chamber",
                 "Loaded Capacity"
@@ -78696,7 +78696,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Galvanized Crosshairs"
             ]
@@ -78727,7 +78727,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Double Tap",
                 "Maximum Capacity",
@@ -78759,7 +78759,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Ice Storm": {
@@ -78786,7 +78786,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Immunity Resistance": {
@@ -78807,7 +78807,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Impaler Munitions": {
@@ -78821,7 +78821,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Meteor Munitions",
                 "Razor Munitions"
@@ -78845,7 +78845,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Incendiary Coat": {
@@ -78866,7 +78866,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Incendiary Coat"
             ]
@@ -78891,7 +78891,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Infected Clip"
             ]
@@ -78920,7 +78920,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Internal Bleeding": {
@@ -78954,7 +78954,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Ion Infusion": {
@@ -78981,7 +78981,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Jagged Edge": {
@@ -79002,7 +79002,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Jagged Edge"
             ]
@@ -79018,7 +79018,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Lohk Canticle",
                 "Fass Canticle",
@@ -79049,7 +79049,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Jugulus Barbs": {
@@ -79076,7 +79076,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Jugulus Spines": {
@@ -79103,7 +79103,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Justice Blades": {
@@ -79125,7 +79125,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Khra Canticle": {
@@ -79139,7 +79139,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Lohk Canticle",
                 "Jahu Canticle",
@@ -79164,7 +79164,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Killing Blow": {
@@ -79191,7 +79191,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Kinetic Ricochet": {
@@ -79207,7 +79207,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Laser Sight": {
@@ -79229,7 +79229,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Lasting Purity": {
@@ -79251,7 +79251,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [],
             "implementation_status": {
                 "state": "not_implemented",
@@ -79278,7 +79278,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Leaded Gas": {
@@ -79307,7 +79307,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Lethal Momentum": {
@@ -79328,7 +79328,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Lethal Torrent": {
@@ -79355,7 +79355,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Lie In Wait": {
@@ -79382,7 +79382,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Life Strike": {
@@ -79396,7 +79396,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Lingering Torment": {
@@ -79417,7 +79417,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Loaded Capacity": {
@@ -79444,7 +79444,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Loose Chamber",
                 "Hydraulic Chamber"
@@ -79461,7 +79461,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Lohk Canticle": {
@@ -79475,7 +79475,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Jahu Canticle",
                 "Fass Canticle",
@@ -79506,7 +79506,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Loaded Capacity",
                 "Hydraulic Chamber"
@@ -79538,7 +79538,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Hydraulic Gauge",
                 "Double Tap",
@@ -79570,7 +79570,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Hydraulic Barrel",
                 "Full Capacity"
@@ -79589,7 +79589,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Feathered Arrows"
             ]
@@ -79612,7 +79612,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Magazine Warp": {
@@ -79635,7 +79635,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Amalgam Javlok Magazine Warp",
                 "Primed Magazine Warp",
@@ -79666,7 +79666,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Magnetic Capacity": {
@@ -79695,7 +79695,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Magnetic Claws": {
@@ -79722,7 +79722,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Magnetic Might": {
@@ -79749,7 +79749,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Magnetic Rush": {
@@ -79776,7 +79776,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Magnetic Strafe": {
@@ -79803,7 +79803,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Magnetic Strike": {
@@ -79817,7 +79817,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Magnetic Welt": {
@@ -79831,7 +79831,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Magnetized Core": {
@@ -79858,7 +79858,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Magnetized Cycle": {
@@ -79885,7 +79885,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Magnum Force": {
@@ -79906,7 +79906,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Maim": {
@@ -79927,7 +79927,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Maiming Strike": {
@@ -79948,7 +79948,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Malignant Force": {
@@ -79977,7 +79977,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Mark of the Beast": {
@@ -79991,7 +79991,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Marked Target": {
@@ -80012,7 +80012,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Martial Fury": {
@@ -80033,7 +80033,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Master's Edge": {
@@ -80047,7 +80047,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Maul": {
@@ -80068,7 +80068,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Maximum Capacity": {
@@ -80097,7 +80097,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Hydraulic Gauge",
                 "Double Tap",
@@ -80130,7 +80130,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Mecha Overdrive": {
@@ -80144,7 +80144,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Melee Elementalist": {
@@ -80171,7 +80171,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Galvanized Elementalist"
             ]
@@ -80194,7 +80194,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Melee Prowess"
             ]
@@ -80212,7 +80212,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Thunderbolt"
             ]
@@ -80228,7 +80228,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Merciless Gunfight": {
@@ -80255,7 +80255,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Metal Auger": {
@@ -80278,7 +80278,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Metal Auger",
                 "Amalgam Argonak Metal Auger"
@@ -80304,7 +80304,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Meteor Crash": {
@@ -80325,7 +80325,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Meteor Munitions": {
@@ -80339,7 +80339,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Impaler Munitions",
                 "Razor Munitions"
@@ -80364,7 +80364,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Modified Munitions": {
@@ -80385,7 +80385,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Molten Impact": {
@@ -80406,7 +80406,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Molten Impact"
             ]
@@ -80422,7 +80422,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Mortal Conduct": {
@@ -80436,7 +80436,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Motus Impact": {
@@ -80450,7 +80450,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Motus Setup": {
@@ -80477,7 +80477,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Nano-Applicator": {
@@ -80499,7 +80499,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Napalm Grenades": {
@@ -80522,7 +80522,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Tether Grenades"
             ]
@@ -80545,7 +80545,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Nebula Bore": {
@@ -80566,7 +80566,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Necrophagic Vigor": {
@@ -80590,7 +80590,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Netra Invocation": {
@@ -80604,7 +80604,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Ris Invocation",
                 "Vome Invocation",
@@ -80622,7 +80622,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Night Stalker": {
@@ -80636,7 +80636,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Nightwatch Napalm": {
@@ -80651,7 +80651,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Nira's Contempt": {
@@ -80678,7 +80678,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "No Return": {
@@ -80699,7 +80699,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed No Return"
             ]
@@ -80722,7 +80722,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed North Wind"
             ]
@@ -80738,7 +80738,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Organ Shatter": {
@@ -80759,7 +80759,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Amalgam Organ Shatter",
                 "Flawed Organ Shatter"
@@ -80776,7 +80776,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Pain Points": {
@@ -80800,7 +80800,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Parallax Scope": {
@@ -80821,7 +80821,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Parry": {
@@ -80835,7 +80835,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Flawed Parry"
             ]
@@ -80858,7 +80858,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Pathogen Rounds"
             ]
@@ -80881,7 +80881,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Photon Overcharge": {
@@ -80904,7 +80904,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Piercing Caliber": {
@@ -80927,7 +80927,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Piercing Hit": {
@@ -80950,7 +80950,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Piercing Hit"
             ]
@@ -80986,7 +80986,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Pistol Ammo Mutation": {
@@ -81000,7 +81000,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Primed Pistol Ammo Mutation"
             ]
@@ -81029,7 +81029,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Pistol Gambit": {
@@ -81050,7 +81050,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Pistol Gambit",
                 "Primed Pistol Gambit",
@@ -81081,7 +81081,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Plan B": {
@@ -81102,7 +81102,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Point Blank": {
@@ -81123,7 +81123,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Point Blank",
                 "Primed Point Blank"
@@ -81149,7 +81149,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Point Strike",
                 "Critical Delay"
@@ -81173,7 +81173,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Polar Magazine": {
@@ -81194,7 +81194,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Power Throw": {
@@ -81223,7 +81223,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Power Throw"
             ]
@@ -81246,7 +81246,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Brute Conditioning",
                 "Disabling Conditioning"
@@ -81264,7 +81264,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Hydraulic Gauge",
                 "Maximum Capacity",
@@ -81292,7 +81292,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Pressure Point": {
@@ -81313,7 +81313,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Pressure Point",
                 "Flawed Pressure Point",
@@ -81340,7 +81340,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Primary Acuity": {
@@ -81376,7 +81376,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Primed Ammo Stock": {
@@ -81397,7 +81397,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Ammo Stock",
                 "Ammo Stock"
@@ -81423,7 +81423,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Bane of Corpus",
                 "Bane of Corpus"
@@ -81449,7 +81449,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Bane of Grineer",
                 "Bane of Grineer"
@@ -81475,7 +81475,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Bane of Infested",
                 "Bane of Infested"
@@ -81501,7 +81501,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Bane of Orokin"
             ]
@@ -81526,7 +81526,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Bane of The Murmur"
             ]
@@ -81552,7 +81552,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Primed Charged Shell": {
@@ -81573,7 +81573,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Charged Shell",
                 "Charged Shell"
@@ -81597,7 +81597,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Chilling Grasp",
                 "Chilling Grasp"
@@ -81621,7 +81621,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Cleanse Corpus",
                 "Cleanse Corpus"
@@ -81645,7 +81645,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Cleanse Grineer",
                 "Cleanse Grineer"
@@ -81669,7 +81669,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Cleanse Infested",
                 "Flawed Cleanse Infested"
@@ -81693,7 +81693,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Cleanse Orokin"
             ]
@@ -81716,7 +81716,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Cleanse The Murmur"
             ]
@@ -81739,7 +81739,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Convulsion",
                 "Convulsion"
@@ -81763,7 +81763,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Primed Cryo Rounds": {
@@ -81786,7 +81786,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Cryo Rounds",
                 "Flawed Cryo Rounds"
@@ -81810,7 +81810,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Primed Dual Rounds": {
@@ -81831,7 +81831,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Dual Rounds"
             ]
@@ -81854,7 +81854,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Expel Corpus",
                 "Expel Corpus"
@@ -81878,7 +81878,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Expel Grineer",
                 "Expel Grineer"
@@ -81902,7 +81902,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Expel Infested",
                 "Expel Infested"
@@ -81926,7 +81926,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Expel Orokin"
             ]
@@ -81949,7 +81949,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Expel The Murmur"
             ]
@@ -81974,7 +81974,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Fast Hands",
                 "Flawed Fast Hands"
@@ -81998,7 +81998,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Fever Strike",
                 "Flawed Fever Strike"
@@ -82024,7 +82024,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Firestorm"
             ]
@@ -82047,7 +82047,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Fulmination"
             ]
@@ -82070,7 +82070,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Fury",
                 "Fury",
@@ -82096,7 +82096,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Heated Charge",
                 "Flawed Heated Charge"
@@ -82120,7 +82120,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Heavy Trauma",
                 "Flawed Heavy Trauma"
@@ -82146,7 +82146,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Amalgam Javlok Magazine Warp",
                 "Magazine Warp",
@@ -82164,7 +82164,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Pistol Ammo Mutation"
             ]
@@ -82187,7 +82187,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Pistol Gambit",
                 "Pistol Gambit",
@@ -82212,7 +82212,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Point Blank",
                 "Flawed Point Blank"
@@ -82236,7 +82236,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Pressure Point",
                 "Pressure Point",
@@ -82262,7 +82262,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Quickdraw",
                 "Flawed Quickdraw"
@@ -82286,7 +82286,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Ravage",
                 "Flawed Ravage"
@@ -82310,7 +82310,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Reach"
             ]
@@ -82326,7 +82326,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Rifle Ammo Mutation"
             ]
@@ -82349,7 +82349,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Rubedo-Lined Barrel"
             ]
@@ -82365,7 +82365,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Shotgun Ammo Mutation"
             ]
@@ -82402,7 +82402,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Shred"
             ]
@@ -82425,7 +82425,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Slip Magazine",
                 "Slip Magazine"
@@ -82449,7 +82449,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Smite Corpus",
                 "Flawed Smite Corpus"
@@ -82473,7 +82473,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Smite Grineer",
                 "Smite Grineer"
@@ -82497,7 +82497,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Smite Infested",
                 "Smite Infested"
@@ -82521,7 +82521,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Smite Orokin"
             ]
@@ -82544,7 +82544,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Smite The Murmur"
             ]
@@ -82567,7 +82567,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Steady Hands"
             ]
@@ -82590,7 +82590,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Tactical Pump",
                 "Flawed Tactical Pump"
@@ -82614,7 +82614,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Target Cracker",
                 "Target Cracker"
@@ -82631,7 +82631,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Proton Jet": {
@@ -82662,7 +82662,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Proton Snap": {
@@ -82691,7 +82691,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Pummel": {
@@ -82712,7 +82712,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Quasar Drill": {
@@ -82733,7 +82733,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Quick Reload": {
@@ -82754,7 +82754,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Quick Return": {
@@ -82768,7 +82768,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Volatile Rebound",
                 "Rebound",
@@ -82793,7 +82793,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Quickdraw",
                 "Primed Quickdraw"
@@ -82823,7 +82823,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Radiated Reload": {
@@ -82852,7 +82852,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Radon Claws": {
@@ -82879,7 +82879,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Range Advantage": {
@@ -82903,7 +82903,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Ravage": {
@@ -82924,7 +82924,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Ravage",
                 "Flawed Ravage"
@@ -82941,7 +82941,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Meteor Munitions",
                 "Impaler Munitions"
@@ -82965,7 +82965,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Razor Shot"
             ]
@@ -82988,7 +82988,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Reach"
             ]
@@ -83004,7 +83004,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Volatile Rebound",
                 "Quick Return",
@@ -83024,7 +83024,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Recuperate": {
@@ -83038,7 +83038,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Reflex Coil": {
@@ -83059,7 +83059,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Galvanized Reflex",
                 "Flawed Reflex Coil"
@@ -83076,7 +83076,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Relentless Assault": {
@@ -83090,7 +83090,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Relentless Combination": {
@@ -83104,7 +83104,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Rending Strike": {
@@ -83131,7 +83131,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Repeater Clip": {
@@ -83153,7 +83153,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Resolute Focus": {
@@ -83167,7 +83167,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Rifle Ammo Mutation": {
@@ -83181,7 +83181,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Primed Rifle Ammo Mutation"
             ]
@@ -83206,7 +83206,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Galvanized Aptitude",
                 "Flawed Rifle Aptitude"
@@ -83238,7 +83238,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Rift Strike": {
@@ -83252,7 +83252,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Rime Rounds": {
@@ -83281,7 +83281,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Ripper Rounds": {
@@ -83297,7 +83297,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Serrated Rounds",
                 "Comet Rounds"
@@ -83314,7 +83314,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Vome Invocation",
                 "Netra Invocation",
@@ -83339,7 +83339,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Rubedo-Lined Barrel"
             ]
@@ -83362,7 +83362,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Rupture": {
@@ -83385,7 +83385,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Rupture"
             ]
@@ -83414,7 +83414,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Sacrificial Pressure": {
@@ -83447,7 +83447,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Pressure Point",
                 "Pressure Point",
@@ -83485,7 +83485,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed True Steel",
                 "Galvanized Steel",
@@ -83513,7 +83513,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Sawtooth Clip"
             ]
@@ -83542,7 +83542,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Saxum Thorax": {
@@ -83569,7 +83569,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Scattered Justice": {
@@ -83592,7 +83592,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Scattering Inferno": {
@@ -83619,7 +83619,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Scorch": {
@@ -83646,7 +83646,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Searing Steel": {
@@ -83673,7 +83673,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Secondary Wind": {
@@ -83694,7 +83694,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Seeker": {
@@ -83715,7 +83715,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Seeking Force": {
@@ -83736,7 +83736,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Seeking Force"
             ]
@@ -83765,7 +83765,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Seismic Wave": {
@@ -83786,7 +83786,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Semi-Pistol Cannonade": {
@@ -83822,7 +83822,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Semi-Rifle Cannonade": {
@@ -83860,7 +83860,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Semi-Shotgun Cannonade": {
@@ -83896,7 +83896,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Sentient Barrage": {
@@ -83919,7 +83919,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Sentient Surge": {
@@ -83942,7 +83942,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Sepsis Claws": {
@@ -83969,7 +83969,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Chilling Claws",
                 "Shocking Claws",
@@ -83988,7 +83988,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Serrated Edges": {
@@ -84002,7 +84002,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Counterweight",
                 "Sharpened Blade"
@@ -84021,7 +84021,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Ripper Rounds",
                 "Comet Rounds"
@@ -84047,7 +84047,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Serration",
                 "Amalgam Serration",
@@ -84066,7 +84066,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Counterweight",
                 "Serrated Edges"
@@ -84091,7 +84091,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Sharpshooter": {
@@ -84105,7 +84105,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Shattering Impact": {
@@ -84119,7 +84119,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Shattering Justice": {
@@ -84141,7 +84141,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Shell Compression": {
@@ -84162,7 +84162,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Flawed Shell Compression"
             ]
@@ -84178,7 +84178,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Shell Shock": {
@@ -84205,7 +84205,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Shivering Contagion": {
@@ -84219,7 +84219,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Shock Collar": {
@@ -84246,7 +84246,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Shocking Claws": {
@@ -84273,7 +84273,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Chilling Claws",
                 "Sepsis Claws",
@@ -84298,7 +84298,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Shocking Touch"
             ]
@@ -84314,7 +84314,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Primed Shotgun Ammo Mutation"
             ]
@@ -84337,7 +84337,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Amalgam Shotgun Barrage",
                 "Flawed Shotgun Barrage"
@@ -84367,7 +84367,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Shotgun Savvy": {
@@ -84388,7 +84388,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Galvanized Savvy",
                 "Flawed Shotgun Savvy"
@@ -84419,7 +84419,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Shrapnel Shot": {
@@ -84441,7 +84441,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Shred": {
@@ -84476,7 +84476,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Shred"
             ]
@@ -84492,7 +84492,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Crash Shot",
                 "Flak Shot"
@@ -84516,7 +84516,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Shredder"
             ]
@@ -84540,7 +84540,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Sinister Reach": {
@@ -84561,7 +84561,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Skull Shots": {
@@ -84585,7 +84585,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Slip Magazine": {
@@ -84606,7 +84606,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Slip Magazine",
                 "Primed Slip Magazine"
@@ -84630,7 +84630,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Smite Corpus",
                 "Flawed Smite Corpus"
@@ -84654,7 +84654,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Smite Grineer",
                 "Flawed Smite Grineer"
@@ -84678,7 +84678,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Smite Infested",
                 "Flawed Smite Infested"
@@ -84702,7 +84702,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Smite Orokin"
             ]
@@ -84725,7 +84725,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Smite The Murmur"
             ]
@@ -84741,7 +84741,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Soaring Strike": {
@@ -84762,7 +84762,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Soft Hands": {
@@ -84776,7 +84776,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Spectral Serration": {
@@ -84800,7 +84800,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Serration",
                 "Amalgam Serration",
@@ -84834,7 +84834,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Speed Trigger"
             ]
@@ -84859,7 +84859,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Split Chamber",
                 "Galvanized Chamber",
@@ -84885,7 +84885,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Split Chamber",
                 "Split Chamber",
@@ -84916,7 +84916,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Spontaneous Singularity": {
@@ -84940,7 +84940,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Spring-Loaded Blade": {
@@ -84961,7 +84961,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Spring-Loaded Broadhead": {
@@ -84985,7 +84985,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Spring-Loaded Chamber": {
@@ -85007,7 +85007,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Spry Sights": {
@@ -85021,7 +85021,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Stabilizer": {
@@ -85044,7 +85044,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Primed Stabilizer"
             ]
@@ -85060,7 +85060,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Static Alacrity": {
@@ -85074,7 +85074,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Static Discharge": {
@@ -85089,7 +85089,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Steady Hands": {
@@ -85110,7 +85110,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Primed Steady Hands"
             ]
@@ -85134,7 +85134,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Stockpiled Blight": {
@@ -85156,7 +85156,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Stormbringer": {
@@ -85179,7 +85179,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Stormbringer"
             ]
@@ -85195,7 +85195,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Strain Fever": {
@@ -85209,7 +85209,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Strain Infection": {
@@ -85223,7 +85223,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Stunning Speed": {
@@ -85250,7 +85250,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Sudden Impact": {
@@ -85271,7 +85271,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Sudden Justice": {
@@ -85296,7 +85296,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Sundering Strike": {
@@ -85317,7 +85317,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Sundering Strike"
             ]
@@ -85341,7 +85341,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Sure Shot": {
@@ -85362,7 +85362,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Sure Shot",
                 "Galvanized Shot"
@@ -85386,7 +85386,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Swipe": {
@@ -85400,7 +85400,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Sword Alone": {
@@ -85414,7 +85414,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Synth Charge": {
@@ -85443,7 +85443,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Tactical Pump": {
@@ -85464,7 +85464,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Tactical Pump",
                 "Flawed Tactical Pump"
@@ -85481,7 +85481,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Tainted Clip": {
@@ -85508,7 +85508,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Tainted Mag": {
@@ -85535,7 +85535,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Tainted Shell": {
@@ -85556,7 +85556,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Target Acquired": {
@@ -85577,7 +85577,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Target Cracker": {
@@ -85598,7 +85598,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Target Cracker",
                 "Flawed Target Cracker"
@@ -85615,7 +85615,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Tek Gravity": {
@@ -85629,7 +85629,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Tempered Blade": {
@@ -85650,7 +85650,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Terminal Velocity": {
@@ -85673,7 +85673,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Tether Grenades": {
@@ -85689,7 +85689,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Napalm Grenades"
             ]
@@ -85707,7 +85707,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Thermite Rounds": {
@@ -85736,7 +85736,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Thunderbolt": {
@@ -85750,7 +85750,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Mending Shot"
             ]
@@ -85773,7 +85773,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Toxic Barrage": {
@@ -85800,7 +85800,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Toxic Blight": {
@@ -85822,7 +85822,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Toxic Sequence": {
@@ -85843,7 +85843,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Trick Mag": {
@@ -85864,7 +85864,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Flawed Trick Mag"
             ]
@@ -85890,7 +85890,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "True Punishment": {
@@ -85917,7 +85917,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "True Steel": {
@@ -85938,7 +85938,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed True Steel",
                 "Galvanized Steel",
@@ -85959,7 +85959,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Unseen Dread": {
@@ -85982,7 +85982,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Vanquished Prey": {
@@ -85998,7 +85998,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Venom Teeth": {
@@ -86025,7 +86025,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Venomous Clip": {
@@ -86046,7 +86046,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Primed Venomous Clip"
             ]
@@ -86069,7 +86069,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Venomous Clip"
             ]
@@ -86098,7 +86098,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Vicious Spread": {
@@ -86119,7 +86119,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Vigilante Armaments": {
@@ -86150,7 +86150,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Vigilante Fervor": {
@@ -86187,7 +86187,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Vigilante Offense": {
@@ -86218,7 +86218,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Vigilante Supplies": {
@@ -86243,7 +86243,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Vile Acceleration": {
@@ -86278,7 +86278,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Vile Discharge": {
@@ -86292,7 +86292,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Vile Precision": {
@@ -86327,7 +86327,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Virulent Scourge": {
@@ -86354,7 +86354,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Vital Sense": {
@@ -86377,7 +86377,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Flawed Vital Sense"
             ]
@@ -86400,7 +86400,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Volatile Rebound",
                 "Quick Return",
@@ -86425,7 +86425,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Quick Return",
                 "Rebound",
@@ -86459,7 +86459,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Volcanic Edge": {
@@ -86486,7 +86486,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Voltage Sequence": {
@@ -86500,7 +86500,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Voltaic Strike": {
@@ -86527,7 +86527,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Vome Invocation": {
@@ -86541,7 +86541,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Ris Invocation",
                 "Netra Invocation",
@@ -86559,7 +86559,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Weeping Wounds": {
@@ -86583,7 +86583,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Whirlwind": {
@@ -86597,7 +86597,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": [
                 "Flawed Whirlwind"
             ]
@@ -86623,7 +86623,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Wildfire": {
@@ -86652,7 +86652,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Winds of Purity": {
@@ -86668,7 +86668,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Xata Invocation": {
@@ -86682,7 +86682,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": [
                 "Ris Invocation",
                 "Vome Invocation",
@@ -86709,7 +86709,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Zodiac Shred": {
@@ -86730,7 +86730,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Primed Stabilizer": {
@@ -86753,7 +86753,7 @@
                 ]
             },
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Truth's Flame": {
@@ -86767,7 +86767,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "exilus",
+            "slot": "exilus_mod",
             "conflicts": []
         },
         "Sentient Incision": {
@@ -86782,7 +86782,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Velox Conclusion": {
@@ -86797,7 +86797,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "normal",
+            "slot": "regular_mod",
             "conflicts": []
         },
         "Argent Scourge": {
@@ -86812,7 +86812,7 @@
             "combos": {},
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Astral Twilight": {
@@ -86888,7 +86888,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Atlantis Vulcan": {
@@ -86964,7 +86964,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Biting Piranha": {
@@ -86979,7 +86979,7 @@
             "combos": {},
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Bleeding Willow": {
@@ -87055,7 +87055,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Blind Justice": {
@@ -87131,7 +87131,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Brutal Tide": {
@@ -87207,7 +87207,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Bullet Dance": {
@@ -87283,7 +87283,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Burning Wasp": {
@@ -87359,7 +87359,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Butcher's Revelry": {
@@ -87435,7 +87435,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Carving Mantis": {
@@ -87511,7 +87511,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Celestial Nightfall": {
@@ -87526,7 +87526,7 @@
             "combos": {},
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Clashing Forest": {
@@ -87602,7 +87602,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Cleaving Whirlwind": {
@@ -87678,7 +87678,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Coiling Viper": {
@@ -87754,7 +87754,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Crashing Havoc": {
@@ -87769,7 +87769,7 @@
             "combos": {},
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Crashing Timber": {
@@ -87784,7 +87784,7 @@
             "combos": {},
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Crimson Dervish": {
@@ -87860,7 +87860,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Crossing Snakes": {
@@ -87936,7 +87936,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Crushing Ruin": {
@@ -88012,7 +88012,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Cunning Aspect": {
@@ -88027,7 +88027,7 @@
             "combos": {},
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Cyclone Kraken": {
@@ -88103,7 +88103,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Decisive Judgement": {
@@ -88179,7 +88179,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Defiled Snapdragon": {
@@ -88255,7 +88255,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Desert Wind": {
@@ -88331,7 +88331,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Dividing Blades": {
@@ -88346,7 +88346,7 @@
             "combos": {},
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Diwata": {
@@ -88368,7 +88368,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Eleventh Storm": {
@@ -88444,7 +88444,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Exalted Blade": {
@@ -88523,7 +88523,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Exalted Chromatic Blade": {
@@ -88599,7 +88599,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Exalted Umbra Blade": {
@@ -88675,7 +88675,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Exalted Umbra Chromatic Blade": {
@@ -88751,7 +88751,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Fateful Truth": {
@@ -88766,7 +88766,7 @@
             "combos": {},
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Final Harbinger": {
@@ -88842,7 +88842,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Flailing Branch": {
@@ -88918,7 +88918,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Four Riders": {
@@ -88994,7 +88994,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Fracturing Wind": {
@@ -89070,7 +89070,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Gaia's Tragedy": {
@@ -89146,7 +89146,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Galeforce Dawn": {
@@ -89222,7 +89222,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Gemini Cross": {
@@ -89298,7 +89298,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Gleaming Talon": {
@@ -89374,7 +89374,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Gnashing Payara": {
@@ -89450,7 +89450,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Grim Fury": {
@@ -89526,7 +89526,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "High Noon": {
@@ -89602,7 +89602,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Homing Fang": {
@@ -89678,7 +89678,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Iron Phoenix": {
@@ -89754,7 +89754,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Iron Staff": {
@@ -89830,7 +89830,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Lashing Coil": {
@@ -89845,7 +89845,7 @@
             "combos": {},
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Last Herald": {
@@ -89860,7 +89860,7 @@
             "combos": {},
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Mafic Rain": {
@@ -89875,7 +89875,7 @@
             "combos": {},
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Malicious Raptor": {
@@ -89951,7 +89951,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Mountain's Edge": {
@@ -90027,7 +90027,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Noble Cadence": {
@@ -90042,7 +90042,7 @@
             "combos": {},
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Piercing Fury": {
@@ -90057,7 +90057,7 @@
             "combos": {},
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Pointed Wind": {
@@ -90133,7 +90133,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Quaking Hand": {
@@ -90148,7 +90148,7 @@
             "combos": {},
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Reaping Spiral": {
@@ -90224,7 +90224,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Rending Crane": {
@@ -90300,7 +90300,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Rending Wind": {
@@ -90315,7 +90315,7 @@
             "combos": {},
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Rising Steel": {
@@ -90330,7 +90330,7 @@
             "combos": {},
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Scarlet Hurricane": {
@@ -90345,7 +90345,7 @@
             "combos": {},
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Seismic Palm": {
@@ -90421,7 +90421,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Shadow Claws": {
@@ -90485,7 +90485,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Shadow Harvest": {
@@ -90500,7 +90500,7 @@
             "combos": {},
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Shattering Storm": {
@@ -90576,7 +90576,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Shimmering Blight": {
@@ -90652,7 +90652,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Sinking Talon": {
@@ -90728,7 +90728,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Slicing Feathers": {
@@ -90804,7 +90804,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Sovereign Outcast": {
@@ -90880,7 +90880,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Spinning Needle": {
@@ -90956,7 +90956,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Stalking Fan": {
@@ -91032,7 +91032,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Star Divide": {
@@ -91047,7 +91047,7 @@
             "combos": {},
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Stinging Thorn": {
@@ -91123,7 +91123,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Sundering Weave": {
@@ -91199,7 +91199,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Swirling Tiger": {
@@ -91275,7 +91275,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Swooping Falcon": {
@@ -91351,7 +91351,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Tainted Hydra": {
@@ -91366,7 +91366,7 @@
             "combos": {},
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Tempo Royale": {
@@ -91442,7 +91442,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Tranquil Cleave": {
@@ -91518,7 +91518,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Twirling Spire": {
@@ -91594,7 +91594,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Valkyr Talons": {
@@ -91670,7 +91670,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Vengeful Revenant": {
@@ -91746,7 +91746,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Vermillion Storm": {
@@ -91822,7 +91822,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Vicious Approach": {
@@ -91837,7 +91837,7 @@
             "combos": {},
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Votive Onslaught": {
@@ -91913,7 +91913,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Vulpine Mask": {
@@ -91989,7 +91989,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Wise Razor": {
@@ -92059,7 +92059,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Harrowing Spire": {
@@ -92099,7 +92099,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Argo & Vel": {
@@ -92114,7 +92114,7 @@
             "combos": {},
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Arum Spinosa": {
@@ -92166,7 +92166,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Azothane": {
@@ -92224,7 +92224,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Caustacyst": {
@@ -92277,7 +92277,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Cobra & Crane": {
@@ -92330,7 +92330,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Edun": {
@@ -92382,7 +92382,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Jat Kusar": {
@@ -92434,7 +92434,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Keratinos": {
@@ -92486,7 +92486,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Korumm": {
@@ -92544,7 +92544,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Nepheri": {
@@ -92602,7 +92602,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Quassus": {
@@ -92655,7 +92655,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Sampotes": {
@@ -92707,7 +92707,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Sigma & Octantis": {
@@ -92759,7 +92759,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Syam": {
@@ -92811,7 +92811,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Tatsu": {
@@ -92864,7 +92864,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Telos Boltace": {
@@ -92916,7 +92916,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Tenet Agendus": {
@@ -92968,7 +92968,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Tenet Exec": {
@@ -93020,7 +93020,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Tenet Grigori": {
@@ -93072,7 +93072,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Verdilac": {
@@ -93130,7 +93130,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Vitrica": {
@@ -93182,7 +93182,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Zenistar": {
@@ -93234,7 +93234,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Hysteria": {
@@ -93310,7 +93310,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Serene Storm": {
@@ -93386,7 +93386,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Primal Fury": {
@@ -93462,7 +93462,7 @@
             },
             "stats": {},
             "kind": "mod",
-            "slot": "stance",
+            "slot": "stance_mod",
             "conflicts": []
         },
         "Akimbo Slip Shot": {
@@ -93485,7 +93485,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Cascadia Accuracy": {
@@ -93507,7 +93507,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Cascadia Empowered": {
@@ -93529,7 +93529,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": [],
             "implementation_status": {
                 "state": "not_implemented",
@@ -93560,7 +93560,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Cascadia Overcharge": {
@@ -93583,7 +93583,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Conjunction Voltage": {
@@ -93618,7 +93618,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Exodia Brave": {
@@ -93632,7 +93632,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Exodia Contagion": {
@@ -93646,7 +93646,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Exodia Epidemic": {
@@ -93660,7 +93660,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Exodia Force": {
@@ -93674,7 +93674,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Exodia Hunt": {
@@ -93688,7 +93688,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Exodia Might": {
@@ -93702,7 +93702,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Exodia Triumph": {
@@ -93716,7 +93716,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Exodia Valor": {
@@ -93730,7 +93730,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Fractalized Reset": {
@@ -93754,7 +93754,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Longbow Sharpshot": {
@@ -93777,7 +93777,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": [],
             "implementation_status": {
                 "state": "not_implemented",
@@ -93805,7 +93805,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": [],
             "implementation_status": {
                 "state": "not_implemented",
@@ -93825,7 +93825,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Melee Assimilation": {
@@ -93847,7 +93847,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Melee Careen": {
@@ -93861,7 +93861,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Melee Crescendo": {
@@ -93875,7 +93875,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Melee Doughty": {
@@ -93901,7 +93901,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Melee Duplicate": {
@@ -93924,7 +93924,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Melee Exposure": {
@@ -93947,7 +93947,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Melee Fortification": {
@@ -93961,7 +93961,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Melee Influence": {
@@ -93975,7 +93975,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Melee Retaliation": {
@@ -93989,7 +93989,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Melee Vortex": {
@@ -94003,7 +94003,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Pax Bolt": {
@@ -94017,7 +94017,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Pax Charge": {
@@ -94031,7 +94031,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Pax Seeker": {
@@ -94045,7 +94045,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Pax Soar": {
@@ -94059,7 +94059,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Primary Blight": {
@@ -94094,7 +94094,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Primary Bulwark": {
@@ -94117,7 +94117,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Primary Compression": {
@@ -94131,7 +94131,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Primary Crux": {
@@ -94164,7 +94164,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Primary Deadhead": {
@@ -94195,7 +94195,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Primary Debilitate": {
@@ -94217,7 +94217,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": [],
             "implementation_status": {
                 "state": "not_implemented",
@@ -94247,7 +94247,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Primary Exhilarate": {
@@ -94261,7 +94261,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Primary Frostbite": {
@@ -94296,7 +94296,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Primary Merciless": {
@@ -94327,7 +94327,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Primary Obstruct": {
@@ -94341,7 +94341,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Primary Overcharge": {
@@ -94364,7 +94364,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Primary Plated Round": {
@@ -94378,7 +94378,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Residual Boils": {
@@ -94392,7 +94392,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Residual Malodor": {
@@ -94406,7 +94406,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Residual Shock": {
@@ -94420,7 +94420,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Residual Viremia": {
@@ -94434,7 +94434,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Secondary Cryogenic": {
@@ -94448,7 +94448,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Secondary Deadhead": {
@@ -94479,7 +94479,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Secondary Dexterity": {
@@ -94503,7 +94503,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Secondary Encumber": {
@@ -94527,7 +94527,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Secondary Enervate": {
@@ -94553,7 +94553,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Secondary Fortifier": {
@@ -94575,7 +94575,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": [],
             "implementation_status": {
                 "state": "not_implemented",
@@ -94595,7 +94595,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Secondary Kinship": {
@@ -94609,7 +94609,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Secondary Merciless": {
@@ -94640,7 +94640,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Secondary Outburst": {
@@ -94673,7 +94673,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Secondary Shiver": {
@@ -94696,7 +94696,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Secondary Surge": {
@@ -94710,7 +94710,7 @@
             },
             "stats": {},
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         },
         "Shotgun Vendetta": {
@@ -94743,7 +94743,7 @@
                 ]
             },
             "kind": "arcane",
-            "slot": "arcane",
+            "slot": "regular_arcane",
             "conflicts": []
         }
     },

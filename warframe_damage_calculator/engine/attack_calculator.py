@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any, Iterable, Mapping
 
 from ..domain.damage import Dist
+from ..domain.loadouts import Progenitor
 from ..domain.results import AttackResult, AverageAttackStats, BaseAttackStats, EffectiveAttackStats, ModdedAttackStats, ResolvedStats, SpatialMetrics, Stats
 from ..domain.upgrades import ResolvedEffect, Upgrade
 from ..domain.weapons import Attack
@@ -38,32 +39,39 @@ def _combined(upgrades: ResolvedStats, evolutions: ResolvedStats) -> ResolvedSta
     return total
 
 
-def _base_damage(context: CalculationContext, attack: Attack, evolutions: ResolvedStats) -> tuple[Dist, Dist]:
+def _base_damage(context: CalculationContext, attack: Attack, evolutions: ResolvedStats) -> tuple[Dist, Dist, Dist]:
     strength = float(context.state.ability_strength) if {"exalted", "pseudo_exalted"} & context.weapon.traits else 1.0
-    raw = attack.stats.damage * max(strength, 0)
-    progenitor = context.loadout.progenitor if "progenitor" in context.weapon.traits else None
-    if progenitor is not None and raw.total: raw += Dist({progenitor.element: raw.total * progenitor.bonus})
+    displayed = attack.stats.damage * max(strength, 0)
+    raw = Dist(displayed)
     conversion = sum(float(bucket.get("impact_to_puncture_conversion", 0)) for bucket in (evolutions.proportional, evolutions.base, evolutions.flat))
-    if conversion > 0 and raw.get("impact", 0):
-        moved = raw.get("impact", 0) * min(conversion, 1)
-        raw += Dist(impact=-moved, puncture=moved)
+    if conversion > 0:
+        for damage in (raw, displayed):
+            if not damage.get("impact", 0): continue
+            moved = damage.get("impact", 0) * min(conversion, 1)
+            damage += Dist(impact=-moved, puncture=moved)
     original = Dist(raw)
     flat = float(evolutions.base.get("damage", 0))
-    if flat and raw.total: raw += Dist({kind: flat * raw.weight(kind) for kind in raw})
-    return raw, original
+    if flat:
+        if raw.total: raw += Dist({kind: flat * raw.weight(kind) for kind in raw})
+        if displayed.total: displayed += Dist({kind: flat * displayed.weight(kind) for kind in displayed})
+    return raw, original, displayed
 
 
-def _modified_damage(base: Dist, resolved: ResolvedStats) -> Dist:
+def _modified_damage(base: Dist, resolved: ResolvedStats, progenitor: Progenitor | None = None) -> Dist:
     recorded = resolved.proportional.get("damage", Dist())
     modifiers = {kind: float(value) for kind, value in recorded.items()} if isinstance(recorded, Dist) else {}
     modifiers.update({kind: float(value) for kind, value in resolved.proportional.items() if kind in DAMAGE_TYPES})
+    if progenitor is not None:
+        element = str(progenitor.element)
+        bonus = modifiers.pop(element, 0) + float(progenitor.bonus)
+        modifiers[element] = bonus
     return base.apply_modifiers(modifiers)
 
 
-def _damage(attack: Attack, base: Dist, original: Dist, upgrades: ResolvedStats, evolutions: ResolvedStats) -> Dist:
+def _damage(attack: Attack, base: Dist, original: Dist, upgrades: ResolvedStats, evolutions: ResolvedStats, progenitor: Progenitor | None = None) -> Dist:
     total = _combined(upgrades, evolutions)
-    evolved = _modified_damage(base, total)
-    original_modified = _modified_damage(original, total)
+    evolved = _modified_damage(base, total, progenitor)
+    original_modified = _modified_damage(original, total, progenitor)
     common = max(1 + attack.stats.damage_bonus + float(total.proportional.get("damage_bonus", 0)), 0)
     status_bonus = family_bonus(total, "unique_status", "damage_bonus")
     if attack.stats.co_effect == "multiplies":
@@ -87,11 +95,15 @@ def _dot_base_damage(attack: Attack, base: Dist, original: Dist, upgrades: Resol
     return value
 
 
-def _elemental_dot_bonuses(total: ResolvedStats) -> Stats:
+def _elemental_dot_bonuses(total: ResolvedStats, progenitor: Progenitor | None = None) -> Stats:
     modifiers = total.proportional.get("damage", Dist())
     heat = float(modifiers.get("heat", 0)) if isinstance(modifiers, Dist) else 0
     electricity = float(modifiers.get("electricity", 0)) if isinstance(modifiers, Dist) else 0
     toxin = float(modifiers.get("toxin", 0)) if isinstance(modifiers, Dist) else 0
+    if progenitor is not None:
+        if progenitor.element == "heat": heat += float(progenitor.bonus)
+        elif progenitor.element == "electricity": electricity += float(progenitor.bonus)
+        elif progenitor.element == "toxin": toxin += float(progenitor.bonus)
     return Stats(heat=max(1 + heat, 0), electricity=max(1 + electricity, 0), toxin=max(1 + toxin, 0), gas=max(1 + heat + toxin, 0), slash=1.0)
 
 
@@ -112,7 +124,7 @@ def _derived_chances(crit: float, status: float, total: ResolvedStats) -> tuple[
 
 
 def _stance(context: CalculationContext) -> Upgrade | None:
-    return next((upgrade for upgrade in context.loadout.upgrades if upgrade.slot == "stance"), None)
+    return next((upgrade for upgrade in context.loadout.upgrades if upgrade.slot == "stance_mod"), None)
 
 
 def _stance_combo(context: CalculationContext, attack: Attack) -> Mapping[str, Any] | None:
@@ -160,12 +172,12 @@ def _ranged_rate(context: CalculationContext, attack: Attack, total: ResolvedSta
     return fire_rate, sustained, Stats(ammo_cost=ammo_cost, ammo_efficiency=efficiency, magazine_capacity=magazine, reload_time=reload_time, burst_count=burst_count, burst_delay=burst_delay, charge_time=charge_time)
 
 
-def _melee_rate(context: CalculationContext, attack: Attack, total: ResolvedStats) -> tuple[float, Stats]:
+def _melee_rate(context: CalculationContext, attack: Attack, total: ResolvedStats, *, include_stance: bool = True) -> tuple[float, Stats]:
     heavy = attack.category in HEAVY_CATEGORIES
     speed_bonus = float(total.proportional.get("heavy_attack_speed" if heavy else "attack_speed", 0))
     base_speed = float(attack.stats.fire_rate if attack.stats.attack_speed is None else attack.stats.attack_speed)
     speed = max(base_speed * (1 + speed_bonus), 0)
-    combo = _stance_combo(context, attack)
+    combo = _stance_combo(context, attack) if include_stance else None
     if combo and float(combo.get("duration", 0)) > 0 and float(combo.get("hits", 0)) > 0:
         speed *= float(combo["hits"]) / float(combo["duration"])
     return speed, Stats(attack_speed=speed, heavy_attack_speed=max(1 + float(total.proportional.get("heavy_attack_speed", 0)), 0), heavy_attack_efficiency=max(float(attack.stats.heavy_attack_efficiency) + float(total.proportional.get("heavy_attack_efficiency", 0)), 0), initial_combo=max(float(attack.stats.initial_combo) + float(total.proportional.get("initial_combo", 0)), 0))
@@ -175,7 +187,7 @@ def _provisional(context: CalculationContext, attack: Attack, upgrade_effects: t
     upgrades = aggregate(effect for effect in upgrade_effects if not effect.automatic)
     evolutions = aggregate(effect for effect in evolution_effects if not effect.automatic)
     total = _combined(upgrades, evolutions)
-    base, original = _base_damage(context, attack, evolutions)
+    base, original, _ = _base_damage(context, attack, evolutions)
     damage = _damage(attack, base, original, upgrades, evolutions)
     crit = _scalar(float(attack.stats.crit_chance), "crit_chance", total)
     status = _scalar(float(attack.stats.status_chance), "status_chance", total) * _status_vulnerability((*upgrade_effects, *evolution_effects))
@@ -503,17 +515,31 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     evolution_resolved, evolution_positions = _resolve_effects(context, attack, evolution_effects, provisional, automatic_model, equipped)
     upgrades = aggregate(effect for effect in upgrades_resolved if automatic_value(effect, "on") not in POSITION_EVENTS and effect.stat not in DEFERRED_STATS and not (effect.stat == "crit_damage" and automatic_value(effect, "with") == "puncture_status_chance"))
     evolutions = aggregate(effect for effect in evolution_resolved if automatic_value(effect, "on") not in POSITION_EVENTS and effect.stat not in DEFERRED_STATS)
+    modded_upgrades = aggregate(effect for effect in upgrades_resolved if not effect.automatic and automatic_value(effect, "on") not in POSITION_EVENTS and effect.stat not in DEFERRED_STATS and not (effect.stat == "crit_damage" and automatic_value(effect, "with") == "puncture_status_chance"))
+    modded_evolutions = aggregate(effect for effect in evolution_resolved if not effect.automatic and automatic_value(effect, "on") not in POSITION_EVENTS and effect.stat not in DEFERRED_STATS)
     total = _combined(upgrades, evolutions)
-    base_damage, original = _base_damage(context, attack, evolutions)
-    damage = _damage(attack, base_damage, original, upgrades, evolutions)
+    modded_total = _combined(modded_upgrades, modded_evolutions)
+    base_damage, original, displayed_base_damage = _base_damage(context, attack, evolutions)
+    modded_base_damage, modded_original, _ = _base_damage(context, attack, modded_evolutions)
+    progenitor = context.loadout.progenitor if "progenitor" in context.weapon.traits else None
+    modded_damage = _damage(attack, modded_base_damage, modded_original, modded_upgrades, modded_evolutions, progenitor)
+    damage = _damage(attack, base_damage, original, upgrades, evolutions, progenitor)
     heavy = context.weapon.type == "melee" and attack.category in HEAVY_CATEGORIES
+    modded_upgrade_crit = float(modded_upgrades.proportional.get("crit_chance", 0)) * (2 if heavy else 1)
+    modded_crit_base = float(attack.stats.crit_chance) + float(modded_total.base.get("crit_chance", 0))
+    modded_crit = max(modded_crit_base * (1 + modded_upgrade_crit + float(modded_evolutions.proportional.get("crit_chance", 0))) * family_factor(modded_total, "crit_chance") + float(modded_total.flat.get("crit_chance", 0)), 0)
     upgrade_crit = float(upgrades.proportional.get("crit_chance", 0)) * (2 if heavy else 1)
     crit_base = float(attack.stats.crit_chance) + float(total.base.get("crit_chance", 0))
     crit = max(crit_base * (1 + upgrade_crit + float(evolutions.proportional.get("crit_chance", 0))) * family_factor(total, "crit_chance") + float(total.flat.get("crit_chance", 0)), 0)
     resolved_effects = (*upgrades_resolved, *evolution_resolved)
+    modded_status = _scalar(float(attack.stats.status_chance), "status_chance", modded_total)
+    modded_crit, modded_status = _derived_chances(modded_crit, modded_status, modded_total)
     status = _scalar(float(attack.stats.status_chance), "status_chance", total) * _status_vulnerability(resolved_effects)
     crit, status = _derived_chances(crit, status, total)
-    if context.weapon.type == "melee" and attack.category == "slide": crit *= max(1 + float(total.proportional.get("slide_crit_chance", 0)), 0)
+    if context.weapon.type == "melee" and attack.category == "slide":
+        modded_crit *= max(1 + float(modded_total.proportional.get("slide_crit_chance", 0)), 0)
+        crit *= max(1 + float(total.proportional.get("slide_crit_chance", 0)), 0)
+    modded_crit_damage = _scalar(float(attack.stats.crit_damage), "crit_damage", modded_total, minimum=1)
     crit_damage = _scalar(float(attack.stats.crit_damage), "crit_damage", total, minimum=1)
     doughty = next((effect for effect in (*upgrades_resolved, *evolution_resolved) if effect.stat == "crit_damage" and automatic_value(effect, "with") == "puncture_status_chance"), None)
     doughty_bonus = 0.0
@@ -521,18 +547,22 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     weakpoint_family = sum(float(family.get("weakpoint_crit_chance", 0)) for family in total.families.values())
     weakpoint_crit = 0.0 if context.weapon.type == "melee" else max(crit + float(attack.stats.crit_chance) * (weakpoint_common + weakpoint_family) + float(total.flat.get("weakpoint_crit_chance", 0)), 0)
     crit_tier_chance = clamp(_special_value((*upgrades_resolved, *evolution_resolved), "crit_tier", "critical_hit"), 0, 1)
+    modded_ms_bonus = 0 if context.weapon.type == "melee" or modded_total.proportional.get("multishot_lock") else float(modded_total.proportional.get("multishot", 0))
+    modded_multishot = max(float(attack.stats.multishot) * (1 + modded_ms_bonus), 1)
     ms_bonus = 0 if context.weapon.type == "melee" or total.proportional.get("multishot_lock") else float(total.proportional.get("multishot", 0))
     ms_ammo_bonus = _multishot_ammo_bonus(total)
     if attack.delivery == "beam" and ms_ammo_bonus and not total.proportional.get("multishot_lock"): ms_bonus *= 1 + ms_ammo_bonus
     multishot = max(float(attack.stats.multishot) * (1 + ms_bonus), 1)
     if attack.delivery != "beam" and ms_ammo_bonus: damage *= 1 + ms_ammo_bonus * (1 - 1 / multishot)
     if context.weapon.type == "melee":
+        modded_instant_rate, modded_category_stats = _melee_rate(context, attack, modded_total, include_stance=False)
         instant_rate, category_stats = _melee_rate(context, attack, total)
         fire_rate = instant_rate
         stance = _stance_combo(context, attack)
         if stance: damage *= max(float(stance.get("multiplier", 1)), 0)
         if attack.category in SLAM_CATEGORIES: damage *= max(1 + float(total.proportional.get("slam_damage", 0)), 0)
     else:
+        modded_instant_rate, _, modded_category_stats = _ranged_rate(context, attack, modded_total, modded_multishot)
         instant_rate, fire_rate, category_stats = _ranged_rate(context, attack, total, multishot)
     duration = _scalar(float(attack.stats.status_duration), "status_duration", total)
     forced = _forced_procs(attack, (*upgrades_resolved, *evolution_resolved))
@@ -566,7 +596,7 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     non_crit_chance = max((float(automatic_value(effect, "chance", 0) or 0) for effect in (*upgrades_resolved, *evolution_resolved) if effect.family == "non_critical_hit"), default=0)
     weakpoint_bonus = max(float(total.proportional.get("weakpoint_damage", 0)) + float(total.proportional.get("sharpshot_bonus", 0)), 0)
     overguard_effect = float(total.proportional.get("overguard_damage_multiplier", 0))
-    effective = EffectiveAttackStats(damage=damage, dot_base_damage=_dot_base_damage(attack, base_damage, original, upgrades, evolutions), dot_elemental_bonuses=_elemental_dot_bonuses(total), forced_procs=forced, status_model=status_model, crit_chance=crit, weakpoint_crit_chance=weakpoint_crit, crit_damage=crit_damage, status_chance=status, status_duration=duration, status_damage=max(1 + float(total.proportional.get("status_damage", 0)), 1), multishot=multishot, instantaneous_fire_rate=instant_rate, attack_event_rate=fire_rate, faction_damage=faction, target_vulnerability=max(1 + float(total.proportional.get("unique_enemy_vulnerability_multiplier", 0)), 0), overguard_damage_multiplier=overguard_effect if overguard_effect else 1, non_crit_bonus_damage=non_crit_damage, non_crit_bonus_chance=non_crit_chance, weakpoint_damage_bonus=weakpoint_bonus, special_effects=tuple(resolved_effects), **category_stats)
+    effective = EffectiveAttackStats(damage=damage, dot_base_damage=_dot_base_damage(attack, base_damage, original, upgrades, evolutions), dot_elemental_bonuses=_elemental_dot_bonuses(total, progenitor), forced_procs=forced, status_model=status_model, crit_chance=crit, weakpoint_crit_chance=weakpoint_crit, crit_damage=crit_damage, status_chance=status, status_duration=duration, status_damage=max(1 + float(total.proportional.get("status_damage", 0)), 1), multishot=multishot, instantaneous_fire_rate=instant_rate, attack_event_rate=fire_rate, faction_damage=faction, target_vulnerability=max(1 + float(total.proportional.get("unique_enemy_vulnerability_multiplier", 0)), 0), overguard_damage_multiplier=overguard_effect if overguard_effect else 1, non_crit_bonus_damage=non_crit_damage, non_crit_bonus_chance=non_crit_chance, weakpoint_damage_bonus=weakpoint_bonus, special_effects=tuple(resolved_effects), **category_stats)
     for stat in ("range", "punch_through", "accuracy", "recoil", "zoom", "ammo_maximum"):
         base_value = float(getattr(attack.stats, stat, 0)) if hasattr(attack.stats, stat) else 0
         effective[stat] = _additive_scalar(base_value, stat, total) if stat == "punch_through" else _scalar(base_value, stat, total)
@@ -582,8 +612,9 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     final_multiplier = attack.stats.falloff.get("final_multiplier")
     effective.final_multiplier = 1.0 if final_multiplier is None else float(final_multiplier)
     effective.noise_level = total.proportional.get("noise_level", attack.stats.noise_level)
-    base = BaseAttackStats(damage=base_damage, forced_procs=attack.stats.forced_procs, crit_chance=attack.stats.crit_chance, crit_damage=attack.stats.crit_damage, status_chance=attack.stats.status_chance, status_duration=attack.stats.status_duration, multishot=attack.stats.multishot, fire_rate=attack.stats.fire_rate)
-    modded = ModdedAttackStats(damage=damage, crit_chance=crit, crit_damage=crit_damage, status_chance=status, status_duration=duration, multishot=multishot, fire_rate=instant_rate, **category_stats)
+    base = BaseAttackStats(damage=displayed_base_damage, forced_procs=attack.stats.forced_procs, crit_chance=attack.stats.crit_chance, crit_damage=attack.stats.crit_damage, status_chance=attack.stats.status_chance, status_duration=attack.stats.status_duration, multishot=attack.stats.multishot, fire_rate=attack.stats.fire_rate)
+    modded_duration = _scalar(float(attack.stats.status_duration), "status_duration", modded_total)
+    modded = ModdedAttackStats(damage=modded_damage, crit_chance=modded_crit, crit_damage=modded_crit_damage, status_chance=modded_status, status_duration=modded_duration, multishot=modded_multishot, fire_rate=modded_instant_rate, **modded_category_stats)
     body_crit, weak_crit = crit, weakpoint_crit
     if context.weapon.type == "secondary":
         per_stack, reset = enervate_parameters([*upgrades_resolved, *evolution_resolved])

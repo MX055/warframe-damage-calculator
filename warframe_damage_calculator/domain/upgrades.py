@@ -107,7 +107,7 @@ class ResolvedEffect:
 class Upgrade:
     __slots__ = ("name", "kind", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats", "combos", "runtime")
 
-    def __init__(self, *, name: str, kind: str = "mod", slot: str = "normal", max_rank: int = 0, implementation_status: ImplementationStatus | None = None, compatibility: Compatibility | None = None, conflicts: Iterable[str] = (), stats: UpgradeStats | None = None, combos: Mapping[str, Any] | None = None, runtime: Mapping[str, Any] | None = None) -> None:
+    def __init__(self, *, name: str, kind: str = "mod", slot: str = "regular_mod", max_rank: int = 0, implementation_status: ImplementationStatus | None = None, compatibility: Compatibility | None = None, conflicts: Iterable[str] = (), stats: UpgradeStats | None = None, combos: Mapping[str, Any] | None = None, runtime: Mapping[str, Any] | None = None) -> None:
         self.name = name
         self.kind = kind
         self.slot = slot
@@ -144,7 +144,7 @@ class Upgrade:
         allowed = {"name", "kind", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats", "combos"}
         unknown = set(record) - allowed
         if unknown: raise TypeError(f"unknown upgrade fields: {', '.join(sorted(unknown))}")
-        return cls(name=str(record["name"]), kind=str(record.get("kind", "mod")), slot=str(record.get("slot", "normal")), max_rank=int(record.get("max_rank", 0)), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")), compatibility=Compatibility.from_record(record.get("compatibility", {})), conflicts=record.get("conflicts", []), stats=UpgradeStats.from_record(record.get("stats", {})), combos=record.get("combos", {}))
+        return cls(name=str(record["name"]), kind=str(record.get("kind", "mod")), slot=str(record.get("slot", "regular_mod")), max_rank=int(record.get("max_rank", 0)), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")), compatibility=Compatibility.from_record(record.get("compatibility", {})), conflicts=record.get("conflicts", []), stats=UpgradeStats.from_record(record.get("stats", {})), combos=record.get("combos", {}))
 
     def copy(self) -> Upgrade:
         return Upgrade(name=self.name, kind=self.kind, slot=self.slot, max_rank=self.max_rank, implementation_status=self.implementation_status, compatibility=deepcopy(self.compatibility), conflicts=self.conflicts, stats=self.stats.copy(), combos=self.combos, runtime=self.runtime.as_dict())

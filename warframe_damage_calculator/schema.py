@@ -47,7 +47,7 @@ def validate_database(database: dict[str, Any]) -> None:
     unexpected_root = set(database) - allowed_root
     if missing_root: raise ValueError(f"database: missing fields {sorted(missing_root)}")
     if unexpected_root: raise ValueError(f"database: unexpected fields {sorted(unexpected_root)}")
-    if database.get("schema_version") != 12: raise ValueError("schema version 12 is required")
+    if database.get("schema_version") != 15: raise ValueError("schema version 15 is required")
     for section in ("weapons", "upgrades", "perks", "enemies", "riven_stats"):
         if not isinstance(database.get(section), dict): raise ValueError(f"{section}: expected an object")
     for name, perk in database["perks"].items():
@@ -85,7 +85,7 @@ def validate_database(database: dict[str, Any]) -> None:
         _implementation_status(upgrade.get("implementation_status"), f"upgrades.{name}.implementation_status")
         if upgrade.get("name") != name: raise ValueError(f"upgrades.{name}: invalid name")
         if upgrade.get("kind") not in {"mod", "arcane", "buff"}: raise ValueError(f"upgrades.{name}: invalid kind")
-        if upgrade.get("slot") not in {"normal", "exilus", "stance", "arcane"}: raise ValueError(f"upgrades.{name}: invalid slot")
+        if upgrade.get("slot") not in {"regular_mod", "exilus_mod", "stance_mod", "regular_arcane"}: raise ValueError(f"upgrades.{name}: invalid slot")
         if set(upgrade.get("compatibility", {})) - {"types", "subtypes", "names", "categories", "triggers", "aoe"}: raise ValueError(f"upgrades.{name}.compatibility: invalid fields")
         _effects(upgrade.get("stats", {}), f"upgrades.{name}.stats")
     allowed_enemy = {"name", "faction", "base_level", "stats", "bodyparts", "modifiers"}

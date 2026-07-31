@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Callable
 import re
 
-from .analysis.contributions import removal_contributions, shapley_contributions
+from .analysis.contributions import progenitor_component_name, removal_contributions, shapley_contributions
 from .domain.loadouts import Loadout
 from .domain.perks import Perk
 from .domain.results import CalculationResult, DamageMetrics, DamageResult, SpatialResult, StatusResult
@@ -13,9 +13,6 @@ from .engine.calculator import Calculator
 
 
 ANSI_PATTERN = re.compile(r"\x1b\[[0-9;]*m")
-GREEN = "\x1b[32m"
-RED = "\x1b[31m"
-RESET = "\x1b[0m"
 
 
 class ResultFormatter:
@@ -64,15 +61,25 @@ class ResultFormatter:
     def _table(cls, headers: tuple[str, ...], rows: list[tuple[str, ...]], *, title: str) -> str:
         content_rows = [row for row in rows if not row[0].startswith("\0")]
         widths = [max(cls._visible_length(header), *(cls._visible_length(row[index]) for row in content_rows)) for index, header in enumerate(headers)]
-        line = " │ ".join(cls._pad(header, widths[index]) for index, header in enumerate(headers))
-        rule = "─" * cls._visible_length(line)
-        values = [title, rule, line, rule]
+        inner_width = sum(widths) + 3 * (len(widths) - 1) + 2
+        if cls._visible_length(title) > inner_width:
+            widths[-1] += cls._visible_length(title) - inner_width
+            inner_width = cls._visible_length(title)
+        top = "┌" + "─" * inner_width + "┐"
+        title_rule = "├" + "┬".join("─" * (width + 2) for width in widths) + "┤"
+        header_rule = "├" + "┼".join("─" * (width + 2) for width in widths) + "┤"
+        bottom = "└" + "┴".join("─" * (width + 2) for width in widths) + "┘"
+        values = [top, "│ " + cls._pad(title, inner_width - 2) + " │", title_rule]
+        values.append("│ " + " │ ".join(cls._pad(header, widths[index]) for index, header in enumerate(headers)) + " │")
+        values.append(header_rule)
+        has_content = False
         for row in rows:
             if row[0].startswith("\0"):
-                if values[-1] != rule: values.append(rule)
+                if has_content and values[-1] != header_rule: values.append(header_rule)
                 continue
-            values.append(" │ ".join(cls._pad(cell, widths[index]) for index, cell in enumerate(row)))
-        values.append(rule)
+            values.append("│ " + " │ ".join(cls._pad(cell, widths[index]) for index, cell in enumerate(row)) + " │")
+            has_content = True
+        values.append(bottom)
         return "\n".join(values)
 
     def summary(self, attack: str | None = None) -> str:
@@ -85,14 +92,14 @@ class ResultFormatter:
         damage_types = dict.fromkeys((*base.damage, *modded.damage, *effective.damage))
         for damage_type in damage_types:
             rows.append((damage_type.replace("_", " ").title(), self._number(base.damage.get(damage_type, 0)), self._number(modded.damage.get(damage_type, 0)), self._number(effective.damage.get(damage_type, 0)), "—", "—"))
+        speed_label = "Attack Speed" if self.result.weapon.type == "melee" else "Fire Rate"
         rows.extend((
             self._section("OFFENSE"),
             ("Critical Chance", self._percent(base.crit_chance), self._percent(modded.crit_chance), self._percent(effective.crit_chance), self._percent(average.crit_chance), "—"),
             ("Critical Damage", self._multiplier(base.crit_damage), self._multiplier(modded.crit_damage), self._multiplier(effective.crit_damage), "—", "—"),
             ("Status Chance", self._percent(base.status_chance), self._percent(modded.status_chance), self._percent(effective.status_chance), "—", "—"),
             ("Multishot", self._multiplier(base.multishot), self._multiplier(modded.multishot), self._multiplier(effective.multishot), "—", "—"),
-            ("Fire Rate", self._number(base.fire_rate), self._number(modded.fire_rate), self._number(effective.instantaneous_fire_rate), self._number(average.sustained_fire_rate), "—"),
-            ("Expected Procs", "—", "—", "—", self._number(selected.status.expected_procs_per_attack), "—"),
+            (speed_label, self._number(base.fire_rate), self._number(modded.fire_rate), self._number(effective.instantaneous_fire_rate), self._number(average.sustained_fire_rate), "—"),
             self._section("HANDLING"),
             ("Magazine Capacity", self._rounds(self.result.weapon.magazine_size), "—", self._rounds(effective.get("magazine_capacity")), "—", "—"),
             ("Reload Time", self._seconds(self.result.weapon.reload_time), "—", self._seconds(effective.get("reload_time")), "—", "—"),
@@ -102,6 +109,9 @@ class ResultFormatter:
         if int(effective.get("burst_count", 1)) > 1: rows.append(("Burst Count", str(int(attack_definition.stats.burst_count)), "—", str(int(effective.get("burst_count"))), "—", "—"))
         if float(effective.get("burst_delay", 0)) > 0: rows.append(("Burst Delay", self._seconds(attack_definition.stats.burst_delay), "—", self._seconds(effective.get("burst_delay")), "—", "—"))
         if float(effective.get("charge_time", 0)) > 0: rows.append(("Charge Time", self._seconds(attack_definition.stats.charge_time), "—", self._seconds(effective.get("charge_time")), "—", "—"))
+        rows.append(self._section("CALCULATED AVERAGES"))
+        rows.append(("Expected Procs", "—", "—", "—", self._number(selected.status.expected_procs_per_attack), "—"))
+        if selected.spatial is not None: rows.append((f"Damage Mass (m^{selected.spatial.dimension})", "—", "—", "—", self._number(selected.spatial.damage_mass), "—"))
         rows.append(self._section("DAMAGE OUTPUT"))
         metrics = (("DIRECT DPH", "direct_dph"), ("DOT DPH", "dot_dph"), ("TOTAL DPH", "total_dph"), ("DIRECT DPS", "direct_dps"), ("DOT DPS", "dot_dps"), ("TOTAL DPS", "total_dps"))
         zones = (("Normal", average_damage.normal), ("Weakpoint", average_damage.weakpoint), ("Resistant", average_damage.resistant))
@@ -109,8 +119,6 @@ class ResultFormatter:
             for zone_name, zone in zones:
                 if zone is None: continue
                 rows.append((f"{label} — {zone_name}", "—", "—", "—", self._number(getattr(zone, attribute)), "—"))
-        if selected.spatial is not None:
-            rows.extend((self._section("SPATIAL"), (f"Damage Mass (m^{selected.spatial.dimension})", "—", "—", "—", self._number(selected.spatial.damage_mass), "—")))
         weapon_name = getattr(self.result.weapon, "name", "Weapon")
         target_name = "" if self.result.target is None else f" vs {getattr(self.result.target, 'name', 'Target')}"
         title = f"{weapon_name} · {attack_name.replace('_', ' ').title()}{target_name}"
@@ -121,19 +129,25 @@ class ResultFormatter:
         shapley = shapley_contributions(calculator, self.result.loadout, attack=self.result.selected_attack, metric=metric, state=self.result.state)
         if not shapley: return ""
         removal = removal_contributions(calculator, self.result.loadout, attack=self.result.selected_attack, metric=metric, state=self.result.state)
-        upgrade_names = {upgrade.name for upgrade in self.result.loadout.upgrades}
+        component_types = {upgrade.name: upgrade.slot.replace("_", " ").title() for upgrade in self.result.loadout.upgrades}
+        component_types.update({perk.name: "Perk" for perk in self.result.loadout.evolutions})
+        if self.result.loadout.progenitor is not None: component_types[progenitor_component_name(self.result.loadout.progenitor)] = "Progenitor"
         maximum = max((abs(value) for value in shapley.values()), default=0)
         ordered = sorted(shapley.items(), key=lambda item: item[1], reverse=True)
         rows = []
         for rank, (name, share) in enumerate(ordered, 1):
-            kind = "Upgrade" if name in upgrade_names else "Evolution"
+            kind = component_types[name]
+            removal_value = removal[name]
+            display_share = 0.0 if share == 0 else share
+            display_removal = 0.0 if removal_value == 0 else removal_value
             bar_length = 0 if maximum == 0 or share == 0 else max(1, round(abs(share) / maximum * 5))
-            bar = "" if bar_length == 0 else f"{RED if share < 0 else GREEN}{'█' * bar_length}{RESET}"
-            rows.append((str(rank), kind, name, f"{share:.2%}", f"{removal[name]:,.2f}", bar))
+            left = "·" * (10 - bar_length) + "█" * bar_length if share < 0 else "·" * 10
+            right = "█" * bar_length + "·" * (10 - bar_length) if share > 0 else "·" * 10
+            rows.append((str(rank), kind, name, f"{display_share:+.2%}", f"{display_removal:+,.2f}", f"{left}│{right}"))
         metric_name = metric.replace("_", " ").upper() if isinstance(metric, str) else "Contribution"
         target_name = "" if self.result.target is None else f" vs {getattr(self.result.target, 'name', 'Target')}"
         title = f"{self.result.weapon.name} · {self.result.selected_attack.replace('_', ' ').title()}{target_name} · {metric_name} Contributions"
-        return self._table(("Rank", "Type", "Component", "Shapley", f"{metric_name} Loss", "Impact"), rows, title=title)
+        return self._table(("Contribution Rank", "Type", "Component", "Shapley", f"{metric_name} Loss", "Impact"), rows, title=title)
 
     def loadout(self) -> str:
         return format_loadout(self.result.loadout)
