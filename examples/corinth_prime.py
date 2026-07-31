@@ -10,8 +10,8 @@ loadout = Loadout(
         arsenal.upgrade.get("Primed Ravage")
     ]
 )
-calculator = Calculator(weapon, target)
-result = calculator.calculate(loadout)
+calculator = Calculator(weapon, target, loadout)
+result = calculator.calculate()
 formatter = ResultFormatter(result)
 print(formatter.summary())
 print(formatter.contributions())

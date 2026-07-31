@@ -255,6 +255,7 @@ class CalculationResult:
     aggregate: AggregateResult
     attacks: dict[str, CalculatedAttack]
     selected_attack: str
+    selected_bodypart: str
     weapon: Weapon
     target: Enemy | None
     loadout: Loadout

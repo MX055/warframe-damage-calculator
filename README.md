@@ -21,15 +21,15 @@ loadout = Loadout(
     ],
 )
 
-calculator = Calculator(weapon, target)
-result = calculator.calculate(loadout, attack="incarnon_form")
+calculator = Calculator(weapon, target, loadout)
+result = calculator.calculate(attack="incarnon_form", bodypart="head")
 print(result.aggregate.average.normal.total_dps)
 ```
 
-`Weapon` and `Enemy` are definitions. `Loadout` owns selected upgrades and global evolution perks. `Calculator` owns the weapon-target pair, while attack selection and temporary state belong to each calculation:
+`Weapon` and `Enemy` are definitions. `Loadout` owns selected upgrades and global evolution perks. `Calculator` owns one weapon-target-loadout combination, while attack selection, body-part selection, and temporary state belong to each calculation:
 
 ```python
-result = calculator.calculate(loadout, attack="heavy_attack", state={"combo": 12})
+result = calculator.calculate(attack="heavy_attack", bodypart="head", state={"combo": 12})
 ```
 
 ## Global perks
@@ -100,17 +100,17 @@ dot_dps
 total_dps
 ```
 
-## Prepared calculations
+## Repeated calculations
 
-Prepare an attack tree once for repeated loadout evaluation:
+A calculator keeps one loadout fixed while allowing repeated attack and body-part calculations:
 
 ```python
-prepared = calculator.prepare(attack="incarnon_form")
-first = prepared.calculate(first_loadout)
-second = prepared.calculate(second_loadout)
+calculator = Calculator(weapon, target, loadout)
+body = calculator.calculate(attack="incarnon_form", bodypart="body")
+head = calculator.calculate(attack="incarnon_form", bodypart="head")
 ```
 
-Prepared and ordinary calculations use the same calculation context and return the same result structure.
+Each result records its selected attack and body part. Loadout optimizers can reuse the lower-level calculation engine without changing this public API.
 
 ## Contributions
 

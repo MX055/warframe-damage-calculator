@@ -105,54 +105,37 @@ def _resolve_perks(weapon: Weapon, perks: list[Perk], state: Mapping[str, object
     return tuple(resolved)
 
 
-class PreparedCalculator:
-    __slots__ = ("weapon", "target", "attack", "attack_names")
-
-    def __init__(self, weapon: Weapon, target: Enemy | None, attack: str, attack_names: tuple[str, ...]) -> None:
-        self.weapon = weapon
-        self.target = target
-        self.attack = attack
-        self.attack_names = attack_names
-
-    def calculate(self, loadout: Loadout | None = None, *, state: Mapping[str, object] | None = None) -> CalculationResult:
-        return Calculator(self.weapon, self.target)._calculate(loadout, self.attack, self.attack_names, state or {})
-
-
 class Calculator:
-    __slots__ = ("weapon", "target")
+    __slots__ = ("weapon", "target", "loadout")
 
-    def __init__(self, weapon: Weapon, target: Enemy | None = None) -> None:
+    def __init__(self, weapon: Weapon, target: Enemy | None = None, loadout: Loadout | None = None) -> None:
         self.weapon = weapon
         self.target = target
+        self.loadout = Loadout() if loadout is None else loadout.copy()
 
-    def prepare(self, *, attack: str | None = None) -> PreparedCalculator:
-        selected = attack or self.weapon.default_attack
-        if selected not in self.weapon.attacks: raise ValueError(f"unknown attack {selected!r}")
-        ordered: list[str] = []
+    def calculate(self, *, attack: str | None = None, bodypart: str | None = None, state: Mapping[str, object] | None = None) -> CalculationResult:
+        selected_attack = attack or self.weapon.default_attack
+        selected_bodypart, target = self._select_bodypart(bodypart)
+        return self._calculate(selected_attack, selected_bodypart, target, state or {})
 
-        def collect(name: str, path: frozenset[str] = frozenset()) -> None:
-            if name in path: raise ValueError(f"attack relationship cycle at {name!r}")
-            if name not in self.weapon.attacks: raise ValueError(f"unknown child attack {name!r}")
-            if name in ordered: return
-            ordered.append(name)
-            for child in self.weapon.attacks[name].children: collect(child, path | {name})
+    def _select_bodypart(self, bodypart: str | None) -> tuple[str, Enemy | None]:
+        if self.target is None:
+            if bodypart not in (None, "body"): raise ValueError(f"unknown body part {bodypart!r}")
+            return "body", None
+        selected = bodypart or next(iter(self.target.bodyparts))
+        if selected not in self.target.bodyparts: raise ValueError(f"unknown body part {selected!r}")
+        target = self.target.copy()
+        target.bodyparts = {selected: target.bodyparts[selected]}
+        return selected, target
 
-        collect(selected)
-        return PreparedCalculator(self.weapon, self.target, selected, tuple(ordered))
-
-    def calculate(self, loadout: Loadout | None = None, *, attack: str | None = None, state: Mapping[str, object] | None = None) -> CalculationResult:
-        selected = attack or self.weapon.default_attack
-        return self._calculate(loadout, selected, None, state or {})
-
-    def _calculate(self, loadout: Loadout | None, selected: str, prepared_names: tuple[str, ...] | None, state: Mapping[str, object]) -> CalculationResult:
-        loadout = Loadout() if loadout is None else loadout.copy()
-        if selected not in self.weapon.attacks: raise ValueError(f"unknown attack {selected!r}")
+    def _calculate(self, selected_attack: str, selected_bodypart: str, target: Enemy | None, state: Mapping[str, object]) -> CalculationResult:
+        if selected_attack not in self.weapon.attacks: raise ValueError(f"unknown attack {selected_attack!r}")
         unknown = set(state) - set(self.weapon.calculation_defaults)
         if unknown: raise TypeError(f"unknown calculation state fields: {', '.join(sorted(unknown))}")
         calculation_state = dict(self.weapon.calculation_defaults) | dict(state)
-        resolved_perks = _resolve_perks(self.weapon, loadout.evolutions, calculation_state)
-        _warn_loadout(self.weapon, loadout)
-        context = CalculationContext(weapon=self.weapon, target=self.target.copy() if self.target is not None else Enemy(), attack=selected, loadout=loadout, resolved_perks=resolved_perks, state=calculation_state)
-        calculated, aggregate, aggregate_status_model, aggregate_status_effects = calculate_weapon(context, prepared_names)
+        resolved_perks = _resolve_perks(self.weapon, self.loadout.evolutions, calculation_state)
+        _warn_loadout(self.weapon, self.loadout)
+        context = CalculationContext(weapon=self.weapon, target=target.copy() if target is not None else Enemy(), attack=selected_attack, loadout=self.loadout.copy(), resolved_perks=resolved_perks, state=calculation_state)
+        calculated, aggregate, aggregate_status_model, aggregate_status_effects = calculate_weapon(context)
         attacks = {name: _calculated_attack(result) for name, result in calculated.items()}
-        return CalculationResult(_aggregate(aggregate, aggregate_status_model, aggregate_status_effects), attacks, selected, self.weapon.copy(), None if self.target is None else self.target.copy(), loadout.copy(), dict(state))
+        return CalculationResult(_aggregate(aggregate, aggregate_status_model, aggregate_status_effects), attacks, selected_attack, selected_bodypart, self.weapon.copy(), None if self.target is None else self.target.copy(), self.loadout.copy(), dict(state))

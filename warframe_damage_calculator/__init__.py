@@ -9,7 +9,7 @@ from .domain.perks import PLACEHOLDER, Perk, PerkValues, Placeholder, ResolvedPe
 from .domain.results import AggregateResult, AverageResult, CalculatedAttack, CalculationResult, DamageMetrics, DamageResult, SpatialDamageMetrics, SpatialResult, StatusResult
 from .domain.upgrades import Compatibility, Upgrade, UpgradeStats
 from .domain.weapons import Attack, AttackStats, LoadoutCompatibilityWarning, Melee, PerkCompatibilityWarning, Primary, ProgenitorCompatibilityWarning, Secondary, UnimplementedUpgradeWarning, Weapon
-from .engine.calculator import Calculator, PreparedCalculator
+from .engine.calculator import Calculator
 from .formatting import ResultFormatter, format_damage_result, format_loadout, format_perk, format_result, format_spatial, format_status, format_upgrade, format_weapon
 
 __version__ = "1.1.0"

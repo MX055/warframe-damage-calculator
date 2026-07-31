@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections.abc import Callable, Mapping
-from typing import Literal
 from math import factorial
 
 from ..domain.loadouts import Loadout, Progenitor
@@ -12,7 +11,7 @@ from ..engine.calculator import Calculator
 
 
 type Metric = str | Callable[[CalculationResult], float]
-type BodyPart = Literal["normal", "weakpoint", "resistant"]
+type BodyPart = str
 type ContributionComponent = Upgrade | Perk | Progenitor
 
 
@@ -24,22 +23,23 @@ def component_name(component: ContributionComponent) -> str:
     return progenitor_component_name(component) if isinstance(component, Progenitor) else component.name
 
 
-def metric_value(result: CalculationResult, metric: Metric = "total_dps", bodypart: BodyPart = "normal") -> float:
+def metric_value(result: CalculationResult, metric: Metric = "total_dps") -> float:
     if callable(metric): return float(metric(result))
     if "." not in metric:
-        damage = getattr(result.aggregate.average, bodypart)
-        if damage is None: raise ValueError(f"Target has no {bodypart} body part")
+        zone = "normal" if result.target is None else result.target.bodyparts[result.selected_bodypart].type
+        damage = getattr(result.aggregate.average, zone)
+        if damage is None: raise ValueError(f"Target body part {result.selected_bodypart!r} has no calculated damage")
         return float(getattr(damage, metric))
     value: object = result
     for name in metric.split("."): value = getattr(value, name)
     return float(value)
 
 
-def _evaluate(calculator: Calculator, loadout: Loadout, attack: str, metric: Metric, bodypart: BodyPart, state: Mapping[str, object]) -> float:
-    return metric_value(calculator.calculate(loadout, attack=attack, state=state), metric, bodypart)
+def _evaluate(calculator: Calculator, loadout: Loadout, attack: str, metric: Metric, bodypart: BodyPart | None, state: Mapping[str, object]) -> float:
+    result = Calculator(calculator.weapon, calculator.target, loadout).calculate(attack=attack, bodypart=bodypart, state=state)
+    return metric_value(result, metric)
 
-
-def removal_contributions(calculator: Calculator, loadout: Loadout, *, attack: str | None = None, metric: Metric = "total_dps", bodypart: BodyPart = "normal", state: Mapping[str, object] | None = None) -> dict[str, float]:
+def removal_contributions(calculator: Calculator, loadout: Loadout, *, attack: str | None = None, metric: Metric = "total_dps", bodypart: BodyPart | None = None, state: Mapping[str, object] | None = None) -> dict[str, float]:
     selected = attack or calculator.weapon.default_attack
     state = state or {}
     baseline = _evaluate(calculator, loadout, selected, metric, bodypart, state)
@@ -49,7 +49,7 @@ def removal_contributions(calculator: Calculator, loadout: Loadout, *, attack: s
     return contributions
 
 
-def shapley_contributions(calculator: Calculator, loadout: Loadout, *, attack: str | None = None, metric: Metric = "total_dps", bodypart: BodyPart = "normal", state: Mapping[str, object] | None = None) -> dict[str, float]:
+def shapley_contributions(calculator: Calculator, loadout: Loadout, *, attack: str | None = None, metric: Metric = "total_dps", bodypart: BodyPart | None = None, state: Mapping[str, object] | None = None) -> dict[str, float]:
     selected = attack or calculator.weapon.default_attack
     state = state or {}
     components: list[ContributionComponent] = [*loadout.upgrades, *loadout.evolutions]

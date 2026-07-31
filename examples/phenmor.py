@@ -17,8 +17,8 @@ loadout = Loadout(
         arsenal.perk.get("Devouring Attrition")
     ]
 )
-calculator = Calculator(weapon, target)
-result = calculator.calculate(loadout, attack="incarnon_form")
+calculator = Calculator(weapon, target, loadout)
+result = calculator.calculate(attack="incarnon_form")
 formatter = ResultFormatter(result)
 print(formatter.summary())
 print(formatter.contributions())

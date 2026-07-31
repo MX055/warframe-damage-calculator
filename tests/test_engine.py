@@ -34,7 +34,7 @@ class EngineTests(unittest.TestCase):
     def test_loadout_evolutions_change_results(self):
         weapon = arsenal.weapon.get("Phenmor")
         baseline = Calculator(weapon).calculate(attack="incarnon_form")
-        evolved = Calculator(weapon).calculate(Loadout(evolutions=[arsenal.perk.get("Elemental Excess")]), attack="incarnon_form")
+        evolved = Calculator(weapon, loadout=Loadout(evolutions=[arsenal.perk.get("Elemental Excess")])).calculate(attack="incarnon_form")
         self.assertNotEqual(baseline.attacks["incarnon_form"].effective.status_chance, evolved.attacks["incarnon_form"].effective.status_chance)
 
 

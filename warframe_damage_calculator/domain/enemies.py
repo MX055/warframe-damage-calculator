@@ -42,6 +42,7 @@ class EnemyStats:
 class BodyPart:
     type: str = "normal"
     multiplier: float = 1
+    name: str = "body"
 
 
 class Enemy:
@@ -66,7 +67,7 @@ class Enemy:
         unknown = set(record) - allowed
         if unknown: raise TypeError(f"unknown enemy fields: {', '.join(sorted(unknown))}")
         runtime = {"level": 100, "steel_path": False, "empowered": False} if loaded else None
-        return cls(name=str(record.get("name", "Enemy")), faction=str(record.get("faction", "")), base_level=float(record.get("base_level", 1)), stats=EnemyStats(**record.get("stats", {})), bodyparts={name: BodyPart(**part) for name, part in record.get("bodyparts", {"body": {}}).items()}, modifiers=record.get("modifiers", {}), runtime=runtime)
+        return cls(name=str(record.get("name", "Enemy")), faction=str(record.get("faction", "")), base_level=float(record.get("base_level", 1)), stats=EnemyStats(**record.get("stats", {})), bodyparts={name: BodyPart(**({"name": name} | dict(part))) for name, part in record.get("bodyparts", {"body": {}}).items()}, modifiers=record.get("modifiers", {}), runtime=runtime)
 
     def copy(self) -> Enemy:
         return Enemy(name=self.name, faction=self.faction, base_level=self.base_level, stats=deepcopy(self.stats), bodyparts=deepcopy(self.bodyparts), modifiers=self.modifiers, runtime=self.runtime.as_dict())

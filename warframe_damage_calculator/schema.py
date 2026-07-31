@@ -62,7 +62,7 @@ def validate_database(database: dict[str, Any]) -> None:
         if weapon.get("name") != name or "ammo" in weapon: raise ValueError(f"weapons.{name}: invalid record")
         if not weapon.get("attacks"): raise ValueError(f"weapons.{name}: attacks are required")
         for attack_name, attack in weapon["attacks"].items():
-            if set(attack) - {"trigger", "delivery", "form", "category", "aoe", "children", "stats"}: raise ValueError(f"weapons.{name}.attacks.{attack_name}: invalid fields")
+            if attack.get("name") != attack_name or set(attack) - {"name", "trigger", "delivery", "form", "category", "aoe", "children", "stats"}: raise ValueError(f"weapons.{name}.attacks.{attack_name}: invalid fields")
         for tier, choices in weapon.get("evolutions", {}).items():
             for choice, record in choices.items():
                 path = f"weapons.{name}.evolutions.{tier}.{choice}"
@@ -90,7 +90,7 @@ def validate_database(database: dict[str, Any]) -> None:
         _effects(upgrade.get("stats", {}), f"upgrades.{name}.stats")
     allowed_enemy = {"name", "faction", "base_level", "stats", "bodyparts", "modifiers"}
     allowed_enemy_stats = {"health", "shields", "armor", "overguard"}
-    allowed_bodypart = {"type", "multiplier"}
+    allowed_bodypart = {"name", "type", "multiplier"}
     for name, enemy in database["enemies"].items():
         path = f"enemies.{name}"
         if not isinstance(enemy, dict): raise ValueError(f"{path}: expected an object")
@@ -102,6 +102,7 @@ def validate_database(database: dict[str, Any]) -> None:
         bodyparts = enemy.get("bodyparts")
         if not isinstance(bodyparts, dict) or not bodyparts: raise ValueError(f"{path}.bodyparts: expected a nonempty object")
         for bodypart_name, bodypart in bodyparts.items():
+            if bodypart.get("name") != bodypart_name: raise ValueError(f"enemies.{name}.bodyparts.{bodypart_name}: name must match its key")
             if not isinstance(bodypart, dict) or set(bodypart) != allowed_bodypart: raise ValueError(f"{path}.bodyparts.{bodypart_name}: invalid fields")
             if bodypart.get("type") not in {"normal", "weakpoint", "resistant"}: raise ValueError(f"{path}.bodyparts.{bodypart_name}.type: invalid type")
             if not isinstance(bodypart.get("multiplier"), (int, float)) or isinstance(bodypart.get("multiplier"), bool) or not isfinite(bodypart["multiplier"]) or bodypart["multiplier"] < 0: raise ValueError(f"{path}.bodyparts.{bodypart_name}.multiplier: expected a finite nonnegative number")

@@ -75,7 +75,9 @@ class Attack:
     @classmethod
     def from_record(cls, name: str, record: Mapping[str, Any]) -> Attack:
         values = dict(record)
-        values["name"] = name
+        record_name = str(values.pop("name", name))
+        if record_name != name: raise ValueError(f"attack key {name!r} does not match record name {record_name!r}")
+        values["name"] = record_name
         values["stats"] = AttackStats.from_record(values.get("stats", {}))
         return cls(**values)
 
