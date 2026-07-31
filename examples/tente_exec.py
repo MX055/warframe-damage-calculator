@@ -7,7 +7,8 @@ loadout = Loadout(
     upgrades=[
         arsenal.upgrade.get("Rending Crane"),
         arsenal.upgrade.get("Galvanized Steel"),
-        arsenal.upgrade.get("Primed Pressure Point")
+        arsenal.upgrade.get("Primed Pressure Point"),
+        arsenal.upgrade.get("Melee Duplicate")
     ],
     progenitor=Progenitor("electricity", 0.60)
 )
