@@ -6,10 +6,10 @@ from importlib.resources import files
 from pathlib import Path
 from typing import Generic, Self, TypeVar
 
-from .domain.enemies import Enemy
-from .domain.upgrades import Perk
-from .domain.upgrades import Arcane, Mod, Upgrade
-from .domain.weapons import Archgun, Melee, Primary, Secondary, Weapon
+from ..domain.enemies import Enemy
+from ..domain.upgrades import Perk
+from ..domain.upgrades import Arcane, Mod, Upgrade
+from ..domain.weapons import Archgun, Melee, Primary, Secondary, Weapon
 from .schema import validate_database
 
 

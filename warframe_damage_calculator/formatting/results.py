@@ -1,15 +1,11 @@
 from __future__ import annotations
 
-from typing import Callable, Literal
 import re
 
-from .analysis.contributions import progenitor_component_name, removal_contributions, shapley_contributions
-from .domain.loadouts import Loadout
-from .domain.upgrades import Perk
-from .domain.results import CalculationResult, DamageMetrics, DamageResult, SpatialResult, StatusResult
-from .domain.upgrades import Upgrade
-from .domain.weapons import Weapon
-from .engine.calculator import Calculator
+from ..analysis.contributions import progenitor_component_name, removal_contributions, shapley_contributions
+from ..domain.results import CalculationResult, DamageResult, SpatialResult, StatusResult
+from ..engine.calculator import Calculator
+from .objects import format_loadout
 
 
 ANSI_PATTERN = re.compile(r"\x1b\[[0-9;]*m")
@@ -183,28 +179,6 @@ class ResultFormatter:
 def format_result(result: CalculationResult, *, attack: str | None = None) -> str:
     return ResultFormatter(result).summary(attack)
 
-
-def format_weapon(weapon: Weapon) -> str:
-    attacks = ", ".join(weapon.attacks)
-    perks = ", ".join(sorted((perk.name for perk in weapon.perks), key=str.casefold)) or "None"
-    return f"{weapon.name}\nType: {weapon.type}\nSubtype: {weapon.subtype or '-'}\nAttacks: {attacks}\nPerks: {perks}"
-
-
-def format_upgrade(upgrade: Upgrade) -> str:
-    stats = ", ".join(upgrade.stats) or "None"
-    return f"{upgrade.name}\nType: {upgrade.type}\nSlot: {upgrade.slot}\nStats: {stats}"
-
-
-def format_perk(perk: Perk) -> str:
-    stats = ", ".join(perk.stats) or "None"
-    return f"{perk.name}\nStats: {stats}"
-
-
-def format_loadout(loadout: Loadout) -> str:
-    mods = "\n".join(f"- {mod.name}" for mod in loadout.mods) or "- None"
-    arcanes = "\n".join(f"- {arcane.name}" for arcane in loadout.arcanes) or "- None"
-    perks = "\n".join(f"- {perk.name}" for perk in loadout.evolutions) or "- None"
-    return f"Mods:\n{mods}\n\nArcanes:\n{arcanes}\n\nPerks:\n{perks}"
 
 
 def format_damage_result(result: DamageResult) -> str:

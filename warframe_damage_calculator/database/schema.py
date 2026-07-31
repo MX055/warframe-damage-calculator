@@ -3,7 +3,7 @@ from __future__ import annotations
 from math import isfinite
 from typing import Any
 
-from .domain.effects import AUTOMATIC_FIELDS, EFFECT_FIELDS, REPEATABLE_AUTOMATIC_FIELDS, Effect
+from ..domain.effects import AUTOMATIC_FIELDS, EFFECT_FIELDS, REPEATABLE_AUTOMATIC_FIELDS, Effect
 
 
 def _validate_automatic(automatic: Any, path: str) -> None:

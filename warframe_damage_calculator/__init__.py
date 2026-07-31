@@ -1,5 +1,5 @@
 from .analysis.contributions import removal_contributions, shapley_contributions
-from .arsenal import Arsenal, arsenal
+from .database.arsenal import Arsenal, arsenal
 from .domain.damage import Dist
 from .domain.effects import Effect
 from .domain.enemies import BodyPart, Enemy, EnemyStats
@@ -10,7 +10,8 @@ from .domain.results import AggregateResult, AverageResult, CalculatedAttack, Ca
 from .domain.upgrades import Arcane, Compatibility, Mod, Upgrade, UpgradeStats
 from .domain.weapons import Archgun, Attack, AttackStats, LoadoutCompatibilityWarning, Melee, PerkCompatibilityWarning, Primary, ProgenitorCompatibilityWarning, Secondary, UnimplementedUpgradeWarning, Weapon
 from .engine.calculator import Calculator
-from .formatting import ResultFormatter, format_damage_result, format_loadout, format_perk, format_result, format_spatial, format_status, format_upgrade, format_weapon
+from .formatting.objects import format_loadout, format_perk, format_upgrade, format_weapon
+from .formatting.results import ResultFormatter, format_damage_result, format_result, format_spatial, format_status
 
 __version__ = "1.1.0"
 
