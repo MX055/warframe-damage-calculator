@@ -169,9 +169,14 @@ class ApiTests(unittest.TestCase):
         self.assertIn("Attack Speed", melee_summary)
         self.assertNotIn("Fire Rate", melee_summary)
         self.assertIn("a/s", melee_summary.split("Attack Speed", 1)[1].splitlines()[0])
+        self.assertNotIn("Multishot", melee_summary)
         self.assertNotIn("Magazine Capacity", melee_summary)
         self.assertNotIn("Reload Time", melee_summary)
         self.assertNotIn("Ammo Cost", melee_summary)
+        self.assertNotIn("Punch Through", melee_summary)
+        self.assertNotIn("Burst Count", melee_summary)
+        self.assertNotIn("Burst Delay", melee_summary)
+        self.assertNotIn("Charge Time", melee_summary)
         self.assertIn("×", melee_summary.split("Expected Procs", 1)[1].splitlines()[0])
 
     def test_contributions_include_upgrades_and_evolutions(self):

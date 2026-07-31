@@ -111,20 +111,19 @@ class ResultFormatter:
             ("Critical Chance", self._percent(base.crit_chance), self._percent(modded.crit_chance), self._percent(effective.crit_chance), self._percent(average.crit_chance), "—"),
             ("Critical Damage", self._multiplier(base.crit_damage), self._multiplier(modded.crit_damage), self._multiplier(effective.crit_damage), self._multiplier(average.crit_damage), "—"),
             ("Status Chance", self._percent(base.status_chance), self._percent(modded.status_chance), self._percent(effective.status_chance), self._percent(average.status_chance), "—"),
-            ("Multishot", self._multiplier(base.multishot), self._multiplier(modded.multishot), self._multiplier(effective.multishot), self._multiplier(average.multishot), "—"),
-            (speed_label, self._attack_rate(base.fire_rate), self._attack_rate(modded.fire_rate), self._attack_rate(effective.fire_rate), self._attack_rate(average.fire_rate), "—"),
         ))
+        if self.result.weapon.type != "melee": rows.append(("Multishot", self._multiplier(base.multishot), self._multiplier(modded.multishot), self._multiplier(effective.multishot), self._multiplier(average.multishot), "—"))
+        rows.append((speed_label, self._attack_rate(base.fire_rate), self._attack_rate(modded.fire_rate), self._attack_rate(effective.fire_rate), self._attack_rate(average.fire_rate), "—"))
         if self.result.weapon.type != "melee":
             rows.extend((
-                self._section("HANDLING"),
                 ("Magazine Capacity", self._rounds(base.get("magazine_capacity", self.result.weapon.magazine_size)), self._rounds(modded.get("magazine_capacity")), self._rounds(effective.get("magazine_capacity")), self._rounds(average.magazine_capacity), "—"),
                 ("Reload Time", self._seconds(base.get("reload_time", self.result.weapon.reload_time)), self._seconds(modded.get("reload_time")), self._seconds(effective.get("reload_time")), self._seconds(average.reload_time), "—"),
                 ("Ammo Cost", self._rounds(base.get("ammo_cost", attack_definition.stats.ammo_cost)), self._rounds(modded.get("ammo_cost")), self._rounds(effective.get("ammo_cost")), self._rounds(average.ammo_cost), "—"),
             ))
-        if float(effective.get("punch_through", 0)) > 0: rows.append(("Punch Through", self._meters(base.get("punch_through", attack_definition.stats.punch_through)), self._meters(modded.get("punch_through")), self._meters(effective.get("punch_through")), self._meters(average.punch_through), "—"))
-        if int(effective.get("burst_count", 1)) > 1: rows.append(("Burst Count", str(int(base.get("burst_count", attack_definition.stats.burst_count))), str(int(modded.get("burst_count", 1))), str(int(effective.get("burst_count"))), str(int(average.burst_count)), "—"))
-        if float(effective.get("burst_delay", 0)) > 0: rows.append(("Burst Delay", self._seconds(base.get("burst_delay", attack_definition.stats.burst_delay)), self._seconds(modded.get("burst_delay")), self._seconds(effective.get("burst_delay")), self._seconds(average.burst_delay), "—"))
-        if float(effective.get("charge_time", 0)) > 0: rows.append(("Charge Time", self._seconds(base.get("charge_time", attack_definition.stats.charge_time)), self._seconds(modded.get("charge_time")), self._seconds(effective.get("charge_time")), self._seconds(average.charge_time), "—"))
+            if float(effective.get("punch_through", 0)) > 0: rows.append(("Punch Through", self._meters(base.get("punch_through", attack_definition.stats.punch_through)), self._meters(modded.get("punch_through")), self._meters(effective.get("punch_through")), self._meters(average.punch_through), "—"))
+            if int(effective.get("burst_count", 1)) > 1: rows.append(("Burst Count", str(int(base.get("burst_count", attack_definition.stats.burst_count))), str(int(modded.get("burst_count", 1))), str(int(effective.get("burst_count"))), str(int(average.burst_count)), "—"))
+            if float(effective.get("burst_delay", 0)) > 0: rows.append(("Burst Delay", self._seconds(base.get("burst_delay", attack_definition.stats.burst_delay)), self._seconds(modded.get("burst_delay")), self._seconds(effective.get("burst_delay")), self._seconds(average.burst_delay), "—"))
+            if float(effective.get("charge_time", 0)) > 0: rows.append(("Charge Time", self._seconds(base.get("charge_time", attack_definition.stats.charge_time)), self._seconds(modded.get("charge_time")), self._seconds(effective.get("charge_time")), self._seconds(average.charge_time), "—"))
         rows.append(self._section("CALCULATED AVERAGES"))
         rows.append(("Attack Rate", "—", "—", "—", self._attack_rate(average.attack_rate), "—"))
         rows.append(("Expected Procs", "—", "—", "—", self._multiplier(selected.status.expected_procs_per_attack), "—"))
