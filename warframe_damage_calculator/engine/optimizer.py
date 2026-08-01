@@ -359,13 +359,11 @@ class Optimizer:
             return self._select_diverse(candidates, pool_limit)
 
         seed_loadouts = list(self._seed_loadouts(base, pools, search_scale=search_scale))
-        local_passes = min(10, max(2, round(3 * mode_scale ** 0.5 * search_scale ** 0.45)))
-        neighbor_limit = min(1_024, max(48, round(160 * mode_scale * search_scale)))
-        perturbation_limit = min(8_192, max(128, round(512 * mode_scale * search_scale)))
-        perturbation_sources = min(20, max(2, round(3 * mode_scale * search_scale ** 0.4)))
-        cleanup_limit = min(96, max(12, round(16 * mode_scale * search_scale ** 0.6)))
-        cleanup_pass_limit = min(12, max(3, round(4 * mode_scale ** 0.5 * search_scale ** 0.35)))
-        estimated_total = min(resolution_budget, len(seed_loadouts) + pool_limit * local_passes * neighbor_limit + perturbation_limit + cleanup_limit * cleanup_pass_limit)
+        local_passes = min(4, max(1, round(2 * search_scale ** 0.35)))
+        local_sources = min(pool_limit, max(2, round(2 * search_scale ** 0.5)))
+        beam_sources = min(pool_limit, max(2, round(3 * search_scale ** 0.5)))
+        cleanup_pass_limit = min(8, max(2, round(3 * search_scale ** 0.35)))
+        estimated_total = resolution_budget
         reporter.set_estimated_total(max(estimated_total, 1))
         reporter.begin_phase("Seeds", min(len(seed_loadouts), resolution_budget - evaluations_used), completed=evaluations_used)
         seed_candidates: list[_Candidate] = []
@@ -378,71 +376,106 @@ class Optimizer:
             seed_candidates.append(candidate)
         pool = retain([*pool, *seed_candidates, best])
 
-        reporter.begin_phase("Local search", max(resolution_budget - evaluations_used, 0), completed=evaluations_used)
-        for source_index, source in enumerate(list(pool)):
-            if evaluations_used >= resolution_budget: break
+        def change_group(origin: Loadout, candidate: Loadout) -> tuple[str, int]:
+            for index, (left, right) in enumerate(zip(origin.mods, candidate.mods)):
+                if left is not right: return "mod", index
+            if len(origin.mods) != len(candidate.mods): return "mod", min(len(origin.mods), len(candidate.mods))
+            for index, (left, right) in enumerate(zip(origin.arcanes, candidate.arcanes)):
+                if left is not right: return "arcane", index
+            if len(origin.arcanes) != len(candidate.arcanes): return "arcane", min(len(origin.arcanes), len(candidate.arcanes))
+            origin_perks = {self.calculator.weapon.perks[perk].tier: perk for perk in origin.evolutions if perk in self.calculator.weapon.perks}
+            candidate_perks = {self.calculator.weapon.perks[perk].tier: perk for perk in candidate.evolutions if perk in self.calculator.weapon.perks}
+            for tier in sorted(origin_perks.keys() | candidate_perks.keys()):
+                if origin_perks.get(tier) is not candidate_perks.get(tier): return "perk", tier
+            return "progenitor", 0
+
+        frontier: dict[tuple[str, int], _Candidate] = {}
+        local_deadline = max(evaluations_used, round(resolution_budget * 0.48))
+        reporter.begin_phase("Local search", max(local_deadline - evaluations_used, 0), completed=evaluations_used)
+        for source in list(pool)[:local_sources]:
+            if evaluations_used >= local_deadline: break
             current = source
             for _ in range(local_passes):
-                neighbors = sorted(self._exact_neighbors(current.loadout, pools), key=self._estimate_loadout, reverse=True)
-                reporter.update_plan(min(neighbor_limit, len(neighbors), resolution_budget - evaluations_used))
+                neighbors = list(self._exact_neighbors(current.loadout, pools))
+                reporter.update_plan(min(len(neighbors), local_deadline - evaluations_used))
                 improved = current
-                checked = 0
                 pass_candidates: list[_Candidate] = []
                 for loadout in neighbors:
-                    if evaluations_used >= resolution_budget or checked >= neighbor_limit: break
+                    if evaluations_used >= local_deadline: break
                     candidate, consumed = evaluate(loadout)
                     if not consumed: continue
-                    checked += 1
                     if candidate.score > improved.score: improved = candidate
                     pass_candidates.append(candidate)
+                    group = change_group(current.loadout, candidate.loadout)
+                    previous = frontier.get(group)
+                    if candidate.score <= current.score and (previous is None or candidate.score > previous.score): frontier[group] = candidate
                 pool = retain([*pool, *pass_candidates, improved, best])
                 if improved.score <= current.score: break
                 current = improved
                 if current.score > best.score: best = current
             pool = retain([*pool, current, best])
 
-        if evaluations_used < resolution_budget:
-            generated: dict[tuple, Loadout] = {}
-            for candidate in pool[:perturbation_sources]:
-                for loadout in self._exact_perturbations(candidate.loadout, pools, search_scale=search_scale):
-                    generated.setdefault(self._loadout_key(loadout), loadout)
-                    if len(generated) >= perturbation_limit: break
-            perturbations = sorted(generated.values(), key=self._estimate_loadout, reverse=True)
-            reporter.begin_phase("Perturbations", min(len(perturbations), resolution_budget - evaluations_used), completed=evaluations_used)
-            perturbation_candidates: list[_Candidate] = []
-            for index, loadout in enumerate(perturbations):
-                reporter.update_plan(min(len(perturbations) - index, resolution_budget - evaluations_used))
-                if evaluations_used >= resolution_budget: break
+        beam_deadline = max(evaluations_used, round(resolution_budget * 0.85))
+        reporter.begin_phase("Perturbations", max(beam_deadline - evaluations_used, 0), completed=evaluations_used)
+        beam_starts = sorted(frontier.values(), key=lambda candidate: candidate.score, reverse=True)[:beam_sources]
+        for source in beam_starts:
+            if evaluations_used >= beam_deadline: break
+            candidates: list[_Candidate] = []
+            neighbors = list(self._exact_neighbors(source.loadout, pools))
+            reporter.update_plan(min(len(neighbors), beam_deadline - evaluations_used))
+            for loadout in neighbors:
+                if evaluations_used >= beam_deadline: break
                 candidate, consumed = evaluate(loadout)
                 if not consumed: continue
+                candidates.append(candidate)
                 if candidate.score > best.score: best = candidate
-                perturbation_candidates.append(candidate)
-            pool = retain([*pool, *perturbation_candidates, best])
+            pool = retain([*pool, *candidates, best])
+
+        rebuild_deadline = max(evaluations_used, round(resolution_budget * 0.95))
+        reporter.begin_phase("Rebuilds", max(rebuild_deadline - evaluations_used, 0), completed=evaluations_used)
+        rebuild_sources = [best, *[candidate for candidate in pool if candidate is not best]][:max(2, round(3 * search_scale ** 0.4))]
+        for source_index, source in enumerate(rebuild_sources):
+            if evaluations_used >= rebuild_deadline: break
+            fixed_mods = len(base.mods)
+            mutable = [index for index in range(fixed_mods, len(source.loadout.mods)) if source.loadout.mods[index].slot == "regular_mod" and not self._is_riven(source.loadout.mods[index])]
+            pairs = list(combinations(mutable, 2))
+            pair_limit = min(len(pairs), max(3, round(5 * search_scale ** 0.4)))
+            pair_offset = source_index * pair_limit % max(len(pairs), 1)
+            ordered_pairs = [*pairs[pair_offset:], *pairs[:pair_offset]]
+            for first, second in ordered_pairs[:pair_limit]:
+                if evaluations_used >= rebuild_deadline: break
+                mods = [mod for index, mod in enumerate(source.loadout.mods) if index not in {first, second}]
+                current = self._loadout(mods=mods, arcanes=source.loadout.arcanes, evolutions=source.loadout.evolutions, progenitor=source.loadout.progenitor)
+                current_candidate, _ = evaluate(current)
+                for _ in range(2):
+                    selected = {mod.name for mod in current.mods}
+                    improved = current_candidate
+                    for mod in pools["mods"]:
+                        if evaluations_used >= rebuild_deadline: break
+                        if mod.slot != "regular_mod" or mod.name in selected: continue
+                        candidate_loadout = self._loadout(mods=[*current.mods, mod], arcanes=current.arcanes, evolutions=current.evolutions, progenitor=current.progenitor)
+                        if not self._legal(candidate_loadout): continue
+                        candidate, _ = evaluate(candidate_loadout)
+                        if candidate.score > improved.score: improved = candidate
+                    if improved.score <= current_candidate.score: break
+                    current_candidate = improved
+                    current = improved.loadout
+                if current_candidate.score > best.score: best = current_candidate
+                pool = retain([*pool, current_candidate, best])
 
         cleanup_passes = 0
         reporter.begin_phase("Cleanup", max(resolution_budget - evaluations_used, 0), completed=evaluations_used)
         while evaluations_used < resolution_budget and cleanup_passes < cleanup_pass_limit:
             cleanup_passes += 1
-            improved = best
-            removals = list(self._cleanup_removals(best.loadout))
-            reporter.update_plan(min(len(removals), resolution_budget - evaluations_used))
-            for _, loadout in removals:
+            origin = best
+            improved = origin
+            neighbors = list(self._exact_neighbors(origin.loadout, pools))
+            reporter.update_plan(min(len(neighbors), resolution_budget - evaluations_used))
+            for loadout in neighbors:
                 if evaluations_used >= resolution_budget: break
                 candidate, _ = evaluate(loadout)
                 if candidate.score > improved.score: improved = candidate
-            weak_indices = []
-            removal_scores = []
-            for index, loadout in self._cleanup_removals(best.loadout):
-                cached = cache.get(self._loadout_key(loadout))
-                if cached is not None: removal_scores.append((best.score - cached.score, index))
-            weak_indices = [index for _, index in sorted(removal_scores)[:8]]
-            replacements = list(self._cleanup_replacements(best.loadout, pools, weak_indices, limit=cleanup_limit))
-            reporter.update_plan(min(len(replacements), resolution_budget - evaluations_used))
-            for loadout in replacements:
-                if evaluations_used >= resolution_budget: break
-                candidate, _ = evaluate(loadout)
-                if candidate.score > improved.score: improved = candidate
-            if improved.score <= best.score: break
+            if improved.score <= origin.score: break
             best = improved
 
         elapsed = time.perf_counter() - started
@@ -660,6 +693,7 @@ class Optimizer:
                 {"damage_bonus", "multishot", "heat", "cold", "electricity", "toxin"},
                 {"crit_chance", "crit_damage", "status_chance", "status_damage"},
                 {"weakpoint_damage", "weakpoint_crit_chance", "crit_chance", "crit_damage"},
+                {"damage_bonus", "weakpoint_damage", "weakpoint_crit_chance", "slash_proc", "status_chance", "status_damage", "status_duration", "cold", "toxin", "fire_rate"},
             )
         perk_limit = min(128, max(8, round(64 * search_scale ** 0.5)))
         perk_sets = self._perk_sets(base, pools, perk_limit)
@@ -762,6 +796,20 @@ class Optimizer:
                 candidate = self._loadout(mods=loadout.mods, arcanes=arcanes, evolutions=loadout.evolutions, progenitor=loadout.progenitor)
                 key = self._loadout_key(candidate)
                 if key not in seen and self._legal(candidate):
+                    seen.add(key)
+                    yield candidate
+        fixed_tiers = {self.calculator.weapon.perks[perk].tier for perk in fixed.evolutions if perk in self.calculator.weapon.perks}
+        tier_indices = {self.calculator.weapon.perks[perk].tier: index for index, perk in enumerate(loadout.evolutions) if perk in self.calculator.weapon.perks}
+        for tier, choices in pools["perks"].items():
+            if tier in fixed_tiers or tier not in tier_indices: continue
+            index = tier_indices[tier]
+            for perk in choices:
+                if perk is loadout.evolutions[index]: continue
+                evolutions = list(loadout.evolutions)
+                evolutions[index] = perk
+                candidate = self._loadout(mods=loadout.mods, arcanes=loadout.arcanes, evolutions=evolutions, progenitor=loadout.progenitor)
+                key = self._loadout_key(candidate)
+                if key not in seen:
                     seen.add(key)
                     yield candidate
 
@@ -999,4 +1047,3 @@ class Optimizer:
 
     def _loadout_key(self, loadout: Loadout) -> tuple:
         return (tuple(self._component_id(mod) for mod in loadout.mods), tuple(self._component_id(arcane) for arcane in loadout.arcanes), tuple(self._component_id(perk) for perk in loadout.evolutions), None if loadout.progenitor is None else (loadout.progenitor.element, loadout.progenitor.bonus))
-

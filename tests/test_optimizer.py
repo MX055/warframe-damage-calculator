@@ -104,6 +104,25 @@ def test_optimizer_searches_all_progenitor_elements_when_unlocked():
     assert {candidate.progenitor.element for candidate in neighbors if candidate.progenitor is not None} >= {"impact", "cold", "electricity", "toxin", "magnetic", "radiation"}
 
 
+def test_optimizer_replaces_unlocked_evolutions_during_contextual_search():
+    weapon = arsenal.primary.get("Vectis Prime")
+    selected = weapon.perk_choices[2][1]
+    alternative = weapon.perk_choices[2][2]
+    optimizer = Optimizer(Calculator(weapon))
+    pools = optimizer._candidate_pools(riven=False)
+    neighbors = list(optimizer._exact_neighbors(Loadout(evolutions=[selected]), pools))
+    assert any(alternative in candidate.evolutions and selected not in candidate.evolutions for candidate in neighbors)
+
+
+def test_optimizer_seeds_dot_weakpoint_synergies():
+    weapon = arsenal.primary.get("Vectis Prime")
+    optimizer = Optimizer(Calculator(weapon))
+    pools = optimizer._candidate_pools(search_scale=2.0)
+    seeds = optimizer._seed_loadouts(optimizer.calculator.loadout, pools, search_scale=2.0)
+    required = {"Primary Acuity", "Rime Rounds", "Malignant Force"}
+    assert any(required <= {mod.name for mod in seed.mods} and any(arcane.name == "Primary Merciless" for arcane in seed.arcanes) for seed in seeds)
+
+
 def test_optimizer_filters_weapon_specific_arcanes_and_beam_exilus_mods():
     weapon = arsenal.primary.get("Vectis Prime")
     pools = Optimizer(Calculator(weapon))._candidate_pools()
