@@ -19,6 +19,14 @@ def test_optimizer_normalizes_attack_and_bodypart_weights():
     assert result.resolutions >= result.evaluations
 
 
+def test_optimizer_rebuilds_upgrade_generated_attack_trees():
+    weapon = arsenal.primary.get("Kuva Ogris")
+    napalm = arsenal.mod.get("Nightwatch Napalm")
+    optimizer = Optimizer(Calculator(weapon, loadout=Loadout(mods=[napalm])))
+    result = optimizer.resolve(attack="rocket_impact", evaluations=2, riven=False, evolutions=False, upgrade_blacklist=set(arsenal.mod) | set(arsenal.arcane), progress=None)
+    assert "nightwatch_napalm_linger" in result.result.attacks
+
+
 def test_optimizer_does_not_select_unimplemented_perks():
     weapon = arsenal.primary.get("Braton")
     optimizer = Optimizer(Calculator(weapon))

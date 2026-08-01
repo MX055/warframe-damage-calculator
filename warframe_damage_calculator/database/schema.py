@@ -3,7 +3,7 @@ from __future__ import annotations
 from math import isfinite
 from typing import Any
 
-from ..domain.effect_stats import unclassified_effect_stats
+from ..domain.effect_stats import MULTIPLICATIVE_EFFECT_STATS, unclassified_effect_stats
 from ..domain.effects import AUTOMATIC_FIELDS, EFFECT_FIELDS, REPEATABLE_AUTOMATIC_FIELDS, Effect
 
 
@@ -24,8 +24,9 @@ def _effects(stats: Any, path: str, *, placeholders: bool = False) -> None:
             if not isinstance(effect, dict) or not set(effect) <= EFFECT_FIELDS or "value" not in effect or "automatic" not in effect: raise ValueError(f"{location}: invalid effect fields")
             if placeholders and effect["value"] != "$weapon": raise ValueError(f"{location}: expected '$weapon' placeholder")
             if not placeholders and effect["value"] == "$weapon": raise ValueError(f"{location}: unresolved placeholder")
-            try: Effect.from_record(effect)
+            try: parsed = Effect.from_record(effect)
             except (TypeError, ValueError) as error: raise ValueError(f"{location}: {error}") from error
+            if parsed.mode == "multiplicative" and stat not in MULTIPLICATIVE_EFFECT_STATS: raise ValueError(f"{location}: {stat} does not support multiplicative effects")
             if isinstance(effect["value"], (dict, list)): raise ValueError(f"{location}: value must be scalar")
             _validate_automatic(effect["automatic"], f"{location}.automatic")
 
@@ -71,7 +72,9 @@ def validate_database(database: dict[str, Any]) -> None:
             if weapon.get("name") != name or "ammo" in weapon: raise ValueError(f"weapons.{category}.{name}: invalid record")
             if not weapon.get("attacks"): raise ValueError(f"weapons.{category}.{name}: attacks are required")
             for attack_name, attack in weapon["attacks"].items():
-                if attack.get("name") != attack_name or set(attack) - {"name", "trigger", "delivery", "form", "category", "aoe", "children", "stats"}: raise ValueError(f"weapons.{category}.{name}.attacks.{attack_name}: invalid fields")
+                if attack.get("name") != attack_name or set(attack) - {"name", "trigger", "delivery", "form", "category", "aoe", "children", "generated_by", "stats"}: raise ValueError(f"weapons.{category}.{name}.attacks.{attack_name}: invalid fields")
+                generated_by = attack.get("generated_by")
+                if generated_by is not None and (not isinstance(generated_by, str) or generated_by not in database["upgrades"]["mods"] | database["upgrades"]["arcanes"]): raise ValueError(f"weapons.{category}.{name}.attacks.{attack_name}.generated_by: unknown upgrade")
             for tier, choices in weapon.get("evolutions", {}).items():
                 for choice, record in choices.items():
                     path = f"weapons.{category}.{name}.evolutions.{tier}.{choice}"

@@ -32,6 +32,11 @@ def _merge(target: Stats, stat: str, value: Any) -> None:
         target[stat] = value
 
 
+def _multiply(target: Stats, stat: str, value: Any) -> None:
+    if not isinstance(value, (int, float)) or isinstance(value, bool): raise TypeError(f"multiplicative {stat} effects must be numeric")
+    target[stat] = float(target.get(stat, 1)) * value
+
+
 def aggregate(effects: Iterable[ResolvedEffect]) -> ResolvedStats:
     result = ResolvedStats()
     for effect in effects:
@@ -39,14 +44,17 @@ def aggregate(effects: Iterable[ResolvedEffect]) -> ResolvedStats:
             target = result.families.setdefault(effect.family, Stats())
         else:
             target = getattr(result, effect.mode)
-        _merge(target, effect.stat, effect.value)
+        if effect.mode == "multiplicative": _multiply(target, effect.stat, effect.value)
+        else: _merge(target, effect.stat, effect.value)
         if effect.maximum is not None: result.maximums[effect.stat] = min(result.maximums.get(effect.stat, effect.maximum), effect.maximum)
     return result
 
 
 def merge(target: ResolvedStats, source: ResolvedStats) -> None:
-    for mode in ("proportional", "base", "flat"):
-        for stat, value in getattr(source, mode).items(): _merge(getattr(target, mode), stat, value)
+    for mode in ("proportional", "multiplicative", "base", "flat"):
+        for stat, value in getattr(source, mode).items():
+            if mode == "multiplicative": _multiply(target.multiplicative, stat, value)
+            else: _merge(getattr(target, mode), stat, value)
     for family, stats in source.families.items():
         destination = target.families.setdefault(family, Stats())
         for stat, value in stats.items(): _merge(destination, stat, value)

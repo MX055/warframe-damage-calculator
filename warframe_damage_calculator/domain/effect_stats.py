@@ -2,6 +2,7 @@ from .status import STATUS_TYPES
 
 
 STATUS_PROC_STATS = frozenset(f"{kind}_proc" for kind in STATUS_TYPES)
+MULTIPLICATIVE_EFFECT_STATS = frozenset({"range", "explosion_radius", "slam_radius"})
 HANDLED_EFFECT_STATS = frozenset({
     "accuracy", "afflictions_proc_multiplier", "ammo_efficiency", "ammo_maximum", "area_of_effect", "armor_reduction", "attack_speed", "bleed_on_impact",
     "cascadia_empowered_proc", "cold", "condition_overload", "corpus_damage", "corrosive", "crit_chance", "crit_damage", "crit_from_status",

@@ -16,11 +16,12 @@ POSITION_EVENTS = frozenset({"magazine_first_shot", "magazine_last_shot"})
 
 def _scalar(base: float, stat: str, modifiers: ResolvedStats, *, minimum: float = 0) -> float:
     value = (base + float(modifiers.base.get(stat, 0))) * (1 + float(modifiers.proportional.get(stat, 0)))
-    return max(value * family_factor(modifiers, stat) + float(modifiers.flat.get(stat, 0)), minimum)
+    return max(value * family_factor(modifiers, stat) * float(modifiers.multiplicative.get(stat, 1)) + float(modifiers.flat.get(stat, 0)), minimum)
 
 
 def _additive_scalar(base: float, stat: str, modifiers: ResolvedStats, *, minimum: float = 0) -> float:
-    return max(base + float(modifiers.proportional.get(stat, 0)) + float(modifiers.base.get(stat, 0)) + float(modifiers.flat.get(stat, 0)), minimum)
+    value = base + float(modifiers.proportional.get(stat, 0)) + float(modifiers.base.get(stat, 0))
+    return max(value * float(modifiers.multiplicative.get(stat, 1)) + float(modifiers.flat.get(stat, 0)), minimum)
 
 
 def _combined(upgrades: ResolvedStats, evolutions: ResolvedStats) -> ResolvedStats:

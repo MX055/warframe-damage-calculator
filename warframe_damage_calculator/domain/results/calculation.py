@@ -28,6 +28,7 @@ class AttackStatsResult(Protocol):
 
 class ResolvedStatsResult(Protocol):
     proportional: Mapping[str, float | Dist]
+    multiplicative: Mapping[str, float | Dist]
     base: Mapping[str, float | Dist]
     flat: Mapping[str, float | Dist]
     families: Mapping[str, Mapping[str, float | Dist]]

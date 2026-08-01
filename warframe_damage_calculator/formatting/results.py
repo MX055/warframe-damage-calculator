@@ -160,7 +160,7 @@ class Formatter:
         target_name = "" if self.result.target is None else f" vs {getattr(self.result.target, 'name', 'Target')} {selected_bodypart.replace('_', ' ').title()}"
         title = f"{metric_name} Contributions: {self.result.weapon.name} {self.result.selected_attack.replace('_', ' ').title()}{target_name}"
         table = self._table(("Contribution Rank", "Type", "Component", "Build Contribution", "Removal Difference", "Impact"), rows, title=title)
-        return f"{table}\n{contributions.samples} permutations · {contributions.evaluations} evaluations"
+        return table
 
     def loadout(self) -> str:
         return format_loadout(self.result.loadout)

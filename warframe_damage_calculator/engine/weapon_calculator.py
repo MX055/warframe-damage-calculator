@@ -29,10 +29,15 @@ class WeaponCalculator:
 
     def collect_attack_tree(self) -> list[str]:
         ordered: list[str] = []
+        equipped = {upgrade.name for upgrade in self.context.loadout.ranked_upgrades}
 
         def collect(name: str, path: frozenset[str] = frozenset()) -> None:
             if name in path: raise ValueError(f"attack relationship cycle at {name!r}")
             if name not in self.context.weapon.attacks: raise ValueError(f"unknown child attack {name!r}")
+            generated_by = self.context.weapon.attacks[name].generated_by
+            if generated_by is not None and generated_by not in equipped:
+                if name == self.root_name: raise ValueError(f"attack {name!r} requires {generated_by}")
+                return
             if name in ordered: return
             ordered.append(name)
             for child in self.context.weapon.attacks[name].children: collect(child, path | {name})
@@ -96,6 +101,7 @@ class WeaponCalculator:
         def collect(name: str, path: frozenset[str] = frozenset()) -> None:
             if name in path: raise ValueError(f"attack relationship cycle at {name!r}")
             for child in results[name].attack.children:
+                if child not in results: continue
                 if child not in descendants: descendants.append(child)
                 collect(child, path | {name})
 

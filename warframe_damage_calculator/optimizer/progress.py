@@ -43,9 +43,9 @@ class _TerminalProgress:
                 return
             width = 30
             filled = min(width - 1, int(progress.fraction * width))
-            bar = "â–ˆ" * filled + "Â·" * (width - filled)
-            message = f"Optimizing {bar} {progress.fraction:6.2%} Â· {progress.elapsed:,.1f}s elapsed"
-            message += " Â· estimating ETA" if progress.eta is None else f" Â· {progress.eta:,.1f}s ETA"
+            bar = "█" * filled + "·" * (width - filled)
+            message = f"Optimizing {bar} {progress.fraction:6.2%} · {progress.elapsed:,.1f}s elapsed"
+            message += " · estimating ETA" if progress.eta is None else f" · {progress.eta:,.1f}s ETA"
             padding = " " * max(0, self._last_length - len(message))
             print(f"\r{message}{padding}", end="", file=sys.stdout, flush=True)
             self._last_length = len(message)

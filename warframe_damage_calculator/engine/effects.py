@@ -34,6 +34,7 @@ def evaluate(effect: ResolvedEffect, *, context: CalculationContext, attack: Att
     elif source == "effective_multishot" and effect.family != "multishot_ammo": multiplier *= float(stats.multishot)
     elif source == "puncture_status_chance" and effect.stat != "crit_damage":
         multiplier *= min(status.proc_count_per_attack("puncture") / max(status.attempts_per_attack, 1), 1)
+    elif source == "explosion_radius_lost": multiplier *= float(stats.get("explosion_radius_lost", 0))
     for condition_value in _values(behavior, "when"):
         condition = str(condition_value)
         if condition in {"normal_form", "incarnon_form"} and attack.form != condition.removesuffix("_form"): return None
@@ -42,6 +43,9 @@ def evaluate(effect: ResolvedEffect, *, context: CalculationContext, attack: Att
         if condition == "magazine_at_least_5" and float(context.weapon.magazine_size) < 5: return None
         if condition == "fire_rate_below_2.5" and float(stats.fire_rate) >= 2.5: return None
         if condition.endswith("_status_proc"):
+            if source == "status_presence":
+                if status.proc_count_per_attack(condition.removesuffix("_status_proc")) <= 0: return None
+                continue
             maximum = _value(behavior, "stacks")
             limit = None if maximum in (None, "inf") else int(maximum)
             duration = float(_value(behavior, "for", status.duration))

@@ -5,6 +5,7 @@ from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import Any, ClassVar, Self
 
+from .effect_stats import MULTIPLICATIVE_EFFECT_STATS
 from .effects import Effect, EffectChannel, EffectMode, Scalar
 from .implementation import ImplementationStatus
 from .runtime import Runtime
@@ -19,6 +20,7 @@ class UpgradeStats(Mapping[str, tuple[Effect, ...]]):
             values = (source,) if isinstance(source, (Effect, int, float, bool, str)) else tuple(source)
             if not values: raise TypeError(f"{stat} requires one or more effect values")
             effects[stat] = tuple(value if isinstance(value, Effect) else Effect(value) for value in values)
+            if stat not in MULTIPLICATIVE_EFFECT_STATS and any(effect.mode == "multiplicative" for effect in effects[stat]): raise ValueError(f"{stat} does not support multiplicative effects")
         self._effects = effects
 
     def __getitem__(self, stat: str) -> tuple[Effect, ...]: return self._effects[stat]
@@ -138,13 +140,13 @@ class _RankedUpgrade(Upgrade):
             for effect in effects:
                 if effect.requires_rank is not None and rank < effect.requires_rank: continue
                 value = effect.value
-                if effect.scales_with_rank and effect.requires_rank is None and isinstance(value, (int, float)) and not isinstance(value, bool): value *= rank_scale
+                if effect.scales_with_rank and effect.requires_rank is None and isinstance(value, (int, float)) and not isinstance(value, bool): value = 1 + (value - 1) * rank_scale if effect.mode == "multiplicative" else value * rank_scale
                 if effect.when is not None:
                     supplied = getattr(self.runtime, effect.when)
                     if not supplied: continue
                     stacks = 1 if isinstance(supplied, bool) else int(supplied)
                     if effect.stacks not in (None, "inf"): stacks = min(stacks, int(effect.stacks))
-                    if isinstance(value, (int, float)) and not isinstance(value, bool): value *= stacks
+                    if isinstance(value, (int, float)) and not isinstance(value, bool): value = value ** stacks if effect.mode == "multiplicative" else value * stacks
                 resolved.append(ResolvedEffect(self.name, stat, value, effect.mode, effect.family, effect.maximum, deepcopy(effect.automatic)))
         return tuple(resolved)
 

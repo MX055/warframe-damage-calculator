@@ -89,7 +89,7 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         evaluator = Calculator(self.calculator.weapon, self.calculator.target, base)
         selected_bodypart, target = evaluator._select_bodypart(body_part)
         context = CalculationContext(weapon=evaluator.weapon, target=target if target is not None else Enemy(), attack=selected_attack, loadout=evaluator.loadout, resolved_perks=(), state=dict(evaluator.weapon.calculation_defaults))
-        prepared_names = tuple(WeaponCalculator(context).collect_attack_tree())
+        prepared_names = None if any(candidate.generated_by is not None for candidate in evaluator.weapon.attacks.values()) else tuple(WeaponCalculator(context).collect_attack_tree())
         cache: dict[tuple, Candidate] = {}
         perk_cache: dict[tuple[int, ...], tuple[ResolvedPerk, ...]] = {}
         use_compact_metric = metric is default_metric

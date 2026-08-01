@@ -25,7 +25,7 @@ type Scalar = int | float | bool | str
 type EffectValue = Scalar | Placeholder
 type ChannelValue = Scalar | list[Scalar]
 type EffectChannel = dict[str, ChannelValue]
-type EffectMode = Literal["proportional", "base", "flat"]
+type EffectMode = Literal["proportional", "multiplicative", "base", "flat"]
 
 EFFECT_FIELDS = frozenset({"value", "mode", "family", "max", "rank_scale", "when", "stacks", "for", "requires_rank", "automatic"})
 AUTOMATIC_FIELDS = frozenset({"when", "on", "with", "stacks", "for", "chance", "multiply", "reset", "equipped", "per"})
@@ -81,7 +81,8 @@ class Effect:
 
     def __init__(self, value: EffectValue, *, mode: EffectMode = "proportional", family: str = "common", maximum: float | None = None, rank_scale: bool = True, when: str | None = None, stacks: Scalar | None = None, duration: Scalar | None = None, requires_rank: int | None = None) -> None:
         normalized_mode = str(mode).strip().lower()
-        if normalized_mode not in {"proportional", "base", "flat"}: raise ValueError(f"unsupported effect mode {normalized_mode!r}")
+        if normalized_mode not in {"proportional", "multiplicative", "base", "flat"}: raise ValueError(f"unsupported effect mode {normalized_mode!r}")
+        if normalized_mode == "multiplicative" and value is not PLACEHOLDER and (not isinstance(value, (int, float)) or isinstance(value, bool)): raise TypeError("multiplicative effect values must be numeric")
         normalized_family = str(family).strip().lower()
         if not normalized_family: raise ValueError("family cannot be empty")
         normalized_when = None if when is None else str(_normalize_scalar(when, "when"))

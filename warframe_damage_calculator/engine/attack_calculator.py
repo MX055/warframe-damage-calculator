@@ -19,6 +19,25 @@ from .targets import damage_multiplier, damage_total
 
 
 DEFERRED_STATS = frozenset({"duplicated_hit", "random_proc", "crit_reset_charges", "crit_tier"})
+RANGE_EFFECT_STATS = frozenset({"range", "explosion_radius", "slam_radius"})
+
+
+def _radius_scale(attack: Attack, total: ResolvedStats) -> float:
+    proportional = float(total.proportional.get("explosion_radius", 0))
+    multiplicative = float(total.multiplicative.get("explosion_radius", 1))
+    if attack.category in SLAM_CATEGORIES:
+        proportional += float(total.proportional.get("slam_radius", 0))
+        multiplicative *= float(total.multiplicative.get("slam_radius", 1))
+    return max((1 + proportional) * multiplicative, 0)
+
+
+def _explosion_radius_lost(attack: Attack, total: ResolvedStats) -> float:
+    if not is_aoe_attack(attack): return 0
+    radius = float(attack.stats.falloff.get("end_range", 0))
+    proportional = float(total.proportional.get("explosion_radius", 0))
+    if attack.category in SLAM_CATEGORIES: proportional += float(total.proportional.get("slam_radius", 0))
+    expanded = max(radius * (1 + proportional), 0)
+    return max(expanded - radius * _radius_scale(attack, total), 0)
 
 
 def _provisional(context: CalculationContext, attack: Attack, upgrade_effects: tuple[ResolvedEffect, ...], evolution_effects: tuple[ResolvedEffect, ...], static_upgrades: ResolvedStats | None = None, static_evolutions: ResolvedStats | None = None) -> tuple[Stats, StatusModel]:
@@ -38,7 +57,7 @@ def _provisional(context: CalculationContext, attack: Attack, upgrade_effects: t
     else:
         instantaneous, sustained, _ = _ranged_rate(context, attack, total, multishot)
     duration = _scalar(float(attack.stats.status_duration), "status_duration", total)
-    stats = Stats(damage=damage, crit_chance=crit, status_chance=status, multishot=multishot, fire_rate=instantaneous, sustained_rate=sustained, status_duration=duration)
+    stats = Stats(damage=damage, crit_chance=crit, status_chance=status, multishot=multishot, fire_rate=instantaneous, sustained_rate=sustained, status_duration=duration, explosion_radius_lost=_explosion_radius_lost(attack, total))
     return stats, StatusModel(damage, attack.stats.forced_procs, status, multishot, sustained, duration)
 
 
@@ -184,6 +203,10 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     modded_evolutions = aggregate(effect for effect in evolution_resolved if not effect.automatic and automatic_value(effect, "on") not in POSITION_EVENTS and effect.stat not in DEFERRED_STATS)
     total = _combined(upgrades, evolutions)
     modded_total = _combined(modded_upgrades, modded_evolutions)
+    range_total = total
+    if attack.generated_by is not None:
+        range_upgrades = aggregate(effect for effect in upgrades_resolved if effect.mode != "multiplicative" or effect.stat not in RANGE_EFFECT_STATS or effect.source == attack.generated_by)
+        range_total = _combined(range_upgrades, evolutions)
     base_damage, original, displayed_base_damage = _base_damage(context, attack, evolutions)
     modded_base_damage, modded_original, _ = _base_damage(context, attack, modded_evolutions)
     progenitor = context.loadout.progenitor if "progenitor" in context.weapon.traits else None
@@ -266,11 +289,11 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     effective = EffectiveAttackStats(damage=damage, dot_base_damage=_dot_base_damage(attack, base_damage, original, upgrades, evolutions), dot_elemental_bonuses=_elemental_dot_bonuses(total, progenitor), forced_procs=forced, status_model=status_model, crit_chance=crit, weakpoint_crit_chance=weakpoint_crit, crit_damage=crit_damage, status_chance=status, status_duration=duration, status_damage=max(1 + float(total.proportional.get("status_damage", 0)), 1), multishot=multishot, fire_rate=instant_rate, attack_event_rate=fire_rate, faction_damage=faction, target_vulnerability=max(1 + float(total.proportional.get("unique_enemy_vulnerability_multiplier", 0)), 0), overguard_damage_multiplier=overguard_effect if overguard_effect else 1, non_crit_bonus_damage=non_crit_damage, non_crit_bonus_chance=non_crit_chance, weakpoint_damage_bonus=weakpoint_bonus, special_effects=tuple(resolved_effects), **category_stats)
     for stat in ("range", "punch_through", "accuracy", "recoil", "zoom", "ammo_maximum"):
         base_value = float(getattr(attack.stats, stat, 0)) if hasattr(attack.stats, stat) else 0
-        effective[stat] = _additive_scalar(base_value, stat, total) if stat == "punch_through" else _scalar(base_value, stat, total)
+        modifiers = range_total if stat == "range" else total
+        effective[stat] = _additive_scalar(base_value, stat, modifiers) if stat == "punch_through" else _scalar(base_value, stat, modifiers)
     projectile_speed = max(1 + float(total.proportional.get("projectile_speed", 0)), 0)
     effective.projectile_speed = projectile_speed
-    radius_bonus = float(total.proportional.get("explosion_radius", 0)) + (float(total.proportional.get("slam_radius", 0)) if attack.category in SLAM_CATEGORIES else 0)
-    range_scale = max(1 + radius_bonus, 0) if is_aoe_attack(attack) else projectile_speed
+    range_scale = _radius_scale(attack, range_total) if is_aoe_attack(attack) else projectile_speed
     effective.start_range = float(attack.stats.falloff.get("start_range", 0)) * range_scale
     effective.end_range = float(attack.stats.falloff.get("end_range", 0)) * range_scale
     maximum = attack.stats.max_range

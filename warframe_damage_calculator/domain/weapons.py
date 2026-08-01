@@ -70,6 +70,7 @@ class Attack:
     category: str = "normal"
     aoe: bool = False
     children: list[str] = field(default_factory=list)
+    generated_by: str | None = None
     stats: AttackStats = field(default_factory=AttackStats)
 
     @classmethod

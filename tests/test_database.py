@@ -4,9 +4,10 @@ import warnings
 from warframe_damage_calculator import Calculator, Loadout, arsenal
 from warframe_damage_calculator.database.compatibility import is_upgrade_compatible
 from warframe_damage_calculator.domain.damage import Dist
-from warframe_damage_calculator.domain.effects import PLACEHOLDER
+from warframe_damage_calculator.domain.effects import PLACEHOLDER, Effect
+from warframe_damage_calculator.domain.upgrades import Mod, UpgradeStats
 from warframe_damage_calculator.domain.warnings import LoadoutCompatibilityWarning
-from warframe_damage_calculator.domain.weapons import Attack, AttackStats, Secondary
+from warframe_damage_calculator.domain.weapons import Attack, AttackStats, Melee, Secondary
 
 
 METADATA_ONLY_PERKS = {
@@ -92,6 +93,52 @@ class DatabaseTests(unittest.TestCase):
         self.assertFalse(is_upgrade_compatible(cannonade, weapon))
         self.assertFalse(is_upgrade_compatible(cannonade, weapon, attack="semi_aoe"))
         self.assertFalse(is_upgrade_compatible(cannonade, weapon, attack="auto_direct"))
+
+    def test_nightwatch_napalm_only_generates_its_child_attack_when_equipped(self):
+        weapon = arsenal.primary.get("Kuva Ogris")
+        plain = Calculator(weapon).resolve(attack="rocket_impact")
+        self.assertNotIn("nightwatch_napalm_linger", plain.attacks)
+        with self.assertRaisesRegex(ValueError, "requires Nightwatch Napalm"): Calculator(weapon).resolve(attack="nightwatch_napalm_linger")
+        result = Calculator(weapon, loadout=Loadout(mods=[arsenal.mod.get("Nightwatch Napalm")])).resolve(attack="rocket_impact")
+        self.assertIn("nightwatch_napalm_linger", result.attacks)
+        self.assertAlmostEqual(result.attacks["nightwatch_napalm_linger"].effective.end_range, 7.11)
+
+    def test_generated_child_attacks_ignore_other_upgrades_multiplicative_range(self):
+        weapon = arsenal.primary.get("Kuva Ogris")
+        napalm = arsenal.mod.get("Nightwatch Napalm")
+        firestorm = arsenal.mod.get("Primed Firestorm")
+        compression = arsenal.arcane.get("Primary Compression")
+        expanded = Calculator(weapon, loadout=Loadout(mods=[napalm, firestorm])).resolve(attack="rocket_impact")
+        compressed = Calculator(weapon, loadout=Loadout(mods=[napalm, firestorm], arcanes=[compression])).resolve(attack="rocket_impact")
+        self.assertAlmostEqual(expanded.attacks["rocket_explosion"].effective.end_range, 7.9 * 1.44)
+        self.assertAlmostEqual(compressed.attacks["rocket_explosion"].effective.end_range, 7.9 * 1.44 * 0.2)
+        self.assertAlmostEqual(expanded.attacks["nightwatch_napalm_linger"].effective.end_range, 7.11 * 1.44)
+        self.assertAlmostEqual(compressed.attacks["nightwatch_napalm_linger"].effective.end_range, 7.11 * 1.44)
+        self.assertAlmostEqual(compressed.attacks["rocket_explosion"].upgrades.proportional["damage_bonus"], 7.9 * 1.44 * 0.8)
+        self.assertAlmostEqual(compressed.attacks["rocket_explosion"].average.ammo_efficiency, 7.9 * 1.44 * 0.8 * 0.055)
+
+    def test_generated_child_attacks_keep_multiplicative_range_from_their_generator(self):
+        weapon = arsenal.primary.get("Kuva Ogris")
+        generator = Mod(name="Nightwatch Napalm", max_rank=0, stats=UpgradeStats(explosion_radius=Effect(0.5, mode="multiplicative")))
+        result = Calculator(weapon, loadout=Loadout(mods=[generator])).resolve(attack="rocket_impact")
+        self.assertAlmostEqual(result.attacks["rocket_explosion"].effective.end_range, 7.9 * 0.5)
+        self.assertAlmostEqual(result.attacks["nightwatch_napalm_linger"].effective.end_range, 7.11 * 0.5)
+
+    def test_primary_compression_can_be_disabled_by_the_aim_condition(self):
+        weapon = arsenal.primary.get("Kuva Ogris")
+        compression = arsenal.arcane.get("Primary Compression").set(aim=False)
+        result = Calculator(weapon, loadout=Loadout(arcanes=[compression])).resolve(attack="rocket_explosion")
+        self.assertAlmostEqual(result.attacks["rocket_explosion"].effective.end_range, 7.9)
+        self.assertNotIn("damage_bonus", result.attacks["rocket_explosion"].upgrades.proportional)
+
+    def test_melee_influence_automatically_adds_flat_range_for_electricity_status(self):
+        influence = arsenal.arcane.get("Melee Influence")
+        electric = Melee(name="Electric", subtype="sword", attacks=[Attack(name="normal", trigger="melee", delivery="melee", stats=AttackStats(damage=Dist(electricity=10), status_chance=1, range=3, fire_rate=1))])
+        physical = Melee(name="Physical", subtype="sword", attacks=[Attack(name="normal", trigger="melee", delivery="melee", stats=AttackStats(damage=Dist(slash=10), status_chance=1, range=3, fire_rate=1))])
+        self.assertAlmostEqual(Calculator(electric, loadout=Loadout(arcanes=[influence])).resolve().attacks["normal"].effective.range, 23)
+        self.assertAlmostEqual(Calculator(physical, loadout=Loadout(arcanes=[influence])).resolve().attacks["normal"].effective.range, 3)
+        rank_zero = arsenal.arcane.get("Melee Influence").set(rank=0)
+        self.assertAlmostEqual(Calculator(electric, loadout=Loadout(arcanes=[rank_zero])).resolve().attacks["normal"].effective.range, 13)
 
     def test_upgrade_repository_supports_attack_slot_and_conflict_filters(self):
         ignis = arsenal.primary.get("Ignis Wraith")

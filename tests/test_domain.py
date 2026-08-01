@@ -10,6 +10,13 @@ class DomainTests(unittest.TestCase):
     def test_compatibility_rejects_non_boolean_aoe_values(self):
         with self.assertRaisesRegex(TypeError, "aoe must be a bool"): Compatibility.from_record({"aoe": "false"})
 
+    def test_multiplicative_effects_scale_from_the_identity(self):
+        upgrade = Mod(name="Multiplier", max_rank=5, stats=UpgradeStats(explosion_radius=Effect(0.2, mode="multiplicative")))
+        self.assertAlmostEqual(upgrade.set(rank=0).resolve_manual()[0].value, 1 - 0.8 / 6)
+        self.assertAlmostEqual(upgrade.set(rank=5).resolve_manual()[0].value, 0.2)
+        with self.assertRaisesRegex(TypeError, "must be numeric"): Effect("invalid", mode="multiplicative")
+        with self.assertRaisesRegex(ValueError, "damage_bonus does not support"): UpgradeStats(damage_bonus=Effect(2, mode="multiplicative"))
+
     def test_loadout_rejects_combined_upgrades_argument(self):
         with self.assertRaises(TypeError): Loadout(upgrades=[])
 

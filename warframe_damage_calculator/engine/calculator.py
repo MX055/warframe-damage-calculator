@@ -53,7 +53,7 @@ class Calculator:
         target.bodyparts = {selected: target.bodyparts[selected]}
         return selected, target
 
-    def _calculate_metric_components(self, selected_attack: str, target: Enemy | None, state: Mapping[str, object], *, resolved_perks: tuple[ResolvedPerk, ...], prepared_names: tuple[str, ...], prepared_upgrade_effects: tuple[ResolvedEffect, ...] | None = None) -> tuple[float, float, float, float, float]:
+    def _calculate_metric_components(self, selected_attack: str, target: Enemy | None, state: Mapping[str, object], *, resolved_perks: tuple[ResolvedPerk, ...], prepared_names: tuple[str, ...] | None, prepared_upgrade_effects: tuple[ResolvedEffect, ...] | None = None) -> tuple[float, float, float, float, float]:
         calculation_state = dict(self.weapon.calculation_defaults) | dict(state)
         context = CalculationContext(weapon=self.weapon, target=target if target is not None else Enemy(), attack=selected_attack, loadout=self.loadout, resolved_perks=resolved_perks, state=calculation_state)
         return calculate_metric_components(context, prepared_names, prepared_upgrade_effects)

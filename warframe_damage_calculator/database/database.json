@@ -7937,12 +7937,18 @@
             "aoe": true,
             "form": "normal",
             "category": "normal",
+            "generated_by": "Nightwatch Napalm",
             "stats": {
               "damage": {
                 "heat": 150
               },
               "forced_procs": {
                 "heat": 1
+              },
+              "falloff": {
+                "end_range": 7.11,
+                "final_multiplier": 1,
+                "start_range": 0
               },
               "crit_damage": 0,
               "multishot": 5,
@@ -10758,12 +10764,18 @@
             "aoe": true,
             "form": "normal",
             "category": "normal",
+            "generated_by": "Nightwatch Napalm",
             "stats": {
               "damage": {
                 "heat": 150
               },
               "forced_procs": {
                 "heat": 1
+              },
+              "falloff": {
+                "end_range": 6.39,
+                "final_multiplier": 1,
+                "start_range": 0
               },
               "crit_damage": 0,
               "multishot": 5,
@@ -117305,7 +117317,64 @@
             "melee"
           ]
         },
-        "stats": {},
+        "stats": {
+          "range": [
+            {
+              "value": 10,
+              "mode": "flat",
+              "rank_scale": false,
+              "automatic": {
+                "when": "electricity_status_proc",
+                "with": "status_presence"
+              }
+            },
+            {
+              "value": 2,
+              "mode": "flat",
+              "requires_rank": 1,
+              "automatic": {
+                "when": "electricity_status_proc",
+                "with": "status_presence"
+              }
+            },
+            {
+              "value": 2,
+              "mode": "flat",
+              "requires_rank": 2,
+              "automatic": {
+                "when": "electricity_status_proc",
+                "with": "status_presence"
+              }
+            },
+            {
+              "value": 2,
+              "mode": "flat",
+              "requires_rank": 3,
+              "automatic": {
+                "when": "electricity_status_proc",
+                "with": "status_presence"
+              }
+            },
+            {
+              "value": 2,
+              "mode": "flat",
+              "requires_rank": 4,
+              "automatic": {
+                "when": "electricity_status_proc",
+                "with": "status_presence"
+              }
+            },
+            {
+              "value": 2,
+              "mode": "flat",
+              "requires_rank": 5,
+              "automatic": {
+                "when": "electricity_status_proc",
+                "with": "status_presence"
+              }
+            }
+          ]
+        },
         "slot": "regular_arcane",
         "conflicts": []
       },
@@ -117441,9 +117510,37 @@
         "compatibility": {
           "types": [
             "primary"
+          ],
+          "aoe": true
+        },
+        "stats": {
+          "explosion_radius": [
+            {
+              "value": 0.2,
+              "mode": "multiplicative",
+              "when": "aim",
+              "automatic": {}
+            }
+          ],
+          "damage_bonus": [
+            {
+              "value": 1,
+              "when": "aim",
+              "automatic": {
+                "with": "explosion_radius_lost"
+              }
+            }
+          ],
+          "ammo_efficiency": [
+            {
+              "value": 0.055,
+              "when": "aim",
+              "automatic": {
+                "with": "explosion_radius_lost"
+              }
+            }
           ]
         },
-        "stats": {},
         "slot": "regular_arcane",
         "conflicts": []
       },

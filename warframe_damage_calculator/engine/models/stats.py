@@ -57,6 +57,7 @@ class EffectiveAttackStats(ModdedAttackStats):
 @dataclass(slots=True)
 class ResolvedStats:
     proportional: Stats = field(default_factory=Stats)
+    multiplicative: Stats = field(default_factory=Stats)
     base: Stats = field(default_factory=Stats)
     flat: Stats = field(default_factory=Stats)
     families: dict[str, Stats] = field(default_factory=dict)
