@@ -9,12 +9,9 @@ calculator = Calculator(weapon, target, loadout)
 optimizer = Optimizer(calculator)
 
 
-optimized = optimizer.resolve(evaluations=18000)
+optimized = optimizer.resolve(evaluations=20000)
 print(optimized.summary)
 
 formatter = Formatter(optimized.result)
 print(formatter.summary())
 print(formatter.contributions())
-
-'''
-'''
