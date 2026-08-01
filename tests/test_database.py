@@ -54,6 +54,23 @@ class DatabaseTests(unittest.TestCase):
         self.assertEqual(arsenal.arcane.get("primary merciless").name, "Primary Merciless")
         self.assertEqual(arsenal.perk.get("devouring attrition").name, "Devouring Attrition")
 
+    def test_upgrade_repositories_filter_by_weapon_compatibility(self):
+        vectis = arsenal.primary.get("Vectis Prime")
+        filtered_mods = {mod.name for mod in arsenal.mod.filter(weapon=vectis, implemented=True)}
+        filtered_arcanes = {arcane.name for arcane in arsenal.arcane.filter(weapon=vectis, implemented=True)}
+        self.assertNotIn("Tainted Mag", filtered_mods)
+        self.assertNotIn("Sinister Reach", filtered_mods)
+        self.assertNotIn("Shotgun Vendetta", filtered_arcanes)
+        self.assertIn("Primary Overcharge", filtered_arcanes)
+
+    def test_upgrade_repository_supports_attack_slot_and_conflict_filters(self):
+        ignis = arsenal.primary.get("Ignis Wraith")
+        beam_exilus = {mod.name for mod in arsenal.mod.filter(weapon=ignis, slot="exilus_mod", implemented=True)}
+        self.assertIn("Sinister Reach", beam_exilus)
+        vectis = arsenal.primary.get("Vectis Prime")
+        self.assertFalse(arsenal.mod.is_compatible("Tainted Mag", weapon=vectis))
+        self.assertTrue(arsenal.arcane.is_compatible("Primary Overcharge", weapon=vectis))
+
     def test_global_perk_names_are_unique(self):
         normalized = [" ".join(name.split()).casefold() for name in arsenal.perk]
         self.assertEqual(len(normalized), len(set(normalized)))

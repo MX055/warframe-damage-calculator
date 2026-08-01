@@ -9,11 +9,13 @@ from typing import Generic, Self, TypeVar
 from ..domain.enemies import Enemy
 from ..domain.upgrades import Perk
 from ..domain.upgrades import Arcane, Mod, Upgrade
-from ..domain.weapons import Archgun, Melee, Primary, Secondary, Weapon
+from ..domain.weapons import Archgun, Attack, Melee, Primary, Secondary, Weapon
+from .compatibility import is_upgrade_compatible
 from .schema import validate_database
 
 
 T = TypeVar("T", Weapon, Upgrade, Enemy)
+U = TypeVar("U", Mod, Arcane)
 
 
 def _key(value: str) -> str:
@@ -44,6 +46,15 @@ class Repository(Generic[T]):
         return tuple(sorted(self._records, key=str.casefold))
 
 
+class UpgradeRepository(Repository[U]):
+    def is_compatible(self, upgrade: str | U, *, weapon: Weapon, attack: str | Attack | None = None, slot: str | None = None, implemented: bool | None = None, selected: tuple[Upgrade, ...] = ()) -> bool:
+        item = self.get(upgrade) if isinstance(upgrade, str) else upgrade
+        return is_upgrade_compatible(item, weapon, attack=attack, slot=slot, implemented=implemented, selected=selected)
+
+    def filter(self, *, weapon: Weapon, attack: str | Attack | None = None, slot: str | None = None, implemented: bool | None = None, selected: tuple[Upgrade, ...] = ()) -> tuple[U, ...]:
+        return tuple(item for name in self.names if self.is_compatible(item := self.get(name), weapon=weapon, attack=attack, slot=slot, implemented=implemented, selected=selected))
+
+
 class Arsenal:
     __slots__ = ("database", "primary", "secondary", "melee", "archgun", "mod", "arcane", "perk", "enemy")
 
@@ -57,8 +68,8 @@ class Arsenal:
         self.secondary = Repository[Secondary](weapons["secondaries"], lambda record: Secondary.from_record(record, perk_definitions))
         self.melee = Repository[Melee](weapons["melees"], lambda record: Melee.from_record(record, perk_definitions))
         self.archgun = Repository[Archgun](weapons["archguns"], lambda record: Archgun.from_record(record, perk_definitions))
-        self.mod = Repository[Mod](upgrades["mods"], Mod.from_record)
-        self.arcane = Repository[Arcane](upgrades["arcanes"], Arcane.from_record)
+        self.mod = UpgradeRepository[Mod](upgrades["mods"], Mod.from_record)
+        self.arcane = UpgradeRepository[Arcane](upgrades["arcanes"], Arcane.from_record)
         self.perk = Repository[Perk](upgrades["perks"], Perk.from_record)
         self.enemy = Repository[Enemy](self.database["enemies"], lambda record: Enemy.from_record(record, loaded=True))
 
@@ -103,11 +114,11 @@ class _LazyArsenal:
         return self._get().archgun
 
     @property
-    def mod(self) -> Repository[Mod]:
+    def mod(self) -> UpgradeRepository[Mod]:
         return self._get().mod
 
     @property
-    def arcane(self) -> Repository[Arcane]:
+    def arcane(self) -> UpgradeRepository[Arcane]:
         return self._get().arcane
 
     @property

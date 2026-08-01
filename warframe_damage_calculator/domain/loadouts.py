@@ -83,5 +83,14 @@ class Loadout:
         if unknown: raise TypeError(f"loadout cannot consume runtime fields: {', '.join(sorted(unknown))}")
         return self
 
+    @classmethod
+    def _from_parts(cls, *, mods: Iterable[Mod] = (), arcanes: Iterable[Arcane] = (), evolutions: Iterable[Perk] = (), progenitor: Progenitor | None = None) -> Loadout:
+        loadout = cls.__new__(cls)
+        loadout.mods = list(mods)
+        loadout.arcanes = list(arcanes)
+        loadout.evolutions = list(evolutions)
+        loadout.progenitor = progenitor
+        return loadout
+
     def copy(self) -> Loadout:
         return Loadout(mods=self.mods, arcanes=self.arcanes, evolutions=self.evolutions, progenitor=self.progenitor)

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from math import factorial
+from random import Random
 
 from ..domain.loadouts import Loadout, Progenitor
 from ..domain.results import ContributionResult
@@ -9,6 +9,9 @@ from ..domain.upgrades import Arcane, Mod, Perk, Upgrade
 
 
 type ContributionComponent = Upgrade | Progenitor
+
+
+_PERMUTATION_SAMPLES = 64
 
 
 def progenitor_component_name(progenitor: Progenitor) -> str:
@@ -19,52 +22,64 @@ def component_name(component: ContributionComponent) -> str:
     return progenitor_component_name(component) if isinstance(component, Progenitor) else component.name
 
 
-def _without_upgrade(loadout: Loadout, upgrade: Upgrade) -> Loadout:
-    return Loadout(mods=[candidate for candidate in loadout.mods if candidate is not upgrade], arcanes=[candidate for candidate in loadout.arcanes if candidate is not upgrade], evolutions=loadout.evolutions, progenitor=loadout.progenitor)
-
-
-def _without_perk(loadout: Loadout, perk: Perk) -> Loadout:
-    return Loadout(mods=loadout.mods, arcanes=loadout.arcanes, evolutions=[candidate for candidate in loadout.evolutions if candidate != perk], progenitor=loadout.progenitor)
-
-
-def _removal_contributions(loadout: Loadout, evaluate: Callable[[Loadout], float]) -> dict[str, float]:
-    baseline = evaluate(loadout)
-    contributions = {upgrade.name: evaluate(_without_upgrade(loadout, upgrade)) - baseline for upgrade in loadout.ranked_upgrades}
-    contributions.update({perk.name: evaluate(_without_perk(loadout, perk)) - baseline for perk in loadout.evolutions})
-    if loadout.progenitor is not None: contributions[progenitor_component_name(loadout.progenitor)] = evaluate(Loadout(mods=loadout.mods, arcanes=loadout.arcanes, evolutions=loadout.evolutions)) - baseline
-    return contributions
-
-
-def _shapley_contributions(loadout: Loadout, evaluate: Callable[[Loadout], float]) -> dict[str, float]:
+def _components(loadout: Loadout) -> list[ContributionComponent]:
     components: list[ContributionComponent] = [*loadout.upgrades]
     if loadout.progenitor is not None: components.append(loadout.progenitor)
-    size = len(components)
-    if not size: return {}
-    coalition_values: dict[int, float] = {}
+    return components
 
-    def coalition_value(mask: int) -> float:
-        if mask not in coalition_values:
-            selected = [component for index, component in enumerate(components) if mask & (1 << index)]
-            candidate = Loadout(mods=[component for component in selected if isinstance(component, Mod)], arcanes=[component for component in selected if isinstance(component, Arcane)], evolutions=[component for component in selected if isinstance(component, Perk)], progenitor=next((component for component in selected if isinstance(component, Progenitor)), None))
-            coalition_values[mask] = evaluate(candidate)
-        return coalition_values[mask]
 
-    empty = coalition_value(0)
-    values = {component_name(component): 0.0 for component in components}
-    for index, component in enumerate(components):
-        bit = 1 << index
-        for mask in range(1 << size):
-            if mask & bit: continue
-            subset_size = mask.bit_count()
-            weight = factorial(subset_size) * factorial(size - subset_size - 1) / factorial(size)
-            values[component_name(component)] += weight * (coalition_value(mask | bit) - coalition_value(mask))
-    total = coalition_value((1 << size) - 1) - empty
+def _coalition_loadout(components: list[ContributionComponent], mask: int) -> Loadout:
+    selected = [component for index, component in enumerate(components) if mask & (1 << index)]
+    return Loadout(mods=[component for component in selected if isinstance(component, Mod)], arcanes=[component for component in selected if isinstance(component, Arcane)], evolutions=[component for component in selected if isinstance(component, Perk)], progenitor=next((component for component in selected if isinstance(component, Progenitor)), None))
+
+
+def _normalize_shapley(values: dict[str, float], total: float) -> dict[str, float]:
     difference = total - sum(values.values())
     if values and abs(difference) > 1e-9: values[next(iter(values))] += difference
     denominator = sum(values.values())
     return {name: value / denominator for name, value in values.items()} if denominator else {name: 0.0 for name in values}
 
 
-def calculate_contributions(loadout: Loadout, evaluate: Callable[[Loadout], float]) -> ContributionResult:
-    shapley = _shapley_contributions(loadout, evaluate)
-    return ContributionResult(shapley, _removal_contributions(loadout, evaluate) if shapley else {})
+def _sample_count(component_count: int) -> int:
+    return 0 if component_count == 0 else _PERMUTATION_SAMPLES
+
+
+def _sample_shapley(components: list[ContributionComponent], coalition_value: Callable[[int], float], seed: int) -> tuple[dict[str, float], int]:
+    size = len(components)
+    target_samples = _sample_count(size)
+    values = {component_name(component): 0.0 for component in components}
+    random = Random(seed)
+    samples = 0
+    while samples < target_samples:
+        permutation = list(range(size))
+        random.shuffle(permutation)
+        for order in (permutation, reversed(permutation)):
+            if samples >= target_samples: break
+            mask = 0
+            previous = coalition_value(mask)
+            for index in order:
+                mask |= 1 << index
+                current = coalition_value(mask)
+                values[component_name(components[index])] += current - previous
+                previous = current
+            samples += 1
+    return {name: value / samples for name, value in values.items()}, samples
+
+
+def calculate_contributions(loadout: Loadout, evaluate: Callable[[Loadout], float], seed: int = 0) -> ContributionResult:
+    components = _components(loadout)
+    if not components: return ContributionResult({}, {}, 0, 0)
+    size = len(components)
+    full_mask = (1 << size) - 1
+    coalition_values: dict[int, float] = {}
+
+    def coalition_value(mask: int) -> float:
+        if mask not in coalition_values: coalition_values[mask] = evaluate(_coalition_loadout(components, mask))
+        return coalition_values[mask]
+
+    empty = coalition_value(0)
+    full = coalition_value(full_mask)
+    values, samples = _sample_shapley(components, coalition_value, seed)
+    shapley = _normalize_shapley(values, full - empty)
+    removal = {component_name(component): coalition_value(full_mask ^ (1 << index)) - full for index, component in enumerate(components)}
+    return ContributionResult(shapley, removal, len(coalition_values), samples)

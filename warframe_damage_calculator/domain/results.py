@@ -70,6 +70,8 @@ class ResolvedStats:
 class ContributionResult:
     shapley: dict[str, float]
     removal: dict[str, float]
+    evaluations: int
+    samples: int
 
 
 @dataclass(frozen=True, slots=True)

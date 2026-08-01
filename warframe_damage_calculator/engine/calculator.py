@@ -4,6 +4,7 @@ import warnings
 from collections.abc import Callable, Mapping
 
 from .contributions import calculate_contributions
+from ..database.compatibility import is_upgrade_compatible
 from ..domain.enemies import Enemy
 from ..domain.loadouts import Loadout
 from ..domain.implementation import ImplementationWarning
@@ -27,16 +28,7 @@ def _warn_loadout(weapon: Weapon, loadout: Loadout) -> None:
         if not upgrade.implemented:
             _warn_implementation(upgrade.name, upgrade.implementation_status, stacklevel=4)
             if upgrade.implementation_status.state == "not_implemented": warnings.warn(f"{upgrade.name} is not implemented and may not affect calculated results.", UnimplementedUpgradeWarning, stacklevel=3)
-        compatibility = upgrade.compatibility
-        matches_type = not compatibility.types or weapon.type.casefold() in {value.casefold() for value in compatibility.types}
-        matches_subtype = not compatibility.subtypes or weapon.subtype is not None and weapon.subtype.casefold() in {value.casefold() for value in compatibility.subtypes}
-        matches_name = not compatibility.names or weapon.name.casefold() in {value.casefold() for value in compatibility.names}
-        attacks = tuple(weapon.attacks.values())
-        valid = matches_type and matches_subtype and matches_name
-        valid = valid and (not compatibility.categories or any(attack.category in compatibility.categories for attack in attacks))
-        valid = valid and (not compatibility.triggers or any(attack.trigger in compatibility.triggers for attack in attacks))
-        valid = valid and (compatibility.aoe is None or any(attack.aoe is compatibility.aoe for attack in attacks))
-        if not valid: warnings.warn(f"{upgrade.name} is not compatible with {weapon.name}", LoadoutCompatibilityWarning, stacklevel=3)
+        if not is_upgrade_compatible(upgrade, weapon): warnings.warn(f"{upgrade.name} is not compatible with {weapon.name}", LoadoutCompatibilityWarning, stacklevel=3)
         conflicts = {other.name for other in previous if other.name in upgrade.conflicts or upgrade.name in other.conflicts}
         if conflicts: warnings.warn(f"{upgrade.name} conflicts with {', '.join(sorted(conflicts))}", LoadoutCompatibilityWarning, stacklevel=3)
         previous.append(upgrade)
@@ -109,7 +101,7 @@ class Calculator:
         selected_bodypart, target = self._select_bodypart(body_part)
         return self._calculate(selected_attack, selected_bodypart, target, state or {})
 
-    def contributions(self, *, attack: str | None = None, metric: str | Callable[[CalculationResult], float] = "total_dps", body_part: str | None = None, state: Mapping[str, object] | None = None) -> ContributionResult:
+    def contributions(self, *, attack: str | None = None, metric: str | Callable[[CalculationResult], float] = "total_dps", body_part: str | None = None, state: Mapping[str, object] | None = None, seed: int = 0) -> ContributionResult:
         selected_attack = attack or self.weapon.default_attack
         selected_bodypart, _ = self._select_bodypart(body_part)
         calculation_state = state or {}
@@ -121,7 +113,7 @@ class Calculator:
             for name in metric.split(".") if "." in metric else ("aggregate", "average", metric): value = getattr(value, name)
             return float(value)
 
-        return calculate_contributions(self.loadout, evaluate)
+        return calculate_contributions(self.loadout, evaluate, seed)
 
     def _select_bodypart(self, body_part: str | None) -> tuple[str, Enemy | None]:
         if self.target is None:
@@ -133,14 +125,19 @@ class Calculator:
         target.bodyparts = {selected: target.bodyparts[selected]}
         return selected, target
 
-    def _calculate(self, selected_attack: str, selected_body_part: str, target: Enemy | None, state: Mapping[str, object]) -> CalculationResult:
+    def _calculate(self, selected_attack: str, selected_body_part: str, target: Enemy | None, state: Mapping[str, object], *, copy_inputs: bool = True) -> CalculationResult:
         if selected_attack not in self.weapon.attacks: raise ValueError(f"unknown attack {selected_attack!r}")
         unknown = set(state) - set(self.weapon.calculation_defaults)
         if unknown: raise TypeError(f"unknown calculation state fields: {', '.join(sorted(unknown))}")
         calculation_state = dict(self.weapon.calculation_defaults) | dict(state)
         resolved_perks = _resolve_perks(self.weapon, self.loadout.evolutions, calculation_state)
         _warn_loadout(self.weapon, self.loadout)
-        context = CalculationContext(weapon=self.weapon, target=target.copy() if target is not None else Enemy(), attack=selected_attack, loadout=self.loadout.copy(), resolved_perks=resolved_perks, state=calculation_state)
+        context_target = target.copy() if copy_inputs and target is not None else target if target is not None else Enemy()
+        context_loadout = self.loadout.copy() if copy_inputs else self.loadout
+        context = CalculationContext(weapon=self.weapon, target=context_target, attack=selected_attack, loadout=context_loadout, resolved_perks=resolved_perks, state=calculation_state)
         calculated, aggregate, aggregate_status_model, aggregate_status_effects = calculate_weapon(context)
         attacks = {name: _calculated_attack(result) for name, result in calculated.items()}
-        return CalculationResult(_aggregate(aggregate, aggregate_status_model, aggregate_status_effects), attacks, selected_attack, selected_body_part, self.weapon.copy(), None if self.target is None else self.target.copy(), self.loadout.copy(), dict(state))
+        result_weapon = self.weapon.copy() if copy_inputs else self.weapon
+        result_target = None if self.target is None else self.target.copy() if copy_inputs else target
+        result_loadout = self.loadout.copy() if copy_inputs else self.loadout
+        return CalculationResult(_aggregate(aggregate, aggregate_status_model, aggregate_status_effects), attacks, selected_attack, selected_body_part, result_weapon, result_target, result_loadout, dict(state))

@@ -207,6 +207,9 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(set(weakpoint_removal), set(removal))
         self.assertEqual(set(weakpoint_shapley), set(removal))
         self.assertAlmostEqual(sum(weakpoint_shapley.values()), 1)
+        self.assertEqual(contributions.samples, 64)
+        self.assertLessEqual(contributions.evaluations, 4)
+        self.assertIn("64 permutations", Formatter(Calculator(weapon, loadout=loadout).resolve(attack="incarnon_form")).contributions())
 
         progenitor_loadout = Loadout(mods=[arsenal.mod.get("Primed Pressure Point")], progenitor=Progenitor("electricity", 0.6))
         progenitor_calculator = Calculator(arsenal.melee.get("Tenet Exec"), loadout=progenitor_loadout)

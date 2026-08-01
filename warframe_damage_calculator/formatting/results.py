@@ -132,9 +132,9 @@ class Formatter:
         title = f"Summary: {weapon_name} {attack_name.replace('_', ' ').title()} {target_name}"
         return self._table(("Stat", "Base", "Modded", "Effective", "Average"), [tuple(cell for index, cell in enumerate(row) if index != 5) for row in rows], title=title)
 
-    def contributions(self, metric: str = "total_dps", body_part: str | None = None) -> str:
+    def contributions(self, metric: str = "total_dps", body_part: str | None = None, seed: int = 0) -> str:
         selected_bodypart = body_part or self.result.selected_bodypart
-        contributions = Calculator(self.result.weapon, self.result.target, self.result.loadout).contributions(attack=self.result.selected_attack, metric=metric, body_part=selected_bodypart, state=self.result.state)
+        contributions = Calculator(self.result.weapon, self.result.target, self.result.loadout).contributions(attack=self.result.selected_attack, metric=metric, body_part=selected_bodypart, state=self.result.state, seed=seed)
         shapley = contributions.shapley
         if not shapley: return ""
         removal = contributions.removal
@@ -155,7 +155,7 @@ class Formatter:
             rows.append((str(rank), kind, name, f"{display_share:+.2%}", f"{display_removal:+,.2f}", f"{left}│{right}"))
         metric_name = self._metric_name(metric) if isinstance(metric, str) else "Contribution"
         target_name = "" if self.result.target is None else f" vs {getattr(self.result.target, 'name', 'Target')} {selected_bodypart.replace('_', ' ').title()}"
-        title = f"{metric_name} Contributions: {self.result.weapon.name} {self.result.selected_attack.replace('_', ' ').title()}{target_name}"
+        title = f"{metric_name} Contributions: {self.result.weapon.name} {self.result.selected_attack.replace('_', ' ').title()}{target_name} · {contributions.samples:,} permutations"
         return self._table(("Contribution Rank", "Type", "Component", "Shapley", "Removal Difference", "Impact"), rows, title=title)
 
     def loadout(self) -> str:

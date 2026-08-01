@@ -17,12 +17,13 @@ ELEMENTAL_COMBINATIONS = {
 
 
 class Dist(Mapping[str, float]):
-    __slots__ = ("_amounts",)
+    __slots__ = ("_amounts", "_total")
 
     def __init__(self, values: Mapping[str, int | float] | None = None, /, **amounts: int | float) -> None:
         merged = dict(values or {})
         merged.update(amounts)
         self._amounts = {str(kind).lower(): float(amount) for kind, amount in merged.items() if amount}
+        self._total = sum(self._amounts.values())
 
     def __getitem__(self, kind: str) -> float:
         return self._amounts[kind]
@@ -54,10 +55,10 @@ class Dist(Mapping[str, float]):
 
     @property
     def total(self) -> float:
-        return sum(self.values())
+        return self._total
 
     def weight(self, kind: str) -> float:
-        return self.get(kind, 0) / self.total if self.total else 0
+        return self._amounts.get(kind, 0.0) / self._total if self._total else 0.0
 
     def include(self, kinds: Iterable[str]) -> Self:
         included = set(kinds)
@@ -82,8 +83,9 @@ class Dist(Mapping[str, float]):
 
     def apply_modifiers(self, modifiers: Mapping[str, int | float]) -> Self:
         kinds = [*self, *(kind for kind in modifiers if kind not in self)]
+        total = self._total
         modified = {
-            kind: self.get(kind, 0) * (1 + modifiers.get(kind, 0)) if kind in PHYSICAL_TYPES else self.get(kind, 0) + self.total * modifiers.get(kind, 0)
+            kind: self.get(kind, 0) * (1 + modifiers.get(kind, 0)) if kind in PHYSICAL_TYPES else self.get(kind, 0) + total * modifiers.get(kind, 0)
             for kind in kinds
         }
         return type(self)(modified).combine_elements()
