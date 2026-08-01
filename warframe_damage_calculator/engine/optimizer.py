@@ -283,16 +283,14 @@ class Optimizer:
         self._resolved_effect_cache: dict[int, tuple[ResolvedEffect, ...]] = {}
         self._upgrade_effects_cache: dict[tuple[int, ...], tuple[ResolvedEffect, ...]] = {}
 
-    def resolve(self, metric: Metric = default_metric, *, attack: str | None = None, body_part: str | None = None, evaluations: int = 20_000, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] = (), riven_stat_blacklist: Collection[str] = (), progress: ProgressCallback | None = terminal_progress) -> Optimization:
+    def resolve(self, metric: Metric = default_metric, *, attack: str | None = None, body_part: str | None = None, evaluations: int = 20_000, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] | None = None, riven_stat_blacklist: Collection[str] | None = None, progress: ProgressCallback | None = terminal_progress) -> Optimization:
         if not callable(metric): raise TypeError("metric must be callable")
         if evaluations < 1: raise ValueError("evaluations must be at least 1")
         if not isinstance(riven, bool): raise TypeError("riven must be a bool")
         if not isinstance(evolutions, bool): raise TypeError("evolutions must be a bool")
-        if isinstance(upgrade_blacklist, (str, bytes)) or not isinstance(upgrade_blacklist, Collection): raise TypeError("upgrade_blacklist must be a collection of upgrade names")
-        if isinstance(riven_stat_blacklist, (str, bytes)) or not isinstance(riven_stat_blacklist, Collection): raise TypeError("riven_stat_blacklist must be a collection of stat names")
+        if upgrade_blacklist is not None and (isinstance(upgrade_blacklist, (str, bytes)) or not isinstance(upgrade_blacklist, Collection)): raise TypeError("upgrade_blacklist must be a collection of upgrade names or None")
+        if riven_stat_blacklist is not None and (isinstance(riven_stat_blacklist, (str, bytes)) or not isinstance(riven_stat_blacklist, Collection)): raise TypeError("riven_stat_blacklist must be a collection of stat names or None")
         if progress is not None and not callable(progress): raise TypeError("progress must be callable or None")
-        upgrade_blacklist = frozenset(name.casefold() for name in (*DEFAULT_UPGRADE_BLACKLIST, *map(str, upgrade_blacklist)))
-        riven_stat_blacklist = frozenset((*DEFAULT_RIVEN_STAT_BLACKLIST, *map(str, riven_stat_blacklist)))
         started = time.perf_counter()
         resolution_budget = evaluations
         search_scale = max(0.25, math.sqrt(evaluations / 5_000))
@@ -473,21 +471,22 @@ class Optimizer:
     def _loadout(self, *, mods=(), arcanes=(), evolutions=(), progenitor=None) -> Loadout:
         return Loadout._from_parts(mods=mods, arcanes=arcanes, evolutions=evolutions, progenitor=progenitor)
 
-    def _candidate_pools(self, *, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] = (), riven_stat_blacklist: Collection[str] = (), search_scale: float = 1.0) -> dict[str, tuple]:
-        upgrade_blacklist = frozenset(name.casefold() for name in (*DEFAULT_UPGRADE_BLACKLIST, *map(str, upgrade_blacklist)))
-        riven_stat_blacklist = frozenset((*DEFAULT_RIVEN_STAT_BLACKLIST, *map(str, riven_stat_blacklist)))
+    def _candidate_pools(self, *, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] | None = None, riven_stat_blacklist: Collection[str] | None = None, search_scale: float = 1.0) -> dict[str, tuple]:
+        use_default_upgrade_blacklist = upgrade_blacklist is None
+        upgrade_blacklist = frozenset(name.casefold() for name in (DEFAULT_UPGRADE_BLACKLIST if upgrade_blacklist is None else map(str, upgrade_blacklist)))
+        riven_stat_blacklist = frozenset(DEFAULT_RIVEN_STAT_BLACKLIST if riven_stat_blacklist is None else map(str, riven_stat_blacklist))
         weapon = self.calculator.weapon
-        compatible_mods = tuple(mod for mod in arsenal.mod.filter(weapon=weapon, implemented=True) if mod.name.casefold() not in upgrade_blacklist and not self._has_faction_damage(mod))
+        compatible_mods = tuple(mod for mod in arsenal.mod.filter(weapon=weapon, implemented=True) if mod.name.casefold() not in upgrade_blacklist and not (use_default_upgrade_blacklist and self._has_faction_damage(mod)))
         mod_limit = min(192, max(36, round(108 * search_scale ** 0.4)))
         regular_mods = self._prepare_pool(compatible_mods, mod_limit)
         locked_riven = any(self._is_riven(mod) for mod in self.calculator.loadout.mods)
         riven_limit = min(192, max(16, round(64 * search_scale ** 0.5)))
         rivens = () if locked_riven or not riven else self._riven_candidates(limit=riven_limit, stat_blacklist=riven_stat_blacklist)
         mods = (*regular_mods, *rivens)
-        compatible_arcanes = tuple(arcane for arcane in arsenal.arcane.filter(weapon=weapon, implemented=True) if arcane.name.casefold() not in upgrade_blacklist and not self._has_faction_damage(arcane))
+        compatible_arcanes = tuple(arcane for arcane in arsenal.arcane.filter(weapon=weapon, implemented=True) if arcane.name.casefold() not in upgrade_blacklist and not (use_default_upgrade_blacklist and self._has_faction_damage(arcane)))
         arcane_limit = min(96, max(18, round(54 * search_scale ** 0.4)))
         arcanes = self._prepare_pool(compatible_arcanes, arcane_limit)
-        perks = {tier: implemented for tier, choices in weapon.perk_choices.items() if evolutions and (implemented := tuple(perk for perk in choices.values() if perk.implemented and perk.name.casefold() not in upgrade_blacklist and not self._has_faction_damage(perk)))}
+        perks = {tier: implemented for tier, choices in weapon.perk_choices.items() if evolutions and (implemented := tuple(perk for perk in choices.values() if perk.implemented and perk.name.casefold() not in upgrade_blacklist and not (use_default_upgrade_blacklist and self._has_faction_damage(perk))))}
         progenitors = tuple(Progenitor(element, 0.6) for element in ("impact", "heat", "cold", "electricity", "toxin", "magnetic", "radiation")) if "progenitor" in weapon.traits else ()
         return {"mods": mods, "arcanes": arcanes, "perks": perks, "progenitors": progenitors, "rivens": rivens}
 

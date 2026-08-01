@@ -198,10 +198,21 @@ def test_optimizer_blacklists_external_condition_upgrades_and_faction_mods():
     assert "Serration" in names
 
 
-def test_optimizer_accepts_additional_upgrade_blacklist():
+def test_optimizer_user_upgrade_blacklist_replaces_defaults():
     weapon = arsenal.primary.get("Vectis Prime")
-    pools = Optimizer(Calculator(weapon))._candidate_pools(riven=False, upgrade_blacklist={"Serration"})
-    assert "Serration" not in {mod.name for mod in pools["mods"]}
+    pools = Optimizer(Calculator(weapon))._candidate_pools(riven=False, upgrade_blacklist={"Serration"}, search_scale=4.0)
+    names = {upgrade.name for upgrade in (*pools["mods"], *pools["arcanes"])}
+    assert "Serration" not in names
+    assert "Spectral Serration" in names
+    assert "Primed Bane of Grineer" in names
+
+
+def test_optimizer_empty_upgrade_blacklist_disables_defaults():
+    weapon = arsenal.primary.get("Vectis Prime")
+    pools = Optimizer(Calculator(weapon))._candidate_pools(riven=False, upgrade_blacklist=(), search_scale=4.0)
+    names = {upgrade.name for upgrade in (*pools["mods"], *pools["arcanes"])}
+    assert "Spectral Serration" in names
+    assert "Primed Bane of Grineer" in names
 
 
 def test_optimizer_blacklists_faction_riven_stats():
@@ -211,10 +222,34 @@ def test_optimizer_blacklists_faction_riven_stats():
     assert all(not {"corpus_damage", "corrupted_damage", "grineer_damage", "infested_damage"}.intersection(riven.stats) for riven in rivens)
 
 
-def test_optimizer_accepts_additional_riven_stat_blacklist():
+def test_optimizer_user_riven_stat_blacklist_replaces_defaults(monkeypatch):
     weapon = arsenal.primary.get("Vectis Prime")
-    rivens = Optimizer(Calculator(weapon))._candidate_pools(riven_stat_blacklist={"crit_chance"})["rivens"]
-    assert all("crit_chance" not in riven.stats for riven in rivens)
+    optimizer = Optimizer(Calculator(weapon))
+    captured = None
+
+    def capture(*, limit, stat_blacklist):
+        nonlocal captured
+        captured = frozenset(stat_blacklist)
+        return ()
+
+    monkeypatch.setattr(Optimizer, "_riven_candidates", lambda self, *, limit, stat_blacklist: capture(limit=limit, stat_blacklist=stat_blacklist))
+    optimizer._candidate_pools(riven_stat_blacklist={"crit_chance"})
+    assert captured == frozenset({"crit_chance"})
+
+
+def test_optimizer_empty_riven_stat_blacklist_disables_defaults(monkeypatch):
+    weapon = arsenal.primary.get("Vectis Prime")
+    optimizer = Optimizer(Calculator(weapon))
+    captured = None
+
+    def capture(*, limit, stat_blacklist):
+        nonlocal captured
+        captured = frozenset(stat_blacklist)
+        return ()
+
+    monkeypatch.setattr(Optimizer, "_riven_candidates", lambda self, *, limit, stat_blacklist: capture(limit=limit, stat_blacklist=stat_blacklist))
+    optimizer._candidate_pools(riven_stat_blacklist=())
+    assert captured == frozenset()
 
 
 def test_optimizer_progress_argument_is_last():
