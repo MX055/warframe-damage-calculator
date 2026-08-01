@@ -68,7 +68,7 @@ class ResolvedStats:
 
 @dataclass(frozen=True, slots=True)
 class ContributionResult:
-    shapley: dict[str, float]
+    contribution: dict[str, float]
     removal: dict[str, float]
     evaluations: int
     samples: int

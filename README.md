@@ -121,10 +121,10 @@ calculator = Calculator(weapon, target, loadout)
 contributions = calculator.contributions(attack="incarnon_form", body_part="weakpoint")
 
 removal = contributions.removal
-shapley = contributions.shapley
+contribution = contributions.contribution
 ```
 
-A metric name selects the chosen aggregate-average body part. `bodypart` accepts `"normal"`, `"weakpoint"`, or `"resistant"` and defaults to `"normal"`. A dotted path or callable may select another result value.
+Build contribution uses completed-build-aware permutation attribution: effects suppressed by another equipped component are evaluated with that suppressor retained. A metric name selects the chosen aggregate-average body part. `bodypart` accepts `"normal"`, `"weakpoint"`, or `"resistant"` and defaults to `"normal"`. A dotted path or callable may select another result value.
 
 ## Spatial output
 

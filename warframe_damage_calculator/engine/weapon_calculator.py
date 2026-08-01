@@ -10,18 +10,19 @@ from .context import CalculationContext
 
 
 class WeaponCalculator:
-    __slots__ = ("context", "upgrade_effects", "evolution_effects", "attacks", "root_name", "prepared_names")
+    __slots__ = ("context", "upgrade_effects", "evolution_effects", "attacks", "root_name", "prepared_names", "prepared_upgrade_effects")
 
-    def __init__(self, context: CalculationContext, prepared_names: tuple[str, ...] | None = None) -> None:
+    def __init__(self, context: CalculationContext, prepared_names: tuple[str, ...] | None = None, prepared_upgrade_effects: tuple[ResolvedEffect, ...] | None = None) -> None:
         self.context = context
         self.upgrade_effects: tuple[ResolvedEffect, ...] = ()
         self.evolution_effects: tuple[ResolvedEffect, ...] = ()
         self.attacks: AttackCalculator
         self.root_name = context.attack
         self.prepared_names = prepared_names
+        self.prepared_upgrade_effects = prepared_upgrade_effects
 
     def prepare_effects(self) -> None:
-        self.upgrade_effects = tuple(effect for upgrade in self.context.loadout.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual())
+        self.upgrade_effects = self.prepared_upgrade_effects if self.prepared_upgrade_effects is not None else tuple(effect for upgrade in self.context.loadout.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual())
         self.evolution_effects = tuple(effect for perk in self.context.resolved_perks for effect in perk.effects)
         self.attacks = AttackCalculator(self.context, self.upgrade_effects, self.evolution_effects)
 
@@ -101,6 +102,20 @@ class WeaponCalculator:
         self._fold_metrics(aggregate, root.average, [results[name].average for name in descendants])
         return aggregate, group_model, status_effects
 
+
+    def calculate_metric_components(self) -> tuple[float, float, float, float, float]:
+        self.prepare_effects()
+        names = list(self.prepared_names) if self.prepared_names is not None else self.collect_attack_tree()
+        preliminary = self.calculate_preliminary_attacks(names)
+        shared, status_effects, random_probability, _ = self.build_shared_status_model(preliminary, names)
+        results = self.calculate_final_attacks(names, shared, status_effects, random_probability)
+        root = results[self.root_name]
+        direct_dph = sum(float(results[name].average.flat_dph or 0) for name in names)
+        dot_dph = sum(float(results[name].average.flat_dotph or 0) for name in names)
+        attack_rate = float(root.average.attack_rate)
+        damage_mass = float(root.spatial.damage_mass) if root.spatial.damage_mass is not None else 1.0
+        return direct_dph, dot_dph, direct_dph * attack_rate, dot_dph * attack_rate, damage_mass
+
     def calculate(self) -> tuple[dict[str, AttackResult], AverageAttackStats, StatusModel, dict[str, float]]:
         self.prepare_effects()
         names = list(self.prepared_names) if self.prepared_names is not None else self.collect_attack_tree()
@@ -111,5 +126,9 @@ class WeaponCalculator:
         return results, aggregate, aggregate_status_model, aggregate_status_effects
 
 
-def calculate_weapon(context: CalculationContext, prepared_names: tuple[str, ...] | None = None) -> tuple[dict[str, AttackResult], AverageAttackStats, StatusModel, dict[str, float]]:
-    return WeaponCalculator(context, prepared_names).calculate()
+def calculate_weapon(context: CalculationContext, prepared_names: tuple[str, ...] | None = None, prepared_upgrade_effects: tuple[ResolvedEffect, ...] | None = None) -> tuple[dict[str, AttackResult], AverageAttackStats, StatusModel, dict[str, float]]:
+    return WeaponCalculator(context, prepared_names, prepared_upgrade_effects).calculate()
+
+
+def calculate_metric_components(context: CalculationContext, prepared_names: tuple[str, ...] | None = None, prepared_upgrade_effects: tuple[ResolvedEffect, ...] | None = None) -> tuple[float, float, float, float, float]:
+    return WeaponCalculator(context, prepared_names, prepared_upgrade_effects).calculate_metric_components()

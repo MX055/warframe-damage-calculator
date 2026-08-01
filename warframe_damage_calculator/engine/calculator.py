@@ -8,11 +8,11 @@ from ..database.compatibility import is_upgrade_compatible
 from ..domain.enemies import Enemy
 from ..domain.loadouts import Loadout
 from ..domain.implementation import ImplementationWarning
-from ..domain.upgrades import Perk, ResolvedPerk
+from ..domain.upgrades import Perk, ResolvedEffect, ResolvedPerk
 from ..domain.results import AggregateResult, AverageResult, CalculatedAttack, CalculationResult, ContributionResult, DamageMetrics, DamageResult, SpatialDamageMetrics, SpatialResult, StatusResult, _damage_metrics
 from ..domain.weapons import LoadoutCompatibilityWarning, PerkCompatibilityWarning, ProgenitorCompatibilityWarning, UnimplementedUpgradeWarning, Weapon
 from .context import CalculationContext
-from .weapon_calculator import calculate_weapon
+from .weapon_calculator import calculate_metric_components, calculate_weapon
 
 
 def _warn_implementation(name: str, status, *, stacklevel: int = 3) -> None:
@@ -128,7 +128,12 @@ class Calculator:
         target.bodyparts = {selected: target.bodyparts[selected]}
         return selected, target
 
-    def _calculate(self, selected_attack: str, selected_body_part: str, target: Enemy | None, state: Mapping[str, object], *, copy_inputs: bool = True, resolved_perks: tuple[ResolvedPerk, ...] | None = None, validate: bool = True, prepared_names: tuple[str, ...] | None = None) -> CalculationResult:
+    def _calculate_metric_components(self, selected_attack: str, target: Enemy | None, state: Mapping[str, object], *, resolved_perks: tuple[ResolvedPerk, ...], prepared_names: tuple[str, ...], prepared_upgrade_effects: tuple[ResolvedEffect, ...] | None = None) -> tuple[float, float, float, float, float]:
+        calculation_state = dict(self.weapon.calculation_defaults) | dict(state)
+        context = CalculationContext(weapon=self.weapon, target=target if target is not None else Enemy(), attack=selected_attack, loadout=self.loadout, resolved_perks=resolved_perks, state=calculation_state)
+        return calculate_metric_components(context, prepared_names, prepared_upgrade_effects)
+
+    def _calculate_raw(self, selected_attack: str, target: Enemy | None, state: Mapping[str, object], *, copy_inputs: bool = True, resolved_perks: tuple[ResolvedPerk, ...] | None = None, validate: bool = True, prepared_names: tuple[str, ...] | None = None, prepared_upgrade_effects: tuple[ResolvedEffect, ...] | None = None):
         if selected_attack not in self.weapon.attacks: raise ValueError(f"unknown attack {selected_attack!r}")
         unknown = set(state) - set(self.weapon.calculation_defaults)
         if unknown: raise TypeError(f"unknown calculation state fields: {', '.join(sorted(unknown))}")
@@ -138,7 +143,10 @@ class Calculator:
         context_target = target.copy() if copy_inputs and target is not None else target if target is not None else Enemy()
         context_loadout = self.loadout.copy() if copy_inputs else self.loadout
         context = CalculationContext(weapon=self.weapon, target=context_target, attack=selected_attack, loadout=context_loadout, resolved_perks=resolved_perks, state=calculation_state)
-        calculated, aggregate, aggregate_status_model, aggregate_status_effects = calculate_weapon(context, prepared_names)
+        return calculate_weapon(context, prepared_names, prepared_upgrade_effects)
+
+    def _calculate(self, selected_attack: str, selected_body_part: str, target: Enemy | None, state: Mapping[str, object], *, copy_inputs: bool = True, resolved_perks: tuple[ResolvedPerk, ...] | None = None, validate: bool = True, prepared_names: tuple[str, ...] | None = None, prepared_upgrade_effects: tuple[ResolvedEffect, ...] | None = None) -> CalculationResult:
+        calculated, aggregate, aggregate_status_model, aggregate_status_effects = self._calculate_raw(selected_attack, target, state, copy_inputs=copy_inputs, resolved_perks=resolved_perks, validate=validate, prepared_names=prepared_names, prepared_upgrade_effects=prepared_upgrade_effects)
         attacks = {name: _calculated_attack(result) for name, result in calculated.items()}
         result_weapon = self.weapon.copy() if copy_inputs else self.weapon
         result_target = None if self.target is None else self.target.copy() if copy_inputs else target

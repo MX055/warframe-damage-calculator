@@ -1,7 +1,7 @@
 import unittest
 from warframe_damage_calculator import Formatter
 
-from warframe_damage_calculator import Attack, AttackStats, BodyPart, Calculator, Dist, Effect, Enemy, ImplementationStatus, Loadout, Progenitor, PLACEHOLDER, Perk, PerkValues, Primary, Upgrade, UpgradeStats, arsenal, format_damage_result, format_loadout, format_perk, format_spatial, format_status, format_upgrade, format_weapon
+from warframe_damage_calculator import Attack, AttackStats, BodyPart, Calculator, Dist, Effect, Enemy, ImplementationStatus, Loadout, Mod, Progenitor, PLACEHOLDER, Perk, PerkValues, Primary, Upgrade, UpgradeStats, arsenal, format_damage_result, format_loadout, format_perk, format_spatial, format_status, format_upgrade, format_weapon
 
 
 class ApiTests(unittest.TestCase):
@@ -195,33 +195,47 @@ class ApiTests(unittest.TestCase):
         loadout = Loadout(mods=[arsenal.mod.get("Serration")], evolutions=[arsenal.perk.get("Devouring Attrition")])
         contributions = Calculator(weapon, loadout=loadout).contributions(attack="incarnon_form")
         removal = contributions.removal
-        shapley = contributions.shapley
+        contribution = contributions.contribution
         weakpoint_contributions = Calculator(weapon, arsenal.enemy.get("Heavy Gunner"), loadout).contributions(attack="incarnon_form", body_part="head")
         weakpoint_removal = weakpoint_contributions.removal
-        weakpoint_shapley = weakpoint_contributions.shapley
+        weakpoint_contribution = weakpoint_contributions.contribution
         self.assertEqual(set(removal), {"Serration", "Devouring Attrition"})
-        self.assertEqual(set(shapley), set(removal))
-        self.assertAlmostEqual(sum(shapley.values()), 1)
+        self.assertEqual(set(contribution), set(removal))
+        self.assertAlmostEqual(sum(contribution.values()), 1)
         self.assertLess(removal["Serration"], 0)
         self.assertLess(removal["Devouring Attrition"], 0)
         self.assertEqual(set(weakpoint_removal), set(removal))
-        self.assertEqual(set(weakpoint_shapley), set(removal))
-        self.assertAlmostEqual(sum(weakpoint_shapley.values()), 1)
+        self.assertEqual(set(weakpoint_contribution), set(removal))
+        self.assertAlmostEqual(sum(weakpoint_contribution.values()), 1)
         self.assertEqual(contributions.samples, 64)
         self.assertLessEqual(contributions.evaluations, 4)
         self.assertIn("64 permutations", Formatter(Calculator(weapon, loadout=loadout).resolve(attack="incarnon_form")).contributions())
+
+        locked_fire_rate = Loadout(mods=[arsenal.mod.get("Semi-Rifle Cannonade"), arsenal.mod.get("Vile Precision")])
+        locked_contributions = Calculator(arsenal.primary.get("Vectis Prime"), loadout=locked_fire_rate).contributions()
+        self.assertEqual(locked_contributions.contribution["Vile Precision"], 0)
+        self.assertEqual(locked_contributions.removal["Vile Precision"], 0)
+        self.assertIn("Build Contribution", Formatter(Calculator(arsenal.primary.get("Vectis Prime"), loadout=locked_fire_rate).resolve()).contributions())
+        self.assertNotIn("Shapley", Formatter(Calculator(arsenal.primary.get("Vectis Prime"), loadout=locked_fire_rate).resolve()).contributions())
+
+        riven = Mod(name="Riven (crit_chance=+1, multishot=+1)", stats=UpgradeStats(crit_chance=1.0, multishot=1.0))
+        riven_table = Formatter(Calculator(arsenal.primary.get("Vectis Prime"), loadout=Loadout(mods=[riven])).resolve()).contributions()
+        self.assertIn("Riven", riven_table)
+        self.assertNotIn("crit_chance=", riven_table)
+        self.assertNotIn("multishot=", riven_table)
 
         progenitor_loadout = Loadout(mods=[arsenal.mod.get("Primed Pressure Point")], progenitor=Progenitor("electricity", 0.6))
         progenitor_calculator = Calculator(arsenal.melee.get("Tenet Exec"), loadout=progenitor_loadout)
         progenitor_contributions = progenitor_calculator.contributions(attack="heavy_slam_attack", state={"stance_combo": "heavy"})
         progenitor_removal = progenitor_contributions.removal
-        progenitor_shapley = progenitor_contributions.shapley
+        progenitor_contribution = progenitor_contributions.contribution
         progenitor_name = "Electricity Progenitor (60%)"
         self.assertIn(progenitor_name, progenitor_removal)
-        self.assertIn(progenitor_name, progenitor_shapley)
+        self.assertIn(progenitor_name, progenitor_contribution)
         progenitor_table = Formatter(Calculator(progenitor_calculator.weapon, loadout=progenitor_loadout).resolve(attack="heavy_slam_attack", state={"stance_combo": "heavy"})).contributions()
         self.assertIn("Progenitor", progenitor_table)
-        self.assertIn(progenitor_name, progenitor_table)
+        self.assertIn("Electricity Progenitor", progenitor_table)
+        self.assertNotIn("(60%)", progenitor_table)
 
 
 if __name__ == "__main__": unittest.main()

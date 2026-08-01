@@ -7,7 +7,7 @@ import sys
 import threading
 import time
 from collections import deque
-from collections.abc import Callable, Iterator, Mapping
+from collections.abc import Callable, Collection, Iterator, Mapping
 from dataclasses import dataclass
 from itertools import combinations, permutations, product
 
@@ -15,7 +15,7 @@ from ..database.arsenal import arsenal
 from ..domain.enemies import Enemy
 from ..domain.loadouts import Loadout, Progenitor
 from ..domain.results import CalculationResult
-from ..domain.upgrades import Arcane, Mod, Perk, ResolvedPerk, UpgradeStats
+from ..domain.upgrades import Arcane, Mod, Perk, ResolvedEffect, ResolvedPerk, UpgradeStats
 from .calculator import Calculator, _resolve_perks
 from .context import CalculationContext
 from .weapon_calculator import WeaponCalculator
@@ -25,6 +25,11 @@ Metric = Callable[[CalculationResult], float]
 RIVEN_ROLLS = ((2, 0, 0.99, 0.0), (2, 1, 1.2375, -0.495), (3, 0, 0.75, 0.0), (3, 1, 0.9375, -0.75))
 RIVEN_NON_NEGATIVE = frozenset({"cold", "electricity", "heat", "punch_through", "toxin"})
 RIVEN_RELEVANT = frozenset({"damage_bonus", "cold", "crit_chance", "crit_damage", "corpus_damage", "electricity", "fire_rate", "grineer_damage", "heat", "impact", "infested_damage", "magazine_capacity", "multishot", "punch_through", "puncture", "reload_speed", "slash", "status_chance", "status_duration", "toxin"})
+FACTION_DAMAGE_STATS = frozenset({"corpus_damage", "corrupted_damage", "grineer_damage", "infested_damage"})
+DEFAULT_RIVEN_STAT_BLACKLIST = FACTION_DAMAGE_STATS
+DEFAULT_UPGRADE_BLACKLIST = frozenset({
+    "Aero Agility", "Aero Periphery", "Air Recon", "Akimbo Slip Shot", "Avenging Truth", "Broad Eye", "Cascadia Accuracy", "Cascadia Overcharge", "Catalyzer Link", "Combo Fury", "Combo Killer", "Deadly Maneuvers", "Dreadful Killshot", "Embedded Catalyzer", "Exodia Contagion", "Exodia Epidemic", "Fractalized Reset", "Hunter Synergy", "Mark of the Beast", "Mecha Overdrive", "Melee Assimilation", "Melee Careen", "Melee Exposure", "Melee Retaliation", "Mortal Conduct", "Nano-Applicator", "Necrophagic Vigor", "Overview", "Pax Soar", "Primary Bulwark", "Primary Dexterity", "Primary Overcharge", "Proton Jet", "Proton Snap", "Secondary Dexterity", "Secondary Kinship", "Secondary Outburst", "Secondary Surge", "Soaring Strike", "Spectral Serration", "Zazvat-Kar",
+})
 
 
 def _balanced_damage(direct: float, dot: float, balance_bonus: float = 0.1) -> float:
@@ -181,7 +186,7 @@ class _ProgressReporter:
             filled = width if complete else min(width - 1, int(progress * width))
             bar = "█" * filled + "·" * (width - filled)
             label = "Complete" if complete else "Optimizing"
-            message = f"{label} [{bar}] {progress:6.2%} · {elapsed:,.1f}s elapsed"
+            message = f"{label} {bar} {progress:6.2%} · {elapsed:,.1f}s elapsed"
             if not complete:
                 if eta_state == "estimating": message += " · estimating ETA"
                 elif eta is not None: message += f" · {eta:,.1f}s ETA"
@@ -207,23 +212,31 @@ class Optimization:
 class _Candidate:
     loadout: Loadout
     score: float
-    result: CalculationResult
+    result: CalculationResult | None = None
 
 
 class Optimizer:
-    __slots__ = ("calculator", "_priority_cache", "_upgrade_key_cache")
+    __slots__ = ("calculator", "_priority_cache", "_component_id_cache", "_next_component_id", "_resolved_effect_cache", "_upgrade_effects_cache")
 
     def __init__(self, calculator: Calculator) -> None:
         if not isinstance(calculator, Calculator): raise TypeError("calculator must be a Calculator")
         self.calculator = calculator
         self._priority_cache: dict[tuple, tuple[float, int, str]] = {}
-        self._upgrade_key_cache: dict[int, tuple] = {}
+        self._component_id_cache: dict[int, tuple[object, int]] = {}
+        self._next_component_id = 1
+        self._resolved_effect_cache: dict[int, tuple[ResolvedEffect, ...]] = {}
+        self._upgrade_effects_cache: dict[tuple[int, ...], tuple[ResolvedEffect, ...]] = {}
 
-    def resolve(self, metric: Metric = default_metric, *, attacks: Mapping[str, float] | None = None, bodyparts: Mapping[str, float] | None = None, evaluations: int = 10_000, progress: bool = True, riven: bool = True) -> Optimization:
+    def resolve(self, metric: Metric = default_metric, *, attacks: Mapping[str, float] | None = None, bodyparts: Mapping[str, float] | None = None, evaluations: int = 20_000, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] = (), riven_stat_blacklist: Collection[str] = (), progress: bool = True) -> Optimization:
         if not callable(metric): raise TypeError("metric must be callable")
         if evaluations < 1: raise ValueError("evaluations must be at least 1")
-        if not isinstance(progress, bool): raise TypeError("progress must be a bool")
         if not isinstance(riven, bool): raise TypeError("riven must be a bool")
+        if not isinstance(evolutions, bool): raise TypeError("evolutions must be a bool")
+        if isinstance(upgrade_blacklist, (str, bytes)) or not isinstance(upgrade_blacklist, Collection): raise TypeError("upgrade_blacklist must be a collection of upgrade names")
+        if isinstance(riven_stat_blacklist, (str, bytes)) or not isinstance(riven_stat_blacklist, Collection): raise TypeError("riven_stat_blacklist must be a collection of stat names")
+        if not isinstance(progress, bool): raise TypeError("progress must be a bool")
+        upgrade_blacklist = frozenset(name.casefold() for name in (*DEFAULT_UPGRADE_BLACKLIST, *map(str, upgrade_blacklist)))
+        riven_stat_blacklist = frozenset((*DEFAULT_RIVEN_STAT_BLACKLIST, *map(str, riven_stat_blacklist)))
         started = time.perf_counter()
         resolution_budget = evaluations
         search_scale = max(0.25, math.sqrt(evaluations / 5_000))
@@ -232,8 +245,8 @@ class Optimizer:
         attack_weights = self._normalize(attacks, self.calculator.weapon.default_attack, "attack")
         default_bodypart = "body" if self.calculator.target is None else next(iter(self.calculator.target.bodyparts))
         bodypart_weights = self._normalize(bodyparts, default_bodypart, "body part")
-        pools = self._candidate_pools(riven=riven, search_scale=search_scale)
-        base = self._complete_fixed_loadout(self.calculator.loadout)
+        pools = self._candidate_pools(riven=riven, evolutions=evolutions, upgrade_blacklist=upgrade_blacklist, riven_stat_blacklist=riven_stat_blacklist, search_scale=search_scale)
+        base = self._complete_fixed_loadout(self.calculator.loadout, evolutions=evolutions)
         scenarios = []
         prepared_names_cache: dict[str, tuple[str, ...]] = {}
         for attack, attack_weight in attack_weights.items():
@@ -248,6 +261,7 @@ class Optimizer:
                 scenarios.append((evaluator, attack, selected_bodypart, target, attack_weight * bodypart_weight, prepared_names))
         cache: dict[tuple, _Candidate] = {}
         perk_cache: dict[tuple[int, ...], tuple[ResolvedPerk, ...]] = {}
+        use_compact_metric = metric is default_metric
         evaluations_used = 0
         resolutions = 0
         attempts = 0
@@ -264,27 +278,33 @@ class Optimizer:
             if evaluations_used >= resolution_budget: return best, False
             score = 0.0
             representative: CalculationResult | None = None
-            perk_key = tuple(id(perk) for perk in loadout.evolutions)
+            perk_key = tuple(self._component_id(perk) for perk in loadout.evolutions)
             resolved_perks = perk_cache.get(perk_key)
             if resolved_perks is None:
                 resolved_perks = _resolve_perks(self.calculator.weapon, loadout.evolutions, dict(self.calculator.weapon.calculation_defaults))
                 perk_cache[perk_key] = resolved_perks
+            prepared_upgrade_effects = self._compiled_upgrade_effects(loadout)
             for evaluator, attack, bodypart, target, weight, prepared_names in scenarios:
                 evaluator.loadout = loadout
-                result = evaluator._calculate(attack, bodypart, target, {}, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names)
-                value = float(metric(result))
+                if use_compact_metric:
+                    direct_dph, dot_dph, direct_dps, dot_dps, damage_mass = evaluator._calculate_metric_components(attack, target, {}, resolved_perks=resolved_perks, prepared_names=prepared_names, prepared_upgrade_effects=prepared_upgrade_effects)
+                    dps = _balanced_damage(direct_dps, dot_dps)
+                    dph = _balanced_damage(direct_dph, dot_dph)
+                    value = (dps * dph * damage_mass) ** (1 / 3) if dps > 0 and dph > 0 and damage_mass > 0 else 0.0
+                else:
+                    result = evaluator._calculate(attack, bodypart, target, {}, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=prepared_upgrade_effects)
+                    value = float(metric(result))
+                    representative = representative or result
                 if not math.isfinite(value): raise ValueError("metric must return a finite number")
                 score += weight * value
-                representative = representative or result
                 resolutions += 1
-            assert representative is not None
             candidate = _Candidate(loadout, score, representative)
             cache[key] = candidate
             evaluations_used += 1
             reporter.record_evaluation(evaluations_used)
             return candidate, True
 
-        best = _Candidate(base, float("-inf"), self.calculator.resolve())
+        best = _Candidate(base, float("-inf"))
         base_candidate, _ = evaluate(base)
         best = base_candidate
         pool = [best]
@@ -395,7 +415,16 @@ class Optimizer:
             "cache_hits": cache_hits,
             "cache_hit_rate": cache_hits / attempts if attempts else 0.0,
         }
-        return Optimization(best.loadout.copy(), best.result, best.score, evaluations_used, resolutions, attempts, cache_hits, 0, elapsed, summary)
+        result = best.result
+        if result is None:
+            evaluator, attack, bodypart, target, _, prepared_names = scenarios[0]
+            evaluator.loadout = best.loadout
+            perk_key = tuple(self._component_id(perk) for perk in best.loadout.evolutions)
+            resolved_perks = perk_cache.get(perk_key)
+            if resolved_perks is None:
+                resolved_perks = _resolve_perks(self.calculator.weapon, best.loadout.evolutions, dict(self.calculator.weapon.calculation_defaults))
+            result = evaluator._calculate(attack, bodypart, target, {}, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=self._compiled_upgrade_effects(best.loadout))
+        return Optimization(best.loadout.copy(), result, best.score, evaluations_used, resolutions, attempts, cache_hits, 0, elapsed, summary)
 
     def _loadout(self, *, mods=(), arcanes=(), evolutions=(), progenitor=None) -> Loadout:
         return Loadout._from_parts(mods=mods, arcanes=arcanes, evolutions=evolutions, progenitor=progenitor)
@@ -409,31 +438,36 @@ class Optimizer:
         if total == 0: raise ValueError(f"{label} weights must contain a positive value")
         return {name: weight / total for name, weight in supplied.items()}
 
-    def _candidate_pools(self, *, riven: bool = True, search_scale: float = 1.0) -> dict[str, tuple]:
+    def _candidate_pools(self, *, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] = (), riven_stat_blacklist: Collection[str] = (), search_scale: float = 1.0) -> dict[str, tuple]:
+        upgrade_blacklist = frozenset(name.casefold() for name in (*DEFAULT_UPGRADE_BLACKLIST, *map(str, upgrade_blacklist)))
+        riven_stat_blacklist = frozenset((*DEFAULT_RIVEN_STAT_BLACKLIST, *map(str, riven_stat_blacklist)))
         weapon = self.calculator.weapon
-        compatible_mods = arsenal.mod.filter(weapon=weapon, implemented=True)
+        compatible_mods = tuple(mod for mod in arsenal.mod.filter(weapon=weapon, implemented=True) if mod.name.casefold() not in upgrade_blacklist and not self._has_faction_damage(mod))
         mod_limit = min(192, max(36, round(108 * search_scale ** 0.4)))
         regular_mods = self._prepare_pool(compatible_mods, mod_limit)
         locked_riven = any(self._is_riven(mod) for mod in self.calculator.loadout.mods)
         riven_limit = min(192, max(16, round(64 * search_scale ** 0.5)))
-        rivens = () if locked_riven or not riven else self._riven_candidates(limit=riven_limit)
+        rivens = () if locked_riven or not riven else self._riven_candidates(limit=riven_limit, stat_blacklist=riven_stat_blacklist)
         mods = (*regular_mods, *rivens)
-        compatible_arcanes = arsenal.arcane.filter(weapon=weapon, implemented=True)
+        compatible_arcanes = tuple(arcane for arcane in arsenal.arcane.filter(weapon=weapon, implemented=True) if arcane.name.casefold() not in upgrade_blacklist and not self._has_faction_damage(arcane))
         arcane_limit = min(96, max(18, round(54 * search_scale ** 0.4)))
         arcanes = self._prepare_pool(compatible_arcanes, arcane_limit)
-        perks = {tier: implemented for tier, choices in weapon.perk_choices.items() if (implemented := tuple(perk for perk in choices.values() if perk.implemented))}
+        perks = {tier: implemented for tier, choices in weapon.perk_choices.items() if evolutions and (implemented := tuple(perk for perk in choices.values() if perk.implemented and perk.name.casefold() not in upgrade_blacklist and not self._has_faction_damage(perk)))}
         progenitors = tuple(Progenitor(element, 0.6) for element in ("impact", "heat", "cold", "electricity", "toxin", "magnetic", "radiation")) if "progenitor" in weapon.traits else ()
         return {"mods": mods, "arcanes": arcanes, "perks": perks, "progenitors": progenitors, "rivens": rivens}
 
-    def _riven_candidates(self, *, limit: int = 32) -> tuple[Mod, ...]:
+    def _has_faction_damage(self, upgrade: Mod | Arcane | Perk) -> bool:
+        return bool(FACTION_DAMAGE_STATS.intersection(upgrade.stats))
+
+    def _riven_candidates(self, *, limit: int = 32, stat_blacklist: Collection[str] = ()) -> tuple[Mod, ...]:
         category = self._riven_category()
         if category is None or self.calculator.weapon.disposition <= 0: return ()
         base_stats = arsenal.database.get("riven_stats", {}).get(category, {})
         if not base_stats: return ()
-        positive_stats = [stat for stat in base_stats if stat in RIVEN_RELEVANT]
+        positive_stats = [stat for stat in base_stats if stat in RIVEN_RELEVANT and stat not in stat_blacklist]
         positive_stats.sort(key=lambda stat: self._riven_stat_priority(stat, float(base_stats[stat])), reverse=True)
         positive_stats = positive_stats[:14 if limit > 32 else 10]
-        negative_stats = [stat for stat in base_stats if stat not in RIVEN_NON_NEGATIVE]
+        negative_stats = [stat for stat in base_stats if stat not in RIVEN_NON_NEGATIVE and stat not in stat_blacklist]
         negative_stats.sort(key=lambda stat: self._riven_negative_priority(stat, float(base_stats[stat])))
         negative_stats = negative_stats[:10 if limit > 32 else 6]
         candidates: dict[str, Mod] = {}
@@ -524,12 +558,13 @@ class Optimizer:
         occupied_tiers = {self.calculator.weapon.perks[perk].tier for perk in loadout.evolutions if perk in self.calculator.weapon.perks}
         return max(0, mod_slots - len(loadout.mods)) + max(0, 1 - len(loadout.arcanes)) + sum(tier not in occupied_tiers for tier in pools["perks"]) + int(loadout.progenitor is None and bool(pools["progenitors"]))
 
-    def _complete_fixed_loadout(self, source: Loadout) -> Loadout:
+    def _complete_fixed_loadout(self, source: Loadout, *, evolutions: bool = True) -> Loadout:
         perks = list(source.evolutions)
-        occupied = {self.calculator.weapon.perks[perk].tier for perk in perks if perk in self.calculator.weapon.perks}
-        for tier, choices in self.calculator.weapon.perk_choices.items():
-            implemented = tuple(perk for perk in choices.values() if perk.implemented)
-            if tier not in occupied and len(implemented) == 1: perks.extend(implemented)
+        if evolutions:
+            occupied = {self.calculator.weapon.perks[perk].tier for perk in perks if perk in self.calculator.weapon.perks}
+            for tier, choices in self.calculator.weapon.perk_choices.items():
+                implemented = tuple(perk for perk in choices.values() if perk.implemented)
+                if tier not in occupied and len(implemented) == 1: perks.extend(implemented)
         return self._loadout(mods=source.mods, arcanes=source.arcanes, evolutions=perks, progenitor=source.progenitor)
 
     def _neighbors(self, loadout: Loadout, pools: dict[str, tuple], rng: random.Random):
@@ -899,14 +934,33 @@ class Optimizer:
         if slot_counts.get("regular_mod", 0) > 8 or slot_counts.get("exilus_mod", 0) > 1 or slot_counts.get("stance_mod", 0) > 1: return False
         return True
 
+    def _component_id(self, component: object) -> int:
+        identity = id(component)
+        cached = self._component_id_cache.get(identity)
+        if cached is not None and cached[0] is component: return cached[1]
+        assigned = self._next_component_id
+        self._next_component_id += 1
+        self._component_id_cache[identity] = component, assigned
+        return assigned
+
+    def _compiled_upgrade_effects(self, loadout: Loadout) -> tuple[ResolvedEffect, ...]:
+        upgrades = loadout.ranked_upgrades
+        key = tuple(self._component_id(upgrade) for upgrade in upgrades)
+        cached = self._upgrade_effects_cache.get(key)
+        if cached is not None: return cached
+        groups: list[tuple[ResolvedEffect, ...]] = []
+        for upgrade in upgrades:
+            if not upgrade.implemented: continue
+            component_id = self._component_id(upgrade)
+            effects = self._resolved_effect_cache.get(component_id)
+            if effects is None:
+                effects = upgrade.resolve_manual()
+                self._resolved_effect_cache[component_id] = effects
+            groups.append(effects)
+        compiled = tuple(effect for effects in groups for effect in effects)
+        self._upgrade_effects_cache[key] = compiled
+        return compiled
+
     def _loadout_key(self, loadout: Loadout) -> tuple:
-        cache = self._upgrade_key_cache
-        def upgrade_key(upgrade: Mod | Arcane) -> tuple:
-            identity = id(upgrade)
-            cached = cache.get(identity)
-            if cached is not None: return cached
-            stats = tuple((stat, tuple((effect.value, effect.mode, effect.family, effect.maximum) for effect in effects)) for stat, effects in sorted(upgrade.stats.items()))
-            key = upgrade.name, upgrade.slot, tuple(sorted(upgrade.runtime._values.items())), stats
-            cache[identity] = key
-            return key
-        return (tuple(upgrade_key(mod) for mod in loadout.mods), tuple(upgrade_key(arcane) for arcane in loadout.arcanes), tuple(perk.name for perk in loadout.evolutions), None if loadout.progenitor is None else (loadout.progenitor.element, loadout.progenitor.bonus))
+        return (tuple(self._component_id(mod) for mod in loadout.mods), tuple(self._component_id(arcane) for arcane in loadout.arcanes), tuple(self._component_id(perk) for perk in loadout.evolutions), None if loadout.progenitor is None else (loadout.progenitor.element, loadout.progenitor.bonus))
+

@@ -36,8 +36,10 @@ def test_optimizer_reports_progress(capsys):
     weapon = arsenal.primary.get("Braton Prime")
     optimization = Optimizer(Calculator(weapon)).resolve(evaluations=2)
     output = capsys.readouterr().out
-    assert "Optimizing [" in output
-    assert "Complete [" in output
+    assert "Optimizing " in output
+    assert "Complete " in output
+    assert "[" not in output
+    assert "]" not in output
     assert optimization.summary is not None
     assert optimization.summary["evaluation_budget"] == 2
     assert optimization.summary["resolutions"] == optimization.resolutions
@@ -81,7 +83,7 @@ def test_optimizer_filters_weapon_specific_arcanes_and_beam_exilus_mods():
     assert "Shotgun Vendetta" not in {arcane.name for arcane in pools["arcanes"]}
     assert "Sinister Reach" not in {mod.name for mod in pools["mods"]}
     assert "Tainted Mag" not in {mod.name for mod in pools["mods"]}
-    assert "Primary Overcharge" in {arcane.name for arcane in pools["arcanes"]}
+    assert "Primary Overcharge" not in {arcane.name for arcane in pools["arcanes"]}
 
 
 def test_optimizer_can_disable_riven_search():
@@ -105,6 +107,41 @@ def test_optimizer_validates_riven_flag():
 
 
 
+
+
+def test_optimizer_defaults_to_20000_evaluations():
+    import inspect
+
+    assert inspect.signature(Optimizer.resolve).parameters["evaluations"].default == 20_000
+
+
+def test_optimizer_can_disable_evolution_search():
+    weapon = arsenal.primary.get("Phenmor")
+    optimizer = Optimizer(Calculator(weapon))
+    assert optimizer._candidate_pools(evolutions=False)["perks"] == {}
+    result = optimizer.resolve(evaluations=2, progress=False, riven=False, evolutions=False)
+    assert not result.loadout.evolutions
+
+
+def test_optimizer_preserves_locked_evolutions_when_search_is_disabled():
+    weapon = arsenal.primary.get("Phenmor")
+    locked = arsenal.perk.get("Devouring Attrition")
+    optimizer = Optimizer(Calculator(weapon, loadout=Loadout(evolutions=[locked])))
+    result = optimizer.resolve(evaluations=2, progress=False, riven=False, evolutions=False)
+    assert locked in result.loadout.evolutions
+
+
+def test_optimizer_validates_evolutions_flag():
+    weapon = arsenal.primary.get("Phenmor")
+    optimizer = Optimizer(Calculator(weapon))
+    try:
+        optimizer.resolve(evaluations=2, progress=False, evolutions=1)
+    except TypeError as error:
+        assert str(error) == "evolutions must be a bool"
+    else:
+        raise AssertionError("Expected TypeError")
+
+
 def test_optimizer_scales_with_evaluation_budget():
     weapon = arsenal.primary.get("Braton Prime")
     optimizer = Optimizer(Calculator(weapon))
@@ -124,3 +161,39 @@ def test_optimizer_candidate_pools_scale_with_evaluation_budget():
     assert len(large["mods"]) >= len(small["mods"])
     assert len(large["arcanes"]) >= len(small["arcanes"])
     assert len(large["rivens"]) >= len(small["rivens"])
+
+
+def test_optimizer_blacklists_external_condition_upgrades_and_faction_mods():
+    weapon = arsenal.primary.get("Vectis Prime")
+    pools = Optimizer(Calculator(weapon))._candidate_pools(riven=False)
+    names = {upgrade.name for upgrade in (*pools["mods"], *pools["arcanes"])}
+    assert "Spectral Serration" not in names
+    assert "Primary Overcharge" not in names
+    assert "Bane of Grineer" not in names
+    assert "Primed Bane of Grineer" not in names
+    assert "Serration" in names
+
+
+def test_optimizer_accepts_additional_upgrade_blacklist():
+    weapon = arsenal.primary.get("Vectis Prime")
+    pools = Optimizer(Calculator(weapon))._candidate_pools(riven=False, upgrade_blacklist={"Serration"})
+    assert "Serration" not in {mod.name for mod in pools["mods"]}
+
+
+def test_optimizer_blacklists_faction_riven_stats():
+    weapon = arsenal.primary.get("Vectis Prime")
+    rivens = Optimizer(Calculator(weapon))._candidate_pools()["rivens"]
+    assert rivens
+    assert all(not {"corpus_damage", "corrupted_damage", "grineer_damage", "infested_damage"}.intersection(riven.stats) for riven in rivens)
+
+
+def test_optimizer_accepts_additional_riven_stat_blacklist():
+    weapon = arsenal.primary.get("Vectis Prime")
+    rivens = Optimizer(Calculator(weapon))._candidate_pools(riven_stat_blacklist={"crit_chance"})["rivens"]
+    assert all("crit_chance" not in riven.stats for riven in rivens)
+
+
+def test_optimizer_progress_argument_is_last():
+    import inspect
+
+    assert next(reversed(inspect.signature(Optimizer.resolve).parameters)) == "progress"

@@ -135,28 +135,30 @@ class Formatter:
     def contributions(self, metric: str = "total_dps", body_part: str | None = None, seed: int = 0) -> str:
         selected_bodypart = body_part or self.result.selected_bodypart
         contributions = Calculator(self.result.weapon, self.result.target, self.result.loadout).contributions(attack=self.result.selected_attack, metric=metric, body_part=selected_bodypart, state=self.result.state, seed=seed)
-        shapley = contributions.shapley
-        if not shapley: return ""
+        contribution = contributions.contribution
+        if not contribution: return ""
         removal = contributions.removal
         component_types = {upgrade.name: upgrade.slot.replace("_", " ").title() for upgrade in self.result.loadout.ranked_upgrades}
         component_types.update({perk.name: "Perk" for perk in self.result.loadout.evolutions})
         if self.result.loadout.progenitor is not None: component_types[progenitor_component_name(self.result.loadout.progenitor)] = "Progenitor"
-        maximum = max((abs(value) for value in shapley.values()), default=0)
-        ordered = sorted(shapley.items(), key=lambda item: item[1], reverse=True)
+        maximum = max((abs(value) for value in contribution.values()), default=0)
+        ordered = sorted(contribution.items(), key=lambda item: item[1], reverse=True)
         rows = []
         for rank, (name, share) in enumerate(ordered, 1):
             kind = component_types[name]
+            display_name = "Riven" if kind == "Regular Mod" and name.casefold().startswith("riven (") else name
+            if kind == "Progenitor" and display_name.endswith(")") and " (" in display_name: display_name = display_name.rsplit(" (", 1)[0]
             removal_value = removal[name]
             display_share = 0.0 if share == 0 else share
             display_removal = 0.0 if removal_value == 0 else removal_value
             bar_length = 0 if maximum == 0 or share == 0 else max(1, round(abs(share) / maximum * 5))
             left = "·" * (10 - bar_length) + "█" * bar_length if share < 0 else "·" * 10
             right = "█" * bar_length + "·" * (10 - bar_length) if share > 0 else "·" * 10
-            rows.append((str(rank), kind, name, f"{display_share:+.2%}", f"{display_removal:+,.2f}", f"{left}│{right}"))
+            rows.append((str(rank), kind, display_name, f"{display_share:+.2%}", f"{display_removal:+,.2f}", f"{left}│{right}"))
         metric_name = self._metric_name(metric) if isinstance(metric, str) else "Contribution"
         target_name = "" if self.result.target is None else f" vs {getattr(self.result.target, 'name', 'Target')} {selected_bodypart.replace('_', ' ').title()}"
-        title = f"{metric_name} Contributions: {self.result.weapon.name} {self.result.selected_attack.replace('_', ' ').title()}{target_name} · {contributions.samples:,} permutations"
-        return self._table(("Contribution Rank", "Type", "Component", "Shapley", "Removal Difference", "Impact"), rows, title=title)
+        title = f"{metric_name} Contributions: {self.result.weapon.name} {self.result.selected_attack.replace('_', ' ').title()}{target_name}"
+        return self._table(("Contribution Rank", "Type", "Component", "Contribution", "Removal Difference", "Impact"), rows, title=title)
 
     def loadout(self) -> str:
         return format_loadout(self.result.loadout)
