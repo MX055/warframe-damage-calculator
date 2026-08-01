@@ -62,7 +62,7 @@ def test_optimizer_reports_structured_progress():
 
 
 def test_optimizer_progress_includes_rebuild_stage():
-    from warframe_damage_calculator.engine.optimizer import _ProgressReporter, _ProgressState
+    from warframe_damage_calculator.optimizer.progress import _ProgressReporter, _ProgressState
 
     reporter = _ProgressReporter(None, budget=100)
     fraction, stage_fraction = reporter._fractions(_ProgressState(completed=70, stage="Rebuilds", stage_started=60, stage_total=20))
@@ -291,7 +291,8 @@ def test_optimizer_progress_argument_is_last():
 
 def test_optimizer_blacklists_are_signature_defaults():
     import inspect
-    from warframe_damage_calculator.engine.optimizer import DEFAULT_RIVEN_STAT_BLACKLIST, DEFAULT_UPGRADE_BLACKLIST
+    from warframe_damage_calculator.optimizer.candidates import DEFAULT_UPGRADE_BLACKLIST
+    from warframe_damage_calculator.optimizer.rivens import DEFAULT_RIVEN_STAT_BLACKLIST
 
     parameters = inspect.signature(Optimizer.resolve).parameters
     assert parameters["upgrade_blacklist"].default == DEFAULT_UPGRADE_BLACKLIST

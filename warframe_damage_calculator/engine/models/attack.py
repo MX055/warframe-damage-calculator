@@ -1,0 +1,76 @@
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+
+from ...domain.damage import Dist
+from ...domain.weapons import Attack
+from .stats import BaseAttackStats, EffectiveAttackStats, ModdedAttackStats, ResolvedStats
+
+
+@dataclass(slots=True)
+class AverageAttackStats:
+    damage: Dist = field(default_factory=Dist)
+    crit_chance: float = 0
+    crit_damage: float = 1
+    status_chance: float = 0
+    status_duration: float = 0
+    multishot: float = 1
+    fire_rate: float = 0
+    magazine_capacity: float = 0
+    reload_time: float = 0
+    ammo_cost: float = 0
+    ammo_efficiency: float = 0
+    punch_through: float = 0
+    burst_count: float = 1
+    burst_delay: float = 0
+    charge_time: float = 0
+    attack_speed: float = 0
+    heavy_attack_speed: float = 1
+    heavy_attack_efficiency: float = 0
+    initial_combo: float = 0
+    crit_multiplier: float = 1
+    weakpoint_crit_chance: float = 0
+    weakpoint_crit_multiplier: float = 1
+    attack_rate: float = 0
+    procs_per_shot: float = 0
+    flat_dph: float | None = None
+    flat_dps: float | None = None
+    flat_dotph: float | None = None
+    flat_dotps: float | None = None
+    total_dph: float | None = None
+    total_dps: float | None = None
+    first_shot_damage_multiplier: float = 1
+    combo_multiplier: float = 1
+    melee_duplicate_multiplier: float = 1
+    melee_doughty_bonus: float = 0
+    crit_tier_bonus: float = 0
+    weakpoint_crit_tier_bonus: float = 0
+    secondary_enervate_bonus: float = 0
+    weakpoint_secondary_enervate_bonus: float = 0
+    falloff_multiplier: float = 1
+
+
+@dataclass(slots=True)
+class SpatialMetrics:
+    falloff_multiplier: float | None = None
+    damage_mass: float | None = None
+    dimension: int | None = None
+    flat_dph: float | None = None
+    flat_dotph: float | None = None
+    total_dph: float | None = None
+    flat_dps: float | None = None
+    flat_dotps: float | None = None
+    total_dps: float | None = None
+
+
+@dataclass(slots=True)
+class AttackResult:
+    attack: Attack
+    base: BaseAttackStats
+    modded: ModdedAttackStats
+    effective: EffectiveAttackStats
+    upgrades: ResolvedStats
+    evolutions: ResolvedStats
+    average: AverageAttackStats
+    spatial: SpatialMetrics
+    status_effects: dict[str, float] = field(default_factory=dict)

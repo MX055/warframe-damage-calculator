@@ -6,7 +6,8 @@ from random import Random
 
 from ..domain.loadouts import Loadout, Progenitor
 from ..domain.results import ContributionResult
-from ..domain.upgrades import Arcane, Mod, Perk, Upgrade
+from ..domain.perks import Perk
+from ..domain.upgrades import Arcane, Mod, Upgrade
 
 
 type ContributionComponent = Upgrade | Progenitor
@@ -16,12 +17,12 @@ _PERMUTATION_SAMPLES = 64
 _INTERACTION_TOLERANCE = 1e-9
 
 
-def progenitor_component_name(progenitor: Progenitor) -> str:
+def progenitor_component_id(progenitor: Progenitor) -> str:
     return f"{progenitor.element.replace('_', ' ').title()} Progenitor ({progenitor.bonus:.0%})"
 
 
-def component_name(component: ContributionComponent) -> str:
-    return progenitor_component_name(component) if isinstance(component, Progenitor) else component.name
+def component_id(component: ContributionComponent) -> str:
+    return progenitor_component_id(component) if isinstance(component, Progenitor) else component.name
 
 
 def _components(loadout: Loadout) -> list[ContributionComponent]:
@@ -64,7 +65,7 @@ def _suppression_masks(component_count: int, coalition_value: Callable[[int], fl
 def _sample_build_contributions(components: list[ContributionComponent], coalition_value: Callable[[int], float], full_mask: int, seed: int) -> tuple[dict[str, float], int]:
     size = len(components)
     target_samples = _sample_count(size)
-    values = {component_name(component): 0.0 for component in components}
+    values = {component_id(component): 0.0 for component in components}
     suppression_masks = _suppression_masks(size, coalition_value, full_mask)
     random = Random(seed)
     samples = 0
@@ -80,7 +81,7 @@ def _sample_build_contributions(components: list[ContributionComponent], coaliti
                 coalition_mask = (preceding_mask | context_mask) & ~component_bit
                 previous = coalition_value(coalition_mask)
                 current = coalition_value(coalition_mask | component_bit)
-                values[component_name(components[index])] += current - previous
+                values[component_id(components[index])] += current - previous
                 preceding_mask |= component_bit
             samples += 1
     return ({name: value / samples for name, value in values.items()} if samples else values), samples
@@ -100,5 +101,5 @@ def calculate_contributions(loadout: Loadout, evaluate: Callable[[Loadout], floa
     full = coalition_value(full_mask)
     values, samples = _sample_build_contributions(components, coalition_value, full_mask, seed)
     contribution = _normalize_contributions(values)
-    removal = {component_name(component): coalition_value(full_mask ^ (1 << index)) - full for index, component in enumerate(components)}
+    removal = {component_id(component): coalition_value(full_mask ^ (1 << index)) - full for index, component in enumerate(components)}
     return ContributionResult(contribution, removal, len(coalition_values), samples)

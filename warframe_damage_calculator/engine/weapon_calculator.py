@@ -2,11 +2,12 @@ from __future__ import annotations
 
 from copy import deepcopy
 
-from ..domain.results import AttackResult, AverageAttackStats
-from ..domain.status import StatusModel
+from ..domain.status import StatusModel, _product
 from ..domain.upgrades import ResolvedEffect
-from .attack_calculator import AFFLICTIONS_CATEGORIES, AttackCalculator, _product, _special_value, _status_model, _with_random_proc
+from .attack_calculator import AttackCalculator
 from .context import CalculationContext
+from .models.attack import AttackResult, AverageAttackStats
+from .status import AFFLICTIONS_CATEGORIES, _special_value, _status_model, _with_random_proc
 
 
 class WeaponCalculator:

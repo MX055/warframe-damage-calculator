@@ -1,186 +1,24 @@
 from __future__ import annotations
 
-from typing import Any, Iterable, Mapping
-
-from ..domain.damage import Dist
-from ..domain.loadouts import Progenitor
-from ..domain.results import AttackResult, AverageAttackStats, BaseAttackStats, EffectiveAttackStats, ModdedAttackStats, ResolvedStats, SpatialMetrics, Stats
-from ..domain.upgrades import ResolvedEffect, Upgrade
+from ..domain.upgrades import ResolvedEffect
 from ..domain.weapons import Attack
-from .aggregation import DAMAGE_TYPES, aggregate, merge
+from .aggregation import aggregate
+from .automatic import automatic_value, automatic_values
 from .context import CalculationContext
-from .effects import evaluate
-from .formulas import DOT_MULTIPLIERS, aoe_damage_mass, average_falloff_multiplier, clamp, crit_multiplier, family_bonus, family_factor, hit_multiplier, ranged_falloff_multiplier, refresh_metrics, true_round
-from .special import automatic_value, automatic_values, average_enervate_bonus, enervate_parameters
-from ..domain.status import COMBINED_STATUS_COMPONENTS, RANDOM_STATUS_TYPES, STATUS_TYPES, StatusModel, attack_proc_chance
+from .damage import DOT_MULTIPLIERS, _base_damage, _damage, _dot_base_damage, _elemental_dot_bonuses
+from .formulas import clamp, crit_multiplier, family_bonus, family_factor, hit_multiplier, refresh_metrics, true_round
+from .models.attack import AttackResult, AverageAttackStats
+from .models.stats import BaseAttackStats, EffectiveAttackStats, ModdedAttackStats, ResolvedStats, Stats
+from .rates import HEAVY_CATEGORIES, SLAM_CATEGORIES, _melee_rate, _multishot_ammo_bonus, _ranged_rate, _stance_combo
+from .secondary_enervate import average_enervate_bonus, enervate_parameters
+from .spatial import is_aoe_attack, refresh_spatial, set_damage, spatial_falloff
+from .stats import POSITION_EVENTS, _additive_scalar, _combined, _resolve_effects, _scalar
+from .status import AFFLICTIONS_CATEGORIES, _derived_chances, _forced_procs, _special_value, _status_model, _status_vulnerability, _with_random_proc
+from ..domain.status import StatusModel
 from .targets import damage_multiplier, damage_total
 
 
-HEAVY_CATEGORIES = frozenset({"heavy", "heavy_slam"})
-SLAM_CATEGORIES = frozenset({"slam", "heavy_slam"})
-AFFLICTIONS_CATEGORIES = frozenset({"lifted", "knockdown", "ragdoll"})
-POSITION_EVENTS = frozenset({"magazine_first_shot", "magazine_last_shot"})
 DEFERRED_STATS = frozenset({"duplicated_hit", "random_proc", "crit_reset_charges", "crit_tier"})
-DEFERRED_FAMILIES = frozenset({"magazine_first_shot", "magazine_last_shot"})
-PROC_STATS = frozenset(f"{damage_type}_proc" for damage_type in STATUS_TYPES)
-def _scalar(base: float, stat: str, modifiers: ResolvedStats, *, minimum: float = 0) -> float:
-    value = (base + float(modifiers.base.get(stat, 0))) * (1 + float(modifiers.proportional.get(stat, 0)))
-    return max(value * family_factor(modifiers, stat) + float(modifiers.flat.get(stat, 0)), minimum)
-
-
-def _additive_scalar(base: float, stat: str, modifiers: ResolvedStats, *, minimum: float = 0) -> float:
-    return max(base + float(modifiers.proportional.get(stat, 0)) + float(modifiers.base.get(stat, 0)) + float(modifiers.flat.get(stat, 0)), minimum)
-
-
-def _combined(upgrades: ResolvedStats, evolutions: ResolvedStats) -> ResolvedStats:
-    total = ResolvedStats()
-    merge(total, upgrades)
-    merge(total, evolutions)
-    return total
-
-
-def _base_damage(context: CalculationContext, attack: Attack, evolutions: ResolvedStats) -> tuple[Dist, Dist, Dist]:
-    strength = float(context.state.ability_strength) if {"exalted", "pseudo_exalted"} & context.weapon.traits else 1.0
-    displayed = attack.stats.damage * max(strength, 0)
-    raw = Dist(displayed)
-    conversion = sum(float(bucket.get("impact_to_puncture_conversion", 0)) for bucket in (evolutions.proportional, evolutions.base, evolutions.flat))
-    if conversion > 0:
-        for damage in (raw, displayed):
-            if not damage.get("impact", 0): continue
-            moved = damage.get("impact", 0) * min(conversion, 1)
-            damage += Dist(impact=-moved, puncture=moved)
-    original = Dist(raw)
-    flat = float(evolutions.base.get("damage", 0))
-    if flat:
-        if raw.total: raw += Dist({kind: flat * raw.weight(kind) for kind in raw})
-        if displayed.total: displayed += Dist({kind: flat * displayed.weight(kind) for kind in displayed})
-    return raw, original, displayed
-
-
-def _modified_damage(base: Dist, resolved: ResolvedStats, progenitor: Progenitor | None = None) -> Dist:
-    recorded = resolved.proportional.get("damage", Dist())
-    modifiers = {kind: float(value) for kind, value in recorded.items()} if isinstance(recorded, Dist) else {}
-    modifiers.update({kind: float(value) for kind, value in resolved.proportional.items() if kind in DAMAGE_TYPES})
-    if progenitor is not None:
-        element = str(progenitor.element)
-        bonus = modifiers.pop(element, 0) + float(progenitor.bonus)
-        modifiers[element] = bonus
-    return base.apply_modifiers(modifiers)
-
-
-def _damage(attack: Attack, base: Dist, original: Dist, upgrades: ResolvedStats, evolutions: ResolvedStats, progenitor: Progenitor | None = None) -> Dist:
-    total = _combined(upgrades, evolutions)
-    evolved = _modified_damage(base, total, progenitor)
-    original_modified = _modified_damage(original, total, progenitor)
-    common = max(1 + attack.stats.damage_bonus + float(total.proportional.get("damage_bonus", 0)), 0)
-    status_bonus = family_bonus(total, "unique_status", "damage_bonus")
-    if attack.stats.co_effect == "multiplies":
-        damage = evolved * common * max(1 + status_bonus, 1)
-    else:
-        damage = evolved * common + original_modified * max(status_bonus, 0)
-    for family, stats in total.families.items():
-        if family in {"unique_status", "non_critical_hit", "multishot_ammo", *DEFERRED_FAMILIES}: continue
-        damage *= max(1 + float(stats.get("damage_bonus", 0)), 1)
-    return damage
-
-
-def _dot_base_damage(attack: Attack, base: Dist, original: Dist, upgrades: ResolvedStats, evolutions: ResolvedStats) -> float:
-    total = _combined(upgrades, evolutions)
-    common = max(1 + attack.stats.damage_bonus + float(total.proportional.get("damage_bonus", 0)), 0)
-    status_bonus = family_bonus(total, "unique_status", "damage_bonus")
-    value = base.total * common * max(1 + status_bonus, 1) if attack.stats.co_effect == "multiplies" else base.total * common + original.total * max(status_bonus, 0)
-    for family, stats in total.families.items():
-        if family in {"unique_status", "non_critical_hit", "multishot_ammo", *DEFERRED_FAMILIES}: continue
-        value *= max(1 + float(stats.get("damage_bonus", 0)), 1)
-    return value
-
-
-def _elemental_dot_bonuses(total: ResolvedStats, progenitor: Progenitor | None = None) -> Stats:
-    modifiers = total.proportional.get("damage", Dist())
-    heat = float(modifiers.get("heat", 0)) if isinstance(modifiers, Dist) else 0
-    electricity = float(modifiers.get("electricity", 0)) if isinstance(modifiers, Dist) else 0
-    toxin = float(modifiers.get("toxin", 0)) if isinstance(modifiers, Dist) else 0
-    if progenitor is not None:
-        if progenitor.element == "heat": heat += float(progenitor.bonus)
-        elif progenitor.element == "electricity": electricity += float(progenitor.bonus)
-        elif progenitor.element == "toxin": toxin += float(progenitor.bonus)
-    return Stats(heat=max(1 + heat, 0), electricity=max(1 + electricity, 0), toxin=max(1 + toxin, 0), gas=max(1 + heat + toxin, 0), slash=1.0)
-
-
-def _status_vulnerability(effects: Iterable[ResolvedEffect]) -> float:
-    return max(1 + sum(float(effect.value) for effect in effects if effect.stat == "status_vulnerability"), 0)
-
-
-def _derived_chances(crit: float, status: float, total: ResolvedStats) -> tuple[float, float]:
-    crit_conversion = sum(float(bucket.get("crit_from_status", 0)) for bucket in (total.proportional, total.base, total.flat))
-    status_conversion = sum(float(bucket.get("status_from_crit", 0)) for bucket in (total.proportional, total.base, total.flat))
-    if crit_conversion:
-        value = status * crit_conversion
-        crit += min(value, total.maximums.get("crit_from_status", value))
-    if status_conversion:
-        value = crit * status_conversion
-        status += min(value, total.maximums.get("status_from_crit", value))
-    return max(crit, 0), max(status, 0)
-
-
-def _stance(context: CalculationContext) -> Upgrade | None:
-    return next((upgrade for upgrade in context.loadout.ranked_upgrades if upgrade.slot == "stance_mod"), None)
-
-
-def _stance_combo(context: CalculationContext, attack: Attack) -> Mapping[str, Any] | None:
-    stance = _stance(context)
-    if stance is None: return None
-    if attack.category in HEAVY_CATEGORIES: key = "heavy"
-    elif attack.category == "slide": key = "slide"
-    elif attack.category == "slam": key = "slam"
-    else: key = str(context.state.stance_combo)
-    return stance.combos.get(key) or stance.combos.get("neutral")
-
-
-def _multishot_ammo_bonus(total: ResolvedStats) -> float:
-    return family_bonus(total, "multishot_ammo", "damage_bonus")
-
-
-def _ranged_rate(context: CalculationContext, attack: Attack, total: ResolvedStats, multishot: float) -> tuple[float, float, Stats]:
-    locked = bool(total.proportional.get("fire_rate_lock"))
-    scale = 1.0 if locked else 1 + float(total.proportional.get("fire_rate", 0))
-    fire_rate = max(float(attack.stats.fire_rate) * scale, 0.05)
-    if not locked: fire_rate *= family_factor(total, "fire_rate")
-    burst_count = max(float(attack.stats.burst_count), 1)
-    burst_delay = max(float(attack.stats.burst_delay), 0) / max(scale, 1)
-    charge_time = max(float(attack.stats.charge_time), 0) / max(scale, 0.01) / (family_factor(total, "fire_rate") if not locked else 1)
-    incarnon = attack.form == "incarnon" and context.weapon.incarnon_charges is not None
-    magazine_base = float(context.weapon.incarnon_charges) if incarnon else float(context.weapon.magazine_size)
-    magazine = max(true_round(magazine_base if incarnon else (magazine_base + float(total.base.get("magazine_capacity", 0))) * (1 + float(total.proportional.get("magazine_capacity", 0))) + float(total.flat.get("magazine_capacity", 0))), 1)
-    efficiency = 0.0 if incarnon else clamp(float(total.proportional.get("ammo_efficiency", 0)), 0, 1)
-    ammo_cost = max(float(attack.stats.ammo_cost), 0)
-    consumes_multishot = _multishot_ammo_bonus(total) != 0
-    if consumes_multishot: ammo_cost *= max(multishot, 1)
-    reload_time = float(context.weapon.reload_time) / max(1 + float(total.proportional.get("reload_speed", 0)), 0.01)
-    if context.weapon.recharge_rate is not None and not incarnon:
-        recharge_rate = max(float(context.weapon.recharge_rate), 0)
-        reload_time += float("inf") if recharge_rate == 0 else magazine / recharge_rate
-    if ammo_cost <= 0 or efficiency >= 1:
-        sustained = fire_rate
-    else:
-        shots = magazine / ammo_cost
-        bursts = shots / burst_count
-        ammo_spent = 1 - efficiency
-        cycle = bursts * (charge_time + (burst_count - 1) * burst_delay)
-        cycle += (bursts - ammo_spent) / fire_rate + ammo_spent * reload_time
-        sustained = float("inf") if cycle <= 0 else shots / cycle
-    return fire_rate, sustained, Stats(ammo_cost=ammo_cost, ammo_efficiency=efficiency, magazine_capacity=magazine, reload_time=reload_time, burst_count=burst_count, burst_delay=burst_delay, charge_time=charge_time)
-
-
-def _melee_rate(context: CalculationContext, attack: Attack, total: ResolvedStats, *, include_stance: bool = True) -> tuple[float, Stats]:
-    heavy = attack.category in HEAVY_CATEGORIES
-    speed_bonus = float(total.proportional.get("heavy_attack_speed" if heavy else "attack_speed", 0))
-    base_speed = float(attack.stats.fire_rate if attack.stats.attack_speed is None else attack.stats.attack_speed)
-    speed = max(base_speed * (1 + speed_bonus), 0)
-    combo = _stance_combo(context, attack) if include_stance else None
-    if combo and float(combo.get("duration", 0)) > 0 and float(combo.get("hits", 0)) > 0:
-        speed *= float(combo["hits"]) / float(combo["duration"])
-    return speed, Stats(attack_speed=speed, heavy_attack_speed=max(1 + float(total.proportional.get("heavy_attack_speed", 0)), 0), heavy_attack_efficiency=max(float(attack.stats.heavy_attack_efficiency) + float(total.proportional.get("heavy_attack_efficiency", 0)), 0), initial_combo=max(float(attack.stats.initial_combo) + float(total.proportional.get("initial_combo", 0)), 0), magazine_capacity=float(context.weapon.magazine_size), reload_time=float(context.weapon.reload_time), ammo_cost=float(attack.stats.ammo_cost), ammo_efficiency=0, burst_count=float(attack.stats.burst_count), burst_delay=float(attack.stats.burst_delay), charge_time=float(attack.stats.charge_time))
 
 
 def _provisional(context: CalculationContext, attack: Attack, upgrade_effects: tuple[ResolvedEffect, ...], evolution_effects: tuple[ResolvedEffect, ...], static_upgrades: ResolvedStats | None = None, static_evolutions: ResolvedStats | None = None) -> tuple[Stats, StatusModel]:
@@ -204,138 +42,6 @@ def _provisional(context: CalculationContext, attack: Attack, upgrade_effects: t
     return stats, StatusModel(damage, attack.stats.forced_procs, status, multishot, sustained, duration)
 
 
-def _resolve_effects(context: CalculationContext, attack: Attack, source: tuple[ResolvedEffect, ...], provisional: Stats, model: StatusModel, equipped: set[str]) -> tuple[list[ResolvedEffect], list[ResolvedEffect]]:
-    resolved: list[ResolvedEffect] = []
-    positions: list[ResolvedEffect] = []
-    for effect in source:
-        if not effect.automatic:
-            resolved.append(effect)
-            continue
-        current = evaluate(effect, context=context, attack=attack, stats=provisional, status=model, equipped=equipped)
-        if current is None: continue
-        event = automatic_value(current, "on")
-        if event in POSITION_EVENTS:
-            positions.append(current)
-        else:
-            resolved.append(current)
-    return resolved, positions
-
-
-def _forced_procs(attack: Attack, effects: Iterable[ResolvedEffect]) -> Dist:
-    forced = attack.stats.forced_procs
-    for effect in effects:
-        if effect.stat not in PROC_STATS or automatic_value(effect, "on") is not None: continue
-        forced += Dist({effect.stat.removesuffix("_proc"): float(effect.value)})
-    return forced
-
-
-def _status_model(damage: Dist, forced_procs: Dist, status_chance: float, attempts: float, attack_rate: float, duration: float, effects: Iterable[ResolvedEffect], crit_chance: float, *, include_random: bool = True, afflictions: bool = False) -> StatusModel:
-    effects = tuple(effects)
-    base = StatusModel(damage, forced_procs, status_chance, attempts, attack_rate, duration)
-    direct_counts: dict[str, float] = {}
-    direct_probabilities: dict[str, float] = {}
-    critical_counts: dict[str, float] = {}
-    for effect in effects:
-        if effect.stat not in PROC_STATS or automatic_value(effect, "on") != "critical_hit": continue
-        kind = effect.stat.removesuffix("_proc")
-        chance = clamp(float(effect.value) * min(max(crit_chance, 0), 1), 0, 1)
-        direct_counts[kind] = direct_counts.get(kind, 0) + chance
-        direct_probabilities[kind] = 1 - (1 - direct_probabilities.get(kind, 0)) * (1 - chance)
-        critical_counts[kind] = critical_counts.get(kind, 0) + chance * max(attempts, 0)
-
-    direct_any_per_attempt = 1 - _product(1 - probability for probability in direct_probabilities.values())
-    triggered_counts: dict[str, float] = {}
-    triggered_probabilities: dict[str, float] = {}
-    for effect in effects:
-        event = "impact_status_proc" if effect.stat == "bleed_on_impact" else automatic_value(effect, "on")
-        if effect.stat not in PROC_STATS and effect.stat != "bleed_on_impact": continue
-        if event == "any_status_proc":
-            source_probability = 1 - (1 - base.base_any_proc_probability_per_attempt()) * (1 - direct_any_per_attempt)
-        elif isinstance(event, str) and event.endswith("_status_proc"):
-            source = event.removesuffix("_status_proc")
-            source_probability = base.base_proc_probability_per_attempt(source)
-            source_probability = 1 - (1 - source_probability) * (1 - direct_probabilities.get(source, 0))
-        else:
-            continue
-        kind = "slash" if effect.stat == "bleed_on_impact" else effect.stat.removesuffix("_proc")
-        chance = clamp(float(effect.value) * source_probability, 0, 1)
-        triggered_counts[kind] = triggered_counts.get(kind, 0) + chance
-        triggered_probabilities[kind] = 1 - (1 - triggered_probabilities.get(kind, 0)) * (1 - chance)
-
-    extra_per_attempt = {kind: direct_counts.get(kind, 0) + triggered_counts.get(kind, 0) for kind in set(direct_counts) | set(triggered_counts)}
-    extra_probabilities_per_attempt = {
-        kind: 1 - (1 - direct_probabilities.get(kind, 0)) * (1 - triggered_probabilities.get(kind, 0))
-        for kind in set(direct_probabilities) | set(triggered_probabilities)
-    }
-    extra_counts = Dist({kind: count * max(attempts, 0) for kind, count in extra_per_attempt.items()})
-    extra_probabilities = Dist({kind: attack_proc_chance(probability, max(attempts, 0)) for kind, probability in extra_probabilities_per_attempt.items()})
-    extra_any_per_attempt = 1 - _product(1 - probability for probability in extra_probabilities_per_attempt.values())
-    extra_any_probability = attack_proc_chance(extra_any_per_attempt, max(attempts, 0))
-    any_per_attempt = 1 - (1 - base.base_any_proc_probability_per_attempt()) * (1 - extra_any_per_attempt)
-    random_chance = clamp(sum(float(effect.value) for effect in effects if include_random and effect.stat == "random_proc" and automatic_value(effect, "on") == "any_status_proc"), 0, 1)
-    random_probability = attack_proc_chance(random_chance * any_per_attempt, max(attempts, 0))
-
-    random_triggered: dict[str, float] = {}
-    if random_probability > 0:
-        for effect in effects:
-            if effect.stat not in PROC_STATS: continue
-            event = automatic_value(effect, "on")
-            if not isinstance(event, str) or not event.endswith("_status_proc"): continue
-            source = event.removesuffix("_status_proc")
-            if source not in RANDOM_STATUS_TYPES: continue
-            kind = effect.stat.removesuffix("_proc")
-            chance = random_probability / len(RANDOM_STATUS_TYPES) * clamp(float(effect.value), 0, 1)
-            chance *= 1 - extra_probabilities.get(kind, 0)
-            random_triggered[kind] = random_triggered.get(kind, 0) + chance
-    random_triggered_procs = Dist(random_triggered)
-    extra_counts += random_triggered_procs
-    extra_probabilities += random_triggered_procs
-
-    provisional = StatusModel(damage, forced_procs, status_chance, attempts, attack_rate, duration, extra_counts, extra_probabilities, extra_any_probability, random_probability, random_triggered_procs, Dist(critical_counts))
-    debilitate = clamp(sum(float(effect.value) for effect in effects if effect.stat == "debilitate_proc_chance"), 0, 1)
-    if debilitate:
-        additions: dict[str, float] = {}
-        for combined, components in COMBINED_STATUS_COMPONENTS.items():
-            activation = min(provisional.expected_stacks(combined, 10) / 10, 1)
-            produced = provisional.proc_count_per_attack(combined) * debilitate * activation / len(components)
-            for component in components: additions[component] = additions.get(component, 0) + produced
-        extra_counts += Dist(additions)
-        extra_probabilities += Dist({kind: min(value, 1) for kind, value in additions.items()})
-
-    if afflictions:
-        multiplier = sum(float(effect.value) for effect in effects if effect.stat == "afflictions_proc_multiplier")
-        existing = StatusModel(damage, forced_procs, status_chance, attempts, attack_rate, duration, extra_counts, extra_probabilities, extra_any_probability, random_probability, random_triggered_procs, Dist(critical_counts))
-        copied = Dist({kind: existing.proc_count_per_attack(kind) * multiplier for kind in RANDOM_STATUS_TYPES | {"void"}})
-        extra_counts += copied
-        critical_counts = {kind: value * (1 + multiplier) for kind, value in critical_counts.items()}
-
-    return StatusModel(damage, forced_procs, status_chance, attempts, attack_rate, duration, extra_counts, extra_probabilities, extra_any_probability, random_probability, random_triggered_procs, Dist(critical_counts))
-
-
-def _product(values: Iterable[float]) -> float:
-    result = 1.0
-    for value in values: result *= value
-    return result
-
-
-def _with_random_proc(model: StatusModel, effects: Iterable[ResolvedEffect], probability: float) -> StatusModel:
-    triggered: dict[str, float] = {}
-    for effect in effects:
-        if effect.stat not in PROC_STATS: continue
-        event = automatic_value(effect, "on")
-        if not isinstance(event, str) or not event.endswith("_status_proc"): continue
-        source = event.removesuffix("_status_proc")
-        if source not in RANDOM_STATUS_TYPES: continue
-        kind = effect.stat.removesuffix("_proc")
-        triggered[kind] = triggered.get(kind, 0) + probability / len(RANDOM_STATUS_TYPES) * clamp(float(effect.value), 0, 1)
-    random_triggered = Dist(triggered)
-    return StatusModel(model.damage, model.forced_procs, model.status_chance, model.attempts_per_attack, model.attack_rate, model.duration, model.extra_proc_counts + random_triggered, model.extra_proc_probabilities + random_triggered, model.extra_any_proc_probability, probability, random_triggered, model.critical_proc_counts)
-
-
-def _special_value(effects: Iterable[ResolvedEffect], stat: str, event: str | None = None) -> float:
-    return sum(float(effect.value) for effect in effects if effect.stat == stat and (event is None or automatic_value(effect, "on") == event))
-
-
 def _hit_multiplier(chance: float, tier_bonus: float, damage: float, non_crit_damage: float = 0, non_crit_chance: float = 0) -> float:
     return hit_multiplier(chance, damage, non_crit_damage, non_crit_chance) + tier_bonus * (damage - 1)
 
@@ -343,49 +49,6 @@ def _hit_multiplier(chance: float, tier_bonus: float, damage: float, non_crit_da
 def _faction_factor(context: CalculationContext, total: ResolvedStats) -> float:
     if context.target.faction not in {"corpus", "grineer", "infested", "orokin", "murmur", "sentient"}: return 1.0
     return 1 + float(total.proportional.get(f"{context.target.faction}_damage", 0))
-
-
-def _is_aoe_attack(attack: Attack) -> bool:
-    return bool(attack.aoe or attack.category in SLAM_CATEGORIES)
-
-
-def _spatial_falloff(attack: Attack, effective: EffectiveAttackStats) -> tuple[float, SpatialMetrics]:
-    falloff = attack.stats.falloff
-    start_range = float(effective.start_range)
-    end_range = float(effective.end_range)
-    max_range = effective.max_range
-    final_multiplier = float(effective.final_multiplier)
-    if _is_aoe_attack(attack):
-        if "end_range" not in falloff: return 1.0, SpatialMetrics()
-        falloff_multiplier = average_falloff_multiplier(start_range, end_range, final_multiplier)
-        damage_mass = aoe_damage_mass(start_range, end_range, final_multiplier)
-        return falloff_multiplier, SpatialMetrics(falloff_multiplier=falloff_multiplier, damage_mass=damage_mass, dimension=3)
-    falloff_multiplier = ranged_falloff_multiplier(start_range, end_range, float(max_range), final_multiplier) if max_range is not None and "end_range" in falloff else 1.0
-    return falloff_multiplier, SpatialMetrics(falloff_multiplier=falloff_multiplier)
-
-
-def _set_damage(average: AverageAttackStats, spatial: SpatialMetrics, direct: float, dot: float) -> None:
-    average_direct = direct * average.falloff_multiplier
-    average_dot = dot * average.falloff_multiplier
-    average.flat_dph = average_direct
-    average.flat_dotph = average_dot
-    if spatial.damage_mass is None:
-        spatial.flat_dph = None
-        spatial.flat_dotph = None
-    else:
-        spatial.flat_dph = direct * spatial.damage_mass
-        spatial.flat_dotph = dot * spatial.damage_mass
-
-
-def _refresh_spatial(metrics: SpatialMetrics, fire_rate: float) -> None:
-    direct, dot = metrics.flat_dph, metrics.flat_dotph
-    if direct is None or dot is None:
-        metrics.total_dph = metrics.flat_dps = metrics.flat_dotps = metrics.total_dps = None
-        return
-    metrics.total_dph = direct + dot
-    metrics.flat_dps = direct * fire_rate
-    metrics.flat_dotps = dot * fire_rate
-    metrics.total_dps = (direct + dot) * fire_rate
 
 
 def _dot_value(context: CalculationContext, result: AttackResult, zone: str, *, multishot: float | None = None, damage_factor: float = 1) -> float:
@@ -474,14 +137,14 @@ def _apply_position_mixture(context: CalculationContext, result: AttackResult, e
         direct, dot = damage
         mixed_direct += direct * weight
         mixed_dot += dot * weight
-    _set_damage(average, spatial, mixed_direct, mixed_dot)
+    set_damage(average, spatial, mixed_direct, mixed_dot)
     first = [effect for effect in effects if automatic_value(effect, "on") == "magazine_first_shot" and effect.stat == "damage_bonus"]
     first_factor = 1.0
     for family in {effect.family for effect in first}: first_factor *= 1 + sum(float(effect.value) for effect in first if effect.family == family)
     first_weight = next((weight for events, weight in weights if "magazine_first_shot" in events), 0)
     average.first_shot_damage_multiplier = 1 + (first_factor - 1) * first_weight
     refresh_metrics(average)
-    _refresh_spatial(spatial, average.attack_rate)
+    refresh_spatial(spatial, average.attack_rate)
 
 
 def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effects: tuple[ResolvedEffect, ...], evolution_effects: tuple[ResolvedEffect, ...], *, static_upgrades: ResolvedStats | None = None, static_evolutions: ResolvedStats | None = None, automatic_model_override: StatusModel | None = None, status_effects_override: dict[str, float] | None = None, random_proc_probability: float = 0) -> AttackResult:
@@ -578,7 +241,7 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
         afflictions = afflictions or any(automatic_model_override.proc_count_per_attack(kind) > 0 for kind in AFFLICTIONS_CATEGORIES)
     status_model = _status_model(damage, forced, status, status_attempts, fire_rate, duration, resolved_effects, crit, include_random=False, afflictions=afflictions)
     puncture_stacks = status_model.non_damage_effects()["puncture"] if status_effects_override is None else status_effects_override.get("puncture", 0)
-    puncture_bonus = 0 if _is_aoe_attack(attack) else 0.05 * puncture_stacks
+    puncture_bonus = 0 if is_aoe_attack(attack) else 0.05 * puncture_stacks
     if puncture_bonus:
         crit += puncture_bonus
         weakpoint_crit += puncture_bonus
@@ -607,7 +270,7 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     projectile_speed = max(1 + float(total.proportional.get("projectile_speed", 0)), 0)
     effective.projectile_speed = projectile_speed
     radius_bonus = float(total.proportional.get("explosion_radius", 0)) + (float(total.proportional.get("slam_radius", 0)) if attack.category in SLAM_CATEGORIES else 0)
-    range_scale = max(1 + radius_bonus, 0) if _is_aoe_attack(attack) else projectile_speed
+    range_scale = max(1 + radius_bonus, 0) if is_aoe_attack(attack) else projectile_speed
     effective.start_range = float(attack.stats.falloff.get("start_range", 0)) * range_scale
     effective.end_range = float(attack.stats.falloff.get("end_range", 0)) * range_scale
     maximum = attack.stats.max_range
@@ -630,7 +293,7 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
         body_bonus = weak_bonus = 0
     body_tier_bonus = min(body_crit, 1) * crit_tier_chance
     weak_tier_bonus = min(weak_crit, 1) * crit_tier_chance
-    falloff_multiplier, spatial = _spatial_falloff(attack, effective)
+    falloff_multiplier, spatial = spatial_falloff(attack, effective)
     average = AverageAttackStats(damage=damage, crit_chance=body_crit, crit_damage=crit_damage, status_chance=status, status_duration=duration, multishot=multishot, fire_rate=instant_rate, magazine_capacity=float(category_stats.get("magazine_capacity", 0)), reload_time=float(category_stats.get("reload_time", 0)), ammo_cost=float(category_stats.get("ammo_cost", 0)), ammo_efficiency=float(category_stats.get("ammo_efficiency", 0)), punch_through=float(effective.get("punch_through", 0)), burst_count=float(category_stats.get("burst_count", 1)), burst_delay=float(category_stats.get("burst_delay", 0)), charge_time=float(category_stats.get("charge_time", 0)), attack_speed=float(category_stats.get("attack_speed", instant_rate if context.weapon.type == "melee" else 0)), heavy_attack_speed=float(category_stats.get("heavy_attack_speed", 1)), heavy_attack_efficiency=float(category_stats.get("heavy_attack_efficiency", 0)), initial_combo=float(category_stats.get("initial_combo", 0)), crit_multiplier=crit_multiplier(body_crit + body_tier_bonus, crit_damage), weakpoint_crit_chance=weak_crit, weakpoint_crit_multiplier=crit_multiplier(weak_crit + weak_tier_bonus, crit_damage), attack_rate=fire_rate, procs_per_shot=status_model.expected_procs_per_attack, melee_duplicate_multiplier=duplicate_multiplier, melee_doughty_bonus=doughty_bonus, crit_tier_bonus=body_tier_bonus, weakpoint_crit_tier_bonus=weak_tier_bonus, secondary_enervate_bonus=body_bonus, weakpoint_secondary_enervate_bonus=weak_bonus, falloff_multiplier=falloff_multiplier)
     result = AttackResult(attack, base, modded, effective, upgrades, evolutions, average, spatial, status_effects)
     combo_multiplier = 1
@@ -641,9 +304,9 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     zone_damage = _zone_damage(context, result, zone, direct_hits=1 if context.weapon.type == "melee" else multishot, duplicate_multiplier=duplicate_multiplier, combo_multiplier=combo_multiplier)
     if zone_damage is not None:
         direct, dot = zone_damage
-        _set_damage(average, spatial, direct, dot)
+        set_damage(average, spatial, direct, dot)
     refresh_metrics(average)
-    _refresh_spatial(spatial, average.attack_rate)
+    refresh_spatial(spatial, average.attack_rate)
     _apply_position_mixture(context, result, [*upgrade_positions, *evolution_positions])
     return result
 

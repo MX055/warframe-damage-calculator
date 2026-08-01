@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import re
 
-from ..engine.contributions import progenitor_component_name
 from ..domain.results import CalculationResult, DamageResult, SpatialResult, StatusResult
 from ..engine.calculator import Calculator
 from .objects import format_loadout
@@ -140,14 +139,16 @@ class Formatter:
         removal = contributions.removal
         component_types = {upgrade.name: upgrade.slot.replace("_", " ").title() for upgrade in self.result.loadout.ranked_upgrades}
         component_types.update({perk.name: "Perk" for perk in self.result.loadout.evolutions})
-        if self.result.loadout.progenitor is not None: component_types[progenitor_component_name(self.result.loadout.progenitor)] = "Progenitor"
+        if self.result.loadout.progenitor is not None:
+            for name in contribution:
+                if name not in component_types: component_types[name] = "Progenitor"
         maximum = max((abs(value) for value in contribution.values()), default=0)
         ordered = sorted(contribution.items(), key=lambda item: item[1], reverse=True)
         rows = []
         for rank, (name, share) in enumerate(ordered, 1):
             kind = component_types[name]
             display_name = "Riven" if kind == "Regular Mod" and name.casefold().startswith("riven (") else name
-            if kind == "Progenitor" and display_name.endswith(")") and " (" in display_name: display_name = display_name.rsplit(" (", 1)[0]
+            if kind == "Progenitor": display_name = f"{self.result.loadout.progenitor.element.replace('_', ' ').title()} Progenitor"
             removal_value = removal[name]
             display_share = 0.0 if share == 0 else share
             display_removal = 0.0 if removal_value == 0 else removal_value
@@ -158,7 +159,8 @@ class Formatter:
         metric_name = self._metric_name(metric) if isinstance(metric, str) else "Contribution"
         target_name = "" if self.result.target is None else f" vs {getattr(self.result.target, 'name', 'Target')} {selected_bodypart.replace('_', ' ').title()}"
         title = f"{metric_name} Contributions: {self.result.weapon.name} {self.result.selected_attack.replace('_', ' ').title()}{target_name}"
-        return self._table(("Contribution Rank", "Type", "Component", "Build Contribution", "Removal Difference", "Impact"), rows, title=title)
+        table = self._table(("Contribution Rank", "Type", "Component", "Build Contribution", "Removal Difference", "Impact"), rows, title=title)
+        return f"{table}\n{contributions.samples} permutations · {contributions.evaluations} evaluations"
 
     def loadout(self) -> str:
         return format_loadout(self.result.loadout)

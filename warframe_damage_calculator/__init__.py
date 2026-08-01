@@ -4,12 +4,14 @@ from .domain.effects import Effect
 from .domain.enemies import BodyPart, Enemy, EnemyStats
 from .domain.implementation import ImplementationStatus, ImplementationWarning
 from .domain.loadouts import Loadout, Progenitor
-from .domain.upgrades import PLACEHOLDER, Perk, PerkValues, Placeholder, ResolvedPerk
+from .domain.effects import PLACEHOLDER, Placeholder
+from .domain.perks import Perk, PerkValues, ResolvedPerk
 from .domain.results import AggregateResult, AverageResult, CalculatedAttack, CalculationResult, ContributionResult, DamageMetrics, DamageResult, SpatialDamageMetrics, SpatialResult, StatusResult
 from .domain.upgrades import Arcane, Compatibility, Mod, Upgrade, UpgradeStats
-from .domain.weapons import Archgun, Attack, AttackStats, LoadoutCompatibilityWarning, Melee, PerkCompatibilityWarning, Primary, ProgenitorCompatibilityWarning, Secondary, UnimplementedUpgradeWarning
+from .domain.warnings import LoadoutCompatibilityWarning, PerkCompatibilityWarning, ProgenitorCompatibilityWarning, UnimplementedUpgradeWarning
+from .domain.weapons import Archgun, Attack, AttackStats, Melee, Primary, Secondary
 from .engine.calculator import Calculator
-from .engine.optimizer import Metric, Optimization, OptimizationProgress, Optimizer, ProgressCallback, default_metric, terminal_progress
+from .optimizer import Metric, Optimization, OptimizationProgress, Optimizer, ProgressCallback, default_metric, terminal_progress
 from .formatting.objects import format_loadout, format_perk, format_upgrade, format_weapon
 from .formatting.results import Formatter, format_damage_result, format_result, format_spatial, format_status
 

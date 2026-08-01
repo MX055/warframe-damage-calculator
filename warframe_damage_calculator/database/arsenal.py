@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Generic, Self, TypeVar
 
 from ..domain.enemies import Enemy
-from ..domain.upgrades import Perk
+from ..domain.perks import Perk
 from ..domain.upgrades import Arcane, Mod, Upgrade
 from ..domain.weapons import Archgun, Attack, Melee, Primary, Secondary, Weapon
 from .compatibility import is_upgrade_compatible

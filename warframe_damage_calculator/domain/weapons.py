@@ -7,7 +7,7 @@ from typing import Any, ClassVar, Mapping, Self
 
 from .damage import Dist
 from .implementation import ImplementationStatus
-from .upgrades import Perk, PerkValues, ResolvedPerk, resolve_perk
+from .perks import Perk, PerkValues, ResolvedPerk, resolve_perk
 
 
 @dataclass(slots=True)
@@ -80,22 +80,6 @@ class Attack:
         values["name"] = record_name
         values["stats"] = AttackStats.from_record(values.get("stats", {}))
         return cls(**values)
-
-
-class LoadoutCompatibilityWarning(UserWarning):
-    pass
-
-
-class PerkCompatibilityWarning(LoadoutCompatibilityWarning):
-    pass
-
-
-class ProgenitorCompatibilityWarning(LoadoutCompatibilityWarning):
-    pass
-
-
-class UnimplementedUpgradeWarning(UserWarning):
-    pass
 
 
 class Weapon:

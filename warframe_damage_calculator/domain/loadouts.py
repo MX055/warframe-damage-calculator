@@ -4,7 +4,7 @@ from collections.abc import Iterable
 from typing import Self
 
 from .damage import BASE_ELEMENT_TYPES
-from .upgrades import Perk
+from .perks import Perk
 from .upgrades import Arcane, Mod, Upgrade
 
 

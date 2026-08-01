@@ -1,12 +1,6 @@
 from __future__ import annotations
 
 from decimal import ROUND_HALF_UP, Decimal
-from math import pi
-
-from ..domain.damage import Dist
-
-
-DOT_MULTIPLIERS = {"slash": 0.35, "heat": 0.5, "toxin": 0.5, "electricity": 0.5, "gas": 0.5}
 
 
 def clamp(value: float, minimum: float | None = None, maximum: float | None = None) -> float:
@@ -37,32 +31,6 @@ def crit_multiplier(chance: float, damage: float) -> float:
 def hit_multiplier(chance: float, damage: float, non_crit_damage: float = 0, non_crit_chance: float = 0) -> float:
     non_crit_bonus = non_crit_damage * (non_crit_chance if non_crit_chance else 1)
     return crit_multiplier(chance, damage) + max(0, 1 - chance) * non_crit_bonus
-
-
-def average_falloff_multiplier(start_range: float, end_range: float, final_multiplier: float) -> float:
-    if end_range <= 0: return 1.0
-    return cumulative_falloff(end_range, start_range, end_range, final_multiplier) / end_range
-
-
-def cumulative_falloff(distance: float, start_range: float, end_range: float, final_multiplier: float) -> float:
-    distance = max(distance, 0)
-    if distance <= start_range: return distance
-    if end_range <= start_range: return distance if distance <= end_range else end_range + final_multiplier * (distance - end_range)
-    if distance <= end_range: return distance - (1 - final_multiplier) * (distance - start_range) ** 2 / (2 * (end_range - start_range))
-    return final_multiplier * distance + (1 - final_multiplier) * (end_range + start_range) / 2
-
-
-def ranged_falloff_multiplier(start_range: float, end_range: float, max_range: float, final_multiplier: float) -> float:
-    if max_range <= 0: return 1.0
-    return cumulative_falloff(max_range, start_range, end_range, final_multiplier) / max_range
-
-
-def aoe_damage_mass(start_range: float, end_range: float, final_multiplier: float) -> float:
-    return 4 / 3 * pi * end_range ** 3 - pi / 3 * (1 - final_multiplier) * (end_range - start_range) * (3 * end_range ** 2 + 2 * end_range * start_range + start_range ** 2)
-
-
-def distribute_flat(damage: Dist, value: float) -> Dist:
-    return Dist({kind: value * damage.weight(kind) for kind in damage})
 
 
 def refresh_metrics(metrics: object) -> None:

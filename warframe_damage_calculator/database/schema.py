@@ -3,6 +3,7 @@ from __future__ import annotations
 from math import isfinite
 from typing import Any
 
+from ..domain.effect_stats import unclassified_effect_stats
 from ..domain.effects import AUTOMATIC_FIELDS, EFFECT_FIELDS, REPEATABLE_AUTOMATIC_FIELDS, Effect
 
 
@@ -88,6 +89,7 @@ def validate_database(database: dict[str, Any]) -> None:
                         if not isinstance(stat_values, list) or len(stat_values) != len(templates[stat]): raise ValueError(f"{path}.values.{stat}: expected {len(templates[stat])} values")
                         if any(not isinstance(value, (int, float, bool, str)) or isinstance(value, str) and not value or value == "$weapon" for value in stat_values): raise ValueError(f"{path}.values.{stat}: invalid concrete value")
     allowed_upgrade = {"name", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats", "combos"}
+    effect_stats: set[str] = set()
     for section, expected_slots in (("mods", {"regular_mod", "exilus_mod", "stance_mod"}), ("arcanes", {"regular_arcane"})):
         for name, upgrade in database["upgrades"][section].items():
             path = f"upgrades.{section}.{name}"
@@ -97,6 +99,10 @@ def validate_database(database: dict[str, Any]) -> None:
             if upgrade.get("slot") not in expected_slots: raise ValueError(f"{path}: invalid slot")
             if set(upgrade.get("compatibility", {})) - {"types", "subtypes", "names", "categories", "triggers", "aoe"}: raise ValueError(f"{path}.compatibility: invalid fields")
             _effects(upgrade.get("stats", {}), f"{path}.stats")
+            effect_stats.update(upgrade.get("stats", {}))
+    for perk in database["upgrades"]["perks"].values(): effect_stats.update(perk.get("stats", {}))
+    unclassified = unclassified_effect_stats(effect_stats)
+    if unclassified: raise ValueError(f"unclassified effect stats: {sorted(unclassified)}")
     allowed_enemy = {"name", "faction", "base_level", "stats", "bodyparts", "modifiers"}
     allowed_enemy_stats = {"health", "shields", "armor", "overguard"}
     allowed_bodypart = {"name", "type", "multiplier"}

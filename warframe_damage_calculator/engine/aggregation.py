@@ -4,8 +4,8 @@ from collections.abc import Iterable, Mapping
 from typing import Any
 
 from ..domain.damage import Dist
-from ..domain.results import ResolvedStats, Stats
 from ..domain.upgrades import ResolvedEffect
+from .models.stats import ResolvedStats, Stats
 
 
 DAMAGE_TYPES = frozenset({"impact", "puncture", "slash", "heat", "cold", "electricity", "toxin", "blast", "radiation", "gas", "magnetic", "viral", "corrosive", "void", "tau", "true"})
