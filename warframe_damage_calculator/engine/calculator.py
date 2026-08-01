@@ -38,7 +38,10 @@ def _warn_loadout(weapon: Weapon, loadout: Loadout) -> None:
 
 def _status_from_model(model, effects: Mapping[str, float]) -> StatusResult:
     kinds = set(model.damage) | set(model.forced_procs) | set(effects)
-    sustained = {kind: float(model.expected_active_stacks(kind)) for kind in kinds if model.expected_active_stacks(kind)}
+    sustained = {}
+    for kind in kinds:
+        value = float(model.expected_active_stacks(kind))
+        if value: sustained[kind] = value
     return StatusResult(float(model.expected_procs_per_attack), sustained, dict(effects))
 
 
@@ -125,17 +128,17 @@ class Calculator:
         target.bodyparts = {selected: target.bodyparts[selected]}
         return selected, target
 
-    def _calculate(self, selected_attack: str, selected_body_part: str, target: Enemy | None, state: Mapping[str, object], *, copy_inputs: bool = True) -> CalculationResult:
+    def _calculate(self, selected_attack: str, selected_body_part: str, target: Enemy | None, state: Mapping[str, object], *, copy_inputs: bool = True, resolved_perks: tuple[ResolvedPerk, ...] | None = None, validate: bool = True, prepared_names: tuple[str, ...] | None = None) -> CalculationResult:
         if selected_attack not in self.weapon.attacks: raise ValueError(f"unknown attack {selected_attack!r}")
         unknown = set(state) - set(self.weapon.calculation_defaults)
         if unknown: raise TypeError(f"unknown calculation state fields: {', '.join(sorted(unknown))}")
         calculation_state = dict(self.weapon.calculation_defaults) | dict(state)
-        resolved_perks = _resolve_perks(self.weapon, self.loadout.evolutions, calculation_state)
-        _warn_loadout(self.weapon, self.loadout)
+        resolved_perks = _resolve_perks(self.weapon, self.loadout.evolutions, calculation_state) if resolved_perks is None else resolved_perks
+        if validate: _warn_loadout(self.weapon, self.loadout)
         context_target = target.copy() if copy_inputs and target is not None else target if target is not None else Enemy()
         context_loadout = self.loadout.copy() if copy_inputs else self.loadout
         context = CalculationContext(weapon=self.weapon, target=context_target, attack=selected_attack, loadout=context_loadout, resolved_perks=resolved_perks, state=calculation_state)
-        calculated, aggregate, aggregate_status_model, aggregate_status_effects = calculate_weapon(context)
+        calculated, aggregate, aggregate_status_model, aggregate_status_effects = calculate_weapon(context, prepared_names)
         attacks = {name: _calculated_attack(result) for name, result in calculated.items()}
         result_weapon = self.weapon.copy() if copy_inputs else self.weapon
         result_target = None if self.target is None else self.target.copy() if copy_inputs else target

@@ -65,5 +65,29 @@ def damage_multiplier(enemy: Enemy | None, kind: str, *, zone: HitZone, dot: boo
 
 
 def damage_total(damage: Dist, enemy: Enemy | None, *, zone: HitZone, dot: bool = False, weakpoint_bonus: float = 0, status_effects: dict[str, float] | None = None, overguard_multiplier: float = 1) -> float | None:
-    if bodypart_multiplier(enemy, zone, weakpoint_bonus) is None: return None
-    return sum(amount * float(damage_multiplier(enemy, kind, zone=zone, dot=dot, weakpoint_bonus=weakpoint_bonus, status_effects=status_effects, overguard_multiplier=overguard_multiplier) or 0) for kind, amount in damage.items())
+    part = bodypart_multiplier(enemy, zone, weakpoint_bonus)
+    if part is None: return None
+    if enemy is None: return damage.total * part
+    statuses = status_effects or {}
+    effective = enemy.effective
+    health, shields, overguard = float(effective.health), float(effective.shields), float(effective.overguard)
+    pool = health + shields + overguard
+    if pool <= 0: return damage.total * part
+    armor_taken = armor_damage_taken(float(effective.armor) * remaining_armor(statuses))
+    viral_taken = status_vulnerability(statuses.get("viral", 0))
+    magnetic_taken = status_vulnerability(statuses.get("magnetic", 0))
+    shield_taken = 0.5 * magnetic_taken
+    total = 0.0
+    modifiers = enemy.modifiers
+    for kind, amount in damage.items():
+        if kind == "true":
+            health_share, shield_share, health_taken = health + shields, 0.0, viral_taken
+        elif kind == "toxin":
+            health_share, shield_share, health_taken = health + shields, 0.0, armor_taken * viral_taken
+        else:
+            health_share, shield_share = health, shields
+            health_taken = (1.0 if dot and kind == "slash" else armor_taken) * viral_taken
+        overguard_taken = 0.0 if dot else (1.5 if kind == "void" else 1.0) * magnetic_taken * overguard_multiplier
+        defense = (health_share * health_taken + shield_share * shield_taken + overguard * overguard_taken) / pool
+        total += amount * float(modifiers.get(kind, 1)) * defense
+    return total * part

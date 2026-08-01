@@ -53,25 +53,29 @@ class StatusModel:
         return max(self.attempts_per_attack * self.attack_rate, 0)
 
     def base_proc_count_per_attempt(self, kind: str) -> float:
-        return max(self.status_chance, 0) * self.damage.weight(kind) + max(self.forced_procs.get(kind, 0), 0)
+        damage = self.damage
+        weight = damage._amounts.get(kind, 0.0) / damage._total if damage._total else 0.0
+        return max(self.status_chance, 0) * weight + max(self.forced_procs._amounts.get(kind, 0.0), 0)
 
     def base_proc_probability_per_attempt(self, kind: str) -> float:
         guaranteed, fractional = divmod(max(self.status_chance, 0), 1)
-        weight = self.damage.weight(kind)
+        damage = self.damage
+        weight = damage._amounts.get(kind, 0.0) / damage._total if damage._total else 0.0
         random = 1 - (1 - weight) ** guaranteed * (1 - fractional * weight)
-        forced = min(max(self.forced_procs.get(kind, 0), 0), 1)
+        forced = min(max(self.forced_procs._amounts.get(kind, 0.0), 0), 1)
         return 1 - (1 - random) * (1 - forced)
 
     def base_any_proc_probability_per_attempt(self) -> float:
-        status_weight = sum(self.damage.weight(kind) for kind in STATUS_TYPES)
+        damage = self.damage
+        status_weight = sum(amount for kind, amount in damage._amounts.items() if kind in STATUS_TYPES) / damage._total if damage._total else 0.0
         guaranteed, fractional = divmod(max(self.status_chance, 0), 1)
         random = 1 - (1 - status_weight) ** guaranteed * (1 - fractional * status_weight)
-        forced = min(sum(max(self.forced_procs.get(kind, 0), 0) for kind in STATUS_TYPES), 1)
+        forced = min(sum(max(amount, 0) for kind, amount in self.forced_procs._amounts.items() if kind in STATUS_TYPES), 1)
         return 1 - (1 - random) * (1 - forced)
 
     def proc_count_per_attack(self, kind: str) -> float:
         random = self.random_proc_probability / len(RANDOM_STATUS_TYPES) if kind in RANDOM_STATUS_TYPES else 0
-        return max(self.attempts_per_attack, 0) * self.base_proc_count_per_attempt(kind) + max(self.extra_proc_counts.get(kind, 0), 0) + random
+        return max(self.attempts_per_attack, 0) * self.base_proc_count_per_attempt(kind) + max(self.extra_proc_counts._amounts.get(kind, 0.0), 0) + random
 
     @property
     def expected_procs_per_attack(self) -> float:

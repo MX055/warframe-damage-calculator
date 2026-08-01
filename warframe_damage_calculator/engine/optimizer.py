@@ -12,10 +12,13 @@ from dataclasses import dataclass
 from itertools import combinations, permutations, product
 
 from ..database.arsenal import arsenal
+from ..domain.enemies import Enemy
 from ..domain.loadouts import Loadout, Progenitor
 from ..domain.results import CalculationResult
-from ..domain.upgrades import Arcane, Mod, Perk, UpgradeStats
-from .calculator import Calculator
+from ..domain.upgrades import Arcane, Mod, Perk, ResolvedPerk, UpgradeStats
+from .calculator import Calculator, _resolve_perks
+from .context import CalculationContext
+from .weapon_calculator import WeaponCalculator
 
 Metric = Callable[[CalculationResult], float]
 
@@ -208,12 +211,13 @@ class _Candidate:
 
 
 class Optimizer:
-    __slots__ = ("calculator", "_priority_cache")
+    __slots__ = ("calculator", "_priority_cache", "_upgrade_key_cache")
 
     def __init__(self, calculator: Calculator) -> None:
         if not isinstance(calculator, Calculator): raise TypeError("calculator must be a Calculator")
         self.calculator = calculator
         self._priority_cache: dict[tuple, tuple[float, int, str]] = {}
+        self._upgrade_key_cache: dict[int, tuple] = {}
 
     def resolve(self, metric: Metric = default_metric, *, attacks: Mapping[str, float] | None = None, bodyparts: Mapping[str, float] | None = None, evaluations: int = 10_000, progress: bool = True, riven: bool = True) -> Optimization:
         if not callable(metric): raise TypeError("metric must be callable")
@@ -231,12 +235,19 @@ class Optimizer:
         pools = self._candidate_pools(riven=riven, search_scale=search_scale)
         base = self._complete_fixed_loadout(self.calculator.loadout)
         scenarios = []
+        prepared_names_cache: dict[str, tuple[str, ...]] = {}
         for attack, attack_weight in attack_weights.items():
             for bodypart, bodypart_weight in bodypart_weights.items():
                 evaluator = Calculator(self.calculator.weapon, self.calculator.target, base)
                 selected_bodypart, target = evaluator._select_bodypart(bodypart)
-                scenarios.append((evaluator, attack, selected_bodypart, target, attack_weight * bodypart_weight))
+                prepared_names = prepared_names_cache.get(attack)
+                if prepared_names is None:
+                    context = CalculationContext(weapon=evaluator.weapon, target=target if target is not None else Enemy(), attack=attack, loadout=evaluator.loadout, resolved_perks=(), state=dict(evaluator.weapon.calculation_defaults))
+                    prepared_names = tuple(WeaponCalculator(context).collect_attack_tree())
+                    prepared_names_cache[attack] = prepared_names
+                scenarios.append((evaluator, attack, selected_bodypart, target, attack_weight * bodypart_weight, prepared_names))
         cache: dict[tuple, _Candidate] = {}
+        perk_cache: dict[tuple[int, ...], tuple[ResolvedPerk, ...]] = {}
         evaluations_used = 0
         resolutions = 0
         attempts = 0
@@ -253,9 +264,14 @@ class Optimizer:
             if evaluations_used >= resolution_budget: return best, False
             score = 0.0
             representative: CalculationResult | None = None
-            for evaluator, attack, bodypart, target, weight in scenarios:
+            perk_key = tuple(id(perk) for perk in loadout.evolutions)
+            resolved_perks = perk_cache.get(perk_key)
+            if resolved_perks is None:
+                resolved_perks = _resolve_perks(self.calculator.weapon, loadout.evolutions, dict(self.calculator.weapon.calculation_defaults))
+                perk_cache[perk_key] = resolved_perks
+            for evaluator, attack, bodypart, target, weight, prepared_names in scenarios:
                 evaluator.loadout = loadout
-                result = evaluator._calculate(attack, bodypart, target, {}, copy_inputs=False)
+                result = evaluator._calculate(attack, bodypart, target, {}, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names)
                 value = float(metric(result))
                 if not math.isfinite(value): raise ValueError("metric must return a finite number")
                 score += weight * value
@@ -884,7 +900,13 @@ class Optimizer:
         return True
 
     def _loadout_key(self, loadout: Loadout) -> tuple:
+        cache = self._upgrade_key_cache
         def upgrade_key(upgrade: Mod | Arcane) -> tuple:
+            identity = id(upgrade)
+            cached = cache.get(identity)
+            if cached is not None: return cached
             stats = tuple((stat, tuple((effect.value, effect.mode, effect.family, effect.maximum) for effect in effects)) for stat, effects in sorted(upgrade.stats.items()))
-            return upgrade.name, upgrade.slot, tuple(sorted(upgrade.runtime.as_dict().items())), stats
+            key = upgrade.name, upgrade.slot, tuple(sorted(upgrade.runtime._values.items())), stats
+            cache[identity] = key
+            return key
         return (tuple(upgrade_key(mod) for mod in loadout.mods), tuple(upgrade_key(arcane) for arcane in loadout.arcanes), tuple(perk.name for perk in loadout.evolutions), None if loadout.progenitor is None else (loadout.progenitor.element, loadout.progenitor.bonus))

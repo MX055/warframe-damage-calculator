@@ -14,10 +14,25 @@ ELEMENTAL_COMBINATIONS = {
     frozenset({"cold", "toxin"}): "viral",
     frozenset({"electricity", "toxin"}): "corrosive",
 }
+_ELEMENTAL_PAIR = {
+    ("heat", "cold"): "blast", ("cold", "heat"): "blast",
+    ("heat", "electricity"): "radiation", ("electricity", "heat"): "radiation",
+    ("heat", "toxin"): "gas", ("toxin", "heat"): "gas",
+    ("cold", "electricity"): "magnetic", ("electricity", "cold"): "magnetic",
+    ("cold", "toxin"): "viral", ("toxin", "cold"): "viral",
+    ("electricity", "toxin"): "corrosive", ("toxin", "electricity"): "corrosive",
+}
 
 
 class Dist(Mapping[str, float]):
     __slots__ = ("_amounts", "_total")
+
+    @classmethod
+    def _from_amounts(cls, amounts: dict[str, float]) -> Self:
+        result = cls.__new__(cls)
+        result._amounts = {kind: amount for kind, amount in amounts.items() if amount}
+        result._total = sum(result._amounts.values())
+        return result
 
     def __init__(self, values: Mapping[str, int | float] | None = None, /, **amounts: int | float) -> None:
         merged = dict(values or {})
@@ -39,14 +54,16 @@ class Dist(Mapping[str, float]):
         return f"Dist({values})"
 
     def __add__(self, other: Self) -> Self:
-        kinds = [*self, *(kind for kind in other if kind not in self)]
-        return type(self)({kind: self.get(kind, 0) + other.get(kind, 0) for kind in kinds})
+        amounts = dict(self._amounts)
+        for kind, amount in other._amounts.items(): amounts[kind] = amounts.get(kind, 0.0) + amount
+        return type(self)._from_amounts(amounts)
 
     def __radd__(self, other: int) -> Self:
         return self if other == 0 else NotImplemented
 
     def __mul__(self, multiplier: int | float) -> Self:
-        return type(self)({kind: amount * multiplier for kind, amount in self.items()})
+        value = float(multiplier)
+        return type(self)._from_amounts({kind: amount * value for kind, amount in self._amounts.items()})
 
     __rmul__ = __mul__
 
@@ -62,30 +79,34 @@ class Dist(Mapping[str, float]):
 
     def include(self, kinds: Iterable[str]) -> Self:
         included = set(kinds)
-        return type(self)({kind: amount for kind, amount in self.items() if kind in included})
+        return type(self)._from_amounts({kind: amount for kind, amount in self._amounts.items() if kind in included})
 
     def exclude(self, kinds: Iterable[str]) -> Self:
         excluded = set(kinds)
-        return type(self)({kind: amount for kind, amount in self.items() if kind not in excluded})
+        return type(self)._from_amounts({kind: amount for kind, amount in self._amounts.items() if kind not in excluded})
 
     def combine_elements(self) -> Self:
-        elements = list(self.include(BASE_ELEMENT_TYPES).items())
-        combined: dict[str, float] = {}
+        source = self._amounts
+        elements = [(kind, amount) for kind, amount in source.items() if kind in BASE_ELEMENT_TYPES]
+        if not elements: return self
+        combined = {kind: amount for kind, amount in source.items() if kind not in BASE_ELEMENT_TYPES}
         for index in range(0, len(elements), 2):
             first, first_amount = elements[index]
             if index + 1 == len(elements):
-                combined[first] = combined.get(first, 0) + first_amount
+                combined[first] = combined.get(first, 0.0) + first_amount
                 continue
             second, second_amount = elements[index + 1]
-            result = ELEMENTAL_COMBINATIONS[frozenset({first, second})]
-            combined[result] = combined.get(result, 0) + first_amount + second_amount
-        return self.exclude(BASE_ELEMENT_TYPES) + type(self)(combined)
+            result = _ELEMENTAL_PAIR[(first, second)]
+            combined[result] = combined.get(result, 0.0) + first_amount + second_amount
+        return type(self)._from_amounts(combined)
 
     def apply_modifiers(self, modifiers: Mapping[str, int | float]) -> Self:
-        kinds = [*self, *(kind for kind in modifiers if kind not in self)]
+        source = self._amounts
         total = self._total
-        modified = {
-            kind: self.get(kind, 0) * (1 + modifiers.get(kind, 0)) if kind in PHYSICAL_TYPES else self.get(kind, 0) + total * modifiers.get(kind, 0)
-            for kind in kinds
-        }
-        return type(self)(modified).combine_elements()
+        modified: dict[str, float] = {}
+        for kind, amount in source.items():
+            modifier = modifiers.get(kind, 0)
+            modified[kind] = amount * (1 + modifier) if kind in PHYSICAL_TYPES else amount + total * modifier
+        for kind, modifier in modifiers.items():
+            if kind not in source: modified[kind] = total * modifier
+        return type(self)._from_amounts(modified).combine_elements()

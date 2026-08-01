@@ -183,9 +183,9 @@ def _melee_rate(context: CalculationContext, attack: Attack, total: ResolvedStat
     return speed, Stats(attack_speed=speed, heavy_attack_speed=max(1 + float(total.proportional.get("heavy_attack_speed", 0)), 0), heavy_attack_efficiency=max(float(attack.stats.heavy_attack_efficiency) + float(total.proportional.get("heavy_attack_efficiency", 0)), 0), initial_combo=max(float(attack.stats.initial_combo) + float(total.proportional.get("initial_combo", 0)), 0), magazine_capacity=float(context.weapon.magazine_size), reload_time=float(context.weapon.reload_time), ammo_cost=float(attack.stats.ammo_cost), ammo_efficiency=0, burst_count=float(attack.stats.burst_count), burst_delay=float(attack.stats.burst_delay), charge_time=float(attack.stats.charge_time))
 
 
-def _provisional(context: CalculationContext, attack: Attack, upgrade_effects: tuple[ResolvedEffect, ...], evolution_effects: tuple[ResolvedEffect, ...]) -> tuple[Stats, StatusModel]:
-    upgrades = aggregate(effect for effect in upgrade_effects if not effect.automatic)
-    evolutions = aggregate(effect for effect in evolution_effects if not effect.automatic)
+def _provisional(context: CalculationContext, attack: Attack, upgrade_effects: tuple[ResolvedEffect, ...], evolution_effects: tuple[ResolvedEffect, ...], static_upgrades: ResolvedStats | None = None, static_evolutions: ResolvedStats | None = None) -> tuple[Stats, StatusModel]:
+    upgrades = static_upgrades if static_upgrades is not None else aggregate(effect for effect in upgrade_effects if not effect.automatic)
+    evolutions = static_evolutions if static_evolutions is not None else aggregate(effect for effect in evolution_effects if not effect.automatic)
     total = _combined(upgrades, evolutions)
     base, original, _ = _base_damage(context, attack, evolutions)
     damage = _damage(attack, base, original, upgrades, evolutions)
@@ -208,6 +208,9 @@ def _resolve_effects(context: CalculationContext, attack: Attack, source: tuple[
     resolved: list[ResolvedEffect] = []
     positions: list[ResolvedEffect] = []
     for effect in source:
+        if not effect.automatic:
+            resolved.append(effect)
+            continue
         current = evaluate(effect, context=context, attack=attack, stats=provisional, status=model, equipped=equipped)
         if current is None: continue
         event = automatic_value(current, "on")
@@ -481,8 +484,8 @@ def _apply_position_mixture(context: CalculationContext, result: AttackResult, e
     _refresh_spatial(spatial, average.attack_rate)
 
 
-def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effects: tuple[ResolvedEffect, ...], evolution_effects: tuple[ResolvedEffect, ...], *, automatic_model_override: StatusModel | None = None, status_effects_override: dict[str, float] | None = None, random_proc_probability: float = 0) -> AttackResult:
-    provisional, provisional_model = _provisional(context, attack, upgrade_effects, evolution_effects)
+def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effects: tuple[ResolvedEffect, ...], evolution_effects: tuple[ResolvedEffect, ...], *, static_upgrades: ResolvedStats | None = None, static_evolutions: ResolvedStats | None = None, automatic_model_override: StatusModel | None = None, status_effects_override: dict[str, float] | None = None, random_proc_probability: float = 0) -> AttackResult:
+    provisional, provisional_model = _provisional(context, attack, upgrade_effects, evolution_effects, static_upgrades, static_evolutions)
     equipped = {upgrade.name for upgrade in context.loadout.ranked_upgrades}
     initial_upgrade_effects, _ = _resolve_effects(context, attack, upgrade_effects, provisional, provisional_model, equipped)
     initial_evolution_effects, _ = _resolve_effects(context, attack, evolution_effects, provisional, provisional_model, equipped)
@@ -646,12 +649,14 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
 
 
 class AttackCalculator:
-    __slots__ = ("context", "upgrade_effects", "evolution_effects")
+    __slots__ = ("context", "upgrade_effects", "evolution_effects", "static_upgrades", "static_evolutions")
 
     def __init__(self, context: CalculationContext, upgrade_effects: tuple[ResolvedEffect, ...], evolution_effects: tuple[ResolvedEffect, ...]) -> None:
         self.context = context
         self.upgrade_effects = upgrade_effects
         self.evolution_effects = evolution_effects
+        self.static_upgrades = aggregate(effect for effect in upgrade_effects if not effect.automatic)
+        self.static_evolutions = aggregate(effect for effect in evolution_effects if not effect.automatic)
 
     def calculate(self, attack: Attack, *, automatic_model: StatusModel | None = None, status_effects: dict[str, float] | None = None, random_proc_probability: float = 0) -> AttackResult:
-        return _calculate_attack(self.context, attack, self.upgrade_effects, self.evolution_effects, automatic_model_override=automatic_model, status_effects_override=status_effects, random_proc_probability=random_proc_probability)
+        return _calculate_attack(self.context, attack, self.upgrade_effects, self.evolution_effects, static_upgrades=self.static_upgrades, static_evolutions=self.static_evolutions, automatic_model_override=automatic_model, status_effects_override=status_effects, random_proc_probability=random_proc_probability)
