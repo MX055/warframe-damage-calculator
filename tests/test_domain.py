@@ -1,9 +1,15 @@
 import unittest
 
-from warframe_damage_calculator import Effect, Loadout, Mod, Perk, UpgradeStats
+from warframe_damage_calculator import Loadout
+from warframe_damage_calculator.domain.effects import Effect
+from warframe_damage_calculator.domain.perks import Perk
+from warframe_damage_calculator.domain.upgrades import Compatibility, Mod, UpgradeStats
 
 
 class DomainTests(unittest.TestCase):
+    def test_compatibility_rejects_non_boolean_aoe_values(self):
+        with self.assertRaisesRegex(TypeError, "aoe must be a bool"): Compatibility.from_record({"aoe": "false"})
+
     def test_loadout_rejects_combined_upgrades_argument(self):
         with self.assertRaises(TypeError): Loadout(upgrades=[])
 

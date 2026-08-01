@@ -1,6 +1,8 @@
 import unittest
 
-from warframe_damage_calculator import Attack, AttackStats, Calculator, Dist, Loadout, Primary, arsenal
+from warframe_damage_calculator import Calculator, Loadout, arsenal
+from warframe_damage_calculator.domain.damage import Dist
+from warframe_damage_calculator.domain.weapons import Attack, AttackStats, Primary
 
 
 class EngineTests(unittest.TestCase):

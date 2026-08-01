@@ -57,6 +57,7 @@ class Compatibility:
         allowed = {"types", "subtypes", "names", "categories", "triggers", "aoe"}
         unknown = set(record) - allowed
         if unknown: raise TypeError(f"unknown compatibility fields: {', '.join(sorted(unknown))}")
+        if "aoe" in record and not isinstance(record["aoe"], bool): raise TypeError("compatibility aoe must be a bool")
         return cls(list(record.get("types", [])), list(record.get("subtypes", [])), list(record.get("names", [])), list(record.get("categories", [])), list(record.get("triggers", [])), record.get("aoe"))
 
 

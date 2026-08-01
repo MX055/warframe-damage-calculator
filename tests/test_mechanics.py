@@ -1,7 +1,10 @@
 import unittest
 import warnings
 
-from warframe_damage_calculator import Attack, AttackStats, BodyPart, Calculator, Dist, Enemy, EnemyStats, Loadout, Primary, arsenal
+from warframe_damage_calculator import Calculator, Loadout, arsenal
+from warframe_damage_calculator.domain.damage import Dist
+from warframe_damage_calculator.domain.enemies import BodyPart, Enemy, EnemyStats
+from warframe_damage_calculator.domain.weapons import Attack, AttackStats, Primary
 
 
 def perk(weapon, tier, choice):

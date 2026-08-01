@@ -1,13 +1,21 @@
 import unittest
-from warframe_damage_calculator import Formatter
-
-from warframe_damage_calculator import Attack, AttackStats, BodyPart, Calculator, Dist, Effect, Enemy, ImplementationStatus, Loadout, Mod, Progenitor, PLACEHOLDER, Perk, PerkValues, Primary, Upgrade, UpgradeStats, arsenal, format_damage_result, format_loadout, format_perk, format_spatial, format_status, format_upgrade, format_weapon
+from warframe_damage_calculator import Calculator, Formatter, Loadout, Progenitor, arsenal
+from warframe_damage_calculator.domain.damage import Dist
+from warframe_damage_calculator.domain.effects import PLACEHOLDER, Effect
+from warframe_damage_calculator.domain.enemies import BodyPart, Enemy
+from warframe_damage_calculator.domain.implementation import ImplementationStatus
+from warframe_damage_calculator.domain.perks import Perk, PerkValues
+from warframe_damage_calculator.domain.upgrades import Mod, Upgrade, UpgradeStats
+from warframe_damage_calculator.domain.weapons import Attack, AttackStats, Primary
+from warframe_damage_calculator.formatting.objects import format_loadout, format_perk, format_upgrade, format_weapon
+from warframe_damage_calculator.formatting.results import format_damage_result, format_spatial, format_status
 
 
 class ApiTests(unittest.TestCase):
     def test_root_api_hides_internal_classes(self):
         import warframe_damage_calculator as package
-        for name in ("Arsenal", "Weapon"): self.assertFalse(hasattr(package, name))
+        self.assertEqual(package.__all__, ("Calculator", "Formatter", "Loadout", "Optimizer", "Progenitor", "arsenal"))
+        for name in ("Attack", "CalculationResult", "Effect", "ImplementationWarning", "Metric", "PLACEHOLDER", "ProgressCallback", "format_result"): self.assertFalse(hasattr(package, name))
         self.assertIs(package.Formatter, Formatter)
 
     def test_weapon_is_definition_only(self):

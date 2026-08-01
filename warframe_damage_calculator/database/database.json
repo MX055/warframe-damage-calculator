@@ -97832,8 +97832,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -97858,8 +97857,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "radiation": [
@@ -97885,8 +97883,7 @@
           "names": [
             "Kuva Sobek",
             "Sobek"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -97898,8 +97895,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -97913,8 +97909,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -97926,8 +97921,7 @@
         "compatibility": {
           "subtypes": [
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -97939,8 +97933,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -97954,8 +97947,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -97967,8 +97959,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -97980,8 +97971,7 @@
         "compatibility": {
           "names": [
             "Argonak"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "punch_through": [
@@ -98003,8 +97993,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "multishot": [
@@ -98028,8 +98017,7 @@
           "names": [
             "Daikyu",
             "Daikyu Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "weakpoint_damage": [
@@ -98050,8 +98038,7 @@
             "Furax",
             "Furax Wraith",
             "MK1-Furax"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -98065,8 +98052,7 @@
         "compatibility": {
           "names": [
             "Javlok"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -98089,8 +98075,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -98118,8 +98103,7 @@
         "compatibility": {
           "names": [
             "Ripkas"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -98145,8 +98129,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -98170,8 +98153,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -98193,8 +98175,7 @@
         "compatibility": {
           "names": [
             "Amanata"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -98218,8 +98199,7 @@
         "compatibility": {
           "subtypes": [
             "dual_dagger"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -98245,8 +98225,7 @@
           "names": [
             "Rubico",
             "Rubico Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "zoom": [
@@ -98265,8 +98244,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -98278,8 +98256,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -98293,8 +98270,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "ammo_maximum": [
@@ -98315,8 +98291,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -98338,8 +98313,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -98366,8 +98340,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -98379,8 +98352,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -98407,8 +98379,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -98430,8 +98401,7 @@
         "compatibility": {
           "subtypes": [
             "bow"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -98443,8 +98413,7 @@
         "compatibility": {
           "subtypes": [
             "archmelee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -98456,8 +98425,7 @@
         "compatibility": {
           "subtypes": [
             "archmelee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "slash": [
@@ -98476,8 +98444,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "radiation": [
@@ -98502,8 +98469,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "puncture": [
@@ -98522,8 +98488,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -98542,8 +98507,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_duration": [
@@ -98562,8 +98526,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -98583,8 +98546,7 @@
           "names": [
             "Silva & Aegis",
             "Silva & Aegis Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -98596,8 +98558,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "range": [
@@ -98618,8 +98579,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "corpus_damage": [
@@ -98643,8 +98603,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "grineer_damage": [
@@ -98668,8 +98627,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "infested_damage": [
@@ -98693,8 +98651,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "orokin_damage": [
@@ -98717,8 +98674,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "murmur_damage": [
@@ -98739,8 +98695,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "multishot": [
@@ -98763,8 +98718,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -98776,8 +98730,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "attack_speed": [
@@ -98803,8 +98756,7 @@
         "compatibility": {
           "names": [
             "Paris Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -98823,8 +98775,7 @@
         "compatibility": {
           "names": [
             "AX-52"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -98858,8 +98809,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -98884,8 +98834,7 @@
         "compatibility": {
           "names": [
             "Jaw Sword"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -98906,8 +98855,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -98927,8 +98875,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -98953,8 +98900,7 @@
         "compatibility": {
           "subtypes": [
             "archmelee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "heat": [
@@ -98973,8 +98919,7 @@
         "compatibility": {
           "subtypes": [
             "archmelee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -98993,8 +98938,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -99006,8 +98950,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -99029,8 +98972,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -99042,8 +98984,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -99065,8 +99006,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "combo_duration": [
@@ -99087,8 +99027,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "puncture": [
@@ -99107,8 +99046,7 @@
         "compatibility": {
           "subtypes": [
             "polearm"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -99133,8 +99071,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -99147,8 +99084,7 @@
           "names": [
             "Grakata",
             "Prisma Grakata"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "ammo_efficiency": [
@@ -99169,8 +99105,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "puncture": [
@@ -99191,8 +99126,7 @@
             "Prisma Skana",
             "Skana",
             "Skana Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -99211,8 +99145,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "zoom": [
@@ -99231,8 +99164,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -99254,8 +99186,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -99280,8 +99211,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "heat": [
@@ -99310,8 +99240,7 @@
         "compatibility": {
           "names": [
             "Hate"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_vulnerability": [
@@ -99338,8 +99267,7 @@
         "compatibility": {
           "names": [
             "Mutalist Quanta"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -99351,8 +99279,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "slash": [
@@ -99371,8 +99298,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -99384,8 +99310,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -99397,8 +99322,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "slash": [
@@ -99423,8 +99347,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "slash": [
@@ -99451,8 +99374,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -99474,8 +99396,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -99487,8 +99408,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "electricity": [
@@ -99513,8 +99433,7 @@
         "compatibility": {
           "subtypes": [
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -99536,8 +99455,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "electricity": [
@@ -99559,8 +99477,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "cold": [
@@ -99589,8 +99506,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "cold": [
@@ -99612,8 +99528,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "cold": [
@@ -99638,8 +99553,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "corpus_damage": [
@@ -99661,8 +99575,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "grineer_damage": [
@@ -99684,8 +99597,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "infested_damage": [
@@ -99707,8 +99619,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "orokin_damage": [
@@ -99729,8 +99640,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "murmur_damage": [
@@ -99752,8 +99662,7 @@
           "names": [
             "Kuva Sobek",
             "Sobek"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "multishot": [
@@ -99774,8 +99683,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "impact": [
@@ -99796,8 +99704,7 @@
             "Sancti Tigris",
             "Tigris",
             "Tigris Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "reload_speed": [
@@ -99818,8 +99725,7 @@
         "compatibility": {
           "subtypes": [
             "glaive"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "reload_speed": [
@@ -99844,8 +99750,7 @@
         "compatibility": {
           "subtypes": [
             "glaive"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "combo_duration": [
@@ -99864,8 +99769,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -99877,8 +99781,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "heat": [
@@ -99899,8 +99802,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "heat": [
@@ -99921,8 +99823,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "impact": [
@@ -99943,8 +99844,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -99959,8 +99859,7 @@
         "compatibility": {
           "subtypes": [
             "thrown"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -99974,8 +99873,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "impact": [
@@ -99996,8 +99894,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -100019,8 +99916,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -100032,8 +99928,7 @@
         "compatibility": {
           "subtypes": [
             "archmelee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "electricity": [
@@ -100052,8 +99947,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "toxin": [
@@ -100074,8 +99968,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "radiation": [
@@ -100100,8 +99993,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "toxin": [
@@ -100128,8 +100020,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_duration": [
@@ -100148,8 +100039,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "electricity": [
@@ -100171,8 +100061,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "initial_combo": [
@@ -100197,8 +100086,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "recoil": [
@@ -100219,8 +100107,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -100235,8 +100122,7 @@
         "compatibility": {
           "subtypes": [
             "dagger"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "initial_combo": [
@@ -100263,8 +100149,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "impact": [
@@ -100283,8 +100168,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -100299,8 +100183,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -100329,8 +100212,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -100360,8 +100242,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -100395,8 +100276,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -100421,8 +100301,7 @@
         "compatibility": {
           "subtypes": [
             "archmelee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "radiation": [
@@ -100448,8 +100327,7 @@
           "names": [
             "Catabolyst",
             "Coda Catabolyst"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -100471,8 +100349,7 @@
           "names": [
             "Tiberon",
             "Tiberon Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -100493,8 +100370,7 @@
         "compatibility": {
           "subtypes": [
             "archmelee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "cold": [
@@ -100521,8 +100397,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "cold": [
@@ -100544,8 +100419,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -100581,8 +100455,7 @@
         "compatibility": {
           "subtypes": [
             "archmelee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -100601,8 +100474,7 @@
         "compatibility": {
           "names": [
             "Akbronco Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "viral": [
@@ -100621,8 +100493,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -100644,8 +100515,7 @@
           "names": [
             "Magnus",
             "Magnus Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "weakpoint_crit_chance": [
@@ -100674,8 +100544,7 @@
           "names": [
             "Grinlok",
             "Prisma Grinlok"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -100694,8 +100563,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "cold": [
@@ -100718,8 +100586,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -100731,8 +100598,7 @@
         "compatibility": {
           "subtypes": [
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -100758,8 +100624,7 @@
           "names": [
             "Supra",
             "Supra Vandal"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -100771,8 +100636,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -100795,8 +100659,7 @@
           "names": [
             "Panthera",
             "Panthera Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -100808,8 +100671,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -100821,8 +100683,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -100834,8 +100695,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "impact": [
@@ -100857,8 +100717,7 @@
           "names": [
             "Bronco",
             "Bronco Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -100879,8 +100738,7 @@
             "Latron",
             "Latron Prime",
             "Latron Wraith"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -100905,8 +100763,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -100918,8 +100775,7 @@
         "compatibility": {
           "names": [
             "Despair"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -100938,8 +100794,7 @@
         "compatibility": {
           "names": [
             "Basmu"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -100960,8 +100815,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -100973,8 +100827,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "combo_duration": [
@@ -100999,8 +100852,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "multishot": [
@@ -101023,8 +100875,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "zoom": [
@@ -101043,8 +100894,7 @@
         "compatibility": {
           "names": [
             "Convectrix"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -101063,8 +100913,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -101076,8 +100925,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "electricity": [
@@ -101096,8 +100944,7 @@
         "compatibility": {
           "names": [
             "Ack & Brunt"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -101109,8 +100956,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -101130,8 +100976,7 @@
         "compatibility": {
           "subtypes": [
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "reload_speed": [
@@ -101150,8 +100995,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -101170,8 +101014,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "combo_gain_chance": [
@@ -101205,8 +101048,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -101219,8 +101061,7 @@
           "names": [
             "Supra",
             "Supra Vandal"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -101240,8 +101081,7 @@
           "names": [
             "Obex",
             "Prisma Obex"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -101254,8 +101094,7 @@
           "names": [
             "Kestrel",
             "Kestrel Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -101267,8 +101106,7 @@
         "compatibility": {
           "names": [
             "Bolto"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -101280,8 +101118,7 @@
         "compatibility": {
           "names": [
             "Embolist"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -101301,8 +101138,7 @@
           "names": [
             "Zylok",
             "Zylok Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -101323,8 +101159,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "corpus_damage": [
@@ -101346,8 +101181,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "grineer_damage": [
@@ -101369,8 +101203,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "infested_damage": [
@@ -101392,8 +101225,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "orokin_damage": [
@@ -101414,8 +101246,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "murmur_damage": [
@@ -101436,8 +101267,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -101449,8 +101279,7 @@
         "compatibility": {
           "names": [
             "Harpak"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -101471,8 +101300,7 @@
         "compatibility": {
           "subtypes": [
             "archmelee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "range": [
@@ -101493,8 +101321,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "slash": [
@@ -101513,8 +101340,7 @@
         "compatibility": {
           "subtypes": [
             "tome"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -101532,8 +101358,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "reload_speed": [
@@ -101555,8 +101380,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "projectile_speed": [
@@ -101577,8 +101401,7 @@
         "compatibility": {
           "subtypes": [
             "bow"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -101599,8 +101422,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "toxin": [
@@ -101623,8 +101445,7 @@
           "names": [
             "Hind",
             "Kuva Hind"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -101645,8 +101466,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "finisher_damage": [
@@ -101667,8 +101487,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "explosion_radius": [
@@ -101689,8 +101508,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -101705,8 +101523,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "heat": [
@@ -101731,8 +101548,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "puncture": [
@@ -101754,8 +101570,7 @@
           "names": [
             "Flux Rifle",
             "Tenet Flux Rifle"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -101774,8 +101589,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "heavy_attack_efficiency": [
@@ -101800,8 +101614,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "radiation": [
@@ -101828,8 +101641,7 @@
             "Prisma Tetra",
             "Tenet Tetra",
             "Tetra"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -101841,8 +101653,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -101855,8 +101666,7 @@
           "names": [
             "Drakgoon",
             "Kuva Drakgoon"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -101868,8 +101678,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -101894,8 +101703,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "cold": [
@@ -101920,8 +101728,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "cold": [
@@ -101946,8 +101753,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "cold": [
@@ -101972,8 +101778,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -102001,8 +101806,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "impact": [
@@ -102021,8 +101825,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "explosion_radius": [
@@ -102043,8 +101846,7 @@
         "compatibility": {
           "subtypes": [
             "archmelee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "attack_speed": [
@@ -102063,8 +101865,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "attack_speed": [
@@ -102088,8 +101889,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "projectile_speed": [
@@ -102118,8 +101918,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -102154,8 +101953,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "multishot": [
@@ -102184,8 +101982,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -102212,8 +102009,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "multishot": [
@@ -102242,8 +102038,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_damage": [
@@ -102272,8 +102067,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "multishot": [
@@ -102301,8 +102095,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "heavy_attack_efficiency": [
@@ -102332,8 +102125,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -102368,8 +102160,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -102396,8 +102187,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -102430,8 +102220,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -102463,8 +102252,7 @@
         "compatibility": {
           "names": [
             "Burston Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -102483,8 +102271,7 @@
         "compatibility": {
           "subtypes": [
             "archmelee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "cold": [
@@ -102503,8 +102290,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -102523,8 +102309,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "combo_duration": [
@@ -102543,8 +102328,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "attack_speed": [
@@ -102564,8 +102348,7 @@
           "names": [
             "Dark Dagger",
             "Rakta Dark Dagger"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -102586,8 +102369,7 @@
             "Gorgon",
             "Gorgon Wraith",
             "Prisma Gorgon"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -102609,8 +102391,7 @@
           "names": [
             "Grinlok",
             "Prisma Grinlok"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -102622,8 +102403,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "combo_gain_chance": [
@@ -102642,8 +102422,7 @@
         "compatibility": {
           "subtypes": [
             "rifle"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -102655,8 +102434,7 @@
         "compatibility": {
           "subtypes": [
             "rifle"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "recoil": [
@@ -102675,8 +102453,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -102699,8 +102476,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -102725,8 +102501,7 @@
         "compatibility": {
           "subtypes": [
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -102738,8 +102513,7 @@
         "compatibility": {
           "names": [
             "Soma Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -102760,8 +102534,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "zoom": [
@@ -102780,8 +102553,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -102793,8 +102565,7 @@
         "compatibility": {
           "subtypes": [
             "dagger"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -102806,8 +102577,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "heat": [
@@ -102831,8 +102601,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -102851,8 +102620,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "impact": [
@@ -102874,8 +102642,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -102887,8 +102654,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "multishot": [
@@ -102912,8 +102678,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "heat": [
@@ -102934,8 +102699,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "slash_proc": [
@@ -102965,8 +102729,7 @@
         "compatibility": {
           "names": [
             "Higasa"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -102992,8 +102755,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "electricity": [
@@ -103018,8 +102780,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -103044,8 +102805,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -103064,8 +102824,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -103086,8 +102845,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "slash_proc": [
@@ -103109,8 +102867,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -103122,8 +102879,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_duration": [
@@ -103142,8 +102898,7 @@
         "compatibility": {
           "names": [
             "Ripkas"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -103165,8 +102920,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "noise_level": [
@@ -103186,8 +102940,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "recoil": [
@@ -103215,8 +102968,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "recoil": [
@@ -103244,8 +102996,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -103269,8 +103020,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "recoil": [
@@ -103300,8 +103050,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "cold": [
@@ -103326,8 +103075,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -103352,8 +103100,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_damage": [
@@ -103372,8 +103119,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -103388,8 +103134,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -103408,8 +103153,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "heat": [
@@ -103432,8 +103176,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "toxin": [
@@ -103454,8 +103197,7 @@
         "compatibility": {
           "subtypes": [
             "archmelee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "toxin": [
@@ -103482,8 +103224,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "slash_proc": [
@@ -103513,8 +103254,7 @@
         "compatibility": {
           "subtypes": [
             "archmelee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "electricity": [
@@ -103539,8 +103279,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "slash": [
@@ -103561,8 +103300,7 @@
         "compatibility": {
           "subtypes": [
             "tome"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -103578,8 +103316,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "electricity": [
@@ -103604,8 +103341,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "puncture": [
@@ -103630,8 +103366,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "puncture": [
@@ -103657,8 +103392,7 @@
           "names": [
             "Dual Cleavers",
             "Prisma Dual Cleavers"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -103677,8 +103411,7 @@
         "compatibility": {
           "subtypes": [
             "tome"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -103694,8 +103427,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "reload_speed": [
@@ -103714,8 +103446,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -103742,8 +103473,7 @@
             "Prisma Tetra",
             "Tenet Tetra",
             "Tetra"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -103755,8 +103485,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -103777,8 +103506,7 @@
           "names": [
             "Vulkar",
             "Vulkar Wraith"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "unique_enemy_vulnerability_multiplier": [
@@ -103803,8 +103531,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_duration": [
@@ -103823,8 +103550,7 @@
         "compatibility": {
           "names": [
             "Vesper 77"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -103851,8 +103577,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "projectile_speed": [
@@ -103871,8 +103596,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -103897,8 +103621,7 @@
         "compatibility": {
           "subtypes": [
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -103923,8 +103646,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -103936,8 +103658,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_duration": [
@@ -103956,8 +103677,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -103985,8 +103705,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -103998,8 +103717,7 @@
         "compatibility": {
           "subtypes": [
             "tome"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -104015,8 +103733,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "reload_speed": [
@@ -104046,8 +103763,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "reload_speed": [
@@ -104077,8 +103793,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "reload_speed": [
@@ -104108,8 +103823,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -104123,8 +103837,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -104145,8 +103858,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -104169,8 +103881,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "heat": [
@@ -104197,8 +103908,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magnetic": [
@@ -104223,8 +103933,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magnetic": [
@@ -104249,8 +103958,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magnetic": [
@@ -104275,8 +103983,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magnetic": [
@@ -104301,8 +104008,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magnetic": [
@@ -104327,8 +104033,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -104340,8 +104045,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -104353,8 +104057,7 @@
         "compatibility": {
           "subtypes": [
             "archmelee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magnetic": [
@@ -104379,8 +104082,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magnetic": [
@@ -104405,8 +104107,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -104425,8 +104126,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "slash": [
@@ -104445,8 +104145,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -104467,8 +104166,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "toxin": [
@@ -104493,8 +104191,7 @@
         "compatibility": {
           "subtypes": [
             "glaive"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -104506,8 +104203,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -104526,8 +104222,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "attack_speed": [
@@ -104546,8 +104241,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -104559,8 +104253,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -104581,8 +104274,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -104613,8 +104305,7 @@
           "names": [
             "Tiberon",
             "Tiberon Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -104639,8 +104330,7 @@
         "compatibility": {
           "names": [
             "Kubrow Claws"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -104652,8 +104342,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_damage": [
@@ -104680,8 +104369,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -104719,8 +104407,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -104732,8 +104419,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -104760,8 +104446,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "punch_through": [
@@ -104785,8 +104470,7 @@
             "Gorgon",
             "Gorgon Wraith",
             "Prisma Gorgon"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -104805,8 +104489,7 @@
         "compatibility": {
           "subtypes": [
             "archmelee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "impact": [
@@ -104825,8 +104508,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -104842,8 +104524,7 @@
           "names": [
             "Vulkar",
             "Vulkar Wraith"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "weakpoint_damage": [
@@ -104862,8 +104543,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -104882,8 +104562,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "heat": [
@@ -104904,8 +104583,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -104917,8 +104595,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -104930,8 +104607,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -104943,8 +104619,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -104969,8 +104644,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -104992,8 +104666,7 @@
             "Carmine Penta",
             "Penta",
             "Secura Penta"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -105014,8 +104687,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "accuracy": [
@@ -105034,8 +104706,7 @@
         "compatibility": {
           "subtypes": [
             "archmelee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "puncture": [
@@ -105055,8 +104726,7 @@
           "names": [
             "Coda Hema",
             "Hema"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -105077,8 +104747,7 @@
         "compatibility": {
           "subtypes": [
             "tome"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -105094,8 +104763,7 @@
         "compatibility": {
           "names": [
             "Miter"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -105107,8 +104775,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -105121,8 +104788,7 @@
           "names": [
             "Kuva Ogris",
             "Ogris"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -105134,8 +104800,7 @@
         "compatibility": {
           "subtypes": [
             "whip"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -105160,8 +104825,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "puncture": [
@@ -105182,8 +104846,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "cold": [
@@ -105204,8 +104867,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -105217,8 +104879,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -105240,8 +104901,7 @@
         "compatibility": {
           "subtypes": [
             "rifle"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -105254,8 +104914,7 @@
           "names": [
             "Athodai",
             "Athodai Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "weakpoint_damage": [
@@ -105276,8 +104935,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -105296,8 +104954,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -105311,8 +104968,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "toxin": [
@@ -105333,8 +104989,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_duration": [
@@ -105355,8 +105010,7 @@
             "Glaxion",
             "Glaxion Vandal",
             "Tenet Glaxion"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -105377,8 +105031,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "puncture": [
@@ -105399,8 +105052,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "puncture": [
@@ -105421,8 +105073,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "weakpoint_damage": [
@@ -105454,8 +105105,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -105469,8 +105119,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_damage": [
@@ -105495,8 +105144,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -105519,8 +105167,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "toxin": [
@@ -105545,8 +105192,7 @@
         "compatibility": {
           "subtypes": [
             "bow"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -105565,8 +105211,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -105590,8 +105235,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -105613,8 +105257,7 @@
         "compatibility": {
           "subtypes": [
             "archmelee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "toxin": [
@@ -105633,8 +105276,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "cold": [
@@ -105653,8 +105295,7 @@
         "compatibility": {
           "subtypes": [
             "glaive"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "punch_through": [
@@ -105683,8 +105324,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -105707,8 +105347,7 @@
           "names": [
             "Kuva Tonkor",
             "Tonkor"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -105725,8 +105364,7 @@
           "names": [
             "Kuva Tonkor",
             "Tonkor"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "reload_speed": [
@@ -105747,8 +105385,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -105772,8 +105409,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -105795,8 +105431,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "weakpoint_damage": [
@@ -105828,8 +105463,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -105853,8 +105487,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "corpus_damage": [
@@ -105878,8 +105511,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "grineer_damage": [
@@ -105903,8 +105535,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "infested_damage": [
@@ -105928,8 +105559,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "orokin_damage": [
@@ -105952,8 +105582,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "murmur_damage": [
@@ -105974,8 +105603,7 @@
         "compatibility": {
           "subtypes": [
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -105997,8 +105625,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "electricity": [
@@ -106020,8 +105647,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "cold": [
@@ -106043,8 +105669,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "corpus_damage": [
@@ -106066,8 +105691,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "grineer_damage": [
@@ -106089,8 +105713,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "infested_damage": [
@@ -106112,8 +105735,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "orokin_damage": [
@@ -106134,8 +105756,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "murmur_damage": [
@@ -106156,8 +105777,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "electricity": [
@@ -106179,8 +105799,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "recoil": [
@@ -106201,8 +105820,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "cold": [
@@ -106224,8 +105842,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -106244,8 +105861,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "multishot": [
@@ -106266,8 +105882,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "corpus_damage": [
@@ -106289,8 +105904,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "grineer_damage": [
@@ -106312,8 +105926,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "infested_damage": [
@@ -106335,8 +105948,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "orokin_damage": [
@@ -106357,8 +105969,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "murmur_damage": [
@@ -106381,8 +105992,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "reload_speed": [
@@ -106404,8 +106014,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "toxin": [
@@ -106429,8 +106038,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "explosion_radius": [
@@ -106451,8 +106059,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "explosion_radius": [
@@ -106473,8 +106080,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "attack_speed": [
@@ -106498,8 +106104,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "heat": [
@@ -106521,8 +106126,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "impact": [
@@ -106546,8 +106150,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -106570,8 +106173,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -106585,8 +106187,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -106609,8 +106210,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -106632,8 +106232,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -106657,8 +106256,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "reload_speed": [
@@ -106680,8 +106278,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -106703,8 +106300,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "range": [
@@ -106725,8 +106321,7 @@
         "compatibility": {
           "subtypes": [
             "rifle"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -106740,8 +106335,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -106762,8 +106356,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -106779,8 +106372,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -106813,8 +106405,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -106836,8 +106427,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "corpus_damage": [
@@ -106859,8 +106449,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "grineer_damage": [
@@ -106882,8 +106471,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "infested_damage": [
@@ -106905,8 +106493,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "orokin_damage": [
@@ -106927,8 +106514,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "murmur_damage": [
@@ -106949,8 +106535,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "recoil": [
@@ -106971,8 +106556,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "reload_speed": [
@@ -106994,8 +106578,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -107017,8 +106600,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -107032,8 +106614,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -107060,8 +106641,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -107088,8 +106668,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "impact": [
@@ -107108,8 +106687,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "puncture": [
@@ -107128,8 +106706,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "reload_speed": [
@@ -107148,8 +106725,7 @@
         "compatibility": {
           "subtypes": [
             "glaive"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -107165,8 +106741,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "reload_speed": [
@@ -107188,8 +106763,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "attack_speed": [
@@ -107216,8 +106790,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "radiation": [
@@ -107242,8 +106815,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "radiation": [
@@ -107269,8 +106841,7 @@
           "names": [
             "Akjagara",
             "Akjagara Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -107291,8 +106862,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -107314,8 +106884,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -107330,8 +106899,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "slash": [
@@ -107352,8 +106920,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "range": [
@@ -107374,8 +106941,7 @@
         "compatibility": {
           "subtypes": [
             "glaive"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -107393,8 +106959,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -107406,8 +106971,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -107419,8 +106983,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "heavy_attack_efficiency": [
@@ -107442,8 +107005,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -107455,8 +107017,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -107468,8 +107029,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -107481,8 +107041,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "slash": [
@@ -107507,8 +107066,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -107528,8 +107086,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -107541,8 +107098,7 @@
         "compatibility": {
           "subtypes": [
             "rifle"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -107558,8 +107114,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -107583,8 +107138,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_damage": [
@@ -107609,8 +107163,7 @@
         "compatibility": {
           "names": [
             "Twin Basolk"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -107624,8 +107177,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "cold": [
@@ -107652,8 +107204,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -107668,8 +107219,7 @@
         "compatibility": {
           "subtypes": [
             "tome"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -107685,8 +107235,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -107707,8 +107256,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "range": [
@@ -107729,8 +107277,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "impact": [
@@ -107751,8 +107298,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -107777,8 +107323,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -107814,8 +107359,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -107853,8 +107397,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "slash": [
@@ -107875,8 +107418,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "impact": [
@@ -107901,8 +107443,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "impact": [
@@ -107929,8 +107470,7 @@
             "Hek",
             "Kuva Hek",
             "Vaykor Hek"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "multishot": [
@@ -107949,8 +107489,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "heat": [
@@ -107975,8 +107514,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "heat": [
@@ -108001,8 +107539,7 @@
         "compatibility": {
           "subtypes": [
             "archmelee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "heat": [
@@ -108027,8 +107564,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "reload_speed": [
@@ -108047,8 +107583,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "punch_through": [
@@ -108067,8 +107602,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "punch_through": [
@@ -108089,8 +107623,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "reload_speed": [
@@ -108115,8 +107648,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "slam_damage": [
@@ -108242,8 +107774,7 @@
         "compatibility": {
           "names": [
             "Battacor"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -108264,8 +107795,7 @@
         "compatibility": {
           "names": [
             "Ocucor"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -108286,8 +107816,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "toxin": [
@@ -108317,8 +107846,7 @@
           "names": [
             "Spectra",
             "Spectra Vandal"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -108330,8 +107858,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -108348,8 +107875,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -108366,8 +107892,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -108391,8 +107916,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -108407,8 +107931,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -108428,8 +107951,7 @@
         "compatibility": {
           "subtypes": [
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -108441,8 +107963,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -108455,8 +107976,7 @@
           "names": [
             "Kuva Sobek",
             "Sobek"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -108475,8 +107995,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "ammo_maximum": [
@@ -108497,8 +108016,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -108510,8 +108028,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "electricity": [
@@ -108536,8 +108053,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -108549,8 +108065,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "electricity": [
@@ -108575,8 +108090,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "electricity": [
@@ -108605,8 +108119,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "electricity": [
@@ -108627,8 +108140,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -108642,8 +108154,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -108665,8 +108176,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_damage": [
@@ -108691,8 +108201,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -108715,8 +108224,7 @@
           "names": [
             "Marelok",
             "Vaykor Marelok"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "multishot": [
@@ -108741,8 +108249,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -108764,8 +108271,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -108798,8 +108304,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -108814,8 +108319,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "slash": [
@@ -108836,8 +108340,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "noise_level": [
@@ -108857,8 +108360,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "range": [
@@ -108878,8 +108380,7 @@
           "names": [
             "Viper",
             "Viper Wraith"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "ammo_efficiency": [
@@ -108900,8 +108401,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -108923,8 +108423,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "corpus_damage": [
@@ -108946,8 +108445,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "grineer_damage": [
@@ -108969,8 +108467,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "infested_damage": [
@@ -108992,8 +108489,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "orokin_damage": [
@@ -109014,8 +108510,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "murmur_damage": [
@@ -109036,8 +108531,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -109049,8 +108543,7 @@
         "compatibility": {
           "subtypes": [
             "bow"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -109069,8 +108562,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -109084,8 +108576,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -109112,8 +108603,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -109142,8 +108632,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "multishot": [
@@ -109166,8 +108655,7 @@
         "compatibility": {
           "subtypes": [
             "bow"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "multishot": [
@@ -109191,8 +108679,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -109218,8 +108705,7 @@
           "names": [
             "Simulor",
             "Synoid Simulor"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -109240,8 +108726,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "range": [
@@ -109261,8 +108746,7 @@
           "names": [
             "Daikyu",
             "Daikyu Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -109283,8 +108767,7 @@
         "compatibility": {
           "subtypes": [
             "rifle"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -109304,8 +108787,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -109319,8 +108801,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "recoil": [
@@ -109341,8 +108822,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -109354,8 +108834,7 @@
         "compatibility": {
           "names": [
             "Staticor"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -109368,8 +108847,7 @@
           "names": [
             "Prova",
             "Prova Vandal"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -109381,8 +108859,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "recoil": [
@@ -109404,8 +108881,7 @@
           "names": [
             "Viper",
             "Viper Wraith"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -109425,8 +108901,7 @@
           "names": [
             "Kunai",
             "MK1-Kunai"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -109447,8 +108922,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "electricity": [
@@ -109469,8 +108943,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -109482,8 +108955,7 @@
         "compatibility": {
           "names": [
             "Helminth Claws"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -109495,8 +108967,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -109508,8 +108979,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "reload_speed": [
@@ -109534,8 +109004,7 @@
         "compatibility": {
           "subtypes": [
             "archmelee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -109556,8 +109025,7 @@
             "Dex Sybaris",
             "Sybaris",
             "Sybaris Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -109578,8 +109046,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "puncture": [
@@ -109600,8 +109067,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "noise_level": [
@@ -109621,8 +109087,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -109644,8 +109109,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "slash": [
@@ -109664,8 +109128,7 @@
         "compatibility": {
           "names": [
             "Kavat Claws"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -109677,8 +109140,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -109690,8 +109152,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -109718,8 +109179,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "reload_speed": [
@@ -109741,8 +109201,7 @@
         "compatibility": {
           "subtypes": [
             "rifle"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -109754,8 +109213,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -109780,8 +109238,7 @@
         "compatibility": {
           "subtypes": [
             "rifle"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -109806,8 +109263,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -109826,8 +109282,7 @@
         "compatibility": {
           "subtypes": [
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "weakpoint_damage": [
@@ -109846,8 +109301,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -109869,8 +109323,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -109882,8 +109335,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -109895,8 +109347,7 @@
         "compatibility": {
           "subtypes": [
             "archmelee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -109917,8 +109368,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "projectile_speed": [
@@ -109939,8 +109389,7 @@
             "Carmine Penta",
             "Penta",
             "Secura Penta"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -109956,8 +109405,7 @@
             "Detron",
             "Mara Detron",
             "Tenet Detron"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -109971,8 +109419,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "heat": [
@@ -109997,8 +109444,7 @@
         "compatibility": {
           "subtypes": [
             "bow"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -110012,8 +109458,7 @@
         "compatibility": {
           "names": [
             "Miter"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -110032,8 +109477,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "toxin": [
@@ -110059,8 +109503,7 @@
           "names": [
             "Coda Mire",
             "Mire"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "toxin": [
@@ -110079,8 +109522,7 @@
         "compatibility": {
           "names": [
             "Acrid"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_duration": [
@@ -110099,8 +109541,7 @@
         "compatibility": {
           "subtypes": [
             "pistol"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "ammo_maximum": [
@@ -110122,8 +109563,7 @@
           "names": [
             "Burston",
             "Burston Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -110144,8 +109584,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "combo_gain_chance": [
@@ -110170,8 +109609,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -110197,8 +109635,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -110210,8 +109647,7 @@
         "compatibility": {
           "names": [
             "Dread"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -110234,8 +109670,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -110247,8 +109682,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "toxin": [
@@ -110273,8 +109707,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "toxin": [
@@ -110295,8 +109728,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "toxin": [
@@ -110317,8 +109749,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "cold": [
@@ -110343,8 +109774,7 @@
         "compatibility": {
           "subtypes": [
             "shotgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -110363,8 +109793,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "multishot": [
@@ -110393,8 +109822,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -110429,8 +109857,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "punch_through": [
@@ -110459,8 +109886,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_tier": [
@@ -110485,8 +109911,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -110517,8 +109942,7 @@
         "compatibility": {
           "names": [
             "Embolist"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -110532,8 +109956,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "recoil": [
@@ -110564,8 +109987,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "toxin": [
@@ -110592,8 +110014,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -110614,8 +110035,7 @@
         "compatibility": {
           "subtypes": [
             "glaive"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "explosion_radius": [
@@ -110638,8 +110058,7 @@
         "compatibility": {
           "subtypes": [
             "glaive"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "punch_through": [
@@ -110663,8 +110082,7 @@
           "names": [
             "Coda Sporothrix",
             "Sporothrix"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "punch_through": [
@@ -110691,8 +110109,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "heat": [
@@ -110717,8 +110134,7 @@
         "compatibility": {
           "names": [
             "Lanka"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -110730,8 +110146,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "electricity": [
@@ -110756,8 +110171,7 @@
         "compatibility": {
           "subtypes": [
             "tome"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -110773,8 +110187,7 @@
         "compatibility": {
           "names": [
             "Jat Kittag"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -110786,8 +110199,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -110809,8 +110221,7 @@
         "compatibility": {
           "subtypes": [
             "glaive"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -110825,8 +110236,7 @@
           "names": [
             "Grakata",
             "Prisma Grakata"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "fire_rate": [
@@ -110849,8 +110259,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "magazine_capacity": [
@@ -110877,8 +110286,7 @@
             "Dex Furis",
             "Furis",
             "MK1-Furis"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -110890,8 +110298,7 @@
         "compatibility": {
           "subtypes": [
             "tome"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -110907,8 +110314,7 @@
         "compatibility": {
           "names": [
             "Akstiletto Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "ammo_efficiency": [
@@ -110929,8 +110335,7 @@
         "compatibility": {
           "subtypes": [
             "archgun"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "slash": [
@@ -110951,8 +110356,7 @@
             "rifle",
             "bow",
             "sniper"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "recoil": [
@@ -110971,8 +110375,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "exilus_mod",
@@ -110985,8 +110388,7 @@
           "names": [
             "Venato",
             "Venato Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -110999,8 +110401,7 @@
           "names": [
             "Velox",
             "Velox Prime"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_mod",
@@ -111012,8 +110413,7 @@
         "compatibility": {
           "subtypes": [
             "polearm"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {},
         "stats": {},
@@ -111026,8 +110426,7 @@
         "compatibility": {
           "subtypes": [
             "glaive"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -111101,8 +110500,7 @@
         "compatibility": {
           "subtypes": [
             "nunchaku"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -111176,8 +110574,7 @@
         "compatibility": {
           "subtypes": [
             "dual_dagger"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {},
         "stats": {},
@@ -111190,8 +110587,7 @@
         "compatibility": {
           "subtypes": [
             "polearm"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -111265,8 +110661,7 @@
         "compatibility": {
           "subtypes": [
             "nikana"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -111340,8 +110735,7 @@
         "compatibility": {
           "subtypes": [
             "sparring"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -111415,8 +110809,7 @@
         "compatibility": {
           "subtypes": [
             "gunblade"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -111490,8 +110883,7 @@
         "compatibility": {
           "subtypes": [
             "whip"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -111565,8 +110957,7 @@
         "compatibility": {
           "subtypes": [
             "assault_saw"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -111640,8 +111031,7 @@
         "compatibility": {
           "subtypes": [
             "dual_sword"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -111715,8 +111105,7 @@
         "compatibility": {
           "subtypes": [
             "glaive"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {},
         "stats": {},
@@ -111729,8 +111118,7 @@
         "compatibility": {
           "subtypes": [
             "staff"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -111804,8 +111192,7 @@
         "compatibility": {
           "subtypes": [
             "heavy_blade"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -111879,8 +111266,7 @@
         "compatibility": {
           "subtypes": [
             "whip"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -111954,8 +111340,7 @@
         "compatibility": {
           "subtypes": [
             "hammer"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {},
         "stats": {},
@@ -111968,8 +111353,7 @@
         "compatibility": {
           "subtypes": [
             "staff"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {},
         "stats": {},
@@ -111982,8 +111366,7 @@
         "compatibility": {
           "subtypes": [
             "sword"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -112057,8 +111440,7 @@
         "compatibility": {
           "subtypes": [
             "dual_sword"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -112132,8 +111514,7 @@
         "compatibility": {
           "subtypes": [
             "hammer"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -112207,8 +111588,7 @@
         "compatibility": {
           "subtypes": [
             "rapier"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {},
         "stats": {},
@@ -112221,8 +111601,7 @@
         "compatibility": {
           "subtypes": [
             "machete"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -112296,8 +111675,7 @@
         "compatibility": {
           "subtypes": [
             "nikana"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -112371,8 +111749,7 @@
         "compatibility": {
           "subtypes": [
             "blade_and_whip"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -112446,8 +111823,7 @@
         "compatibility": {
           "names": [
             "Desert Wind"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -112521,8 +111897,7 @@
         "compatibility": {
           "subtypes": [
             "dual_sword"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {},
         "stats": {},
@@ -112535,8 +111910,7 @@
         "compatibility": {
           "names": [
             "Diwata"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -112556,8 +111930,7 @@
         "compatibility": {
           "subtypes": [
             "sword_and_shield"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -112634,8 +112007,7 @@
             "Exalted Chromatic Blade",
             "Exalted Umbra Blade",
             "Exalted Umbra Chromatic Blade"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -112709,8 +112081,7 @@
         "compatibility": {
           "names": [
             "Exalted Chromatic Blade"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -112784,8 +112155,7 @@
         "compatibility": {
           "names": [
             "Exalted Umbra Blade"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -112859,8 +112229,7 @@
         "compatibility": {
           "names": [
             "Exalted Umbra Chromatic Blade"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -112934,8 +112303,7 @@
         "compatibility": {
           "subtypes": [
             "nikana"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {},
         "stats": {},
@@ -112948,8 +112316,7 @@
         "compatibility": {
           "subtypes": [
             "sword_and_shield"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -113023,8 +112390,7 @@
         "compatibility": {
           "subtypes": [
             "staff"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -113098,8 +112464,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -113173,8 +112538,7 @@
         "compatibility": {
           "subtypes": [
             "fist"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -113248,8 +112612,7 @@
         "compatibility": {
           "subtypes": [
             "fist"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -113323,8 +112686,7 @@
         "compatibility": {
           "subtypes": [
             "heavy_scythe"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -113398,8 +112760,7 @@
         "compatibility": {
           "subtypes": [
             "tonfa"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -113473,8 +112834,7 @@
         "compatibility": {
           "subtypes": [
             "glaive"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -113548,8 +112908,7 @@
         "compatibility": {
           "subtypes": [
             "dual_dagger"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -113623,8 +112982,7 @@
         "compatibility": {
           "subtypes": [
             "sparring"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -113698,8 +113056,7 @@
         "compatibility": {
           "subtypes": [
             "gunblade"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -113773,8 +113130,7 @@
         "compatibility": {
           "subtypes": [
             "dagger"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -113848,8 +113204,7 @@
         "compatibility": {
           "subtypes": [
             "sword"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -113923,8 +113278,7 @@
         "compatibility": {
           "names": [
             "Iron Staff"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -113998,8 +113352,7 @@
         "compatibility": {
           "subtypes": [
             "whip"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {},
         "stats": {},
@@ -114012,8 +113365,7 @@
         "compatibility": {
           "subtypes": [
             "sword_and_shield"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {},
         "stats": {},
@@ -114026,8 +113378,7 @@
         "compatibility": {
           "subtypes": [
             "nunchaku"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {},
         "stats": {},
@@ -114040,8 +113391,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -114115,8 +113465,7 @@
         "compatibility": {
           "subtypes": [
             "dual_nikana"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -114190,8 +113539,7 @@
         "compatibility": {
           "subtypes": [
             "heavy_blade"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {},
         "stats": {},
@@ -114204,8 +113552,7 @@
         "compatibility": {
           "subtypes": [
             "dagger"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {},
         "stats": {},
@@ -114218,8 +113565,7 @@
         "compatibility": {
           "subtypes": [
             "dagger"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -114293,8 +113639,7 @@
         "compatibility": {
           "subtypes": [
             "fist"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {},
         "stats": {},
@@ -114307,8 +113652,7 @@
         "compatibility": {
           "subtypes": [
             "scythe"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -114382,8 +113726,7 @@
         "compatibility": {
           "subtypes": [
             "heavy_blade"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -114457,8 +113800,7 @@
         "compatibility": {
           "subtypes": [
             "machete"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {},
         "stats": {},
@@ -114471,8 +113813,7 @@
         "compatibility": {
           "subtypes": [
             "sword"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {},
         "stats": {},
@@ -114485,8 +113826,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {},
         "stats": {},
@@ -114499,8 +113839,7 @@
         "compatibility": {
           "subtypes": [
             "fist"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -114574,8 +113913,7 @@
         "compatibility": {
           "names": [
             "Shadow Claws"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -114637,8 +113975,7 @@
         "compatibility": {
           "subtypes": [
             "scythe"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {},
         "stats": {},
@@ -114651,8 +113988,7 @@
         "compatibility": {
           "subtypes": [
             "hammer"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -114726,8 +114062,7 @@
         "compatibility": {
           "subtypes": [
             "polearm"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -114801,8 +114136,7 @@
         "compatibility": {
           "subtypes": [
             "dual_dagger"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -114876,8 +114210,7 @@
         "compatibility": {
           "subtypes": [
             "warfan"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -114951,8 +114284,7 @@
         "compatibility": {
           "subtypes": [
             "tonfa"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -115026,8 +114358,7 @@
         "compatibility": {
           "subtypes": [
             "dual_dagger"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -115101,8 +114432,7 @@
         "compatibility": {
           "subtypes": [
             "scythe"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -115176,8 +114506,7 @@
         "compatibility": {
           "subtypes": [
             "tonfa"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {},
         "stats": {},
@@ -115190,8 +114519,7 @@
         "compatibility": {
           "subtypes": [
             "dagger"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -115265,8 +114593,7 @@
         "compatibility": {
           "subtypes": [
             "machete"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -115340,8 +114667,7 @@
         "compatibility": {
           "subtypes": [
             "dual_sword"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -115415,8 +114741,7 @@
         "compatibility": {
           "subtypes": [
             "sword"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -115490,8 +114815,7 @@
         "compatibility": {
           "subtypes": [
             "blade_and_whip"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {},
         "stats": {},
@@ -115504,8 +114828,7 @@
         "compatibility": {
           "subtypes": [
             "heavy_blade"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -115579,8 +114902,7 @@
         "compatibility": {
           "subtypes": [
             "nikana"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -115654,8 +114976,7 @@
         "compatibility": {
           "subtypes": [
             "polearm"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -115729,8 +115050,7 @@
         "compatibility": {
           "names": [
             "Valkyr Talons"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -115804,8 +115124,7 @@
         "compatibility": {
           "subtypes": [
             "sword"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -115879,8 +115198,7 @@
         "compatibility": {
           "subtypes": [
             "claw"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -115954,8 +115272,7 @@
         "compatibility": {
           "subtypes": [
             "sparring"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {},
         "stats": {},
@@ -115968,8 +115285,7 @@
         "compatibility": {
           "subtypes": [
             "warfan"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -116043,8 +115359,7 @@
         "compatibility": {
           "subtypes": [
             "rapier"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -116118,8 +115433,7 @@
         "compatibility": {
           "subtypes": [
             "two_handed_nikana"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -116187,8 +115501,7 @@
         "compatibility": {
           "subtypes": [
             "bayonet"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -116226,8 +115539,7 @@
         "compatibility": {
           "names": [
             "Argo & Vel"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {},
         "stats": {},
@@ -116240,8 +115552,7 @@
         "compatibility": {
           "names": [
             "Arum Spinosa"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "heavy": {
@@ -116291,8 +115602,7 @@
         "compatibility": {
           "names": [
             "Azothane"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "block": {
@@ -116349,8 +115659,7 @@
           "names": [
             "Caustacyst",
             "Coda Caustacyst"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "heavy": {
@@ -116401,8 +115710,7 @@
           "names": [
             "Cobra & Crane",
             "Cobra & Crane Prime"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "heavy": {
@@ -116452,8 +115760,7 @@
         "compatibility": {
           "names": [
             "Edun"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "heavy": {
@@ -116503,8 +115810,7 @@
         "compatibility": {
           "names": [
             "Jat Kusar"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "heavy": {
@@ -116554,8 +115860,7 @@
         "compatibility": {
           "names": [
             "Keratinos"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "heavy": {
@@ -116605,8 +115910,7 @@
         "compatibility": {
           "names": [
             "Korumm"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "block": {
@@ -116662,8 +115966,7 @@
         "compatibility": {
           "names": [
             "Nepheri"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -116720,8 +116023,7 @@
           "names": [
             "Quassus",
             "Quassus Prime"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "heavy": {
@@ -116771,8 +116073,7 @@
         "compatibility": {
           "names": [
             "Sampotes"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "heavy": {
@@ -116822,8 +116123,7 @@
         "compatibility": {
           "names": [
             "Sigma & Octantis"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "heavy": {
@@ -116873,8 +116173,7 @@
         "compatibility": {
           "names": [
             "Syam"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "heavy": {
@@ -116925,8 +116224,7 @@
           "names": [
             "Tatsu",
             "Tatsu Prime"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "heavy": {
@@ -116976,8 +116274,7 @@
         "compatibility": {
           "names": [
             "Telos Boltace"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "heavy": {
@@ -117027,8 +116324,7 @@
         "compatibility": {
           "names": [
             "Tenet Agendus"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "heavy": {
@@ -117078,8 +116374,7 @@
         "compatibility": {
           "names": [
             "Tenet Exec"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "heavy": {
@@ -117129,8 +116424,7 @@
         "compatibility": {
           "names": [
             "Tenet Grigori"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "heavy": {
@@ -117180,8 +116474,7 @@
         "compatibility": {
           "names": [
             "Verdilac"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "block": {
@@ -117237,8 +116530,7 @@
         "compatibility": {
           "names": [
             "Vitrica"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "heavy": {
@@ -117288,8 +116580,7 @@
         "compatibility": {
           "names": [
             "Zenistar"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "heavy": {
@@ -117339,8 +116630,7 @@
         "compatibility": {
           "names": [
             "Valkyr Talons"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -117414,8 +116704,7 @@
         "compatibility": {
           "names": [
             "Desert Wind"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -117489,8 +116778,7 @@
         "compatibility": {
           "names": [
             "Iron Staff"
-          ],
-          "aoe": false
+          ]
         },
         "combos": {
           "neutral": {
@@ -117566,8 +116854,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "ammo_efficiency": [
@@ -117588,8 +116875,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "weakpoint_crit_chance": [
@@ -117609,8 +116895,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "cascadia_empowered_proc": [
@@ -117636,8 +116921,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -117660,8 +116944,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -117682,8 +116965,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "reload_speed": [
@@ -117716,8 +116998,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -117729,8 +117010,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -117742,8 +117022,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -117755,8 +117034,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -117768,8 +117046,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -117781,8 +117058,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -117794,8 +117070,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -117807,8 +117082,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -117820,8 +117094,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "reload_speed": [
@@ -117843,8 +117116,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "sharpshot_bonus": [
@@ -117871,8 +117143,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "afflictions_proc_multiplier": [
@@ -117898,8 +117169,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -117911,8 +117181,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -117932,8 +117201,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -117945,8 +117213,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -117958,8 +117225,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -117983,8 +117249,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "duplicated_hit": [
@@ -118005,8 +117270,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "corrosive": [
@@ -118027,8 +117291,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -118040,8 +117303,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -118053,8 +117315,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -118066,8 +117327,7 @@
         "compatibility": {
           "types": [
             "melee"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -118079,8 +117339,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -118092,8 +117351,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -118105,8 +117363,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -118118,8 +117375,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -118131,8 +117387,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -118165,8 +117420,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -118187,8 +117441,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -118200,8 +117453,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "status_chance": [
@@ -118232,8 +117484,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -118262,8 +117513,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "debilitate_proc_chance": [
@@ -118289,8 +117539,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -118312,8 +117561,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -118325,8 +117573,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_damage": [
@@ -118359,8 +117606,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "reload_speed": [
@@ -118389,8 +117635,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -118402,8 +117647,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "multishot": [
@@ -118424,8 +117668,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -118437,8 +117680,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -118450,8 +117692,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -118463,8 +117704,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -118476,8 +117716,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -118489,8 +117728,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -118502,8 +117740,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -118532,8 +117769,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -118555,8 +117791,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "random_proc": [
@@ -118578,8 +117813,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_reset_charges": [
@@ -118603,8 +117837,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "overguard_damage_multiplier": [
@@ -118630,8 +117863,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -118643,8 +117875,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -118656,8 +117887,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "reload_speed": [
@@ -118686,8 +117916,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "crit_chance": [
@@ -118718,8 +117947,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "damage_bonus": [
@@ -118740,8 +117968,7 @@
         "compatibility": {
           "types": [
             "secondary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {},
         "slot": "regular_arcane",
@@ -118753,8 +117980,7 @@
         "compatibility": {
           "types": [
             "primary"
-          ],
-          "aoe": false
+          ]
         },
         "stats": {
           "multishot": [

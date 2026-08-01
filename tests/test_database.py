@@ -1,6 +1,12 @@
 import unittest
+import warnings
 
-from warframe_damage_calculator import PLACEHOLDER, arsenal
+from warframe_damage_calculator import Calculator, Loadout, arsenal
+from warframe_damage_calculator.database.compatibility import is_upgrade_compatible
+from warframe_damage_calculator.domain.damage import Dist
+from warframe_damage_calculator.domain.effects import PLACEHOLDER
+from warframe_damage_calculator.domain.warnings import LoadoutCompatibilityWarning
+from warframe_damage_calculator.domain.weapons import Attack, AttackStats, Secondary
 
 
 METADATA_ONLY_PERKS = {
@@ -17,6 +23,8 @@ METADATA_ONLY_PERKS = {
     "Silent Running",
     "Swift Transmute",
 }
+
+AOE_RESTRICTED_UPGRADES = {"Energizing Shot", "Mending Shot", "Semi-Pistol Cannonade", "Semi-Rifle Cannonade", "Semi-Shotgun Cannonade"}
 
 
 class DatabaseTests(unittest.TestCase):
@@ -62,6 +70,28 @@ class DatabaseTests(unittest.TestCase):
         self.assertNotIn("Sinister Reach", filtered_mods)
         self.assertNotIn("Shotgun Vendetta", filtered_arcanes)
         self.assertIn("Primary Overcharge", filtered_arcanes)
+
+    def test_aoe_compatibility_metadata_contains_only_intentional_restrictions(self):
+        restricted = {name for repository in (arsenal.mod, arsenal.arcane) for name in repository if repository.get(name).compatibility.aoe is False}
+        self.assertEqual(restricted, AOE_RESTRICTED_UPGRADES)
+        stug = arsenal.secondary.get("Stug")
+        self.assertTrue(all(attack.aoe for attack in stug.attacks.values()))
+        self.assertTrue(is_upgrade_compatible(arsenal.mod.get("Hornet Strike"), stug))
+        self.assertFalse(is_upgrade_compatible(arsenal.mod.get("Energizing Shot"), stug))
+        with warnings.catch_warnings(record=True) as captured:
+            warnings.simplefilter("always")
+            Calculator(stug, loadout=Loadout(mods=[arsenal.mod.get("Hornet Strike")])).resolve()
+        self.assertFalse(any(isinstance(item.message, LoadoutCompatibilityWarning) for item in captured))
+
+    def test_attack_compatibility_constraints_must_match_the_same_attack(self):
+        weapon = Secondary(name="Mixed", subtype="pistol", attacks=[
+            Attack(name="semi_aoe", trigger="semi", aoe=True, stats=AttackStats(damage=Dist(impact=10))),
+            Attack(name="auto_direct", trigger="auto", stats=AttackStats(damage=Dist(impact=10))),
+        ])
+        cannonade = arsenal.mod.get("Semi-Pistol Cannonade")
+        self.assertFalse(is_upgrade_compatible(cannonade, weapon))
+        self.assertFalse(is_upgrade_compatible(cannonade, weapon, attack="semi_aoe"))
+        self.assertFalse(is_upgrade_compatible(cannonade, weapon, attack="auto_direct"))
 
     def test_upgrade_repository_supports_attack_slot_and_conflict_filters(self):
         ignis = arsenal.primary.get("Ignis Wraith")

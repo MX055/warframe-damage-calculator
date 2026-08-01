@@ -35,9 +35,12 @@ def is_upgrade_compatible(upgrade: Mod | Arcane, weapon: Weapon, *, attack: str 
     if subtypes and (weapon.subtype is None or weapon.subtype.casefold() not in subtypes): return False
     if names and weapon.name.casefold() not in names: return False
     attacks = _selected_attacks(weapon, attack)
-    if compatibility.categories and not any(candidate.category in compatibility.categories for candidate in attacks): return False
-    if compatibility.triggers and not any(candidate.trigger in compatibility.triggers for candidate in attacks): return False
-    if compatibility.aoe is not None and not any(candidate.aoe is compatibility.aoe for candidate in attacks): return False
+    if not any(
+        (not compatibility.categories or candidate.category in compatibility.categories)
+        and (not compatibility.triggers or candidate.trigger in compatibility.triggers)
+        and (compatibility.aoe is None or candidate.aoe is compatibility.aoe)
+        for candidate in attacks
+    ): return False
     if isinstance(upgrade, Arcane) and not _arcane_compatible(upgrade, weapon): return False
     if isinstance(upgrade, Mod) and upgrade.slot == "exilus_mod" and "range" in upgrade.stats and not any(candidate.delivery == "beam" for candidate in attacks): return False
     for other in selected:

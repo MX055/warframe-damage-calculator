@@ -43,7 +43,7 @@ def test_optimizer_can_disable_progress(capsys):
 
 
 def test_optimizer_reports_structured_progress():
-    from warframe_damage_calculator import OptimizationProgress
+    from warframe_damage_calculator.optimizer.progress import OptimizationProgress
 
     weapon = arsenal.primary.get("Braton Prime")
     snapshots = []
@@ -91,7 +91,7 @@ def test_optimizer_generates_riven_candidates_when_unlocked():
 
 
 def test_optimizer_preserves_locked_riven():
-    from warframe_damage_calculator import Mod, UpgradeStats
+    from warframe_damage_calculator.domain.upgrades import Mod, UpgradeStats
 
     weapon = arsenal.primary.get("Vectis Prime")
     locked = Mod(name="Riven", stats=UpgradeStats(multishot=1.0))
