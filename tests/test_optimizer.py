@@ -76,7 +76,8 @@ def test_optimizer_generates_riven_candidates_when_unlocked():
     optimizer = Optimizer(Calculator(weapon))
     pools = optimizer._candidate_pools()
     assert pools["rivens"]
-    assert all(mod.name.startswith("Riven (") for mod in pools["rivens"])
+    assert all(mod.name == "Riven" for mod in pools["rivens"])
+    assert len({tuple((stat, tuple(effect.value for effect in effects)) for stat, effects in mod.stats.items()) for mod in pools["rivens"]}) == len(pools["rivens"])
     assert all(mod.slot == "regular_mod" for mod in pools["rivens"])
 
 
@@ -117,7 +118,7 @@ def test_optimizer_can_disable_riven_search():
     optimizer = Optimizer(Calculator(weapon))
     assert optimizer._candidate_pools(riven=False)["rivens"] == ()
     result = optimizer.resolve(evaluations=2, progress=None, riven=False)
-    assert not any(mod.name.startswith("Riven (") for mod in result.loadout.mods)
+    assert not any(mod.name == "Riven" for mod in result.loadout.mods)
 
 
 def test_optimizer_validates_riven_flag():

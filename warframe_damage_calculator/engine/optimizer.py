@@ -506,7 +506,7 @@ class Optimizer:
         negative_stats = [stat for stat in base_stats if stat not in RIVEN_NON_NEGATIVE and stat not in stat_blacklist]
         negative_stats.sort(key=lambda stat: self._riven_negative_priority(stat, float(base_stats[stat])))
         negative_stats = negative_stats[:10 if limit > 32 else 6]
-        candidates: dict[str, Mod] = {}
+        candidates: dict[tuple[tuple[str, float], ...], Mod] = {}
         disposition = float(self.calculator.weapon.disposition)
         from itertools import combinations
         for positive_count, negative_count, positive_factor, negative_factor in RIVEN_ROLLS:
@@ -515,8 +515,8 @@ class Optimizer:
                 for negative in negatives:
                     fields = {stat: float(base_stats[stat]) * disposition * positive_factor * 1.1 for stat in positives}
                     if negative is not None: fields[negative] = float(base_stats[negative]) * disposition * negative_factor * 0.9
-                    name = self._riven_name(fields)
-                    candidates[name] = Mod(name=name, stats=UpgradeStats(**fields))
+                    key = tuple(sorted(fields.items()))
+                    candidates[key] = Mod(name="Riven", stats=UpgradeStats(**fields))
         ranked = sorted(candidates.values(), key=self._upgrade_priority, reverse=True)
         return tuple(ranked[:limit])
 
@@ -538,12 +538,11 @@ class Optimizer:
         harmless = stat in {"ammo_maximum", "projectile_speed", "recoil", "zoom"}
         return (0 if harmless else 1), abs(value), stat
 
-    def _riven_name(self, fields: Mapping[str, float]) -> str:
-        parts = [f"{stat}={value:+.6g}" for stat, value in sorted(fields.items())]
-        return "Riven (" + ", ".join(parts) + ")"
-
     def _is_riven(self, mod: Mod) -> bool:
-        return mod.name.casefold() == "riven" or mod.name.casefold().startswith("riven (")
+        return mod.name.casefold() == "riven"
+
+    def _riven_signature(self, mod: Mod) -> tuple[tuple[str, tuple[object, ...]], ...]:
+        return tuple((stat, tuple(effect.value for effect in effects)) for stat, effects in mod.stats.items())
 
     def _prepare_pool(self, pool: tuple, limit: int) -> tuple:
         ranked = sorted(pool, key=self._upgrade_priority, reverse=True)
@@ -563,7 +562,8 @@ class Optimizer:
 
     def _upgrade_priority(self, upgrade: Mod | Arcane) -> tuple[float, int, str]:
         runtime = tuple(sorted(upgrade.runtime.as_dict().items()))
-        key = (type(upgrade), upgrade.name, upgrade.slot, runtime)
+        riven_stats = self._riven_signature(upgrade) if isinstance(upgrade, Mod) and self._is_riven(upgrade) else ()
+        key = (type(upgrade), upgrade.name, upgrade.slot, runtime, riven_stats)
         cached = self._priority_cache.get(key)
         if cached is not None: return cached
         relevant = {"damage_bonus", "base_damage", "multiplicative_base_damage", "multishot", "crit_chance", "flat_crit_chance", "multiplicative_crit_chance", "crit_damage", "flat_crit_damage", "status_chance", "status_damage", "fire_rate", "multiplicative_fire_rate", "attack_speed", "weakpoint_damage", "weakpoint_crit_chance", "reload_speed", "magazine_capacity", "ammo_efficiency", "impact", "puncture", "slash", "cold", "electricity", "heat", "toxin", "blast", "corrosive", "gas", "magnetic", "radiation", "viral", "void"}
@@ -820,7 +820,7 @@ class Optimizer:
             if stats & {"fire_rate", "multiplicative_fire_rate", "attack_speed"}: orientation.add("speed")
         perks = tuple(sorted((self.calculator.weapon.perks[perk].tier, perk.name) for perk in loadout.evolutions if perk in self.calculator.weapon.perks))
         progenitor = None if loadout.progenitor is None else loadout.progenitor.element
-        riven = next((mod.name for mod in loadout.mods if self._is_riven(mod)), "")
+        riven = next((self._riven_signature(mod) for mod in loadout.mods if self._is_riven(mod)), ())
         return arcane, tuple(sorted(elements)), tuple(sorted(orientation)), perks, progenitor, riven
 
     def _select_diverse(self, candidates: list[_Candidate], limit: int) -> list[_Candidate]:

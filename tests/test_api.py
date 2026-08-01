@@ -218,7 +218,7 @@ class ApiTests(unittest.TestCase):
         self.assertIn("Build Contribution", Formatter(Calculator(arsenal.primary.get("Vectis Prime"), loadout=locked_fire_rate).resolve()).contributions())
         self.assertNotIn("Shapley", Formatter(Calculator(arsenal.primary.get("Vectis Prime"), loadout=locked_fire_rate).resolve()).contributions())
 
-        riven = Mod(name="Riven (crit_chance=+1, multishot=+1)", stats=UpgradeStats(crit_chance=1.0, multishot=1.0))
+        riven = Mod(name="Riven", stats=UpgradeStats(crit_chance=1.0, multishot=1.0))
         riven_table = Formatter(Calculator(arsenal.primary.get("Vectis Prime"), loadout=Loadout(mods=[riven])).resolve()).contributions()
         self.assertIn("Riven", riven_table)
         self.assertNotIn("crit_chance=", riven_table)
