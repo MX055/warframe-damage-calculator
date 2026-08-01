@@ -14,7 +14,7 @@ def test_optimizer_preserves_locked_loadout_and_uses_budget():
 def test_optimizer_normalizes_attack_and_bodypart_weights():
     weapon = arsenal.primary.get("Braton Prime")
     optimizer = Optimizer(Calculator(weapon))
-    result = optimizer.resolve(attacks={weapon.default_attack: 7}, bodyparts={"body": 3}, evaluations=2)
+    result = optimizer.resolve(attack=weapon.default_attack, body_part="body", evaluations=2)
     assert result.evaluations <= 2
     assert result.resolutions >= result.evaluations
 

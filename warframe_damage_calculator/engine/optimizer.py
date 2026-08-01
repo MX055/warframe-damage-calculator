@@ -283,7 +283,7 @@ class Optimizer:
         self._resolved_effect_cache: dict[int, tuple[ResolvedEffect, ...]] = {}
         self._upgrade_effects_cache: dict[tuple[int, ...], tuple[ResolvedEffect, ...]] = {}
 
-    def resolve(self, metric: Metric = default_metric, *, attacks: Mapping[str, float] | None = None, bodyparts: Mapping[str, float] | None = None, evaluations: int = 20_000, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] = (), riven_stat_blacklist: Collection[str] = (), progress: ProgressCallback | None = terminal_progress) -> Optimization:
+    def resolve(self, metric: Metric = default_metric, *, attack: str | None = None, body_part: str | None = None, evaluations: int = 20_000, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] = (), riven_stat_blacklist: Collection[str] = (), progress: ProgressCallback | None = terminal_progress) -> Optimization:
         if not callable(metric): raise TypeError("metric must be callable")
         if evaluations < 1: raise ValueError("evaluations must be at least 1")
         if not isinstance(riven, bool): raise TypeError("riven must be a bool")
@@ -298,23 +298,14 @@ class Optimizer:
         search_scale = max(0.25, math.sqrt(evaluations / 5_000))
         mode_scale = 2.0
         reporter = _ProgressReporter(progress, budget=evaluations)
-        attack_weights = self._normalize(attacks, self.calculator.weapon.default_attack, "attack")
-        default_bodypart = "body" if self.calculator.target is None else next(iter(self.calculator.target.bodyparts))
-        bodypart_weights = self._normalize(bodyparts, default_bodypart, "body part")
         pools = self._candidate_pools(riven=riven, evolutions=evolutions, upgrade_blacklist=upgrade_blacklist, riven_stat_blacklist=riven_stat_blacklist, search_scale=search_scale)
         base = self._complete_fixed_loadout(self.calculator.loadout, evolutions=evolutions)
-        scenarios = []
-        prepared_names_cache: dict[str, tuple[str, ...]] = {}
-        for attack, attack_weight in attack_weights.items():
-            for bodypart, bodypart_weight in bodypart_weights.items():
-                evaluator = Calculator(self.calculator.weapon, self.calculator.target, base)
-                selected_bodypart, target = evaluator._select_bodypart(bodypart)
-                prepared_names = prepared_names_cache.get(attack)
-                if prepared_names is None:
-                    context = CalculationContext(weapon=evaluator.weapon, target=target if target is not None else Enemy(), attack=attack, loadout=evaluator.loadout, resolved_perks=(), state=dict(evaluator.weapon.calculation_defaults))
-                    prepared_names = tuple(WeaponCalculator(context).collect_attack_tree())
-                    prepared_names_cache[attack] = prepared_names
-                scenarios.append((evaluator, attack, selected_bodypart, target, attack_weight * bodypart_weight, prepared_names))
+        selected_attack = attack or self.calculator.weapon.default_attack
+        if selected_attack not in self.calculator.weapon.attacks: raise ValueError(f"unknown attack {selected_attack!r}")
+        evaluator = Calculator(self.calculator.weapon, self.calculator.target, base)
+        selected_bodypart, target = evaluator._select_bodypart(body_part)
+        context = CalculationContext(weapon=evaluator.weapon, target=target if target is not None else Enemy(), attack=selected_attack, loadout=evaluator.loadout, resolved_perks=(), state=dict(evaluator.weapon.calculation_defaults))
+        prepared_names = tuple(WeaponCalculator(context).collect_attack_tree())
         cache: dict[tuple, _Candidate] = {}
         perk_cache: dict[tuple[int, ...], tuple[ResolvedPerk, ...]] = {}
         use_compact_metric = metric is default_metric
@@ -340,20 +331,18 @@ class Optimizer:
                 resolved_perks = _resolve_perks(self.calculator.weapon, loadout.evolutions, dict(self.calculator.weapon.calculation_defaults))
                 perk_cache[perk_key] = resolved_perks
             prepared_upgrade_effects = self._compiled_upgrade_effects(loadout)
-            for evaluator, attack, bodypart, target, weight, prepared_names in scenarios:
-                evaluator.loadout = loadout
-                if use_compact_metric:
-                    direct_dph, dot_dph, direct_dps, dot_dps, damage_mass = evaluator._calculate_metric_components(attack, target, {}, resolved_perks=resolved_perks, prepared_names=prepared_names, prepared_upgrade_effects=prepared_upgrade_effects)
-                    dps = _balanced_damage(direct_dps, dot_dps)
-                    dph = _balanced_damage(direct_dph, dot_dph)
-                    value = (dps * dph * damage_mass) ** (1 / 3) if dps > 0 and dph > 0 and damage_mass > 0 else 0.0
-                else:
-                    result = evaluator._calculate(attack, bodypart, target, {}, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=prepared_upgrade_effects)
-                    value = float(metric(result))
-                    representative = representative or result
-                if not math.isfinite(value): raise ValueError("metric must return a finite number")
-                score += weight * value
-                resolutions += 1
+            evaluator.loadout = loadout
+            if use_compact_metric:
+                direct_dph, dot_dph, direct_dps, dot_dps, damage_mass = evaluator._calculate_metric_components(selected_attack, target, {}, resolved_perks=resolved_perks, prepared_names=prepared_names, prepared_upgrade_effects=prepared_upgrade_effects)
+                dps = _balanced_damage(direct_dps, dot_dps)
+                dph = _balanced_damage(direct_dph, dot_dph)
+                score = (dps * dph * damage_mass) ** (1 / 3) if dps > 0 and dph > 0 and damage_mass > 0 else 0.0
+            else:
+                result = evaluator._calculate(selected_attack, selected_bodypart, target, {}, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=prepared_upgrade_effects)
+                score = float(metric(result))
+                representative = result
+            if not math.isfinite(score): raise ValueError("metric must return a finite number")
+            resolutions += 1
             candidate = _Candidate(loadout, score, representative)
             cache[key] = candidate
             evaluations_used += 1
@@ -473,26 +462,16 @@ class Optimizer:
         }
         result = best.result
         if result is None:
-            evaluator, attack, bodypart, target, _, prepared_names = scenarios[0]
             evaluator.loadout = best.loadout
             perk_key = tuple(self._component_id(perk) for perk in best.loadout.evolutions)
             resolved_perks = perk_cache.get(perk_key)
             if resolved_perks is None:
                 resolved_perks = _resolve_perks(self.calculator.weapon, best.loadout.evolutions, dict(self.calculator.weapon.calculation_defaults))
-            result = evaluator._calculate(attack, bodypart, target, {}, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=self._compiled_upgrade_effects(best.loadout))
+            result = evaluator._calculate(selected_attack, selected_bodypart, target, {}, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=self._compiled_upgrade_effects(best.loadout))
         return Optimization(best.loadout.copy(), result, best.score, evaluations_used, resolutions, attempts, cache_hits, 0, elapsed, summary)
 
     def _loadout(self, *, mods=(), arcanes=(), evolutions=(), progenitor=None) -> Loadout:
         return Loadout._from_parts(mods=mods, arcanes=arcanes, evolutions=evolutions, progenitor=progenitor)
-
-    def _normalize(self, values: Mapping[str, float] | None, default: str, label: str) -> dict[str, float]:
-        supplied = {default: 1.0} if values is None else {str(name): float(weight) for name, weight in values.items()}
-        if not supplied: raise ValueError(f"{label} weights cannot be empty")
-        if any(weight < 0 for weight in supplied.values()): raise ValueError(f"{label} weights cannot be negative")
-        supplied = {name: weight for name, weight in supplied.items() if weight > 0}
-        total = sum(supplied.values())
-        if total == 0: raise ValueError(f"{label} weights must contain a positive value")
-        return {name: weight / total for name, weight in supplied.items()}
 
     def _candidate_pools(self, *, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] = (), riven_stat_blacklist: Collection[str] = (), search_scale: float = 1.0) -> dict[str, tuple]:
         upgrade_blacklist = frozenset(name.casefold() for name in (*DEFAULT_UPGRADE_BLACKLIST, *map(str, upgrade_blacklist)))
