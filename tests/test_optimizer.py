@@ -61,6 +61,15 @@ def test_optimizer_reports_structured_progress():
     assert optimization.summary["resolutions"] == optimization.resolutions
 
 
+def test_optimizer_progress_includes_rebuild_stage():
+    from warframe_damage_calculator.engine.optimizer import _ProgressReporter, _ProgressState
+
+    reporter = _ProgressReporter(None, budget=100)
+    fraction, stage_fraction = reporter._fractions(_ProgressState(completed=70, stage="Rebuilds", stage_started=60, stage_total=20))
+    assert stage_fraction == 0.5
+    assert abs(fraction - 0.8) < 1e-12
+
+
 def test_optimizer_rejects_non_callable_progress():
     weapon = arsenal.primary.get("Braton Prime")
     try:

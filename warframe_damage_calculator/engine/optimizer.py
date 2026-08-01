@@ -212,8 +212,8 @@ class _ProgressReporter:
         return self._display_eta
 
     def _fractions(self, state: _ProgressState) -> tuple[float, float]:
-        weights = {"Seeds": 0.12, "Local search": 0.53, "Perturbations": 0.20, "Cleanup": 0.15}
-        order = ("Seeds", "Local search", "Perturbations", "Cleanup")
+        weights = {"Seeds": 0.10, "Local search": 0.35, "Perturbations": 0.25, "Rebuilds": 0.20, "Cleanup": 0.10}
+        order = ("Seeds", "Local search", "Perturbations", "Rebuilds", "Cleanup")
         stage_done = max(state.completed - state.stage_started, 0)
         stage_fraction = min(stage_done / max(state.stage_total, 1), 1.0)
         try: index = order.index(state.stage)
