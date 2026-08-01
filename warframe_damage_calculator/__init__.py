@@ -9,7 +9,7 @@ from .domain.upgrades import Arcane, Compatibility, Mod, Upgrade, UpgradeStats
 from .domain.weapons import Archgun, Attack, AttackStats, Melee, Primary, Secondary
 from .engine.calculator import Calculator
 from .formatting.results import Formatter
-from .optimizer import Optimizer
+from .optimizer import OptimizationProgress, Optimizer, default_metric
 
 __version__ = "1.1.0"
 
@@ -30,6 +30,7 @@ __all__ = (
     "Loadout",
     "Melee",
     "Mod",
+    "OptimizationProgress",
     "Optimizer",
     "PLACEHOLDER",
     "Perk",
@@ -40,4 +41,5 @@ __all__ = (
     "Upgrade",
     "UpgradeStats",
     "arsenal",
+    "default_metric",
 )
