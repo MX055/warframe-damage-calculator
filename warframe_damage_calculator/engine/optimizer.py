@@ -283,7 +283,7 @@ class Optimizer:
         self._resolved_effect_cache: dict[int, tuple[ResolvedEffect, ...]] = {}
         self._upgrade_effects_cache: dict[tuple[int, ...], tuple[ResolvedEffect, ...]] = {}
 
-    def resolve(self, metric: Metric = default_metric, *, attack: str | None = None, body_part: str | None = None, evaluations: int = 20_000, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] | None = None, riven_stat_blacklist: Collection[str] | None = None, progress: ProgressCallback | None = terminal_progress) -> Optimization:
+    def resolve(self, metric: Metric = default_metric, *, attack: str | None = None, body_part: str | None = None, evaluations: int = 20_000, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] | None = DEFAULT_UPGRADE_BLACKLIST, riven_stat_blacklist: Collection[str] | None = DEFAULT_RIVEN_STAT_BLACKLIST, progress: ProgressCallback | None = terminal_progress) -> Optimization:
         if not callable(metric): raise TypeError("metric must be callable")
         if evaluations < 1: raise ValueError("evaluations must be at least 1")
         if not isinstance(riven, bool): raise TypeError("riven must be a bool")
@@ -471,10 +471,10 @@ class Optimizer:
     def _loadout(self, *, mods=(), arcanes=(), evolutions=(), progenitor=None) -> Loadout:
         return Loadout._from_parts(mods=mods, arcanes=arcanes, evolutions=evolutions, progenitor=progenitor)
 
-    def _candidate_pools(self, *, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] | None = None, riven_stat_blacklist: Collection[str] | None = None, search_scale: float = 1.0) -> dict[str, tuple]:
-        use_default_upgrade_blacklist = upgrade_blacklist is None
-        upgrade_blacklist = frozenset(name.casefold() for name in (DEFAULT_UPGRADE_BLACKLIST if upgrade_blacklist is None else map(str, upgrade_blacklist)))
-        riven_stat_blacklist = frozenset(DEFAULT_RIVEN_STAT_BLACKLIST if riven_stat_blacklist is None else map(str, riven_stat_blacklist))
+    def _candidate_pools(self, *, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] | None = DEFAULT_UPGRADE_BLACKLIST, riven_stat_blacklist: Collection[str] | None = DEFAULT_RIVEN_STAT_BLACKLIST, search_scale: float = 1.0) -> dict[str, tuple]:
+        use_default_upgrade_blacklist = upgrade_blacklist == DEFAULT_UPGRADE_BLACKLIST
+        upgrade_blacklist = frozenset() if upgrade_blacklist is None else frozenset(name.casefold() for name in map(str, upgrade_blacklist))
+        riven_stat_blacklist = frozenset() if riven_stat_blacklist is None else frozenset(map(str, riven_stat_blacklist))
         weapon = self.calculator.weapon
         compatible_mods = tuple(mod for mod in arsenal.mod.filter(weapon=weapon, implemented=True) if mod.name.casefold() not in upgrade_blacklist and not (use_default_upgrade_blacklist and self._has_faction_damage(mod)))
         mod_limit = min(192, max(36, round(108 * search_scale ** 0.4)))

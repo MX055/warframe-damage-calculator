@@ -207,9 +207,9 @@ def test_optimizer_user_upgrade_blacklist_replaces_defaults():
     assert "Primed Bane of Grineer" in names
 
 
-def test_optimizer_empty_upgrade_blacklist_disables_defaults():
+def test_optimizer_none_upgrade_blacklist_disables_defaults():
     weapon = arsenal.primary.get("Vectis Prime")
-    pools = Optimizer(Calculator(weapon))._candidate_pools(riven=False, upgrade_blacklist=(), search_scale=4.0)
+    pools = Optimizer(Calculator(weapon))._candidate_pools(riven=False, upgrade_blacklist=None, search_scale=4.0)
     names = {upgrade.name for upgrade in (*pools["mods"], *pools["arcanes"])}
     assert "Spectral Serration" in names
     assert "Primed Bane of Grineer" in names
@@ -237,7 +237,7 @@ def test_optimizer_user_riven_stat_blacklist_replaces_defaults(monkeypatch):
     assert captured == frozenset({"crit_chance"})
 
 
-def test_optimizer_empty_riven_stat_blacklist_disables_defaults(monkeypatch):
+def test_optimizer_none_riven_stat_blacklist_disables_defaults(monkeypatch):
     weapon = arsenal.primary.get("Vectis Prime")
     optimizer = Optimizer(Calculator(weapon))
     captured = None
@@ -248,7 +248,7 @@ def test_optimizer_empty_riven_stat_blacklist_disables_defaults(monkeypatch):
         return ()
 
     monkeypatch.setattr(Optimizer, "_riven_candidates", lambda self, *, limit, stat_blacklist: capture(limit=limit, stat_blacklist=stat_blacklist))
-    optimizer._candidate_pools(riven_stat_blacklist=())
+    optimizer._candidate_pools(riven_stat_blacklist=None)
     assert captured == frozenset()
 
 
@@ -256,3 +256,12 @@ def test_optimizer_progress_argument_is_last():
     import inspect
 
     assert next(reversed(inspect.signature(Optimizer.resolve).parameters)) == "progress"
+
+
+def test_optimizer_blacklists_are_signature_defaults():
+    import inspect
+    from warframe_damage_calculator.engine.optimizer import DEFAULT_RIVEN_STAT_BLACKLIST, DEFAULT_UPGRADE_BLACKLIST
+
+    parameters = inspect.signature(Optimizer.resolve).parameters
+    assert parameters["upgrade_blacklist"].default == DEFAULT_UPGRADE_BLACKLIST
+    assert parameters["riven_stat_blacklist"].default == DEFAULT_RIVEN_STAT_BLACKLIST
