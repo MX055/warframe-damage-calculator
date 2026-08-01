@@ -26,23 +26,47 @@ def test_optimizer_does_not_select_unimplemented_perks():
     assert all(perk.implemented for choices in pools["perks"].values() for perk in choices)
 
 
+def test_optimizer_uses_terminal_progress_by_default(capsys):
+    weapon = arsenal.primary.get("Braton Prime")
+    Optimizer(Calculator(weapon)).resolve(evaluations=2)
+    output = capsys.readouterr().out
+    assert "Complete " in output
+    assert "[" not in output
+
+
 def test_optimizer_can_disable_progress(capsys):
     weapon = arsenal.primary.get("Braton Prime")
-    Optimizer(Calculator(weapon)).resolve(evaluations=2, progress=False)
+    Optimizer(Calculator(weapon)).resolve(evaluations=2, progress=None)
     assert capsys.readouterr().out == ""
 
 
-def test_optimizer_reports_progress(capsys):
+def test_optimizer_reports_structured_progress():
+    from warframe_damage_calculator import OptimizationProgress
+
     weapon = arsenal.primary.get("Braton Prime")
-    optimization = Optimizer(Calculator(weapon)).resolve(evaluations=2)
-    output = capsys.readouterr().out
-    assert "Optimizing " in output
-    assert "Complete " in output
-    assert "[" not in output
-    assert "]" not in output
+    snapshots = []
+    optimization = Optimizer(Calculator(weapon)).resolve(evaluations=2, progress=snapshots.append)
+    assert snapshots
+    assert all(isinstance(snapshot, OptimizationProgress) for snapshot in snapshots)
+    assert snapshots[-1].complete
+    assert snapshots[-1].stage == "Complete"
+    assert snapshots[-1].fraction == 1.0
+    assert snapshots[-1].evaluations == optimization.evaluations
+    assert snapshots[-1].resolutions == optimization.resolutions
+    assert snapshots[-1].best_score == optimization.score
     assert optimization.summary is not None
     assert optimization.summary["evaluation_budget"] == 2
     assert optimization.summary["resolutions"] == optimization.resolutions
+
+
+def test_optimizer_rejects_non_callable_progress():
+    weapon = arsenal.primary.get("Braton Prime")
+    try:
+        Optimizer(Calculator(weapon)).resolve(evaluations=2, progress=True)
+    except TypeError as error:
+        assert str(error) == "progress must be callable or None"
+    else:
+        raise AssertionError("Expected TypeError")
 
 
 def test_optimizer_generates_riven_candidates_when_unlocked():
@@ -61,7 +85,7 @@ def test_optimizer_preserves_locked_riven():
     locked = Mod(name="Riven", stats=UpgradeStats(multishot=1.0))
     optimizer = Optimizer(Calculator(weapon, loadout=Loadout(mods=[locked])))
     assert optimizer._candidate_pools()["rivens"] == ()
-    result = optimizer.resolve(evaluations=2, progress=False)
+    result = optimizer.resolve(evaluations=2, progress=None)
     assert any(mod.name == "Riven" for mod in result.loadout.mods)
 
 
@@ -90,7 +114,7 @@ def test_optimizer_can_disable_riven_search():
     weapon = arsenal.primary.get("Vectis Prime")
     optimizer = Optimizer(Calculator(weapon))
     assert optimizer._candidate_pools(riven=False)["rivens"] == ()
-    result = optimizer.resolve(evaluations=2, progress=False, riven=False)
+    result = optimizer.resolve(evaluations=2, progress=None, riven=False)
     assert not any(mod.name.startswith("Riven (") for mod in result.loadout.mods)
 
 
@@ -98,7 +122,7 @@ def test_optimizer_validates_riven_flag():
     weapon = arsenal.primary.get("Vectis Prime")
     optimizer = Optimizer(Calculator(weapon))
     try:
-        optimizer.resolve(evaluations=2, progress=False, riven=1)
+        optimizer.resolve(evaluations=2, progress=None, riven=1)
     except TypeError as error:
         assert str(error) == "riven must be a bool"
     else:
@@ -119,7 +143,7 @@ def test_optimizer_can_disable_evolution_search():
     weapon = arsenal.primary.get("Phenmor")
     optimizer = Optimizer(Calculator(weapon))
     assert optimizer._candidate_pools(evolutions=False)["perks"] == {}
-    result = optimizer.resolve(evaluations=2, progress=False, riven=False, evolutions=False)
+    result = optimizer.resolve(evaluations=2, progress=None, riven=False, evolutions=False)
     assert not result.loadout.evolutions
 
 
@@ -127,7 +151,7 @@ def test_optimizer_preserves_locked_evolutions_when_search_is_disabled():
     weapon = arsenal.primary.get("Phenmor")
     locked = arsenal.perk.get("Devouring Attrition")
     optimizer = Optimizer(Calculator(weapon, loadout=Loadout(evolutions=[locked])))
-    result = optimizer.resolve(evaluations=2, progress=False, riven=False, evolutions=False)
+    result = optimizer.resolve(evaluations=2, progress=None, riven=False, evolutions=False)
     assert locked in result.loadout.evolutions
 
 
@@ -135,7 +159,7 @@ def test_optimizer_validates_evolutions_flag():
     weapon = arsenal.primary.get("Phenmor")
     optimizer = Optimizer(Calculator(weapon))
     try:
-        optimizer.resolve(evaluations=2, progress=False, evolutions=1)
+        optimizer.resolve(evaluations=2, progress=None, evolutions=1)
     except TypeError as error:
         assert str(error) == "evolutions must be a bool"
     else:
@@ -145,7 +169,7 @@ def test_optimizer_validates_evolutions_flag():
 def test_optimizer_scales_with_evaluation_budget():
     weapon = arsenal.primary.get("Braton Prime")
     optimizer = Optimizer(Calculator(weapon))
-    result = optimizer.resolve(evaluations=8, progress=False, riven=False)
+    result = optimizer.resolve(evaluations=8, progress=None, riven=False)
     assert result.evaluations <= 8
     assert result.summary is not None
     assert "mode" not in result.summary
