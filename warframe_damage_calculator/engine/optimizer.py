@@ -82,16 +82,18 @@ class _TerminalProgress:
 
     def __call__(self, progress: OptimizationProgress) -> None:
         with self._lock:
+            if progress.complete:
+                if self._last_length: print(f"\r{' ' * self._last_length}\r", end="", file=sys.stdout, flush=True)
+                self._last_length = 0
+                return
             width = 30
-            filled = width if progress.complete else min(width - 1, int(progress.fraction * width))
+            filled = min(width - 1, int(progress.fraction * width))
             bar = "█" * filled + "·" * (width - filled)
-            label = "Complete" if progress.complete else "Optimizing"
-            message = f"{label} {bar} {progress.fraction:6.2%} · {progress.elapsed:,.1f}s elapsed"
-            if not progress.complete:
-                message += " · estimating ETA" if progress.eta is None else f" · {progress.eta:,.1f}s ETA"
+            message = f"Optimizing {bar} {progress.fraction:6.2%} · {progress.elapsed:,.1f}s elapsed"
+            message += " · estimating ETA" if progress.eta is None else f" · {progress.eta:,.1f}s ETA"
             padding = " " * max(0, self._last_length - len(message))
-            print(f"\r{message}{padding}", end="\n" if progress.complete else "", file=sys.stdout, flush=True)
-            self._last_length = 0 if progress.complete else len(message)
+            print(f"\r{message}{padding}", end="", file=sys.stdout, flush=True)
+            self._last_length = len(message)
 
 
 terminal_progress: ProgressCallback = _TerminalProgress()

@@ -30,7 +30,9 @@ def test_optimizer_uses_terminal_progress_by_default(capsys):
     weapon = arsenal.primary.get("Braton Prime")
     Optimizer(Calculator(weapon)).resolve(evaluations=2)
     output = capsys.readouterr().out
-    assert "Complete " in output
+    assert "Optimizing " in output
+    assert "Complete " not in output
+    assert output.endswith("\r")
     assert "[" not in output
 
 
