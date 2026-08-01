@@ -32,6 +32,29 @@ print(result.aggregate.average.total_dps)
 result = calculator.resolve(attack="heavy_attack", body_part="head", state={"combo": 12})
 ```
 
+## Custom definitions
+
+Definition types are available directly from the package root, so custom content does not depend on internal module paths:
+
+```python
+from warframe_damage_calculator import Attack, AttackStats, Calculator, Compatibility, Dist, Loadout, Mod, Primary, UpgradeStats
+
+weapon = Primary(
+    name="Custom Primary",
+    attacks=[Attack("shot", stats=AttackStats(damage=Dist(impact=100), fire_rate=1))],
+    reload_time=1,
+)
+mod = Mod(
+    name="Custom Mod",
+    max_rank=5,
+    compatibility=Compatibility(types=["primary"]),
+    stats=UpgradeStats(damage_bonus=0.2),
+)
+result = Calculator(weapon, loadout=Loadout(mods=[mod])).resolve()
+```
+
+The same root API exposes `Arcane`, `Perk`, `PerkValues`, `Effect`, `PLACEHOLDER`, all concrete weapon categories, and the enemy definition types. Calculation-result models and optimizer implementation details remain in their dedicated modules.
+
 ## Global perks
 
 Perks are loaded independently of weapons:

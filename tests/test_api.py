@@ -1,22 +1,25 @@
 import unittest
-from warframe_damage_calculator import Calculator, Formatter, Loadout, Progenitor, arsenal
-from warframe_damage_calculator.domain.damage import Dist
-from warframe_damage_calculator.domain.effects import PLACEHOLDER, Effect
-from warframe_damage_calculator.domain.enemies import BodyPart, Enemy
-from warframe_damage_calculator.domain.implementation import ImplementationStatus
-from warframe_damage_calculator.domain.perks import Perk, PerkValues
-from warframe_damage_calculator.domain.upgrades import Mod, Upgrade, UpgradeStats
-from warframe_damage_calculator.domain.weapons import Attack, AttackStats, Primary
+from warframe_damage_calculator import Arcane, Attack, AttackStats, BodyPart, Calculator, Compatibility, Dist, Effect, Enemy, Formatter, ImplementationStatus, Loadout, Mod, PLACEHOLDER, Perk, PerkValues, Primary, Progenitor, Upgrade, UpgradeStats, arsenal
 from warframe_damage_calculator.formatting.objects import format_loadout, format_perk, format_upgrade, format_weapon
 from warframe_damage_calculator.formatting.results import format_damage_result, format_spatial, format_status
 
 
 class ApiTests(unittest.TestCase):
-    def test_root_api_hides_internal_classes(self):
+    def test_root_api_exposes_definition_types_and_hides_internal_classes(self):
         import warframe_damage_calculator as package
-        self.assertEqual(package.__all__, ("Calculator", "Formatter", "Loadout", "Optimizer", "Progenitor", "arsenal"))
-        for name in ("Attack", "CalculationResult", "Effect", "ImplementationWarning", "Metric", "PLACEHOLDER", "ProgressCallback", "format_result"): self.assertFalse(hasattr(package, name))
+        expected = ("Arcane", "Archgun", "Attack", "AttackStats", "BodyPart", "Calculator", "Compatibility", "Dist", "Effect", "Enemy", "EnemyStats", "Formatter", "ImplementationStatus", "Loadout", "Melee", "Mod", "Optimizer", "PLACEHOLDER", "Perk", "PerkValues", "Primary", "Progenitor", "Secondary", "Upgrade", "UpgradeStats", "arsenal")
+        self.assertEqual(package.__all__, expected)
+        for name in ("AggregateResult", "CalculationResult", "ImplementationWarning", "Metric", "OptimizationProgress", "Placeholder", "ProgressCallback", "ResolvedPerk", "format_result"): self.assertFalse(hasattr(package, name))
         self.assertIs(package.Formatter, Formatter)
+
+    def test_root_api_can_define_custom_mods_arcanes_perks_and_weapons(self):
+        compatibility = Compatibility(types=["primary"])
+        mod = Mod(name="Custom Mod", max_rank=5, compatibility=compatibility, stats=UpgradeStats(damage_bonus=0.2))
+        arcane = Arcane(name="Primary Custom Arcane", max_rank=5, compatibility=compatibility, stats=UpgradeStats(multishot=0.3))
+        perk = Perk("Custom Perk", stats=UpgradeStats(crit_chance=Effect(PLACEHOLDER, mode="flat")))
+        weapon = Primary(name="Custom Primary", attacks=[Attack("shot", stats=AttackStats(damage=Dist(impact=100), fire_rate=1))], reload_time=1, perks=[PerkValues(perk, 1, 1, {"crit_chance": (0.2,)})])
+        result = Calculator(weapon, loadout=Loadout(mods=[mod], arcanes=[arcane], evolutions=[perk])).resolve()
+        self.assertGreater(result.aggregate.average.total_dps, 0)
 
     def test_weapon_is_definition_only(self):
         weapon = arsenal.primary.get("Phenmor")
