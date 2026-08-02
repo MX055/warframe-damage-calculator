@@ -164,6 +164,8 @@ class ApiTests(unittest.TestCase):
         self.assertIn("├", summary)
         self.assertIn("┬", summary.splitlines()[2])
         self.assertIn("┼", summary)
+        long_title = Formatter._table(("A", "B"), [("x", "y")], title="This is a very long title that should stretch the whole table border")
+        self.assertEqual(len({len(line) for line in long_title.splitlines()}), 1)
         fire_rate_result = Calculator(weapon, loadout=Loadout(mods=[arsenal.mod.get("Critical Deceleration")])).resolve()
         fire_rate_attack = fire_rate_result.attacks[fire_rate_result.selected_attack]
         self.assertAlmostEqual(fire_rate_attack.modded.fire_rate, fire_rate_attack.effective.fire_rate)
@@ -237,8 +239,7 @@ class ApiTests(unittest.TestCase):
         self.assertAlmostEqual(sum(weakpoint_contribution.values()), 1)
         self.assertEqual(contributions.samples, 64)
         self.assertLessEqual(contributions.evaluations, 4)
-        self.assertIn("64 permutations", Formatter(Calculator(weapon, loadout=loadout).resolve(attack="incarnon_form")).contributions())
-
+    
         locked_fire_rate = Loadout(mods=[arsenal.mod.get("Semi-Rifle Cannonade"), arsenal.mod.get("Vile Precision")])
         locked_contributions = Calculator(arsenal.primary.get("Vectis Prime"), loadout=locked_fire_rate).contributions()
         self.assertEqual(locked_contributions.contribution["Vile Precision"], 0)

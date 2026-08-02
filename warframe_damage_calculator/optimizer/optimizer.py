@@ -4,7 +4,7 @@ import math
 import os
 import time
 from concurrent import futures
-from collections.abc import Callable, Collection, Iterator, Mapping
+from collections.abc import Callable, Collection, Iterator
 from dataclasses import dataclass
 from itertools import combinations, repeat
 
@@ -13,6 +13,7 @@ from ..domain.generated_attacks import GENERATED_ATTACK_STAT
 from ..domain.loadouts import Loadout
 from ..domain.perks import ResolvedPerk
 from ..domain.results import CalculationResult
+from ..domain.state import State
 from ..domain.upgrades import ResolvedEffect
 from ..engine.calculator import Calculator
 from ..engine.context import CalculationContext
@@ -26,7 +27,7 @@ from .search import Search
 
 Metric = Callable[[CalculationResult], float]
 
-def _score_worker_batch(evaluator: Calculator, target: Enemy | None, attack: str, state: Mapping[str, object], prepared_names: tuple[str, ...] | None, indexed_loadouts: tuple[tuple[int, Loadout], ...]) -> tuple[tuple[int, float], ...]:
+def _score_worker_batch(evaluator: Calculator, target: Enemy | None, attack: str, state: State, prepared_names: tuple[str, ...] | None, indexed_loadouts: tuple[tuple[int, Loadout], ...]) -> tuple[tuple[int, float], ...]:
     import math
     from warframe_damage_calculator.engine.perks import resolve_perks
 
@@ -97,7 +98,7 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         self._resolved_effect_cache: dict[int, tuple[ResolvedEffect, ...]] = {}
         self._upgrade_effects_cache: dict[tuple[int, ...], tuple[ResolvedEffect, ...]] = {}
 
-    def resolve(self, metric: Metric = default_metric, *, attack: str | None = None, body_part: str | None = None, state: Mapping[str, object] | None = None, evaluations: int = 20_000, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] | None = DEFAULT_UPGRADE_BLACKLIST, riven_stat_blacklist: Collection[str] | None = DEFAULT_RIVEN_STAT_BLACKLIST, workers: int | None = None, progress: ProgressCallback | None = terminal_progress) -> Optimization:
+    def resolve(self, metric: Metric = default_metric, *, attack: str | None = None, body_part: str | None = None, state: State | None = None, evaluations: int = 20_000, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] | None = DEFAULT_UPGRADE_BLACKLIST, riven_stat_blacklist: Collection[str] | None = DEFAULT_RIVEN_STAT_BLACKLIST, workers: int | None = None, progress: ProgressCallback | None = terminal_progress) -> Optimization:
         if not callable(metric): raise TypeError("metric must be callable")
         if evaluations < 1: raise ValueError("evaluations must be at least 1")
         if not isinstance(riven, bool): raise TypeError("riven must be a bool")
@@ -106,10 +107,10 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         if upgrade_blacklist is not None and (isinstance(upgrade_blacklist, (str, bytes)) or not isinstance(upgrade_blacklist, Collection)): raise TypeError("upgrade_blacklist must be a collection of upgrade names or None")
         if riven_stat_blacklist is not None and (isinstance(riven_stat_blacklist, (str, bytes)) or not isinstance(riven_stat_blacklist, Collection)): raise TypeError("riven_stat_blacklist must be a collection of stat names or None")
         if progress is not None and not callable(progress): raise TypeError("progress must be callable or None")
-        calculation_state = dict(state or {})
+        calculation_state = State() if state is None else State(state)
         unknown_state = set(calculation_state) - set(self.calculator.weapon.calculation_defaults)
         if unknown_state: raise TypeError(f"unknown calculation state fields: {', '.join(sorted(unknown_state))}")
-        resolved_state = dict(self.calculator.weapon.calculation_defaults) | calculation_state
+        resolved_state = State(dict(self.calculator.weapon.calculation_defaults) | dict(calculation_state))
         started = time.perf_counter()
         resolution_budget = evaluations
         search_scale = max(0.25, math.sqrt(evaluations / 5_000))

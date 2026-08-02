@@ -70,9 +70,12 @@ class Formatter:
         content_rows = [row for row in rows if not row[0].startswith("\0")]
         widths = [max(cls._visible_length(header), *(cls._visible_length(row[index]) for row in content_rows)) for index, header in enumerate(headers)]
         inner_width = sum(widths) + 3 * (len(widths) - 1) + 2
-        if cls._visible_length(title) > inner_width:
-            widths[-1] += cls._visible_length(title) - inner_width
-            inner_width = cls._visible_length(title)
+        title_len = cls._visible_length(title)
+        # Title sits in "│ " ... " │", so it only has inner_width - 2 columns of content.
+        overflow = title_len - (inner_width - 2)
+        if overflow > 0:
+            widths[-1] += overflow
+            inner_width += overflow
         top = "┌" + "─" * inner_width + "┐"
         title_rule = "├" + "┬".join("─" * (width + 2) for width in widths) + "┤"
         header_rule = "├" + "┼".join("─" * (width + 2) for width in widths) + "┤"
@@ -158,7 +161,7 @@ class Formatter:
             rows.append((str(rank), kind, display_name, f"{display_share:+.2%}", f"{display_removal:+,.2f}", f"{left}│{right}"))
         metric_name = self._metric_name(metric) if isinstance(metric, str) else "Contribution"
         target_name = "" if self.result.target is None else f" vs {self.result.target.name} {self.result.target.bodyparts[selected_bodypart].name}"
-        title = f"{metric_name} Contributions: {self.result.weapon.name} {self.result.weapon.attacks[self.result.selected_attack].name}{target_name} ({contributions.samples} permutations)"
+        title = f"{metric_name} Contributions: {self.result.weapon.name} {self.result.weapon.attacks[self.result.selected_attack].name}{target_name}"
         table = self._table(("Contribution Rank", "Type", "Component", "Build Contribution", "Removal Difference", "Impact"), rows, title=title)
         return table
 

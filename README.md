@@ -332,7 +332,7 @@ On Python 3.14, the default metric is evaluated across up to four isolated inter
 optimized = Optimizer(calculator).resolve(attack="rocket_impact", body_part="body")
 ```
 
-The optional `state` argument has the same meaning and validation as `Calculator.resolve()` and is applied to every candidate, for example `state=State(combo=12, stance_combo="heavy")` for an appropriate melee weapon. Plain mappings remain accepted. Use `workers=1` for sequential execution or set an explicit positive worker count to match the available CPU and memory. Custom callable metrics remain sequential because arbitrary callables and full result objects cannot safely be transferred between isolated interpreters.
+The optional `state` argument has the same meaning and validation as `Calculator.resolve()` and is applied to every candidate, for example `state=State(combo=12, stance_combo="heavy")` for an appropriate melee weapon. Use `workers=1` for sequential execution or set an explicit positive worker count to match the available CPU and memory. Custom callable metrics remain sequential because arbitrary callables and full result objects cannot safely be transferred between isolated interpreters.
 
 ## Contributions
 
