@@ -44,17 +44,7 @@ class Weapon:
         self.perk_choices = MappingProxyType({tier: MappingProxyType(dict(sorted(tier_choices.items()))) for tier, tier_choices in sorted(choices.items())})
         self.traits = set(traits or ())
         self.combo = deepcopy(dict(combo or {}))
-        condition_defaults: dict[str, Any] = {}
-        for perk in self.perks:
-            for effects in perk.stats.values():
-                for effect in effects:
-                    if effect.when is None: continue
-                    condition = effect.when
-                    maximum = effect.stacks
-                    value = int(maximum) if maximum not in (None, "inf") else True
-                    if isinstance(value, int) and not isinstance(value, bool): condition_defaults[condition] = max(int(condition_defaults.get(condition, 0)), value)
-                    else: condition_defaults.setdefault(condition, value)
-        defaults = {"combo": self.combo.get("max_combo", 12), "stance_combo": "neutral", "ability_strength": 1.0} | condition_defaults
+        defaults = {"stance_combo": "neutral", "ability_strength": 1.0}
         defaults.update(calculation_defaults or {})
         self.calculation_defaults = MappingProxyType(defaults)
 
@@ -67,10 +57,10 @@ class Weapon:
         tier = self.perk_choices.get(1, {})
         return tuple(tier.values()) if len(tier) == 1 else ()
 
-    def resolve_perk(self, perk: Perk, *, state: Mapping[str, object] | None = None) -> ResolvedPerk:
+    def resolve_perk(self, perk: Perk) -> ResolvedPerk:
         try: values = self.perks[perk]
         except KeyError: raise ValueError(f"{perk.name} is not available for {self.name}") from None
-        return resolve_perk(values, weapon_name=self.name, state=dict(self.calculation_defaults) | dict(state or {}))
+        return resolve_perk(values, weapon_name=self.name, perk=perk)
 
     @classmethod
     def from_record(cls, record: Mapping[str, Any], perks: Mapping[str, Perk] | None = None) -> Weapon:

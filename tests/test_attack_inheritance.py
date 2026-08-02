@@ -104,7 +104,7 @@ class AttackInheritanceTests(unittest.TestCase):
     def test_melee_influence_definition_is_selective_but_uses_resolved_parent_status(self):
         influence = arsenal.arcane.get("Melee Influence")
         weapon = Melee(name="Influence Test", subtype="sword", attacks=[Attack("Heavy", trigger="melee", delivery="melee", category="heavy", stats=AttackStats(damage=Dist(slash=10, electricity=10), forced_procs=Dist(slash=1), crit_chance=0.8, crit_damage=4, status_chance=1, multishot=3, co_factor=2, co_effect="multiplies", fire_rate=1))])
-        result = Calculator(weapon, loadout=Loadout(arcanes=[influence])).resolve(state={"combo": 5})
+        result = Calculator(weapon, loadout=Loadout(arcanes=[influence])).resolve(state={"combo_multiplier": 5})
         generated = result.weapon.attacks["melee_influence"]
         self.assertEqual(generated.stats.damage, Dist(electricity=10))
         self.assertEqual(generated.stats.forced_procs, Dist())

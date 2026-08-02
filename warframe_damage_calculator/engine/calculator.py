@@ -7,7 +7,7 @@ from ..domain.enemies import Enemy
 from ..domain.loadouts import Loadout
 from ..domain.perks import ResolvedPerk
 from ..domain.results import CalculationResult, ContributionResult
-from ..domain.state import State
+from ..domain.state import ALLOWED_STATE_FIELDS, State
 from ..domain.upgrades import ResolvedEffect
 from ..domain.generated_attacks import GENERATED_ATTACK_STAT
 from ..domain.weapons import Weapon
@@ -30,12 +30,12 @@ class Calculator:
     def resolve(self, *, attack: str | None = None, body_part: str | None = None, state: State | None = None) -> CalculationResult:
         selected_attack = attack or self.weapon.default_attack
         selected_bodypart, target = self._select_bodypart(body_part)
-        return self._calculate(selected_attack, selected_bodypart, target, State() if state is None else State(state))
+        return self._calculate(selected_attack, selected_bodypart, target, State() if state is None else State._from_values(state))
 
     def contributions(self, *, attack: str | None = None, metric: str | Callable[[CalculationResult], float] = "total_dps", body_part: str | None = None, state: State | None = None, seed: int = 0) -> ContributionResult:
         selected_attack = attack or self.weapon.default_attack
         selected_bodypart, _ = self._select_bodypart(body_part)
-        calculation_state = State() if state is None else State(state)
+        calculation_state = State() if state is None else State._from_values(state)
 
         def evaluate(loadout: Loadout) -> float:
             result = Calculator(self.weapon, self.target, loadout).resolve(attack=selected_attack, body_part=selected_bodypart, state=calculation_state)
@@ -56,18 +56,24 @@ class Calculator:
         target.bodyparts = {selected: target.bodyparts[selected]}
         return selected, target
 
+    def _merge_state(self, state: State) -> State:
+        allowed = frozenset(self.weapon.calculation_defaults) | {"combo_multiplier"}
+        unknown = set(state) - allowed
+        if unknown: raise TypeError(f"unknown calculation state fields: {', '.join(sorted(unknown))}")
+        unknown_defaults = set(self.weapon.calculation_defaults) - ALLOWED_STATE_FIELDS
+        if unknown_defaults: raise TypeError(f"unknown calculation state fields: {', '.join(sorted(unknown_defaults))}")
+        return State._from_values(dict(self.weapon.calculation_defaults) | dict(state))
+
     def _calculate_metric_components(self, selected_attack: str, target: Enemy | None, state: State, *, resolved_perks: tuple[ResolvedPerk, ...], prepared_names: tuple[str, ...] | None, prepared_upgrade_effects: tuple[ResolvedEffect, ...] | None = None) -> tuple[float, float, float, float, float]:
-        calculation_state = State(dict(self.weapon.calculation_defaults) | dict(state))
+        calculation_state = self._merge_state(state)
         context = CalculationContext(weapon=self.weapon, target=target if target is not None else Enemy(), attack=selected_attack, loadout=self.loadout, resolved_perks=resolved_perks, state=calculation_state)
         return calculate_metric_components(context, prepared_names, prepared_upgrade_effects)
 
     def _calculate_raw(self, selected_attack: str, target: Enemy | None, state: State, *, copy_inputs: bool = True, resolved_perks: tuple[ResolvedPerk, ...] | None = None, validate: bool = True, prepared_names: tuple[str, ...] | None = None, prepared_upgrade_effects: tuple[ResolvedEffect, ...] | None = None):
         generated_attacks = {WeaponCalculator._generated_key(effect) for upgrade in self.loadout.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual() if effect.stat == GENERATED_ATTACK_STAT}
         if selected_attack not in self.weapon.attacks and selected_attack not in generated_attacks: raise ValueError(f"unknown attack {selected_attack!r}")
-        unknown = set(state) - set(self.weapon.calculation_defaults)
-        if unknown: raise TypeError(f"unknown calculation state fields: {', '.join(sorted(unknown))}")
-        calculation_state = State(dict(self.weapon.calculation_defaults) | dict(state))
-        resolved_perks = resolve_perks(self.weapon, self.loadout.evolutions, calculation_state) if resolved_perks is None else resolved_perks
+        calculation_state = self._merge_state(state)
+        resolved_perks = resolve_perks(self.weapon, self.loadout.evolutions) if resolved_perks is None else resolved_perks
         if validate: warn_loadout(self.weapon, self.loadout)
         context_target = target.copy() if copy_inputs and target is not None else target if target is not None else Enemy()
         context_loadout = self.loadout.copy() if copy_inputs else self.loadout
@@ -82,4 +88,4 @@ class Calculator:
             for name, result in calculated.items(): result_weapon.attacks[name] = deepcopy(result.attack)
         result_target = None if self.target is None else self.target.copy() if copy_inputs else target
         result_loadout = self.loadout.copy() if copy_inputs else self.loadout
-        return CalculationResult(build_aggregate(aggregate, aggregate_status_model, aggregate_status_effects), attacks, selected_attack, selected_body_part, result_weapon, result_target, result_loadout, State(state))
+        return CalculationResult(build_aggregate(aggregate, aggregate_status_model, aggregate_status_effects), attacks, selected_attack, selected_body_part, result_weapon, result_target, result_loadout, State._from_values(state))

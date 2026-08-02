@@ -35,10 +35,10 @@ class ApiTests(unittest.TestCase):
         for field in ("build", "loadout", "target", "runtime", "results", "format", "evolutions"): self.assertFalse(hasattr(weapon, field))
 
     def test_state_is_a_public_mapping_for_calculators(self):
-        state = State(combo=5, stance_combo="heavy")
+        state = State(combo_multiplier=5, stance_combo="heavy")
         result = Calculator(arsenal.melee.get("Xoris")).resolve(state=state)
         self.assertIsInstance(result.state, State)
-        self.assertEqual(result.state, {"combo": 5, "stance_combo": "heavy"})
+        self.assertEqual(result.state, {"combo_multiplier": 5, "stance_combo": "heavy"})
 
     def test_loadout_contains_upgrades_and_global_perks(self):
         loadout = Loadout(mods=[arsenal.mod.get("Serration")], evolutions=[arsenal.perk.get("Elemental Excess")])
@@ -108,7 +108,7 @@ class ApiTests(unittest.TestCase):
     def test_calculation_does_not_mutate_weapon_definition(self):
         weapon = arsenal.melee.get("Bo Prime")
         before = (repr(weapon.attacks), repr(weapon.perks), dict(weapon.calculation_defaults))
-        Calculator(weapon).resolve(state={"combo": 5})
+        Calculator(weapon).resolve(state={"combo_multiplier": 5})
         self.assertEqual((repr(weapon.attacks), repr(weapon.perks), dict(weapon.calculation_defaults)), before)
 
 

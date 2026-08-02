@@ -40,8 +40,7 @@ def _score_worker_batch(evaluator: Calculator, target: Enemy | None, attack: str
 
     scores = []
     for index, loadout in indexed_loadouts:
-        calculation_state = dict(evaluator.weapon.calculation_defaults) | dict(state)
-        resolved_perks = resolve_perks(evaluator.weapon, loadout.evolutions, calculation_state)
+        resolved_perks = resolve_perks(evaluator.weapon, loadout.evolutions)
         upgrade_effects = tuple(effect for upgrade in loadout.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual())
         evaluator.loadout = loadout
         direct_dph, dot_dph, direct_dps, dot_dps, damage_mass = evaluator._calculate_metric_components(attack, target, state, resolved_perks=resolved_perks, prepared_names=prepared_names, prepared_upgrade_effects=upgrade_effects)
@@ -107,10 +106,11 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         if upgrade_blacklist is not None and (isinstance(upgrade_blacklist, (str, bytes)) or not isinstance(upgrade_blacklist, Collection)): raise TypeError("upgrade_blacklist must be a collection of upgrade names or None")
         if riven_stat_blacklist is not None and (isinstance(riven_stat_blacklist, (str, bytes)) or not isinstance(riven_stat_blacklist, Collection)): raise TypeError("riven_stat_blacklist must be a collection of stat names or None")
         if progress is not None and not callable(progress): raise TypeError("progress must be callable or None")
-        calculation_state = State() if state is None else State(state)
-        unknown_state = set(calculation_state) - set(self.calculator.weapon.calculation_defaults)
+        calculation_state = State() if state is None else State._from_values(state)
+        allowed = frozenset(self.calculator.weapon.calculation_defaults) | {"combo_multiplier"}
+        unknown_state = set(calculation_state) - allowed
         if unknown_state: raise TypeError(f"unknown calculation state fields: {', '.join(sorted(unknown_state))}")
-        resolved_state = State(dict(self.calculator.weapon.calculation_defaults) | dict(calculation_state))
+        resolved_state = State._from_values(dict(self.calculator.weapon.calculation_defaults) | dict(calculation_state))
         started = time.perf_counter()
         resolution_budget = evaluations
         search_scale = max(0.25, math.sqrt(evaluations / 5_000))
@@ -151,7 +151,7 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             perk_key = tuple(self._component_id(perk) for perk in loadout.evolutions)
             resolved_perks = perk_cache.get(perk_key)
             if resolved_perks is None:
-                resolved_perks = resolve_perks(self.calculator.weapon, loadout.evolutions, resolved_state)
+                resolved_perks = resolve_perks(self.calculator.weapon, loadout.evolutions)
                 perk_cache[perk_key] = resolved_perks
             prepared_upgrade_effects = self._compiled_upgrade_effects(loadout)
             evaluator.loadout = loadout
@@ -374,6 +374,6 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             perk_key = tuple(self._component_id(perk) for perk in best.loadout.evolutions)
             resolved_perks = perk_cache.get(perk_key)
             if resolved_perks is None:
-                resolved_perks = resolve_perks(self.calculator.weapon, best.loadout.evolutions, resolved_state)
+                resolved_perks = resolve_perks(self.calculator.weapon, best.loadout.evolutions)
             result = evaluator._calculate(selected_attack, selected_bodypart, target, calculation_state, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=self._compiled_upgrade_effects(best.loadout))
         return Optimization(best.loadout.copy(), result, best.score, evaluations_used, resolutions, attempts, cache_hits, 0, elapsed, summary)

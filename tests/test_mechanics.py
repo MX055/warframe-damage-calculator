@@ -41,7 +41,7 @@ class MechanicsTests(unittest.TestCase):
 
     def test_melee_combo_status_duplicate_and_doughty(self):
         weapon = arsenal.melee.get("Bo Prime")
-        calculation = Calculator(weapon, loadout=loadout("Condition Overload", "Blood Rush", "Weeping Wounds", "Melee Duplicate", "Melee Doughty")).resolve(state={"combo": 12})
+        calculation = Calculator(weapon, loadout=loadout("Condition Overload", "Blood Rush", "Weeping Wounds", "Melee Duplicate", "Melee Doughty")).resolve(state={"combo_multiplier": 12})
         result = selected(calculation)
         self.assertAlmostEqual(result.effective.damage.total, 457.6)
         self.assertAlmostEqual(result.effective.crit_chance, 1.4886961152000002)

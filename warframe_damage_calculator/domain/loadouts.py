@@ -42,7 +42,7 @@ class Loadout:
         if any(not isinstance(perk, Perk) for perk in supplied_perks): raise TypeError("evolutions must contain Perk objects")
         self.mods = [mod.copy() for mod in supplied_mods]
         self.arcanes = [arcane.copy() for arcane in supplied_arcanes]
-        self.evolutions = supplied_perks
+        self.evolutions = [perk.copy() for perk in supplied_perks]
         if progenitor is not None and not isinstance(progenitor, Progenitor): raise TypeError("progenitor must be a Progenitor object")
         self.progenitor = progenitor
         if len(set(self.evolutions)) != len(self.evolutions): raise ValueError("loadout contains duplicate evolution perks")
@@ -78,6 +78,11 @@ class Loadout:
             accepted = ({"rank"} | set(upgrade.stats.manual_fields)) & values.keys()
             if accepted:
                 upgrade.set(**{key: values[key] for key in accepted})
+                consumed.update(accepted)
+        for perk in self.evolutions:
+            accepted = set(perk.stats.manual_fields) & values.keys()
+            if accepted:
+                perk.set(**{key: values[key] for key in accepted})
                 consumed.update(accepted)
         unknown = set(values) - consumed
         if unknown: raise TypeError(f"loadout cannot consume runtime fields: {', '.join(sorted(unknown))}")

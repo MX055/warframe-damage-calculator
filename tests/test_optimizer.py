@@ -74,11 +74,11 @@ def test_parallel_optimizer_preserves_search_results():
 
 def test_optimizer_propagates_state_to_parallel_scoring_and_results():
     calculator = Calculator(arsenal.melee.get("Xoris"))
-    sequential = Optimizer(calculator).resolve(attack="heavy_slam_attack", state=State(combo=1), evaluations=16, workers=1, progress=None)
-    parallel = Optimizer(calculator).resolve(attack="heavy_slam_attack", state={"combo": 1}, evaluations=16, workers=2, progress=None)
+    sequential = Optimizer(calculator).resolve(attack="heavy_slam_attack", state=State(combo_multiplier=12), evaluations=16, workers=1, progress=None)
+    parallel = Optimizer(calculator).resolve(attack="heavy_slam_attack", state={"combo_multiplier": 12}, evaluations=16, workers=2, progress=None)
     default_state = Optimizer(calculator).resolve(attack="heavy_slam_attack", evaluations=16, workers=1, progress=None)
     assert parallel.score == sequential.score
-    assert parallel.result.state == {"combo": 1}
+    assert parallel.result.state == {"combo_multiplier": 12}
     assert parallel.score != default_state.score
 
 

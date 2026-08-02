@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import replace
 from ..domain.effects import ChannelValue, Scalar
 from ..domain.effect_stats import STATUS_PROC_STATS
+from ..domain.state import combo_multiplier_from_hits
 from ..domain.status import StatusModel
 from ..domain.upgrades import ResolvedEffect
 from ..domain.weapons import Attack
@@ -21,6 +22,12 @@ def _value(channel: dict[str, ChannelValue], key: str, default: Scalar | None = 
     return values[0] if values else default
 
 
+def _weapon_combo_multiplier(context: CalculationContext, stats: Stats) -> float:
+    max_combo = int(context.weapon.combo.get("max_combo", 12))
+    if "combo_multiplier" in context.state: return float(max(1, min(max_combo, int(context.state.combo_multiplier))))
+    return float(combo_multiplier_from_hits(float(stats.get("initial_combo", 0)), max_combo))
+
+
 def evaluate(effect: ResolvedEffect, *, context: CalculationContext, attack: Attack, stats: Stats, status: StatusModel, equipped: set[str]) -> ResolvedEffect | None:
     behavior = effect.automatic
     equipped_names = {name.casefold() for name in equipped}
@@ -30,7 +37,9 @@ def evaluate(effect: ResolvedEffect, *, context: CalculationContext, attack: Att
     maximum = _value(behavior, "stacks")
     stack_limit = None if maximum in (None, "inf") else int(maximum)
     if source == "unique_status_count": multiplier *= status.expected_active_types(stack_limit) * float(attack.stats.co_factor)
-    elif source == "weapon_combo": multiplier *= min(float(context.state.combo), stack_limit) if stack_limit is not None else float(context.state.combo)
+    elif source == "weapon_combo":
+        combo = _weapon_combo_multiplier(context, stats)
+        multiplier *= min(combo, stack_limit) if stack_limit is not None else combo
     elif source == "effective_multishot" and effect.family != "multishot_ammo": multiplier *= float(stats.multishot)
     elif source == "puncture_status_chance" and effect.stat != "crit_damage":
         multiplier *= min(status.proc_count_per_attack("puncture") / max(status.attempts_per_attack, 1), 1)

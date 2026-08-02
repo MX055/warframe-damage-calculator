@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 
-from ..domain.damage import Dist
+from ..domain.state import combo_multiplier_from_hits
 from ..domain.status import STATUS_TYPES, StatusModel
 from ..domain.upgrades import ResolvedEffect
 from ..domain.weapons import Attack
@@ -23,6 +23,12 @@ from .targets import damage_multiplier, damage_total
 
 DEFERRED_STATS = frozenset({"random_proc", "crit_reset_charges", "crit_tier"})
 RANGE_EFFECT_STATS = frozenset({"range", "explosion_radius", "slam_radius"})
+
+
+def _resolved_combo_multiplier(context: CalculationContext, initial_combo: float) -> int:
+    max_combo = int(context.weapon.combo.get("max_combo", 12))
+    if "combo_multiplier" in context.state: return max(1, min(max_combo, int(context.state.combo_multiplier)))
+    return combo_multiplier_from_hits(initial_combo, max_combo)
 
 
 def _radius_scale(attack: Attack, total: ResolvedStats) -> float:
@@ -56,12 +62,14 @@ def _provisional(context: CalculationContext, attack: Attack, upgrade_effects: t
     ms_bonus = 0 if context.weapon.type == "melee" or total.proportional.get("multishot_lock") else float(total.proportional.get("multishot", 0))
     multishot = max(float(attack.stats.multishot) * (1 + ms_bonus), 1)
     if context.weapon.type == "melee":
-        sustained, _ = _melee_rate(context, attack, total)
+        sustained, category_stats = _melee_rate(context, attack, total)
         instantaneous = sustained
+        initial_combo = float(category_stats.get("initial_combo", 0))
     else:
         instantaneous, sustained, _ = _ranged_rate(context, attack, total, multishot)
+        initial_combo = 0.0
     duration = _scalar(float(attack.stats.status_duration), "status_duration", total)
-    stats = Stats(damage=damage, crit_chance=crit, status_chance=status, multishot=multishot, fire_rate=instantaneous, sustained_rate=sustained, status_duration=duration, explosion_radius_lost=_explosion_radius_lost(attack, total))
+    stats = Stats(damage=damage, crit_chance=crit, status_chance=status, multishot=multishot, fire_rate=instantaneous, sustained_rate=sustained, status_duration=duration, explosion_radius_lost=_explosion_radius_lost(attack, total), initial_combo=initial_combo)
     return stats, StatusModel(damage, attack.stats.forced_procs, status, multishot, sustained, duration)
 
 
@@ -340,7 +348,7 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     result = AttackResult(attack, base, modded, effective, upgrades, evolutions, average, spatial, status_effects)
     combo_multiplier = 1
     if heavy:
-        combo_multiplier = max(1, min(int(context.weapon.combo.get("max_combo", 12)), int(context.state.combo)))
+        combo_multiplier = _resolved_combo_multiplier(context, float(category_stats.get("initial_combo", 0)))
     average.combo_multiplier = combo_multiplier
     zone = next(iter(context.target.bodyparts.values())).type
     zone_damage = _zone_damage(context, result, zone, direct_hits=1 if context.weapon.type == "melee" else multishot, combo_multiplier=combo_multiplier)

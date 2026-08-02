@@ -29,8 +29,10 @@ print(result.aggregate.average.total_dps)
 `Weapon` and `Enemy` are definitions. `Loadout` owns selected mods, arcanes, and global evolution perks. `Calculator` owns one weapon-target-loadout combination, while attack selection, body-part selection, and temporary state belong to each calculation:
 
 ```python
-result = calculator.resolve(attack="heavy_attack", body_part="head", state=State(combo=12))
+result = calculator.resolve(attack="heavy_attack", body_part="head", state=State(combo_multiplier=12))
 ```
+
+`State` accepts only `combo_multiplier`, `stance_combo`, and `ability_strength`. When `combo_multiplier` is omitted, melee combo-scaling mods and heavy damage use the attack’s modded `initial_combo` hits converted with `floor(hits / 20) + 1`, capped by the weapon’s `max_combo`. Perk `when` conditions are not part of `State`; set them with `perk.set(...)` or `loadout.set(...)` (defaulting to active / max stacks), the same way as other upgrade runtime fields.
 
 ## Custom definitions
 
@@ -266,7 +268,7 @@ telos = arsenal.primary.get("Telos Boltor").resolve_perk(perk)
 prime = arsenal.primary.get("Boltor Prime").resolve_perk(perk)
 ```
 
-Every selected item in `Loadout.evolutions` is resolved through the weapon before calculation. Missing values, unknown values, duplicate tier selections, and perks unavailable to the weapon are rejected. Tier and choice data are retained in `weapon.perk_choices` for selection and optimizer search spaces; calculation does not convert selected perks back into database instructions.
+Every selected item in `Loadout.evolutions` is resolved through the weapon before calculation. Missing values, unknown values, duplicate tier selections, and perks unavailable to the weapon are rejected. Tier and choice data are retained in `weapon.perk_choices` for selection and optimizer search spaces; calculation does not convert selected perks back into database instructions. Conditional perk effects use perk runtime (`perk.set(...)` / `loadout.set(...)`) with defaults of `True` or max stacks, matching ranked upgrades.
 
 ## Result navigation
 
@@ -332,7 +334,7 @@ On Python 3.14, the default metric is evaluated across up to four isolated inter
 optimized = Optimizer(calculator).resolve(attack="rocket_impact", body_part="body")
 ```
 
-The optional `state` argument has the same meaning and validation as `Calculator.resolve()` and is applied to every candidate, for example `state=State(combo=12, stance_combo="heavy")` for an appropriate melee weapon. Use `workers=1` for sequential execution or set an explicit positive worker count to match the available CPU and memory. Custom callable metrics remain sequential because arbitrary callables and full result objects cannot safely be transferred between isolated interpreters.
+The optional `state` argument has the same meaning and validation as `Calculator.resolve()` and is applied to every candidate, for example `state=State(combo_multiplier=12, stance_combo="heavy")` for an appropriate melee weapon. Use `workers=1` for sequential execution or set an explicit positive worker count to match the available CPU and memory. Custom callable metrics remain sequential because arbitrary callables and full result objects cannot safely be transferred between isolated interpreters.
 
 ## Contributions
 

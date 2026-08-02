@@ -8,7 +8,7 @@ loadout = Loadout()
 calculator = Calculator(weapon, target, loadout)
 optimizer = Optimizer(calculator)
 
-optimized = optimizer.resolve(body_part="body", state=State(stance_combo="forward", combo=0))
+optimized = optimizer.resolve(body_part="body", state=State(stance_combo="forward"))
 print(optimized.summary["elapsed"])
 formatter = Formatter(optimized.result)
 
