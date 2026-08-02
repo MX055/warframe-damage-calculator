@@ -29,6 +29,14 @@ def test_optimizer_rebuilds_upgrade_generated_attack_trees():
     assert list(generated.result.attacks) == ["nightwatch_napalm_linger"]
 
 
+def test_parallel_optimizer_supports_status_generated_attacks():
+    weapon = arsenal.melee.get("Xoris")
+    influence = arsenal.arcane.get("Melee Influence")
+    optimizer = Optimizer(Calculator(weapon, loadout=Loadout(mods=[arsenal.mod.get("Shocking Touch")], arcanes=[influence])))
+    result = optimizer.resolve(evaluations=2, workers=2, riven=False, evolutions=False, upgrade_blacklist=set(arsenal.mod) | set(arsenal.arcane), progress=None)
+    assert "melee_influence" in result.result.attacks
+
+
 def test_optimizer_does_not_select_unimplemented_perks():
     weapon = arsenal.primary.get("Braton")
     optimizer = Optimizer(Calculator(weapon))

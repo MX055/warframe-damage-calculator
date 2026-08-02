@@ -357,9 +357,9 @@ def derive_status_attack(context: CalculationContext, parent: AttackResult, atta
     result = deepcopy(parent)
     result.attack = attack
     model = parent.effective.status_model.include(status_types)
-    result.base.damage = parent.base.damage.include(status_types)
-    result.base.forced_procs = parent.base.forced_procs.include(status_types)
-    result.modded.damage = parent.modded.damage.include(status_types)
+    if "damage" in parent.base: result.base.damage = parent.base.damage.include(status_types)
+    if "forced_procs" in parent.base: result.base.forced_procs = parent.base.forced_procs.include(status_types)
+    if "damage" in parent.modded: result.modded.damage = parent.modded.damage.include(status_types)
     result.effective.status_model = model
     result.effective.forced_procs = parent.effective.forced_procs.include(status_types)
     result.status_effects = model.non_damage_effects()
