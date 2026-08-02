@@ -25,6 +25,8 @@ def test_optimizer_rebuilds_upgrade_generated_attack_trees():
     optimizer = Optimizer(Calculator(weapon, loadout=Loadout(mods=[napalm])))
     result = optimizer.resolve(attack="rocket_impact", evaluations=2, riven=False, evolutions=False, upgrade_blacklist=set(arsenal.mod) | set(arsenal.arcane), progress=None)
     assert "nightwatch_napalm_linger" in result.result.attacks
+    generated = optimizer.resolve(attack="nightwatch_napalm_linger", evaluations=2, riven=False, evolutions=False, upgrade_blacklist=set(arsenal.mod) | set(arsenal.arcane), progress=None)
+    assert list(generated.result.attacks) == ["nightwatch_napalm_linger"]
 
 
 def test_optimizer_does_not_select_unimplemented_perks():

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from copy import deepcopy
+
 from ..domain.upgrades import ResolvedEffect
 from ..domain.weapons import Attack
 from .aggregation import aggregate
@@ -348,6 +350,36 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     refresh_metrics(average)
     refresh_spatial(spatial, average.attack_rate)
     _apply_position_mixture(context, result, [*upgrade_positions, *evolution_positions])
+    return result
+
+
+def derive_status_attack(context: CalculationContext, parent: AttackResult, attack: Attack, status_types: set[str]) -> AttackResult:
+    result = deepcopy(parent)
+    result.attack = attack
+    model = parent.effective.status_model.include(status_types)
+    result.base.damage = parent.base.damage.include(status_types)
+    result.base.forced_procs = parent.base.forced_procs.include(status_types)
+    result.modded.damage = parent.modded.damage.include(status_types)
+    result.effective.status_model = model
+    result.effective.forced_procs = parent.effective.forced_procs.include(status_types)
+    result.status_effects = model.non_damage_effects()
+    result.effective.start_range = float(attack.stats.falloff.get("start_range", 0))
+    result.effective.end_range = float(attack.stats.falloff.get("end_range", 0))
+    maximum = attack.stats.max_range
+    if maximum is None and "end_range" in attack.stats.falloff: maximum = float(attack.stats.falloff["end_range"])
+    result.effective.max_range = maximum
+    final_multiplier = attack.stats.falloff.get("final_multiplier")
+    result.effective.final_multiplier = 1.0 if final_multiplier is None else float(final_multiplier)
+    falloff_multiplier, result.spatial = spatial_falloff(attack, result.effective)
+    result.average.falloff_multiplier = falloff_multiplier
+    result.average.procs_per_shot = model.expected_procs_per_attack
+    zone = next(iter(context.target.bodyparts.values())).type
+    dot = _dot_value(context, result, zone) * parent.average.combo_multiplier
+    result.effective.damage = parent.effective.damage.include(status_types)
+    result.average.damage = result.effective.damage
+    set_damage(result.average, result.spatial, 0, dot)
+    refresh_metrics(result.average)
+    refresh_spatial(result.spatial, result.average.attack_rate)
     return result
 
 

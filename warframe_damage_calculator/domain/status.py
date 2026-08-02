@@ -125,6 +125,14 @@ class StatusModel:
             "void": self.expected_stacks("void", 1),
         }
 
+    def include(self, kinds: Iterable[str]) -> StatusModel:
+        selected = set(kinds) & STATUS_TYPES
+        counts = Dist({kind: self.proc_count_per_attack(kind) for kind in selected})
+        probabilities = Dist({kind: self.per_attack_probability(kind) for kind in selected})
+        any_probability = 1 - _product(1 - probability for probability in probabilities.values())
+        critical_counts = Dist({kind: self.critical_proc_counts.get(kind, 0) for kind in selected})
+        return StatusModel(Dist(), Dist(), 0, 0, self.attack_rate, self.duration, counts, probabilities, any_probability, critical_proc_counts=critical_counts)
+
     @classmethod
     def combine(cls, models: list[StatusModel], attack_rate: float, duration: float, random_proc_probability: float = 0, random_triggered_procs: Dist | None = None) -> StatusModel:
         triggered = random_triggered_procs or Dist()

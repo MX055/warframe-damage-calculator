@@ -15,6 +15,15 @@ def _validate_automatic(automatic: Any, path: str) -> None:
         if any(not isinstance(item, (int, float, bool, str)) or isinstance(item, str) and not item for item in values): raise ValueError(f"{path}.{key}: expected scalar values")
 
 
+def _extra_attack(value: Any, path: str) -> None:
+    if not isinstance(value, dict) or set(value) - {"parent", "attack"}: raise ValueError(f"{path}: expected parent and attack fields")
+    if value.get("parent") is not None and (not isinstance(value["parent"], str) or not value["parent"]): raise ValueError(f"{path}.parent: expected a name")
+    attack = value.get("attack")
+    if not isinstance(attack, dict) or set(attack) - {"name", "trigger", "delivery", "form", "category", "aoe", "children", "stats"}: raise ValueError(f"{path}.attack: invalid fields")
+    if not isinstance(attack.get("name"), str) or not attack["name"]: raise ValueError(f"{path}.attack.name: expected a name")
+    if not isinstance(attack.get("stats", {}), dict): raise ValueError(f"{path}.attack.stats: expected an object")
+
+
 def _effects(stats: Any, path: str, *, placeholders: bool = False) -> None:
     if not isinstance(stats, dict): raise ValueError(f"{path}: expected an object")
     for stat, effects in stats.items():
@@ -27,7 +36,8 @@ def _effects(stats: Any, path: str, *, placeholders: bool = False) -> None:
             try: parsed = Effect.from_record(effect)
             except (TypeError, ValueError) as error: raise ValueError(f"{location}: {error}") from error
             if parsed.mode == "multiplicative" and stat not in MULTIPLICATIVE_EFFECT_STATS: raise ValueError(f"{location}: {stat} does not support multiplicative effects")
-            if isinstance(effect["value"], (dict, list)): raise ValueError(f"{location}: value must be scalar")
+            if stat == "extra_attack": _extra_attack(effect["value"], f"{location}.value")
+            elif isinstance(effect["value"], (dict, list)): raise ValueError(f"{location}: value must be scalar")
             _validate_automatic(effect["automatic"], f"{location}.automatic")
 
 
@@ -49,7 +59,7 @@ def validate_database(database: dict[str, Any]) -> None:
     unexpected_root = set(database) - allowed_root
     if missing_root: raise ValueError(f"database: missing fields {sorted(missing_root)}")
     if unexpected_root: raise ValueError(f"database: unexpected fields {sorted(unexpected_root)}")
-    if database.get("schema_version") != 19: raise ValueError("schema version 19 is required")
+    if database.get("schema_version") != 20: raise ValueError("schema version 20 is required")
     for section in ("weapons", "upgrades", "enemies", "riven_stats"):
         if not isinstance(database.get(section), dict): raise ValueError(f"{section}: expected an object")
     upgrade_categories = {"mods", "arcanes", "perks"}
@@ -72,9 +82,7 @@ def validate_database(database: dict[str, Any]) -> None:
             if weapon.get("name") != name or "ammo" in weapon: raise ValueError(f"weapons.{category}.{name}: invalid record")
             if not weapon.get("attacks"): raise ValueError(f"weapons.{category}.{name}: attacks are required")
             for attack_name, attack in weapon["attacks"].items():
-                if attack.get("name") != attack_name or set(attack) - {"name", "trigger", "delivery", "form", "category", "aoe", "children", "generated_by", "stats"}: raise ValueError(f"weapons.{category}.{name}.attacks.{attack_name}: invalid fields")
-                generated_by = attack.get("generated_by")
-                if generated_by is not None and (not isinstance(generated_by, str) or generated_by not in database["upgrades"]["mods"] | database["upgrades"]["arcanes"]): raise ValueError(f"weapons.{category}.{name}.attacks.{attack_name}.generated_by: unknown upgrade")
+                if attack.get("name") != attack_name or set(attack) - {"name", "trigger", "delivery", "form", "category", "aoe", "children", "stats"}: raise ValueError(f"weapons.{category}.{name}.attacks.{attack_name}: invalid fields")
             for tier, choices in weapon.get("evolutions", {}).items():
                 for choice, record in choices.items():
                     path = f"weapons.{category}.{name}.evolutions.{tier}.{choice}"

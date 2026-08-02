@@ -1,5 +1,5 @@
 {
-  "schema_version": 19,
+  "schema_version": 20,
   "weapons": {
     "primaries": {
       "Coda Bassocyst": {
@@ -7900,8 +7900,7 @@
               "co_effect": "adds"
             },
             "children": [
-              "rocket_explosion",
-              "nightwatch_napalm_linger"
+              "rocket_explosion"
             ]
           },
           "rocket_explosion": {
@@ -7927,33 +7926,6 @@
               "status_chance": 0.47,
               "fire_rate": 1.5,
               "co_factor": 0.0,
-              "co_effect": "adds"
-            }
-          },
-          "nightwatch_napalm_linger": {
-            "name": "nightwatch_napalm_linger",
-            "trigger": "semi",
-            "delivery": "projectile",
-            "aoe": true,
-            "form": "normal",
-            "category": "normal",
-            "generated_by": "Nightwatch Napalm",
-            "stats": {
-              "damage": {
-                "heat": 150
-              },
-              "forced_procs": {
-                "heat": 1
-              },
-              "falloff": {
-                "end_range": 7.11,
-                "final_multiplier": 1,
-                "start_range": 0
-              },
-              "crit_damage": 0,
-              "multishot": 5,
-              "fire_rate": 1.5,
-              "co_factor": 1.0,
               "co_effect": "adds"
             }
           }
@@ -10728,8 +10700,7 @@
               "co_effect": "adds"
             },
             "children": [
-              "rocket_explosion",
-              "nightwatch_napalm_linger"
+              "rocket_explosion"
             ]
           },
           "rocket_explosion": {
@@ -10754,34 +10725,6 @@
               "fire_rate": 1.5,
               "charge_time": 0.3,
               "co_factor": 0.0,
-              "co_effect": "adds"
-            }
-          },
-          "nightwatch_napalm_linger": {
-            "name": "nightwatch_napalm_linger",
-            "trigger": "charge",
-            "delivery": "projectile",
-            "aoe": true,
-            "form": "normal",
-            "category": "normal",
-            "generated_by": "Nightwatch Napalm",
-            "stats": {
-              "damage": {
-                "heat": 150
-              },
-              "forced_procs": {
-                "heat": 1
-              },
-              "falloff": {
-                "end_range": 6.39,
-                "final_multiplier": 1,
-                "start_range": 0
-              },
-              "crit_damage": 0,
-              "multishot": 5,
-              "fire_rate": 1.5,
-              "charge_time": 0.3,
-              "co_factor": 1.0,
               "co_effect": "adds"
             }
           }
@@ -104802,7 +104745,52 @@
             "Ogris"
           ]
         },
-        "stats": {},
+        "stats": {
+          "extra_attack": [
+            {
+              "value": {
+                "parent": "rocket_explosion",
+                "attack": {
+                  "name": "nightwatch_napalm_linger",
+                  "trigger": "$attack",
+                  "delivery": "$attack",
+                  "form": "$attack",
+                  "category": "$attack",
+                  "aoe": true,
+                  "stats": {
+                    "damage": {
+                      "heat": {
+                        "source": "$attack.damage.total",
+                        "multiplier": 0.3
+                      }
+                    },
+                    "forced_procs": {
+                      "heat": 1
+                    },
+                    "falloff": {
+                      "end_range": {
+                        "source": "$attack",
+                        "multiplier": 0.9
+                      },
+                      "final_multiplier": 1,
+                      "start_range": "$attack"
+                    },
+                    "crit_chance": 0,
+                    "crit_damage": 0,
+                    "status_chance": 0,
+                    "multishot": 5,
+                    "fire_rate": "$attack",
+                    "charge_time": "$attack",
+                    "co_factor": 1,
+                    "co_effect": "$attack"
+                  }
+                }
+              },
+              "rank_scale": false,
+              "automatic": {}
+            }
+          ]
+        },
         "slot": "regular_mod",
         "conflicts": []
       },
@@ -117318,59 +117306,43 @@
           ]
         },
         "stats": {
-          "range": [
+          "extra_attack": [
             {
-              "value": 10,
-              "mode": "flat",
+              "value": {
+                "attack": {
+                  "name": "melee_influence",
+                  "trigger": "melee",
+                  "delivery": "melee",
+                  "form": "$attack",
+                  "category": "$attack",
+                  "aoe": true,
+                  "stats": {
+                    "damage": {
+                      "heat": "$attack",
+                      "cold": "$attack",
+                      "electricity": "$attack",
+                      "toxin": "$attack",
+                      "blast": "$attack",
+                      "radiation": "$attack",
+                      "gas": "$attack",
+                      "magnetic": "$attack",
+                      "viral": "$attack",
+                      "corrosive": "$attack"
+                    },
+                    "falloff": {
+                      "end_range": 20,
+                      "final_multiplier": 1,
+                      "start_range": 0
+                    }
+                  }
+                }
+              },
               "rank_scale": false,
               "automatic": {
                 "when": "electricity_status_proc",
-                "with": "status_presence"
-              }
-            },
-            {
-              "value": 2,
-              "mode": "flat",
-              "requires_rank": 1,
-              "automatic": {
-                "when": "electricity_status_proc",
-                "with": "status_presence"
-              }
-            },
-            {
-              "value": 2,
-              "mode": "flat",
-              "requires_rank": 2,
-              "automatic": {
-                "when": "electricity_status_proc",
-                "with": "status_presence"
-              }
-            },
-            {
-              "value": 2,
-              "mode": "flat",
-              "requires_rank": 3,
-              "automatic": {
-                "when": "electricity_status_proc",
-                "with": "status_presence"
-              }
-            },
-            {
-              "value": 2,
-              "mode": "flat",
-              "requires_rank": 4,
-              "automatic": {
-                "when": "electricity_status_proc",
-                "with": "status_presence"
-              }
-            },
-            {
-              "value": 2,
-              "mode": "flat",
-              "requires_rank": 5,
-              "automatic": {
-                "when": "electricity_status_proc",
-                "with": "status_presence"
+                "on": "status_proc",
+                "for": 18,
+                "refresh": false
               }
             }
           ]

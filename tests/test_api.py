@@ -14,12 +14,15 @@ class ApiTests(unittest.TestCase):
 
     def test_root_api_can_define_custom_mods_arcanes_perks_and_weapons(self):
         compatibility = Compatibility(types=["primary"])
-        mod = Mod(name="Custom Mod", max_rank=5, compatibility=compatibility, stats=UpgradeStats(damage_bonus=0.2))
+        generated = Effect({"attack": {"name": "aftershock", "trigger": "$attack", "delivery": "$attack", "form": "$attack", "category": "$attack", "aoe": True, "stats": {"damage": {"heat": {"source": "$attack.damage.total", "multiplier": 0.1}}, "falloff": {"end_range": 2}}}}, rank_scale=False)
+        mod = Mod(name="Custom Mod", max_rank=5, compatibility=compatibility, stats=UpgradeStats(damage_bonus=0.2, extra_attack=generated))
         arcane = Arcane(name="Primary Custom Arcane", max_rank=5, compatibility=compatibility, stats=UpgradeStats(multishot=0.3))
         perk = Perk("Custom Perk", stats=UpgradeStats(crit_chance=Effect(PLACEHOLDER, mode="flat")))
         weapon = Primary(name="Custom Primary", attacks=[Attack("shot", stats=AttackStats(damage=Dist(impact=100), fire_rate=1))], reload_time=1, perks=[PerkValues(perk, 1, 1, {"crit_chance": (0.2,)})])
         result = Calculator(weapon, loadout=Loadout(mods=[mod], arcanes=[arcane], evolutions=[perk])).resolve()
         self.assertGreater(result.aggregate.average.total_dps, 0)
+        self.assertIn("aftershock", result.attacks)
+        self.assertEqual(result.attacks["aftershock"].base.damage, Dist(heat=10))
 
     def test_weapon_is_definition_only(self):
         weapon = arsenal.primary.get("Phenmor")

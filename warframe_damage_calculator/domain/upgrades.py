@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from typing import Any, ClassVar, Self
 
 from .effect_stats import MULTIPLICATIVE_EFFECT_STATS
-from .effects import Effect, EffectChannel, EffectMode, Scalar
+from .effects import Effect, EffectChannel, EffectMode, EffectValue, Scalar
 from .implementation import ImplementationStatus
 from .runtime import Runtime
 
@@ -14,10 +14,10 @@ from .runtime import Runtime
 class UpgradeStats(Mapping[str, tuple[Effect, ...]]):
     __slots__ = ("_effects",)
 
-    def __init__(self, **stats: Effect | Scalar | Iterable[Effect | Scalar]) -> None:
+    def __init__(self, **stats: Effect | EffectValue | Iterable[Effect | EffectValue]) -> None:
         effects: dict[str, tuple[Effect, ...]] = {}
         for stat, source in stats.items():
-            values = (source,) if isinstance(source, (Effect, int, float, bool, str)) else tuple(source)
+            values = (source,) if isinstance(source, (Effect, int, float, bool, str, Mapping)) else tuple(source)
             if not values: raise TypeError(f"{stat} requires one or more effect values")
             effects[stat] = tuple(value if isinstance(value, Effect) else Effect(value) for value in values)
             if stat not in MULTIPLICATIVE_EFFECT_STATS and any(effect.mode == "multiplicative" for effect in effects[stat]): raise ValueError(f"{stat} does not support multiplicative effects")
@@ -44,7 +44,6 @@ class UpgradeStats(Mapping[str, tuple[Effect, ...]]):
     def from_record(cls, record: Mapping[str, list[Mapping[str, object]]]) -> UpgradeStats:
         return cls(**{stat: tuple(Effect.from_record(effect) for effect in effects) for stat, effects in record.items()})
 
-
 @dataclass(slots=True)
 class Compatibility:
     types: list[str] = field(default_factory=list)
@@ -67,7 +66,7 @@ class Compatibility:
 class ResolvedEffect:
     source: str
     stat: str
-    value: Scalar
+    value: EffectValue
     mode: EffectMode
     family: str
     maximum: float | None
@@ -149,7 +148,6 @@ class _RankedUpgrade(Upgrade):
                     if isinstance(value, (int, float)) and not isinstance(value, bool): value = value ** stacks if effect.mode == "multiplicative" else value * stacks
                 resolved.append(ResolvedEffect(self.name, stat, value, effect.mode, effect.family, effect.maximum, deepcopy(effect.automatic)))
         return tuple(resolved)
-
 
 class Mod(_RankedUpgrade):
     type = "mod"

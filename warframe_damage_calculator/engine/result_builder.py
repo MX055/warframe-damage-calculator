@@ -19,7 +19,7 @@ def _damage_metrics(source: AverageAttackStats | SpatialMetrics) -> DamageMetric
 
 
 def _status_from_model(model: StatusModel, effects: Mapping[str, float]) -> StatusResult:
-    kinds = set(model.damage) | set(model.forced_procs) | set(effects)
+    kinds = set(model.damage) | set(model.forced_procs) | set(model.extra_proc_counts) | set(effects)
     sustained = {}
     for kind in kinds:
         value = float(model.expected_active_stacks(kind))

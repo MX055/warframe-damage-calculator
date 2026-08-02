@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable, Mapping
+from copy import deepcopy
 
 from ..domain.enemies import Enemy
 from ..domain.loadouts import Loadout
@@ -13,7 +14,7 @@ from .contributions import calculate_contributions
 from .perks import resolve_perks
 from .result_builder import build_aggregate, build_calculated_attack
 from .validation import warn_loadout
-from .weapon_calculator import calculate_metric_components, calculate_weapon
+from .weapon_calculator import WeaponCalculator, calculate_metric_components, calculate_weapon
 
 
 class Calculator:
@@ -59,7 +60,8 @@ class Calculator:
         return calculate_metric_components(context, prepared_names, prepared_upgrade_effects)
 
     def _calculate_raw(self, selected_attack: str, target: Enemy | None, state: Mapping[str, object], *, copy_inputs: bool = True, resolved_perks: tuple[ResolvedPerk, ...] | None = None, validate: bool = True, prepared_names: tuple[str, ...] | None = None, prepared_upgrade_effects: tuple[ResolvedEffect, ...] | None = None):
-        if selected_attack not in self.weapon.attacks: raise ValueError(f"unknown attack {selected_attack!r}")
+        generated_attacks = {WeaponCalculator._generated_name(effect) for upgrade in self.loadout.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual() if effect.stat == "extra_attack"}
+        if selected_attack not in self.weapon.attacks and selected_attack not in generated_attacks: raise ValueError(f"unknown attack {selected_attack!r}")
         unknown = set(state) - set(self.weapon.calculation_defaults)
         if unknown: raise TypeError(f"unknown calculation state fields: {', '.join(sorted(unknown))}")
         calculation_state = dict(self.weapon.calculation_defaults) | dict(state)
@@ -74,6 +76,8 @@ class Calculator:
         calculated, aggregate, aggregate_status_model, aggregate_status_effects = self._calculate_raw(selected_attack, target, state, copy_inputs=copy_inputs, resolved_perks=resolved_perks, validate=validate, prepared_names=prepared_names, prepared_upgrade_effects=prepared_upgrade_effects)
         attacks = {name: build_calculated_attack(result) for name, result in calculated.items()}
         result_weapon = self.weapon.copy() if copy_inputs else self.weapon
+        if copy_inputs:
+            for name, result in calculated.items(): result_weapon.attacks[name] = deepcopy(result.attack)
         result_target = None if self.target is None else self.target.copy() if copy_inputs else target
         result_loadout = self.loadout.copy() if copy_inputs else self.loadout
         return CalculationResult(build_aggregate(aggregate, aggregate_status_model, aggregate_status_effects), attacks, selected_attack, selected_body_part, result_weapon, result_target, result_loadout, dict(state))

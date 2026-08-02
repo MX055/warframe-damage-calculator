@@ -29,13 +29,13 @@ class Placeholder:
 PLACEHOLDER = Placeholder()
 
 type Scalar = int | float | bool | str
-type EffectValue = Scalar | Placeholder
+type EffectValue = Scalar | Placeholder | dict[str, object]
 type ChannelValue = Scalar | list[Scalar]
 type EffectChannel = dict[str, ChannelValue]
 type EffectMode = Literal["proportional", "multiplicative", "base", "flat"]
 
 EFFECT_FIELDS = frozenset({"value", "mode", "family", "max", "rank_scale", "when", "stacks", "for", "requires_rank", "automatic"})
-AUTOMATIC_FIELDS = frozenset({"when", "on", "with", "stacks", "for", "chance", "multiply", "reset", "equipped", "per"})
+AUTOMATIC_FIELDS = frozenset({"when", "on", "with", "stacks", "for", "chance", "multiply", "reset", "refresh", "equipped", "per"})
 REPEATABLE_AUTOMATIC_FIELDS = frozenset({"when", "equipped"})
 
 
@@ -48,6 +48,9 @@ def _normalize_scalar(value: Scalar, field_name: str) -> Scalar:
 
 
 def _normalize_effect_value(value: EffectValue) -> EffectValue:
+    if isinstance(value, Mapping):
+        if any(not isinstance(key, str) or not key for key in value): raise TypeError("structured effect keys must be nonempty strings")
+        return deepcopy(dict(value))
     return value if value is PLACEHOLDER else _normalize_scalar(value, "value")
 
 
@@ -105,7 +108,7 @@ class Effect:
         self.requires_rank = None if requires_rank is None else int(requires_rank)
         self.automatic = {}
 
-    def automate(self, *, when: Scalar | Iterable[Scalar] | None = None, on: Scalar | None = None, with_: Scalar | None = None, stacks: Scalar | None = None, duration: Scalar | None = None, chance: Scalar | None = None, multiply: Scalar | None = None, reset: Scalar | None = None, equipped: Scalar | Iterable[Scalar] | None = None, per: Scalar | None = None) -> Self:
+    def automate(self, *, when: Scalar | Iterable[Scalar] | None = None, on: Scalar | None = None, with_: Scalar | None = None, stacks: Scalar | None = None, duration: Scalar | None = None, chance: Scalar | None = None, multiply: Scalar | None = None, reset: Scalar | None = None, refresh: Scalar | None = None, equipped: Scalar | Iterable[Scalar] | None = None, per: Scalar | None = None) -> Self:
         automatic: EffectChannel = {}
         if when is not None: automatic["when"] = _normalize_repeated(when, "automatic.when")
         if on is not None: automatic["on"] = _normalize_scalar(on, "automatic.on")
@@ -115,6 +118,7 @@ class Effect:
         if chance is not None: automatic["chance"] = _normalize_scalar(chance, "automatic.chance")
         if multiply is not None: automatic["multiply"] = _normalize_scalar(multiply, "automatic.multiply")
         if reset is not None: automatic["reset"] = _normalize_scalar(reset, "automatic.reset")
+        if refresh is not None: automatic["refresh"] = _normalize_scalar(refresh, "automatic.refresh")
         if equipped is not None: automatic["equipped"] = _normalize_repeated(equipped, "automatic.equipped")
         if per is not None: automatic["per"] = _normalize_scalar(per, "automatic.per")
         self.automatic = automatic

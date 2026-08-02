@@ -37,7 +37,7 @@ result = calculator.resolve(attack="heavy_attack", body_part="head", state={"com
 Definition types are available directly from the package root, so custom content does not depend on internal module paths:
 
 ```python
-from warframe_damage_calculator import Attack, AttackStats, Calculator, Compatibility, Dist, Loadout, Mod, Primary, UpgradeStats
+from warframe_damage_calculator import Attack, AttackStats, Calculator, Compatibility, Dist, Effect, Loadout, Mod, Primary, UpgradeStats
 
 weapon = Primary(
     name="Custom Primary",
@@ -48,12 +48,28 @@ mod = Mod(
     name="Custom Mod",
     max_rank=5,
     compatibility=Compatibility(types=["primary"]),
-    stats=UpgradeStats(damage_bonus=0.2),
+    stats=UpgradeStats(
+        damage_bonus=0.2,
+        extra_attack=Effect({
+            "attack": {
+                "name": "aftershock",
+                "trigger": "$attack",
+                "delivery": "$attack",
+                "form": "$attack",
+                "category": "$attack",
+                "aoe": True,
+                "stats": {
+                    "damage": {"heat": {"source": "$attack.damage.total", "multiplier": 0.1}},
+                    "falloff": {"end_range": 2},
+                },
+            }
+        }, rank_scale=False),
+    ),
 )
 result = Calculator(weapon, loadout=Loadout(mods=[mod])).resolve()
 ```
 
-The same root API exposes `Arcane`, `Perk`, `PerkValues`, `Effect`, `PLACEHOLDER`, all concrete weapon categories, and the enemy definition types. Calculation-result models and optimizer implementation details remain in their dedicated modules.
+`extra_attack` is a regular upgrade effect containing an attack template. A `$attack` value copies the corresponding parent-attack field; a source expression can read another parent value such as total base damage. Generated attacks therefore remain part of the upgrade definition without requiring a specialized public class or duplicating them across compatible weapons. The same root API exposes `Arcane`, `Perk`, `PerkValues`, `Effect`, `PLACEHOLDER`, all concrete weapon categories, and the enemy definition types. Calculation-result models and optimizer implementation details remain in their dedicated modules.
 
 ## Global perks
 
