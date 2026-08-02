@@ -6,22 +6,36 @@ from dataclasses import dataclass, field
 from types import MappingProxyType
 from typing import Any
 
-from .effects import Effect, Scalar, Source, resolve_source
+from .effects import Effect, Scalar, Source, resolve_automatic, resolve_source
 from .implementation import ImplementationStatus
 from .upgrades import ResolvedEffect, Upgrade, UpgradeStats
+
+PERK_DESCRIPTION_SOURCE = Source("$description")
 
 
 class Perk(Upgrade):
     type = "perk"
-    __slots__ = ("description",)
+    __slots__ = ("description_source",)
 
-    def __init__(self, name: str, description: str = "", stats: UpgradeStats | None = None, implementation_status: ImplementationStatus | None = None) -> None:
-        super().__init__(name=name, stats=stats, implementation_status=implementation_status)
-        self.description = description
+    def __init__(self, name: str, description: str | Source | Mapping[str, object] | None = None, stats: UpgradeStats | None = None, implementation_status: ImplementationStatus | None = None) -> None:
+        super().__init__(name=name, description="", stats=stats, implementation_status=implementation_status)
+        self.description_source = self._parse_description(description)
+
+    @staticmethod
+    def _parse_description(value: str | Source | Mapping[str, object] | None) -> Source:
+        if value is None or value == "": return PERK_DESCRIPTION_SOURCE
+        if isinstance(value, Source):
+            if value.path != "$description": raise ValueError("perk description source must be '$description'")
+            return value
+        if isinstance(value, Mapping):
+            source = Source.from_record(value)
+            if source.path != "$description": raise ValueError("perk description source must be '$description'")
+            return source
+        raise TypeError("perk description must be a $description source expression")
 
     @classmethod
     def from_record(cls, record: Mapping[str, Any]) -> Perk:
-        return cls(name=str(record["name"]), description=str(record.get("description", "")), stats=UpgradeStats.from_record(record.get("stats", {})), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")))
+        return cls(name=str(record["name"]), description=record.get("description"), stats=UpgradeStats.from_record(record.get("stats", {})), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")))
 
 
 @dataclass(frozen=True, slots=True)
@@ -52,6 +66,7 @@ class ResolvedPerk:
     perk: Perk
     tier: int
     choice: int
+    description: str
     effects: tuple[ResolvedEffect, ...]
 
 
@@ -64,6 +79,7 @@ def resolve_perk(perk_values: PerkValues, *, weapon_name: str, state: Mapping[st
     unknown = set(perk_values.values) - referenced
     if missing: raise ValueError(f"{weapon_name} supplies no values for {perk.name}: {', '.join(sorted(missing))}")
     if unknown: raise ValueError(f"{weapon_name} supplies unknown values for {perk.name}: {', '.join(sorted(unknown))}")
+    description = str(resolve_source(perk.description_source, {"description": perk_values.description}))
     resolved: list[ResolvedEffect] = []
     for stat, templates in perk.stats.items():
         for template in templates:
@@ -75,5 +91,5 @@ def resolve_perk(perk_values: PerkValues, *, weapon_name: str, state: Mapping[st
                 stacks = 1 if isinstance(supplied, bool) else int(supplied)
                 if template.stacks not in (None, "inf"): stacks = min(stacks, int(template.stacks))
                 if isinstance(value, (int, float)) and not isinstance(value, bool): value *= stacks
-            resolved.append(ResolvedEffect(perk.name, stat, value, template.mode, template.family, template.maximum, deepcopy(template.automatic)))
-    return ResolvedPerk(perk, perk_values.tier, perk_values.choice, tuple(resolved))
+            resolved.append(ResolvedEffect(perk.name, stat, value, template.mode, template.family, template.maximum, resolve_automatic(template.automatic, 0, 0)))
+    return ResolvedPerk(perk, perk_values.tier, perk_values.choice, description, tuple(resolved))

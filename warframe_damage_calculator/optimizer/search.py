@@ -3,6 +3,7 @@ from __future__ import annotations
 import random
 
 from ..domain.damage import BASE_ELEMENT_TYPES
+from ..domain.generated_attacks import GENERATED_ATTACK_STAT
 from ..domain.loadouts import Loadout
 from ..domain.perks import Perk
 from ..domain.upgrades import Arcane, Mod
@@ -76,7 +77,7 @@ class Search:
         arcanes = tuple(base.arcanes) if base.arcanes else (None, *pools["arcanes"][:arcane_seed_limit])
         seen: set[tuple] = set()
         for generator in (*pools["mods"], *pools["arcanes"]):
-            dependencies = self._extra_attack_status_dependencies(generator)
+            dependencies = self._generated_attack_status_dependencies(generator)
             if not dependencies: continue
             allowed_mods = tuple(mod for mod in pools["mods"] if not ((set(mod.stats) & BASE_ELEMENT_TYPES) - dependencies) and not self._zeroes_base_damage(mod))
             seed_base = base
@@ -146,9 +147,9 @@ class Search:
         return mods
 
     @staticmethod
-    def _extra_attack_status_dependencies(upgrade: Mod | Arcane) -> set[str]:
+    def _generated_attack_status_dependencies(upgrade: Mod | Arcane) -> set[str]:
         dependencies: set[str] = set()
-        for effect in upgrade.stats.get("extra_attack", ()):
+        for effect in upgrade.stats.get(GENERATED_ATTACK_STAT, ()):
             if effect.automatic.get("on") != "status_proc": continue
             conditions = effect.automatic.get("when", ())
             values = conditions if isinstance(conditions, list) else (conditions,)

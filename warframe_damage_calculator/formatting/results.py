@@ -127,8 +127,8 @@ class Formatter:
         metrics = (("Direct DPH", "direct_dph"), ("DoT DPH", "dot_dph"), ("Total DPH", "total_dph"), ("Direct DPS", "direct_dps"), ("DoT DPS", "dot_dps"), ("Total DPS", "total_dps"))
         for label, attribute in metrics: rows.append((label, "—", "—", "—", self._number(getattr(average_damage, attribute)), "—"))
         weapon_name = getattr(self.result.weapon, "name", "Weapon")
-        target_name = "" if self.result.target is None else f"vs {getattr(self.result.target, 'name', 'Target')} {self.result.selected_bodypart.replace('_', ' ').title()}"
-        title = f"Summary: {weapon_name} {attack_name.replace('_', ' ').title()} {target_name}"
+        target_name = "" if self.result.target is None else f"vs {self.result.target.name} {self.result.target.bodyparts[self.result.selected_bodypart].name}"
+        title = f"Summary: {weapon_name} {self.result.weapon.attacks[attack_name].name} {target_name}"
         return self._table(("Stat", "Base", "Modded", "Effective", "Average"), [tuple(cell for index, cell in enumerate(row) if index != 5) for row in rows], title=title)
 
     def contributions(self, metric: str = "total_dps", body_part: str | None = None, seed: int = 0) -> str:
@@ -157,8 +157,8 @@ class Formatter:
             right = "█" * bar_length + "·" * (10 - bar_length) if share > 0 else "·" * 10
             rows.append((str(rank), kind, display_name, f"{display_share:+.2%}", f"{display_removal:+,.2f}", f"{left}│{right}"))
         metric_name = self._metric_name(metric) if isinstance(metric, str) else "Contribution"
-        target_name = "" if self.result.target is None else f" vs {getattr(self.result.target, 'name', 'Target')} {selected_bodypart.replace('_', ' ').title()}"
-        title = f"{metric_name} Contributions: {self.result.weapon.name} {self.result.selected_attack.replace('_', ' ').title()}{target_name}"
+        target_name = "" if self.result.target is None else f" vs {self.result.target.name} {self.result.target.bodyparts[selected_bodypart].name}"
+        title = f"{metric_name} Contributions: {self.result.weapon.name} {self.result.weapon.attacks[self.result.selected_attack].name}{target_name} ({contributions.samples} permutations)"
         table = self._table(("Contribution Rank", "Type", "Component", "Build Contribution", "Removal Difference", "Impact"), rows, title=title)
         return table
 

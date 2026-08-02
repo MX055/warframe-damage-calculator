@@ -53,7 +53,9 @@ class Enemy:
         self.faction = faction
         self.base_level = float(base_level)
         self.stats = stats or EnemyStats()
-        self.bodyparts = dict(bodyparts or {"body": BodyPart()})
+        self.bodyparts = deepcopy(dict(bodyparts or {"body": BodyPart()}))
+        for bodypart_id, bodypart in self.bodyparts.items():
+            if bodypart.name == "body" and bodypart_id != "body": bodypart.name = bodypart_id.replace("_", " ").title()
         self.modifiers = {kind.lower(): float(value) for kind, value in (modifiers or {}).items()}
         self.runtime = Runtime({"level", "steel_path", "empowered"}, {"level": 1, "steel_path": False, "empowered": False} | dict(runtime or {}))
 

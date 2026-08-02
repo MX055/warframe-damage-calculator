@@ -111,7 +111,7 @@ def test_default_metric_includes_generated_attack_spatial_mass():
     assert default_metric(with_influence) > default_metric(without)
 
 
-def test_optimizer_seeds_extra_attack_status_dependencies():
+def test_optimizer_seeds_generated_attack_status_dependencies():
     optimizer = Optimizer(Calculator(arsenal.melee.get("Xoris")))
     pools = optimizer._candidate_pools(riven=False)
     influence_seeds = [seed for seed in optimizer._seed_loadouts(optimizer.calculator.loadout, pools) if any(arcane.name == "Melee Influence" for arcane in seed.arcanes)]

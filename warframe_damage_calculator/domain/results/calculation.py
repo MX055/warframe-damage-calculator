@@ -46,6 +46,8 @@ class CalculatedAttack:
     average: AverageResult
     status: StatusResult
     spatial: SpatialResult | None
+    generated_by: str | None = None
+    generated_from: str | None = None
 
 
 @dataclass(frozen=True, slots=True)

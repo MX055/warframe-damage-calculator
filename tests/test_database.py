@@ -5,6 +5,7 @@ from warframe_damage_calculator import Calculator, Loadout, arsenal
 from warframe_damage_calculator.database.compatibility import is_upgrade_compatible
 from warframe_damage_calculator.domain.damage import Dist
 from warframe_damage_calculator.domain.effects import Effect, Source
+from warframe_damage_calculator.domain.scaled_values import ScaledValue
 from warframe_damage_calculator.domain.upgrades import Mod, UpgradeStats
 from warframe_damage_calculator.domain.warnings import LoadoutCompatibilityWarning
 from warframe_damage_calculator.domain.weapons import Attack, AttackStats, Melee, Secondary
@@ -47,7 +48,7 @@ class DatabaseTests(unittest.TestCase):
         self.assertTrue(all(arsenal.arcane.get(name).type == "arcane" for name in arsenal.arcane))
 
     def test_perks_are_loaded_from_database(self):
-        self.assertEqual(arsenal.database["schema_version"], 20)
+        self.assertEqual(arsenal.database["schema_version"], 24)
         self.assertIn("Devouring Attrition", arsenal.database["upgrades"]["perks"])
         self.assertEqual(arsenal.database["upgrades"]["perks"]["Devouring Attrition"]["stats"]["damage_bonus"][0]["value"], {"source": "$values.damage_bonus[0]"})
 
@@ -62,6 +63,31 @@ class DatabaseTests(unittest.TestCase):
         self.assertEqual(arsenal.mod.get("serration").name, "Serration")
         self.assertEqual(arsenal.arcane.get("primary merciless").name, "Primary Merciless")
         self.assertEqual(arsenal.perk.get("devouring attrition").name, "Devouring Attrition")
+
+    def test_upgrade_and_weapon_descriptions_are_loaded(self):
+        serration = arsenal.mod.get("Serration")
+        merciless = arsenal.arcane.get("Primary Merciless")
+        boltor = arsenal.primary.get("Boltor")
+        self.assertIsInstance(serration.description, str)
+        self.assertIsInstance(merciless.description, str)
+        self.assertIsInstance(boltor.description, str)
+        self.assertEqual(serration.description, "+165% Damage")
+        influence = arsenal.arcane.get("Melee Influence")
+        self.assertEqual(influence.description, "On Melee Electricity Status: 20% chance for elemental Melee Status Effects to apply to enemies within 20m for 18s. Cannot refresh while active.")
+
+    def test_perk_descriptions_resolve_from_weapon_evolutions(self):
+        perk = arsenal.perk.get("Elemental Balance")
+        self.assertEqual(perk.description_source.path, "$description")
+        weapon = arsenal.primary.get("Telos Boltor")
+        values = weapon.perks[perk]
+        resolved = weapon.resolve_perk(perk)
+        self.assertEqual(resolved.description, values.description)
+        self.assertTrue(resolved.description)
+
+    def test_attack_and_bodypart_keys_are_separate_from_display_names(self):
+        attack = arsenal.primary.get("Coda Bassocyst").attacks["normal_attack"]
+        self.assertEqual(attack.name, "Normal Attack")
+        self.assertEqual(arsenal.enemy.get("Drudge Brazer").bodyparts["stealth_finisher"].name, "Stealth Finisher")
 
     def test_upgrade_repositories_filter_by_weapon_compatibility(self):
         vectis = arsenal.primary.get("Vectis Prime")
@@ -98,7 +124,7 @@ class DatabaseTests(unittest.TestCase):
         weapon = arsenal.primary.get("Kuva Ogris")
         ogris = arsenal.primary.get("Ogris")
         napalm = arsenal.mod.get("Nightwatch Napalm")
-        self.assertEqual(len(napalm.stats.extra_attack), 1)
+        self.assertEqual(len(napalm.stats.generated_attack), 1)
         self.assertNotIn("nightwatch_napalm_linger", weapon.attacks)
         plain = Calculator(weapon).resolve(attack="rocket_impact")
         self.assertNotIn("nightwatch_napalm_linger", plain.attacks)
@@ -128,7 +154,7 @@ class DatabaseTests(unittest.TestCase):
 
     def test_generated_child_attacks_keep_multiplicative_range_from_their_generator(self):
         weapon = arsenal.primary.get("Kuva Ogris")
-        generator = Mod(name="Nightwatch Napalm", max_rank=0, stats=UpgradeStats(explosion_radius=Effect(0.5, mode="multiplicative"), extra_attack=arsenal.mod.get("Nightwatch Napalm").stats.extra_attack))
+        generator = Mod(name="Nightwatch Napalm", max_rank=0, stats=UpgradeStats(explosion_radius=Effect(0.5, mode="multiplicative"), generated_attack=arsenal.mod.get("Nightwatch Napalm").stats.generated_attack))
         result = Calculator(weapon, loadout=Loadout(mods=[generator])).resolve(attack="rocket_impact")
         self.assertAlmostEqual(result.attacks["rocket_explosion"].effective.end_range, 7.9 * 0.5)
         self.assertAlmostEqual(result.attacks["nightwatch_napalm_linger"].effective.end_range, 7.11 * 0.5)
@@ -144,11 +170,15 @@ class DatabaseTests(unittest.TestCase):
         influence = arsenal.arcane.get("Melee Influence")
         electric = Melee(name="Electric", subtype="sword", attacks=[Attack(name="normal", trigger="melee", delivery="melee", stats=AttackStats(damage=Dist(slash=10, electricity=10), status_chance=1, range=3, fire_rate=1))])
         physical = Melee(name="Physical", subtype="sword", attacks=[Attack(name="normal", trigger="melee", delivery="melee", stats=AttackStats(damage=Dist(slash=10), status_chance=1, range=3, fire_rate=1))])
-        self.assertEqual(set(influence.stats), {"extra_attack"})
-        influence_effect = influence.stats.extra_attack[0]
-        self.assertEqual(influence_effect.automatic, {"when": "electricity_status_proc", "on": "status_proc", "for": 18, "refresh": False})
-        self.assertEqual(influence_effect.value["parent"], {"deliveries": ["melee"]})
-        self.assertEqual(influence_effect.value["attack"]["inherit"], "$parent")
+        self.assertEqual(set(influence.stats), {"generated_attack"})
+        influence_effect = influence.stats.generated_attack[0]
+        self.assertEqual(influence_effect.automatic["when"], "electricity_status_proc")
+        self.assertEqual(influence_effect.automatic["chance"], ScaledValue(0.2, False))
+        self.assertEqual(influence_effect.automatic["on"][0], "heat_status_proc")
+        self.assertEqual(influence_effect.automatic["refresh"], False)
+        self.assertEqual(influence_effect.value["links"]["parents"], {"deliveries": ["melee"]})
+        self.assertIn("stats.crit_chance", influence_effect.value["inheritance"]["include"])
+        self.assertIn("stats.damage.electricity", influence_effect.value["inheritance"]["include"])
         self.assertNotIn("attacks", arsenal.database["upgrades"]["arcanes"]["Melee Influence"])
         result = Calculator(electric, loadout=Loadout(arcanes=[influence])).resolve()
         self.assertAlmostEqual(result.attacks["normal"].effective.range, 3)
@@ -165,13 +195,17 @@ class DatabaseTests(unittest.TestCase):
         self.assertIn("electricity", modded_result.attacks["melee_influence"].status.sustained_procs)
         rank_zero = arsenal.arcane.get("Melee Influence").set(rank=0)
         self.assertAlmostEqual(Calculator(electric, loadout=Loadout(arcanes=[rank_zero])).resolve().attacks["melee_influence"].effective.end_range, 20)
+        self.assertEqual(rank_zero.resolve_manual()[0].automatic["for"], 3)
 
     def test_melee_duplicate_is_an_inherited_automatic_child_attack(self):
         duplicate = arsenal.arcane.get("Melee Duplicate")
-        self.assertEqual(set(duplicate.stats), {"extra_attack"})
-        effect = duplicate.stats.extra_attack[0]
-        self.assertEqual(effect.value, {"parent": {"deliveries": ["melee"]}, "attack": {"inherit": "$parent", "name": "melee_duplicate"}})
-        self.assertEqual(effect.automatic, {"on": "near_yellow_critical_hit"})
+        self.assertEqual(set(duplicate.stats), {"generated_attack"})
+        effect = duplicate.stats.generated_attack[0]
+        self.assertEqual(effect.value, {"name": "Melee Duplicate", "inheritance": {"include": ["trigger", "delivery", "aoe", "form", "category", "stats"]}, "links": {"parents": {"deliveries": ["melee"]}}})
+        self.assertEqual(effect.automatic["on"], "near_yellow_critical_hit")
+        self.assertEqual(effect.automatic["chance"], ScaledValue(1, True))
+        for rank, chance in enumerate([1 / 6, 2 / 6, 3 / 6, 4 / 6, 5 / 6, 1]):
+            self.assertAlmostEqual(duplicate.set(rank=rank).resolve_manual()[0].automatic["chance"], chance)
         result = Calculator(arsenal.melee.get("Bo Prime"), loadout=Loadout(arcanes=[duplicate])).resolve()
         self.assertIn("melee_duplicate", result.attacks)
         self.assertGreater(result.attacks["melee_duplicate"].average.direct_dph, 0)

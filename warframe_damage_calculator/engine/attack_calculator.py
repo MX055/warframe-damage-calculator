@@ -36,7 +36,8 @@ def _radius_scale(attack: Attack, total: ResolvedStats) -> float:
 
 def _explosion_radius_lost(attack: Attack, total: ResolvedStats) -> float:
     if not is_aoe_attack(attack): return 0
-    radius = float(attack.stats.falloff.get("end_range", 0))
+    falloff = attack.stats.falloff
+    radius = 0.0 if falloff is None or falloff.end_range is None else float(falloff.end_range)
     proportional = float(total.proportional.get("explosion_radius", 0))
     if attack.category in SLAM_CATEGORIES: proportional += float(total.proportional.get("slam_radius", 0))
     expanded = max(radius * (1 + proportional), 0)
@@ -169,7 +170,7 @@ def _apply_position_mixture(context: CalculationContext, result: AttackResult, e
     refresh_spatial(spatial, average.attack_rate)
 
 
-def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effects: tuple[ResolvedEffect, ...], evolution_effects: tuple[ResolvedEffect, ...], *, static_upgrades: ResolvedStats | None = None, static_evolutions: ResolvedStats | None = None, automatic_model_override: StatusModel | None = None, status_effects_override: dict[str, float] | None = None, random_proc_probability: float = 0, preliminary: bool = False, compact: bool = False, provisional_override: Stats | None = None) -> AttackResult | PreliminaryAttack:
+def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effects: tuple[ResolvedEffect, ...], evolution_effects: tuple[ResolvedEffect, ...], *, static_upgrades: ResolvedStats | None = None, static_evolutions: ResolvedStats | None = None, automatic_model_override: StatusModel | None = None, status_effects_override: dict[str, float] | None = None, random_proc_probability: float = 0, preliminary: bool = False, compact: bool = False, provisional_override: Stats | None = None, generated_by: str | None = None) -> AttackResult | PreliminaryAttack:
     if provisional_override is None:
         provisional, provisional_model = _provisional(context, attack, upgrade_effects, evolution_effects, static_upgrades, static_evolutions)
     else:
@@ -229,7 +230,7 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
         instant_rate, category_stats = _melee_rate(context, attack, total)
         fire_rate = instant_rate
         stance = _stance_combo(context, attack)
-        if stance: damage *= max(float(stance.get("multiplier", 1)), 0)
+        if stance is not None: damage *= max(float(stance.multiplier), 0)
         if attack.category in SLAM_CATEGORIES: damage *= max(1 + float(total.proportional.get("slam_damage", 0)), 0)
     else:
         instant_rate, fire_rate, category_stats = _ranged_rate(context, attack, total, multishot)
@@ -248,8 +249,8 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
         status_model = _status_model(damage, forced, status, status_attempts, fire_rate, duration, resolved_effects, crit, include_random=False, afflictions=afflictions)
     if preliminary: return PreliminaryAttack(provisional, status_model, damage, forced, status, multishot, fire_rate, duration, tuple(resolved_effects), crit, trigger_crit_chance)
     range_total = total
-    if attack.generated_by is not None:
-        range_upgrades = aggregate(effect for effect in upgrades_resolved if effect.mode != "multiplicative" or effect.stat not in RANGE_EFFECT_STATS or effect.source == attack.generated_by)
+    if generated_by is not None:
+        range_upgrades = aggregate(effect for effect in upgrades_resolved if effect.mode != "multiplicative" or effect.stat not in RANGE_EFFECT_STATS or effect.source == generated_by)
         range_total = _combined(range_upgrades, evolutions)
     if not compact:
         modded_upgrades = aggregate(effect for effect in upgrades_resolved if not effect.automatic and automatic_value(effect, "on") not in POSITION_EVENTS and effect.stat not in DEFERRED_STATS and not (effect.stat == "crit_damage" and automatic_value(effect, "with") == "puncture_status_chance"))
@@ -308,13 +309,13 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     projectile_speed = max(1 + float(total.proportional.get("projectile_speed", 0)), 0)
     effective.projectile_speed = projectile_speed
     range_scale = _radius_scale(attack, range_total) if is_aoe_attack(attack) else projectile_speed
-    effective.start_range = float(attack.stats.falloff.get("start_range", 0)) * range_scale
-    effective.end_range = float(attack.stats.falloff.get("end_range", 0)) * range_scale
+    falloff = attack.stats.falloff
+    effective.start_range = (0.0 if falloff is None else float(falloff.start_range)) * range_scale
+    effective.end_range = (0.0 if falloff is None or falloff.end_range is None else float(falloff.end_range)) * range_scale
     maximum = attack.stats.max_range
-    if maximum is None and "end_range" in attack.stats.falloff: maximum = float(attack.stats.falloff["end_range"])
+    if maximum is None and falloff is not None and falloff.end_range is not None: maximum = float(falloff.end_range)
     effective.max_range = None if maximum is None else float(maximum) * range_scale
-    final_multiplier = attack.stats.falloff.get("final_multiplier")
-    effective.final_multiplier = 1.0 if final_multiplier is None else float(final_multiplier)
+    effective.final_multiplier = 1.0 if falloff is None else float(falloff.final_multiplier)
     effective.noise_level = total.proportional.get("noise_level", attack.stats.noise_level)
     if compact:
         base = BaseAttackStats()
@@ -362,13 +363,13 @@ def derive_status_attack(context: CalculationContext, parent: AttackResult, atta
     result.effective.status_model = model
     result.effective.forced_procs = parent.effective.forced_procs.include(status_types)
     result.status_effects = model.non_damage_effects()
-    result.effective.start_range = float(attack.stats.falloff.get("start_range", 0))
-    result.effective.end_range = float(attack.stats.falloff.get("end_range", 0))
+    falloff = attack.stats.falloff
+    result.effective.start_range = 0.0 if falloff is None else float(falloff.start_range)
+    result.effective.end_range = 0.0 if falloff is None or falloff.end_range is None else float(falloff.end_range)
     maximum = attack.stats.max_range
-    if maximum is None and "end_range" in attack.stats.falloff: maximum = float(attack.stats.falloff["end_range"])
+    if maximum is None and falloff is not None and falloff.end_range is not None: maximum = float(falloff.end_range)
     result.effective.max_range = maximum
-    final_multiplier = attack.stats.falloff.get("final_multiplier")
-    result.effective.final_multiplier = 1.0 if final_multiplier is None else float(final_multiplier)
+    result.effective.final_multiplier = 1.0 if falloff is None else float(falloff.final_multiplier)
     falloff_multiplier, result.spatial = spatial_falloff(attack, result.effective)
     result.average.falloff_multiplier = falloff_multiplier
     result.average.procs_per_shot = model.expected_procs_per_attack
@@ -385,16 +386,17 @@ def derive_status_attack(context: CalculationContext, parent: AttackResult, atta
 def derive_event_attack(parent: AttackResult, attack: Attack, probability: float) -> AttackResult:
     result = deepcopy(parent)
     result.attack = attack
-    probability = clamp(probability, 0, 1)
-    result.effective.status_model = parent.effective.status_model.include(STATUS_TYPES).scaled(probability)
+    # Expected multiplicity may exceed 1 for analytically folded recursive self-triggers.
+    factor = max(float(probability), 0)
+    result.effective.status_model = parent.effective.status_model.include(STATUS_TYPES).scaled(factor)
     result.status_effects = result.effective.status_model.non_damage_effects()
-    result.average.damage = parent.average.damage * probability
+    result.average.damage = parent.average.damage * factor
     result.average.procs_per_shot = result.effective.status_model.expected_procs_per_attack
-    result.average.flat_dph = float(parent.average.flat_dph or 0) * probability
-    result.average.flat_dotph = float(parent.average.flat_dotph or 0) * probability
+    result.average.flat_dph = float(parent.average.flat_dph or 0) * factor
+    result.average.flat_dotph = float(parent.average.flat_dotph or 0) * factor
     if result.spatial.damage_mass is not None:
-        result.spatial.flat_dph = float(parent.spatial.flat_dph or 0) * probability
-        result.spatial.flat_dotph = float(parent.spatial.flat_dotph or 0) * probability
+        result.spatial.flat_dph = float(parent.spatial.flat_dph or 0) * factor
+        result.spatial.flat_dotph = float(parent.spatial.flat_dotph or 0) * factor
     refresh_metrics(result.average)
     refresh_spatial(result.spatial, result.average.attack_rate)
     return result
@@ -410,8 +412,8 @@ class AttackCalculator:
         self.static_upgrades = aggregate(effect for effect in upgrade_effects if not effect.automatic)
         self.static_evolutions = aggregate(effect for effect in evolution_effects if not effect.automatic)
 
-    def calculate(self, attack: Attack, *, automatic_model: StatusModel | None = None, status_effects: dict[str, float] | None = None, random_proc_probability: float = 0, compact: bool = False, provisional: Stats | None = None) -> AttackResult:
-        result = _calculate_attack(self.context, attack, self.upgrade_effects, self.evolution_effects, static_upgrades=self.static_upgrades, static_evolutions=self.static_evolutions, automatic_model_override=automatic_model, status_effects_override=status_effects, random_proc_probability=random_proc_probability, compact=compact, provisional_override=provisional)
+    def calculate(self, attack: Attack, *, automatic_model: StatusModel | None = None, status_effects: dict[str, float] | None = None, random_proc_probability: float = 0, compact: bool = False, provisional: Stats | None = None, generated_by: str | None = None) -> AttackResult:
+        result = _calculate_attack(self.context, attack, self.upgrade_effects, self.evolution_effects, static_upgrades=self.static_upgrades, static_evolutions=self.static_evolutions, automatic_model_override=automatic_model, status_effects_override=status_effects, random_proc_probability=random_proc_probability, compact=compact, provisional_override=provisional, generated_by=generated_by)
         if isinstance(result, PreliminaryAttack): raise RuntimeError("full attack calculation returned preliminary data")
         return result
 

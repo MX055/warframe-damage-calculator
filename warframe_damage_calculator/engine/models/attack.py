@@ -90,3 +90,5 @@ class AttackResult:
     average: AverageAttackStats
     spatial: SpatialMetrics
     status_effects: dict[str, float] = field(default_factory=dict)
+    generated_by: str | None = None
+    generated_from: str | None = None

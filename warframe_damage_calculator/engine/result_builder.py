@@ -49,7 +49,7 @@ def _average_result(source: AverageAttackStats) -> AverageResult:
 
 
 def build_calculated_attack(result: AttackResult) -> CalculatedAttack:
-    return CalculatedAttack(result.base, result.modded, result.effective, result.upgrades, result.evolutions, _average_result(result.average), _status(result), _spatial(result))
+    return CalculatedAttack(result.base, result.modded, result.effective, result.upgrades, result.evolutions, _average_result(result.average), _status(result), _spatial(result), result.generated_by, result.generated_from)
 
 
 def build_aggregate(average: AverageAttackStats, status_model: StatusModel, status_effects: Mapping[str, float]) -> AggregateResult:

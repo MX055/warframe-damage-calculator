@@ -7,7 +7,7 @@ HANDLED_EFFECT_STATS = frozenset({
     "accuracy", "afflictions_proc_multiplier", "ammo_efficiency", "ammo_maximum", "area_of_effect", "armor_reduction", "attack_speed", "bleed_on_impact",
     "cascadia_empowered_proc", "cold", "condition_overload", "corpus_damage", "corrosive", "crit_chance", "crit_damage", "crit_from_status",
     "crit_reset_charges", "crit_tier", "damage", "damage_bonus", "debilitate_proc_chance", "electricity", "explosion_radius",
-    "extra_attack", "fire_rate", "fire_rate_lock", "gas", "grineer_damage", "heat", "heavy_attack_efficiency", "heavy_attack_speed", "impact",
+    "generated_attack", "fire_rate", "fire_rate_lock", "gas", "grineer_damage", "heat", "heavy_attack_efficiency", "heavy_attack_speed", "impact",
     "impact_to_puncture_conversion", "infested_damage", "initial_combo", "magazine_capacity", "magnetic", "multishot", "multishot_lock",
     "murmur_damage", "noise_level", "orokin_damage", "overguard_damage_multiplier", "projectile_speed", "puncture", "puncture_proc",
     "punch_through", "radiation", "random_proc", "range", "recoil", "reload_speed", "sentient_damage", "sharpshot_bonus", "slam_damage",

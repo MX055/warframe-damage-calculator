@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from itertools import combinations, repeat
 
 from ..domain.enemies import Enemy
+from ..domain.generated_attacks import GENERATED_ATTACK_STAT
 from ..domain.loadouts import Loadout
 from ..domain.perks import ResolvedPerk
 from ..domain.results import CalculationResult
@@ -117,13 +118,13 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         pools = self._candidate_pools(riven=riven, evolutions=evolutions, upgrade_blacklist=upgrade_blacklist, riven_stat_blacklist=riven_stat_blacklist, search_scale=search_scale)
         base = self._complete_fixed_loadout(self.calculator.loadout, evolutions=evolutions)
         selected_attack = attack or self.calculator.weapon.default_attack
-        generated_attacks = {WeaponCalculator._generated_name(effect) for upgrade in base.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual() if effect.stat == "extra_attack"}
+        generated_attacks = {WeaponCalculator._generated_key(effect) for upgrade in base.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual() if effect.stat == GENERATED_ATTACK_STAT}
         if selected_attack not in self.calculator.weapon.attacks and selected_attack not in generated_attacks: raise ValueError(f"unknown attack {selected_attack!r}")
         evaluator = Calculator(self.calculator.weapon, self.calculator.target, base)
         selected_bodypart, target = evaluator._select_bodypart(body_part)
         context = CalculationContext(weapon=evaluator.weapon, target=target if target is not None else Enemy(), attack=selected_attack, loadout=evaluator.loadout, resolved_perks=(), state=resolved_state)
         attack_generators = (*base.ranked_upgrades, *pools["mods"], *pools["arcanes"])
-        prepared_names = None if any("extra_attack" in upgrade.stats for upgrade in attack_generators) else tuple(WeaponCalculator(context).collect_attack_tree())
+        prepared_names = None if any(GENERATED_ATTACK_STAT in upgrade.stats for upgrade in attack_generators) else tuple(WeaponCalculator(context).collect_attack_tree())
         use_compact_metric = metric is default_metric
         worker_count = min(os.cpu_count() or 1, 4) if workers is None else workers
         executor_type = getattr(futures, "InterpreterPoolExecutor", None)

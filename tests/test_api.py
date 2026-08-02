@@ -1,5 +1,5 @@
 import unittest
-from warframe_damage_calculator import Arcane, Attack, AttackStats, BodyPart, Calculator, Compatibility, Dist, Effect, Enemy, Formatter, ImplementationStatus, Loadout, Mod, Perk, PerkValues, Primary, Progenitor, Source, State, Upgrade, UpgradeStats, arsenal
+from warframe_damage_calculator import Arcane, Attack, AttackStats, Automatic, BodyPart, Calculator, Combo, Compatibility, Dist, Effect, Enemy, Formatter, ImplementationStatus, Inheritance, Links, Loadout, Mod, Perk, PerkValues, Primary, Progenitor, RelatedAttacks, Source, State, Upgrade, UpgradeStats, UpgradeValue, arsenal
 from warframe_damage_calculator.formatting.objects import format_loadout, format_perk, format_upgrade, format_weapon
 from warframe_damage_calculator.formatting.results import format_damage_result, format_spatial, format_status
 
@@ -7,15 +7,21 @@ from warframe_damage_calculator.formatting.results import format_damage_result, 
 class ApiTests(unittest.TestCase):
     def test_root_api_exposes_definition_types_and_hides_internal_classes(self):
         import warframe_damage_calculator as package
-        expected = ("Arcane", "Archgun", "Attack", "AttackStats", "BodyPart", "Calculator", "Compatibility", "Dist", "Effect", "Enemy", "EnemyStats", "Formatter", "ImplementationStatus", "Loadout", "Melee", "Mod", "OptimizationProgress", "Optimizer", "Perk", "PerkValues", "Primary", "Progenitor", "Secondary", "Source", "State", "Upgrade", "UpgradeStats", "arsenal", "default_metric")
+        expected = ("Arcane", "Archgun", "Attack", "AttackStats", "Automatic", "BodyPart", "Calculator", "Combo", "Compatibility", "Dist", "Effect", "Enemy", "EnemyStats", "Falloff", "Formatter", "ImplementationStatus", "Inheritance", "Links", "Loadout", "Melee", "Mod", "OptimizationProgress", "Optimizer", "Perk", "PerkValues", "Primary", "Progenitor", "RelatedAttacks", "Secondary", "Source", "State", "Upgrade", "UpgradeStats", "UpgradeValue", "arsenal", "default_metric")
         self.assertEqual(package.__all__, expected)
         for name in ("AggregateResult", "CalculationResult", "ImplementationWarning", "Metric", "ProgressCallback", "ResolvedPerk", "format_result"): self.assertFalse(hasattr(package, name))
         self.assertIs(package.Formatter, Formatter)
 
     def test_root_api_can_define_custom_mods_arcanes_perks_and_weapons(self):
         compatibility = Compatibility(types=["primary"])
-        generated = Effect({"parent": {"names": ["shot"]}, "attack": {"inherit": "$parent", "name": "aftershock", "aoe": True, "stats": {"damage": {"heat": {"source": "$parent.stats.damage.total", "multiplier": 0.1}}, "falloff": {"end_range": 2}}}}, rank_scale=False)
-        mod = Mod(name="Custom Mod", max_rank=5, compatibility=compatibility, stats=UpgradeStats(damage_bonus=0.2, extra_attack=generated))
+        generated = Attack(
+            name="Aftershock",
+            aoe=True,
+            inheritance=Inheritance(include=["trigger", "delivery", "form", "category"]),
+            links=Links(parents=RelatedAttacks(names=["shot"])),
+            stats={"damage": {"heat": {"source": "$parent.stats.damage.total", "multiplier": 0.1}}, "falloff": {"end_range": 2}},
+        )
+        mod = Mod(name="Custom Mod", max_rank=5, compatibility=compatibility, stats=UpgradeStats(damage_bonus=0.2, generated_attack=generated))
         arcane = Arcane(name="Primary Custom Arcane", max_rank=5, compatibility=compatibility, stats=UpgradeStats(multishot=0.3))
         perk = Perk("Custom Perk", stats=UpgradeStats(crit_chance=Effect(Source("$values.crit_chance[0]"), mode="flat")))
         weapon = Primary(name="Custom Primary", attacks=[Attack("shot", stats=AttackStats(damage=Dist(impact=100), fire_rate=1))], reload_time=1, perks=[PerkValues(perk, 1, 1, {"crit_chance": (0.2,)})])
@@ -57,7 +63,9 @@ class ApiTests(unittest.TestCase):
         resolved = arsenal.primary.get("Phenmor").resolve_perk(perk)
         template = perk.stats.damage_bonus[0]
         effect = resolved.effects[0]
-        self.assertEqual((effect.stat, effect.mode, effect.family, effect.maximum, effect.automatic), ("damage_bonus", template.mode, template.family, template.maximum, template.automatic))
+        self.assertEqual((effect.stat, effect.mode, effect.family, effect.maximum), ("damage_bonus", template.mode, template.family, template.maximum))
+        self.assertEqual(effect.automatic["on"], "non_critical_hit")
+        self.assertEqual(effect.automatic["chance"], 0.5)
         self.assertNotIsInstance(effect.value, Source)
 
     def test_missing_and_unknown_weapon_values_are_rejected(self):

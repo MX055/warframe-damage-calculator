@@ -55,6 +55,6 @@ Desktop.ini
 /_*.py
 /_*.txt
 
-# Database builder source data and local caches
+# Database builder source dumps and local caches
 /database_builder/
 /.wiki_weapon_cache/

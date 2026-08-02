@@ -39,11 +39,11 @@ def spatial_falloff(attack: Attack, effective: EffectiveAttackStats) -> tuple[fl
     max_range = effective.max_range
     final_multiplier = float(effective.final_multiplier)
     if is_aoe_attack(attack):
-        if "end_range" not in falloff: return 1.0, SpatialMetrics()
+        if falloff is None or falloff.end_range is None: return 1.0, SpatialMetrics()
         falloff_multiplier = average_falloff_multiplier(start_range, end_range, final_multiplier)
         damage_mass = aoe_damage_mass(start_range, end_range, final_multiplier)
         return falloff_multiplier, SpatialMetrics(falloff_multiplier=falloff_multiplier, damage_mass=damage_mass, dimension=3)
-    falloff_multiplier = ranged_falloff_multiplier(start_range, end_range, float(max_range), final_multiplier) if max_range is not None and "end_range" in falloff else 1.0
+    falloff_multiplier = ranged_falloff_multiplier(start_range, end_range, float(max_range), final_multiplier) if max_range is not None and falloff is not None and falloff.end_range is not None else 1.0
     return falloff_multiplier, SpatialMetrics(falloff_multiplier=falloff_multiplier)
 
 
