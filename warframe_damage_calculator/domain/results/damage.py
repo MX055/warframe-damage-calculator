@@ -51,7 +51,6 @@ class AverageResult:
     attack_rate: float
     first_shot_damage_multiplier: float
     combo_multiplier: float
-    melee_duplicate_multiplier: float
     melee_doughty_bonus: float
     crit_tier_bonus: float
     weakpoint_crit_tier_bonus: float

@@ -52,6 +52,7 @@ class EffectiveAttackStats(ModdedAttackStats):
     non_crit_bonus_chance: float
     weakpoint_damage_bonus: float
     special_effects: tuple[ResolvedEffect, ...]
+    trigger_crit_chance: float
 
 
 @dataclass(slots=True)

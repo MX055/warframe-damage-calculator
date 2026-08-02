@@ -4,7 +4,7 @@ import warnings
 from warframe_damage_calculator import Calculator, Loadout, arsenal
 from warframe_damage_calculator.database.compatibility import is_upgrade_compatible
 from warframe_damage_calculator.domain.damage import Dist
-from warframe_damage_calculator.domain.effects import PLACEHOLDER, Effect
+from warframe_damage_calculator.domain.effects import Effect, Source
 from warframe_damage_calculator.domain.upgrades import Mod, UpgradeStats
 from warframe_damage_calculator.domain.warnings import LoadoutCompatibilityWarning
 from warframe_damage_calculator.domain.weapons import Attack, AttackStats, Melee, Secondary
@@ -49,7 +49,7 @@ class DatabaseTests(unittest.TestCase):
     def test_perks_are_loaded_from_database(self):
         self.assertEqual(arsenal.database["schema_version"], 20)
         self.assertIn("Devouring Attrition", arsenal.database["upgrades"]["perks"])
-        self.assertEqual(arsenal.database["upgrades"]["perks"]["Devouring Attrition"]["stats"]["damage_bonus"][0]["value"], "$weapon")
+        self.assertEqual(arsenal.database["upgrades"]["perks"]["Devouring Attrition"]["stats"]["damage_bonus"][0]["value"], {"source": "$values.damage_bonus[0]"})
 
     def test_weapon_records_contain_only_perk_values(self):
         record = arsenal.database["weapons"]["primaries"]["Phenmor"]["evolutions"]["5"]["1"]
@@ -147,7 +147,8 @@ class DatabaseTests(unittest.TestCase):
         self.assertEqual(set(influence.stats), {"extra_attack"})
         influence_effect = influence.stats.extra_attack[0]
         self.assertEqual(influence_effect.automatic, {"when": "electricity_status_proc", "on": "status_proc", "for": 18, "refresh": False})
-        self.assertEqual(influence_effect.value["attack"]["form"], "$attack")
+        self.assertEqual(influence_effect.value["parent"], {"deliveries": ["melee"]})
+        self.assertEqual(influence_effect.value["attack"]["inherit"], "$parent")
         self.assertNotIn("attacks", arsenal.database["upgrades"]["arcanes"]["Melee Influence"])
         result = Calculator(electric, loadout=Loadout(arcanes=[influence])).resolve()
         self.assertAlmostEqual(result.attacks["normal"].effective.range, 3)
@@ -164,6 +165,16 @@ class DatabaseTests(unittest.TestCase):
         self.assertIn("electricity", modded_result.attacks["melee_influence"].status.sustained_procs)
         rank_zero = arsenal.arcane.get("Melee Influence").set(rank=0)
         self.assertAlmostEqual(Calculator(electric, loadout=Loadout(arcanes=[rank_zero])).resolve().attacks["melee_influence"].effective.end_range, 20)
+
+    def test_melee_duplicate_is_an_inherited_automatic_child_attack(self):
+        duplicate = arsenal.arcane.get("Melee Duplicate")
+        self.assertEqual(set(duplicate.stats), {"extra_attack"})
+        effect = duplicate.stats.extra_attack[0]
+        self.assertEqual(effect.value, {"parent": {"deliveries": ["melee"]}, "attack": {"inherit": "$parent", "name": "melee_duplicate"}})
+        self.assertEqual(effect.automatic, {"on": "near_yellow_critical_hit"})
+        result = Calculator(arsenal.melee.get("Bo Prime"), loadout=Loadout(arcanes=[duplicate])).resolve()
+        self.assertIn("melee_duplicate", result.attacks)
+        self.assertGreater(result.attacks["melee_duplicate"].average.direct_dph, 0)
 
     def test_upgrade_repository_supports_attack_slot_and_conflict_filters(self):
         ignis = arsenal.primary.get("Ignis Wraith")
@@ -192,7 +203,7 @@ class DatabaseTests(unittest.TestCase):
                             self.assertEqual(set(record["values"]), set(template))
                             for stat, effects in template.items():
                                 self.assertEqual(len(record["values"][stat]), len(effects))
-                                self.assertNotIn("$weapon", record["values"][stat])
+                                self.assertTrue(all(isinstance(value, (int, float, bool, str)) for value in record["values"][stat]))
 
     def test_every_weapon_perk_resolves_to_concrete_effects(self):
         for repository in (arsenal.primary, arsenal.secondary, arsenal.melee, arsenal.archgun):
@@ -201,7 +212,7 @@ class DatabaseTests(unittest.TestCase):
                 for perk in weapon.perks:
                     with self.subTest(weapon=weapon_name, perk=perk.name):
                         resolved = weapon.resolve_perk(perk)
-                        self.assertTrue(all(effect.value is not PLACEHOLDER for effect in resolved.effects))
+                        self.assertTrue(all(not isinstance(effect.value, Source) for effect in resolved.effects))
 
 
 if __name__ == "__main__": unittest.main()

@@ -1,10 +1,11 @@
 from .database.arsenal import arsenal
 from .domain.damage import Dist
-from .domain.effects import PLACEHOLDER, Effect
+from .domain.effects import Effect, Source
 from .domain.enemies import BodyPart, Enemy, EnemyStats
 from .domain.implementation import ImplementationStatus
 from .domain.loadouts import Loadout, Progenitor
 from .domain.perks import Perk, PerkValues
+from .domain.state import State
 from .domain.upgrades import Arcane, Compatibility, Mod, Upgrade, UpgradeStats
 from .domain.weapons import Archgun, Attack, AttackStats, Melee, Primary, Secondary
 from .engine.calculator import Calculator
@@ -32,12 +33,13 @@ __all__ = (
     "Mod",
     "OptimizationProgress",
     "Optimizer",
-    "PLACEHOLDER",
     "Perk",
     "PerkValues",
     "Primary",
     "Progenitor",
     "Secondary",
+    "Source",
+    "State",
     "Upgrade",
     "UpgradeStats",
     "arsenal",

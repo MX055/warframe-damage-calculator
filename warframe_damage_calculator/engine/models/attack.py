@@ -43,7 +43,6 @@ class AverageAttackStats:
     total_dps: float | None = None
     first_shot_damage_multiplier: float = 1
     combo_multiplier: float = 1
-    melee_duplicate_multiplier: float = 1
     melee_doughty_bonus: float = 0
     crit_tier_bonus: float = 0
     weakpoint_crit_tier_bonus: float = 0
@@ -77,6 +76,7 @@ class PreliminaryAttack:
     status_duration: float
     special_effects: tuple[ResolvedEffect, ...]
     crit_chance: float
+    trigger_crit_chance: float
 
 
 @dataclass(slots=True)

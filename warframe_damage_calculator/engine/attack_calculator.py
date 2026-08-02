@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from copy import deepcopy
 
+from ..domain.damage import Dist
+from ..domain.status import STATUS_TYPES, StatusModel
 from ..domain.upgrades import ResolvedEffect
 from ..domain.weapons import Attack
 from .aggregation import aggregate
@@ -16,11 +18,10 @@ from .secondary_enervate import average_enervate_bonus, enervate_parameters
 from .spatial import is_aoe_attack, refresh_spatial, set_damage, spatial_falloff
 from .stats import POSITION_EVENTS, _additive_scalar, _combined, _resolve_effects, _scalar
 from .status import AFFLICTIONS_CATEGORIES, _derived_chances, _forced_procs, _special_value, _status_model, _status_vulnerability, _with_random_proc
-from ..domain.status import StatusModel
 from .targets import damage_multiplier, damage_total
 
 
-DEFERRED_STATS = frozenset({"duplicated_hit", "random_proc", "crit_reset_charges", "crit_tier"})
+DEFERRED_STATS = frozenset({"random_proc", "crit_reset_charges", "crit_tier"})
 RANGE_EFFECT_STATS = frozenset({"range", "explosion_radius", "slam_radius"})
 
 
@@ -110,7 +111,7 @@ def _dot_value(context: CalculationContext, result: AttackResult, zone: str, *, 
     return value * float(effective.target_vulnerability)
 
 
-def _zone_damage(context: CalculationContext, result: AttackResult, zone: str, *, direct_hits: float, dot_multishot: float | None = None, damage_factor: float = 1, duplicate_multiplier: float = 1, combo_multiplier: float = 1) -> tuple[float, float] | None:
+def _zone_damage(context: CalculationContext, result: AttackResult, zone: str, *, direct_hits: float, dot_multishot: float | None = None, damage_factor: float = 1, combo_multiplier: float = 1) -> tuple[float, float] | None:
     effective, average = result.effective, result.average
     weakpoint_bonus = float(effective.weakpoint_damage_bonus)
     direct_total = damage_total(effective.damage * damage_factor, context.target, zone=zone, weakpoint_bonus=weakpoint_bonus, status_effects=result.status_effects, overguard_multiplier=float(effective.overguard_damage_multiplier))
@@ -118,7 +119,7 @@ def _zone_damage(context: CalculationContext, result: AttackResult, zone: str, *
     chance = average.weakpoint_crit_chance if zone == "weakpoint" else average.crit_chance
     tier_bonus = average.weakpoint_crit_tier_bonus if zone == "weakpoint" else average.crit_tier_bonus
     faction = float(effective.faction_damage)
-    direct = direct_total * direct_hits * faction * _hit_multiplier(chance, tier_bonus, float(effective.crit_damage), float(effective.non_crit_bonus_damage), float(effective.non_crit_bonus_chance)) * duplicate_multiplier * combo_multiplier * float(effective.target_vulnerability)
+    direct = direct_total * direct_hits * faction * _hit_multiplier(chance, tier_bonus, float(effective.crit_damage), float(effective.non_crit_bonus_damage), float(effective.non_crit_bonus_chance)) * combo_multiplier * float(effective.target_vulnerability)
     cascadia = _special_value(effective.special_effects, "cascadia_empowered_proc")
     if cascadia:
         direct += sum(effective.status_model.proc_count_per_attack(kind) * cascadia * faction * float(damage_multiplier(context.target, kind, zone=zone, weakpoint_bonus=weakpoint_bonus, status_effects=result.status_effects, overguard_multiplier=float(effective.overguard_damage_multiplier)) or 0) for kind in RANDOM_STATUS_TYPES | {"void"}) * float(effective.target_vulnerability)
@@ -190,10 +191,8 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
         initial_crit, initial_status = _derived_chances(initial_crit, initial_status, initial_total)
         initial_ms_bonus = 0 if context.weapon.type == "melee" or initial_total.proportional.get("multishot_lock") else float(initial_total.proportional.get("multishot", 0))
         initial_multishot = max(float(attack.stats.multishot) * (1 + initial_ms_bonus), 1)
-        acquisition = [effect for effect in (*initial_upgrade_effects, *initial_evolution_effects) if effect.stat == "duplicated_hit"]
-        duplicate_acquisition = _special_value(acquisition, "duplicated_hit")
         if context.weapon.type == "melee":
-            acquisition_attempts = initial_multishot + duplicate_acquisition * max(0, 1 - abs(initial_crit - 1))
+            acquisition_attempts = initial_multishot
             initial_rate, _ = _melee_rate(context, attack, initial_total)
         else:
             acquisition_attempts = initial_multishot
@@ -236,9 +235,8 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
         instant_rate, fire_rate, category_stats = _ranged_rate(context, attack, total, multishot)
     duration = _scalar(float(attack.stats.status_duration), "status_duration", total)
     forced = _forced_procs(attack, (*upgrades_resolved, *evolution_resolved))
-    duplicate = clamp(_special_value((*upgrades_resolved, *evolution_resolved), "duplicated_hit"), 0, 1)
-    duplicate_multiplier = 1 + duplicate * max(0, 1 - abs(crit - 1)) if context.weapon.type == "melee" else 1
-    status_attempts = multishot + duplicate * max(0, 1 - abs(crit - 1)) if context.weapon.type == "melee" else multishot
+    trigger_crit_chance = crit
+    status_attempts = multishot
     afflictions = bool(AFFLICTIONS_CATEGORIES & set(forced))
     if automatic_model_override is not None:
         afflictions = afflictions or any(automatic_model_override.proc_count_per_attack(kind) > 0 for kind in AFFLICTIONS_CATEGORIES)
@@ -248,7 +246,7 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     if puncture_bonus:
         crit += puncture_bonus
         status_model = _status_model(damage, forced, status, status_attempts, fire_rate, duration, resolved_effects, crit, include_random=False, afflictions=afflictions)
-    if preliminary: return PreliminaryAttack(provisional, status_model, damage, forced, status, multishot, fire_rate, duration, tuple(resolved_effects), crit)
+    if preliminary: return PreliminaryAttack(provisional, status_model, damage, forced, status, multishot, fire_rate, duration, tuple(resolved_effects), crit, trigger_crit_chance)
     range_total = total
     if attack.generated_by is not None:
         range_upgrades = aggregate(effect for effect in upgrades_resolved if effect.mode != "multiplicative" or effect.stat not in RANGE_EFFECT_STATS or effect.source == attack.generated_by)
@@ -289,7 +287,8 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
         per = float(automatic_value(doughty, "per", 0.1) or 0.1)
         maximum = 50 if doughty.maximum is None else float(doughty.maximum)
         puncture_source = status_model if automatic_model_override is None else automatic_model_override
-        puncture_chance = min(puncture_source.proc_count_per_attack("puncture") / max(status_attempts, 1), 1)
+        puncture_attempts = status_attempts if automatic_model_override is None else automatic_model_override.attempts_per_attack
+        puncture_chance = min(puncture_source.proc_count_per_attack("puncture") / max(puncture_attempts, 1), 1)
         doughty_bonus = true_round(min(puncture_chance / per * float(doughty.value), maximum), 1)
         crit_damage += doughty_bonus
     status_effects = dict(status_model.non_damage_effects() if status_effects_override is None else status_effects_override)
@@ -301,7 +300,7 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     non_crit_chance = max((float(automatic_value(effect, "chance", 0) or 0) for effect in (*upgrades_resolved, *evolution_resolved) if effect.family == "non_critical_hit"), default=0)
     weakpoint_bonus = max(float(total.proportional.get("weakpoint_damage", 0)) + float(total.proportional.get("sharpshot_bonus", 0)), 0)
     overguard_effect = float(total.proportional.get("overguard_damage_multiplier", 0))
-    effective = EffectiveAttackStats(damage=damage, dot_base_damage=_dot_base_damage(attack, base_damage, original, upgrades, evolutions), dot_elemental_bonuses=_elemental_dot_bonuses(total, progenitor), forced_procs=forced, status_model=status_model, crit_chance=crit, weakpoint_crit_chance=weakpoint_crit, crit_damage=crit_damage, status_chance=status, status_duration=duration, status_damage=max(1 + float(total.proportional.get("status_damage", 0)), 1), multishot=multishot, fire_rate=instant_rate, attack_event_rate=fire_rate, faction_damage=faction, target_vulnerability=max(1 + float(total.proportional.get("unique_enemy_vulnerability_multiplier", 0)), 0), overguard_damage_multiplier=overguard_effect if overguard_effect else 1, non_crit_bonus_damage=non_crit_damage, non_crit_bonus_chance=non_crit_chance, weakpoint_damage_bonus=weakpoint_bonus, special_effects=tuple(resolved_effects), **category_stats)
+    effective = EffectiveAttackStats(damage=damage, dot_base_damage=_dot_base_damage(attack, base_damage, original, upgrades, evolutions), dot_elemental_bonuses=_elemental_dot_bonuses(total, progenitor), forced_procs=forced, status_model=status_model, crit_chance=crit, weakpoint_crit_chance=weakpoint_crit, crit_damage=crit_damage, status_chance=status, status_duration=duration, status_damage=max(1 + float(total.proportional.get("status_damage", 0)), 1), multishot=multishot, fire_rate=instant_rate, attack_event_rate=fire_rate, faction_damage=faction, target_vulnerability=max(1 + float(total.proportional.get("unique_enemy_vulnerability_multiplier", 0)), 0), overguard_damage_multiplier=overguard_effect if overguard_effect else 1, non_crit_bonus_damage=non_crit_damage, non_crit_bonus_chance=non_crit_chance, weakpoint_damage_bonus=weakpoint_bonus, special_effects=tuple(resolved_effects), trigger_crit_chance=crit_before_puncture, **category_stats)
     for stat in ("range", "punch_through", "accuracy", "recoil", "zoom", "ammo_maximum"):
         base_value = float(getattr(attack.stats, stat, 0)) if hasattr(attack.stats, stat) else 0
         modifiers = range_total if stat == "range" else total
@@ -336,14 +335,14 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     body_tier_bonus = min(body_crit, 1) * crit_tier_chance
     weak_tier_bonus = min(weak_crit, 1) * crit_tier_chance
     falloff_multiplier, spatial = spatial_falloff(attack, effective)
-    average = AverageAttackStats(damage=damage, crit_chance=body_crit, crit_damage=crit_damage, status_chance=status, status_duration=duration, multishot=multishot, fire_rate=instant_rate, magazine_capacity=float(category_stats.get("magazine_capacity", 0)), reload_time=float(category_stats.get("reload_time", 0)), ammo_cost=float(category_stats.get("ammo_cost", 0)), ammo_efficiency=float(category_stats.get("ammo_efficiency", 0)), punch_through=float(effective.get("punch_through", 0)), burst_count=float(category_stats.get("burst_count", 1)), burst_delay=float(category_stats.get("burst_delay", 0)), charge_time=float(category_stats.get("charge_time", 0)), attack_speed=float(category_stats.get("attack_speed", instant_rate if context.weapon.type == "melee" else 0)), heavy_attack_speed=float(category_stats.get("heavy_attack_speed", 1)), heavy_attack_efficiency=float(category_stats.get("heavy_attack_efficiency", 0)), initial_combo=float(category_stats.get("initial_combo", 0)), crit_multiplier=crit_multiplier(body_crit + body_tier_bonus, crit_damage), weakpoint_crit_chance=weak_crit, weakpoint_crit_multiplier=crit_multiplier(weak_crit + weak_tier_bonus, crit_damage), attack_rate=fire_rate, procs_per_shot=status_model.expected_procs_per_attack, melee_duplicate_multiplier=duplicate_multiplier, melee_doughty_bonus=doughty_bonus, crit_tier_bonus=body_tier_bonus, weakpoint_crit_tier_bonus=weak_tier_bonus, secondary_enervate_bonus=body_bonus, weakpoint_secondary_enervate_bonus=weak_bonus, falloff_multiplier=falloff_multiplier)
+    average = AverageAttackStats(damage=damage, crit_chance=body_crit, crit_damage=crit_damage, status_chance=status, status_duration=duration, multishot=multishot, fire_rate=instant_rate, magazine_capacity=float(category_stats.get("magazine_capacity", 0)), reload_time=float(category_stats.get("reload_time", 0)), ammo_cost=float(category_stats.get("ammo_cost", 0)), ammo_efficiency=float(category_stats.get("ammo_efficiency", 0)), punch_through=float(effective.get("punch_through", 0)), burst_count=float(category_stats.get("burst_count", 1)), burst_delay=float(category_stats.get("burst_delay", 0)), charge_time=float(category_stats.get("charge_time", 0)), attack_speed=float(category_stats.get("attack_speed", instant_rate if context.weapon.type == "melee" else 0)), heavy_attack_speed=float(category_stats.get("heavy_attack_speed", 1)), heavy_attack_efficiency=float(category_stats.get("heavy_attack_efficiency", 0)), initial_combo=float(category_stats.get("initial_combo", 0)), crit_multiplier=crit_multiplier(body_crit + body_tier_bonus, crit_damage), weakpoint_crit_chance=weak_crit, weakpoint_crit_multiplier=crit_multiplier(weak_crit + weak_tier_bonus, crit_damage), attack_rate=fire_rate, procs_per_shot=status_model.expected_procs_per_attack, melee_doughty_bonus=doughty_bonus, crit_tier_bonus=body_tier_bonus, weakpoint_crit_tier_bonus=weak_tier_bonus, secondary_enervate_bonus=body_bonus, weakpoint_secondary_enervate_bonus=weak_bonus, falloff_multiplier=falloff_multiplier)
     result = AttackResult(attack, base, modded, effective, upgrades, evolutions, average, spatial, status_effects)
     combo_multiplier = 1
     if heavy:
         combo_multiplier = max(1, min(int(context.weapon.combo.get("max_combo", 12)), int(context.state.combo)))
     average.combo_multiplier = combo_multiplier
     zone = next(iter(context.target.bodyparts.values())).type
-    zone_damage = _zone_damage(context, result, zone, direct_hits=1 if context.weapon.type == "melee" else multishot, duplicate_multiplier=duplicate_multiplier, combo_multiplier=combo_multiplier)
+    zone_damage = _zone_damage(context, result, zone, direct_hits=1 if context.weapon.type == "melee" else multishot, combo_multiplier=combo_multiplier)
     if zone_damage is not None:
         direct, dot = zone_damage
         set_damage(average, spatial, direct, dot)
@@ -378,6 +377,24 @@ def derive_status_attack(context: CalculationContext, parent: AttackResult, atta
     result.effective.damage = parent.effective.damage.include(status_types)
     result.average.damage = result.effective.damage
     set_damage(result.average, result.spatial, 0, dot)
+    refresh_metrics(result.average)
+    refresh_spatial(result.spatial, result.average.attack_rate)
+    return result
+
+
+def derive_event_attack(parent: AttackResult, attack: Attack, probability: float) -> AttackResult:
+    result = deepcopy(parent)
+    result.attack = attack
+    probability = clamp(probability, 0, 1)
+    result.effective.status_model = parent.effective.status_model.include(STATUS_TYPES).scaled(probability)
+    result.status_effects = result.effective.status_model.non_damage_effects()
+    result.average.damage = parent.average.damage * probability
+    result.average.procs_per_shot = result.effective.status_model.expected_procs_per_attack
+    result.average.flat_dph = float(parent.average.flat_dph or 0) * probability
+    result.average.flat_dotph = float(parent.average.flat_dotph or 0) * probability
+    if result.spatial.damage_mass is not None:
+        result.spatial.flat_dph = float(parent.spatial.flat_dph or 0) * probability
+        result.spatial.flat_dotph = float(parent.spatial.flat_dotph or 0) * probability
     refresh_metrics(result.average)
     refresh_spatial(result.spatial, result.average.attack_rate)
     return result

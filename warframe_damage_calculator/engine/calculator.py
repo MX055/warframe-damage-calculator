@@ -7,6 +7,7 @@ from ..domain.enemies import Enemy
 from ..domain.loadouts import Loadout
 from ..domain.perks import ResolvedPerk
 from ..domain.results import CalculationResult, ContributionResult
+from ..domain.state import State
 from ..domain.upgrades import ResolvedEffect
 from ..domain.weapons import Weapon
 from .context import CalculationContext
@@ -80,4 +81,4 @@ class Calculator:
             for name, result in calculated.items(): result_weapon.attacks[name] = deepcopy(result.attack)
         result_target = None if self.target is None else self.target.copy() if copy_inputs else target
         result_loadout = self.loadout.copy() if copy_inputs else self.loadout
-        return CalculationResult(build_aggregate(aggregate, aggregate_status_model, aggregate_status_effects), attacks, selected_attack, selected_body_part, result_weapon, result_target, result_loadout, dict(state))
+        return CalculationResult(build_aggregate(aggregate, aggregate_status_model, aggregate_status_effects), attacks, selected_attack, selected_body_part, result_weapon, result_target, result_loadout, State(state))

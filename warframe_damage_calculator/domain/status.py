@@ -133,6 +133,13 @@ class StatusModel:
         critical_counts = Dist({kind: self.critical_proc_counts.get(kind, 0) for kind in selected})
         return StatusModel(Dist(), Dist(), 0, 0, self.attack_rate, self.duration, counts, probabilities, any_probability, critical_proc_counts=critical_counts)
 
+    def scaled(self, factor: float) -> StatusModel:
+        scale = max(float(factor), 0)
+        return StatusModel(self.damage, self.forced_procs, self.status_chance, self.attempts_per_attack * scale, self.attack_rate, self.duration, self.extra_proc_counts * scale, self.extra_proc_probabilities * scale, self.extra_any_proc_probability * scale, self.random_proc_probability * scale, self.random_triggered_procs * scale, self.critical_proc_counts * scale)
+
+    def with_attempt_multiplier(self, multiplier: float) -> StatusModel:
+        return StatusModel(self.damage, self.forced_procs, self.status_chance, self.attempts_per_attack * max(float(multiplier), 0), self.attack_rate, self.duration, self.extra_proc_counts, self.extra_proc_probabilities, self.extra_any_proc_probability, self.random_proc_probability, self.random_triggered_procs, self.critical_proc_counts)
+
     @classmethod
     def combine(cls, models: list[StatusModel], attack_rate: float, duration: float, random_proc_probability: float = 0, random_triggered_procs: Dist | None = None) -> StatusModel:
         triggered = random_triggered_procs or Dist()
@@ -143,7 +150,7 @@ class StatusModel:
         })
         any_probability = 1 - _product(1 - model.any_proc_probability_per_attack() for model in models)
         critical_counts = Dist({kind: sum(model.critical_proc_counts.get(kind, 0) for model in models) for kind in STATUS_TYPES})
-        return cls(Dist(), Dist(), 0, 0, attack_rate, duration, counts, probabilities + triggered, any_probability, random_proc_probability, triggered, critical_counts)
+        return cls(Dist(), Dist(), 0, sum(model.attempts_per_attack for model in models), attack_rate, duration, counts, probabilities + triggered, any_probability, random_proc_probability, triggered, critical_counts)
 
 
 def _product(values: Iterable[float]) -> float:

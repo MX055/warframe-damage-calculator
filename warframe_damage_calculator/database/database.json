@@ -104749,18 +104749,19 @@
           "extra_attack": [
             {
               "value": {
-                "parent": "rocket_explosion",
+                "parent": {
+                  "names": [
+                    "rocket_explosion"
+                  ]
+                },
                 "attack": {
+                  "inherit": "$parent",
                   "name": "nightwatch_napalm_linger",
-                  "trigger": "$attack",
-                  "delivery": "$attack",
-                  "form": "$attack",
-                  "category": "$attack",
                   "aoe": true,
                   "stats": {
                     "damage": {
                       "heat": {
-                        "source": "$attack.damage.total",
+                        "source": "$parent.stats.damage.total",
                         "multiplier": 0.3
                       }
                     },
@@ -104769,20 +104770,17 @@
                     },
                     "falloff": {
                       "end_range": {
-                        "source": "$attack",
+                        "source": "$parent.stats.falloff.end_range",
                         "multiplier": 0.9
                       },
                       "final_multiplier": 1,
-                      "start_range": "$attack"
+                      "start_range": 0
                     },
                     "crit_chance": 0,
                     "crit_damage": 0,
                     "status_chance": 0,
                     "multishot": 5,
-                    "fire_rate": "$attack",
-                    "charge_time": "$attack",
-                    "co_factor": 1,
-                    "co_effect": "$attack"
+                    "co_factor": 1
                   }
                 }
               },
@@ -117252,9 +117250,20 @@
           ]
         },
         "stats": {
-          "duplicated_hit": [
+          "extra_attack": [
             {
-              "value": 1,
+              "value": {
+                "parent": {
+                  "deliveries": [
+                    "melee"
+                  ]
+                },
+                "attack": {
+                  "inherit": "$parent",
+                  "name": "melee_duplicate"
+                }
+              },
+              "rank_scale": false,
               "automatic": {
                 "on": "near_yellow_critical_hit"
               }
@@ -117309,25 +117318,57 @@
           "extra_attack": [
             {
               "value": {
+                "parent": {
+                  "deliveries": [
+                    "melee"
+                  ]
+                },
                 "attack": {
+                  "inherit": "$parent",
                   "name": "melee_influence",
-                  "trigger": "melee",
-                  "delivery": "melee",
-                  "form": "$attack",
-                  "category": "$attack",
                   "aoe": true,
                   "stats": {
                     "damage": {
-                      "heat": "$attack",
-                      "cold": "$attack",
-                      "electricity": "$attack",
-                      "toxin": "$attack",
-                      "blast": "$attack",
-                      "radiation": "$attack",
-                      "gas": "$attack",
-                      "magnetic": "$attack",
-                      "viral": "$attack",
-                      "corrosive": "$attack"
+                      "heat": {
+                        "source": "$parent.stats.damage.heat",
+                        "default": 0
+                      },
+                      "cold": {
+                        "source": "$parent.stats.damage.cold",
+                        "default": 0
+                      },
+                      "electricity": {
+                        "source": "$parent.stats.damage.electricity",
+                        "default": 0
+                      },
+                      "toxin": {
+                        "source": "$parent.stats.damage.toxin",
+                        "default": 0
+                      },
+                      "blast": {
+                        "source": "$parent.stats.damage.blast",
+                        "default": 0
+                      },
+                      "radiation": {
+                        "source": "$parent.stats.damage.radiation",
+                        "default": 0
+                      },
+                      "gas": {
+                        "source": "$parent.stats.damage.gas",
+                        "default": 0
+                      },
+                      "magnetic": {
+                        "source": "$parent.stats.damage.magnetic",
+                        "default": 0
+                      },
+                      "viral": {
+                        "source": "$parent.stats.damage.viral",
+                        "default": 0
+                      },
+                      "corrosive": {
+                        "source": "$parent.stats.damage.corrosive",
+                        "default": 0
+                      }
                     },
                     "falloff": {
                       "end_range": 20,
@@ -118082,7 +118123,9 @@
         "stats": {
           "combo_timer_pause": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.combo_timer_pause[0]"
+              },
               "automatic": {}
             }
           ]
@@ -118094,7 +118137,9 @@
         "stats": {
           "status_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.status_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -118107,14 +118152,18 @@
         "stats": {
           "crit_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "status_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.status_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -118127,7 +118176,9 @@
         "stats": {
           "fire_rate": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.fire_rate[0]"
+              },
               "when": "fire",
               "stacks": 5,
               "automatic": {}
@@ -118141,7 +118192,9 @@
         "stats": {
           "initial_combo": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.initial_combo[0]"
+              },
               "automatic": {}
             }
           ]
@@ -118153,7 +118206,9 @@
         "stats": {
           "ammo_efficiency": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.ammo_efficiency[0]"
+              },
               "automatic": {}
             }
           ]
@@ -118165,14 +118220,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "combo_count": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.combo_count[0]"
+              },
               "automatic": {}
             }
           ]
@@ -118184,14 +118243,18 @@
         "stats": {
           "status_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.status_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "status_duration": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.status_duration[0]"
+              },
               "automatic": {}
             }
           ]
@@ -118203,7 +118266,9 @@
         "stats": {
           "fire_rate": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.fire_rate[0]"
+              },
               "when": "punch_through_hit",
               "automatic": {}
             }
@@ -118216,7 +118281,9 @@
         "stats": {
           "combo_on_ammo_pickup": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.combo_on_ammo_pickup[0]"
+              },
               "automatic": {}
             }
           ]
@@ -118239,7 +118306,9 @@
         "stats": {
           "accuracy": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.accuracy[0]"
+              },
               "automatic": {}
             }
           ]
@@ -118251,11 +118320,15 @@
         "stats": {
           "holstered_reload": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.holstered_reload[0]"
+              },
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.holstered_reload[1]"
+              },
               "automatic": {
                 "when": "normal_form"
               }
@@ -118286,7 +118359,9 @@
         "stats": {
           "finisher_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.finisher_damage[0]"
+              },
               "automatic": {}
             }
           ]
@@ -118298,7 +118373,9 @@
         "stats": {
           "attack_speed": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.attack_speed[0]"
+              },
               "automatic": {}
             }
           ]
@@ -118310,20 +118387,26 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "multishot": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.multishot[0]"
+              },
               "when": "firing",
               "stacks": 10,
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.multishot[1]"
+              },
               "when": "firing",
               "stacks": 5,
               "automatic": {}
@@ -118337,7 +118420,9 @@
         "stats": {
           "heavy_attack_efficiency": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.heavy_attack_efficiency[0]"
+              },
               "automatic": {}
             }
           ]
@@ -118349,14 +118434,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "damage_bonus": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage_bonus[0]"
+              },
               "when": "shield_break",
               "automatic": {}
             }
@@ -118369,14 +118458,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "fire_rate": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.fire_rate[0]"
+              },
               "when": "equip",
               "automatic": {}
             }
@@ -118389,14 +118482,18 @@
         "stats": {
           "crit_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "status_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.status_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -118409,7 +118506,9 @@
         "stats": {
           "heavy_attack_efficiency": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.heavy_attack_efficiency[0]"
+              },
               "automatic": {}
             }
           ]
@@ -118421,7 +118520,9 @@
         "stats": {
           "weakpoint_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.weakpoint_damage[0]"
+              },
               "automatic": {}
             }
           ]
@@ -118433,20 +118534,26 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "condition_overload": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.condition_overload[0]"
+              },
               "automatic": {}
             }
           ],
           "damage_bonus": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage_bonus[0]"
+              },
               "family": "unique_status",
               "automatic": {
                 "with": "unique_status_count"
@@ -118472,7 +118579,9 @@
         "stats": {
           "crit_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -118485,19 +118594,25 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[1]"
+              },
               "mode": "base",
               "when": "kill",
               "stacks": 3,
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[2]"
+              },
               "mode": "base",
               "when": "kill",
               "stacks": 4,
@@ -118506,13 +118621,17 @@
           ],
           "ammo_efficiency": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.ammo_efficiency[0]"
+              },
               "when": "kill",
               "stacks": 3,
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.ammo_efficiency[1]"
+              },
               "when": "kill",
               "stacks": 4,
               "automatic": {}
@@ -118526,7 +118645,9 @@
         "stats": {
           "crit_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -118539,7 +118660,9 @@
         "stats": {
           "crit_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -118552,21 +118675,27 @@
         "stats": {
           "crit_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "crit_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "status_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.status_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -118579,14 +118708,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "follow_through": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.follow_through[0]"
+              },
               "when": "while_channeling_ability",
               "automatic": {}
             }
@@ -118599,12 +118732,16 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[1]"
+              },
               "mode": "base",
               "when": "while_channeling_ability",
               "automatic": {}
@@ -118612,7 +118749,9 @@
           ],
           "ammo_efficiency": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.ammo_efficiency[0]"
+              },
               "when": "while_channeling_ability",
               "automatic": {}
             }
@@ -118625,7 +118764,9 @@
         "stats": {
           "weakpoint_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.weakpoint_damage[0]"
+              },
               "automatic": {}
             }
           ]
@@ -118637,14 +118778,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "fire_rate": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.fire_rate[0]"
+              },
               "automatic": {}
             }
           ]
@@ -118656,21 +118801,27 @@
         "stats": {
           "crit_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "crit_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -118683,14 +118834,18 @@
         "stats": {
           "crit_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "crit_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -118703,7 +118858,9 @@
         "stats": {
           "crit_from_status": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_from_status[0]"
+              },
               "max": 0.35,
               "automatic": {}
             }
@@ -118716,7 +118873,9 @@
         "stats": {
           "damage_bonus": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage_bonus[0]"
+              },
               "family": "non_critical_hit",
               "automatic": {
                 "on": "non_critical_hit",
@@ -118743,13 +118902,17 @@
         "stats": {
           "crit_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_chance[0]"
+              },
               "automatic": {}
             }
           ],
           "crit_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_damage[0]"
+              },
               "automatic": {}
             }
           ]
@@ -118761,7 +118924,9 @@
         "stats": {
           "damage_bonus": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage_bonus[0]"
+              },
               "family": "non_critical_hit",
               "automatic": {
                 "on": "non_critical_hit",
@@ -118777,7 +118942,9 @@
         "stats": {
           "range": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.range[0]"
+              },
               "when": "weapon_status_proc",
               "stacks": 20,
               "automatic": {}
@@ -118791,13 +118958,17 @@
         "stats": {
           "sprint_speed": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.sprint_speed[0]"
+              },
               "automatic": {}
             }
           ],
           "slide": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.slide[0]"
+              },
               "automatic": {}
             }
           ]
@@ -118809,13 +118980,17 @@
         "stats": {
           "projectile_speed": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.projectile_speed[0]"
+              },
               "automatic": {}
             }
           ],
           "punch_through": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.punch_through[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -118839,14 +119014,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "attack_speed": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.attack_speed[0]"
+              },
               "when": "while_melee_weapon_equipped",
               "automatic": {}
             }
@@ -118859,7 +119038,9 @@
         "stats": {
           "status_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.status_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -118872,7 +119053,9 @@
         "stats": {
           "status_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.status_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -118885,24 +119068,32 @@
         "stats": {
           "status_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.status_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.status_chance[1]"
+              },
               "mode": "flat",
               "automatic": {}
             }
           ],
           "crit_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_chance[1]"
+              },
               "mode": "flat",
               "automatic": {}
             }
@@ -118915,7 +119106,9 @@
         "stats": {
           "ammo_efficiency": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.ammo_efficiency[0]"
+              },
               "automatic": {}
             }
           ]
@@ -118927,7 +119120,9 @@
         "stats": {
           "parkour_velocity": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.parkour_velocity[0]"
+              },
               "automatic": {}
             }
           ]
@@ -118939,7 +119134,9 @@
         "stats": {
           "holstered_reload": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.holstered_reload[0]"
+              },
               "automatic": {}
             }
           ]
@@ -118951,7 +119148,9 @@
         "stats": {
           "instant_reload_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.instant_reload_chance[0]"
+              },
               "when": "kill",
               "automatic": {}
             }
@@ -118964,7 +119163,9 @@
         "stats": {
           "weakpoint_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.weakpoint_damage[0]"
+              },
               "when": "equip",
               "automatic": {}
             }
@@ -118977,12 +119178,16 @@
         "stats": {
           "instant_reload_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.instant_reload_chance[0]"
+              },
               "when": "headshot",
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.instant_reload_chance[1]"
+              },
               "when": "headshot_kill",
               "automatic": {
                 "when": "normal_form"
@@ -119014,7 +119219,9 @@
         "stats": {
           "magazine_capacity": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.magazine_capacity[0]"
+              },
               "mode": "base",
               "automatic": {
                 "when": "normal_form"
@@ -119029,13 +119236,17 @@
         "stats": {
           "condition_overload": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.condition_overload[0]"
+              },
               "automatic": {}
             }
           ],
           "damage_bonus": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage_bonus[0]"
+              },
               "family": "unique_status",
               "automatic": {
                 "with": "unique_status_count"
@@ -119044,7 +119255,9 @@
           ],
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -119057,7 +119270,9 @@
         "stats": {
           "ammo_efficiency": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.ammo_efficiency[0]"
+              },
               "automatic": {
                 "when": "normal_form"
               }
@@ -119071,14 +119286,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "damage_bonus": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage_bonus[0]"
+              },
               "when": "target_health_below_50_percent",
               "automatic": {}
             }
@@ -119091,14 +119310,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "multishot": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.multishot[0]"
+              },
               "when": "ability_cast",
               "stacks": 20,
               "automatic": {}
@@ -119112,14 +119335,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "multishot": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.multishot[0]"
+              },
               "mode": "flat",
               "when": "magazine_last_shot",
               "automatic": {}
@@ -119133,7 +119360,9 @@
         "stats": {
           "bleed_on_impact": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.bleed_on_impact[0]"
+              },
               "automatic": {}
             }
           ]
@@ -119145,7 +119374,9 @@
         "stats": {
           "armor_reduction": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.armor_reduction[0]"
+              },
               "automatic": {}
             }
           ]
@@ -119157,7 +119388,9 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -119170,14 +119403,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "overshield": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.overshield[0]"
+              },
               "when": "bleed_kill",
               "automatic": {}
             }
@@ -119190,21 +119427,27 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "punch_through": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.punch_through[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "multishot": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.multishot[0]"
+              },
               "automatic": {}
             }
           ]
@@ -119216,7 +119459,9 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "when": "reload_from_empty",
               "stacks": 2,
@@ -119231,7 +119476,9 @@
         "stats": {
           "projectile_speed": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.projectile_speed[0]"
+              },
               "automatic": {}
             }
           ]
@@ -119243,7 +119490,9 @@
         "stats": {
           "magazine_restore_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.magazine_restore_chance[0]"
+              },
               "automatic": {}
             }
           ]
@@ -119255,7 +119504,9 @@
         "stats": {
           "movement_speed": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.movement_speed[0]"
+              },
               "automatic": {}
             }
           ]
@@ -119267,12 +119518,16 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[1]"
+              },
               "mode": "base",
               "when": "while_overshields_active",
               "automatic": {}
@@ -119286,14 +119541,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "heavy_attack_efficiency": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.heavy_attack_efficiency[0]"
+              },
               "when": "while_overshields_active",
               "automatic": {}
             }
@@ -119306,14 +119565,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "initial_combo": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.initial_combo[0]"
+              },
               "when": "primary_kill",
               "stacks": 100,
               "automatic": {}
@@ -119327,7 +119590,9 @@
         "stats": {
           "ammo_restore": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.ammo_restore[0]"
+              },
               "when": "punch_through_hit",
               "automatic": {
                 "when": "normal_form"
@@ -119348,12 +119613,16 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[1]"
+              },
               "mode": "base",
               "when": "while_overshields_active",
               "automatic": {}
@@ -119367,12 +119636,16 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[1]"
+              },
               "mode": "base",
               "when": "while_overshields_active",
               "automatic": {}
@@ -119386,7 +119659,9 @@
         "stats": {
           "combo_count": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.combo_count[0]"
+              },
               "automatic": {}
             }
           ]
@@ -119398,14 +119673,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "fire_rate": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.fire_rate[0]"
+              },
               "when": "headshot",
               "stacks": 10,
               "automatic": {}
@@ -119419,7 +119698,9 @@
         "stats": {
           "crit_from_status": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_from_status[0]"
+              },
               "max": 0.35,
               "automatic": {}
             }
@@ -119432,7 +119713,9 @@
         "stats": {
           "ammo_maximum": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.ammo_maximum[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -119445,14 +119728,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "damage_bonus": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage_bonus[0]"
+              },
               "automatic": {}
             }
           ]
@@ -119464,12 +119751,16 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[1]"
+              },
               "mode": "base",
               "when": "shield_break",
               "automatic": {}
@@ -119483,12 +119774,16 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[1]"
+              },
               "mode": "base",
               "when": "shield_break",
               "automatic": {}
@@ -119502,14 +119797,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "punch_through": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.punch_through[0]"
+              },
               "mode": "base",
               "when": "while_channeling_ability",
               "automatic": {}
@@ -119517,7 +119816,9 @@
           ],
           "accuracy": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.accuracy[0]"
+              },
               "when": "while_channeling_ability",
               "automatic": {}
             }
@@ -119530,7 +119831,9 @@
         "stats": {
           "ammo_replenish_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.ammo_replenish_chance[0]"
+              },
               "when": "kill",
               "automatic": {
                 "when": "normal_form"
@@ -119551,7 +119854,9 @@
         "stats": {
           "damage_bonus": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage_bonus[0]"
+              },
               "when": "punch_through_hit",
               "automatic": {}
             }
@@ -119564,7 +119869,9 @@
         "stats": {
           "incarnon_charge_rate": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.incarnon_charge_rate[0]"
+              },
               "automatic": {}
             }
           ]
@@ -119576,7 +119883,9 @@
         "stats": {
           "incarnon_charge_rate": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.incarnon_charge_rate[0]"
+              },
               "automatic": {}
             }
           ]
@@ -119599,7 +119908,9 @@
         "stats": {
           "damage_bonus": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage_bonus[0]"
+              },
               "automatic": {
                 "when": "incarnon_form"
               }
@@ -119607,13 +119918,17 @@
           ],
           "range": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.range[0]"
+              },
               "automatic": {
                 "when": "incarnon_form"
               }
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.range[1]"
+              },
               "when": "slide_attack_hit",
               "automatic": {
                 "when": "incarnon_form"
@@ -119622,7 +119937,9 @@
           ],
           "sprint_speed": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.sprint_speed[0]"
+              },
               "automatic": {
                 "when": "incarnon_form"
               }
@@ -119630,7 +119947,9 @@
           ],
           "heavy_attack_efficiency": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.heavy_attack_efficiency[0]"
+              },
               "automatic": {
                 "when": "incarnon_form"
               }
@@ -119638,7 +119957,9 @@
           ],
           "bullet_jump": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.bullet_jump[0]"
+              },
               "automatic": {
                 "when": "incarnon_form"
               }
@@ -119646,7 +119967,9 @@
           ],
           "parkour_velocity": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.parkour_velocity[0]"
+              },
               "automatic": {
                 "when": "incarnon_form"
               }
@@ -119654,7 +119977,9 @@
           ],
           "puncture": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.puncture[0]"
+              },
               "when": "heavy_attack_kill",
               "stacks": 30,
               "automatic": {
@@ -119664,7 +119989,9 @@
           ],
           "attack_speed": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.attack_speed[0]"
+              },
               "automatic": {
                 "when": "incarnon_form"
               }
@@ -119672,7 +119999,9 @@
           ],
           "impact_to_puncture_conversion": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.impact_to_puncture_conversion[0]"
+              },
               "automatic": {
                 "when": "incarnon_form"
               }
@@ -119680,7 +120009,9 @@
           ],
           "initial_combo": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.initial_combo[0]"
+              },
               "automatic": {
                 "when": "incarnon_form"
               }
@@ -119688,7 +120019,9 @@
           ],
           "slash_proc": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.slash_proc[0]"
+              },
               "when": "slide_attack_hit",
               "automatic": {
                 "when": "incarnon_form"
@@ -119703,14 +120036,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "punch_through": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.punch_through[0]"
+              },
               "mode": "base",
               "when": "while_channeling_ability",
               "automatic": {}
@@ -119724,12 +120061,16 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[1]"
+              },
               "mode": "base",
               "when": "50_energy_spent",
               "stacks": 4,
@@ -119744,7 +120085,9 @@
         "stats": {
           "combo_gain_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.combo_gain_chance[0]"
+              },
               "automatic": {}
             }
           ]
@@ -119756,14 +120099,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "attack_speed": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.attack_speed[0]"
+              },
               "when": "enemies_within_6_meters",
               "stacks": 5,
               "automatic": {}
@@ -119777,7 +120124,9 @@
         "stats": {
           "recoil": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.recoil[0]"
+              },
               "automatic": {}
             }
           ]
@@ -119789,7 +120138,9 @@
         "stats": {
           "recoil": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.recoil[0]"
+              },
               "automatic": {}
             }
           ]
@@ -119801,7 +120152,9 @@
         "stats": {
           "heavy_attack_speed": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.heavy_attack_speed[0]"
+              },
               "automatic": {}
             }
           ]
@@ -119813,7 +120166,9 @@
         "stats": {
           "crit_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -119826,20 +120181,26 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "body_shot_crit_chance_multiplier": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.body_shot_crit_chance_multiplier[0]"
+              },
               "automatic": {}
             }
           ],
           "crit_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -119852,7 +120213,9 @@
         "stats": {
           "attack_speed": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.attack_speed[0]"
+              },
               "when": "kill",
               "stacks": 3,
               "automatic": {}
@@ -119866,7 +120229,9 @@
         "stats": {
           "punch_through": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.punch_through[0]"
+              },
               "mode": "base",
               "when": "kill",
               "automatic": {}
@@ -119880,7 +120245,9 @@
         "stats": {
           "reload_speed": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.reload_speed[0]"
+              },
               "when": "headshot",
               "stacks": 3,
               "automatic": {}
@@ -119894,7 +120261,9 @@
         "stats": {
           "recoil": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.recoil[0]"
+              },
               "when": "headshot",
               "stacks": 4,
               "automatic": {}
@@ -119902,7 +120271,9 @@
           ],
           "accuracy": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.accuracy[0]"
+              },
               "when": "headshot",
               "stacks": 4,
               "automatic": {}
@@ -119916,7 +120287,9 @@
         "stats": {
           "weakpoint_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.weakpoint_damage[0]"
+              },
               "when": "2_headshots_within_2_seconds",
               "automatic": {}
             }
@@ -119929,7 +120302,9 @@
         "stats": {
           "follow_through": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.follow_through[0]"
+              },
               "when": "while_melee_weapon_equipped",
               "automatic": {}
             }
@@ -119942,14 +120317,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "multishot": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.multishot[0]"
+              },
               "automatic": {}
             }
           ]
@@ -119961,21 +120340,27 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "damage_bonus": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage_bonus[0]"
+              },
               "when": "while_no_primary_weapon_equipped",
               "automatic": {}
             }
           ],
           "magazine_capacity": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.magazine_capacity[0]"
+              },
               "mode": "base",
               "when": "while_no_primary_weapon_equipped",
               "automatic": {
@@ -119991,7 +120376,9 @@
         "stats": {
           "zoom": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.zoom[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120003,7 +120390,9 @@
         "stats": {
           "zoom": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.zoom[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120015,7 +120404,9 @@
         "stats": {
           "ammo_efficiency_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.ammo_efficiency_chance[0]"
+              },
               "when": "headshot",
               "automatic": {
                 "when": "normal_form"
@@ -120024,7 +120415,9 @@
           ],
           "ammo_efficiency": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.ammo_efficiency[0]"
+              },
               "when": "headshot",
               "automatic": {
                 "when": "normal_form"
@@ -120045,7 +120438,9 @@
         "stats": {
           "recoil": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.recoil[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120057,7 +120452,9 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -120070,14 +120467,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "combo_count": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.combo_count[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120089,14 +120490,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "crit_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_damage[0]"
+              },
               "mode": "base",
               "when": "reload_from_empty",
               "stacks": 2,
@@ -120111,12 +120516,16 @@
         "stats": {
           "ammo_maximum": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.ammo_maximum[0]"
+              },
               "mode": "base",
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.ammo_maximum[1]"
+              },
               "mode": "base",
               "automatic": {
                 "when": "normal_form"
@@ -120131,7 +120540,9 @@
         "stats": {
           "range": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.range[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120143,7 +120554,9 @@
         "stats": {
           "initial_combo": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.initial_combo[0]"
+              },
               "when": "kill_against_enemy_with_3_cold_stacks",
               "stacks": 4,
               "automatic": {}
@@ -120157,7 +120570,9 @@
         "stats": {
           "fire_rate": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.fire_rate[0]"
+              },
               "when": "shell_reloaded",
               "stacks": 99,
               "automatic": {}
@@ -120171,20 +120586,26 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "multishot": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.multishot[0]"
+              },
               "automatic": {}
             }
           ],
           "damage_bonus": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage_bonus[0]"
+              },
               "family": "multishot_ammo",
               "automatic": {
                 "with": "effective_multishot"
@@ -120199,7 +120620,9 @@
         "stats": {
           "toxin": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.toxin[0]"
+              },
               "when": "headshot",
               "automatic": {}
             }
@@ -120223,7 +120646,9 @@
         "stats": {
           "range": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.range[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120235,14 +120660,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "explosion_radius": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.explosion_radius[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120254,7 +120683,9 @@
         "stats": {
           "heavy_attack_efficiency": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.heavy_attack_efficiency[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120266,7 +120697,9 @@
         "stats": {
           "damage_bonus": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage_bonus[0]"
+              },
               "when": "non_critical_non_status_hit",
               "stacks": 3,
               "automatic": {}
@@ -120280,14 +120713,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "crit_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -120300,14 +120737,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "fire_rate": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.fire_rate[0]"
+              },
               "when": "status_proc",
               "stacks": 6,
               "automatic": {}
@@ -120321,7 +120762,9 @@
         "stats": {
           "puncture_proc": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.puncture_proc[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120333,7 +120776,9 @@
         "stats": {
           "status_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.status_chance[0]"
+              },
               "when": "puncture_status_proc",
               "stacks": 5,
               "automatic": {}
@@ -120347,14 +120792,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "damage_bonus": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage_bonus[0]"
+              },
               "family": "multishot_ammo",
               "automatic": {
                 "with": "effective_multishot"
@@ -120369,7 +120818,9 @@
         "stats": {
           "health_regen": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.health_regen[0]"
+              },
               "when": "kill_against_enemy_with_3_toxin_stacks",
               "automatic": {}
             }
@@ -120382,7 +120833,9 @@
         "stats": {
           "accuracy": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.accuracy[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120394,7 +120847,9 @@
         "stats": {
           "accuracy": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.accuracy[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120406,12 +120861,16 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[1]"
+              },
               "mode": "base",
               "when": "burst_headshots",
               "stacks": 3,
@@ -120426,7 +120885,9 @@
         "stats": {
           "crit_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -120439,7 +120900,9 @@
         "stats": {
           "crit_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -120452,14 +120915,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "crit_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -120472,7 +120939,9 @@
         "stats": {
           "combo_on_finisher": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.combo_on_finisher[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120495,7 +120964,9 @@
         "stats": {
           "multishot": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.multishot[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120518,7 +120989,9 @@
         "stats": {
           "reload_speed": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.reload_speed[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120530,7 +121003,9 @@
         "stats": {
           "fire_rate": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.fire_rate[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120542,7 +121017,9 @@
         "stats": {
           "movement_speed_while_aiming": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.movement_speed_while_aiming[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120554,7 +121031,9 @@
         "stats": {
           "slide_attack_range": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.slide_attack_range[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120566,7 +121045,9 @@
         "stats": {
           "reload_speed": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.reload_speed[0]"
+              },
               "when": "reload_from_empty",
               "automatic": {}
             }
@@ -120579,7 +121060,9 @@
         "stats": {
           "ammo_efficiency": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.ammo_efficiency[0]"
+              },
               "when": "headshot",
               "automatic": {
                 "when": "normal_form"
@@ -120594,13 +121077,17 @@
         "stats": {
           "damage_bonus": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage_bonus[0]"
+              },
               "when": "full_burst_hit",
               "stacks": 5,
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage_bonus[1]"
+              },
               "when": "full_burst_hit",
               "automatic": {}
             }
@@ -120613,7 +121100,9 @@
         "stats": {
           "crit_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_damage[0]"
+              },
               "mode": "base",
               "when": "first_attack_with_primary_equipped",
               "automatic": {}
@@ -120627,12 +121116,16 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[1]"
+              },
               "mode": "base",
               "when": "reload_from_empty",
               "automatic": {}
@@ -120646,12 +121139,16 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[1]"
+              },
               "mode": "base",
               "when": "reload_from_empty",
               "automatic": {}
@@ -120665,7 +121162,9 @@
         "stats": {
           "damage_field_duration": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage_field_duration[0]"
+              },
               "when": "reload_from_empty",
               "automatic": {}
             }
@@ -120678,7 +121177,9 @@
         "stats": {
           "combo_duration": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.combo_duration[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120690,7 +121191,9 @@
         "stats": {
           "magazine_capacity": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.magazine_capacity[0]"
+              },
               "mode": "base",
               "when": "reload_from_empty",
               "stacks": 3,
@@ -120699,7 +121202,9 @@
               }
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.magazine_capacity[1]"
+              },
               "mode": "base",
               "when": "reload_from_empty",
               "stacks": 7,
@@ -120716,7 +121221,9 @@
         "stats": {
           "magazine_capacity": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.magazine_capacity[0]"
+              },
               "automatic": {
                 "when": "normal_form"
               }
@@ -120730,7 +121237,9 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -120743,7 +121252,9 @@
         "stats": {
           "punch_through": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.punch_through[0]"
+              },
               "mode": "base",
               "when": "kill",
               "automatic": {}
@@ -120757,7 +121268,9 @@
         "stats": {
           "instant_reload_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.instant_reload_chance[0]"
+              },
               "when": "kill",
               "automatic": {}
             }
@@ -120770,14 +121283,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "attack_speed": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.attack_speed[0]"
+              },
               "when": "neutral_combo_final_hit",
               "automatic": {}
             }
@@ -120790,7 +121307,9 @@
         "stats": {
           "ammo_efficiency": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.ammo_efficiency[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120802,14 +121321,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "multishot": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.multishot[0]"
+              },
               "when": "while_channeling_ability",
               "automatic": {}
             }
@@ -120822,7 +121345,9 @@
         "stats": {
           "area_of_effect": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.area_of_effect[0]"
+              },
               "automatic": {
                 "when": "normal_form"
               }
@@ -120836,14 +121361,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "combo_count": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.combo_count[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120855,7 +121384,9 @@
         "stats": {
           "slam_radius": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.slam_radius[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120867,7 +121398,9 @@
         "stats": {
           "weakpoint_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.weakpoint_damage[0]"
+              },
               "when": "consecutive_weakpoint_hits",
               "stacks": 4,
               "automatic": {
@@ -120883,14 +121416,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "combo_gain_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.combo_gain_chance[0]"
+              },
               "when": "shield_break",
               "automatic": {}
             }
@@ -120903,7 +121440,9 @@
         "stats": {
           "combo_count": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.combo_count[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120926,7 +121465,9 @@
         "stats": {
           "aerial_melee_attack_range": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.aerial_melee_attack_range[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120938,7 +121479,9 @@
         "stats": {
           "accuracy": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.accuracy[0]"
+              },
               "when": "hit",
               "stacks": 10,
               "automatic": {}
@@ -120946,7 +121489,9 @@
           ],
           "recoil": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.recoil[0]"
+              },
               "when": "hit",
               "stacks": 10,
               "automatic": {}
@@ -120960,14 +121505,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "projectile_speed": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.projectile_speed[0]"
+              },
               "automatic": {}
             }
           ]
@@ -120979,7 +121528,9 @@
         "stats": {
           "crit_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -120992,14 +121543,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "initial_combo": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.initial_combo[0]"
+              },
               "when": "while_dread_and_despair_equipped",
               "automatic": {}
             }
@@ -121012,14 +121567,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "damage_bonus": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage_bonus[0]"
+              },
               "when": "while_hate_and_despair_equipped",
               "stacks": 5,
               "automatic": {}
@@ -121033,14 +121592,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "damage_bonus": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage_bonus[0]"
+              },
               "family": "multishot_ammo",
               "when": "while_dread_and_hate_equipped",
               "automatic": {
@@ -121050,7 +121613,9 @@
           ],
           "multishot": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.multishot[0]"
+              },
               "when": "while_dread_and_hate_equipped",
               "automatic": {}
             }
@@ -121063,20 +121628,26 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "parry_angle": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.parry_angle[0]"
+              },
               "automatic": {}
             }
           ],
           "combo_gain_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.combo_gain_chance[0]"
+              },
               "automatic": {}
             }
           ]
@@ -121088,7 +121659,9 @@
         "stats": {
           "combo_timer_pause": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.combo_timer_pause[0]"
+              },
               "automatic": {}
             }
           ]
@@ -121100,14 +121673,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "crit_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_damage[0]"
+              },
               "when": "shield_overguard_break",
               "automatic": {}
             }
@@ -121120,14 +121697,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "multishot": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.multishot[0]"
+              },
               "when": "hit_against_electrified_enemy",
               "stacks": 3,
               "automatic": {}
@@ -121141,7 +121722,9 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -121154,7 +121737,9 @@
         "stats": {
           "sprint_speed": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.sprint_speed[0]"
+              },
               "automatic": {}
             }
           ]
@@ -121166,7 +121751,9 @@
         "stats": {
           "stun_on_finisher": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.stun_on_finisher[0]"
+              },
               "when": "finisher",
               "automatic": {}
             }
@@ -121179,14 +121766,18 @@
         "stats": {
           "crit_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "status_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.status_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -121199,24 +121790,32 @@
         "stats": {
           "crit_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_chance[1]"
+              },
               "mode": "flat",
               "automatic": {}
             }
           ],
           "status_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.status_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.status_chance[1]"
+              },
               "mode": "flat",
               "automatic": {}
             }
@@ -121229,7 +121828,9 @@
         "stats": {
           "heavy_attack_speed": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.heavy_attack_speed[0]"
+              },
               "automatic": {}
             }
           ]
@@ -121241,14 +121842,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "damage_bonus": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage_bonus[0]"
+              },
               "automatic": {}
             }
           ]
@@ -121260,7 +121865,9 @@
         "stats": {
           "projectile_speed": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.projectile_speed[0]"
+              },
               "automatic": {}
             }
           ]
@@ -121272,20 +121879,26 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "condition_overload": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.condition_overload[0]"
+              },
               "automatic": {}
             }
           ],
           "damage_bonus": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage_bonus[0]"
+              },
               "family": "unique_status",
               "automatic": {
                 "with": "unique_status_count"
@@ -121300,14 +121913,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "fire_rate": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.fire_rate[0]"
+              },
               "when": "while_channeling_ability",
               "automatic": {}
             }
@@ -121331,7 +121948,9 @@
         "stats": {
           "damage_bonus": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage_bonus[0]"
+              },
               "automatic": {}
             }
           ]
@@ -121343,7 +121962,9 @@
         "stats": {
           "movement_speed": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.movement_speed[0]"
+              },
               "automatic": {}
             }
           ]
@@ -121355,14 +121976,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "combo_gain_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.combo_gain_chance[0]"
+              },
               "when": "while_melee_weapon_equipped",
               "automatic": {}
             }
@@ -121375,14 +122000,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "status_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.status_damage[0]"
+              },
               "when": "critical_hit",
               "stacks": 5,
               "automatic": {}
@@ -121396,14 +122025,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "heavy_attack_efficiency": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.heavy_attack_efficiency[0]"
+              },
               "automatic": {}
             }
           ]
@@ -121415,14 +122048,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "punch_through": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.punch_through[0]"
+              },
               "mode": "base",
               "when": "while_channeling_ability",
               "automatic": {}
@@ -121436,7 +122073,9 @@
         "stats": {
           "extra_jump": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.extra_jump[0]"
+              },
               "automatic": {}
             }
           ]
@@ -121448,12 +122087,16 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[1]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -121466,7 +122109,9 @@
         "stats": {
           "heavy_attack_efficiency": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.heavy_attack_efficiency[0]"
+              },
               "automatic": {}
             }
           ]
@@ -121478,14 +122123,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "ammo_efficiency": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.ammo_efficiency[0]"
+              },
               "when": "while_channeling_ability",
               "automatic": {}
             }
@@ -121498,7 +122147,9 @@
         "stats": {
           "combo_on_ammo_pickup": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.combo_on_ammo_pickup[0]"
+              },
               "automatic": {}
             }
           ]
@@ -121510,7 +122161,9 @@
         "stats": {
           "double_jump_strength": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.double_jump_strength[0]"
+              },
               "automatic": {}
             }
           ]
@@ -121522,14 +122175,18 @@
         "stats": {
           "crit_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "status_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.status_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -121542,14 +122199,18 @@
         "stats": {
           "crit_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "crit_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -121562,7 +122223,9 @@
         "stats": {
           "crit_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -121575,13 +122238,17 @@
         "stats": {
           "accuracy": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.accuracy[0]"
+              },
               "automatic": {}
             }
           ],
           "recoil": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.recoil[0]"
+              },
               "automatic": {}
             }
           ]
@@ -121593,7 +122260,9 @@
         "stats": {
           "status_vulnerability": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.status_vulnerability[0]"
+              },
               "automatic": {}
             }
           ]
@@ -121605,14 +122274,18 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "combo_count": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.combo_count[0]"
+              },
               "automatic": {}
             }
           ]
@@ -121624,7 +122297,9 @@
         "stats": {
           "heavy_attack_speed": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.heavy_attack_speed[0]"
+              },
               "automatic": {}
             }
           ]
@@ -121636,12 +122311,16 @@
         "stats": {
           "damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             },
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.damage[1]"
+              },
               "mode": "base",
               "when": "consecutive_weakpoint_hits",
               "stacks": 3,
@@ -121656,7 +122335,9 @@
         "stats": {
           "attack_speed": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.attack_speed[0]"
+              },
               "automatic": {}
             }
           ]
@@ -121668,7 +122349,9 @@
         "stats": {
           "status_from_crit": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.status_from_crit[0]"
+              },
               "max": 0.4,
               "automatic": {}
             }
@@ -121681,14 +122364,18 @@
         "stats": {
           "status_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.status_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
           ],
           "crit_chance": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_chance[0]"
+              },
               "mode": "base",
               "automatic": {}
             }
@@ -121701,7 +122388,9 @@
         "stats": {
           "crit_damage": [
             {
-              "value": "$weapon",
+              "value": {
+                "source": "$values.crit_damage[0]"
+              },
               "mode": "base",
               "automatic": {}
             }

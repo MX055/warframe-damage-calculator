@@ -6,30 +6,7 @@ from dataclasses import dataclass, field
 from typing import Literal, Self
 
 
-def _restore_placeholder() -> Placeholder:
-    return PLACEHOLDER
-
-
-class Placeholder:
-    __slots__ = ()
-
-    def __repr__(self) -> str:
-        return "PLACEHOLDER"
-
-    def __copy__(self) -> Placeholder:
-        return self
-
-    def __deepcopy__(self, memo: dict) -> Placeholder:
-        return self
-
-    def __reduce__(self):
-        return _restore_placeholder, ()
-
-
-PLACEHOLDER = Placeholder()
-
 type Scalar = int | float | bool | str
-type EffectValue = Scalar | Placeholder | dict[str, object]
 type ChannelValue = Scalar | list[Scalar]
 type EffectChannel = dict[str, ChannelValue]
 type EffectMode = Literal["proportional", "multiplicative", "base", "flat"]
@@ -37,6 +14,68 @@ type EffectMode = Literal["proportional", "multiplicative", "base", "flat"]
 EFFECT_FIELDS = frozenset({"value", "mode", "family", "max", "rank_scale", "when", "stacks", "for", "requires_rank", "automatic"})
 AUTOMATIC_FIELDS = frozenset({"when", "on", "with", "stacks", "for", "chance", "multiply", "reset", "refresh", "equipped", "per"})
 REPEATABLE_AUTOMATIC_FIELDS = frozenset({"when", "equipped"})
+
+
+@dataclass(frozen=True, slots=True)
+class Source:
+    path: str
+    multiplier: float = 1
+    default: Scalar | None = None
+
+    def __post_init__(self) -> None:
+        if not self.path.startswith("$") or len(self.path) == 1: raise ValueError("source path must start with '$'")
+
+    @classmethod
+    def from_record(cls, record: Mapping[str, object]) -> Source:
+        if set(record) - {"source", "multiplier", "default"} or not isinstance(record.get("source"), str): raise ValueError("source expressions only support source, multiplier, and default")
+        multiplier = record.get("multiplier", 1)
+        if not isinstance(multiplier, (int, float)) or isinstance(multiplier, bool): raise TypeError("source multiplier must be numeric")
+        default = record.get("default")
+        if default is not None and not isinstance(default, (int, float, bool, str)): raise TypeError("source default must be a scalar")
+        return cls(str(record["source"]), float(multiplier), default)
+
+    def to_record(self) -> dict[str, object]:
+        record: dict[str, object] = {"source": self.path}
+        if self.multiplier != 1: record["multiplier"] = self.multiplier
+        if self.default is not None: record["default"] = self.default
+        return record
+
+
+type EffectValue = Scalar | Source | dict[str, object]
+
+
+def resolve_source(source: Source, namespaces: Mapping[str, object]) -> object:
+    path = source.path[1:]
+    root, separator, remainder = path.partition(".")
+    if root not in namespaces: raise ValueError(f"unknown source namespace ${root}")
+    value = namespaces[root]
+    segments: list[str | int] = []
+    for component in remainder.split(".") if separator else ():
+        name, _, indices = component.partition("[")
+        if name: segments.append(name)
+        while indices:
+            index, closing, indices = indices.partition("]")
+            if not closing or index == "" or not index.isdigit(): raise ValueError(f"invalid source path {source.path!r}")
+            segments.append(int(index))
+            if indices.startswith("["): indices = indices[1:]
+            elif indices: raise ValueError(f"invalid source path {source.path!r}")
+    for segment in segments:
+        if isinstance(segment, int):
+            if not isinstance(value, (list, tuple)): raise ValueError(f"source path {source.path!r} does not reference a sequence")
+            try: value = value[segment]
+            except IndexError: raise ValueError(f"source path {source.path!r} is out of range") from None
+        elif isinstance(value, Mapping):
+            if segment in value: value = value[segment]
+            elif hasattr(value, segment): value = getattr(value, segment)
+            elif source.default is not None: return deepcopy(source.default)
+            else: raise ValueError(f"source path {source.path!r} does not exist")
+        else:
+            try: value = getattr(value, segment)
+            except AttributeError: raise ValueError(f"source path {source.path!r} does not exist") from None
+    if source.multiplier != 1:
+        if not isinstance(value, (int, float)) or isinstance(value, bool): raise TypeError("source multiplier requires a numeric value")
+        value = float(value) * source.multiplier
+    return deepcopy(value)
 
 
 def _normalize_scalar(value: Scalar, field_name: str) -> Scalar:
@@ -50,8 +89,9 @@ def _normalize_scalar(value: Scalar, field_name: str) -> Scalar:
 def _normalize_effect_value(value: EffectValue) -> EffectValue:
     if isinstance(value, Mapping):
         if any(not isinstance(key, str) or not key for key in value): raise TypeError("structured effect keys must be nonempty strings")
+        if "source" in value: return Source.from_record(value)
         return deepcopy(dict(value))
-    return value if value is PLACEHOLDER else _normalize_scalar(value, "value")
+    return value if isinstance(value, Source) else _normalize_scalar(value, "value")
 
 
 def _normalize_repeated(value: Scalar | Iterable[Scalar], field_name: str) -> ChannelValue:
@@ -92,7 +132,7 @@ class Effect:
     def __init__(self, value: EffectValue, *, mode: EffectMode = "proportional", family: str = "common", maximum: float | None = None, rank_scale: bool = True, when: str | None = None, stacks: Scalar | None = None, duration: Scalar | None = None, requires_rank: int | None = None) -> None:
         normalized_mode = str(mode).strip().lower()
         if normalized_mode not in {"proportional", "multiplicative", "base", "flat"}: raise ValueError(f"unsupported effect mode {normalized_mode!r}")
-        if normalized_mode == "multiplicative" and value is not PLACEHOLDER and (not isinstance(value, (int, float)) or isinstance(value, bool)): raise TypeError("multiplicative effect values must be numeric")
+        if normalized_mode == "multiplicative" and not isinstance(value, Source) and (not isinstance(value, (int, float)) or isinstance(value, bool)): raise TypeError("multiplicative effect values must be numeric")
         normalized_family = str(family).strip().lower()
         if not normalized_family: raise ValueError("family cannot be empty")
         normalized_when = None if when is None else str(_normalize_scalar(when, "when"))
@@ -146,7 +186,7 @@ class Effect:
         return effect
 
     def to_record(self) -> dict[str, object]:
-        record: dict[str, object] = {"value": "$weapon" if self.value is PLACEHOLDER else deepcopy(self.value)}
+        record: dict[str, object] = {"value": self.value.to_record() if isinstance(self.value, Source) else deepcopy(self.value)}
         if self.mode != "proportional": record["mode"] = self.mode
         if self.family != "common": record["family"] = self.family
         if self.maximum is not None: record["max"] = self.maximum

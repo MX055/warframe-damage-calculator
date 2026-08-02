@@ -4,9 +4,10 @@ from collections.abc import Mapping
 from copy import deepcopy
 
 from ..domain.status import StatusModel, _product
+from ..domain.effects import Source, resolve_source
 from ..domain.upgrades import ResolvedEffect
 from ..domain.weapons import Attack, AttackStats
-from .attack_calculator import AttackCalculator, derive_status_attack
+from .attack_calculator import AttackCalculator, derive_event_attack, derive_status_attack
 from .automatic import automatic_value, automatic_values
 from .context import CalculationContext
 from .models.attack import AttackResult, AverageAttackStats, PreliminaryAttack
@@ -35,47 +36,57 @@ class WeaponCalculator:
         self.attacks = AttackCalculator(self.context, self.upgrade_effects, self.evolution_effects)
 
     @staticmethod
-    def _attack_record(effect: ResolvedEffect) -> tuple[str | None, Mapping[str, object]]:
+    def _attack_record(effect: ResolvedEffect) -> tuple[Mapping[str, object], Mapping[str, object]]:
         if not isinstance(effect.value, Mapping): raise TypeError("extra_attack value must be an object")
+        parent = effect.value.get("parent")
+        if not isinstance(parent, Mapping): raise TypeError("extra_attack.parent must be an attack selector")
         attack = effect.value.get("attack")
         if not isinstance(attack, Mapping): raise TypeError("extra_attack.attack must be an object")
-        parent = effect.value.get("parent")
-        if parent is not None and not isinstance(parent, str): raise TypeError("extra_attack.parent must be a string")
         return parent, attack
 
     @staticmethod
-    def _template_value(value: object, inherited: object, parent: Attack) -> object:
-        if value == "$attack": return deepcopy(inherited)
+    def _template_value(value: object, parent: Attack) -> object:
         if isinstance(value, Mapping) and "source" in value:
-            if set(value) - {"source", "multiplier"}: raise ValueError("attack source expressions only support source and multiplier")
-            source = value["source"]
-            if source == "$attack.damage.total": resolved = parent.stats.damage.total
-            elif source == "$attack": resolved = inherited
-            else: raise ValueError(f"unknown attack template source {source!r}")
-            multiplier = value.get("multiplier", 1)
-            if not isinstance(resolved, (int, float)) or not isinstance(multiplier, (int, float)): raise TypeError("attack source expressions must resolve to numbers")
-            return float(resolved) * float(multiplier)
+            return resolve_source(Source.from_record(value), {"parent": parent})
         return deepcopy(value)
+
+    @staticmethod
+    def _matches_parent(name: str, attack: Attack, selector: Mapping[str, object]) -> bool:
+        fields = {"names": name, "triggers": attack.trigger, "deliveries": attack.delivery, "forms": attack.form, "categories": attack.category}
+        for field, actual in fields.items():
+            expected = selector.get(field)
+            if expected is not None and actual not in expected: return False
+        return selector.get("aoe") in (None, attack.aoe)
+
+    @classmethod
+    def _parent_name(cls, effect: ResolvedEffect, definitions: Mapping[str, Attack], preferred: str | None = None) -> str | None:
+        selector, _ = cls._attack_record(effect)
+        matches = [name for name, attack in definitions.items() if cls._matches_parent(name, attack, selector)]
+        if not matches: return None
+        if preferred in matches: return preferred
+        if len(matches) > 1: raise ValueError(f"extra attack {effect.source!r} matches multiple parents: {', '.join(matches)}")
+        return matches[0]
 
     @classmethod
     def _generated_attack(cls, effect: ResolvedEffect, parent: Attack) -> Attack:
         _, template = cls._attack_record(effect)
         name = template.get("name")
         if not isinstance(name, str) or not name: raise ValueError("extra_attack.attack.name is required")
-        values: dict[str, object] = {"name": name, "generated_by": effect.source}
+        if template.get("inherit") != "$parent": raise ValueError("extra_attack.attack.inherit must be '$parent'")
+        values: dict[str, object] = {field: deepcopy(getattr(parent, field)) for field in ("trigger", "delivery", "form", "category", "aoe", "children")}
+        values.update(name=name, generated_by=effect.source)
         for field_name in ("trigger", "delivery", "form", "category", "aoe", "children"):
-            if field_name in template: values[field_name] = cls._template_value(template[field_name], getattr(parent, field_name), parent)
+            if field_name in template: values[field_name] = cls._template_value(template[field_name], parent)
         stats_template = template.get("stats", {})
         if not isinstance(stats_template, Mapping): raise TypeError("extra_attack.attack.stats must be an object")
-        stats: dict[str, object] = {}
+        stats = {field_name: deepcopy(getattr(parent.stats, field_name)) for field_name in parent.stats.__dataclass_fields__}
         for field_name, value in stats_template.items():
             if field_name in {"damage", "forced_procs", "falloff"}:
                 if not isinstance(value, Mapping): raise TypeError(f"extra_attack.attack.stats.{field_name} must be an object")
-                inherited = parent.stats.falloff if field_name == "falloff" else getattr(parent.stats, field_name)
-                stats[field_name] = {key: cls._template_value(item, inherited.get(key, 0), parent) for key, item in value.items()}
+                stats[field_name] = {key: cls._template_value(item, parent) for key, item in value.items()}
             else:
                 if not hasattr(parent.stats, field_name): raise ValueError(f"unknown attack stat {field_name!r}")
-                stats[field_name] = cls._template_value(value, getattr(parent.stats, field_name), parent)
+                stats[field_name] = cls._template_value(value, parent)
         values["stats"] = AttackStats.from_record(stats)
         return Attack(**values)
 
@@ -99,16 +110,17 @@ class WeaponCalculator:
         self.definitions = dict(self.context.weapon.attacks)
 
         for effect in self.attack_effects:
-            if automatic_value(effect, "on") == "status_proc": continue
-            configured_parent, _ = self._attack_record(effect)
-            parent_name = configured_parent or self.root_name
+            if effect.automatic: continue
+            parent_name = self._parent_name(effect, self.definitions, self.root_name)
+            if parent_name is None: continue
             if parent_name not in self.definitions: raise ValueError(f"unknown generated attack parent {parent_name!r}")
             name = self._generated_name(effect)
             if name in self.definitions: raise ValueError(f"duplicate generated attack {name!r}")
             parent = deepcopy(self.definitions[parent_name])
+            generated = self._generated_attack(effect, parent)
             if name not in parent.children: parent.children.append(name)
             self.definitions[parent_name] = parent
-            self.definitions[name] = self._generated_attack(effect, parent)
+            self.definitions[name] = generated
 
         def collect(name: str, path: frozenset[str] = frozenset()) -> None:
             if name in path: raise ValueError(f"attack relationship cycle at {name!r}")
@@ -128,7 +140,16 @@ class WeaponCalculator:
         return {name: self.attacks.calculate_preliminary(self.definitions[name]) for name in names}
 
     def build_shared_status_model(self, preliminary: dict[str, PreliminaryAttack], names: list[str]) -> tuple[StatusModel, dict[str, float], float, float]:
-        preliminary_models = [preliminary[name].status_model for name in names]
+        event_factors: dict[str, float] = {}
+        for effect in self.attack_effects:
+            event = automatic_value(effect, "on")
+            if event in (None, "status_proc"): continue
+            parent_name = self._parent_name(effect, {name: self.definitions[name] for name in names}, self.root_name)
+            if parent_name is None: continue
+            parent = preliminary[parent_name]
+            probability = self._event_probability(effect, parent.trigger_crit_chance)
+            if probability > 0: event_factors[parent_name] = event_factors.get(parent_name, 0) + probability
+        preliminary_models = [preliminary[name].status_model.with_attempt_multiplier(1 + event_factors.get(name, 0)) for name in names]
         root_rate = preliminary[self.root_name].attack_rate
         root_duration = max((model.duration for model in preliminary_models), default=0)
         random_probabilities: list[float] = []
@@ -158,8 +179,8 @@ class WeaponCalculator:
     def derive_status_attacks(self, results: dict[str, AttackResult], names: list[str]) -> None:
         for effect in self.attack_effects:
             if automatic_value(effect, "on") != "status_proc": continue
-            configured_parent, _ = self._attack_record(effect)
-            parent_name = configured_parent or self.root_name
+            parent_name = self._parent_name(effect, {name: result.attack for name, result in results.items()}, self.root_name)
+            if parent_name is None: continue
             if parent_name not in results: continue
             parent = results[parent_name]
             conditions = [str(condition) for condition in automatic_values(effect, "when") if str(condition).endswith("_status_proc")]
@@ -173,6 +194,36 @@ class WeaponCalculator:
             self.definitions[name] = attack
             results[name] = derive_status_attack(self.context, parent, attack, self._generated_status_types(effect))
             names.append(name)
+
+    def derive_event_attacks(self, results: dict[str, AttackResult], names: list[str]) -> None:
+        for effect in self.attack_effects:
+            event = automatic_value(effect, "on")
+            if event in (None, "status_proc"): continue
+            parent_name = self._parent_name(effect, {name: result.attack for name, result in results.items()}, self.root_name)
+            if parent_name is None: continue
+            parent = results[parent_name]
+            probability = self._event_probability(effect, float(parent.effective.trigger_crit_chance))
+            if probability <= 0: continue
+            name = self._generated_name(effect)
+            if name in results: raise ValueError(f"duplicate generated attack {name!r}")
+            attack = self._generated_attack(effect, parent.attack)
+            parent.attack = deepcopy(parent.attack)
+            if name not in parent.attack.children: parent.attack.children.append(name)
+            self.definitions[parent_name] = parent.attack
+            self.definitions[name] = attack
+            results[name] = derive_event_attack(parent, attack, probability)
+            names.append(name)
+
+    @staticmethod
+    def _event_probability(effect: ResolvedEffect, crit_chance: float) -> float:
+        event = automatic_value(effect, "on")
+        if event == "near_yellow_critical_hit": probability = max(1 - abs(crit_chance - 1), 0)
+        elif event == "critical_hit": probability = min(max(crit_chance, 0), 1)
+        elif event == "non_critical_hit": probability = max(1 - crit_chance, 0)
+        else: raise ValueError(f"unsupported extra attack event {event!r}")
+        chance = automatic_value(effect, "chance", 1)
+        if not isinstance(chance, (int, float)) or isinstance(chance, bool): raise TypeError("extra attack chance must be numeric")
+        return min(max(probability * float(chance), 0), 1)
 
     @staticmethod
     def _fold_metrics(output: AverageAttackStats, own: AverageAttackStats, children: list[AverageAttackStats]) -> None:
@@ -218,11 +269,14 @@ class WeaponCalculator:
         shared, status_effects, random_probability, _ = self.build_shared_status_model(preliminary, names)
         results = self.calculate_final_attacks(names, preliminary, shared, status_effects, random_probability, compact=True)
         self.derive_status_attacks(results, names)
+        self.derive_event_attacks(results, names)
         root = results[self.root_name]
         direct_dph = sum(float(results[name].average.flat_dph or 0) for name in names)
         dot_dph = sum(float(results[name].average.flat_dotph or 0) for name in names)
         attack_rate = float(root.average.attack_rate)
-        damage_mass = float(root.spatial.damage_mass) if root.spatial.damage_mass is not None else 1.0
+        total_dph = direct_dph + dot_dph
+        weighted_damage_mass = sum((float(results[name].average.flat_dph or 0) + float(results[name].average.flat_dotph or 0)) * (float(results[name].spatial.damage_mass) if results[name].spatial.damage_mass is not None else 1.0) for name in names)
+        damage_mass = weighted_damage_mass / total_dph if total_dph > 0 else 1.0
         return direct_dph, dot_dph, direct_dph * attack_rate, dot_dph * attack_rate, damage_mass
 
     def calculate(self) -> tuple[dict[str, AttackResult], AverageAttackStats, StatusModel, dict[str, float]]:
@@ -233,6 +287,7 @@ class WeaponCalculator:
         shared, status_effects, random_probability, root_duration = self.build_shared_status_model(preliminary, names)
         results = self.calculate_final_attacks(names, preliminary, shared, status_effects, random_probability)
         self.derive_status_attacks(results, names)
+        self.derive_event_attacks(results, names)
         aggregate, aggregate_status_model, aggregate_status_effects = self.aggregate_attack_tree(results, names, root_duration)
         return results, aggregate, aggregate_status_model, aggregate_status_effects
 

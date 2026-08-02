@@ -1,5 +1,5 @@
 import unittest
-from warframe_damage_calculator import Arcane, Attack, AttackStats, BodyPart, Calculator, Compatibility, Dist, Effect, Enemy, Formatter, ImplementationStatus, Loadout, Mod, PLACEHOLDER, Perk, PerkValues, Primary, Progenitor, Upgrade, UpgradeStats, arsenal
+from warframe_damage_calculator import Arcane, Attack, AttackStats, BodyPart, Calculator, Compatibility, Dist, Effect, Enemy, Formatter, ImplementationStatus, Loadout, Mod, Perk, PerkValues, Primary, Progenitor, Source, State, Upgrade, UpgradeStats, arsenal
 from warframe_damage_calculator.formatting.objects import format_loadout, format_perk, format_upgrade, format_weapon
 from warframe_damage_calculator.formatting.results import format_damage_result, format_spatial, format_status
 
@@ -7,17 +7,17 @@ from warframe_damage_calculator.formatting.results import format_damage_result, 
 class ApiTests(unittest.TestCase):
     def test_root_api_exposes_definition_types_and_hides_internal_classes(self):
         import warframe_damage_calculator as package
-        expected = ("Arcane", "Archgun", "Attack", "AttackStats", "BodyPart", "Calculator", "Compatibility", "Dist", "Effect", "Enemy", "EnemyStats", "Formatter", "ImplementationStatus", "Loadout", "Melee", "Mod", "OptimizationProgress", "Optimizer", "PLACEHOLDER", "Perk", "PerkValues", "Primary", "Progenitor", "Secondary", "Upgrade", "UpgradeStats", "arsenal", "default_metric")
+        expected = ("Arcane", "Archgun", "Attack", "AttackStats", "BodyPart", "Calculator", "Compatibility", "Dist", "Effect", "Enemy", "EnemyStats", "Formatter", "ImplementationStatus", "Loadout", "Melee", "Mod", "OptimizationProgress", "Optimizer", "Perk", "PerkValues", "Primary", "Progenitor", "Secondary", "Source", "State", "Upgrade", "UpgradeStats", "arsenal", "default_metric")
         self.assertEqual(package.__all__, expected)
-        for name in ("AggregateResult", "CalculationResult", "ImplementationWarning", "Metric", "Placeholder", "ProgressCallback", "ResolvedPerk", "format_result"): self.assertFalse(hasattr(package, name))
+        for name in ("AggregateResult", "CalculationResult", "ImplementationWarning", "Metric", "ProgressCallback", "ResolvedPerk", "format_result"): self.assertFalse(hasattr(package, name))
         self.assertIs(package.Formatter, Formatter)
 
     def test_root_api_can_define_custom_mods_arcanes_perks_and_weapons(self):
         compatibility = Compatibility(types=["primary"])
-        generated = Effect({"attack": {"name": "aftershock", "trigger": "$attack", "delivery": "$attack", "form": "$attack", "category": "$attack", "aoe": True, "stats": {"damage": {"heat": {"source": "$attack.damage.total", "multiplier": 0.1}}, "falloff": {"end_range": 2}}}}, rank_scale=False)
+        generated = Effect({"parent": {"names": ["shot"]}, "attack": {"inherit": "$parent", "name": "aftershock", "aoe": True, "stats": {"damage": {"heat": {"source": "$parent.stats.damage.total", "multiplier": 0.1}}, "falloff": {"end_range": 2}}}}, rank_scale=False)
         mod = Mod(name="Custom Mod", max_rank=5, compatibility=compatibility, stats=UpgradeStats(damage_bonus=0.2, extra_attack=generated))
         arcane = Arcane(name="Primary Custom Arcane", max_rank=5, compatibility=compatibility, stats=UpgradeStats(multishot=0.3))
-        perk = Perk("Custom Perk", stats=UpgradeStats(crit_chance=Effect(PLACEHOLDER, mode="flat")))
+        perk = Perk("Custom Perk", stats=UpgradeStats(crit_chance=Effect(Source("$values.crit_chance[0]"), mode="flat")))
         weapon = Primary(name="Custom Primary", attacks=[Attack("shot", stats=AttackStats(damage=Dist(impact=100), fire_rate=1))], reload_time=1, perks=[PerkValues(perk, 1, 1, {"crit_chance": (0.2,)})])
         result = Calculator(weapon, loadout=Loadout(mods=[mod], arcanes=[arcane], evolutions=[perk])).resolve()
         self.assertGreater(result.aggregate.average.total_dps, 0)
@@ -28,15 +28,21 @@ class ApiTests(unittest.TestCase):
         weapon = arsenal.primary.get("Phenmor")
         for field in ("build", "loadout", "target", "runtime", "results", "format", "evolutions"): self.assertFalse(hasattr(weapon, field))
 
+    def test_state_is_a_public_mapping_for_calculators(self):
+        state = State(combo=5, stance_combo="heavy")
+        result = Calculator(arsenal.melee.get("Xoris")).resolve(state=state)
+        self.assertIsInstance(result.state, State)
+        self.assertEqual(result.state, {"combo": 5, "stance_combo": "heavy"})
+
     def test_loadout_contains_upgrades_and_global_perks(self):
         loadout = Loadout(mods=[arsenal.mod.get("Serration")], evolutions=[arsenal.perk.get("Elemental Excess")])
         self.assertEqual([upgrade.name for upgrade in loadout.upgrades], ["Serration", "Elemental Excess"])
         self.assertTrue(all(isinstance(upgrade, Upgrade) for upgrade in loadout.upgrades))
         self.assertEqual(loadout.evolutions[0].name, "Elemental Excess")
 
-    def test_global_perk_contains_placeholder_stats(self):
+    def test_global_perk_contains_value_sources(self):
         perk = arsenal.perk.get("Elemental Excess")
-        self.assertTrue(any(effect.value is PLACEHOLDER for effect in perk.stats.status_chance))
+        self.assertTrue(all(isinstance(effect.value, Source) and effect.value.path.startswith("$values.") for effect in perk.stats.status_chance))
 
     def test_same_perk_resolves_differently_for_two_weapons(self):
         perk = arsenal.perk.get("Elemental Balance")
@@ -46,16 +52,16 @@ class ApiTests(unittest.TestCase):
         prime_values = tuple(effect.value for effect in prime.effects if effect.stat == "status_chance")
         self.assertNotEqual(telos_values, prime_values)
 
-    def test_placeholder_metadata_is_preserved_during_resolution(self):
+    def test_source_metadata_is_preserved_during_resolution(self):
         perk = arsenal.perk.get("Devouring Attrition")
         resolved = arsenal.primary.get("Phenmor").resolve_perk(perk)
         template = perk.stats.damage_bonus[0]
         effect = resolved.effects[0]
         self.assertEqual((effect.stat, effect.mode, effect.family, effect.maximum, effect.automatic), ("damage_bonus", template.mode, template.family, template.maximum, template.automatic))
-        self.assertIsNot(effect.value, PLACEHOLDER)
+        self.assertNotIsInstance(effect.value, Source)
 
     def test_missing_and_unknown_weapon_values_are_rejected(self):
-        perk = Perk("Test", stats=UpgradeStats(damage_bonus=Effect(PLACEHOLDER)))
+        perk = Perk("Test", stats=UpgradeStats(damage_bonus=Effect(Source("$values.damage_bonus[0]"))))
         attack = Attack("shot", stats=AttackStats(damage=Dist(impact=1)))
         missing = Primary(name="Missing", attacks=[attack], perks=[PerkValues(perk, 2, 1, {})])
         with self.assertRaisesRegex(ValueError, "supplies no values"): missing.resolve_perk(perk)
@@ -63,7 +69,7 @@ class ApiTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unknown values"): unknown.resolve_perk(perk)
 
     def test_calculator_uses_resolved_global_template(self):
-        perk = Perk("Flat Critical", stats=UpgradeStats(crit_chance=Effect(PLACEHOLDER, mode="flat")))
+        perk = Perk("Flat Critical", stats=UpgradeStats(crit_chance=Effect(Source("$values.crit_chance[0]"), mode="flat")))
         weapon = Primary(name="Template", attacks=[Attack("shot", stats=AttackStats(damage=Dist(impact=10), crit_chance=0.1))], reload_time=1, perks=[PerkValues(perk, 2, 1, {"crit_chance": (0.4,)})])
         result = Calculator(weapon, loadout=Loadout(evolutions=[perk])).resolve()
         self.assertAlmostEqual(result.attacks["shot"].effective.crit_chance, 0.5)

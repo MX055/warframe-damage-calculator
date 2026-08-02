@@ -4,7 +4,7 @@ from math import isfinite
 from typing import Any
 
 from ..domain.effect_stats import MULTIPLICATIVE_EFFECT_STATS, unclassified_effect_stats
-from ..domain.effects import AUTOMATIC_FIELDS, EFFECT_FIELDS, REPEATABLE_AUTOMATIC_FIELDS, Effect
+from ..domain.effects import AUTOMATIC_FIELDS, EFFECT_FIELDS, REPEATABLE_AUTOMATIC_FIELDS, Effect, Source
 
 
 def _validate_automatic(automatic: Any, path: str) -> None:
@@ -17,27 +17,42 @@ def _validate_automatic(automatic: Any, path: str) -> None:
 
 def _extra_attack(value: Any, path: str) -> None:
     if not isinstance(value, dict) or set(value) - {"parent", "attack"}: raise ValueError(f"{path}: expected parent and attack fields")
-    if value.get("parent") is not None and (not isinstance(value["parent"], str) or not value["parent"]): raise ValueError(f"{path}.parent: expected a name")
+    parent = value.get("parent")
+    selector_fields = {"names", "triggers", "deliveries", "forms", "categories", "aoe"}
+    if not isinstance(parent, dict) or set(parent) - selector_fields or not parent: raise ValueError(f"{path}.parent: expected an attack selector")
+    for field in selector_fields - {"aoe"}:
+        selected = parent.get(field)
+        if selected is not None and (not isinstance(selected, list) or not selected or any(not isinstance(item, str) or not item for item in selected)): raise ValueError(f"{path}.parent.{field}: expected names")
+    if "aoe" in parent and not isinstance(parent["aoe"], bool): raise ValueError(f"{path}.parent.aoe: expected a bool")
     attack = value.get("attack")
-    if not isinstance(attack, dict) or set(attack) - {"name", "trigger", "delivery", "form", "category", "aoe", "children", "stats"}: raise ValueError(f"{path}.attack: invalid fields")
+    if not isinstance(attack, dict) or set(attack) - {"inherit", "name", "trigger", "delivery", "form", "category", "aoe", "children", "stats"}: raise ValueError(f"{path}.attack: invalid fields")
+    if attack.get("inherit") != "$parent": raise ValueError(f"{path}.attack.inherit: expected '$parent'")
     if not isinstance(attack.get("name"), str) or not attack["name"]: raise ValueError(f"{path}.attack.name: expected a name")
     if not isinstance(attack.get("stats", {}), dict): raise ValueError(f"{path}.attack.stats: expected an object")
 
+    def expressions(candidate: object, location: str) -> None:
+        if isinstance(candidate, dict) and "source" in candidate:
+            try: Source.from_record(candidate)
+            except (TypeError, ValueError) as error: raise ValueError(f"{location}: {error}") from error
+        elif isinstance(candidate, dict):
+            for key, item in candidate.items(): expressions(item, f"{location}.{key}")
 
-def _effects(stats: Any, path: str, *, placeholders: bool = False) -> None:
+    expressions(attack.get("stats", {}), f"{path}.attack.stats")
+
+
+def _effects(stats: Any, path: str, *, sources: bool = False) -> None:
     if not isinstance(stats, dict): raise ValueError(f"{path}: expected an object")
     for stat, effects in stats.items():
         if not isinstance(effects, list) or not effects: raise ValueError(f"{path}.{stat}: expected effects")
         for index, effect in enumerate(effects):
             location = f"{path}.{stat}[{index}]"
             if not isinstance(effect, dict) or not set(effect) <= EFFECT_FIELDS or "value" not in effect or "automatic" not in effect: raise ValueError(f"{location}: invalid effect fields")
-            if placeholders and effect["value"] != "$weapon": raise ValueError(f"{location}: expected '$weapon' placeholder")
-            if not placeholders and effect["value"] == "$weapon": raise ValueError(f"{location}: unresolved placeholder")
             try: parsed = Effect.from_record(effect)
             except (TypeError, ValueError) as error: raise ValueError(f"{location}: {error}") from error
+            if sources and (not isinstance(parsed.value, Source) or not parsed.value.path.startswith("$values.")): raise ValueError(f"{location}: expected a $values source")
             if parsed.mode == "multiplicative" and stat not in MULTIPLICATIVE_EFFECT_STATS: raise ValueError(f"{location}: {stat} does not support multiplicative effects")
             if stat == "extra_attack": _extra_attack(effect["value"], f"{location}.value")
-            elif isinstance(effect["value"], (dict, list)): raise ValueError(f"{location}: value must be scalar")
+            elif isinstance(effect["value"], (dict, list)) and not sources: raise ValueError(f"{location}: value must be scalar")
             _validate_automatic(effect["automatic"], f"{location}.automatic")
 
 
@@ -70,7 +85,7 @@ def validate_database(database: dict[str, Any]) -> None:
         if not isinstance(perk, dict) or set(perk) - {"name", "description", "stats", "implementation_status"}: raise ValueError(f"upgrades.perks.{name}: invalid fields")
         if perk.get("name") != name: raise ValueError(f"upgrades.perks.{name}: invalid name")
         _implementation_status(perk.get("implementation_status"), f"upgrades.perks.{name}.implementation_status")
-        _effects(perk.get("stats", {}), f"upgrades.perks.{name}.stats", placeholders=True)
+        _effects(perk.get("stats", {}), f"upgrades.perks.{name}.stats", sources=True)
     weapon_categories = {"primaries", "secondaries", "melees", "archguns"}
     if set(database["weapons"]) != weapon_categories: raise ValueError(f"weapons: expected categories {sorted(weapon_categories)}")
     for category, weapons in database["weapons"].items():
@@ -98,7 +113,7 @@ def validate_database(database: dict[str, Any]) -> None:
                     if unknown: raise ValueError(f"{path}.values: unknown stats {sorted(unknown)}")
                     for stat, stat_values in values.items():
                         if not isinstance(stat_values, list) or len(stat_values) != len(templates[stat]): raise ValueError(f"{path}.values.{stat}: expected {len(templates[stat])} values")
-                        if any(not isinstance(value, (int, float, bool, str)) or isinstance(value, str) and not value or value == "$weapon" for value in stat_values): raise ValueError(f"{path}.values.{stat}: invalid concrete value")
+                        if any(not isinstance(value, (int, float, bool, str)) or isinstance(value, str) and not value for value in stat_values): raise ValueError(f"{path}.values.{stat}: invalid concrete value")
     allowed_upgrade = {"name", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats", "combos"}
     effect_stats: set[str] = set()
     for section, expected_slots in (("mods", {"regular_mod", "exilus_mod", "stance_mod"}), ("arcanes", {"regular_arcane"})):

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import random
 
+from ..domain.damage import BASE_ELEMENT_TYPES
 from ..domain.loadouts import Loadout
 from ..domain.perks import Perk
 from ..domain.upgrades import Arcane, Mod
@@ -74,6 +75,25 @@ class Search:
         arcane_seed_limit = min(len(pools["arcanes"]), max(4, round(48 * search_scale ** 0.5)))
         arcanes = tuple(base.arcanes) if base.arcanes else (None, *pools["arcanes"][:arcane_seed_limit])
         seen: set[tuple] = set()
+        for generator in (*pools["mods"], *pools["arcanes"]):
+            dependencies = self._extra_attack_status_dependencies(generator)
+            if not dependencies: continue
+            allowed_mods = tuple(mod for mod in pools["mods"] if not ((set(mod.stats) & BASE_ELEMENT_TYPES) - dependencies) and not self._zeroes_base_damage(mod))
+            seed_base = base
+            arcanes_value = list(base.arcanes)
+            if isinstance(generator, Mod):
+                if generator.name in {mod.name for mod in base.mods}: continue
+                seed_base = self._loadout(mods=[*base.mods, generator], arcanes=base.arcanes, evolutions=base.evolutions, progenitor=base.progenitor)
+                if not self._legal(seed_base): continue
+            else:
+                if base.arcanes: continue
+                arcanes_value = [generator]
+            mods = self._profile_mods(seed_base, allowed_mods, {"damage_bonus", "base_damage", "crit_chance", "crit_damage", "status_chance", "status_damage", *dependencies})
+            candidate = self._loadout(mods=mods, arcanes=arcanes_value, evolutions=base.evolutions, progenitor=base.progenitor)
+            key = self._loadout_key(candidate)
+            if key not in seen and self._legal(candidate):
+                seen.add(key)
+                yield candidate
         for profile in profiles:
             mods = self._profile_mods(base, pools["mods"], profile)
             profile_perk_limit = min(len(perk_sets), max(2, round(8 * search_scale ** 0.35)))
@@ -124,6 +144,20 @@ class Search:
             selected.add(mod.name)
             counts[mod.slot] = counts.get(mod.slot, 0) + 1
         return mods
+
+    @staticmethod
+    def _extra_attack_status_dependencies(upgrade: Mod | Arcane) -> set[str]:
+        dependencies: set[str] = set()
+        for effect in upgrade.stats.get("extra_attack", ()):
+            if effect.automatic.get("on") != "status_proc": continue
+            conditions = effect.automatic.get("when", ())
+            values = conditions if isinstance(conditions, list) else (conditions,)
+            dependencies.update(str(value).removesuffix("_status_proc") for value in values if str(value).endswith("_status_proc"))
+        return dependencies & BASE_ELEMENT_TYPES
+
+    @staticmethod
+    def _zeroes_base_damage(mod: Mod) -> bool:
+        return any(isinstance(effect.value, (int, float)) and not isinstance(effect.value, bool) and effect.value <= -1 and not effect.automatic for stat in {"damage_bonus", "base_damage", "multiplicative_base_damage"} for effect in mod.stats.get(stat, ()))
 
     def _profile_priority(self, upgrade: Mod | Arcane, profile: set[str]) -> tuple[float, float, int, str]:
         matched = len(set(upgrade.stats) & profile)

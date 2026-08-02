@@ -41,13 +41,16 @@ class MechanicsTests(unittest.TestCase):
 
     def test_melee_combo_status_duplicate_and_doughty(self):
         weapon = arsenal.melee.get("Bo Prime")
-        result = selected(Calculator(weapon, loadout=loadout("Condition Overload", "Blood Rush", "Weeping Wounds", "Melee Duplicate", "Melee Doughty")).resolve(state={"combo": 12}))
+        calculation = Calculator(weapon, loadout=loadout("Condition Overload", "Blood Rush", "Weeping Wounds", "Melee Duplicate", "Melee Doughty")).resolve(state={"combo": 12})
+        result = selected(calculation)
         self.assertAlmostEqual(result.effective.damage.total, 457.6)
         self.assertAlmostEqual(result.effective.crit_chance, 1.4886961152000002)
         self.assertAlmostEqual(result.effective.status_chance, 1.856)
         self.assertAlmostEqual(result.effective.crit_damage, 4.5)
-        self.assertAlmostEqual(result.average.direct_dph, 4569.768282551748)
-        self.assertAlmostEqual(result.average.total_dps, 4935.349745155888)
+        self.assertAlmostEqual(result.average.direct_dph, 2841.8956981043207)
+        self.assertIn("melee_duplicate", calculation.attacks)
+        self.assertAlmostEqual(calculation.attacks["melee_duplicate"].average.direct_dph, 1727.8725844474266)
+        self.assertAlmostEqual(calculation.aggregate.average.total_dps, 4935.349745155888)
 
     def test_enervate_reset_expectation_and_encumber_random_proc(self):
         enervate = selected(Calculator(arsenal.secondary.get("Laetum"), loadout=loadout("Secondary Enervate")).resolve())

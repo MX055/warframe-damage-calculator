@@ -7,6 +7,7 @@ from typing import Protocol
 from ..damage import Dist
 from ..enemies import Enemy
 from ..loadouts import Loadout
+from ..state import State
 from ..status import StatusModel
 from ..upgrades import ResolvedEffect
 from ..weapons import Weapon
@@ -62,4 +63,4 @@ class CalculationResult:
     weapon: Weapon
     target: Enemy | None
     loadout: Loadout
-    state: dict[str, object]
+    state: State

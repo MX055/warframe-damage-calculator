@@ -5,7 +5,7 @@ An analytic Python damage calculator for Warframe weapons.
 ## Basic use
 
 ```python
-from warframe_damage_calculator import Calculator, Loadout, arsenal
+from warframe_damage_calculator import Calculator, Loadout, State, arsenal
 
 weapon = arsenal.primary.get("Phenmor")
 target = arsenal.enemy.get("Heavy Gunner").set(level=200, steel_path=True)
@@ -29,7 +29,7 @@ print(result.aggregate.average.total_dps)
 `Weapon` and `Enemy` are definitions. `Loadout` owns selected mods, arcanes, and global evolution perks. `Calculator` owns one weapon-target-loadout combination, while attack selection, body-part selection, and temporary state belong to each calculation:
 
 ```python
-result = calculator.resolve(attack="heavy_attack", body_part="head", state={"combo": 12})
+result = calculator.resolve(attack="heavy_attack", body_part="head", state=State(combo=12))
 ```
 
 ## Custom definitions
@@ -37,7 +37,7 @@ result = calculator.resolve(attack="heavy_attack", body_part="head", state={"com
 Definition types are available directly from the package root, so custom content does not depend on internal module paths:
 
 ```python
-from warframe_damage_calculator import Attack, AttackStats, Calculator, Compatibility, Dist, Effect, Loadout, Mod, Primary, UpgradeStats
+from warframe_damage_calculator import Attack, AttackStats, Calculator, Compatibility, Dist, Effect, Loadout, Mod, Primary, Source, UpgradeStats
 
 weapon = Primary(
     name="Custom Primary",
@@ -51,15 +51,13 @@ mod = Mod(
     stats=UpgradeStats(
         damage_bonus=0.2,
         extra_attack=Effect({
+            "parent": {"names": ["shot"]},
             "attack": {
+                "inherit": "$parent",
                 "name": "aftershock",
-                "trigger": "$attack",
-                "delivery": "$attack",
-                "form": "$attack",
-                "category": "$attack",
                 "aoe": True,
                 "stats": {
-                    "damage": {"heat": {"source": "$attack.damage.total", "multiplier": 0.1}},
+                    "damage": {"heat": {"source": "$parent.stats.damage.total", "multiplier": 0.1}},
                     "falloff": {"end_range": 2},
                 },
             }
@@ -69,7 +67,7 @@ mod = Mod(
 result = Calculator(weapon, loadout=Loadout(mods=[mod])).resolve()
 ```
 
-`extra_attack` is a regular upgrade effect containing an attack template. A `$attack` value copies the corresponding parent-attack field; a source expression can read another parent value such as total base damage. Generated attacks therefore remain part of the upgrade definition without requiring a specialized public class or duplicating them across compatible weapons. The same root API exposes `Arcane`, `Perk`, `PerkValues`, `Effect`, `PLACEHOLDER`, all concrete weapon categories, and the enemy definition types. Calculation-result models and optimizer implementation details remain in their dedicated modules.
+`extra_attack` is a regular upgrade effect with a required `parent` selector and an attack template. `inherit: "$parent"` initializes the child from the matched parent, while explicit fields override inherited values. Source expressions always use complete paths such as `$parent.stats.damage.total`. Generated attacks therefore remain part of the upgrade definition without duplicating them across compatible weapons. The same root API exposes `Arcane`, `Perk`, `PerkValues`, `Effect`, `Source`, all concrete weapon categories, and the enemy definition types. Calculation-result models and optimizer implementation details remain in their dedicated modules.
 
 ## Global perks
 
@@ -79,7 +77,7 @@ Perks are loaded independently of weapons:
 perk = arsenal.perk.get("Devouring Attrition")
 ```
 
-A global `Perk` owns the complete effect template: affected stats, modes, families, conditions, automatic behavior, and placeholder positions. A weapon owns a `PerkValues` entry containing only the concrete values for those positions.
+A global `Perk` owns the complete effect template: affected stats, modes, families, conditions, automatic behavior, and `$values` source expressions. A weapon owns a `PerkValues` entry containing the concrete values referenced by those expressions. Custom definitions use `Source("$values.stat_name[0]")` for the same representation.
 
 ```text
 global Perk template + weapon PerkValues -> ResolvedPerk -> effect pipeline
@@ -159,7 +157,7 @@ On Python 3.14, the default metric is evaluated across up to four isolated inter
 optimized = Optimizer(calculator).resolve(attack="rocket_impact", body_part="body")
 ```
 
-Use `workers=1` for sequential execution or set an explicit positive worker count to match the available CPU and memory. Custom callable metrics remain sequential because arbitrary callables and full result objects cannot safely be transferred between isolated interpreters.
+The optional `state` argument has the same meaning and validation as `Calculator.resolve()` and is applied to every candidate, for example `state=State(combo=12, stance_combo="heavy")` for an appropriate melee weapon. Plain mappings remain accepted. Use `workers=1` for sequential execution or set an explicit positive worker count to match the available CPU and memory. Custom callable metrics remain sequential because arbitrary callables and full result objects cannot safely be transferred between isolated interpreters.
 
 ## Contributions
 

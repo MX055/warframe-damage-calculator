@@ -54,7 +54,7 @@ def evaluate(effect: ResolvedEffect, *, context: CalculationContext, attack: Att
             multiplier *= max(float(stats.crit_chance) - 1, 0)
     event = _value(behavior, "on")
     if event == "critical_hit" and effect.stat not in STATUS_PROC_STATS | {"crit_tier"}: multiplier *= min(max(float(stats.crit_chance), 0), 1)
-    elif event == "near_yellow_critical_hit" and effect.stat != "duplicated_hit": multiplier *= max(1 - abs(float(stats.crit_chance) - 1), 0)
+    elif event == "near_yellow_critical_hit": multiplier *= max(1 - abs(float(stats.crit_chance) - 1), 0)
     elif event == "non_critical_hit" and effect.family != "non_critical_hit": multiplier *= max(1 - float(stats.crit_chance), 0)
     elif event == "any_status_proc" and effect.stat not in STATUS_PROC_STATS | {"random_proc"}: multiplier *= status.any_proc_probability_per_attack()
     elif event == "impact_status_proc" and effect.stat not in STATUS_PROC_STATS: multiplier *= status.per_attack_probability("impact")

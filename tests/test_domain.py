@@ -1,7 +1,7 @@
 import unittest
 import pickle
 
-from warframe_damage_calculator import Loadout, PLACEHOLDER, arsenal
+from warframe_damage_calculator import Loadout, Source, arsenal
 from warframe_damage_calculator.domain.effects import Effect
 from warframe_damage_calculator.domain.perks import Perk
 from warframe_damage_calculator.domain.upgrades import Compatibility, Mod, UpgradeStats
@@ -17,6 +17,13 @@ class DomainTests(unittest.TestCase):
         self.assertAlmostEqual(upgrade.set(rank=5).resolve_manual()[0].value, 0.2)
         with self.assertRaisesRegex(TypeError, "must be numeric"): Effect("invalid", mode="multiplicative")
         with self.assertRaisesRegex(ValueError, "damage_bonus does not support"): UpgradeStats(damage_bonus=Effect(2, mode="multiplicative"))
+
+    def test_source_expressions_round_trip_through_effect_records(self):
+        source = Source("$values.damage_bonus[0]", multiplier=0.5)
+        effect = Effect(source, mode="flat")
+        restored = Effect.from_record(effect.to_record())
+        self.assertEqual(restored.value, source)
+        self.assertEqual(restored.mode, "flat")
 
     def test_loadout_rejects_combined_upgrades_argument(self):
         with self.assertRaises(TypeError): Loadout(upgrades=[])
@@ -48,7 +55,7 @@ class DomainTests(unittest.TestCase):
         weapon = pickle.loads(pickle.dumps(arsenal.primary.get("Vectis Prime")))
         self.assertEqual((weapon.name, list(weapon.attacks), list(weapon.perk_choices)), ("Vectis Prime", ["normal_attack", "incarnon_form", "incarnon_form_aoe", "incarnon_form_embed"], [1, 2, 3, 4]))
         perk = next(iter(weapon.perks))
-        self.assertTrue(any(effect.value is PLACEHOLDER for effects in perk.stats.values() for effect in effects))
+        self.assertTrue(all(isinstance(effect.value, Source) for effects in perk.stats.values() for effect in effects))
 
 
 if __name__ == "__main__": unittest.main()

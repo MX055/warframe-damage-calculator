@@ -1,4 +1,4 @@
-from warframe_damage_calculator import Calculator, Loadout, Optimizer, arsenal
+from warframe_damage_calculator import Calculator, Loadout, Optimizer, State, arsenal
 
 
 def test_optimizer_preserves_locked_loadout_and_uses_budget():
@@ -72,12 +72,52 @@ def test_parallel_optimizer_preserves_search_results():
     assert parallel.loadout.progenitor == sequential.loadout.progenitor
 
 
+def test_optimizer_propagates_state_to_parallel_scoring_and_results():
+    calculator = Calculator(arsenal.melee.get("Xoris"))
+    sequential = Optimizer(calculator).resolve(attack="heavy_slam_attack", state=State(combo=1), evaluations=16, workers=1, progress=None)
+    parallel = Optimizer(calculator).resolve(attack="heavy_slam_attack", state={"combo": 1}, evaluations=16, workers=2, progress=None)
+    default_state = Optimizer(calculator).resolve(attack="heavy_slam_attack", evaluations=16, workers=1, progress=None)
+    assert parallel.score == sequential.score
+    assert parallel.result.state == {"combo": 1}
+    assert parallel.score != default_state.score
+
+
+def test_optimizer_rejects_unknown_state_fields():
+    optimizer = Optimizer(Calculator(arsenal.primary.get("Braton Prime")))
+    try:
+        optimizer.resolve(state={"unknown": True}, evaluations=1, progress=None)
+    except TypeError as error:
+        assert str(error) == "unknown calculation state fields: unknown"
+    else:
+        raise AssertionError("Expected TypeError")
+
+
 def test_compact_optimizer_score_matches_full_result():
     from warframe_damage_calculator.optimizer import default_metric
 
     optimizer = Optimizer(Calculator(arsenal.primary.get("Kuva Ogris"), loadout=Loadout(mods=[arsenal.mod.get("Nightwatch Napalm")])))
     result = optimizer.resolve(attack="rocket_impact", evaluations=8, workers=1, progress=None)
     assert result.score == default_metric(result.result)
+
+
+def test_default_metric_includes_generated_attack_spatial_mass():
+    from warframe_damage_calculator.optimizer import default_metric
+
+    weapon = arsenal.melee.get("Xoris")
+    electricity = arsenal.mod.get("Shocking Touch")
+    without = Calculator(weapon, loadout=Loadout(mods=[electricity])).resolve()
+    with_influence = Calculator(weapon, loadout=Loadout(mods=[electricity], arcanes=[arsenal.arcane.get("Melee Influence")])).resolve()
+    assert "melee_influence" in with_influence.attacks
+    assert default_metric(with_influence) > default_metric(without)
+
+
+def test_optimizer_seeds_extra_attack_status_dependencies():
+    optimizer = Optimizer(Calculator(arsenal.melee.get("Xoris")))
+    pools = optimizer._candidate_pools(riven=False)
+    influence_seeds = [seed for seed in optimizer._seed_loadouts(optimizer.calculator.loadout, pools) if any(arcane.name == "Melee Influence" for arcane in seed.arcanes)]
+    assert influence_seeds
+    assert any("electricity" in mod.stats for seed in influence_seeds for mod in seed.mods)
+    assert any(not ({stat for mod in seed.mods for stat in mod.stats} & {"heat", "cold", "toxin"}) for seed in influence_seeds)
 
 
 def test_optimizer_validates_workers():
