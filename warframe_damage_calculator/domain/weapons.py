@@ -10,6 +10,10 @@ from .implementation import ImplementationStatus
 from .perks import Perk, PerkValues, ResolvedPerk, resolve_perk
 
 
+def _restore_weapon(cls: type[Weapon], values: dict[str, Any]) -> Weapon:
+    return cls(**values)
+
+
 @dataclass(slots=True)
 class AttackStats:
     ammo_cost: float = 1
@@ -148,6 +152,10 @@ class Weapon:
 
     def copy(self) -> Self:
         return type(self)(name=self.name, subtype=self.subtype, attacks=deepcopy(list(self.attacks.values())), disposition=self.disposition, reload_time=self.reload_time, magazine_size=self.magazine_size, recharge_delay=self.recharge_delay, recharge_rate=self.recharge_rate, incarnon_charges=self.incarnon_charges, incarnon_recharge_count=self.incarnon_recharge_count, perks=list(self.perks.values()), traits=self.traits, combo=self.combo, calculation_defaults=self.calculation_defaults, implementation_status=self.implementation_status)
+
+    def __reduce__(self):
+        values = {"name": self.name, "subtype": self.subtype, "attacks": list(self.attacks.values()), "disposition": self.disposition, "reload_time": self.reload_time, "magazine_size": self.magazine_size, "recharge_delay": self.recharge_delay, "recharge_rate": self.recharge_rate, "incarnon_charges": self.incarnon_charges, "incarnon_recharge_count": self.incarnon_recharge_count, "perks": list(self.perks.values()), "traits": self.traits, "combo": self.combo, "calculation_defaults": dict(self.calculation_defaults), "implementation_status": self.implementation_status}
+        return _restore_weapon, (type(self), values)
 
 
 class Primary(Weapon):

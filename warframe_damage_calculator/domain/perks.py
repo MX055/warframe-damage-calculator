@@ -48,6 +48,9 @@ class PerkValues:
     def __post_init__(self) -> None:
         object.__setattr__(self, "values", MappingProxyType({stat: tuple(values) for stat, values in self.values.items()}))
 
+    def __reduce__(self):
+        return type(self), (self.perk, self.tier, self.choice, dict(self.values), self.description)
+
     @classmethod
     def from_record(cls, perk: Perk, tier: int, choice: int, record: Mapping[str, Any]) -> PerkValues:
         if record.get("perk") != perk.name: raise ValueError(f"perk record does not reference {perk.name}")

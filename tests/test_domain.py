@@ -1,6 +1,7 @@
 import unittest
+import pickle
 
-from warframe_damage_calculator import Loadout
+from warframe_damage_calculator import Loadout, PLACEHOLDER, arsenal
 from warframe_damage_calculator.domain.effects import Effect
 from warframe_damage_calculator.domain.perks import Perk
 from warframe_damage_calculator.domain.upgrades import Compatibility, Mod, UpgradeStats
@@ -42,6 +43,12 @@ class DomainTests(unittest.TestCase):
         loadout = Loadout(mods=[Mod(name="Damage")]) + perk
         self.assertEqual(len(loadout), 2)
         self.assertEqual((loadout - perk).evolutions, [])
+
+    def test_weapon_definitions_are_picklable_for_parallel_optimization(self):
+        weapon = pickle.loads(pickle.dumps(arsenal.primary.get("Vectis Prime")))
+        self.assertEqual((weapon.name, list(weapon.attacks), list(weapon.perk_choices)), ("Vectis Prime", ["normal_attack", "incarnon_form", "incarnon_form_aoe", "incarnon_form_embed"], [1, 2, 3, 4]))
+        perk = next(iter(weapon.perks))
+        self.assertTrue(any(effect.value is PLACEHOLDER for effects in perk.stats.values() for effect in effects))
 
 
 if __name__ == "__main__": unittest.main()

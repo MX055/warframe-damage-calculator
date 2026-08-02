@@ -50,6 +50,37 @@ def test_optimizer_can_disable_progress(capsys):
     assert capsys.readouterr().out == ""
 
 
+def test_parallel_optimizer_preserves_search_results():
+    calculator = Calculator(arsenal.primary.get("Kuva Ogris"))
+    sequential = Optimizer(calculator).resolve(evaluations=64, workers=1, progress=None)
+    parallel = Optimizer(calculator).resolve(evaluations=64, workers=2, progress=None)
+    assert parallel.evaluations == sequential.evaluations
+    assert parallel.score == sequential.score
+    assert [mod.name for mod in parallel.loadout.mods] == [mod.name for mod in sequential.loadout.mods]
+    assert [arcane.name for arcane in parallel.loadout.arcanes] == [arcane.name for arcane in sequential.loadout.arcanes]
+    assert parallel.loadout.evolutions == sequential.loadout.evolutions
+    assert parallel.loadout.progenitor == sequential.loadout.progenitor
+
+
+def test_compact_optimizer_score_matches_full_result():
+    from warframe_damage_calculator.optimizer import default_metric
+
+    optimizer = Optimizer(Calculator(arsenal.primary.get("Kuva Ogris"), loadout=Loadout(mods=[arsenal.mod.get("Nightwatch Napalm")])))
+    result = optimizer.resolve(attack="rocket_impact", evaluations=8, workers=1, progress=None)
+    assert result.score == default_metric(result.result)
+
+
+def test_optimizer_validates_workers():
+    optimizer = Optimizer(Calculator(arsenal.primary.get("Braton Prime")))
+    for workers in (0, -1, True, 1.5):
+        try:
+            optimizer.resolve(evaluations=1, workers=workers, progress=None)
+        except ValueError as error:
+            assert str(error) == "workers must be a positive integer or None"
+        else:
+            raise AssertionError("Expected ValueError")
+
+
 def test_optimizer_reports_structured_progress():
     from warframe_damage_calculator.optimizer.progress import OptimizationProgress
 

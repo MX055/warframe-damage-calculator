@@ -3,8 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from ...domain.damage import Dist
+from ...domain.status import StatusModel
+from ...domain.upgrades import ResolvedEffect
 from ...domain.weapons import Attack
-from .stats import BaseAttackStats, EffectiveAttackStats, ModdedAttackStats, ResolvedStats
+from .stats import BaseAttackStats, EffectiveAttackStats, ModdedAttackStats, ResolvedStats, Stats
 
 
 @dataclass(slots=True)
@@ -61,6 +63,20 @@ class SpatialMetrics:
     flat_dps: float | None = None
     flat_dotps: float | None = None
     total_dps: float | None = None
+
+
+@dataclass(slots=True)
+class PreliminaryAttack:
+    provisional: Stats
+    status_model: StatusModel
+    damage: Dist
+    forced_procs: Dist
+    status_chance: float
+    multishot: float
+    attack_rate: float
+    status_duration: float
+    special_effects: tuple[ResolvedEffect, ...]
+    crit_chance: float
 
 
 @dataclass(slots=True)

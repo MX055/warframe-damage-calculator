@@ -9,7 +9,23 @@ calculator = Calculator(weapon, target, loadout)
 optimizer = Optimizer(calculator)
 
 optimized = optimizer.resolve(body_part="body")
-formatter = Formatter(optimized.result)
+print(optimized.summary["elapsed"], optimized.result.aggregate.average.total_dps)
 
-print(formatter.summary())
-print(formatter.contributions())
+
+weapon = arsenal.primary.get("Vectis Prime")
+target = arsenal.enemy.get("Exo Gokstad Officer").set(level=235, steel_path=True)
+loadout = Loadout()
+
+calculator = Calculator(weapon, target, loadout)
+optimizer = Optimizer(calculator)
+
+optimized = optimizer.resolve(body_part="head")
+print(optimized.summary["elapsed"])
+
+
+
+
+
+
+
+

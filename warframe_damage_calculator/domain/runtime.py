@@ -32,3 +32,6 @@ class Runtime:
 
     def as_dict(self) -> dict[str, Any]:
         return deepcopy(self._values)
+
+    def __reduce__(self):
+        return type(self), (self._allowed, self._values)

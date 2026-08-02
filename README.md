@@ -135,6 +135,16 @@ head = calculator.resolve(attack="incarnon_form", body_part="head")
 
 Each result records its selected attack and body part. Loadout optimizers can reuse the lower-level calculation engine without changing this public API.
 
+## Optimization
+
+On Python 3.14, the default metric is evaluated across up to four isolated interpreter workers. Candidate order, evaluation count, scores, and tie-breaking remain deterministic; parallelism changes only how independent scores in each search batch are calculated.
+
+```python
+optimized = Optimizer(calculator).resolve(attack="rocket_impact", body_part="body")
+```
+
+Use `workers=1` for sequential execution or set an explicit positive worker count to match the available CPU and memory. Custom callable metrics remain sequential because arbitrary callables and full result objects cannot safely be transferred between isolated interpreters.
+
 ## Contributions
 
 Contribution analysis is part of the calculator workflow and includes selected upgrades, evolution perks, and progenitor bonuses:

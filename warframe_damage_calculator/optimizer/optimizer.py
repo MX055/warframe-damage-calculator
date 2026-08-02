@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import math
+import os
 import time
-from collections.abc import Callable, Collection
+from concurrent import futures
+from collections.abc import Callable, Collection, Iterator
 from dataclasses import dataclass
-from itertools import combinations
+from itertools import combinations, repeat
 
 from ..domain.enemies import Enemy
 from ..domain.loadouts import Loadout
@@ -22,6 +24,30 @@ from .search import Search
 
 
 Metric = Callable[[CalculationResult], float]
+
+def _score_worker_batch(evaluator: Calculator, target: Enemy | None, attack: str, prepared_names: tuple[str, ...] | None, indexed_loadouts: tuple[tuple[int, Loadout], ...]) -> tuple[tuple[int, float], ...]:
+    import math
+    from warframe_damage_calculator.engine.perks import resolve_perks
+
+    def balanced_damage(direct: float, dot: float) -> float:
+        direct = max(float(direct), 0.0)
+        dot = max(float(dot), 0.0)
+        total = direct + dot
+        if total == 0: return 0.0
+        return total * (1 + 0.1 * 2 * math.sqrt(direct * dot) / total)
+
+    scores = []
+    for index, loadout in indexed_loadouts:
+        state = dict(evaluator.weapon.calculation_defaults)
+        resolved_perks = resolve_perks(evaluator.weapon, loadout.evolutions, state)
+        upgrade_effects = tuple(effect for upgrade in loadout.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual())
+        evaluator.loadout = loadout
+        direct_dph, dot_dph, direct_dps, dot_dps, damage_mass = evaluator._calculate_metric_components(attack, target, {}, resolved_perks=resolved_perks, prepared_names=prepared_names, prepared_upgrade_effects=upgrade_effects)
+        dps = balanced_damage(direct_dps, dot_dps)
+        dph = balanced_damage(direct_dph, dot_dph)
+        score = (dps * dph * damage_mass) ** (1 / 3) if dps > 0 and dph > 0 and damage_mass > 0 else 0.0
+        scores.append((index, score))
+    return tuple(scores)
 
 
 def _balanced_damage(direct: float, dot: float, balance_bonus: float = 0.1) -> float:
@@ -69,11 +95,12 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         self._resolved_effect_cache: dict[int, tuple[ResolvedEffect, ...]] = {}
         self._upgrade_effects_cache: dict[tuple[int, ...], tuple[ResolvedEffect, ...]] = {}
 
-    def resolve(self, metric: Metric = default_metric, *, attack: str | None = None, body_part: str | None = None, evaluations: int = 20_000, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] | None = DEFAULT_UPGRADE_BLACKLIST, riven_stat_blacklist: Collection[str] | None = DEFAULT_RIVEN_STAT_BLACKLIST, progress: ProgressCallback | None = terminal_progress) -> Optimization:
+    def resolve(self, metric: Metric = default_metric, *, attack: str | None = None, body_part: str | None = None, evaluations: int = 20_000, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] | None = DEFAULT_UPGRADE_BLACKLIST, riven_stat_blacklist: Collection[str] | None = DEFAULT_RIVEN_STAT_BLACKLIST, workers: int | None = None, progress: ProgressCallback | None = terminal_progress) -> Optimization:
         if not callable(metric): raise TypeError("metric must be callable")
         if evaluations < 1: raise ValueError("evaluations must be at least 1")
         if not isinstance(riven, bool): raise TypeError("riven must be a bool")
         if not isinstance(evolutions, bool): raise TypeError("evolutions must be a bool")
+        if workers is not None and (not isinstance(workers, int) or isinstance(workers, bool) or workers < 1): raise ValueError("workers must be a positive integer or None")
         if upgrade_blacklist is not None and (isinstance(upgrade_blacklist, (str, bytes)) or not isinstance(upgrade_blacklist, Collection)): raise TypeError("upgrade_blacklist must be a collection of upgrade names or None")
         if riven_stat_blacklist is not None and (isinstance(riven_stat_blacklist, (str, bytes)) or not isinstance(riven_stat_blacklist, Collection)): raise TypeError("riven_stat_blacklist must be a collection of stat names or None")
         if progress is not None and not callable(progress): raise TypeError("progress must be callable or None")
@@ -90,9 +117,12 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         selected_bodypart, target = evaluator._select_bodypart(body_part)
         context = CalculationContext(weapon=evaluator.weapon, target=target if target is not None else Enemy(), attack=selected_attack, loadout=evaluator.loadout, resolved_perks=(), state=dict(evaluator.weapon.calculation_defaults))
         prepared_names = None if any(candidate.generated_by is not None for candidate in evaluator.weapon.attacks.values()) else tuple(WeaponCalculator(context).collect_attack_tree())
+        use_compact_metric = metric is default_metric
+        worker_count = min(os.cpu_count() or 1, 4) if workers is None else workers
+        executor_type = getattr(futures, "InterpreterPoolExecutor", None)
+        executor = executor_type(max_workers=worker_count) if use_compact_metric and worker_count > 1 and executor_type is not None else None
         cache: dict[tuple, Candidate] = {}
         perk_cache: dict[tuple[int, ...], tuple[ResolvedPerk, ...]] = {}
-        use_compact_metric = metric is default_metric
         evaluations_used = 0
         resolutions = 0
         attempts = 0
@@ -133,6 +163,64 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             reporter.record_evaluation(evaluations_used, resolutions=resolutions, attempts=attempts, cache_hits=cache_hits, best_score=max(best.score if "best" in locals() else float("-inf"), score))
             return candidate, True
 
+        def evaluate_many(loadouts: list[Loadout], limit: int) -> list[tuple[Candidate, bool]]:
+            nonlocal evaluations_used, resolutions, attempts, cache_hits
+            if executor is None:
+                results: list[tuple[Candidate, bool]] = []
+                for loadout in loadouts:
+                    if evaluations_used >= limit: break
+                    results.append(evaluate(loadout))
+                return results
+            results: list[tuple[Candidate, bool] | None] = [None] * len(loadouts)
+            pending: list[tuple[int, tuple, Loadout]] = []
+            pending_keys: dict[tuple, int] = {}
+            duplicates: list[tuple[int, int]] = []
+            for index, loadout in enumerate(loadouts):
+                if evaluations_used + len(pending) >= min(limit, resolution_budget):
+                    results = results[:index]
+                    break
+                attempts += 1
+                key = self._loadout_key(loadout)
+                cached = cache.get(key)
+                if cached is not None:
+                    cache_hits += 1
+                    results[index] = cached, False
+                elif key in pending_keys:
+                    cache_hits += 1
+                    duplicates.append((index, pending_keys[key]))
+                else:
+                    pending_keys[key] = index
+                    pending.append((index, key, loadout))
+            worker_batches = []
+            for offset in range(0, len(pending), 16):
+                stop = min(offset + 16, len(pending))
+                worker_batches.append(tuple((pending_index, pending[pending_index][2]) for pending_index in range(offset, stop)))
+            try:
+                scored_batches = executor.map(_score_worker_batch, repeat(evaluator), repeat(target), repeat(selected_attack), repeat(prepared_names), worker_batches)
+                scores_by_index = {index: score for scored_batch in scored_batches for index, score in scored_batch}
+                batch_best = best.score
+                for pending_index, (index, key, loadout) in enumerate(pending):
+                    score = scores_by_index[pending_index]
+                    if not math.isfinite(score): raise ValueError("metric must return a finite number")
+                    candidate = Candidate(loadout, score)
+                    cache[key] = candidate
+                    evaluations_used += 1
+                    resolutions += 1
+                    results[index] = candidate, True
+                    batch_best = max(batch_best, score)
+                    reporter.record_evaluation(evaluations_used, resolutions=resolutions, attempts=attempts, cache_hits=cache_hits, best_score=batch_best)
+            except BaseException:
+                executor.shutdown(cancel_futures=True)
+                raise
+            for index, source_index in duplicates: results[index] = results[source_index][0], False
+            return [result for result in results if result is not None]
+
+        def evaluated(loadouts: list[Loadout], limit: int) -> Iterator[tuple[Candidate, bool]]:
+            batch_size = max(worker_count * 64, 1)
+            for offset in range(0, len(loadouts), batch_size):
+                if evaluations_used >= min(limit, resolution_budget): break
+                yield from evaluate_many(loadouts[offset:offset + batch_size], limit)
+
         best = Candidate(base, float("-inf"))
         base_candidate, _ = evaluate(base)
         best = base_candidate
@@ -151,10 +239,9 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         reporter.set_estimated_total(max(estimated_total, 1))
         reporter.begin_phase("Seeds", min(len(seed_loadouts), resolution_budget - evaluations_used), completed=evaluations_used)
         seed_candidates: list[Candidate] = []
-        for index, loadout in enumerate(seed_loadouts):
+        for index, (loadout, evaluation) in enumerate(zip(seed_loadouts, evaluated(seed_loadouts, resolution_budget), strict=False)):
             reporter.update_plan(min(len(seed_loadouts) - index, resolution_budget - evaluations_used))
-            if evaluations_used >= resolution_budget: break
-            candidate, consumed = evaluate(loadout)
+            candidate, consumed = evaluation
             if not consumed: continue
             if candidate.score > best.score: best = candidate
             seed_candidates.append(candidate)
@@ -184,9 +271,8 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
                 reporter.update_plan(min(len(neighbors), local_deadline - evaluations_used))
                 improved = current
                 pass_candidates: list[Candidate] = []
-                for loadout in neighbors:
-                    if evaluations_used >= local_deadline: break
-                    candidate, consumed = evaluate(loadout)
+                for loadout, evaluation in zip(neighbors, evaluated(neighbors, local_deadline), strict=False):
+                    candidate, consumed = evaluation
                     if not consumed: continue
                     if candidate.score > improved.score: improved = candidate
                     pass_candidates.append(candidate)
@@ -207,9 +293,8 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             candidates: list[Candidate] = []
             neighbors = list(self._exact_neighbors(source.loadout, pools))
             reporter.update_plan(min(len(neighbors), beam_deadline - evaluations_used))
-            for loadout in neighbors:
-                if evaluations_used >= beam_deadline: break
-                candidate, consumed = evaluate(loadout)
+            for loadout, evaluation in zip(neighbors, evaluated(neighbors, beam_deadline), strict=False):
+                candidate, consumed = evaluation
                 if not consumed: continue
                 candidates.append(candidate)
                 if candidate.score > best.score: best = candidate
@@ -234,12 +319,8 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
                 for _ in range(2):
                     selected = {mod.name for mod in current.mods}
                     improved = current_candidate
-                    for mod in pools["mods"]:
-                        if evaluations_used >= rebuild_deadline: break
-                        if mod.slot != "regular_mod" or mod.name in selected: continue
-                        candidate_loadout = self._loadout(mods=[*current.mods, mod], arcanes=current.arcanes, evolutions=current.evolutions, progenitor=current.progenitor)
-                        if not self._legal(candidate_loadout): continue
-                        candidate, _ = evaluate(candidate_loadout)
+                    additions = [candidate_loadout for mod in pools["mods"] if mod.slot == "regular_mod" and mod.name not in selected and self._legal(candidate_loadout := self._loadout(mods=[*current.mods, mod], arcanes=current.arcanes, evolutions=current.evolutions, progenitor=current.progenitor))]
+                    for candidate, _ in evaluated(additions, rebuild_deadline):
                         if candidate.score > improved.score: improved = candidate
                     if improved.score <= current_candidate.score: break
                     current_candidate = improved
@@ -255,13 +336,13 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             improved = origin
             neighbors = list(self._exact_neighbors(origin.loadout, pools))
             reporter.update_plan(min(len(neighbors), resolution_budget - evaluations_used))
-            for loadout in neighbors:
-                if evaluations_used >= resolution_budget: break
-                candidate, _ = evaluate(loadout)
+            for loadout, evaluation in zip(neighbors, evaluated(neighbors, resolution_budget), strict=False):
+                candidate, _ = evaluation
                 if candidate.score > improved.score: improved = candidate
             if improved.score <= origin.score: break
             best = improved
 
+        if executor is not None: executor.shutdown()
         elapsed = time.perf_counter() - started
         reporter.close(completed=evaluations_used, resolutions=resolutions, attempts=attempts, cache_hits=cache_hits, best_score=best.score)
         summary = {
@@ -276,6 +357,7 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             "attempts": attempts,
             "cache_hits": cache_hits,
             "cache_hit_rate": cache_hits / attempts if attempts else 0.0,
+            "workers": worker_count if executor_type is not None and use_compact_metric else 1,
         }
         result = best.result
         if result is None:

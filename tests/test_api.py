@@ -7,9 +7,9 @@ from warframe_damage_calculator.formatting.results import format_damage_result, 
 class ApiTests(unittest.TestCase):
     def test_root_api_exposes_definition_types_and_hides_internal_classes(self):
         import warframe_damage_calculator as package
-        expected = ("Arcane", "Archgun", "Attack", "AttackStats", "BodyPart", "Calculator", "Compatibility", "Dist", "Effect", "Enemy", "EnemyStats", "Formatter", "ImplementationStatus", "Loadout", "Melee", "Mod", "Optimizer", "PLACEHOLDER", "Perk", "PerkValues", "Primary", "Progenitor", "Secondary", "Upgrade", "UpgradeStats", "arsenal")
+        expected = ("Arcane", "Archgun", "Attack", "AttackStats", "BodyPart", "Calculator", "Compatibility", "Dist", "Effect", "Enemy", "EnemyStats", "Formatter", "ImplementationStatus", "Loadout", "Melee", "Mod", "OptimizationProgress", "Optimizer", "PLACEHOLDER", "Perk", "PerkValues", "Primary", "Progenitor", "Secondary", "Upgrade", "UpgradeStats", "arsenal", "default_metric")
         self.assertEqual(package.__all__, expected)
-        for name in ("AggregateResult", "CalculationResult", "ImplementationWarning", "Metric", "OptimizationProgress", "Placeholder", "ProgressCallback", "ResolvedPerk", "format_result"): self.assertFalse(hasattr(package, name))
+        for name in ("AggregateResult", "CalculationResult", "ImplementationWarning", "Metric", "Placeholder", "ProgressCallback", "ResolvedPerk", "format_result"): self.assertFalse(hasattr(package, name))
         self.assertIs(package.Formatter, Formatter)
 
     def test_root_api_can_define_custom_mods_arcanes_perks_and_weapons(self):

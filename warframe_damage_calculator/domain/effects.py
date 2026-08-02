@@ -6,6 +6,10 @@ from dataclasses import dataclass, field
 from typing import Literal, Self
 
 
+def _restore_placeholder() -> Placeholder:
+    return PLACEHOLDER
+
+
 class Placeholder:
     __slots__ = ()
 
@@ -17,6 +21,9 @@ class Placeholder:
 
     def __deepcopy__(self, memo: dict) -> Placeholder:
         return self
+
+    def __reduce__(self):
+        return _restore_placeholder, ()
 
 
 PLACEHOLDER = Placeholder()
