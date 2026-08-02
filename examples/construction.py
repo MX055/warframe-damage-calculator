@@ -11,27 +11,17 @@ mod = Mod(
             name="Generated Attack",
             aoe=True,
             inheritance=Inheritance(
-                include=[
-                    "trigger",
-                    "delivery",
-                    "form",
-                    "category",
-                    "stats"
-                ],
-                exclude=[
-                    "stats.forced_procs"
-                ],
+                include=["trigger", "delivery", "form", "category", "stats"],
+                exclude=["stats.forced_procs"],
             ),
             stats=AttackStats(
-                falloff=Falloff(5, 10, 0.5)
+                falloff=Falloff(start_range=5, end_range=10, final_multiplier=0.5)
             ),
             links=Links(
                 parents=RelatedAttacks(names=["Normal Attack"]),
                 children=RelatedAttacks(names=["Generated Attack"]),
             ),
-            automatic=Automatic(
-                on="impact_status_proc"
-            )
+            automatic=Automatic(on="impact_status_proc")
         )
     )
 )
