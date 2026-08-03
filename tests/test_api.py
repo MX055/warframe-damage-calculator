@@ -112,6 +112,16 @@ class ApiTests(unittest.TestCase):
         self.assertEqual((repr(weapon.attacks), repr(weapon.perks), dict(weapon.calculation_defaults)), before)
 
 
+    def test_maiming_strike_only_scales_slide_crit_chance(self):
+        weapon = arsenal.melee.get("Skana")
+        maiming = arsenal.mod.get("Maiming Strike").copy()
+        baseline = Calculator(weapon).resolve(attack="slide_attack")
+        modded = Calculator(weapon, loadout=Loadout(mods=[maiming])).resolve(attack="slide_attack")
+        normal = Calculator(weapon, loadout=Loadout(mods=[maiming])).resolve(attack="normal_attack")
+        base_normal = Calculator(weapon).resolve(attack="normal_attack")
+        self.assertAlmostEqual(modded.attacks["slide_attack"].modded.crit_chance, baseline.attacks["slide_attack"].modded.crit_chance * 2.5)
+        self.assertAlmostEqual(normal.attacks["normal_attack"].modded.crit_chance, base_normal.attacks["normal_attack"].modded.crit_chance)
+
     def test_implementation_status_and_progenitor_loadout(self):
         self.assertEqual(arsenal.primary.get("Kuva Chakkhurr").implementation_status, ImplementationStatus("partial", ("multiplicative_weakpoint_crit_chance",)))
         loadout = Loadout(progenitor=Progenitor("heat", 0.6))

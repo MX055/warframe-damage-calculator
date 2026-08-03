@@ -106402,9 +106402,9 @@
                     ]
                 },
                 "stats": {
-                    "crit_chance": [
+                    "slide_crit_chance": [
                         {
-                            "value": 3,
+                            "value": 1.5,
                             "automatic": {}
                         }
                     ]

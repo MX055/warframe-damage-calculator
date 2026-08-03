@@ -6,7 +6,7 @@ from ..domain.upgrades import Mod, UpgradeStats
 
 RIVEN_ROLLS = ((2, 0, 0.99, 0.0), (2, 1, 1.2375, -0.495), (3, 0, 0.75, 0.0), (3, 1, 0.9375, -0.75))
 RIVEN_NON_NEGATIVE = frozenset({"cold", "electricity", "heat", "punch_through", "toxin"})
-RIVEN_RELEVANT = frozenset({"damage_bonus", "cold", "crit_chance", "crit_damage", "corpus_damage", "electricity", "fire_rate", "grineer_damage", "heat", "impact", "infested_damage", "magazine_capacity", "multishot", "punch_through", "puncture", "reload_speed", "slash", "status_chance", "status_duration", "toxin"})
+RIVEN_RELEVANT = frozenset({"damage_bonus", "cold", "crit_chance", "crit_damage", "corpus_damage", "electricity", "fire_rate", "grineer_damage", "heat", "impact", "infested_damage", "magazine_capacity", "multishot", "punch_through", "puncture", "reload_speed", "slash", "slide_crit_chance", "status_chance", "status_duration", "toxin"})
 FACTION_DAMAGE_STATS = frozenset({"corpus_damage", "corrupted_damage", "grineer_damage", "infested_damage"})
 DEFAULT_RIVEN_STAT_BLACKLIST = FACTION_DAMAGE_STATS
 
@@ -48,7 +48,7 @@ class RivenCandidates:
     def _riven_stat_priority(self, stat: str, value: float) -> tuple[float, float, str]:
         mod = Mod(name=f"Riven {stat}", stats=UpgradeStats(**{stat: value * max(float(self.calculator.weapon.disposition), 0.0)}))
         priority, _, _ = self._upgrade_priority(mod)
-        preferred = 1.0 if stat in {"damage_bonus", "multishot", "crit_chance", "crit_damage", "status_chance", "fire_rate", "reload_speed", "cold", "electricity", "heat", "toxin"} else 0.0
+        preferred = 1.0 if stat in {"damage_bonus", "multishot", "crit_chance", "crit_damage", "slide_crit_chance", "status_chance", "fire_rate", "reload_speed", "cold", "electricity", "heat", "toxin"} else 0.0
         return preferred, priority, stat
 
     def _riven_negative_priority(self, stat: str, value: float) -> tuple[int, float, str]:

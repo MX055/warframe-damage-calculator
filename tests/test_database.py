@@ -73,6 +73,8 @@ class DatabaseTests(unittest.TestCase):
         self.assertIsInstance(boltor.description, str)
         self.assertEqual(serration.description, "+165% Damage")
         self.assertEqual(arsenal.mod.get("Malignant Force").description, "+60% Toxin\n+60% Status Chance")
+        self.assertEqual(list(arsenal.mod.get("Maiming Strike").stats), ["slide_crit_chance"])
+        self.assertEqual(arsenal.mod.get("Maiming Strike").stats["slide_crit_chance"][0].value.value, 1.5)
         influence = arsenal.arcane.get("Melee Influence")
         self.assertEqual(influence.description, "On Melee\nElectricity Status:\n20% chance for elemental Melee Status Effects to apply to enemies within 20m for 18s. Cannot refresh while active.")
 

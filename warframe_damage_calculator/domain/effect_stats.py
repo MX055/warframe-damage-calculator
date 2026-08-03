@@ -11,7 +11,7 @@ HANDLED_EFFECT_STATS = frozenset({
     "impact_to_puncture_conversion", "infested_damage", "initial_combo", "magazine_capacity", "magnetic", "multishot", "multishot_lock",
     "murmur_damage", "noise_level", "orokin_damage", "overguard_damage_multiplier", "projectile_speed", "puncture", "puncture_proc",
     "punch_through", "radiation", "random_proc", "range", "recoil", "reload_speed", "sentient_damage", "sharpshot_bonus", "slam_damage",
-    "slam_radius", "slash", "slash_proc", "status_chance", "status_damage", "status_duration", "status_from_crit", "status_vulnerability",
+    "slam_radius", "slash", "slash_proc", "slide_crit_chance", "status_chance", "status_damage", "status_duration", "status_from_crit", "status_vulnerability",
     "toxin", "unique_enemy_vulnerability_multiplier", "viral", "weakpoint_crit_chance", "weakpoint_damage", "zoom",
 })
 NON_CALCULATION_EFFECT_STATS = frozenset({
