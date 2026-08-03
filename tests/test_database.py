@@ -72,8 +72,9 @@ class DatabaseTests(unittest.TestCase):
         self.assertIsInstance(merciless.description, str)
         self.assertIsInstance(boltor.description, str)
         self.assertEqual(serration.description, "+165% Damage")
+        self.assertEqual(arsenal.mod.get("Malignant Force").description, "+60% Toxin\n+60% Status Chance")
         influence = arsenal.arcane.get("Melee Influence")
-        self.assertEqual(influence.description, "On Melee Electricity Status: 20% chance for elemental Melee Status Effects to apply to enemies within 20m for 18s. Cannot refresh while active.")
+        self.assertEqual(influence.description, "On Melee\nElectricity Status:\n20% chance for elemental Melee Status Effects to apply to enemies within 20m for 18s. Cannot refresh while active.")
 
     def test_perk_descriptions_resolve_from_weapon_evolutions(self):
         perk = arsenal.perk.get("Elemental Balance")
