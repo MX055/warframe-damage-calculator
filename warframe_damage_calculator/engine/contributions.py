@@ -33,7 +33,7 @@ def _components(loadout: Loadout) -> list[ContributionComponent]:
 
 def _coalition_loadout(components: list[ContributionComponent], mask: int) -> Loadout:
     selected = [component for index, component in enumerate(components) if mask & (1 << index)]
-    return Loadout(mods=[component for component in selected if isinstance(component, Mod)], arcanes=[component for component in selected if isinstance(component, Arcane)], evolutions=[component for component in selected if isinstance(component, Perk)], progenitor=next((component for component in selected if isinstance(component, Progenitor)), None))
+    return Loadout._from_parts(mods=[component for component in selected if isinstance(component, Mod)], arcanes=[component for component in selected if isinstance(component, Arcane)], evolutions=[component for component in selected if isinstance(component, Perk)], progenitor=next((component for component in selected if isinstance(component, Progenitor)), None))
 
 
 def _normalize_contributions(values: dict[str, float]) -> dict[str, float]:
@@ -42,7 +42,9 @@ def _normalize_contributions(values: dict[str, float]) -> dict[str, float]:
 
 
 def _sample_count(component_count: int) -> int:
-    return 0 if component_count == 0 else _PERMUTATION_SAMPLES
+    if component_count == 0: return 0
+    if component_count <= 8: return _PERMUTATION_SAMPLES
+    return max(32, _PERMUTATION_SAMPLES - 4 * (component_count - 8))
 
 
 def _suppression_masks(component_count: int, coalition_value: Callable[[int], float], full_mask: int) -> list[int]:

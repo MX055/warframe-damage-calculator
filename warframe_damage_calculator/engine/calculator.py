@@ -34,11 +34,53 @@ class Calculator:
 
     def contributions(self, *, attack: str | None = None, metric: str | Callable[[CalculationResult], float] = "total_dps", body_part: str | None = None, state: State | None = None, seed: int = 0) -> ContributionResult:
         selected_attack = attack or self.weapon.default_attack
-        selected_bodypart, _ = self._select_bodypart(body_part)
+        selected_bodypart, target = self._select_bodypart(body_part)
         calculation_state = State() if state is None else State._from_values(state)
+        evaluator = Calculator(self.weapon, self.target)
+        metric_name = None if callable(metric) else metric.rsplit(".", 1)[-1]
+        compact_metrics = {
+            "total_dps": lambda direct_dph, dot_dph, direct_dps, dot_dps, damage_mass: direct_dps + dot_dps,
+            "direct_dps": lambda direct_dph, dot_dph, direct_dps, dot_dps, damage_mass: direct_dps,
+            "dot_dps": lambda direct_dph, dot_dph, direct_dps, dot_dps, damage_mass: dot_dps,
+            "total_dph": lambda direct_dph, dot_dph, direct_dps, dot_dps, damage_mass: direct_dph + dot_dph,
+            "direct_dph": lambda direct_dph, dot_dph, direct_dps, dot_dps, damage_mass: direct_dph,
+            "dot_dph": lambda direct_dph, dot_dph, direct_dps, dot_dps, damage_mass: dot_dph,
+        }
+        compact_metric = compact_metrics.get(metric_name or "")
+        effect_cache: dict[int, tuple[ResolvedEffect, ...]] = {}
+        for upgrade in self.loadout.ranked_upgrades:
+            if upgrade.implemented: effect_cache[id(upgrade)] = upgrade.resolve_manual()
+        perk_cache: dict[tuple[int, ...], tuple[ResolvedPerk, ...]] = {}
+        has_generated = any(GENERATED_ATTACK_STAT in upgrade.stats for upgrade in self.loadout.ranked_upgrades)
+        prepared_names = None
+        if not has_generated:
+            baseline_perks = resolve_perks(self.weapon, self.loadout.evolutions)
+            perk_cache[tuple(id(perk) for perk in self.loadout.evolutions)] = baseline_perks
+            evaluator.loadout = self.loadout
+            prepared_names = tuple(WeaponCalculator(CalculationContext(weapon=self.weapon, target=target if target is not None else Enemy(), attack=selected_attack, loadout=self.loadout, resolved_perks=baseline_perks, state=self._merge_state(calculation_state))).collect_attack_tree())
+
+        def compiled_upgrade_effects(loadout: Loadout) -> tuple[ResolvedEffect, ...]:
+            effects: list[ResolvedEffect] = []
+            for upgrade in loadout.ranked_upgrades:
+                if not upgrade.implemented: continue
+                cached = effect_cache.get(id(upgrade))
+                if cached is None:
+                    cached = upgrade.resolve_manual()
+                    effect_cache[id(upgrade)] = cached
+                effects.extend(cached)
+            return tuple(effects)
 
         def evaluate(loadout: Loadout) -> float:
-            result = Calculator(self.weapon, self.target, loadout).resolve(attack=selected_attack, body_part=selected_bodypart, state=calculation_state)
+            evaluator.loadout = loadout
+            perk_key = tuple(id(perk) for perk in loadout.evolutions)
+            resolved_perks = perk_cache.get(perk_key)
+            if resolved_perks is None:
+                resolved_perks = resolve_perks(self.weapon, loadout.evolutions)
+                perk_cache[perk_key] = resolved_perks
+            upgrade_effects = compiled_upgrade_effects(loadout)
+            if compact_metric is not None:
+                return float(compact_metric(*evaluator._calculate_metric_components(selected_attack, target, calculation_state, resolved_perks=resolved_perks, prepared_names=prepared_names, prepared_upgrade_effects=upgrade_effects)))
+            result = evaluator._calculate(selected_attack, selected_bodypart, target, calculation_state, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=upgrade_effects)
             if callable(metric): return float(metric(result))
             value: object = result
             for name in metric.split(".") if "." in metric else ("aggregate", "average", metric): value = getattr(value, name)

@@ -215,6 +215,9 @@ class RelatedAttacks:
         if self.aoe is not None: record["aoe"] = self.aoe
         return record
 
+    def copy(self) -> RelatedAttacks:
+        return RelatedAttacks(names=None if self.names is None else list(self.names), triggers=None if self.triggers is None else list(self.triggers), deliveries=None if self.deliveries is None else list(self.deliveries), forms=None if self.forms is None else list(self.forms), categories=None if self.categories is None else list(self.categories), aoe=self.aoe)
+
     def matches(self, key: str, attack: Attack) -> bool:
         if self.names is not None:
             expected = {item.casefold() for item in self.names}
@@ -263,6 +266,9 @@ class Links:
         if self.parents is not None: record["parents"] = self.parents.to_record()
         if self.children is not None: record["children"] = self.children.to_record()
         return record
+
+    def copy(self) -> Links:
+        return Links(None if self.parents is None else self.parents.copy(), None if self.children is None else self.children.copy())
 
     def has_named(self, key: str, *, side: str) -> bool:
         selector = self.parents if side == "parents" else self.children
@@ -330,6 +336,9 @@ class Attack:
             stats = deepcopy(dict(self.stats))
         if stats: record["stats"] = stats
         return record
+
+    def copy(self) -> Attack:
+        return Attack(name=self.name, trigger=self.trigger, delivery=self.delivery, form=self.form, category=self.category, aoe=self.aoe, inheritance=self.inheritance, links=self.links.copy(), automatic=self.automatic, stats=self.stats if isinstance(self.stats, AttackStats) else deepcopy(dict(self.stats)))
 
     def to_generated_value(self) -> dict[str, Any]:
         """Serialize generated-attack payload without automatic (stored on Effect.automatic)."""

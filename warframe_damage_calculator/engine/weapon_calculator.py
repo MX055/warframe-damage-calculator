@@ -222,7 +222,7 @@ class WeaponCalculator:
         definitions: dict[str, Attack] = {}
         for key, attack in self.context.weapon.attacks.items():
             if key in stale_keys: continue
-            clone = deepcopy(attack)
+            clone = attack.copy()
             self._strip_stale_generated_children(clone, stale_folded)
             definitions[key] = clone
         return definitions
@@ -240,7 +240,7 @@ class WeaponCalculator:
             if parent_name not in self.definitions: raise ValueError(f"unknown generated attack parent {parent_name!r}")
             name = self._generated_key(effect)
             if name in self.definitions: raise ValueError(f"duplicate generated attack {name!r}")
-            parent = deepcopy(self.definitions[parent_name])
+            parent = self.definitions[parent_name].copy()
             generated = self._generated_attack(effect, parent, parent_name)
             parent.links.add_child_key(name)
             self.definitions[parent_name] = parent
