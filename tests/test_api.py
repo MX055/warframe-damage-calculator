@@ -230,6 +230,33 @@ class ApiTests(unittest.TestCase):
         self.assertNotIn("Charge Time", melee_summary)
         self.assertIn("×", melee_summary.split("Expected Procs", 1)[1].splitlines()[0])
 
+    def test_formatter_status_table_lists_damage_types_per_attack(self):
+        result = Calculator(arsenal.primary.get("Corinth Prime")).resolve(attack="air_burst_projectile")
+        table = Formatter(result).status()
+        lines = table.splitlines()
+        self.assertTrue(table.startswith("┌"))
+        self.assertTrue(table.endswith("┘"))
+        self.assertEqual(len({len(line) for line in lines}), 1)
+        self.assertIn("Damage Type", table)
+        self.assertIn("Air Burst Projectile", table)
+        self.assertIn("Air Burst Explosion", table)
+        self.assertIn("Damage", table)
+        self.assertIn("Weight", table)
+        self.assertIn("Forced Procs", table)
+        self.assertIn("Proc Rate", table)
+        self.assertIn("Impact", table)
+        self.assertIn("Blast", table)
+        projectile = result.attacks["air_burst_projectile"]
+        explosion = result.attacks["air_burst_explosion"]
+        self.assertIn(f"{projectile.effective.damage['impact']:,.2f}", table)
+        self.assertIn(f"{explosion.effective.damage['blast']:,.2f}", table)
+        self.assertIn("100.00%", table)
+        braton = Formatter(Calculator(arsenal.primary.get("Braton")).resolve()).status()
+        self.assertIn("Impact", braton)
+        self.assertIn("Puncture", braton)
+        self.assertIn("Slash", braton)
+        self.assertEqual(len({len(line) for line in braton.splitlines()}), 1)
+
     def test_contributions_include_upgrades_and_evolutions(self):
         weapon = arsenal.primary.get("Phenmor")
         loadout = Loadout(mods=[arsenal.mod.get("Serration")], evolutions=[arsenal.perk.get("Devouring Attrition")])

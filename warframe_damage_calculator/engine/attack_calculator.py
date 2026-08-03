@@ -22,6 +22,16 @@ from .targets import damage_multiplier, damage_total
 
 
 DEFERRED_STATS = frozenset({"random_proc", "crit_reset_charges", "crit_tier"})
+
+
+def _modded_pool_effect(effect: ResolvedEffect) -> bool:
+    if effect.stat in DEFERRED_STATS: return False
+    if effect.stat == "crit_damage" and automatic_value(effect, "with") == "puncture_status_chance": return False
+    if automatic_value(effect, "on") in POSITION_EVENTS: return False
+    if effect.family == "multishot_ammo": return True
+    return not effect.automatic
+
+
 RANGE_EFFECT_STATS = frozenset({"range", "explosion_radius", "slam_radius"})
 
 
@@ -261,8 +271,8 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
         range_upgrades = aggregate(effect for effect in upgrades_resolved if effect.mode != "multiplicative" or effect.stat not in RANGE_EFFECT_STATS or effect.source == generated_by)
         range_total = _combined(range_upgrades, evolutions)
     if not compact:
-        modded_upgrades = aggregate(effect for effect in upgrades_resolved if not effect.automatic and automatic_value(effect, "on") not in POSITION_EVENTS and effect.stat not in DEFERRED_STATS and not (effect.stat == "crit_damage" and automatic_value(effect, "with") == "puncture_status_chance"))
-        modded_evolutions = aggregate(effect for effect in evolution_resolved if not effect.automatic and automatic_value(effect, "on") not in POSITION_EVENTS and effect.stat not in DEFERRED_STATS)
+        modded_upgrades = aggregate(effect for effect in upgrades_resolved if _modded_pool_effect(effect))
+        modded_evolutions = aggregate(effect for effect in evolution_resolved if _modded_pool_effect(effect))
         modded_total = _combined(modded_upgrades, modded_evolutions)
         modded_base_damage, modded_original, _ = _base_damage(context, attack, modded_evolutions)
         modded_damage = _damage(attack, modded_base_damage, modded_original, modded_upgrades, modded_evolutions, progenitor)

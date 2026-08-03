@@ -47,18 +47,18 @@ def _ranged_rate(context: CalculationContext, attack: Attack, total: ResolvedSta
     ammo_cost = max(float(attack.stats.ammo_cost), 0)
     consumes_multishot = _multishot_ammo_bonus(total) != 0
     if consumes_multishot: ammo_cost *= max(multishot, 1)
+    ammo_cost *= 1 - efficiency
     reload_time = float(context.weapon.reload_time) / max(1 + float(total.proportional.get("reload_speed", 0)), 0.01)
     if context.weapon.recharge_rate is not None and not incarnon:
         recharge_rate = max(float(context.weapon.recharge_rate), 0)
         reload_time += float("inf") if recharge_rate == 0 else magazine / recharge_rate
-    if ammo_cost <= 0 or efficiency >= 1:
+    if ammo_cost <= 0:
         sustained = fire_rate
     else:
         shots = magazine / ammo_cost
         bursts = shots / burst_count
-        ammo_spent = 1 - efficiency
         cycle = bursts * (charge_time + (burst_count - 1) * burst_delay)
-        cycle += (bursts - ammo_spent) / fire_rate + ammo_spent * reload_time
+        cycle += (bursts - 1) / fire_rate + reload_time
         sustained = float("inf") if cycle <= 0 else shots / cycle
     return fire_rate, sustained, Stats(ammo_cost=ammo_cost, ammo_efficiency=efficiency, magazine_capacity=magazine, reload_time=reload_time, burst_count=burst_count, burst_delay=burst_delay, charge_time=charge_time)
 

@@ -186,9 +186,67 @@ class Formatter:
     def pool(self, pool: DamageResult) -> str:
         return format_damage_result(pool)
 
-    def status(self, attack: str | None = None) -> str:
-        status = self.result.aggregate.status if attack is None else self.result.attacks[attack].status
-        return format_status(status)
+    def status(self) -> str:
+        return "\n".join(self.status_table()[1])
+
+    def status_table(self) -> tuple[str, list[str]]:
+        attacks = [(key, self.result.weapon.attacks[key].name, calculated) for key, calculated in self.result.attacks.items()]
+        type_order = ("impact", "puncture", "slash", "heat", "cold", "electricity", "toxin", "blast", "radiation", "gas", "magnetic", "viral", "corrosive", "void")
+        present: set[str] = set()
+        for _, _, calculated in attacks:
+            damage = calculated.effective.damage
+            forced = calculated.effective.forced_procs
+            model = calculated.effective.status_model
+            present.update(kind for kind in type_order if damage.get(kind, 0) or forced.get(kind, 0) or model.proc_count_per_attack(kind))
+            present.update(kind for kind in (*damage, *forced) if kind not in type_order)
+        damage_types = [kind for kind in type_order if kind in present] + sorted(present - set(type_order))
+        subheaders = ("Damage", "Weight", "Forced Procs", "Proc Rate")
+        left_header = "Damage Type"
+        left_width = max(self._visible_length(left_header), *(self._visible_length(kind.replace("_", " ").title()) for kind in damage_types), 1)
+        groups: list[tuple[str, list[int], list[tuple[str, str, str, str]]]] = []
+        for _, attack_name, calculated in attacks:
+            damage = calculated.effective.damage
+            forced = calculated.effective.forced_procs
+            model = calculated.effective.status_model
+            total = float(damage.total)
+            rows: list[tuple[str, str, str, str]] = []
+            widths = [self._visible_length(header) for header in subheaders]
+            for kind in damage_types:
+                amount = float(damage.get(kind, 0))
+                forced_amount = float(forced.get(kind, 0))
+                procs = float(model.proc_count_per_attack(kind))
+                weight = 0.0 if total <= 0 or amount <= 0 else amount / total
+                cells = (
+                    self._number(amount) if amount else "—",
+                    self._percent(weight) if weight else "—",
+                    self._number(forced_amount) if forced_amount else "—",
+                    self._number(procs) if procs else "—",
+                )
+                rows.append(cells)
+                for index, cell in enumerate(cells): widths[index] = max(widths[index], self._visible_length(cell))
+            span = sum(widths) + 3 * (len(widths) - 1)
+            overflow = self._visible_length(attack_name) - span
+            if overflow > 0: widths[-1] += overflow
+            groups.append((attack_name, widths, rows))
+        if not groups:
+            groups.append(("—", [self._visible_length(header) for header in subheaders], []))
+            damage_types = []
+        top = "┌" + "─" * (left_width + 2) + "".join("┬" + "─" * (sum(widths) + 3 * (len(widths) - 1) + 2) for _, widths, _ in groups) + "┐"
+        attack_row = "│ " + self._pad("", left_width) + " │ " + " │ ".join(self._pad(name, sum(widths) + 3 * (len(widths) - 1)) for name, widths, _ in groups) + " │"
+        split = "│ " + self._pad(left_header, left_width) + " ├" + "┼".join("┬".join("─" * (width + 2) for width in widths) for _, widths, _ in groups) + "┤"
+        subheader_row = "│ " + self._pad("", left_width) + " │ " + " │ ".join(" │ ".join(self._pad(header, widths[index]) for index, header in enumerate(subheaders)) for _, widths, _ in groups) + " │"
+        header_rule = "├" + "─" * (left_width + 2) + "".join("┼" + "┼".join("─" * (width + 2) for width in widths) for _, widths, _ in groups) + "┤"
+        bottom = "└" + "─" * (left_width + 2) + "".join("┴" + "┴".join("─" * (width + 2) for width in widths) for _, widths, _ in groups) + "┘"
+        lines = [top, attack_row, split, subheader_row, header_rule]
+        for row_index, kind in enumerate(damage_types):
+            label = kind.replace("_", " ").title()
+            cells = " │ ".join(" │ ".join(self._pad(group[2][row_index][index], group[1][index]) for index in range(4)) for group in groups)
+            lines.append("│ " + self._pad(label, left_width) + " │ " + cells + " │")
+        lines.append(bottom)
+        weapon_name = getattr(self.result.weapon, "name", "Weapon")
+        target_name = "" if self.result.target is None else f" vs {self.result.target.name} {self.result.target.bodyparts[self.result.selected_bodypart].name}"
+        title = f"Status: {weapon_name}{target_name}"
+        return title, lines
 
     def spatial(self, attack: str) -> str:
         spatial = self.result.attacks[attack].spatial

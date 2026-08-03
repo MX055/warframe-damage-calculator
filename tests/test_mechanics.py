@@ -73,8 +73,23 @@ class MechanicsTests(unittest.TestCase):
         result = selected(calculation)
         self.assertAlmostEqual(result.effective.multishot, 1.2)
         self.assertAlmostEqual(result.effective.ammo_cost, 1.2)
+        self.assertAlmostEqual(result.modded.multishot, 1.2)
+        self.assertAlmostEqual(result.modded.ammo_cost, 1.2)
         self.assertAlmostEqual(result.effective.damage.total, 70.4)
         self.assertAlmostEqual(calculation.aggregate.average.total_dps, 1539.4027259436357)
+
+    def test_ammo_efficiency_combines_into_modded_ammo_cost(self):
+        from warframe_damage_calculator.domain.upgrades import Mod, UpgradeStats
+
+        weapon = arsenal.primary.get("Braton")
+        without = selected(Calculator(weapon).resolve())
+        efficiency = Mod(name="Ammo Efficiency", max_rank=0, stats=UpgradeStats(ammo_efficiency=0.5))
+        with_efficiency = selected(Calculator(weapon, loadout=Loadout(mods=[efficiency])).resolve())
+        self.assertAlmostEqual(without.modded.ammo_cost, 1.0)
+        self.assertAlmostEqual(with_efficiency.modded.ammo_efficiency, 0.5)
+        self.assertAlmostEqual(with_efficiency.modded.ammo_cost, 0.5)
+        self.assertAlmostEqual(with_efficiency.effective.ammo_cost, 0.5)
+        self.assertGreater(with_efficiency.average.attack_rate, without.average.attack_rate)
 
     def test_target_pool_armor_status_and_bodypart_model(self):
         target = arsenal.enemy.get("Heavy Gunner").set(level=100, steel_path=True)
