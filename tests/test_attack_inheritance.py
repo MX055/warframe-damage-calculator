@@ -174,6 +174,22 @@ class AttackInheritanceTests(unittest.TestCase):
         table = Formatter(result).contributions()
         self.assertIn("Recursive Echo", table)
 
+    def test_contributions_on_result_weapon_do_not_keep_stale_generated_attacks(self):
+        weapon = arsenal.melee.get("Bo Prime")
+        mods = [arsenal.mod.get(name) for name in ("Blood Rush", "True Steel", "Organ Shatter", "Condition Overload", "Weeping Wounds", "Primed Pressure Point", "Vicious Frost", "North Wind")]
+        loadout = Loadout(mods=mods, arcanes=[arsenal.arcane.get("Melee Duplicate")])
+        without = Loadout(mods=mods)
+        enemy = arsenal.enemy.get("Heavy Gunner")
+        state = {"combo_multiplier": 4}
+        fresh_with = Calculator(weapon, enemy, loadout).resolve(state=state).aggregate.average.total_dps
+        fresh_without = Calculator(weapon, enemy, without).resolve(state=state).aggregate.average.total_dps
+        self.assertGreater(fresh_with, fresh_without)
+        result = Calculator(weapon, enemy, loadout).resolve(state=state)
+        self.assertIn("melee_duplicate", result.weapon.attacks)
+        contributions = Calculator(result.weapon, result.target, result.loadout).contributions(attack=result.selected_attack, state=result.state)
+        self.assertLess(contributions.removal["Melee Duplicate"], 0)
+        self.assertGreater(contributions.contribution["Melee Duplicate"], 0)
+
     def test_typed_construction_api(self):
         attack = Attack(
             name="Aftershock",

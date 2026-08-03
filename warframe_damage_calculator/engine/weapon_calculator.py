@@ -216,8 +216,12 @@ class WeaponCalculator:
 
     def _base_definitions(self) -> dict[str, Attack]:
         # Result weapons retain previously derived generated attacks. Strip keys that
-        # current upgrades will rebuild so recalculation does not duplicate them.
-        stale_keys = {self._generated_key(effect) for effect in self.attack_effects}
+        # current upgrades will rebuild, and also strip leftover generated attacks whose
+        # source upgrade is no longer equipped so leave-one-out contributions cannot keep
+        # scoring a stale full-damage copy.
+        rebuild_keys = {self._generated_key(effect) for effect in self.attack_effects}
+        stale_keys = set(rebuild_keys)
+        stale_keys.update(key for key in self.context.weapon.attacks if key not in self.context.weapon.intrinsic_attacks and key not in rebuild_keys)
         stale_folded = {key.casefold() for key in stale_keys}
         definitions: dict[str, Attack] = {}
         for key, attack in self.context.weapon.attacks.items():

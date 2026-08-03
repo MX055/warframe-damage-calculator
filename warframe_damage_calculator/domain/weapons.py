@@ -19,7 +19,7 @@ def _restore_weapon(cls: type[Weapon], values: dict[str, Any]) -> Weapon:
 class Weapon:
     type: ClassVar[str] = "weapon"
 
-    def __init__(self, *, name: str, description: str = "", subtype: str | None = None, attacks: list[Attack] | Mapping[str, Attack], disposition: float = 0, reload_time: float = 0, magazine_size: float = 1, recharge_delay: float | None = None, recharge_rate: float | None = None, incarnon_charges: float | None = None, incarnon_recharge_count: float | None = None, perks: list[PerkValues] | None = None, traits: set[str] | None = None, combo: Mapping[str, Any] | None = None, calculation_defaults: Mapping[str, Any] | None = None, implementation_status: ImplementationStatus | None = None) -> None:
+    def __init__(self, *, name: str, description: str = "", subtype: str | None = None, attacks: list[Attack] | Mapping[str, Attack], disposition: float = 0, reload_time: float = 0, magazine_size: float = 1, recharge_delay: float | None = None, recharge_rate: float | None = None, incarnon_charges: float | None = None, incarnon_recharge_count: float | None = None, perks: list[PerkValues] | None = None, traits: set[str] | None = None, combo: Mapping[str, Any] | None = None, calculation_defaults: Mapping[str, Any] | None = None, implementation_status: ImplementationStatus | None = None, intrinsic_attacks: frozenset[str] | None = None) -> None:
         if not attacks: raise ValueError("weapon requires at least one attack")
         self.name = name
         self.description = description
@@ -29,6 +29,7 @@ class Weapon:
         for attack in loaded.values():
             attack.links.children = resolve_child_keys(attack.links.children, loaded)
         self.attacks = loaded
+        self.intrinsic_attacks = frozenset(loaded) if intrinsic_attacks is None else frozenset(intrinsic_attacks)
         self.disposition = float(disposition)
         self.reload_time = float(reload_time)
         self.magazine_size = float(magazine_size)
@@ -74,10 +75,10 @@ class Weapon:
         return cls(name=str(record["name"]), description=str(record.get("description", "")), subtype=record.get("subtype"), attacks=attacks, disposition=float(record.get("disposition", 0)), reload_time=float(record.get("reload_time", 0)), magazine_size=float(record.get("magazine_size", 1)), recharge_delay=record.get("recharge_delay"), recharge_rate=record.get("recharge_rate"), incarnon_charges=record.get("incarnon_charges"), incarnon_recharge_count=record.get("incarnon_recharge_count"), perks=perk_values, traits=traits, combo=record.get("combo"), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")))
 
     def copy(self) -> Self:
-        return type(self)(name=self.name, description=self.description, subtype=self.subtype, attacks=deepcopy(self.attacks), disposition=self.disposition, reload_time=self.reload_time, magazine_size=self.magazine_size, recharge_delay=self.recharge_delay, recharge_rate=self.recharge_rate, incarnon_charges=self.incarnon_charges, incarnon_recharge_count=self.incarnon_recharge_count, perks=list(self.perks.values()), traits=self.traits, combo=self.combo, calculation_defaults=self.calculation_defaults, implementation_status=self.implementation_status)
+        return type(self)(name=self.name, description=self.description, subtype=self.subtype, attacks=deepcopy(self.attacks), disposition=self.disposition, reload_time=self.reload_time, magazine_size=self.magazine_size, recharge_delay=self.recharge_delay, recharge_rate=self.recharge_rate, incarnon_charges=self.incarnon_charges, incarnon_recharge_count=self.incarnon_recharge_count, perks=list(self.perks.values()), traits=self.traits, combo=self.combo, calculation_defaults=self.calculation_defaults, implementation_status=self.implementation_status, intrinsic_attacks=self.intrinsic_attacks)
 
     def __reduce__(self):
-        values = {"name": self.name, "description": self.description, "subtype": self.subtype, "attacks": self.attacks, "disposition": self.disposition, "reload_time": self.reload_time, "magazine_size": self.magazine_size, "recharge_delay": self.recharge_delay, "recharge_rate": self.recharge_rate, "incarnon_charges": self.incarnon_charges, "incarnon_recharge_count": self.incarnon_recharge_count, "perks": list(self.perks.values()), "traits": self.traits, "combo": self.combo, "calculation_defaults": dict(self.calculation_defaults), "implementation_status": self.implementation_status}
+        values = {"name": self.name, "description": self.description, "subtype": self.subtype, "attacks": self.attacks, "disposition": self.disposition, "reload_time": self.reload_time, "magazine_size": self.magazine_size, "recharge_delay": self.recharge_delay, "recharge_rate": self.recharge_rate, "incarnon_charges": self.incarnon_charges, "incarnon_recharge_count": self.incarnon_recharge_count, "perks": list(self.perks.values()), "traits": self.traits, "combo": self.combo, "calculation_defaults": dict(self.calculation_defaults), "implementation_status": self.implementation_status, "intrinsic_attacks": self.intrinsic_attacks}
         return _restore_weapon, (type(self), values)
 
 
