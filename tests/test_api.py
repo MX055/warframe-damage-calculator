@@ -247,7 +247,7 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(set(weakpoint_removal), set(removal))
         self.assertEqual(set(weakpoint_contribution), set(removal))
         self.assertAlmostEqual(sum(weakpoint_contribution.values()), 1)
-        self.assertEqual(contributions.samples, 64)
+        self.assertEqual(contributions.samples, 0)
         self.assertLessEqual(contributions.evaluations, 4)
     
         locked_fire_rate = Loadout(mods=[arsenal.mod.get("Semi-Rifle Cannonade"), arsenal.mod.get("Vile Precision")])

@@ -352,7 +352,7 @@ removal = contributions.removal
 contribution = contributions.contribution
 ```
 
-Build contribution uses completed-build-aware permutation attribution: effects suppressed by another equipped component are evaluated with that suppressor retained. A metric name selects the chosen aggregate-average body part. `bodypart` accepts `"normal"`, `"weakpoint"`, or `"resistant"` and defaults to `"normal"`. A dotted path or callable may select another result value.
+Build contribution percentages are leave-one-out removal differences normalized to sum to 1 (a component that does not change the metric gets 0%). A metric name selects the chosen aggregate-average body part. `bodypart` accepts `"normal"`, `"weakpoint"`, or `"resistant"` and defaults to `"normal"`. A dotted path or callable may select another result value.
 
 ## Spatial output
 

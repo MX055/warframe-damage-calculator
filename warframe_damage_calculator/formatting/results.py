@@ -162,7 +162,7 @@ class Formatter:
         metric_name = self._metric_name(metric) if isinstance(metric, str) else "Contribution"
         target_name = "" if self.result.target is None else f" vs {self.result.target.name} {self.result.target.bodyparts[selected_bodypart].name}"
         title = f"{metric_name} Contributions: {self.result.weapon.name} {self.result.weapon.attacks[self.result.selected_attack].name}{target_name}"
-        table = self._table(("Contribution Rank", "Type", "Component", "Build Contribution", "Removal Difference", "Impact"), rows, title=title)
+        table = self._table(("Contribution Rank", "Type", "Component", "Relative Contribution", "Removal Difference", "Impact"), rows, title=title)
         return table
 
     def loadout(self) -> str:
