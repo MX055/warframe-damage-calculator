@@ -69,19 +69,23 @@ result = Calculator(weapon, loadout=Loadout(mods=[mod])).resolve()
 
 ### Per-value rank scaling
 
-Upgrade ranks scale individual numeric values, not complete effect entries. Rank scaling is **on by default**. A plain number scales with rank. Fixed values must opt out:
+Upgrade ranks scale individual numeric values, not complete effect entries.
+
+**Effect `value` fields** scale by default. A plain number is treated as max-rank and scales down with rank. Fixed effect values must opt out:
 
 ```json
 {"value": 0.2, "rank_scale": false}
 ```
 
-Scaled values may also be written explicitly:
+A plain effect value is enough when scaling is wanted (`"value": 0.9`), so an explicit `{"value": 0.9, "rank_scale": true}` wrapper is unnecessary.
+
+**All other scaled numbers** (automatic `chance` / `for` / `stacks`, source `multiplier`, effect `for`, nested generated-attack numbers) do **not** scale by default. A plain number stays fixed. Opt in with an explicit wrapper:
 
 ```json
-{"value": 0.9, "rank_scale": true}
+{"value": 0.3, "rank_scale": true}
 ```
 
-`rank_scale` affects only the numeric value directly wrapped by `{ "value": ..., "rank_scale": ... }`. It is not interpreted recursively and must not wrap mappings, lists, attacks, source expressions, or complete stat entries. When `rank_scale` is omitted from a wrapper, it defaults to `true`. For a source expression, wrap only the numeric parameter that scales:
+`rank_scale` affects only the numeric value directly wrapped by `{ "value": ..., "rank_scale": ... }`. It is not interpreted recursively and must not wrap mappings, lists, attacks, source expressions, or complete stat entries. For a source expression, wrap only the numeric parameter that scales:
 
 ```json
 {
@@ -161,7 +165,7 @@ Melee Duplicate lists every gameplay field it copies explicitly and does not inh
   }
 }
 ```
-Melee Influence is represented through the same generated-attack pipeline as an expected-value abstraction, not as a literal independent random attack. It inherits elemental damage and forced-proc fields plus crit and Condition Overload inputs. Activation chance is fixed (`rank_scale: false`). Duration scales with rank (`for: {"value": 18, "rank_scale": true}` → 3 at rank 0, 18 at rank 5). Range stays a fixed `20` because the in-game 10→20 progression does not match the project's linear rank formula. The `automatic.on` list of elemental status-proc events drives the averaged occurrence rate; Influence does not roll status chance again:
+Melee Influence is represented through the same generated-attack pipeline as an expected-value abstraction, not as a literal independent random attack. It inherits elemental damage and forced-proc fields plus crit and Condition Overload inputs. Activation chance is fixed (`"chance": 0.2`). Duration scales with rank (`"for": {"value": 18, "rank_scale": true}` → 3 at rank 0, 18 at rank 5). Range stays a fixed `20` because the in-game 10→20 progression does not match the project's linear rank formula. The `automatic.on` list of elemental status-proc events drives the averaged occurrence rate; Influence does not roll status chance again:
 
 ```json
 {
@@ -186,7 +190,7 @@ Melee Influence is represented through the same generated-attack pipeline as an 
   "stats": {"falloff": {"start_range": 0, "end_range": 20, "final_multiplier": 1}},
   "automatic": {
     "when": "electricity_status_proc",
-    "chance": {"value": 0.2, "rank_scale": false},
+    "chance": 0.2,
     "on": ["heat_status_proc", "cold_status_proc", "electricity_status_proc", "toxin_status_proc", "blast_status_proc", "radiation_status_proc", "gas_status_proc", "magnetic_status_proc", "viral_status_proc", "corrosive_status_proc"],
     "for": {"value": 18, "rank_scale": true},
     "refresh": false
@@ -213,7 +217,7 @@ Nightwatch Napalm is an independently calculated child. Only the heat damage mul
     "forced_procs": {"heat": 1},
     "falloff": {
       "start_range": 0,
-      "end_range": {"source": "$parent.stats.falloff.end_range", "multiplier": {"value": 0.9, "rank_scale": false}},
+      "end_range": {"source": "$parent.stats.falloff.end_range", "multiplier": 0.9},
       "final_multiplier": 1
     },
     "crit_chance": 0,

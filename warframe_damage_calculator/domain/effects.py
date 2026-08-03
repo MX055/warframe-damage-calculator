@@ -34,9 +34,9 @@ class Source:
         if set(record) - {"source", "multiplier", "default"} or not isinstance(record.get("source"), str): raise ValueError("source expressions only support source, multiplier, and default")
         raw_multiplier = record.get("multiplier", 1)
         if is_scaled_value_record(raw_multiplier):
-            multiplier: Numeric | UpgradeValue = UpgradeValue.from_record(raw_multiplier)
+            multiplier: Numeric | UpgradeValue = UpgradeValue.from_record(raw_multiplier, default_rank_scale=False)
         elif isinstance(raw_multiplier, (int, float)) and not isinstance(raw_multiplier, bool):
-            multiplier = UpgradeValue(raw_multiplier, True) if raw_multiplier != 1 else 1
+            multiplier = raw_multiplier
         else:
             raise TypeError("source multiplier must be numeric or an upgrade value")
         default = record.get("default")
@@ -114,8 +114,8 @@ def _normalize_effect_value(value: EffectValue) -> EffectValue:
 
 def _normalize_channel_item(value: object, field_name: str) -> Scalar | UpgradeValue:
     if isinstance(value, UpgradeValue): return value
-    if is_scaled_value_record(value): return UpgradeValue.from_record(value)
-    if isinstance(value, (int, float)) and not isinstance(value, bool): return UpgradeValue(value, True)
+    if is_scaled_value_record(value): return UpgradeValue.from_record(value, default_rank_scale=False)
+    if isinstance(value, (int, float)) and not isinstance(value, bool): return value
     if isinstance(value, (bool, str)): return _normalize_scalar(value, field_name)
     raise TypeError(f"{field_name} must be a scalar or upgrade value")
 
@@ -252,8 +252,8 @@ class Effect:
         self.when = normalized_when
         self.stacks = None if stacks is None else _normalize_scalar(stacks, "stacks")
         if duration is None: self.duration = None
-        elif isinstance(duration, UpgradeValue) or is_scaled_value_record(duration): self.duration = duration if isinstance(duration, UpgradeValue) else UpgradeValue.from_record(duration)
-        elif isinstance(duration, (int, float)) and not isinstance(duration, bool): self.duration = UpgradeValue(duration, True)
+        elif isinstance(duration, UpgradeValue) or is_scaled_value_record(duration): self.duration = duration if isinstance(duration, UpgradeValue) else UpgradeValue.from_record(duration, default_rank_scale=False)
+        elif isinstance(duration, (int, float)) and not isinstance(duration, bool): self.duration = duration
         else: self.duration = _normalize_scalar(duration, "duration")
         self.requires_rank = None if requires_rank is None else int(requires_rank)
         if automatic is None: self.automatic = {}

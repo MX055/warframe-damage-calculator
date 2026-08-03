@@ -44,8 +44,22 @@ class ScaledValueTests(unittest.TestCase):
         self.assertEqual(source.multiplier, ScaledValue(0.3, True))
         self.assertAlmostEqual(source.resolve_multiplier(0, 5), 0.05)
         self.assertAlmostEqual(source.resolve_multiplier(5, 5), 0.3)
-        fixed = Source.from_record({"source": "$parent.stats.falloff.end_range", "multiplier": {"value": 0.9, "rank_scale": False}})
+        fixed = Source.from_record({"source": "$parent.stats.falloff.end_range", "multiplier": 0.9})
+        self.assertEqual(fixed.multiplier, 0.9)
         self.assertEqual(fixed.resolve_multiplier(0, 5), 0.9)
+
+    def test_non_effect_values_do_not_scale_by_default(self):
+        upgrade = Mod(name="Fixed Auto", max_rank=5, stats=UpgradeStats(damage_bonus=Effect.from_record({"value": 0.9, "automatic": {"chance": 0.2, "for": 10}})))
+        self.assertEqual(upgrade.stats.damage_bonus[0].automatic["chance"], 0.2)
+        self.assertEqual(upgrade.stats.damage_bonus[0].automatic["for"], 10)
+        zero = upgrade.set(rank=0).resolve_manual()[0]
+        maximum = upgrade.set(rank=5).resolve_manual()[0]
+        self.assertEqual(zero.automatic["chance"], 0.2)
+        self.assertEqual(maximum.automatic["chance"], 0.2)
+        self.assertEqual(zero.automatic["for"], 10)
+        self.assertEqual(maximum.automatic["for"], 10)
+        omitted = ScaledValue.from_record({"value": 0.3}, default_rank_scale=False)
+        self.assertEqual(omitted, ScaledValue(0.3, False))
 
     def test_multiplicative_mode_scales_from_identity(self):
         self.assertAlmostEqual(resolve_scalar(ScaledValue(0.2, True), 0, 5, mode="multiplicative"), 1 - 0.8 / 6)

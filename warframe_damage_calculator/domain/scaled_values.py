@@ -19,10 +19,10 @@ class UpgradeValue:
         if not isinstance(self.rank_scale, bool): raise TypeError("rank_scale must be a bool")
 
     @classmethod
-    def from_record(cls, record: Mapping[str, object]) -> UpgradeValue:
+    def from_record(cls, record: Mapping[str, object], *, default_rank_scale: bool = True) -> UpgradeValue:
         if "value" not in record or set(record) - {"value", "rank_scale"}: raise ValueError("scaled value requires value and optional rank_scale")
         value = record["value"]
-        rank_scale = record.get("rank_scale", True)
+        rank_scale = record.get("rank_scale", default_rank_scale)
         if isinstance(value, bool) or not isinstance(value, (int, float)): raise TypeError("scaled value must be numeric")
         if not isinstance(rank_scale, bool): raise TypeError("rank_scale must be a bool")
         return cls(value, rank_scale)

@@ -323,7 +323,7 @@ def test_optimizer_user_upgrade_blacklist_replaces_defaults():
     pools = Optimizer(Calculator(weapon))._candidate_pools(riven=False, upgrade_blacklist={"Serration"}, search_scale=4.0)
     names = {upgrade.name for upgrade in (*pools["mods"], *pools["arcanes"])}
     assert "Serration" not in names
-    assert "Spectral Serration" in names
+    assert "Catalyzer Link" in names
     assert "Primed Bane of Grineer" in names
 
 
@@ -331,7 +331,7 @@ def test_optimizer_none_upgrade_blacklist_disables_defaults():
     weapon = arsenal.primary.get("Vectis Prime")
     pools = Optimizer(Calculator(weapon))._candidate_pools(riven=False, upgrade_blacklist=None, search_scale=4.0)
     names = {upgrade.name for upgrade in (*pools["mods"], *pools["arcanes"])}
-    assert "Spectral Serration" in names
+    assert "Catalyzer Link" in names
     assert "Primed Bane of Grineer" in names
 
 

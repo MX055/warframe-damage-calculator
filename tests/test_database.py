@@ -96,7 +96,8 @@ class DatabaseTests(unittest.TestCase):
         self.assertNotIn("Tainted Mag", filtered_mods)
         self.assertNotIn("Sinister Reach", filtered_mods)
         self.assertNotIn("Shotgun Vendetta", filtered_arcanes)
-        self.assertIn("Primary Overcharge", filtered_arcanes)
+        self.assertIn("Primary Merciless", filtered_arcanes)
+        self.assertNotIn("Primary Overcharge", filtered_arcanes)
 
     def test_aoe_compatibility_metadata_contains_only_intentional_restrictions(self):
         restricted = {name for repository in (arsenal.mod, arsenal.arcane) for name in repository if repository.get(name).compatibility.aoe is False}
@@ -173,7 +174,7 @@ class DatabaseTests(unittest.TestCase):
         self.assertEqual(set(influence.stats), {"generated_attack"})
         influence_effect = influence.stats.generated_attack[0]
         self.assertEqual(influence_effect.automatic["when"], "electricity_status_proc")
-        self.assertEqual(influence_effect.automatic["chance"], ScaledValue(0.2, False))
+        self.assertEqual(influence_effect.automatic["chance"], 0.2)
         self.assertEqual(influence_effect.automatic["on"][0], "heat_status_proc")
         self.assertEqual(influence_effect.automatic["refresh"], False)
         self.assertEqual(influence_effect.value["links"]["parents"], {"deliveries": ["melee"]})

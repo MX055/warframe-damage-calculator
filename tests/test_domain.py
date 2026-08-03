@@ -4,7 +4,6 @@ import pickle
 from warframe_damage_calculator import Attack, AttackStats, Calculator, Dist, Loadout, Melee, PerkValues, Primary, Source, State, arsenal
 from warframe_damage_calculator.domain.effects import Effect
 from warframe_damage_calculator.domain.perks import Perk, resolve_perk
-from warframe_damage_calculator.domain.scaled_values import ScaledValue
 from warframe_damage_calculator.domain.state import combo_multiplier_from_hits
 from warframe_damage_calculator.domain.upgrades import Compatibility, Mod, UpgradeStats
 
@@ -25,7 +24,7 @@ class DomainTests(unittest.TestCase):
         effect = Effect(source, mode="flat")
         restored = Effect.from_record(effect.to_record())
         self.assertEqual(restored.value.path, source.path)
-        self.assertEqual(restored.value.multiplier, ScaledValue(0.5, True))
+        self.assertEqual(restored.value.multiplier, 0.5)
         self.assertEqual(restored.mode, "flat")
 
     def test_loadout_rejects_combined_upgrades_argument(self):

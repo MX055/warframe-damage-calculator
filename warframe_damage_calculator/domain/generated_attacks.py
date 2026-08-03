@@ -19,7 +19,7 @@ def resolve_generated_payload(value: object, rank: int, max_rank: int) -> object
         if multiplier != 1: record["multiplier"] = multiplier
         if value.default is not None: record["default"] = value.default
         return record
-    if is_scaled_value_record(value): return resolve_scalar(UpgradeValue.from_record(value), rank, max_rank)
+    if is_scaled_value_record(value): return resolve_scalar(UpgradeValue.from_record(value, default_rank_scale=False), rank, max_rank)
     if isinstance(value, Mapping):
         if "source" in value and set(value) <= {"source", "multiplier", "default"}:
             return resolve_generated_payload(Source.from_record(value), rank, max_rank)
