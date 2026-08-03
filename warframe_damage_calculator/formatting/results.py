@@ -137,10 +137,6 @@ class Formatter:
     def contributions(self, metric: str = "total_dps", body_part: str | None = None, seed: int = 0) -> str:
         selected_bodypart = body_part or self.result.selected_bodypart
         contributions = Calculator(self.result.weapon, self.result.target, self.result.loadout).contributions(attack=self.result.selected_attack, metric=metric, body_part=selected_bodypart, state=self.result.state, seed=seed)
-        return self.format_contributions(contributions, metric=metric, body_part=selected_bodypart)
-
-    def format_contributions(self, contributions, metric: str = "total_dps", body_part: str | None = None) -> str:
-        selected_bodypart = body_part or self.result.selected_bodypart
         contribution = contributions.contribution
         if not contribution: return ""
         removal = contributions.removal
