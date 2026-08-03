@@ -45,7 +45,6 @@ class _TerminalProgress:
             filled = min(width - 1, int(progress.fraction * width))
             bar = "█" * filled + "·" * (width - filled)
             message = f"Optimizing {bar} {progress.fraction:6.2%} · {progress.elapsed:,.1f}s elapsed"
-            message += " · estimating ETA" if progress.eta is None else f" · {progress.eta:,.1f}s ETA"
             padding = " " * max(0, self._last_length - len(message))
             print(f"\r{message}{padding}", end="", file=sys.stdout, flush=True)
             self._last_length = len(message)
@@ -69,7 +68,7 @@ class _ProgressState:
 
 
 class _ProgressReporter:
-    __slots__ = ("_callback", "_started", "_interval", "_budget", "_state", "_lock", "_publish_lock", "_stop", "_thread", "_progress", "_samples", "_display_eta", "_error")
+    __slots__ = ("_callback", "_started", "_interval", "_budget", "_state", "_lock", "_publish_lock", "_stop", "_thread", "_progress", "_samples", "_display_eta", "_error", "_scheme")
 
     def __init__(self, callback: ProgressCallback | None, *, budget: int, interval: float = 0.1) -> None:
         self._callback = callback
@@ -82,6 +81,7 @@ class _ProgressReporter:
         self._stop = threading.Event()
         self._thread = threading.Thread(target=self._run, name="optimizer-progress", daemon=True) if callback is not None else None
         self._progress = 0.0
+        self._scheme = "dedicated"
         self._samples: deque[tuple[float, int]] = deque(maxlen=64)
         self._samples.append((self._started, 0))
         self._display_eta: float | None = None
@@ -167,14 +167,26 @@ class _ProgressReporter:
         return self._display_eta
 
     def _fractions(self, state: _ProgressState) -> tuple[float, float]:
-        weights = {"Seeds": 0.10, "Local search": 0.35, "Perturbations": 0.25, "Rebuilds": 0.20, "Cleanup": 0.10}
-        order = ("Seeds", "Local search", "Perturbations", "Rebuilds", "Cleanup")
         stage_done = max(state.completed - state.stage_started, 0)
         stage_fraction = min(stage_done / max(state.stage_total, 1), 1.0)
-        try: index = order.index(state.stage)
-        except ValueError: return self._progress, stage_fraction
-        estimated = min(sum(weights[name] for name in order[:index]) + weights[state.stage] * min(stage_fraction, 0.95), 0.985)
-        self._progress = min(max(self._progress, estimated), 0.985)
+        total = max(state.estimated_total, self._budget, 1)
+        budget_fraction = min(state.completed / total, 0.985)
+        dedicated = (("Seeds", 0.10), ("Local search", 0.35), ("Perturbations", 0.25), ("Rebuilds", 0.20), ("Cleanup", 0.10))
+        auto = (("Seeds", 0.08), ("Single-target local", 0.17), ("Single-target perturbations", 0.12), ("Single-target rebuilds", 0.10), ("AoE local", 0.17), ("AoE perturbations", 0.12), ("AoE rebuilds", 0.10), ("Cleanup", 0.06))
+        if state.stage.startswith("Single-target") or state.stage.startswith("AoE"):
+            self._scheme = "auto"
+        elif state.stage in {"Local search", "Perturbations", "Rebuilds"}:
+            self._scheme = "dedicated"
+        schedule = auto if self._scheme == "auto" else dedicated
+        weights = dict(schedule)
+        order = tuple(name for name, _ in schedule)
+        if state.stage in weights:
+            index = order.index(state.stage)
+            estimated = min(sum(weights[name] for name in order[:index]) + weights[state.stage] * min(stage_fraction, 0.95), 0.985)
+        else:
+            estimated = budget_fraction
+        # Evaluation count is the source of truth when stage labels are unknown or drift; never let the bar freeze while work continues.
+        self._progress = min(max(self._progress, estimated, budget_fraction), 0.985)
         return self._progress, stage_fraction
 
     def _publish(self) -> None:

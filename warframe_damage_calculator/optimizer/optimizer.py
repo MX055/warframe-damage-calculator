@@ -127,7 +127,7 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         self._resolved_effect_cache: dict[int, tuple[ResolvedEffect, ...]] = {}
         self._upgrade_effects_cache: dict[tuple[int, ...], tuple[ResolvedEffect, ...]] = {}
 
-    def resolve(self, metric: Metric = balanced_damage_metric, *, compact_metric: CompactMetric | None = None, spatial: SpatialMode = "auto", attack: str | None = None, body_part: str | None = None, state: State | None = None, evaluations: int = 20_000, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] | None = DEFAULT_UPGRADE_BLACKLIST, riven_stat_blacklist: Collection[str] | None = DEFAULT_RIVEN_STAT_BLACKLIST, workers: int | None = None, progress: ProgressCallback | None = terminal_progress) -> OptimizationResult:
+    def resolve(self, metric: Metric = balanced_damage_metric, *, compact_metric: CompactMetric | None = None, spatial: SpatialMode = "auto", attack: str | None = None, body_part: str | None = None, state: State | None = None, evaluations: int = 10_000, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] | None = DEFAULT_UPGRADE_BLACKLIST, riven_stat_blacklist: Collection[str] | None = DEFAULT_RIVEN_STAT_BLACKLIST, workers: int | None = None, progress: ProgressCallback | None = terminal_progress) -> OptimizationResult:
         if not callable(metric): raise TypeError("metric must be callable")
         if compact_metric is None and metric is balanced_damage_metric: compact_metric = balanced_damage_components
         if compact_metric is not None and not callable(compact_metric): raise TypeError("compact_metric must be callable or None")
@@ -423,9 +423,9 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         if unknown_state: raise TypeError(f"unknown calculation state fields: {', '.join(sorted(unknown_state))}")
         resolved_state = State._from_values(dict(self.calculator.weapon.calculation_defaults) | dict(calculation_state))
         started = time.perf_counter()
-        resolution_budget = evaluations * 2
-        search_scale = max(0.25, math.sqrt(resolution_budget / 5_000))
-        mode_scale = 2.0
+        resolution_budget = evaluations
+        search_scale = max(0.25, math.sqrt(evaluations / 5_000))
+        mode_scale = 1.0
         reporter = _ProgressReporter(progress, budget=resolution_budget)
         pools = self._candidate_pools(riven=riven, evolutions=evolutions, upgrade_blacklist=upgrade_blacklist, riven_stat_blacklist=riven_stat_blacklist, search_scale=search_scale)
         base = self._complete_fixed_build(self.calculator.build, evolutions=evolutions)
@@ -438,7 +438,7 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         attack_generators = (*base.ranked_upgrades, *pools["mods"], *pools["arcanes"])
         prepared_names = None if any(GENERATED_ATTACK_STAT in upgrade.stats for upgrade in attack_generators) else tuple(WeaponCalculator(context).collect_attack_tree())
         use_compact_metric = compact_metric is not None
-        worker_count = min(os.cpu_count() or 1, 8) if workers is None else workers
+        worker_count = min(os.cpu_count() or 1, 4) if workers is None else workers
         executor_type = getattr(futures, "InterpreterPoolExecutor", None)
         executor = executor_type(max_workers=worker_count) if use_compact_metric and worker_count > 1 and executor_type is not None else None
         cache: dict[tuple, DualCandidate] = {}

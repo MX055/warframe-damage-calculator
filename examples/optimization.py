@@ -12,9 +12,9 @@ optimized = optimizer.resolve(body_part="body", state=State(stance_combo="forwar
 print(optimized.elapsed)
 formatter = Formatter(optimized.result)
 
-print(formatter.stat_summary())
-print(formatter.status_summary())
-print(formatter.build_summary())
+#print(formatter.stat_summary())
+#print(formatter.status_summary())
+#print(formatter.build_summary())
 
 
 
@@ -29,9 +29,9 @@ optimized = optimizer.resolve(body_part="body")
 print(optimized.elapsed)
 formatter = Formatter(optimized.result)
 
-print(formatter.stat_summary())
-print(formatter.status_summary())
-print(formatter.build_summary())
+#print(formatter.stat_summary())
+#print(formatter.status_summary())
+#print(formatter.build_summary())
 
 
 

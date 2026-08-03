@@ -161,13 +161,41 @@ def test_spatial_auto_runs_dual_metric_search_and_picks_one():
     single = Optimizer(calculator).resolve(spatial="none", evaluations=16, workers=1, progress=None)
     aoe = Optimizer(calculator).resolve(spatial="full", evaluations=16, workers=1, progress=None)
     auto = Optimizer(calculator).resolve(spatial="auto", evaluations=16, workers=1, progress=None)
-    assert auto.evaluation_budget == 32
-    assert auto.evaluations <= 32
-    assert auto.resolution_budget == 32
+    assert auto.evaluation_budget == 16
+    assert auto.evaluations <= 16
+    assert auto.resolution_budget == 16
     assert single.spatial == "none"
     assert aoe.spatial == "full"
     assert auto.spatial in {"full", "none"}
     assert auto.score >= 0
+
+
+def test_auto_search_scale_matches_requested_evaluations_not_doubled_budget(monkeypatch):
+    scales: list[float] = []
+    original = Optimizer._candidate_pools
+
+    def capture(self, *args, search_scale=1.0, **kwargs):
+        scales.append(search_scale)
+        return original(self, *args, search_scale=search_scale, **kwargs)
+
+    monkeypatch.setattr(Optimizer, "_candidate_pools", capture)
+    calculator = Calculator(arsenal.primary.get("Braton Prime"))
+    Optimizer(calculator).resolve(spatial="full", evaluations=5_000, workers=1, progress=None, riven=False, evolutions=False)
+    Optimizer(calculator).resolve(spatial="auto", evaluations=5_000, workers=1, progress=None, riven=False, evolutions=False)
+    assert len(scales) >= 2
+    assert scales[0] == scales[1]
+    assert abs(scales[0] - (5_000 / 5_000) ** 0.5) < 1e-12
+
+
+def test_auto_default_workers_cap_at_four():
+    from concurrent import futures
+
+    calculator = Calculator(arsenal.primary.get("Braton Prime"))
+    result = Optimizer(calculator).resolve(spatial="auto", evaluations=8, progress=None, riven=False, evolutions=False)
+    if getattr(futures, "InterpreterPoolExecutor", None) is None:
+        assert result.workers == 1
+    else:
+        assert 1 <= result.workers <= 4
 
 
 def test_dual_compact_scores_differ_when_damage_mass_matters():
@@ -234,9 +262,23 @@ def test_optimizer_progress_includes_rebuild_stage():
     from warframe_damage_calculator.optimizer.progress import _ProgressReporter, _ProgressState
 
     reporter = _ProgressReporter(None, budget=100)
-    fraction, stage_fraction = reporter._fractions(_ProgressState(completed=70, stage="Rebuilds", stage_started=60, stage_total=20))
+    fraction, stage_fraction = reporter._fractions(_ProgressState(completed=70, stage="Rebuilds", stage_started=60, stage_total=20, estimated_total=100))
     assert stage_fraction == 0.5
     assert abs(fraction - 0.8) < 1e-12
+
+
+def test_optimizer_progress_advances_for_auto_stages():
+    from warframe_damage_calculator.optimizer.progress import _ProgressReporter, _ProgressState
+
+    reporter = _ProgressReporter(None, budget=40_000)
+    reporter.set_estimated_total(40_000)
+    first, _ = reporter._fractions(_ProgressState(completed=2_000, stage="Seeds", stage_started=0, stage_total=2_000, estimated_total=40_000))
+    second, _ = reporter._fractions(_ProgressState(completed=8_000, stage="Single-target local", stage_started=2_000, stage_total=10_000, estimated_total=40_000))
+    third, _ = reporter._fractions(_ProgressState(completed=22_000, stage="AoE local", stage_started=20_000, stage_total=10_000, estimated_total=40_000))
+    assert first > 0
+    assert second > first
+    assert third > second
+    assert third >= 22_000 / 40_000
 
 
 def test_optimizer_rejects_non_callable_progress():
