@@ -22,4 +22,5 @@ result = calculator.resolve(attack="incarnon_form")
 
 formatter = Formatter(result)
 print(formatter.stat_summary())
+print(formatter.status_summary())
 print(formatter.build_summary())

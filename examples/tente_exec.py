@@ -19,4 +19,5 @@ result = calculator.resolve(attack="heavy_slam_attack", state={"stance_combo": "
 
 formatter = Formatter(result)
 print(formatter.stat_summary())
+print(formatter.status_summary())
 print(formatter.build_summary())

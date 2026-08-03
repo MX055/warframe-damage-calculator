@@ -13,6 +13,7 @@ print(optimized.summary["elapsed"])
 formatter = Formatter(optimized.result)
 
 print(formatter.stat_summary())
+print(formatter.status_summary())
 print(formatter.build_summary())
 
 
