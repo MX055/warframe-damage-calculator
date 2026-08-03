@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 
-from ..domain.results import AggregateResult, AverageResult, CalculatedAttack, DamageMetrics, DamageResult, SpatialResult, StatusResult
+from ..domain.results import AggregateResult, AttackCriticalMetrics, AttackDamageMetrics, AttackResult, AttackSpatialMetrics, AttackStatusMetrics, AttackTimingMetrics, DamageMetrics, DamageResult
 from ..domain.status import StatusModel
-from .models.attack import AttackResult, AverageAttackStats, SpatialMetrics
+from .models.attack import ResolvedAttack, ResolvedAttackMetrics, SpatialMetrics
 
 
-def _damage_metrics(source: AverageAttackStats | SpatialMetrics) -> DamageMetrics | None:
+def _damage_metrics(source: ResolvedAttackMetrics | SpatialMetrics) -> DamageMetrics | None:
     direct_dph = source.flat_dph
     dot_dph = source.flat_dotph
     total_dph = source.total_dph
@@ -18,39 +18,51 @@ def _damage_metrics(source: AverageAttackStats | SpatialMetrics) -> DamageMetric
     return DamageMetrics(float(direct_dph or 0), float(dot_dph or 0), float(total_dph or 0), float(direct_dps or 0), float(dot_dps or 0), float(total_dps or 0))
 
 
-def _status_from_model(model: StatusModel, effects: Mapping[str, float]) -> StatusResult:
+def _status_from_model(model: StatusModel, effects: Mapping[str, float], *, status_chance: float = 0, status_duration: float = 0) -> AttackStatusMetrics:
     kinds = set(model.damage) | set(model.forced_procs) | set(model.extra_proc_counts) | set(effects)
     sustained = {}
     for kind in kinds:
         value = float(model.expected_active_stacks(kind))
         if value: sustained[kind] = value
-    return StatusResult(float(model.expected_procs_per_attack), sustained, dict(effects))
+    return AttackStatusMetrics(float(status_chance), float(status_duration), float(model.expected_procs_per_attack), sustained, dict(effects))
 
 
-def _status(result: AttackResult) -> StatusResult:
-    return _status_from_model(result.effective.status_model, result.status_effects)
+def _status(result: ResolvedAttack) -> AttackStatusMetrics:
+    average = result.average
+    return _status_from_model(result.effective.status_model, result.status_effects, status_chance=average.status_chance, status_duration=average.status_duration)
 
 
-def _spatial(result: AttackResult) -> SpatialResult | None:
+def _spatial(result: ResolvedAttack) -> AttackSpatialMetrics:
+    average = result.average
     spatial = result.spatial
-    if spatial.dimension is None or spatial.damage_mass is None: return None
+    if spatial.dimension is None or spatial.damage_mass is None:
+        return AttackSpatialMetrics(float(average.punch_through), float(average.falloff_multiplier))
     metrics = _damage_metrics(spatial) or DamageMetrics(0, 0, 0, 0, 0, 0)
-    return SpatialResult(int(spatial.dimension), float(spatial.falloff_multiplier or 1), float(spatial.damage_mass), metrics.direct_dph, metrics.dot_dph, metrics.total_dph, metrics.direct_dps, metrics.dot_dps, metrics.total_dps)
+    return AttackSpatialMetrics(float(average.punch_through), float(spatial.falloff_multiplier or average.falloff_multiplier), int(spatial.dimension), float(spatial.damage_mass), metrics.direct_dph, metrics.dot_dph, metrics.total_dph, metrics.direct_dps, metrics.dot_dps, metrics.total_dps)
 
 
-def _damage_result(source: AverageAttackStats) -> DamageResult:
+def _damage_result(source: ResolvedAttackMetrics) -> DamageResult:
     metrics = _damage_metrics(source) or DamageMetrics(0, 0, 0, 0, 0, 0)
     return DamageResult(metrics.direct_dph, metrics.dot_dph, metrics.total_dph, metrics.direct_dps, metrics.dot_dps, metrics.total_dps)
 
 
-def _average_result(source: AverageAttackStats) -> AverageResult:
-    damage = _damage_result(source)
-    return AverageResult(damage=source.damage, crit_chance=float(source.crit_chance), crit_damage=float(source.crit_damage), status_chance=float(source.status_chance), status_duration=float(source.status_duration), multishot=float(source.multishot), fire_rate=float(source.fire_rate), magazine_capacity=float(source.magazine_capacity), reload_time=float(source.reload_time), ammo_cost=float(source.ammo_cost), ammo_efficiency=float(source.ammo_efficiency), punch_through=float(source.punch_through), burst_count=float(source.burst_count), burst_delay=float(source.burst_delay), charge_time=float(source.charge_time), attack_speed=float(source.attack_speed), heavy_attack_speed=float(source.heavy_attack_speed), heavy_attack_efficiency=float(source.heavy_attack_efficiency), initial_combo=float(source.initial_combo), direct_dph=damage.direct_dph, dot_dph=damage.dot_dph, total_dph=damage.total_dph, direct_dps=damage.direct_dps, dot_dps=damage.dot_dps, total_dps=damage.total_dps, crit_multiplier=float(source.crit_multiplier), weakpoint_crit_chance=float(source.weakpoint_crit_chance), weakpoint_crit_multiplier=float(source.weakpoint_crit_multiplier), attack_rate=float(source.attack_rate), first_shot_damage_multiplier=float(source.first_shot_damage_multiplier), combo_multiplier=float(source.combo_multiplier), melee_doughty_bonus=float(source.melee_doughty_bonus), crit_tier_bonus=float(source.crit_tier_bonus), weakpoint_crit_tier_bonus=float(source.weakpoint_crit_tier_bonus), secondary_enervate_bonus=float(source.secondary_enervate_bonus), weakpoint_secondary_enervate_bonus=float(source.weakpoint_secondary_enervate_bonus), falloff_multiplier=float(source.falloff_multiplier))
+def _attack_damage(source: ResolvedAttackMetrics) -> AttackDamageMetrics:
+    metrics = _damage_result(source)
+    return AttackDamageMetrics(metrics.direct_dph, metrics.dot_dph, metrics.total_dph, metrics.direct_dps, metrics.dot_dps, metrics.total_dps, source.damage, float(source.first_shot_damage_multiplier), float(source.combo_multiplier))
 
 
-def build_calculated_attack(result: AttackResult) -> CalculatedAttack:
-    return CalculatedAttack(result.base, result.modded, result.effective, result.upgrades, result.evolutions, _average_result(result.average), _status(result), _spatial(result), result.generated_by, result.generated_from)
+def _attack_critical(source: ResolvedAttackMetrics) -> AttackCriticalMetrics:
+    return AttackCriticalMetrics(float(source.crit_chance), float(source.crit_damage), float(source.crit_multiplier), float(source.crit_tier_bonus), float(source.puncture_status_crit_damage_bonus), float(source.secondary_enervate_bonus), float(source.weak_point_crit_chance), float(source.weak_point_crit_multiplier), float(source.weak_point_crit_tier_bonus), float(source.weak_point_secondary_enervate_bonus))
 
 
-def build_aggregate(average: AverageAttackStats, status_model: StatusModel, status_effects: Mapping[str, float]) -> AggregateResult:
-    return AggregateResult(_damage_result(average), _status_from_model(status_model, status_effects))
+def _attack_timing(source: ResolvedAttackMetrics) -> AttackTimingMetrics:
+    return AttackTimingMetrics(float(source.fire_rate), float(source.attack_speed), float(source.attack_rate), float(source.multishot), float(source.magazine_capacity), float(source.reload_time), float(source.ammo_cost), float(source.ammo_efficiency), float(source.burst_count), float(source.burst_delay), float(source.charge_time), float(source.heavy_attack_speed), float(source.heavy_attack_efficiency), float(source.initial_combo))
+
+
+def build_calculated_attack(result: ResolvedAttack) -> AttackResult:
+    average = result.average
+    return AttackResult(result.base, result.modded, result.effective, result.upgrades, result.evolutions, _attack_damage(average), _attack_critical(average), _attack_timing(average), _status(result), _spatial(result), result.generated_by, result.generated_from)
+
+
+def build_aggregate(average: ResolvedAttackMetrics, status_model: StatusModel, status_effects: Mapping[str, float]) -> AggregateResult:
+    return AggregateResult(_damage_result(average), _status_from_model(status_model, status_effects, status_chance=average.status_chance, status_duration=average.status_duration))

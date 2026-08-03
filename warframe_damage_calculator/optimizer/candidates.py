@@ -71,7 +71,7 @@ class CandidatePreparation:
         key = (type(upgrade), upgrade.name, upgrade.slot, runtime, riven_stats)
         cached = self._priority_cache.get(key)
         if cached is not None: return cached
-        relevant = {"damage_bonus", "base_damage", "multiplicative_base_damage", "multishot", "crit_chance", "flat_crit_chance", "multiplicative_crit_chance", "crit_damage", "flat_crit_damage", "slide_crit_chance", "status_chance", "status_damage", "fire_rate", "multiplicative_fire_rate", "attack_speed", "weakpoint_damage", "weakpoint_crit_chance", "reload_speed", "magazine_capacity", "ammo_efficiency", "impact", "puncture", "slash", "cold", "electricity", "heat", "toxin", "blast", "corrosive", "gas", "magnetic", "radiation", "viral", "void"}
+        relevant = {"damage_bonus", "base_damage", "multiplicative_base_damage", "multishot", "crit_chance", "flat_crit_chance", "multiplicative_crit_chance", "crit_damage", "flat_crit_damage", "slide_crit_chance", "status_chance", "status_damage", "fire_rate", "multiplicative_fire_rate", "attack_speed", "weak_point_damage", "weak_point_crit_chance", "reload_speed", "magazine_capacity", "ammo_efficiency", "impact", "puncture", "slash", "cold", "electricity", "heat", "toxin", "blast", "corrosive", "gas", "magnetic", "radiation", "viral", "void"}
         score = 0.0
         special = 0
         for stat, effects in upgrade.stats.items():

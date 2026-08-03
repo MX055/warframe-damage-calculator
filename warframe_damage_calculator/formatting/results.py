@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 
-from ..domain.results import CalculationResult, DamageResult, SpatialResult, StatusResult
+from ..domain.results import AttackSpatialMetrics, AttackStatusMetrics, CalculationResult, DamageResult
 from ..engine.calculator import Calculator
 from .objects import format_build
 
@@ -97,40 +97,41 @@ class Formatter:
         attack_name = self.result.selected_attack if attack is None else attack
         selected = self.result.attacks[attack_name]
         attack_definition = self.result.weapon.attacks[attack_name]
-        average_damage = self.result.aggregate.average if attack is None else selected.average
-        base, modded, effective, average = selected.base, selected.modded, selected.effective, selected.average
+        output_damage = self.result.aggregate.damage if attack is None else selected.damage
+        base, modded, effective = selected.base, selected.modded, selected.effective
+        damage, critical, timing, status, spatial = selected.damage, selected.critical, selected.timing, selected.status, selected.spatial
         rows: list[tuple[str, ...]] = [self._section("DAMAGE")]
         damage_types = dict.fromkeys((*base.damage, *modded.damage, *effective.damage))
         for damage_type in damage_types:
-            rows.append((damage_type.replace("_", " ").title(), self._number(base.damage.get(damage_type, 0)), self._number(modded.damage.get(damage_type, 0)), self._number(effective.damage.get(damage_type, 0)), self._number(average.damage.get(damage_type, 0)), "—"))
+            rows.append((damage_type.replace("_", " ").title(), self._number(base.damage.get(damage_type, 0)), self._number(modded.damage.get(damage_type, 0)), self._number(effective.damage.get(damage_type, 0)), self._number(damage.damage.get(damage_type, 0)), "—"))
         speed_label = "Attack Speed" if self.result.weapon.type == "melee" else "Fire Rate"
         rows.extend((
             self._section("OFFENSE"),
-            ("Critical Chance", self._percent(base.crit_chance), self._percent(modded.crit_chance), self._percent(effective.crit_chance), self._percent(average.crit_chance), "—"),
-            ("Critical Damage", self._multiplier(base.crit_damage), self._multiplier(modded.crit_damage), self._multiplier(effective.crit_damage), self._multiplier(average.crit_damage), "—"),
-            ("Status Chance", self._percent(base.status_chance), self._percent(modded.status_chance), self._percent(effective.status_chance), self._percent(average.status_chance), "—"),
+            ("Critical Chance", self._percent(base.crit_chance), self._percent(modded.crit_chance), self._percent(effective.crit_chance), self._percent(critical.crit_chance), "—"),
+            ("Critical Damage", self._multiplier(base.crit_damage), self._multiplier(modded.crit_damage), self._multiplier(effective.crit_damage), self._multiplier(critical.crit_damage), "—"),
+            ("Status Chance", self._percent(base.status_chance), self._percent(modded.status_chance), self._percent(effective.status_chance), self._percent(status.status_chance), "—"),
         ))
-        if self.result.weapon.type != "melee": rows.append(("Multishot", self._multiplier(base.multishot), self._multiplier(modded.multishot), self._multiplier(effective.multishot), self._multiplier(average.multishot), "—"))
-        rows.append((speed_label, self._attack_rate(base.fire_rate), self._attack_rate(modded.fire_rate), self._attack_rate(effective.fire_rate), self._attack_rate(average.fire_rate), "—"))
+        if self.result.weapon.type != "melee": rows.append(("Multishot", self._multiplier(base.multishot), self._multiplier(modded.multishot), self._multiplier(effective.multishot), self._multiplier(timing.multishot), "—"))
+        rows.append((speed_label, self._attack_rate(base.fire_rate), self._attack_rate(modded.fire_rate), self._attack_rate(effective.fire_rate), self._attack_rate(timing.fire_rate), "—"))
         if self.result.weapon.type != "melee":
             rows.extend((
-                ("Magazine Capacity", self._rounds(base.get("magazine_capacity", self.result.weapon.magazine_size)), self._rounds(modded.get("magazine_capacity")), self._rounds(effective.get("magazine_capacity")), self._rounds(average.magazine_capacity), "—"),
-                ("Reload Time", self._seconds(base.get("reload_time", self.result.weapon.reload_time)), self._seconds(modded.get("reload_time")), self._seconds(effective.get("reload_time")), self._seconds(average.reload_time), "—"),
-                ("Ammo Cost", self._rounds(base.get("ammo_cost", attack_definition.stats.ammo_cost)), self._rounds(modded.get("ammo_cost")), self._rounds(effective.get("ammo_cost")), self._rounds(average.ammo_cost), "—"),
+                ("Magazine Capacity", self._rounds(base.get("magazine_capacity", self.result.weapon.magazine_size)), self._rounds(modded.get("magazine_capacity")), self._rounds(effective.get("magazine_capacity")), self._rounds(timing.magazine_capacity), "—"),
+                ("Reload Time", self._seconds(base.get("reload_time", self.result.weapon.reload_time)), self._seconds(modded.get("reload_time")), self._seconds(effective.get("reload_time")), self._seconds(timing.reload_time), "—"),
+                ("Ammo Cost", self._rounds(base.get("ammo_cost", attack_definition.stats.ammo_cost)), self._rounds(modded.get("ammo_cost")), self._rounds(effective.get("ammo_cost")), self._rounds(timing.ammo_cost), "—"),
             ))
-            if float(effective.get("punch_through", 0)) > 0: rows.append(("Punch Through", self._meters(base.get("punch_through", attack_definition.stats.punch_through)), self._meters(modded.get("punch_through")), self._meters(effective.get("punch_through")), self._meters(average.punch_through), "—"))
-            if int(effective.get("burst_count", 1)) > 1: rows.append(("Burst Count", str(int(base.get("burst_count", attack_definition.stats.burst_count))), str(int(modded.get("burst_count", 1))), str(int(effective.get("burst_count"))), str(int(average.burst_count)), "—"))
-            if float(effective.get("burst_delay", 0)) > 0: rows.append(("Burst Delay", self._seconds(base.get("burst_delay", attack_definition.stats.burst_delay)), self._seconds(modded.get("burst_delay")), self._seconds(effective.get("burst_delay")), self._seconds(average.burst_delay), "—"))
-            if float(effective.get("charge_time", 0)) > 0: rows.append(("Charge Time", self._seconds(base.get("charge_time", attack_definition.stats.charge_time)), self._seconds(modded.get("charge_time")), self._seconds(effective.get("charge_time")), self._seconds(average.charge_time), "—"))
+            if float(effective.get("punch_through", 0)) > 0: rows.append(("Punch Through", self._meters(base.get("punch_through", attack_definition.stats.punch_through)), self._meters(modded.get("punch_through")), self._meters(effective.get("punch_through")), self._meters(spatial.punch_through), "—"))
+            if int(effective.get("burst_count", 1)) > 1: rows.append(("Burst Count", str(int(base.get("burst_count", attack_definition.stats.burst_count))), str(int(modded.get("burst_count", 1))), str(int(effective.get("burst_count"))), str(int(timing.burst_count)), "—"))
+            if float(effective.get("burst_delay", 0)) > 0: rows.append(("Burst Delay", self._seconds(base.get("burst_delay", attack_definition.stats.burst_delay)), self._seconds(modded.get("burst_delay")), self._seconds(effective.get("burst_delay")), self._seconds(timing.burst_delay), "—"))
+            if float(effective.get("charge_time", 0)) > 0: rows.append(("Charge Time", self._seconds(base.get("charge_time", attack_definition.stats.charge_time)), self._seconds(modded.get("charge_time")), self._seconds(effective.get("charge_time")), self._seconds(timing.charge_time), "—"))
         rows.append(self._section("CALCULATED AVERAGES"))
-        rows.append(("Attack Rate", "—", "—", "—", self._attack_rate(average.attack_rate), "—"))
-        rows.append(("Expected Procs", "—", "—", "—", self._multiplier(selected.status.expected_procs_per_attack), "—"))
-        if selected.spatial is not None: rows.append(("Damage Mass", "—", "—", "—", f"{self._number(selected.spatial.damage_mass)}m{self._superscript(selected.spatial.dimension)}", "—"))
+        rows.append(("Attack Rate", "—", "—", "—", self._attack_rate(timing.attack_rate), "—"))
+        rows.append(("Expected Procs", "—", "—", "—", self._multiplier(status.expected_procs_per_attack), "—"))
+        if spatial.damage_mass is not None: rows.append(("Damage Mass", "—", "—", "—", f"{self._number(spatial.damage_mass)}m{self._superscript(spatial.dimension)}", "—"))
         rows.append(self._section("DAMAGE OUTPUT"))
         metrics = (("Direct DPH", "direct_dph"), ("DoT DPH", "dot_dph"), ("Total DPH", "total_dph"), ("Direct DPS", "direct_dps"), ("DoT DPS", "dot_dps"), ("Total DPS", "total_dps"))
-        for label, attribute in metrics: rows.append((label, "—", "—", "—", self._number(getattr(average_damage, attribute)), "—"))
+        for label, attribute in metrics: rows.append((label, "—", "—", "—", self._number(getattr(output_damage, attribute)), "—"))
         weapon_name = getattr(self.result.weapon, "name", "Weapon")
-        target_name = "" if self.result.target is None else f"vs {self.result.target.name} {self.result.target.bodyparts[self.result.selected_bodypart].name}"
+        target_name = "" if self.result.target is None else f"vs {self.result.target.name} {self.result.target.body_parts[self.result.selected_body_part].name}"
         title = f"Summary: {weapon_name} {self.result.weapon.attacks[attack_name].name} {target_name}"
         headers = ("Stat", "Base", "Modded", "Effective", "Average")
         display_rows = [tuple(cell for index, cell in enumerate(row) if index != 5) for row in rows]
@@ -141,9 +142,9 @@ class Formatter:
         return self._table(headers, rows, title=title)
 
     def build_summary_table(self, metric: str = "total_dps", body_part: str | None = None, seed: int = 0, contributions=None) -> tuple[str, tuple[str, ...], list[tuple[str, ...]]] | None:
-        selected_bodypart = body_part or self.result.selected_bodypart
+        selected_body_part = body_part or self.result.selected_body_part
         if contributions is None:
-            contributions = Calculator(self.result.weapon, self.result.target, self.result.build).contributions(attack=self.result.selected_attack, metric=metric, body_part=selected_bodypart, state=self.result.state, seed=seed)
+            contributions = Calculator(self.result.weapon, self.result.target, self.result.build).contributions(attack=self.result.selected_attack, metric=metric, body_part=selected_body_part, state=self.result.state, seed=seed)
         contribution = contributions.contribution
         if not contribution: return None
         removal = contributions.removal
@@ -167,7 +168,7 @@ class Formatter:
             right = "█" * bar_length + "·" * (10 - bar_length) if share > 0 else "·" * 10
             rows.append((str(rank), kind, display_name, f"{display_share:+.2%}", f"{display_removal:+,.2f}", f"{left}│{right}"))
         metric_name = self._metric_name(metric) if isinstance(metric, str) else "Contribution"
-        target_name = "" if self.result.target is None else f" vs {self.result.target.name} {self.result.target.bodyparts[selected_bodypart].name}"
+        target_name = "" if self.result.target is None else f" vs {self.result.target.name} {self.result.target.body_parts[selected_body_part].name}"
         title = f"{metric_name} Contributions: {self.result.weapon.name} {self.result.weapon.attacks[self.result.selected_attack].name}{target_name}"
         return title, ("Contribution Rank", "Type", "Component", "Relative Contribution", "Removal Difference", "Impact"), rows
 
@@ -244,30 +245,30 @@ class Formatter:
             lines.append("│ " + self._pad(label, left_width) + " │ " + cells + " │")
         lines.append(bottom)
         weapon_name = getattr(self.result.weapon, "name", "Weapon")
-        target_name = "" if self.result.target is None else f" vs {self.result.target.name} {self.result.target.bodyparts[self.result.selected_bodypart].name}"
+        target_name = "" if self.result.target is None else f" vs {self.result.target.name} {self.result.target.body_parts[self.result.selected_body_part].name}"
         title = f"Status: {weapon_name}{target_name}"
         return title, lines
 
     def spatial(self, attack: str) -> str:
         spatial = self.result.attacks[attack].spatial
-        return "No spatial output" if spatial is None else format_spatial(spatial)
+        return "No spatial output" if spatial.damage_mass is None else format_spatial(spatial)
 
 
 def format_result(result: CalculationResult, *, attack: str | None = None) -> str:
     return Formatter(result).stat_summary(attack)
 
 
-
 def format_damage_result(result: DamageResult) -> str:
     return f"{result.total_dph:.2f} DPH, {result.total_dps:.2f} DPS"
 
 
-def format_status(status: StatusResult) -> str:
+def format_status(status: AttackStatusMetrics) -> str:
     sustained = ", ".join(f"{name}={value:.2f}" for name, value in sorted(status.sustained_procs.items())) or "none"
     effects = ", ".join(f"{name}={value:.2f}" for name, value in sorted(status.effects.items())) or "none"
     return f"Expected procs per attack: {status.expected_procs_per_attack:.2f}\nSustained procs: {sustained}\nEffects: {effects}"
 
 
-def format_spatial(spatial: SpatialResult) -> str:
+def format_spatial(spatial: AttackSpatialMetrics) -> str:
+    if spatial.dimension is None or spatial.damage_mass is None or spatial.total_dps_mass is None: return "No spatial output"
     dimension = Formatter._superscript(spatial.dimension)
     return f"Dimension: {spatial.dimension}\nDamage mass: {spatial.damage_mass:.2f} m{dimension}\nTotal DPS mass: {spatial.total_dps_mass:.2f}"

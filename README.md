@@ -23,7 +23,7 @@ build = Build(
 
 calculator = Calculator(weapon, target, build)
 result = calculator.resolve(attack="incarnon_form", body_part="head")
-print(result.aggregate.average.total_dps)
+print(result.aggregate.damage.total_dps)
 ```
 
 `Weapon` and `Enemy` are definitions. `Build` owns selected mods, arcanes, and global evolution perks. `Calculator` owns one weapon-target-build combination, while attack selection, body-part selection, and temporary state belong to each calculation:
@@ -277,17 +277,10 @@ Every selected item in `Build.evolutions` is resolved through the weapon before 
 
 ## Result navigation
 
-Results use one navigation rule:
-
-```text
-scope -> pool -> target zone -> metric
-```
-
-The aggregate scope is the selected root attack including every descendant:
+Results expose aggregate totals and per-attack metric groups:
 
 ```python
-result.aggregate.average.normal.total_dps
-result.aggregate.average.weakpoint.total_dph
+result.aggregate.damage.total_dps
 result.aggregate.status
 ```
 
@@ -300,15 +293,18 @@ projectile.modded
 projectile.effective
 projectile.upgrades
 projectile.evolutions
-projectile.average
-projectile.average.normal.total_dps
+projectile.damage
+projectile.critical
+projectile.timing
 projectile.status
 projectile.spatial
 ```
 
 `result.selected_attack` identifies the selected root. `result.attacks.keys()` lists the components included in its final damage. Aggregate results intentionally do not expose a combined critical chance or other meaningless cross-component weapon stats.
 
-Damage zones are `normal`, `weakpoint`, and `resistant`. Each available zone exposes:
+Damage and timing metrics live on each attack’s `damage` / `timing` groups. Critical averages live on `critical`, including weak-point parallels such as `weak_point_crit_chance`. Spatial mass fields are present only for AoE components (`spatial.damage_mass` is `None` otherwise). Body-part selection is made at resolve time via `body_part=...`; zones on the enemy definition use `normal`, `weak_point`, and `resistant`.
+
+Each available damage pool exposes:
 
 ```python
 direct_dph
@@ -331,7 +327,7 @@ head = calculator.resolve(attack="incarnon_form", body_part="head")
 
 Each result records its selected attack and body part. Build optimizers can reuse the lower-level calculation engine without changing this public API.
 
-## Optimization
+## OptimizationResult
 
 On Python 3.14, the default metric is evaluated across up to four isolated interpreter workers. Candidate order, evaluation count, scores, and tie-breaking remain deterministic; parallelism changes only how independent scores in each search batch are calculated.
 
@@ -347,13 +343,13 @@ Contribution analysis is part of the calculator workflow and includes selected u
 
 ```python
 calculator = Calculator(weapon, target, build)
-contributions = calculator.contributions(attack="incarnon_form", body_part="weakpoint")
+contributions = calculator.contributions(attack="incarnon_form", body_part="weak_point")
 
 removal = contributions.removal
 contribution = contributions.contribution
 ```
 
-Build contribution percentages are leave-one-out removal differences normalized to sum to 1 (a component that does not change the metric gets 0%). A metric name selects the chosen aggregate-average body part. `bodypart` accepts `"normal"`, `"weakpoint"`, or `"resistant"` and defaults to `"normal"`. A dotted path or callable may select another result value.
+Build contribution percentages are leave-one-out removal differences normalized to sum to 1 (a component that does not change the metric gets 0%). A metric name selects a field on `aggregate.damage`. `body_part` selects an enemy body-part key such as `"body"` or `"head"`. A dotted path or callable may select another result value.
 
 ## Spatial output
 
@@ -369,8 +365,8 @@ An AoE component may expose raw analytic damage mass:
 spatial = result.attacks["air_burst_explosion"].spatial
 spatial.dimension
 spatial.damage_mass
-spatial.normal.total_dph_mass
-spatial.normal.total_dps_mass
+spatial.total_dph_mass
+spatial.total_dps_mass
 ```
 
 The `_mass` suffix and dimension distinguish these values from ordinary damage.

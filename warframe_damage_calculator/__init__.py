@@ -11,7 +11,7 @@ from .domain.upgrades import Arcane, Combo, Compatibility, Mod, Upgrade, Upgrade
 from .domain.weapons import Archgun, Attack, AttackStats, Falloff, Inheritance, Links, Melee, Primary, RelatedAttacks, Secondary
 from .engine.calculator import Calculator
 from .formatting.results import Formatter
-from .optimizer import OptimizationProgress, Optimizer, default_metric
+from .optimizer import OptimizationProgress, Optimizer, balanced_damage_metric
 
 __version__ = "1.1.0"
 
@@ -51,5 +51,5 @@ __all__ = (
     "UpgradeStats",
     "UpgradeValue",
     "arsenal",
-    "default_metric",
+    "balanced_damage_metric",
 )

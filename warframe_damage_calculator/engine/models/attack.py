@@ -10,7 +10,7 @@ from .stats import BaseAttackStats, EffectiveAttackStats, ModdedAttackStats, Res
 
 
 @dataclass(slots=True)
-class AverageAttackStats:
+class ResolvedAttackMetrics:
     damage: Dist = field(default_factory=Dist)
     crit_chance: float = 0
     crit_damage: float = 1
@@ -31,8 +31,8 @@ class AverageAttackStats:
     heavy_attack_efficiency: float = 0
     initial_combo: float = 0
     crit_multiplier: float = 1
-    weakpoint_crit_chance: float = 0
-    weakpoint_crit_multiplier: float = 1
+    weak_point_crit_chance: float = 0
+    weak_point_crit_multiplier: float = 1
     attack_rate: float = 0
     procs_per_shot: float = 0
     flat_dph: float | None = None
@@ -43,11 +43,11 @@ class AverageAttackStats:
     total_dps: float | None = None
     first_shot_damage_multiplier: float = 1
     combo_multiplier: float = 1
-    melee_doughty_bonus: float = 0
+    puncture_status_crit_damage_bonus: float = 0
     crit_tier_bonus: float = 0
-    weakpoint_crit_tier_bonus: float = 0
+    weak_point_crit_tier_bonus: float = 0
     secondary_enervate_bonus: float = 0
-    weakpoint_secondary_enervate_bonus: float = 0
+    weak_point_secondary_enervate_bonus: float = 0
     falloff_multiplier: float = 1
 
 
@@ -80,14 +80,14 @@ class PreliminaryAttack:
 
 
 @dataclass(slots=True)
-class AttackResult:
+class ResolvedAttack:
     attack: Attack
     base: BaseAttackStats
     modded: ModdedAttackStats
     effective: EffectiveAttackStats
     upgrades: ResolvedStats
     evolutions: ResolvedStats
-    average: AverageAttackStats
+    average: ResolvedAttackMetrics
     spatial: SpatialMetrics
     status_effects: dict[str, float] = field(default_factory=dict)
     generated_by: str | None = None

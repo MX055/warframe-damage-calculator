@@ -113,7 +113,7 @@ class AttackInheritanceTests(unittest.TestCase):
         self.assertEqual(generated.category, "heavy")
         self.assertFalse(generated.hits_source)
         self.assertEqual(result.attacks["melee_influence"].generated_from, "heavy")
-        self.assertEqual(result.attacks["melee_influence"].average.combo_multiplier, 5)
+        self.assertEqual(result.attacks["melee_influence"].damage.combo_multiplier, 5)
         self.assertNotIn("slash", result.attacks["melee_influence"].status.sustained_procs)
 
     def test_nightwatch_napalm_has_explicit_combat_stats(self):
@@ -182,8 +182,8 @@ class AttackInheritanceTests(unittest.TestCase):
         without = Build(mods=mods)
         enemy = arsenal.enemy.get("Heavy Gunner")
         state = {"combo_multiplier": 4}
-        fresh_with = Calculator(weapon, enemy, build).resolve(state=state).aggregate.average.total_dps
-        fresh_without = Calculator(weapon, enemy, without).resolve(state=state).aggregate.average.total_dps
+        fresh_with = Calculator(weapon, enemy, build).resolve(state=state).aggregate.damage.total_dps
+        fresh_without = Calculator(weapon, enemy, without).resolve(state=state).aggregate.damage.total_dps
         self.assertGreater(fresh_with, fresh_without)
         result = Calculator(weapon, enemy, build).resolve(state=state)
         self.assertIn("melee_duplicate", result.weapon.attacks)
@@ -219,8 +219,8 @@ class AttackInheritanceTests(unittest.TestCase):
         weapon = arsenal.primary.get("Karak")
         result = Calculator(weapon, build=Build(mods=[mod])).resolve()
         self.assertIn("hit_echo", result.attacks)
-        parent = result.attacks["normal_attack"].average.direct_dph
-        child = result.attacks["hit_echo"].average.direct_dph
+        parent = result.attacks["normal_attack"].damage.direct_dph
+        child = result.attacks["hit_echo"].damage.direct_dph
         self.assertAlmostEqual(float(child), float(parent) * 0.3)
 
     def test_recursive_generated_attack_uses_geometric_expectation(self):
@@ -242,8 +242,8 @@ class AttackInheritanceTests(unittest.TestCase):
         )
         weapon = arsenal.primary.get("Karak")
         result = Calculator(weapon, build=Build(mods=[mod])).resolve()
-        parent = result.attacks["normal_attack"].average.direct_dph
-        child = result.attacks["recursive_echo"].average.direct_dph
+        parent = result.attacks["normal_attack"].damage.direct_dph
+        child = result.attacks["recursive_echo"].damage.direct_dph
         self.assertAlmostEqual(float(child), float(parent) * (0.3 / (1 - 0.3)))
 
 

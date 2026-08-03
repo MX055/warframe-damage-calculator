@@ -87,10 +87,10 @@ class DatabaseTests(unittest.TestCase):
         self.assertEqual(resolved.description, values.description)
         self.assertTrue(resolved.description)
 
-    def test_attack_and_bodypart_keys_are_separate_from_display_names(self):
+    def test_attack_and_body_part_keys_are_separate_from_display_names(self):
         attack = arsenal.primary.get("Coda Bassocyst").attacks["normal_attack"]
         self.assertEqual(attack.name, "Normal Attack")
-        self.assertEqual(arsenal.enemy.get("Drudge Brazer").bodyparts["stealth_finisher"].name, "Stealth Finisher")
+        self.assertEqual(arsenal.enemy.get("Drudge Brazer").body_parts["stealth_finisher"].name, "Stealth Finisher")
 
     def test_upgrade_repositories_filter_by_weapon_compatibility(self):
         vectis = arsenal.primary.get("Vectis Prime")
@@ -154,7 +154,7 @@ class DatabaseTests(unittest.TestCase):
         self.assertAlmostEqual(expanded.attacks["nightwatch_napalm_linger"].effective.end_range, 7.11 * 1.44)
         self.assertAlmostEqual(compressed.attacks["nightwatch_napalm_linger"].effective.end_range, 7.11 * 1.44)
         self.assertAlmostEqual(compressed.attacks["rocket_explosion"].upgrades.proportional["damage_bonus"], 7.9 * 1.44 * 0.8)
-        self.assertAlmostEqual(compressed.attacks["rocket_explosion"].average.ammo_efficiency, 7.9 * 1.44 * 0.8 * 0.055)
+        self.assertAlmostEqual(compressed.attacks["rocket_explosion"].timing.ammo_efficiency, 7.9 * 1.44 * 0.8 * 0.055)
 
     def test_generated_child_attacks_keep_multiplicative_range_from_their_generator(self):
         weapon = arsenal.primary.get("Kuva Ogris")
@@ -190,15 +190,15 @@ class DatabaseTests(unittest.TestCase):
         self.assertAlmostEqual(result.attacks["normal"].effective.range, 3)
         self.assertFalse(result.weapon.attacks["melee_influence"].hits_source)
         self.assertAlmostEqual(result.attacks["melee_influence"].effective.end_range, 20)
-        self.assertEqual(result.attacks["melee_influence"].average.direct_dph, 0)
-        self.assertGreater(result.attacks["melee_influence"].average.dot_dph, 0)
+        self.assertEqual(result.attacks["melee_influence"].damage.direct_dph, 0)
+        self.assertGreater(result.attacks["melee_influence"].damage.dot_dph, 0)
         self.assertIsNotNone(result.attacks["melee_influence"].spatial)
         self.assertGreater(result.attacks["melee_influence"].spatial.damage_mass, 0)
         self.assertEqual(result.attacks["melee_influence"].base.damage, Dist(electricity=10))
         self.assertIn("electricity", result.attacks["melee_influence"].status.sustained_procs)
         self.assertNotIn("slash", result.attacks["melee_influence"].status.sustained_procs)
-        self.assertAlmostEqual(result.aggregate.average.direct_dph, without.aggregate.average.direct_dph)
-        self.assertAlmostEqual(result.aggregate.average.dot_dph, without.aggregate.average.dot_dph)
+        self.assertAlmostEqual(result.aggregate.damage.direct_dph, without.aggregate.damage.direct_dph)
+        self.assertAlmostEqual(result.aggregate.damage.dot_dph, without.aggregate.damage.dot_dph)
         self.assertEqual(result.aggregate.status.sustained_procs, without.aggregate.status.sustained_procs)
         self.assertEqual(result.aggregate.status.effects, without.aggregate.status.effects)
         physical_result = Calculator(physical, build=Build(arcanes=[influence])).resolve()
@@ -221,7 +221,7 @@ class DatabaseTests(unittest.TestCase):
             self.assertAlmostEqual(duplicate.set(rank=rank).resolve_manual()[0].automatic["chance"], chance)
         result = Calculator(arsenal.melee.get("Bo Prime"), build=Build(arcanes=[duplicate])).resolve()
         self.assertIn("melee_duplicate", result.attacks)
-        self.assertGreater(result.attacks["melee_duplicate"].average.direct_dph, 0)
+        self.assertGreater(result.attacks["melee_duplicate"].damage.direct_dph, 0)
 
     def test_upgrade_repository_supports_attack_slot_and_conflict_filters(self):
         ignis = arsenal.primary.get("Ignis Wraith")

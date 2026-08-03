@@ -11,9 +11,9 @@ from ..state import State
 from ..status import StatusModel
 from ..upgrades import ResolvedEffect
 from ..weapons import Weapon
-from .damage import AverageResult, DamageResult
-from .spatial import SpatialResult
-from .status import StatusResult
+from .damage import AttackCriticalMetrics, AttackDamageMetrics, AttackTimingMetrics, DamageResult
+from .spatial import AttackSpatialMetrics
+from .status import AttackStatusMetrics
 
 
 class AttackStatsResult(Protocol):
@@ -37,31 +37,33 @@ class ResolvedStatsResult(Protocol):
 
 
 @dataclass(frozen=True, slots=True)
-class CalculatedAttack:
+class AttackResult:
     base: AttackStatsResult
     modded: AttackStatsResult
     effective: AttackStatsResult
     upgrades: ResolvedStatsResult
     evolutions: ResolvedStatsResult
-    average: AverageResult
-    status: StatusResult
-    spatial: SpatialResult | None
+    damage: AttackDamageMetrics
+    critical: AttackCriticalMetrics
+    timing: AttackTimingMetrics
+    status: AttackStatusMetrics
+    spatial: AttackSpatialMetrics
     generated_by: str | None = None
     generated_from: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
 class AggregateResult:
-    average: DamageResult
-    status: StatusResult
+    damage: DamageResult
+    status: AttackStatusMetrics
 
 
 @dataclass(frozen=True, slots=True)
 class CalculationResult:
     aggregate: AggregateResult
-    attacks: dict[str, CalculatedAttack]
+    attacks: dict[str, AttackResult]
     selected_attack: str
-    selected_bodypart: str
+    selected_body_part: str
     weapon: Weapon
     target: Enemy | None
     build: Build

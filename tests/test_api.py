@@ -7,7 +7,7 @@ from warframe_damage_calculator.formatting.results import format_damage_result, 
 class ApiTests(unittest.TestCase):
     def test_root_api_exposes_definition_types_and_hides_internal_classes(self):
         import warframe_damage_calculator as package
-        expected = ("Arcane", "Archgun", "Attack", "AttackStats", "Automatic", "BodyPart", "Build", "Calculator", "Combo", "Compatibility", "Dist", "Effect", "Enemy", "EnemyStats", "Falloff", "Formatter", "ImplementationStatus", "Inheritance", "Links", "Melee", "Mod", "OptimizationProgress", "Optimizer", "Perk", "PerkValues", "Primary", "Progenitor", "RelatedAttacks", "Secondary", "Source", "State", "Upgrade", "UpgradeStats", "UpgradeValue", "arsenal", "default_metric")
+        expected = ("Arcane", "Archgun", "Attack", "AttackStats", "Automatic", "BodyPart", "Build", "Calculator", "Combo", "Compatibility", "Dist", "Effect", "Enemy", "EnemyStats", "Falloff", "Formatter", "ImplementationStatus", "Inheritance", "Links", "Melee", "Mod", "OptimizationProgress", "Optimizer", "Perk", "PerkValues", "Primary", "Progenitor", "RelatedAttacks", "Secondary", "Source", "State", "Upgrade", "UpgradeStats", "UpgradeValue", "arsenal", "balanced_damage_metric")
         self.assertEqual(package.__all__, expected)
         for name in ("AggregateResult", "CalculationResult", "ImplementationWarning", "Metric", "ProgressCallback", "ResolvedPerk", "format_result"): self.assertFalse(hasattr(package, name))
         self.assertIs(package.Formatter, Formatter)
@@ -26,7 +26,7 @@ class ApiTests(unittest.TestCase):
         perk = Perk("Custom Perk", stats=UpgradeStats(crit_chance=Effect(Source("$values.crit_chance[0]"), mode="flat")))
         weapon = Primary(name="Custom Primary", attacks=[Attack("shot", stats=AttackStats(damage=Dist(impact=100), fire_rate=1))], reload_time=1, perks=[PerkValues(perk, 1, 1, {"crit_chance": (0.2,)})])
         result = Calculator(weapon, build=Build(mods=[mod], arcanes=[arcane], evolutions=[perk])).resolve()
-        self.assertGreater(result.aggregate.average.total_dps, 0)
+        self.assertGreater(result.aggregate.damage.total_dps, 0)
         self.assertIn("aftershock", result.attacks)
         self.assertEqual(result.attacks["aftershock"].base.damage, Dist(heat=10))
 
@@ -92,8 +92,8 @@ class ApiTests(unittest.TestCase):
         self.assertFalse(hasattr(root, "original_damage"))
         self.assertFalse(hasattr(result.aggregate, "components"))
         self.assertFalse(hasattr(result.aggregate, "spatial"))
-        self.assertGreater(result.aggregate.average.total_dps, root.average.total_dps)
-        self.assertGreater(result.attacks["air_burst_explosion"].average.total_dps, 0)
+        self.assertGreater(result.aggregate.damage.total_dps, root.damage.total_dps)
+        self.assertGreater(result.attacks["air_burst_explosion"].damage.total_dps, 0)
         self.assertFalse(hasattr(result, "main"))
 
     def test_prepared_and_ordinary_calculations_are_equal(self):
@@ -102,7 +102,7 @@ class ApiTests(unittest.TestCase):
         calculator = Calculator(weapon, build=build)
         ordinary = calculator.resolve(attack="incarnon_form")
         repeated = calculator.resolve(attack="incarnon_form")
-        self.assertEqual(repeated.aggregate.average, ordinary.aggregate.average)
+        self.assertEqual(repeated.aggregate.damage, ordinary.aggregate.damage)
         self.assertEqual(repeated.attacks.keys(), ordinary.attacks.keys())
 
     def test_calculation_does_not_mutate_weapon_definition(self):
@@ -123,7 +123,7 @@ class ApiTests(unittest.TestCase):
         self.assertAlmostEqual(normal.attacks["normal_attack"].modded.crit_chance, base_normal.attacks["normal_attack"].modded.crit_chance)
 
     def test_implementation_status_and_progenitor_build(self):
-        self.assertEqual(arsenal.primary.get("Kuva Chakkhurr").implementation_status, ImplementationStatus("partial", ("multiplicative_weakpoint_crit_chance",)))
+        self.assertEqual(arsenal.primary.get("Kuva Chakkhurr").implementation_status, ImplementationStatus("partial", ("multiplicative_weak_point_crit_chance",)))
         build = Build(progenitor=Progenitor("heat", 0.6))
         result = Calculator(arsenal.primary.get("Kuva Chakkhurr"), build=build).resolve()
         self.assertEqual(result.build.progenitor, build.progenitor)
@@ -182,13 +182,13 @@ class ApiTests(unittest.TestCase):
         fire_rate_summary = Formatter(fire_rate_result).stat_summary()
         self.assertIn("1.14a/s", fire_rate_summary.split("Fire Rate", 1)[1].splitlines()[0])
         self.assertIn("Attack Rate", fire_rate_summary)
-        self.assertIn(f"{fire_rate_attack.average.attack_rate:,.2f}a/s", fire_rate_summary.split("Attack Rate", 1)[1].splitlines()[0])
-        self.assertEqual(fire_rate_attack.average.damage, fire_rate_attack.effective.damage)
-        self.assertEqual(fire_rate_attack.average.crit_damage, fire_rate_attack.effective.crit_damage)
-        self.assertEqual(fire_rate_attack.average.status_chance, fire_rate_attack.effective.status_chance)
-        self.assertEqual(fire_rate_attack.average.multishot, fire_rate_attack.effective.multishot)
-        self.assertEqual(fire_rate_attack.average.fire_rate, fire_rate_attack.effective.fire_rate)
-        self.assertIn(f"{fire_rate_attack.average.crit_damage:.2f}×", fire_rate_summary.split("Critical Damage", 1)[1].splitlines()[0])
+        self.assertIn(f"{fire_rate_attack.timing.attack_rate:,.2f}a/s", fire_rate_summary.split("Attack Rate", 1)[1].splitlines()[0])
+        self.assertEqual(fire_rate_attack.damage.damage, fire_rate_attack.effective.damage)
+        self.assertEqual(fire_rate_attack.critical.crit_damage, fire_rate_attack.effective.crit_damage)
+        self.assertEqual(fire_rate_attack.status.status_chance, fire_rate_attack.effective.status_chance)
+        self.assertEqual(fire_rate_attack.timing.multishot, fire_rate_attack.effective.multishot)
+        self.assertEqual(fire_rate_attack.timing.fire_rate, fire_rate_attack.effective.fire_rate)
+        self.assertIn(f"{fire_rate_attack.critical.crit_damage:.2f}×", fire_rate_summary.split("Critical Damage", 1)[1].splitlines()[0])
         spatial_summary = Formatter(Calculator(weapon).resolve(attack="air_burst_explosion")).stat_summary()
         self.assertIn("Damage Mass", spatial_summary)
         self.assertIn("m³", spatial_summary.split("Damage Mass", 1)[1].splitlines()[0])
@@ -196,7 +196,7 @@ class ApiTests(unittest.TestCase):
         targeted = Formatter(Calculator(weapon, arsenal.enemy.get("Heavy Gunner"), build).resolve())
         self.assertIn("Total DPS Contributions: Corinth Prime Buckshot vs Heavy Gunner Body", targeted.build_summary())
         self.assertIn("Total DPS Contributions: Corinth Prime Buckshot vs Heavy Gunner Head", targeted.build_summary(body_part="head"))
-        resistant_target = Enemy(name="Heavy Gunner", bodyparts={"armor": BodyPart("resistant", 0.5)})
+        resistant_target = Enemy(name="Heavy Gunner", body_parts={"armor": BodyPart("resistant", 0.5)})
         resistant = Formatter(Calculator(weapon, resistant_target, build).resolve())
         self.assertIn("Total DPS Contributions: Corinth Prime Buckshot vs Heavy Gunner Armor", resistant.build_summary(body_part="armor"))
         self.assertEqual(Formatter._metric_name("dot_dps"), "DoT DPS")
@@ -209,7 +209,7 @@ class ApiTests(unittest.TestCase):
         self.assertIn("Contribution Rank", contribution_table)
         self.assertIn("Regular Mod", contribution_table)
         self.assertIn("Regular Arcane", Formatter(Calculator(arsenal.primary.get("Phenmor"), arsenal.enemy.get("Heavy Gunner"), Build(arcanes=[arsenal.arcane.get("Primary Merciless")])).resolve()).build_summary())
-        self.assertIn("DPH", format_damage_result(result.aggregate.average))
+        self.assertIn("DPH", format_damage_result(result.aggregate.damage))
         self.assertIn("Expected procs", format_status(result.aggregate.status))
         aoe = Calculator(weapon).resolve(attack="air_burst_explosion").attacks["air_burst_explosion"].spatial
         self.assertIsNotNone(aoe)
@@ -263,17 +263,17 @@ class ApiTests(unittest.TestCase):
         contributions = Calculator(weapon, build=build).contributions(attack="incarnon_form")
         removal = contributions.removal
         contribution = contributions.contribution
-        weakpoint_contributions = Calculator(weapon, arsenal.enemy.get("Heavy Gunner"), build).contributions(attack="incarnon_form", body_part="head")
-        weakpoint_removal = weakpoint_contributions.removal
-        weakpoint_contribution = weakpoint_contributions.contribution
+        weak_point_contributions = Calculator(weapon, arsenal.enemy.get("Heavy Gunner"), build).contributions(attack="incarnon_form", body_part="head")
+        weak_point_removal = weak_point_contributions.removal
+        weak_point_contribution = weak_point_contributions.contribution
         self.assertEqual(set(removal), {"Serration", "Devouring Attrition"})
         self.assertEqual(set(contribution), set(removal))
         self.assertAlmostEqual(sum(contribution.values()), 1)
         self.assertLess(removal["Serration"], 0)
         self.assertLess(removal["Devouring Attrition"], 0)
-        self.assertEqual(set(weakpoint_removal), set(removal))
-        self.assertEqual(set(weakpoint_contribution), set(removal))
-        self.assertAlmostEqual(sum(weakpoint_contribution.values()), 1)
+        self.assertEqual(set(weak_point_removal), set(removal))
+        self.assertEqual(set(weak_point_contribution), set(removal))
+        self.assertAlmostEqual(sum(weak_point_contribution.values()), 1)
         self.assertEqual(contributions.samples, 0)
         self.assertLessEqual(contributions.evaluations, 4)
     

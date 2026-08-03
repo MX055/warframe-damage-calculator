@@ -67,8 +67,8 @@ class Search:
                 {"multishot", "fire_rate", "reload_speed", "magazine_capacity"},
                 {"damage_bonus", "multishot", "heat", "cold", "electricity", "toxin"},
                 {"crit_chance", "crit_damage", "status_chance", "status_damage"},
-                {"weakpoint_damage", "weakpoint_crit_chance", "crit_chance", "crit_damage"},
-                {"damage_bonus", "weakpoint_damage", "weakpoint_crit_chance", "slash_proc", "status_chance", "status_damage", "status_duration", "cold", "toxin", "fire_rate"},
+                {"weak_point_damage", "weak_point_crit_chance", "crit_chance", "crit_damage"},
+                {"damage_bonus", "weak_point_damage", "weak_point_crit_chance", "slash_proc", "status_chance", "status_damage", "status_duration", "cold", "toxin", "fire_rate"},
             )
         perk_limit = min(128, max(8, round(64 * search_scale ** 0.5)))
         perk_sets = self._perk_sets(base, pools, perk_limit)

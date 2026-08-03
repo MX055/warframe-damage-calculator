@@ -14,6 +14,11 @@ def true_round(value: float, decimals: int = 0) -> float:
     return float(Decimal(str(value)).quantize(quantum, rounding=ROUND_HALF_UP))
 
 
+def resolve_status_stack_bonus(stacks: float, bonus_per_stack: float, max_stacks: float | None = None) -> float:
+    effective_stacks = stacks if max_stacks is None else min(stacks, max_stacks)
+    return true_round(effective_stacks * bonus_per_stack, 1)
+
+
 def family_factor(resolved: object, stat: str) -> float:
     factor = 1.0
     for family in getattr(resolved, "families", {}).values(): factor *= max(1 + float(family.get(stat, 0)), 1)

@@ -60,19 +60,19 @@ def _balanced_damage(direct: float, dot: float, balance_bonus: float = 0.1) -> f
     return total * (1 + balance_bonus * balance)
 
 
-def default_metric(result: CalculationResult) -> float:
-    average = result.aggregate.average
-    dps = _balanced_damage(average.direct_dps, average.dot_dps)
-    dph = _balanced_damage(average.direct_dph, average.dot_dph)
-    total_dph = average.direct_dph + average.dot_dph
-    weighted_damage_mass = sum((attack.average.direct_dph + attack.average.dot_dph) * (attack.spatial.damage_mass if attack.spatial is not None else 1.0) for attack in result.attacks.values())
+def balanced_damage_metric(result: CalculationResult) -> float:
+    damage = result.aggregate.damage
+    dps = _balanced_damage(damage.direct_dps, damage.dot_dps)
+    dph = _balanced_damage(damage.direct_dph, damage.dot_dph)
+    total_dph = damage.direct_dph + damage.dot_dph
+    weighted_damage_mass = sum((attack.damage.direct_dph + attack.damage.dot_dph) * (attack.spatial.damage_mass if attack.spatial.damage_mass is not None else 1.0) for attack in result.attacks.values())
     damage_mass = weighted_damage_mass / total_dph if total_dph > 0 else 1.0
     if dps <= 0 or dph <= 0 or damage_mass <= 0: return 0.0
     return (dps * dph * damage_mass) ** (1 / 3)
 
 
 @dataclass(frozen=True, slots=True)
-class Optimization:
+class OptimizationResult:
     build: Build
     result: CalculationResult
     score: float
@@ -97,7 +97,7 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         self._resolved_effect_cache: dict[int, tuple[ResolvedEffect, ...]] = {}
         self._upgrade_effects_cache: dict[tuple[int, ...], tuple[ResolvedEffect, ...]] = {}
 
-    def resolve(self, metric: Metric = default_metric, *, attack: str | None = None, body_part: str | None = None, state: State | None = None, evaluations: int = 20_000, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] | None = DEFAULT_UPGRADE_BLACKLIST, riven_stat_blacklist: Collection[str] | None = DEFAULT_RIVEN_STAT_BLACKLIST, workers: int | None = None, progress: ProgressCallback | None = terminal_progress) -> Optimization:
+    def resolve(self, metric: Metric = balanced_damage_metric, *, attack: str | None = None, body_part: str | None = None, state: State | None = None, evaluations: int = 20_000, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] | None = DEFAULT_UPGRADE_BLACKLIST, riven_stat_blacklist: Collection[str] | None = DEFAULT_RIVEN_STAT_BLACKLIST, workers: int | None = None, progress: ProgressCallback | None = terminal_progress) -> OptimizationResult:
         if not callable(metric): raise TypeError("metric must be callable")
         if evaluations < 1: raise ValueError("evaluations must be at least 1")
         if not isinstance(riven, bool): raise TypeError("riven must be a bool")
@@ -122,11 +122,11 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         generated_attacks = {WeaponCalculator._generated_key(effect) for upgrade in base.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual() if effect.stat == GENERATED_ATTACK_STAT}
         if selected_attack not in self.calculator.weapon.attacks and selected_attack not in generated_attacks: raise ValueError(f"unknown attack {selected_attack!r}")
         evaluator = Calculator(self.calculator.weapon, self.calculator.target, base)
-        selected_bodypart, target = evaluator._select_bodypart(body_part)
+        selected_body_part, target = evaluator._select_body_part(body_part)
         context = CalculationContext(weapon=evaluator.weapon, target=target if target is not None else Enemy(), attack=selected_attack, build=evaluator.build, resolved_perks=(), state=resolved_state)
         attack_generators = (*base.ranked_upgrades, *pools["mods"], *pools["arcanes"])
         prepared_names = None if any(GENERATED_ATTACK_STAT in upgrade.stats for upgrade in attack_generators) else tuple(WeaponCalculator(context).collect_attack_tree())
-        use_compact_metric = metric is default_metric
+        use_compact_metric = metric is balanced_damage_metric
         worker_count = min(os.cpu_count() or 1, 4) if workers is None else workers
         executor_type = getattr(futures, "InterpreterPoolExecutor", None)
         executor = executor_type(max_workers=worker_count) if use_compact_metric and worker_count > 1 and executor_type is not None else None
@@ -161,7 +161,7 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
                 dph = _balanced_damage(direct_dph, dot_dph)
                 score = (dps * dph * damage_mass) ** (1 / 3) if dps > 0 and dph > 0 and damage_mass > 0 else 0.0
             else:
-                result = evaluator._calculate(selected_attack, selected_bodypart, target, calculation_state, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=prepared_upgrade_effects)
+                result = evaluator._calculate(selected_attack, selected_body_part, target, calculation_state, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=prepared_upgrade_effects)
                 score = float(metric(result))
                 representative = result
             if not math.isfinite(score): raise ValueError("metric must return a finite number")
@@ -375,5 +375,5 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             resolved_perks = perk_cache.get(perk_key)
             if resolved_perks is None:
                 resolved_perks = resolve_perks(self.calculator.weapon, best.build.evolutions)
-            result = evaluator._calculate(selected_attack, selected_bodypart, target, calculation_state, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=self._compiled_upgrade_effects(best.build))
-        return Optimization(best.build.copy(), result, best.score, evaluations_used, resolutions, attempts, cache_hits, 0, elapsed, summary)
+            result = evaluator._calculate(selected_attack, selected_body_part, target, calculation_state, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=self._compiled_upgrade_effects(best.build))
+        return OptimizationResult(best.build.copy(), result, best.score, evaluations_used, resolutions, attempts, cache_hits, 0, elapsed, summary)

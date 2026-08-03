@@ -12,7 +12,7 @@ HANDLED_EFFECT_STATS = frozenset({
     "murmur_damage", "noise_level", "orokin_damage", "overguard_damage_multiplier", "projectile_speed", "puncture", "puncture_proc",
     "punch_through", "radiation", "random_proc", "range", "recoil", "reload_speed", "sentient_damage", "sharpshot_bonus", "slam_damage",
     "slam_radius", "slash", "slash_proc", "slide_crit_chance", "status_chance", "status_damage", "status_duration", "status_from_crit", "status_vulnerability",
-    "toxin", "unique_enemy_vulnerability_multiplier", "viral", "weakpoint_crit_chance", "weakpoint_damage", "zoom",
+    "toxin", "unique_enemy_vulnerability_multiplier", "viral", "weak_point_crit_chance", "weak_point_damage", "zoom",
 })
 NON_CALCULATION_EFFECT_STATS = frozenset({
     "aerial_melee_attack_range", "ammo_efficiency_chance", "ammo_replenish_chance", "ammo_restore", "body_shot_crit_chance_multiplier",

@@ -1,18 +1,19 @@
-from .calculation import AggregateResult, CalculatedAttack, CalculationResult
+from .calculation import AggregateResult, AttackResult, CalculationResult
 from .contributions import ContributionResult
-from .damage import AverageResult, DamageMetrics, DamageResult
-from .spatial import SpatialDamageMetrics, SpatialResult
-from .status import StatusResult
+from .damage import AttackCriticalMetrics, AttackDamageMetrics, AttackTimingMetrics, DamageMetrics, DamageResult
+from .spatial import AttackSpatialMetrics
+from .status import AttackStatusMetrics
 
 __all__ = (
     "AggregateResult",
-    "AverageResult",
-    "CalculatedAttack",
+    "AttackCriticalMetrics",
+    "AttackDamageMetrics",
+    "AttackResult",
+    "AttackSpatialMetrics",
+    "AttackStatusMetrics",
+    "AttackTimingMetrics",
     "CalculationResult",
     "ContributionResult",
     "DamageMetrics",
     "DamageResult",
-    "SpatialDamageMetrics",
-    "SpatialResult",
-    "StatusResult",
 )

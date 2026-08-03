@@ -12,7 +12,7 @@ from ..domain.generated_attacks import GENERATED_ATTACK_STAT
 from .attack_calculator import AttackCalculator, derive_event_attack, derive_status_attack
 from .automatic import automatic_value, automatic_values
 from .context import CalculationContext
-from .models.attack import AttackResult, AverageAttackStats, PreliminaryAttack
+from .models.attack import ResolvedAttack, ResolvedAttackMetrics, PreliminaryAttack
 from .status import AFFLICTIONS_CATEGORIES, _special_value, _status_model, _with_random_proc
 
 
@@ -297,8 +297,8 @@ class WeaponCalculator:
         shared = _with_random_proc(shared, preliminary[self.root_name].special_effects, random_probability)
         return shared, shared.non_damage_effects(), random_probability, root_duration
 
-    def calculate_final_attacks(self, names: list[str], preliminary: dict[str, PreliminaryAttack], shared: StatusModel, status_effects: dict[str, float], random_probability: float, *, compact: bool = False) -> dict[str, AttackResult]:
-        results: dict[str, AttackResult] = {}
+    def calculate_final_attacks(self, names: list[str], preliminary: dict[str, PreliminaryAttack], shared: StatusModel, status_effects: dict[str, float], random_probability: float, *, compact: bool = False) -> dict[str, ResolvedAttack]:
+        results: dict[str, ResolvedAttack] = {}
         for name in names:
             origin = self.origins.get(name)
             result = self.attacks.calculate(
@@ -315,7 +315,7 @@ class WeaponCalculator:
             results[name] = result
         return results
 
-    def derive_status_attacks(self, results: dict[str, AttackResult], names: list[str]) -> None:
+    def derive_status_attacks(self, results: dict[str, ResolvedAttack], names: list[str]) -> None:
         for effect in self.attack_effects:
             trigger_events = self._status_trigger_events(effect)
             if not trigger_events: continue
@@ -351,7 +351,7 @@ class WeaponCalculator:
             results[name] = derived
             names.append(name)
 
-    def derive_event_attacks(self, results: dict[str, AttackResult], names: list[str]) -> None:
+    def derive_event_attacks(self, results: dict[str, ResolvedAttack], names: list[str]) -> None:
         for effect in self.attack_effects:
             if self._status_trigger_events(effect): continue
             event = automatic_value(effect, "on")
@@ -409,7 +409,7 @@ class WeaponCalculator:
         return probability / (1 - probability)
 
     @staticmethod
-    def _fold_metrics(output: AverageAttackStats, own: AverageAttackStats, children: list[AverageAttackStats]) -> None:
+    def _fold_metrics(output: ResolvedAttackMetrics, own: ResolvedAttackMetrics, children: list[ResolvedAttackMetrics]) -> None:
         direct_values = [own.flat_dph, *(child.flat_dph for child in children)]
         dot_values = [own.flat_dotph, *(child.flat_dotph for child in children)]
         if not any(value is not None for value in (*direct_values, *dot_values)):
@@ -424,13 +424,13 @@ class WeaponCalculator:
         output.flat_dotps = dot * own.attack_rate
         output.total_dps = (direct + dot) * own.attack_rate
 
-    def aggregate_attack_tree(self, results: dict[str, AttackResult], names: list[str], root_duration: float) -> tuple[AverageAttackStats, StatusModel, dict[str, float]]:
+    def aggregate_attack_tree(self, results: dict[str, ResolvedAttack], names: list[str], root_duration: float) -> tuple[ResolvedAttackMetrics, StatusModel, dict[str, float]]:
         root = results[self.root_name]
         status_names = [name for name in names if results[name].attack.hits_source]
         group_model = StatusModel.combine([results[name].effective.status_model for name in status_names], root.average.attack_rate, root_duration)
         status_effects = group_model.non_damage_effects()
         status_effects["armor_reduction"] = min(status_effects.get("puncture", 0) * _special_value(root.effective.special_effects, "armor_reduction"), 1)
-        aggregate = AverageAttackStats(**{name: deepcopy(getattr(root.average, name)) for name in root.average.__dataclass_fields__})
+        aggregate = ResolvedAttackMetrics(**{name: deepcopy(getattr(root.average, name)) for name in root.average.__dataclass_fields__})
         descendants: list[str] = []
 
         def collect(name: str, path: frozenset[str] = frozenset()) -> None:
@@ -466,7 +466,7 @@ class WeaponCalculator:
         damage_mass = weighted_damage_mass / total_dph if total_dph > 0 else 1.0
         return direct_dph, dot_dph, direct_dph * attack_rate, dot_dph * attack_rate, damage_mass
 
-    def calculate(self) -> tuple[dict[str, AttackResult], AverageAttackStats, StatusModel, dict[str, float]]:
+    def calculate(self) -> tuple[dict[str, ResolvedAttack], ResolvedAttackMetrics, StatusModel, dict[str, float]]:
         self.prepare_effects()
         collected = self.collect_attack_tree()
         names = list(self.prepared_names) if self.prepared_names is not None else collected
@@ -479,7 +479,7 @@ class WeaponCalculator:
         return results, aggregate, aggregate_status_model, aggregate_status_effects
 
 
-def calculate_weapon(context: CalculationContext, prepared_names: tuple[str, ...] | None = None, prepared_upgrade_effects: tuple[ResolvedEffect, ...] | None = None) -> tuple[dict[str, AttackResult], AverageAttackStats, StatusModel, dict[str, float]]:
+def calculate_weapon(context: CalculationContext, prepared_names: tuple[str, ...] | None = None, prepared_upgrade_effects: tuple[ResolvedEffect, ...] | None = None) -> tuple[dict[str, ResolvedAttack], ResolvedAttackMetrics, StatusModel, dict[str, float]]:
     return WeaponCalculator(context, prepared_names, prepared_upgrade_effects).calculate()
 
 

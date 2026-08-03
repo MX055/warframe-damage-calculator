@@ -29,12 +29,12 @@ class Calculator:
 
     def resolve(self, *, attack: str | None = None, body_part: str | None = None, state: State | None = None) -> CalculationResult:
         selected_attack = attack or self.weapon.default_attack
-        selected_bodypart, target = self._select_bodypart(body_part)
-        return self._calculate(selected_attack, selected_bodypart, target, State() if state is None else State._from_values(state))
+        selected_body_part, target = self._select_body_part(body_part)
+        return self._calculate(selected_attack, selected_body_part, target, State() if state is None else State._from_values(state))
 
     def contributions(self, *, attack: str | None = None, metric: str | Callable[[CalculationResult], float] = "total_dps", body_part: str | None = None, state: State | None = None, seed: int = 0) -> ContributionResult:
         selected_attack = attack or self.weapon.default_attack
-        selected_bodypart, target = self._select_bodypart(body_part)
+        selected_body_part, target = self._select_body_part(body_part)
         calculation_state = State() if state is None else State._from_values(state)
         evaluator = Calculator(self.weapon, self.target)
         metric_name = None if callable(metric) else metric.rsplit(".", 1)[-1]
@@ -80,22 +80,22 @@ class Calculator:
             upgrade_effects = compiled_upgrade_effects(build)
             if compact_metric is not None:
                 return float(compact_metric(*evaluator._calculate_metric_components(selected_attack, target, calculation_state, resolved_perks=resolved_perks, prepared_names=prepared_names, prepared_upgrade_effects=upgrade_effects)))
-            result = evaluator._calculate(selected_attack, selected_bodypart, target, calculation_state, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=upgrade_effects)
+            result = evaluator._calculate(selected_attack, selected_body_part, target, calculation_state, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=upgrade_effects)
             if callable(metric): return float(metric(result))
             value: object = result
-            for name in metric.split(".") if "." in metric else ("aggregate", "average", metric): value = getattr(value, name)
+            for name in metric.split(".") if "." in metric else ("aggregate", "damage", metric): value = getattr(value, name)
             return float(value)
 
         return calculate_contributions(self.build, evaluate, seed)
 
-    def _select_bodypart(self, body_part: str | None) -> tuple[str, Enemy | None]:
+    def _select_body_part(self, body_part: str | None) -> tuple[str, Enemy | None]:
         if self.target is None:
             if body_part not in (None, "body"): raise ValueError(f"unknown body part {body_part!r}")
             return "body", None
-        selected = body_part or next(iter(self.target.bodyparts))
-        if selected not in self.target.bodyparts: raise ValueError(f"unknown body part {selected!r}")
+        selected = body_part or next(iter(self.target.body_parts))
+        if selected not in self.target.body_parts: raise ValueError(f"unknown body part {selected!r}")
         target = self.target.copy()
-        target.bodyparts = {selected: target.bodyparts[selected]}
+        target.body_parts = {selected: target.body_parts[selected]}
         return selected, target
 
     def _merge_state(self, state: State) -> State:

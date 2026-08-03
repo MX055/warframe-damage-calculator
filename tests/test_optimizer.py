@@ -5,13 +5,13 @@ def test_optimizer_preserves_locked_build_and_uses_budget():
     weapon = arsenal.primary.get("Braton Prime")
     locked = arsenal.mod.get("Serration")
     optimizer = Optimizer(Calculator(weapon, build=Build(mods=[locked])))
-    result = optimizer.resolve(metric=lambda calculation: calculation.aggregate.average.total_dps, evaluations=8)
+    result = optimizer.resolve(metric=lambda calculation: calculation.aggregate.damage.total_dps, evaluations=8)
     assert locked in result.build.mods
     assert result.evaluations <= 8
     assert result.score >= 0
 
 
-def test_optimizer_normalizes_attack_and_bodypart_weights():
+def test_optimizer_normalizes_attack_and_body_part_weights():
     weapon = arsenal.primary.get("Braton Prime")
     optimizer = Optimizer(Calculator(weapon))
     result = optimizer.resolve(attack=weapon.default_attack, body_part="body", evaluations=2)
@@ -93,15 +93,15 @@ def test_optimizer_rejects_unknown_state_fields():
 
 
 def test_compact_optimizer_score_matches_full_result():
-    from warframe_damage_calculator.optimizer import default_metric
+    from warframe_damage_calculator.optimizer import balanced_damage_metric
 
     optimizer = Optimizer(Calculator(arsenal.primary.get("Kuva Ogris"), build=Build(mods=[arsenal.mod.get("Nightwatch Napalm")])))
     result = optimizer.resolve(attack="rocket_impact", evaluations=8, workers=1, progress=None)
-    assert result.score == default_metric(result.result)
+    assert result.score == balanced_damage_metric(result.result)
 
 
-def test_default_metric_includes_generated_attack_spatial_mass():
-    from warframe_damage_calculator.optimizer import default_metric
+def test_balanced_damage_metric_includes_generated_attack_spatial_mass():
+    from warframe_damage_calculator.optimizer import balanced_damage_metric
 
     weapon = arsenal.melee.get("Xoris")
     electricity = arsenal.mod.get("Shocking Touch")
@@ -109,8 +109,8 @@ def test_default_metric_includes_generated_attack_spatial_mass():
     with_influence = Calculator(weapon, build=Build(mods=[electricity], arcanes=[arsenal.arcane.get("Melee Influence")])).resolve()
     assert "melee_influence" in with_influence.attacks
     assert with_influence.weapon.attacks["melee_influence"].hits_source is False
-    assert with_influence.aggregate.average.total_dph == without.aggregate.average.total_dph
-    assert default_metric(with_influence) > default_metric(without)
+    assert with_influence.aggregate.damage.total_dph == without.aggregate.damage.total_dph
+    assert balanced_damage_metric(with_influence) > balanced_damage_metric(without)
 
 
 def test_optimizer_seeds_generated_attack_status_dependencies():
@@ -214,7 +214,7 @@ def test_optimizer_replaces_unlocked_evolutions_during_contextual_search():
     assert any(alternative in candidate.evolutions and selected not in candidate.evolutions for candidate in neighbors)
 
 
-def test_optimizer_seeds_dot_weakpoint_synergies():
+def test_optimizer_seeds_dot_weak_point_synergies():
     weapon = arsenal.primary.get("Vectis Prime")
     optimizer = Optimizer(Calculator(weapon))
     pools = optimizer._candidate_pools(search_scale=2.0)

@@ -1,7 +1,7 @@
 from math import pi
 
 from ..domain.weapons import Attack
-from .models.attack import AverageAttackStats, SpatialMetrics
+from .models.attack import ResolvedAttackMetrics, SpatialMetrics
 from .models.stats import EffectiveAttackStats
 from .rates import SLAM_CATEGORIES
 
@@ -47,7 +47,7 @@ def spatial_falloff(attack: Attack, effective: EffectiveAttackStats) -> tuple[fl
     return falloff_multiplier, SpatialMetrics(falloff_multiplier=falloff_multiplier)
 
 
-def set_damage(average: AverageAttackStats, spatial: SpatialMetrics, direct: float, dot: float) -> None:
+def set_damage(average: ResolvedAttackMetrics, spatial: SpatialMetrics, direct: float, dot: float) -> None:
     average_direct = direct * average.falloff_multiplier
     average_dot = dot * average.falloff_multiplier
     average.flat_dph = average_direct

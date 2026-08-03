@@ -92,9 +92,9 @@ class DomainTests(unittest.TestCase):
     def test_omitted_combo_multiplier_uses_initial_combo(self):
         weapon = Melee(name="Test Blade", attacks=[Attack("heavy_attack", category="heavy", stats=AttackStats(damage=Dist(slash=100), initial_combo=40, fire_rate=1))], combo={"max_combo": 12})
         result = Calculator(weapon).resolve(attack="heavy_attack")
-        self.assertEqual(result.attacks["heavy_attack"].average.combo_multiplier, 3)
+        self.assertEqual(result.attacks["heavy_attack"].damage.combo_multiplier, 3)
         explicit = Calculator(weapon).resolve(attack="heavy_attack", state=State(combo_multiplier=5))
-        self.assertEqual(explicit.attacks["heavy_attack"].average.combo_multiplier, 5)
+        self.assertEqual(explicit.attacks["heavy_attack"].damage.combo_multiplier, 5)
 
     def test_weapon_definitions_are_picklable_for_parallel_optimization(self):
         weapon = pickle.loads(pickle.dumps(arsenal.primary.get("Vectis Prime")))

@@ -50,7 +50,7 @@ class EffectiveAttackStats(ModdedAttackStats):
     overguard_damage_multiplier: float
     non_crit_bonus_damage: float
     non_crit_bonus_chance: float
-    weakpoint_damage_bonus: float
+    weak_point_damage_bonus: float
     special_effects: tuple[ResolvedEffect, ...]
     trigger_crit_chance: float
 

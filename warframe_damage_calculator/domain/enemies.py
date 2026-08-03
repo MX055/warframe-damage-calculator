@@ -46,16 +46,16 @@ class BodyPart:
 
 
 class Enemy:
-    __slots__ = ("name", "faction", "base_level", "stats", "bodyparts", "modifiers", "runtime")
+    __slots__ = ("name", "faction", "base_level", "stats", "body_parts", "modifiers", "runtime")
 
-    def __init__(self, *, name: str = "Enemy", faction: str = "", base_level: float = 1, stats: EnemyStats | None = None, bodyparts: Mapping[str, BodyPart] | None = None, modifiers: Mapping[str, int | float] | None = None, runtime: Mapping[str, Any] | None = None) -> None:
+    def __init__(self, *, name: str = "Enemy", faction: str = "", base_level: float = 1, stats: EnemyStats | None = None, body_parts: Mapping[str, BodyPart] | None = None, modifiers: Mapping[str, int | float] | None = None, runtime: Mapping[str, Any] | None = None) -> None:
         self.name = name
         self.faction = faction
         self.base_level = float(base_level)
         self.stats = stats or EnemyStats()
-        self.bodyparts = deepcopy(dict(bodyparts or {"body": BodyPart()}))
-        for bodypart_id, bodypart in self.bodyparts.items():
-            if bodypart.name == "body" and bodypart_id != "body": bodypart.name = bodypart_id.replace("_", " ").title()
+        self.body_parts = deepcopy(dict(body_parts or {"body": BodyPart()}))
+        for body_part_id, body_part in self.body_parts.items():
+            if body_part.name == "body" and body_part_id != "body": body_part.name = body_part_id.replace("_", " ").title()
         self.modifiers = {kind.lower(): float(value) for kind, value in (modifiers or {}).items()}
         self.runtime = Runtime({"level", "steel_path", "empowered"}, {"level": 1, "steel_path": False, "empowered": False} | dict(runtime or {}))
 
@@ -65,14 +65,14 @@ class Enemy:
 
     @classmethod
     def from_record(cls, record: Mapping[str, Any], *, loaded: bool = False) -> Enemy:
-        allowed = {"name", "faction", "base_level", "stats", "bodyparts", "modifiers"}
+        allowed = {"name", "faction", "base_level", "stats", "body_parts", "modifiers"}
         unknown = set(record) - allowed
         if unknown: raise TypeError(f"unknown enemy fields: {', '.join(sorted(unknown))}")
         runtime = {"level": 100, "steel_path": False, "empowered": False} if loaded else None
-        return cls(name=str(record.get("name", "Enemy")), faction=str(record.get("faction", "")), base_level=float(record.get("base_level", 1)), stats=EnemyStats(**record.get("stats", {})), bodyparts={name: BodyPart(**({"name": name} | dict(part))) for name, part in record.get("bodyparts", {"body": {}}).items()}, modifiers=record.get("modifiers", {}), runtime=runtime)
+        return cls(name=str(record.get("name", "Enemy")), faction=str(record.get("faction", "")), base_level=float(record.get("base_level", 1)), stats=EnemyStats(**record.get("stats", {})), body_parts={name: BodyPart(**({"name": name} | dict(part))) for name, part in record.get("body_parts", {"body": {}}).items()}, modifiers=record.get("modifiers", {}), runtime=runtime)
 
     def copy(self) -> Enemy:
-        return Enemy(name=self.name, faction=self.faction, base_level=self.base_level, stats=deepcopy(self.stats), bodyparts=deepcopy(self.bodyparts), modifiers=self.modifiers, runtime=self.runtime.as_dict())
+        return Enemy(name=self.name, faction=self.faction, base_level=self.base_level, stats=deepcopy(self.stats), body_parts=deepcopy(self.body_parts), modifiers=self.modifiers, runtime=self.runtime.as_dict())
 
     @property
     def effective(self) -> EnemyStats:

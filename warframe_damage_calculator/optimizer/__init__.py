@@ -1,4 +1,4 @@
-from .optimizer import Metric, Optimization, Optimizer, default_metric
+from .optimizer import Metric, OptimizationResult, Optimizer, balanced_damage_metric
 from .progress import OptimizationProgress, ProgressCallback, terminal_progress
 
-__all__ = ("Metric", "Optimization", "OptimizationProgress", "Optimizer", "ProgressCallback", "default_metric", "terminal_progress")
+__all__ = ("Metric", "OptimizationResult", "OptimizationProgress", "Optimizer", "ProgressCallback", "balanced_damage_metric", "terminal_progress")
