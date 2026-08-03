@@ -13,7 +13,7 @@ SLAM_CATEGORIES = frozenset({"slam", "heavy_slam"})
 
 
 def _stance(context: CalculationContext) -> Upgrade | None:
-    return next((upgrade for upgrade in context.loadout.ranked_upgrades if upgrade.slot == "stance_mod"), None)
+    return next((upgrade for upgrade in context.build.ranked_upgrades if upgrade.slot == "stance_mod"), None)
 
 
 def _stance_combo(context: CalculationContext, attack: Attack) -> Combo | None:

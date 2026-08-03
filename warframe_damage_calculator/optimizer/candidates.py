@@ -4,7 +4,7 @@ from collections.abc import Collection
 from dataclasses import dataclass
 
 from ..database.arsenal import arsenal
-from ..domain.loadouts import Loadout, Progenitor
+from ..domain.builds import Build, Progenitor
 from ..domain.perks import Perk
 from ..domain.results import CalculationResult
 from ..domain.upgrades import Arcane, Mod, ResolvedEffect
@@ -18,14 +18,14 @@ DEFAULT_UPGRADE_BLACKLIST = frozenset({
 
 @dataclass(frozen=True, slots=True)
 class Candidate:
-    loadout: Loadout
+    build: Build
     score: float
     result: CalculationResult | None = None
 
 
 class CandidatePreparation:
-    def _loadout(self, *, mods=(), arcanes=(), evolutions=(), progenitor=None) -> Loadout:
-        return Loadout._from_parts(mods=mods, arcanes=arcanes, evolutions=evolutions, progenitor=progenitor)
+    def _build(self, *, mods=(), arcanes=(), evolutions=(), progenitor=None) -> Build:
+        return Build._from_parts(mods=mods, arcanes=arcanes, evolutions=evolutions, progenitor=progenitor)
 
     def _candidate_pools(self, *, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] | None = DEFAULT_UPGRADE_BLACKLIST, riven_stat_blacklist: Collection[str] | None = DEFAULT_RIVEN_STAT_BLACKLIST, search_scale: float = 1.0) -> dict[str, tuple]:
         use_default_upgrade_blacklist = upgrade_blacklist == DEFAULT_UPGRADE_BLACKLIST
@@ -35,7 +35,7 @@ class CandidatePreparation:
         compatible_mods = tuple(mod for mod in arsenal.mod.filter(weapon=weapon, implemented=True) if mod.name.casefold() not in upgrade_blacklist and not (use_default_upgrade_blacklist and self._has_faction_damage(mod)))
         mod_limit = min(192, max(36, round(108 * search_scale ** 0.4)))
         regular_mods = self._prepare_pool(compatible_mods, mod_limit)
-        locked_riven = any(self._is_riven(mod) for mod in self.calculator.loadout.mods)
+        locked_riven = any(self._is_riven(mod) for mod in self.calculator.build.mods)
         riven_limit = min(192, max(16, round(64 * search_scale ** 0.5)))
         rivens = () if locked_riven or not riven else self._riven_candidates(limit=riven_limit, stat_blacklist=riven_stat_blacklist)
         mods = (*regular_mods, *rivens)
@@ -83,93 +83,93 @@ class CandidatePreparation:
         self._priority_cache[key] = priority
         return priority
 
-    def _estimate_loadout(self, loadout: Loadout) -> float:
+    def _estimate_build(self, build: Build) -> float:
         score = 0.0
-        for upgrade in loadout.ranked_upgrades:
+        for upgrade in build.ranked_upgrades:
             priority, stat_count, _ = self._upgrade_priority(upgrade)
             score += priority + stat_count * 0.25
-        score += len(loadout.evolutions) * 12.0
-        if loadout.progenitor is not None: score += 8.0 + loadout.progenitor.bonus * 10.0
-        names = {upgrade.name for upgrade in loadout.ranked_upgrades}
+        score += len(build.evolutions) * 12.0
+        if build.progenitor is not None: score += 8.0 + build.progenitor.bonus * 10.0
+        names = {upgrade.name for upgrade in build.ranked_upgrades}
         elemental = sum(name in names for name in ("heat", "cold", "electricity", "toxin"))
         return score + elemental * 2.0
 
-    def _open_slots(self, loadout: Loadout, pools: dict[str, tuple]) -> int:
+    def _open_slots(self, build: Build, pools: dict[str, tuple]) -> int:
         mod_slots = 8 + (1 if any(mod.slot == "exilus_mod" for mod in pools["mods"]) else 0) + (1 if self.calculator.weapon.type == "melee" and any(mod.slot == "stance_mod" for mod in pools["mods"]) else 0)
-        occupied_tiers = {self.calculator.weapon.perks[perk].tier for perk in loadout.evolutions if perk in self.calculator.weapon.perks}
-        return max(0, mod_slots - len(loadout.mods)) + max(0, 1 - len(loadout.arcanes)) + sum(tier not in occupied_tiers for tier in pools["perks"]) + int(loadout.progenitor is None and bool(pools["progenitors"]))
+        occupied_tiers = {self.calculator.weapon.perks[perk].tier for perk in build.evolutions if perk in self.calculator.weapon.perks}
+        return max(0, mod_slots - len(build.mods)) + max(0, 1 - len(build.arcanes)) + sum(tier not in occupied_tiers for tier in pools["perks"]) + int(build.progenitor is None and bool(pools["progenitors"]))
 
-    def _complete_fixed_loadout(self, source: Loadout, *, evolutions: bool = True) -> Loadout:
+    def _complete_fixed_build(self, source: Build, *, evolutions: bool = True) -> Build:
         perks = list(source.evolutions)
         if evolutions:
             occupied = {self.calculator.weapon.perks[perk].tier for perk in perks if perk in self.calculator.weapon.perks}
             for tier, choices in self.calculator.weapon.perk_choices.items():
                 implemented = tuple(perk for perk in choices.values() if perk.implemented)
                 if tier not in occupied and len(implemented) == 1: perks.extend(implemented)
-        return self._loadout(mods=source.mods, arcanes=source.arcanes, evolutions=perks, progenitor=source.progenitor)
+        return self._build(mods=source.mods, arcanes=source.arcanes, evolutions=perks, progenitor=source.progenitor)
 
-    def _cleanup_removals(self, loadout: Loadout) -> list[tuple[int, Loadout]]:
-        fixed = self.calculator.loadout
-        removals: list[tuple[int, Loadout]] = []
-        for index in range(len(fixed.mods), len(loadout.mods)):
-            candidate = self._loadout(mods=[mod for i, mod in enumerate(loadout.mods) if i != index], arcanes=loadout.arcanes, evolutions=loadout.evolutions, progenitor=loadout.progenitor)
+    def _cleanup_removals(self, build: Build) -> list[tuple[int, Build]]:
+        fixed = self.calculator.build
+        removals: list[tuple[int, Build]] = []
+        for index in range(len(fixed.mods), len(build.mods)):
+            candidate = self._build(mods=[mod for i, mod in enumerate(build.mods) if i != index], arcanes=build.arcanes, evolutions=build.evolutions, progenitor=build.progenitor)
             if self._legal(candidate): removals.append((index, candidate))
-        offset = len(loadout.mods)
-        for index in range(len(fixed.arcanes), len(loadout.arcanes)):
-            candidate = self._loadout(mods=loadout.mods, arcanes=[arcane for i, arcane in enumerate(loadout.arcanes) if i != index], evolutions=loadout.evolutions, progenitor=loadout.progenitor)
+        offset = len(build.mods)
+        for index in range(len(fixed.arcanes), len(build.arcanes)):
+            candidate = self._build(mods=build.mods, arcanes=[arcane for i, arcane in enumerate(build.arcanes) if i != index], evolutions=build.evolutions, progenitor=build.progenitor)
             if self._legal(candidate): removals.append((offset + index, candidate))
         return removals
 
-    def _cleanup_replacements(self, loadout: Loadout, pools: dict[str, tuple], weak_indices: list[int], *, limit: int) -> list[Loadout]:
-        fixed = self.calculator.loadout
+    def _cleanup_replacements(self, build: Build, pools: dict[str, tuple], weak_indices: list[int], *, limit: int) -> list[Build]:
+        fixed = self.calculator.build
         fixed_tiers = {self.calculator.weapon.perks[perk].tier for perk in fixed.evolutions if perk in self.calculator.weapon.perks}
-        candidates: dict[tuple, Loadout] = {}
+        candidates: dict[tuple, Build] = {}
         for encoded_index in weak_indices:
-            if encoded_index < len(loadout.mods):
+            if encoded_index < len(build.mods):
                 index = encoded_index
-                selected = {mod.name for i, mod in enumerate(loadout.mods) if i != index}
+                selected = {mod.name for i, mod in enumerate(build.mods) if i != index}
                 ranked = sorted((mod for mod in pools["mods"] if mod.name not in selected), key=self._upgrade_priority, reverse=True)[:limit]
                 for mod in ranked:
-                    mods = list(loadout.mods)
+                    mods = list(build.mods)
                     mods[index] = mod
-                    candidate = self._loadout(mods=mods, arcanes=loadout.arcanes, evolutions=loadout.evolutions, progenitor=loadout.progenitor)
-                    if self._legal(candidate): candidates.setdefault(self._loadout_key(candidate), candidate)
+                    candidate = self._build(mods=mods, arcanes=build.arcanes, evolutions=build.evolutions, progenitor=build.progenitor)
+                    if self._legal(candidate): candidates.setdefault(self._build_key(candidate), candidate)
             else:
-                index = encoded_index - len(loadout.mods)
+                index = encoded_index - len(build.mods)
                 if index < len(fixed.arcanes): continue
-                selected = {arcane.name for i, arcane in enumerate(loadout.arcanes) if i != index}
+                selected = {arcane.name for i, arcane in enumerate(build.arcanes) if i != index}
                 ranked = sorted((arcane for arcane in pools["arcanes"] if arcane.name not in selected), key=self._upgrade_priority, reverse=True)[:limit]
                 for arcane in ranked:
-                    arcanes = list(loadout.arcanes)
+                    arcanes = list(build.arcanes)
                     arcanes[index] = arcane
-                    candidate = self._loadout(mods=loadout.mods, arcanes=arcanes, evolutions=loadout.evolutions, progenitor=loadout.progenitor)
-                    if self._legal(candidate): candidates.setdefault(self._loadout_key(candidate), candidate)
-        tier_indices = {self.calculator.weapon.perks[perk].tier: index for index, perk in enumerate(loadout.evolutions) if perk in self.calculator.weapon.perks}
+                    candidate = self._build(mods=build.mods, arcanes=arcanes, evolutions=build.evolutions, progenitor=build.progenitor)
+                    if self._legal(candidate): candidates.setdefault(self._build_key(candidate), candidate)
+        tier_indices = {self.calculator.weapon.perks[perk].tier: index for index, perk in enumerate(build.evolutions) if perk in self.calculator.weapon.perks}
         for tier, choices in pools["perks"].items():
             if tier in fixed_tiers or tier not in tier_indices: continue
             index = tier_indices[tier]
             for perk in choices:
-                if perk == loadout.evolutions[index]: continue
-                evolutions = list(loadout.evolutions)
+                if perk == build.evolutions[index]: continue
+                evolutions = list(build.evolutions)
                 evolutions[index] = perk
-                candidate = self._loadout(mods=loadout.mods, arcanes=loadout.arcanes, evolutions=evolutions, progenitor=loadout.progenitor)
-                candidates.setdefault(self._loadout_key(candidate), candidate)
+                candidate = self._build(mods=build.mods, arcanes=build.arcanes, evolutions=evolutions, progenitor=build.progenitor)
+                candidates.setdefault(self._build_key(candidate), candidate)
         if fixed.progenitor is None:
             for progenitor in pools["progenitors"]:
-                if progenitor == loadout.progenitor: continue
-                candidate = self._loadout(mods=loadout.mods, arcanes=loadout.arcanes, evolutions=loadout.evolutions, progenitor=progenitor)
-                candidates.setdefault(self._loadout_key(candidate), candidate)
-        return sorted(candidates.values(), key=self._estimate_loadout, reverse=True)[:max(limit * max(1, len(weak_indices)), limit)]
+                if progenitor == build.progenitor: continue
+                candidate = self._build(mods=build.mods, arcanes=build.arcanes, evolutions=build.evolutions, progenitor=progenitor)
+                candidates.setdefault(self._build_key(candidate), candidate)
+        return sorted(candidates.values(), key=self._estimate_build, reverse=True)[:max(limit * max(1, len(weak_indices)), limit)]
 
-    def _legal(self, loadout: Loadout) -> bool:
-        if sum(self._is_riven(mod) for mod in loadout.mods) > 1: return False
-        upgrades = list(loadout.ranked_upgrades)
+    def _legal(self, build: Build) -> bool:
+        if sum(self._is_riven(mod) for mod in build.mods) > 1: return False
+        upgrades = list(build.ranked_upgrades)
         names = {upgrade.name for upgrade in upgrades}
         if len(names) != len(upgrades): return False
         for upgrade in upgrades:
             if any(conflict in names for conflict in upgrade.conflicts): return False
         slot_counts: dict[str, int] = {}
-        for mod in loadout.mods: slot_counts[mod.slot] = slot_counts.get(mod.slot, 0) + 1
+        for mod in build.mods: slot_counts[mod.slot] = slot_counts.get(mod.slot, 0) + 1
         if slot_counts.get("regular_mod", 0) > 8 or slot_counts.get("exilus_mod", 0) > 1 or slot_counts.get("stance_mod", 0) > 1: return False
         return True
 
@@ -182,8 +182,8 @@ class CandidatePreparation:
         self._component_id_cache[identity] = component, assigned
         return assigned
 
-    def _compiled_upgrade_effects(self, loadout: Loadout) -> tuple[ResolvedEffect, ...]:
-        upgrades = loadout.ranked_upgrades
+    def _compiled_upgrade_effects(self, build: Build) -> tuple[ResolvedEffect, ...]:
+        upgrades = build.ranked_upgrades
         key = tuple(self._component_id(upgrade) for upgrade in upgrades)
         cached = self._upgrade_effects_cache.get(key)
         if cached is not None: return cached
@@ -200,6 +200,6 @@ class CandidatePreparation:
         self._upgrade_effects_cache[key] = compiled
         return compiled
 
-    def _loadout_key(self, loadout: Loadout) -> tuple:
-        return (tuple(self._component_id(mod) for mod in loadout.mods), tuple(self._component_id(arcane) for arcane in loadout.arcanes), tuple(self._component_id(perk) for perk in loadout.evolutions), None if loadout.progenitor is None else (loadout.progenitor.element, loadout.progenitor.bonus))
+    def _build_key(self, build: Build) -> tuple:
+        return (tuple(self._component_id(mod) for mod in build.mods), tuple(self._component_id(arcane) for arcane in build.arcanes), tuple(self._component_id(perk) for perk in build.evolutions), None if build.progenitor is None else (build.progenitor.element, build.progenitor.bonus))
 

@@ -10,7 +10,7 @@ from itertools import combinations, repeat
 
 from ..domain.enemies import Enemy
 from ..domain.generated_attacks import GENERATED_ATTACK_STAT
-from ..domain.loadouts import Loadout
+from ..domain.builds import Build
 from ..domain.perks import ResolvedPerk
 from ..domain.results import CalculationResult
 from ..domain.state import State
@@ -27,7 +27,7 @@ from .search import Search
 
 Metric = Callable[[CalculationResult], float]
 
-def _score_worker_batch(evaluator: Calculator, target: Enemy | None, attack: str, state: State, prepared_names: tuple[str, ...] | None, indexed_loadouts: tuple[tuple[int, Loadout], ...]) -> tuple[tuple[int, float], ...]:
+def _score_worker_batch(evaluator: Calculator, target: Enemy | None, attack: str, state: State, prepared_names: tuple[str, ...] | None, indexed_builds: tuple[tuple[int, Build], ...]) -> tuple[tuple[int, float], ...]:
     import math
     from warframe_damage_calculator.engine.perks import resolve_perks
 
@@ -39,10 +39,10 @@ def _score_worker_batch(evaluator: Calculator, target: Enemy | None, attack: str
         return total * (1 + 0.1 * 2 * math.sqrt(direct * dot) / total)
 
     scores = []
-    for index, loadout in indexed_loadouts:
-        resolved_perks = resolve_perks(evaluator.weapon, loadout.evolutions)
-        upgrade_effects = tuple(effect for upgrade in loadout.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual())
-        evaluator.loadout = loadout
+    for index, build in indexed_builds:
+        resolved_perks = resolve_perks(evaluator.weapon, build.evolutions)
+        upgrade_effects = tuple(effect for upgrade in build.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual())
+        evaluator.build = build
         direct_dph, dot_dph, direct_dps, dot_dps, damage_mass = evaluator._calculate_metric_components(attack, target, state, resolved_perks=resolved_perks, prepared_names=prepared_names, prepared_upgrade_effects=upgrade_effects)
         dps = balanced_damage(direct_dps, dot_dps)
         dph = balanced_damage(direct_dph, dot_dph)
@@ -73,7 +73,7 @@ def default_metric(result: CalculationResult) -> float:
 
 @dataclass(frozen=True, slots=True)
 class Optimization:
-    loadout: Loadout
+    build: Build
     result: CalculationResult
     score: float
     evaluations: int
@@ -117,13 +117,13 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         mode_scale = 2.0
         reporter = _ProgressReporter(progress, budget=evaluations)
         pools = self._candidate_pools(riven=riven, evolutions=evolutions, upgrade_blacklist=upgrade_blacklist, riven_stat_blacklist=riven_stat_blacklist, search_scale=search_scale)
-        base = self._complete_fixed_loadout(self.calculator.loadout, evolutions=evolutions)
+        base = self._complete_fixed_build(self.calculator.build, evolutions=evolutions)
         selected_attack = attack or self.calculator.weapon.default_attack
         generated_attacks = {WeaponCalculator._generated_key(effect) for upgrade in base.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual() if effect.stat == GENERATED_ATTACK_STAT}
         if selected_attack not in self.calculator.weapon.attacks and selected_attack not in generated_attacks: raise ValueError(f"unknown attack {selected_attack!r}")
         evaluator = Calculator(self.calculator.weapon, self.calculator.target, base)
         selected_bodypart, target = evaluator._select_bodypart(body_part)
-        context = CalculationContext(weapon=evaluator.weapon, target=target if target is not None else Enemy(), attack=selected_attack, loadout=evaluator.loadout, resolved_perks=(), state=resolved_state)
+        context = CalculationContext(weapon=evaluator.weapon, target=target if target is not None else Enemy(), attack=selected_attack, build=evaluator.build, resolved_perks=(), state=resolved_state)
         attack_generators = (*base.ranked_upgrades, *pools["mods"], *pools["arcanes"])
         prepared_names = None if any(GENERATED_ATTACK_STAT in upgrade.stats for upgrade in attack_generators) else tuple(WeaponCalculator(context).collect_attack_tree())
         use_compact_metric = metric is default_metric
@@ -137,10 +137,10 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         attempts = 0
         cache_hits = 0
 
-        def evaluate(loadout: Loadout) -> tuple[Candidate, bool]:
+        def evaluate(build: Build) -> tuple[Candidate, bool]:
             nonlocal evaluations_used, resolutions, attempts, cache_hits
             attempts += 1
-            key = self._loadout_key(loadout)
+            key = self._build_key(build)
             cached = cache.get(key)
             if cached is not None:
                 cache_hits += 1
@@ -148,13 +148,13 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             if evaluations_used >= resolution_budget: return best, False
             score = 0.0
             representative: CalculationResult | None = None
-            perk_key = tuple(self._component_id(perk) for perk in loadout.evolutions)
+            perk_key = tuple(self._component_id(perk) for perk in build.evolutions)
             resolved_perks = perk_cache.get(perk_key)
             if resolved_perks is None:
-                resolved_perks = resolve_perks(self.calculator.weapon, loadout.evolutions)
+                resolved_perks = resolve_perks(self.calculator.weapon, build.evolutions)
                 perk_cache[perk_key] = resolved_perks
-            prepared_upgrade_effects = self._compiled_upgrade_effects(loadout)
-            evaluator.loadout = loadout
+            prepared_upgrade_effects = self._compiled_upgrade_effects(build)
+            evaluator.build = build
             if use_compact_metric:
                 direct_dph, dot_dph, direct_dps, dot_dps, damage_mass = evaluator._calculate_metric_components(selected_attack, target, calculation_state, resolved_perks=resolved_perks, prepared_names=prepared_names, prepared_upgrade_effects=prepared_upgrade_effects)
                 dps = _balanced_damage(direct_dps, dot_dps)
@@ -166,30 +166,30 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
                 representative = result
             if not math.isfinite(score): raise ValueError("metric must return a finite number")
             resolutions += 1
-            candidate = Candidate(loadout, score, representative)
+            candidate = Candidate(build, score, representative)
             cache[key] = candidate
             evaluations_used += 1
             reporter.record_evaluation(evaluations_used, resolutions=resolutions, attempts=attempts, cache_hits=cache_hits, best_score=max(best.score if "best" in locals() else float("-inf"), score))
             return candidate, True
 
-        def evaluate_many(loadouts: list[Loadout], limit: int) -> list[tuple[Candidate, bool]]:
+        def evaluate_many(builds: list[Build], limit: int) -> list[tuple[Candidate, bool]]:
             nonlocal evaluations_used, resolutions, attempts, cache_hits
             if executor is None:
                 results: list[tuple[Candidate, bool]] = []
-                for loadout in loadouts:
+                for build in builds:
                     if evaluations_used >= limit: break
-                    results.append(evaluate(loadout))
+                    results.append(evaluate(build))
                 return results
-            results: list[tuple[Candidate, bool] | None] = [None] * len(loadouts)
-            pending: list[tuple[int, tuple, Loadout]] = []
+            results: list[tuple[Candidate, bool] | None] = [None] * len(builds)
+            pending: list[tuple[int, tuple, Build]] = []
             pending_keys: dict[tuple, int] = {}
             duplicates: list[tuple[int, int]] = []
-            for index, loadout in enumerate(loadouts):
+            for index, build in enumerate(builds):
                 if evaluations_used + len(pending) >= min(limit, resolution_budget):
                     results = results[:index]
                     break
                 attempts += 1
-                key = self._loadout_key(loadout)
+                key = self._build_key(build)
                 cached = cache.get(key)
                 if cached is not None:
                     cache_hits += 1
@@ -199,7 +199,7 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
                     duplicates.append((index, pending_keys[key]))
                 else:
                     pending_keys[key] = index
-                    pending.append((index, key, loadout))
+                    pending.append((index, key, build))
             worker_batches = []
             for offset in range(0, len(pending), 16):
                 stop = min(offset + 16, len(pending))
@@ -208,10 +208,10 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
                 scored_batches = executor.map(_score_worker_batch, repeat(evaluator), repeat(target), repeat(selected_attack), repeat(calculation_state), repeat(prepared_names), worker_batches)
                 scores_by_index = {index: score for scored_batch in scored_batches for index, score in scored_batch}
                 batch_best = best.score
-                for pending_index, (index, key, loadout) in enumerate(pending):
+                for pending_index, (index, key, build) in enumerate(pending):
                     score = scores_by_index[pending_index]
                     if not math.isfinite(score): raise ValueError("metric must return a finite number")
-                    candidate = Candidate(loadout, score)
+                    candidate = Candidate(build, score)
                     cache[key] = candidate
                     evaluations_used += 1
                     resolutions += 1
@@ -224,11 +224,11 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             for index, source_index in duplicates: results[index] = results[source_index][0], False
             return [result for result in results if result is not None]
 
-        def evaluated(loadouts: list[Loadout], limit: int) -> Iterator[tuple[Candidate, bool]]:
+        def evaluated(builds: list[Build], limit: int) -> Iterator[tuple[Candidate, bool]]:
             batch_size = max(worker_count * 64, 1)
-            for offset in range(0, len(loadouts), batch_size):
+            for offset in range(0, len(builds), batch_size):
                 if evaluations_used >= min(limit, resolution_budget): break
-                yield from evaluate_many(loadouts[offset:offset + batch_size], limit)
+                yield from evaluate_many(builds[offset:offset + batch_size], limit)
 
         best = Candidate(base, float("-inf"))
         base_candidate, _ = evaluate(base)
@@ -239,24 +239,24 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         def retain(candidates: list[Candidate]) -> list[Candidate]:
             return self._select_diverse(candidates, pool_limit)
 
-        seed_loadouts = list(self._seed_loadouts(base, pools, search_scale=search_scale))
+        seed_builds = list(self._seed_builds(base, pools, search_scale=search_scale))
         local_passes = min(4, max(1, round(2 * search_scale ** 0.35)))
         local_sources = min(pool_limit, max(2, round(2 * search_scale ** 0.5)))
         beam_sources = min(pool_limit, max(2, round(3 * search_scale ** 0.5)))
         cleanup_pass_limit = min(8, max(2, round(3 * search_scale ** 0.35)))
         estimated_total = resolution_budget
         reporter.set_estimated_total(max(estimated_total, 1))
-        reporter.begin_phase("Seeds", min(len(seed_loadouts), resolution_budget - evaluations_used), completed=evaluations_used)
+        reporter.begin_phase("Seeds", min(len(seed_builds), resolution_budget - evaluations_used), completed=evaluations_used)
         seed_candidates: list[Candidate] = []
-        for index, (loadout, evaluation) in enumerate(zip(seed_loadouts, evaluated(seed_loadouts, resolution_budget), strict=False)):
-            reporter.update_plan(min(len(seed_loadouts) - index, resolution_budget - evaluations_used))
+        for index, (build, evaluation) in enumerate(zip(seed_builds, evaluated(seed_builds, resolution_budget), strict=False)):
+            reporter.update_plan(min(len(seed_builds) - index, resolution_budget - evaluations_used))
             candidate, consumed = evaluation
             if not consumed: continue
             if candidate.score > best.score: best = candidate
             seed_candidates.append(candidate)
         pool = retain([*pool, *seed_candidates, best])
 
-        def change_group(origin: Loadout, candidate: Loadout) -> tuple[str, int]:
+        def change_group(origin: Build, candidate: Build) -> tuple[str, int]:
             for index, (left, right) in enumerate(zip(origin.mods, candidate.mods)):
                 if left is not right: return "mod", index
             if len(origin.mods) != len(candidate.mods): return "mod", min(len(origin.mods), len(candidate.mods))
@@ -276,16 +276,16 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             if evaluations_used >= local_deadline: break
             current = source
             for _ in range(local_passes):
-                neighbors = list(self._exact_neighbors(current.loadout, pools))
+                neighbors = list(self._exact_neighbors(current.build, pools))
                 reporter.update_plan(min(len(neighbors), local_deadline - evaluations_used))
                 improved = current
                 pass_candidates: list[Candidate] = []
-                for loadout, evaluation in zip(neighbors, evaluated(neighbors, local_deadline), strict=False):
+                for build, evaluation in zip(neighbors, evaluated(neighbors, local_deadline), strict=False):
                     candidate, consumed = evaluation
                     if not consumed: continue
                     if candidate.score > improved.score: improved = candidate
                     pass_candidates.append(candidate)
-                    group = change_group(current.loadout, candidate.loadout)
+                    group = change_group(current.build, candidate.build)
                     previous = frontier.get(group)
                     if candidate.score <= current.score and (previous is None or candidate.score > previous.score): frontier[group] = candidate
                 pool = retain([*pool, *pass_candidates, improved, best])
@@ -300,9 +300,9 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         for source in beam_starts:
             if evaluations_used >= beam_deadline: break
             candidates: list[Candidate] = []
-            neighbors = list(self._exact_neighbors(source.loadout, pools))
+            neighbors = list(self._exact_neighbors(source.build, pools))
             reporter.update_plan(min(len(neighbors), beam_deadline - evaluations_used))
-            for loadout, evaluation in zip(neighbors, evaluated(neighbors, beam_deadline), strict=False):
+            for build, evaluation in zip(neighbors, evaluated(neighbors, beam_deadline), strict=False):
                 candidate, consumed = evaluation
                 if not consumed: continue
                 candidates.append(candidate)
@@ -315,25 +315,25 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         for source_index, source in enumerate(rebuild_sources):
             if evaluations_used >= rebuild_deadline: break
             fixed_mods = len(base.mods)
-            mutable = [index for index in range(fixed_mods, len(source.loadout.mods)) if source.loadout.mods[index].slot == "regular_mod" and not self._is_riven(source.loadout.mods[index])]
+            mutable = [index for index in range(fixed_mods, len(source.build.mods)) if source.build.mods[index].slot == "regular_mod" and not self._is_riven(source.build.mods[index])]
             pairs = list(combinations(mutable, 2))
             pair_limit = min(len(pairs), max(3, round(5 * search_scale ** 0.4)))
             pair_offset = source_index * pair_limit % max(len(pairs), 1)
             ordered_pairs = [*pairs[pair_offset:], *pairs[:pair_offset]]
             for first, second in ordered_pairs[:pair_limit]:
                 if evaluations_used >= rebuild_deadline: break
-                mods = [mod for index, mod in enumerate(source.loadout.mods) if index not in {first, second}]
-                current = self._loadout(mods=mods, arcanes=source.loadout.arcanes, evolutions=source.loadout.evolutions, progenitor=source.loadout.progenitor)
+                mods = [mod for index, mod in enumerate(source.build.mods) if index not in {first, second}]
+                current = self._build(mods=mods, arcanes=source.build.arcanes, evolutions=source.build.evolutions, progenitor=source.build.progenitor)
                 current_candidate, _ = evaluate(current)
                 for _ in range(2):
                     selected = {mod.name for mod in current.mods}
                     improved = current_candidate
-                    additions = [candidate_loadout for mod in pools["mods"] if mod.slot == "regular_mod" and mod.name not in selected and self._legal(candidate_loadout := self._loadout(mods=[*current.mods, mod], arcanes=current.arcanes, evolutions=current.evolutions, progenitor=current.progenitor))]
+                    additions = [candidate_build for mod in pools["mods"] if mod.slot == "regular_mod" and mod.name not in selected and self._legal(candidate_build := self._build(mods=[*current.mods, mod], arcanes=current.arcanes, evolutions=current.evolutions, progenitor=current.progenitor))]
                     for candidate, _ in evaluated(additions, rebuild_deadline):
                         if candidate.score > improved.score: improved = candidate
                     if improved.score <= current_candidate.score: break
                     current_candidate = improved
-                    current = improved.loadout
+                    current = improved.build
                 if current_candidate.score > best.score: best = current_candidate
                 pool = retain([*pool, current_candidate, best])
 
@@ -343,9 +343,9 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             cleanup_passes += 1
             origin = best
             improved = origin
-            neighbors = list(self._exact_neighbors(origin.loadout, pools))
+            neighbors = list(self._exact_neighbors(origin.build, pools))
             reporter.update_plan(min(len(neighbors), resolution_budget - evaluations_used))
-            for loadout, evaluation in zip(neighbors, evaluated(neighbors, resolution_budget), strict=False):
+            for build, evaluation in zip(neighbors, evaluated(neighbors, resolution_budget), strict=False):
                 candidate, _ = evaluation
                 if candidate.score > improved.score: improved = candidate
             if improved.score <= origin.score: break
@@ -370,10 +370,10 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         }
         result = best.result
         if result is None:
-            evaluator.loadout = best.loadout
-            perk_key = tuple(self._component_id(perk) for perk in best.loadout.evolutions)
+            evaluator.build = best.build
+            perk_key = tuple(self._component_id(perk) for perk in best.build.evolutions)
             resolved_perks = perk_cache.get(perk_key)
             if resolved_perks is None:
-                resolved_perks = resolve_perks(self.calculator.weapon, best.loadout.evolutions)
-            result = evaluator._calculate(selected_attack, selected_bodypart, target, calculation_state, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=self._compiled_upgrade_effects(best.loadout))
-        return Optimization(best.loadout.copy(), result, best.score, evaluations_used, resolutions, attempts, cache_hits, 0, elapsed, summary)
+                resolved_perks = resolve_perks(self.calculator.weapon, best.build.evolutions)
+            result = evaluator._calculate(selected_attack, selected_bodypart, target, calculation_state, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=self._compiled_upgrade_effects(best.build))
+        return Optimization(best.build.copy(), result, best.score, evaluations_used, resolutions, attempts, cache_hits, 0, elapsed, summary)

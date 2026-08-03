@@ -3,7 +3,7 @@ from .domain.damage import Dist
 from .domain.effects import Automatic, Effect, Source
 from .domain.enemies import BodyPart, Enemy, EnemyStats
 from .domain.implementation import ImplementationStatus
-from .domain.loadouts import Loadout, Progenitor
+from .domain.builds import Build, Progenitor
 from .domain.perks import Perk, PerkValues
 from .domain.scaled_values import UpgradeValue
 from .domain.state import State
@@ -22,6 +22,7 @@ __all__ = (
     "AttackStats",
     "Automatic",
     "BodyPart",
+    "Build",
     "Calculator",
     "Combo",
     "Compatibility",
@@ -34,7 +35,6 @@ __all__ = (
     "ImplementationStatus",
     "Inheritance",
     "Links",
-    "Loadout",
     "Melee",
     "Mod",
     "OptimizationProgress",

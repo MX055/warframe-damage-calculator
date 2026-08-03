@@ -1,7 +1,7 @@
 import unittest
 import warnings
 
-from warframe_damage_calculator import Calculator, Loadout, arsenal
+from warframe_damage_calculator import Calculator, Build, arsenal
 from warframe_damage_calculator.domain.damage import Dist
 from warframe_damage_calculator.domain.enemies import BodyPart, Enemy, EnemyStats
 from warframe_damage_calculator.domain.weapons import Attack, AttackStats, Primary
@@ -11,8 +11,8 @@ def perk(weapon, tier, choice):
     return weapon.perk_choices[tier][choice]
 
 
-def loadout(*names, evolutions=()):
-    return Loadout(mods=[arsenal.mod.get(name) for name in names if name not in arsenal.arcane.names], arcanes=[arsenal.arcane.get(name) for name in names if name in arsenal.arcane.names], evolutions=evolutions)
+def build(*names, evolutions=()):
+    return Build(mods=[arsenal.mod.get(name) for name in names if name not in arsenal.arcane.names], arcanes=[arsenal.arcane.get(name) for name in names if name in arsenal.arcane.names], evolutions=evolutions)
 
 
 def selected(calculation):
@@ -30,7 +30,7 @@ class MechanicsTests(unittest.TestCase):
 
     def test_ranged_damage_crit_multishot_and_hunter_munitions(self):
         weapon = arsenal.primary.get("Braton")
-        result = selected(Calculator(weapon, loadout=loadout("Serration", "Split Chamber", "Point Strike", "Vital Sense", "Hunter Munitions")).resolve())
+        result = selected(Calculator(weapon, build=build("Serration", "Split Chamber", "Point Strike", "Vital Sense", "Hunter Munitions")).resolve())
         self.assertAlmostEqual(result.effective.damage.total, 63.6)
         self.assertAlmostEqual(result.effective.crit_chance, 0.3722579268292683)
         self.assertAlmostEqual(result.effective.crit_damage, 3.52)
@@ -41,7 +41,7 @@ class MechanicsTests(unittest.TestCase):
 
     def test_melee_combo_status_duplicate_and_doughty(self):
         weapon = arsenal.melee.get("Bo Prime")
-        calculation = Calculator(weapon, loadout=loadout("Condition Overload", "Blood Rush", "Weeping Wounds", "Melee Duplicate", "Melee Doughty")).resolve(state={"combo_multiplier": 12})
+        calculation = Calculator(weapon, build=build("Condition Overload", "Blood Rush", "Weeping Wounds", "Melee Duplicate", "Melee Doughty")).resolve(state={"combo_multiplier": 12})
         result = selected(calculation)
         self.assertAlmostEqual(result.effective.damage.total, 457.6)
         self.assertAlmostEqual(result.effective.crit_chance, 1.4886961152000002)
@@ -53,23 +53,23 @@ class MechanicsTests(unittest.TestCase):
         self.assertAlmostEqual(calculation.aggregate.average.total_dps, 4935.349745155888)
 
     def test_enervate_reset_expectation_and_encumber_random_proc(self):
-        enervate = selected(Calculator(arsenal.secondary.get("Laetum"), loadout=loadout("Secondary Enervate")).resolve())
+        enervate = selected(Calculator(arsenal.secondary.get("Laetum"), build=build("Secondary Enervate")).resolve())
         self.assertGreater(enervate.average.secondary_enervate_bonus, 0)
         self.assertAlmostEqual(enervate.average.direct_dph, 378.6766179484155)
         self.assertAlmostEqual(enervate.average.total_dps, 906.835830831968)
-        encumber = selected(Calculator(arsenal.secondary.get("Lato"), loadout=loadout("Secondary Encumber")).resolve())
+        encumber = selected(Calculator(arsenal.secondary.get("Lato"), build=build("Secondary Encumber")).resolve())
         self.assertAlmostEqual(encumber.average.dot_dph, 3.5399275201480167)
 
     def test_magazine_position_effects_use_shot_class_mixture(self):
-        charged = selected(Calculator(arsenal.primary.get("Braton"), loadout=loadout("Charged Chamber")).resolve())
+        charged = selected(Calculator(arsenal.primary.get("Braton"), build=build("Charged Chamber")).resolve())
         self.assertAlmostEqual(charged.average.first_shot_damage_multiplier, 1.008888888888889)
         self.assertAlmostEqual(charged.average.direct_dph, 26.5092002601626)
-        synth = selected(Calculator(arsenal.secondary.get("Lato"), loadout=loadout("Synth Charge")).resolve())
+        synth = selected(Calculator(arsenal.secondary.get("Lato"), build=build("Synth Charge")).resolve())
         self.assertAlmostEqual(synth.average.direct_dph, 49.555459459459456)
 
     def test_incarnon_form_condition_and_multishot_ammo_mechanics(self):
         weapon = arsenal.primary.get("Braton")
-        calculation = Calculator(weapon, loadout=Loadout(evolutions=[perk(weapon, 2, 2)])).resolve(attack="incarnon_form")
+        calculation = Calculator(weapon, build=Build(evolutions=[perk(weapon, 2, 2)])).resolve(attack="incarnon_form")
         result = selected(calculation)
         self.assertAlmostEqual(result.effective.multishot, 1.2)
         self.assertAlmostEqual(result.effective.ammo_cost, 1.2)
@@ -84,7 +84,7 @@ class MechanicsTests(unittest.TestCase):
         weapon = arsenal.primary.get("Braton")
         without = selected(Calculator(weapon).resolve())
         efficiency = Mod(name="Ammo Efficiency", max_rank=0, stats=UpgradeStats(ammo_efficiency=0.5))
-        with_efficiency = selected(Calculator(weapon, loadout=Loadout(mods=[efficiency])).resolve())
+        with_efficiency = selected(Calculator(weapon, build=Build(mods=[efficiency])).resolve())
         self.assertAlmostEqual(without.modded.ammo_cost, 1.0)
         self.assertAlmostEqual(with_efficiency.modded.ammo_efficiency, 0.5)
         self.assertAlmostEqual(with_efficiency.modded.ammo_cost, 0.5)
@@ -93,7 +93,7 @@ class MechanicsTests(unittest.TestCase):
 
     def test_target_pool_armor_status_and_bodypart_model(self):
         target = arsenal.enemy.get("Heavy Gunner").set(level=100, steel_path=True)
-        calculator = Calculator(arsenal.primary.get("Braton"), target, loadout("Serration"))
+        calculator = Calculator(arsenal.primary.get("Braton"), target, build("Serration"))
         body = selected(calculator.resolve(body_part="body"))
         head = selected(calculator.resolve(body_part="head"))
         self.assertAlmostEqual(body.average.direct_dph, 8.111946657804877)
@@ -113,7 +113,7 @@ class MechanicsTests(unittest.TestCase):
     def test_evolution_base_stats_and_form_condition(self):
         weapon = arsenal.primary.get("Braton")
         evolutions = [perk(weapon, 2, 1), perk(weapon, 3, 1), perk(weapon, 4, 1)]
-        calculation = Calculator(weapon, loadout=Loadout(evolutions=evolutions)).resolve(attack="incarnon_form")
+        calculation = Calculator(weapon, build=Build(evolutions=evolutions)).resolve(attack="incarnon_form")
         result = selected(calculation)
         self.assertAlmostEqual(result.effective.damage.total, 104)
         self.assertAlmostEqual(result.effective.crit_chance, 0.46688995215311)
@@ -123,8 +123,8 @@ class MechanicsTests(unittest.TestCase):
 
     def test_equipped_dependencies_are_case_insensitive(self):
         weapon = arsenal.melee.get("Bo Prime")
-        pressure_only = selected(Calculator(weapon, loadout=loadout("Sacrificial Pressure")).resolve()).effective.damage.total
-        paired = selected(Calculator(weapon, loadout=loadout("Sacrificial Pressure", "Sacrificial Steel")).resolve())
+        pressure_only = selected(Calculator(weapon, build=build("Sacrificial Pressure")).resolve()).effective.damage.total
+        paired = selected(Calculator(weapon, build=build("Sacrificial Pressure", "Sacrificial Steel")).resolve())
         bare = selected(Calculator(weapon).resolve())
         self.assertGreater(paired.effective.damage.total, pressure_only)
         self.assertGreater(paired.effective.crit_chance, bare.effective.crit_chance)
@@ -137,7 +137,7 @@ class MechanicsTests(unittest.TestCase):
 
     def test_non_crit_family_uses_event_chance_without_changing_effective_damage(self):
         weapon = arsenal.secondary.get("Laetum")
-        result = selected(Calculator(weapon, loadout=Loadout(evolutions=[perk(weapon, 5, 1)])).resolve())
+        result = selected(Calculator(weapon, build=Build(evolutions=[perk(weapon, 5, 1)])).resolve())
         self.assertAlmostEqual(result.effective.damage.total, 160)
         self.assertAlmostEqual(result.average.direct_dph, 1450.24)
         self.assertAlmostEqual(result.average.dot_dph, 402.006528)
@@ -146,30 +146,30 @@ class MechanicsTests(unittest.TestCase):
     def test_not_continuous_condition_prevents_last_shot_overlay(self):
         weapon = arsenal.primary.get("Amprex")
         bare = selected(Calculator(weapon).resolve()).average.direct_dph
-        synth = selected(Calculator(weapon, loadout=loadout("Synth Charge")).resolve())
+        synth = selected(Calculator(weapon, build=build("Synth Charge")).resolve())
         self.assertAlmostEqual(synth.average.direct_dph, bare)
         self.assertEqual(synth.average.first_shot_damage_multiplier, 1)
 
     def test_synth_charge_requires_a_base_magazine_of_five(self):
         weapon = arsenal.secondary.get("Knell")
         bare = selected(Calculator(weapon).resolve()).average.direct_dph
-        synth = selected(Calculator(weapon, loadout=loadout("Synth Charge")).resolve()).average.direct_dph
+        synth = selected(Calculator(weapon, build=build("Synth Charge")).resolve()).average.direct_dph
         self.assertAlmostEqual(synth, bare)
 
     def test_synth_charge_does_not_apply_to_incarnon_form(self):
         weapon = arsenal.secondary.get("Laetum")
         bare = selected(Calculator(weapon).resolve(attack="incarnon_form")).average.direct_dph
-        synth = selected(Calculator(weapon, loadout=loadout("Synth Charge")).resolve(attack="incarnon_form")).average.direct_dph
+        synth = selected(Calculator(weapon, build=build("Synth Charge")).resolve(attack="incarnon_form")).average.direct_dph
         self.assertAlmostEqual(synth, bare)
 
     def test_bow_fire_rate_effect_is_an_additional_application(self):
-        speed_trigger = loadout("Speed Trigger")
+        speed_trigger = build("Speed Trigger")
         bow = arsenal.primary.get("Paris")
         rifle = arsenal.primary.get("Braton")
         bare_bow_rate = selected(Calculator(bow).resolve()).effective.fire_rate
         bare_rifle_rate = selected(Calculator(rifle).resolve()).effective.fire_rate
-        bow_rate = selected(Calculator(bow, loadout=speed_trigger).resolve()).effective.fire_rate
-        rifle_rate = selected(Calculator(rifle, loadout=speed_trigger).resolve()).effective.fire_rate
+        bow_rate = selected(Calculator(bow, build=speed_trigger).resolve()).effective.fire_rate
+        rifle_rate = selected(Calculator(rifle, build=speed_trigger).resolve()).effective.fire_rate
         self.assertAlmostEqual(bow_rate / bare_bow_rate, 2.2)
         self.assertAlmostEqual(rifle_rate / bare_rifle_rate, 1.6)
 

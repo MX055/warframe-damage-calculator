@@ -123,7 +123,7 @@ class WeaponCalculator:
         self.prepared_upgrade_effects = prepared_upgrade_effects
 
     def prepare_effects(self) -> None:
-        resolved = self.prepared_upgrade_effects if self.prepared_upgrade_effects is not None else tuple(effect for upgrade in self.context.loadout.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual())
+        resolved = self.prepared_upgrade_effects if self.prepared_upgrade_effects is not None else tuple(effect for upgrade in self.context.build.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual())
         self.attack_effects = tuple(effect for effect in resolved if effect.stat == GENERATED_ATTACK_STAT)
         self.upgrade_effects = tuple(effect for effect in resolved if effect.stat != GENERATED_ATTACK_STAT)
         self.evolution_effects = tuple(effect for perk in self.context.resolved_perks for effect in perk.effects)
@@ -233,7 +233,7 @@ class WeaponCalculator:
 
     def collect_attack_tree(self) -> list[str]:
         ordered: list[str] = []
-        equipped = {upgrade.name for upgrade in self.context.loadout.ranked_upgrades}
+        equipped = {upgrade.name for upgrade in self.context.build.ranked_upgrades}
         self.definitions = self._base_definitions()
         self.origins = {}
 

@@ -28,11 +28,11 @@ mod = Mod(
 
 weapon = arsenal.primary.get("Karak")
 target = arsenal.enemy.get("Corrupted Heavy Gunner").set(level=100)
-loadout = Loadout(mods=[mod])
+build = Build(mods=[mod])
 
-calculator = Calculator(weapon, target, loadout)
+calculator = Calculator(weapon, target, build)
 result = calculator.resolve()
 formatter = Formatter(result)
 
-print(formatter.summary())
-print(formatter.contributions())
+print(formatter.stat_summary())
+print(formatter.build_summary())

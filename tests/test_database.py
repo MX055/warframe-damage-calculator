@@ -1,13 +1,13 @@
 import unittest
 import warnings
 
-from warframe_damage_calculator import Calculator, Loadout, arsenal
+from warframe_damage_calculator import Calculator, Build, arsenal
 from warframe_damage_calculator.database.compatibility import is_upgrade_compatible
 from warframe_damage_calculator.domain.damage import Dist
 from warframe_damage_calculator.domain.effects import Effect, Source
 from warframe_damage_calculator.domain.scaled_values import ScaledValue
 from warframe_damage_calculator.domain.upgrades import Mod, UpgradeStats
-from warframe_damage_calculator.domain.warnings import LoadoutCompatibilityWarning
+from warframe_damage_calculator.domain.warnings import BuildCompatibilityWarning
 from warframe_damage_calculator.domain.weapons import Attack, AttackStats, Melee, Secondary
 
 
@@ -111,8 +111,8 @@ class DatabaseTests(unittest.TestCase):
         self.assertFalse(is_upgrade_compatible(arsenal.mod.get("Energizing Shot"), stug))
         with warnings.catch_warnings(record=True) as captured:
             warnings.simplefilter("always")
-            Calculator(stug, loadout=Loadout(mods=[arsenal.mod.get("Hornet Strike")])).resolve()
-        self.assertFalse(any(isinstance(item.message, LoadoutCompatibilityWarning) for item in captured))
+            Calculator(stug, build=Build(mods=[arsenal.mod.get("Hornet Strike")])).resolve()
+        self.assertFalse(any(isinstance(item.message, BuildCompatibilityWarning) for item in captured))
 
     def test_attack_compatibility_constraints_must_match_the_same_attack(self):
         weapon = Secondary(name="Mixed", subtype="pistol", attacks=[
@@ -133,13 +133,13 @@ class DatabaseTests(unittest.TestCase):
         plain = Calculator(weapon).resolve(attack="rocket_impact")
         self.assertNotIn("nightwatch_napalm_linger", plain.attacks)
         with self.assertRaisesRegex(ValueError, "unknown attack"): Calculator(weapon).resolve(attack="nightwatch_napalm_linger")
-        result = Calculator(weapon, loadout=Loadout(mods=[napalm])).resolve(attack="rocket_impact")
+        result = Calculator(weapon, build=Build(mods=[napalm])).resolve(attack="rocket_impact")
         self.assertIn("nightwatch_napalm_linger", result.attacks)
         self.assertAlmostEqual(result.attacks["nightwatch_napalm_linger"].effective.end_range, 7.11)
         self.assertAlmostEqual(result.attacks["nightwatch_napalm_linger"].effective.damage["heat"], 687 * 0.3)
-        ogris_result = Calculator(ogris, loadout=Loadout(mods=[napalm])).resolve(attack="rocket_impact")
+        ogris_result = Calculator(ogris, build=Build(mods=[napalm])).resolve(attack="rocket_impact")
         self.assertAlmostEqual(ogris_result.attacks["nightwatch_napalm_linger"].effective.damage["heat"], 600 * 0.3)
-        generated = Calculator(weapon, loadout=Loadout(mods=[napalm])).resolve(attack="nightwatch_napalm_linger")
+        generated = Calculator(weapon, build=Build(mods=[napalm])).resolve(attack="nightwatch_napalm_linger")
         self.assertEqual(list(generated.attacks), ["nightwatch_napalm_linger"])
 
     def test_generated_child_attacks_ignore_other_upgrades_multiplicative_range(self):
@@ -147,8 +147,8 @@ class DatabaseTests(unittest.TestCase):
         napalm = arsenal.mod.get("Nightwatch Napalm")
         firestorm = arsenal.mod.get("Primed Firestorm")
         compression = arsenal.arcane.get("Primary Compression")
-        expanded = Calculator(weapon, loadout=Loadout(mods=[napalm, firestorm])).resolve(attack="rocket_impact")
-        compressed = Calculator(weapon, loadout=Loadout(mods=[napalm, firestorm], arcanes=[compression])).resolve(attack="rocket_impact")
+        expanded = Calculator(weapon, build=Build(mods=[napalm, firestorm])).resolve(attack="rocket_impact")
+        compressed = Calculator(weapon, build=Build(mods=[napalm, firestorm], arcanes=[compression])).resolve(attack="rocket_impact")
         self.assertAlmostEqual(expanded.attacks["rocket_explosion"].effective.end_range, 7.9 * 1.44)
         self.assertAlmostEqual(compressed.attacks["rocket_explosion"].effective.end_range, 7.9 * 1.44 * 0.2)
         self.assertAlmostEqual(expanded.attacks["nightwatch_napalm_linger"].effective.end_range, 7.11 * 1.44)
@@ -159,14 +159,14 @@ class DatabaseTests(unittest.TestCase):
     def test_generated_child_attacks_keep_multiplicative_range_from_their_generator(self):
         weapon = arsenal.primary.get("Kuva Ogris")
         generator = Mod(name="Nightwatch Napalm", max_rank=0, stats=UpgradeStats(explosion_radius=Effect(0.5, mode="multiplicative"), generated_attack=arsenal.mod.get("Nightwatch Napalm").stats.generated_attack))
-        result = Calculator(weapon, loadout=Loadout(mods=[generator])).resolve(attack="rocket_impact")
+        result = Calculator(weapon, build=Build(mods=[generator])).resolve(attack="rocket_impact")
         self.assertAlmostEqual(result.attacks["rocket_explosion"].effective.end_range, 7.9 * 0.5)
         self.assertAlmostEqual(result.attacks["nightwatch_napalm_linger"].effective.end_range, 7.11 * 0.5)
 
     def test_primary_compression_can_be_disabled_by_the_aim_condition(self):
         weapon = arsenal.primary.get("Kuva Ogris")
         compression = arsenal.arcane.get("Primary Compression").set(aim=False)
-        result = Calculator(weapon, loadout=Loadout(arcanes=[compression])).resolve(attack="rocket_explosion")
+        result = Calculator(weapon, build=Build(arcanes=[compression])).resolve(attack="rocket_explosion")
         self.assertAlmostEqual(result.attacks["rocket_explosion"].effective.end_range, 7.9)
         self.assertNotIn("damage_bonus", result.attacks["rocket_explosion"].upgrades.proportional)
 
@@ -186,7 +186,7 @@ class DatabaseTests(unittest.TestCase):
         self.assertIn("stats.damage.electricity", influence_effect.value["inheritance"]["include"])
         self.assertNotIn("attacks", arsenal.database["upgrades"]["arcanes"]["Melee Influence"])
         without = Calculator(electric).resolve()
-        result = Calculator(electric, loadout=Loadout(arcanes=[influence])).resolve()
+        result = Calculator(electric, build=Build(arcanes=[influence])).resolve()
         self.assertAlmostEqual(result.attacks["normal"].effective.range, 3)
         self.assertFalse(result.weapon.attacks["melee_influence"].hits_source)
         self.assertAlmostEqual(result.attacks["melee_influence"].effective.end_range, 20)
@@ -201,13 +201,13 @@ class DatabaseTests(unittest.TestCase):
         self.assertAlmostEqual(result.aggregate.average.dot_dph, without.aggregate.average.dot_dph)
         self.assertEqual(result.aggregate.status.sustained_procs, without.aggregate.status.sustained_procs)
         self.assertEqual(result.aggregate.status.effects, without.aggregate.status.effects)
-        physical_result = Calculator(physical, loadout=Loadout(arcanes=[influence])).resolve()
+        physical_result = Calculator(physical, build=Build(arcanes=[influence])).resolve()
         self.assertNotIn("melee_influence", physical_result.attacks)
         self.assertAlmostEqual(physical_result.attacks["normal"].effective.range, 3)
-        modded_result = Calculator(physical, loadout=Loadout(mods=[arsenal.mod.get("Shocking Touch")], arcanes=[influence])).resolve()
+        modded_result = Calculator(physical, build=Build(mods=[arsenal.mod.get("Shocking Touch")], arcanes=[influence])).resolve()
         self.assertIn("electricity", modded_result.attacks["melee_influence"].status.sustained_procs)
         rank_zero = arsenal.arcane.get("Melee Influence").set(rank=0)
-        self.assertAlmostEqual(Calculator(electric, loadout=Loadout(arcanes=[rank_zero])).resolve().attacks["melee_influence"].effective.end_range, 20)
+        self.assertAlmostEqual(Calculator(electric, build=Build(arcanes=[rank_zero])).resolve().attacks["melee_influence"].effective.end_range, 20)
         self.assertEqual(rank_zero.resolve_manual()[0].automatic["for"], 3)
 
     def test_melee_duplicate_is_an_inherited_automatic_child_attack(self):
@@ -219,7 +219,7 @@ class DatabaseTests(unittest.TestCase):
         self.assertEqual(effect.automatic["chance"], ScaledValue(1, True))
         for rank, chance in enumerate([1 / 6, 2 / 6, 3 / 6, 4 / 6, 5 / 6, 1]):
             self.assertAlmostEqual(duplicate.set(rank=rank).resolve_manual()[0].automatic["chance"], chance)
-        result = Calculator(arsenal.melee.get("Bo Prime"), loadout=Loadout(arcanes=[duplicate])).resolve()
+        result = Calculator(arsenal.melee.get("Bo Prime"), build=Build(arcanes=[duplicate])).resolve()
         self.assertIn("melee_duplicate", result.attacks)
         self.assertGreater(result.attacks["melee_duplicate"].average.direct_dph, 0)
 

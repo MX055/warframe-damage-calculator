@@ -5,12 +5,12 @@ An analytic Python damage calculator for Warframe weapons.
 ## Basic use
 
 ```python
-from warframe_damage_calculator import Calculator, Loadout, State, arsenal
+from warframe_damage_calculator import Calculator, Build, State, arsenal
 
 weapon = arsenal.primary.get("Phenmor")
 target = arsenal.enemy.get("Heavy Gunner").set(level=200, steel_path=True)
 
-loadout = Loadout(
+build = Build(
     mods=[
         arsenal.mod.get("Galvanized Chamber"),
         arsenal.mod.get("Critical Delay"),
@@ -21,25 +21,25 @@ loadout = Loadout(
     ],
 )
 
-calculator = Calculator(weapon, target, loadout)
+calculator = Calculator(weapon, target, build)
 result = calculator.resolve(attack="incarnon_form", body_part="head")
 print(result.aggregate.average.total_dps)
 ```
 
-`Weapon` and `Enemy` are definitions. `Loadout` owns selected mods, arcanes, and global evolution perks. `Calculator` owns one weapon-target-loadout combination, while attack selection, body-part selection, and temporary state belong to each calculation:
+`Weapon` and `Enemy` are definitions. `Build` owns selected mods, arcanes, and global evolution perks. `Calculator` owns one weapon-target-build combination, while attack selection, body-part selection, and temporary state belong to each calculation:
 
 ```python
 result = calculator.resolve(attack="heavy_attack", body_part="head", state=State(combo_multiplier=12))
 ```
 
-`State` accepts only `combo_multiplier`, `stance_combo`, and `ability_strength`. When `combo_multiplier` is omitted, melee combo-scaling mods and heavy damage use the attack’s modded `initial_combo` hits converted with `floor(hits / 20) + 1`, capped by the weapon’s `max_combo`. Perk `when` conditions are not part of `State`; set them with `perk.set(...)` or `loadout.set(...)` (defaulting to active / max stacks), the same way as other upgrade runtime fields.
+`State` accepts only `combo_multiplier`, `stance_combo`, and `ability_strength`. When `combo_multiplier` is omitted, melee combo-scaling mods and heavy damage use the attack’s modded `initial_combo` hits converted with `floor(hits / 20) + 1`, capped by the weapon’s `max_combo`. Perk `when` conditions are not part of `State`; set them with `perk.set(...)` or `build.set(...)` (defaulting to active / max stacks), the same way as other upgrade runtime fields.
 
 ## Custom definitions
 
 Definition types are available directly from the package root, so custom content does not depend on internal module paths:
 
 ```python
-from warframe_damage_calculator import Attack, AttackStats, Calculator, Compatibility, Dist, Effect, Inheritance, Links, Loadout, Mod, Primary, RelatedAttacks, Source, UpgradeStats
+from warframe_damage_calculator import Attack, AttackStats, Calculator, Compatibility, Dist, Effect, Inheritance, Links, Build, Mod, Primary, RelatedAttacks, Source, UpgradeStats
 
 weapon = Primary(
     name="Custom Primary",
@@ -64,7 +64,7 @@ mod = Mod(
         ),
     ),
 )
-result = Calculator(weapon, loadout=Loadout(mods=[mod])).resolve()
+result = Calculator(weapon, build=Build(mods=[mod])).resolve()
 ```
 
 ### Per-value rank scaling
@@ -273,7 +273,7 @@ telos = arsenal.primary.get("Telos Boltor").resolve_perk(perk)
 prime = arsenal.primary.get("Boltor Prime").resolve_perk(perk)
 ```
 
-Every selected item in `Loadout.evolutions` is resolved through the weapon before calculation. Missing values, unknown values, duplicate tier selections, and perks unavailable to the weapon are rejected. Tier and choice data are retained in `weapon.perk_choices` for selection and optimizer search spaces; calculation does not convert selected perks back into database instructions. Conditional perk effects use perk runtime (`perk.set(...)` / `loadout.set(...)`) with defaults of `True` or max stacks, matching ranked upgrades.
+Every selected item in `Build.evolutions` is resolved through the weapon before calculation. Missing values, unknown values, duplicate tier selections, and perks unavailable to the weapon are rejected. Tier and choice data are retained in `weapon.perk_choices` for selection and optimizer search spaces; calculation does not convert selected perks back into database instructions. Conditional perk effects use perk runtime (`perk.set(...)` / `build.set(...)`) with defaults of `True` or max stacks, matching ranked upgrades.
 
 ## Result navigation
 
@@ -321,15 +321,15 @@ total_dps
 
 ## Repeated calculations
 
-A calculator keeps one loadout fixed while allowing repeated attack and body-part calculations:
+A calculator keeps one build fixed while allowing repeated attack and body-part calculations:
 
 ```python
-calculator = Calculator(weapon, target, loadout)
+calculator = Calculator(weapon, target, build)
 body = calculator.resolve(attack="incarnon_form", body_part="body")
 head = calculator.resolve(attack="incarnon_form", body_part="head")
 ```
 
-Each result records its selected attack and body part. Loadout optimizers can reuse the lower-level calculation engine without changing this public API.
+Each result records its selected attack and body part. Build optimizers can reuse the lower-level calculation engine without changing this public API.
 
 ## Optimization
 
@@ -346,7 +346,7 @@ The optional `state` argument has the same meaning and validation as `Calculator
 Contribution analysis is part of the calculator workflow and includes selected upgrades, evolution perks, and progenitor bonuses:
 
 ```python
-calculator = Calculator(weapon, target, loadout)
+calculator = Calculator(weapon, target, build)
 contributions = calculator.contributions(attack="incarnon_form", body_part="weakpoint")
 
 removal = contributions.removal
@@ -381,13 +381,15 @@ Formatting is separate from definitions and calculation:
 
 ```python
 from warframe_damage_calculator import Formatter
-from warframe_damage_calculator.formatting.objects import format_loadout, format_perk, format_upgrade, format_weapon
+from warframe_damage_calculator.formatting.objects import format_build, format_perk, format_upgrade, format_weapon
 from warframe_damage_calculator.formatting.results import format_result
 
 print(format_weapon(weapon))
-print(format_upgrade(loadout.upgrades[0]))
-print(format_perk(loadout.evolutions[0]))
-print(format_loadout(loadout))
+print(format_upgrade(build.upgrades[0]))
+print(format_perk(build.evolutions[0]))
+print(format_build(build))
 print(format_result(result))
-print(Formatter(result).contributions())
+print(Formatter(result).stat_summary())
+print(Formatter(result).build_summary())
+print(Formatter(result).status_summary())
 ```

@@ -1,12 +1,12 @@
-class LoadoutCompatibilityWarning(UserWarning):
+class BuildCompatibilityWarning(UserWarning):
     pass
 
 
-class PerkCompatibilityWarning(LoadoutCompatibilityWarning):
+class PerkCompatibilityWarning(BuildCompatibilityWarning):
     pass
 
 
-class ProgenitorCompatibilityWarning(LoadoutCompatibilityWarning):
+class ProgenitorCompatibilityWarning(BuildCompatibilityWarning):
     pass
 
 

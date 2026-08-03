@@ -6,7 +6,7 @@ from typing import Protocol
 
 from ..damage import Dist
 from ..enemies import Enemy
-from ..loadouts import Loadout
+from ..builds import Build
 from ..state import State
 from ..status import StatusModel
 from ..upgrades import ResolvedEffect
@@ -64,5 +64,5 @@ class CalculationResult:
     selected_bodypart: str
     weapon: Weapon
     target: Enemy | None
-    loadout: Loadout
+    build: Build
     state: State

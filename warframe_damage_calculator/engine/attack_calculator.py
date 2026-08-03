@@ -194,7 +194,7 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     else:
         provisional = provisional_override
         provisional_model = None
-    equipped = {upgrade.name for upgrade in context.loadout.ranked_upgrades}
+    equipped = {upgrade.name for upgrade in context.build.ranked_upgrades}
     if automatic_model_override is None:
         if provisional_model is None: raise RuntimeError("an automatic model or provisional status model is required")
         initial_upgrade_effects, _ = _resolve_effects(context, attack, upgrade_effects, provisional, provisional_model, equipped)
@@ -228,7 +228,7 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     evolutions = aggregate(effect for effect in evolution_resolved if automatic_value(effect, "on") not in POSITION_EVENTS and effect.stat not in DEFERRED_STATS)
     total = _combined(upgrades, evolutions)
     base_damage, original, displayed_base_damage = _base_damage(context, attack, evolutions)
-    progenitor = context.loadout.progenitor if "progenitor" in context.weapon.traits else None
+    progenitor = context.build.progenitor if "progenitor" in context.weapon.traits else None
     damage = _damage(attack, base_damage, original, upgrades, evolutions, progenitor)
     heavy = context.weapon.type == "melee" and attack.category in HEAVY_CATEGORIES
     upgrade_crit = float(upgrades.proportional.get("crit_chance", 0)) * (2 if heavy else 1)

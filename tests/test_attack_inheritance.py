@@ -1,7 +1,7 @@
 import unittest
 from copy import deepcopy
 
-from warframe_damage_calculator import Attack, AttackStats, Automatic, Calculator, Compatibility, Dist, Inheritance, Links, Loadout, Melee, Mod, RelatedAttacks, UpgradeStats, UpgradeValue, arsenal
+from warframe_damage_calculator import Attack, AttackStats, Automatic, Calculator, Compatibility, Dist, Inheritance, Links, Build, Melee, Mod, RelatedAttacks, UpgradeStats, UpgradeValue, arsenal
 from warframe_damage_calculator.database.schema import validate_database
 from warframe_damage_calculator.engine.weapon_calculator import _resolve_attack_expressions, resolve_attack_inheritance
 
@@ -93,7 +93,7 @@ class AttackInheritanceTests(unittest.TestCase):
             "parent": Attack("Parent", trigger="melee", delivery="melee", links=Links(children=RelatedAttacks(names=["native_child"])), stats=AttackStats(damage=Dist(slash=10), crit_chance=1, crit_damage=3, status_chance=0.5, fire_rate=1)),
             "native_child": Attack("Native Child", trigger="melee", delivery="melee", stats=AttackStats(damage=Dist(impact=2), fire_rate=1)),
         })
-        result = Calculator(weapon, loadout=Loadout(arcanes=[duplicate])).resolve(attack="parent")
+        result = Calculator(weapon, build=Build(arcanes=[duplicate])).resolve(attack="parent")
         parent = result.weapon.attacks["parent"]
         generated = result.weapon.attacks["melee_duplicate"]
         self.assertEqual(generated.stats, parent.stats)
@@ -104,7 +104,7 @@ class AttackInheritanceTests(unittest.TestCase):
     def test_melee_influence_definition_is_selective_but_uses_resolved_parent_status(self):
         influence = arsenal.arcane.get("Melee Influence")
         weapon = Melee(name="Influence Test", subtype="sword", attacks=[Attack("Heavy", trigger="melee", delivery="melee", category="heavy", stats=AttackStats(damage=Dist(slash=10, electricity=10), forced_procs=Dist(slash=1), crit_chance=0.8, crit_damage=4, status_chance=1, multishot=3, co_factor=2, co_effect="multiplies", fire_rate=1))])
-        result = Calculator(weapon, loadout=Loadout(arcanes=[influence])).resolve(state={"combo_multiplier": 5})
+        result = Calculator(weapon, build=Build(arcanes=[influence])).resolve(state={"combo_multiplier": 5})
         generated = result.weapon.attacks["melee_influence"]
         self.assertEqual(generated.stats.damage, Dist(electricity=10))
         self.assertEqual(generated.stats.forced_procs, Dist())
@@ -117,7 +117,7 @@ class AttackInheritanceTests(unittest.TestCase):
         self.assertNotIn("slash", result.attacks["melee_influence"].status.sustained_procs)
 
     def test_nightwatch_napalm_has_explicit_combat_stats(self):
-        result = Calculator(arsenal.primary.get("Kuva Ogris"), loadout=Loadout(mods=[arsenal.mod.get("Nightwatch Napalm")])).resolve(attack="rocket_impact")
+        result = Calculator(arsenal.primary.get("Kuva Ogris"), build=Build(mods=[arsenal.mod.get("Nightwatch Napalm")])).resolve(attack="rocket_impact")
         generated = result.weapon.attacks["nightwatch_napalm_linger"]
         self.assertEqual((generated.stats.crit_chance, generated.stats.crit_damage, generated.stats.status_chance), (0, 0, 0))
         self.assertEqual((generated.stats.multishot, generated.stats.co_factor, generated.stats.co_effect), (5, 1, "adds"))
@@ -132,8 +132,8 @@ class AttackInheritanceTests(unittest.TestCase):
             "first": Attack("First", trigger="melee", delivery="melee", stats=AttackStats(damage=Dist(electricity=10), status_chance=1, fire_rate=1)),
             "second": Attack("Second", trigger="melee", delivery="melee", category="heavy", stats=AttackStats(damage=Dist(electricity=30), status_chance=1, fire_rate=1)),
         })
-        first = Calculator(weapon, loadout=Loadout(arcanes=[influence])).resolve(attack="first")
-        second = Calculator(weapon, loadout=Loadout(arcanes=[influence])).resolve(attack="second")
+        first = Calculator(weapon, build=Build(arcanes=[influence])).resolve(attack="first")
+        second = Calculator(weapon, build=Build(arcanes=[influence])).resolve(attack="second")
         self.assertEqual(first.attacks["melee_influence"].generated_from, "first")
         self.assertEqual(second.attacks["melee_influence"].generated_from, "second")
         self.assertEqual(first.attacks["melee_influence"].effective.damage, Dist(electricity=2))
@@ -141,7 +141,7 @@ class AttackInheritanceTests(unittest.TestCase):
 
     def test_generated_attack_contributions_are_deterministic_and_do_not_mutate_the_weapon(self):
         weapon = arsenal.primary.get("Kuva Ogris")
-        calculator = Calculator(weapon, loadout=Loadout(mods=[arsenal.mod.get("Nightwatch Napalm")]))
+        calculator = Calculator(weapon, build=Build(mods=[arsenal.mod.get("Nightwatch Napalm")]))
         first = calculator.contributions(attack="rocket_impact", seed=7)
         second = calculator.contributions(attack="rocket_impact", seed=7)
         self.assertEqual(first, second)
@@ -167,27 +167,27 @@ class AttackInheritanceTests(unittest.TestCase):
                 )
             ),
         )
-        result = Calculator(arsenal.primary.get("Karak"), loadout=Loadout(mods=[mod])).resolve()
+        result = Calculator(arsenal.primary.get("Karak"), build=Build(mods=[mod])).resolve()
         self.assertIn("generated_attack", result.weapon.attacks)
-        contributions = Calculator(result.weapon, result.target, result.loadout).contributions(seed=1)
+        contributions = Calculator(result.weapon, result.target, result.build).contributions(seed=1)
         self.assertEqual(set(contributions.contribution), {"Recursive Echo"})
         self.assertAlmostEqual(contributions.contribution["Recursive Echo"], 1.0)
-        table = Formatter(result).contributions()
+        table = Formatter(result).build_summary()
         self.assertIn("Recursive Echo", table)
 
     def test_contributions_on_result_weapon_do_not_keep_stale_generated_attacks(self):
         weapon = arsenal.melee.get("Bo Prime")
         mods = [arsenal.mod.get(name) for name in ("Blood Rush", "True Steel", "Organ Shatter", "Condition Overload", "Weeping Wounds", "Primed Pressure Point", "Vicious Frost", "North Wind")]
-        loadout = Loadout(mods=mods, arcanes=[arsenal.arcane.get("Melee Duplicate")])
-        without = Loadout(mods=mods)
+        build = Build(mods=mods, arcanes=[arsenal.arcane.get("Melee Duplicate")])
+        without = Build(mods=mods)
         enemy = arsenal.enemy.get("Heavy Gunner")
         state = {"combo_multiplier": 4}
-        fresh_with = Calculator(weapon, enemy, loadout).resolve(state=state).aggregate.average.total_dps
+        fresh_with = Calculator(weapon, enemy, build).resolve(state=state).aggregate.average.total_dps
         fresh_without = Calculator(weapon, enemy, without).resolve(state=state).aggregate.average.total_dps
         self.assertGreater(fresh_with, fresh_without)
-        result = Calculator(weapon, enemy, loadout).resolve(state=state)
+        result = Calculator(weapon, enemy, build).resolve(state=state)
         self.assertIn("melee_duplicate", result.weapon.attacks)
-        contributions = Calculator(result.weapon, result.target, result.loadout).contributions(attack=result.selected_attack, state=result.state)
+        contributions = Calculator(result.weapon, result.target, result.build).contributions(attack=result.selected_attack, state=result.state)
         self.assertLess(contributions.removal["Melee Duplicate"], 0)
         self.assertGreater(contributions.contribution["Melee Duplicate"], 0)
 
@@ -217,7 +217,7 @@ class AttackInheritanceTests(unittest.TestCase):
             ),
         )
         weapon = arsenal.primary.get("Karak")
-        result = Calculator(weapon, loadout=Loadout(mods=[mod])).resolve()
+        result = Calculator(weapon, build=Build(mods=[mod])).resolve()
         self.assertIn("hit_echo", result.attacks)
         parent = result.attacks["normal_attack"].average.direct_dph
         child = result.attacks["hit_echo"].average.direct_dph
@@ -241,7 +241,7 @@ class AttackInheritanceTests(unittest.TestCase):
             ),
         )
         weapon = arsenal.primary.get("Karak")
-        result = Calculator(weapon, loadout=Loadout(mods=[mod])).resolve()
+        result = Calculator(weapon, build=Build(mods=[mod])).resolve()
         parent = result.attacks["normal_attack"].average.direct_dph
         child = result.attacks["recursive_echo"].average.direct_dph
         self.assertAlmostEqual(float(child), float(parent) * (0.3 / (1 - 0.3)))

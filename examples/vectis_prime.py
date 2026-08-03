@@ -1,9 +1,9 @@
-from warframe_damage_calculator import Loadout, Calculator, Formatter, arsenal
+from warframe_damage_calculator import Build, Calculator, Formatter, arsenal
 
 
 weapon = arsenal.primary.get("Vectis Prime")
 target = arsenal.enemy.get("Heavy Gunner").set(level=100, steel_path=True)
-loadout = Loadout(
+build = Build(
     mods=[
         arsenal.mod.get("Primed Chamber"),
         arsenal.mod.get("Galvanized Aptitude"),
@@ -16,9 +16,9 @@ loadout = Loadout(
         arsenal.perk.get("Critical Parallel"),
     ]
 )
-calculator = Calculator(weapon, target, loadout)
+calculator = Calculator(weapon, target, build)
 body = calculator.resolve()
 head = calculator.resolve(body_part="head")
 
-print(Formatter(body).summary())
-print(Formatter(head).contributions())
+print(Formatter(body).stat_summary())
+print(Formatter(head).build_summary())

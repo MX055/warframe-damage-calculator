@@ -1,7 +1,7 @@
 import unittest
 import pickle
 
-from warframe_damage_calculator import Attack, AttackStats, Calculator, Dist, Loadout, Melee, PerkValues, Primary, Source, State, arsenal
+from warframe_damage_calculator import Attack, AttackStats, Calculator, Dist, Build, Melee, PerkValues, Primary, Source, State, arsenal
 from warframe_damage_calculator.domain.effects import Effect
 from warframe_damage_calculator.domain.perks import Perk, resolve_perk
 from warframe_damage_calculator.domain.state import combo_multiplier_from_hits
@@ -27,37 +27,37 @@ class DomainTests(unittest.TestCase):
         self.assertEqual(restored.value.multiplier, 0.5)
         self.assertEqual(restored.mode, "flat")
 
-    def test_loadout_rejects_combined_upgrades_argument(self):
-        with self.assertRaises(TypeError): Loadout(upgrades=[])
+    def test_build_rejects_combined_upgrades_argument(self):
+        with self.assertRaises(TypeError): Build(upgrades=[])
 
-    def test_loadout_copies_upgrades(self):
+    def test_build_copies_upgrades(self):
         upgrade = Mod(name="Damage", stats=UpgradeStats(damage_bonus=Effect(1)))
-        loadout = Loadout(mods=[upgrade])
-        self.assertIsNot(loadout.upgrades[0], upgrade)
+        build = Build(mods=[upgrade])
+        self.assertIsNot(build.upgrades[0], upgrade)
 
-    def test_loadout_copies_evolutions(self):
+    def test_build_copies_evolutions(self):
         perk = Perk("Example", stats=UpgradeStats(damage_bonus=Effect(Source("$values.damage_bonus[0]"), when="charged")))
-        loadout = Loadout(evolutions=[perk])
-        self.assertIsNot(loadout.evolutions[0], perk)
-        self.assertTrue(loadout.evolutions[0].runtime.charged)
+        build = Build(evolutions=[perk])
+        self.assertIsNot(build.evolutions[0], perk)
+        self.assertTrue(build.evolutions[0].runtime.charged)
 
-    def test_loadout_rejects_duplicate_perks(self):
+    def test_build_rejects_duplicate_perks(self):
         perk = Perk("Example")
-        with self.assertRaises(ValueError): Loadout(evolutions=[perk, perk])
+        with self.assertRaises(ValueError): Build(evolutions=[perk, perk])
 
-    def test_loadout_addition_preserves_evolutions(self):
+    def test_build_addition_preserves_evolutions(self):
         perk = Perk("Example")
-        first = Loadout(evolutions=[perk])
+        first = Build(evolutions=[perk])
         combined = first + Mod(name="Damage")
         self.assertEqual(combined.evolutions, [perk])
         self.assertEqual([upgrade.name for upgrade in combined.upgrades], ["Damage", "Example"])
         self.assertEqual([upgrade.name for upgrade in combined.ranked_upgrades], ["Damage"])
 
-    def test_loadout_operators_support_perks(self):
+    def test_build_operators_support_perks(self):
         perk = Perk("Example")
-        loadout = Loadout(mods=[Mod(name="Damage")]) + perk
-        self.assertEqual(len(loadout), 2)
-        self.assertEqual((loadout - perk).evolutions, [])
+        build = Build(mods=[Mod(name="Damage")]) + perk
+        self.assertEqual(len(build), 2)
+        self.assertEqual((build - perk).evolutions, [])
 
     def test_state_rejects_unknown_fields_and_conditions(self):
         with self.assertRaises(TypeError): State(combo=5)
@@ -86,8 +86,8 @@ class DomainTests(unittest.TestCase):
         self.assertEqual(weapon.resolve_perk(perk).effects[0].value, 1.5)
         disabled = perk.copy().set(charged=False)
         self.assertEqual(resolve_perk(values, weapon_name=weapon.name, perk=disabled).effects, ())
-        loadout = Loadout(evolutions=[perk]).set(charged=0)
-        self.assertEqual(loadout.evolutions[0].runtime.charged, 0)
+        build = Build(evolutions=[perk]).set(charged=0)
+        self.assertEqual(build.evolutions[0].runtime.charged, 0)
 
     def test_omitted_combo_multiplier_uses_initial_combo(self):
         weapon = Melee(name="Test Blade", attacks=[Attack("heavy_attack", category="heavy", stats=AttackStats(damage=Dist(slash=100), initial_combo=40, fire_rate=1))], combo={"max_combo": 12})

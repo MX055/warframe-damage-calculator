@@ -4,7 +4,7 @@ import re
 
 from ..domain.results import CalculationResult, DamageResult, SpatialResult, StatusResult
 from ..engine.calculator import Calculator
-from .objects import format_loadout
+from .objects import format_build
 
 
 ANSI_PATTERN = re.compile(r"\x1b\[[0-9;]*m")
@@ -93,7 +93,7 @@ class Formatter:
         values.append(bottom)
         return "\n".join(values)
 
-    def summary_table(self, attack: str | None = None) -> tuple[str, tuple[str, ...], list[tuple[str, ...]]]:
+    def stat_summary_table(self, attack: str | None = None) -> tuple[str, tuple[str, ...], list[tuple[str, ...]]]:
         attack_name = self.result.selected_attack if attack is None else attack
         selected = self.result.attacks[attack_name]
         attack_definition = self.result.weapon.attacks[attack_name]
@@ -136,20 +136,20 @@ class Formatter:
         display_rows = [tuple(cell for index, cell in enumerate(row) if index != 5) for row in rows]
         return title, headers, display_rows
 
-    def summary(self, attack: str | None = None) -> str:
-        title, headers, rows = self.summary_table(attack)
+    def stat_summary(self, attack: str | None = None) -> str:
+        title, headers, rows = self.stat_summary_table(attack)
         return self._table(headers, rows, title=title)
 
-    def contribution_table(self, metric: str = "total_dps", body_part: str | None = None, seed: int = 0, contributions=None) -> tuple[str, tuple[str, ...], list[tuple[str, ...]]] | None:
+    def build_summary_table(self, metric: str = "total_dps", body_part: str | None = None, seed: int = 0, contributions=None) -> tuple[str, tuple[str, ...], list[tuple[str, ...]]] | None:
         selected_bodypart = body_part or self.result.selected_bodypart
         if contributions is None:
-            contributions = Calculator(self.result.weapon, self.result.target, self.result.loadout).contributions(attack=self.result.selected_attack, metric=metric, body_part=selected_bodypart, state=self.result.state, seed=seed)
+            contributions = Calculator(self.result.weapon, self.result.target, self.result.build).contributions(attack=self.result.selected_attack, metric=metric, body_part=selected_bodypart, state=self.result.state, seed=seed)
         contribution = contributions.contribution
         if not contribution: return None
         removal = contributions.removal
-        component_types = {upgrade.name: upgrade.slot.replace("_", " ").title() for upgrade in self.result.loadout.ranked_upgrades}
-        component_types.update({perk.name: "Perk" for perk in self.result.loadout.evolutions})
-        if self.result.loadout.progenitor is not None:
+        component_types = {upgrade.name: upgrade.slot.replace("_", " ").title() for upgrade in self.result.build.ranked_upgrades}
+        component_types.update({perk.name: "Perk" for perk in self.result.build.evolutions})
+        if self.result.build.progenitor is not None:
             for name in contribution:
                 if name not in component_types: component_types[name] = "Progenitor"
         maximum = max((abs(value) for value in contribution.values()), default=0)
@@ -158,7 +158,7 @@ class Formatter:
         for rank, (name, share) in enumerate(ordered, 1):
             kind = component_types[name]
             display_name = "Riven" if kind == "Regular Mod" and name.casefold().startswith("riven (") else name
-            if kind == "Progenitor": display_name = f"{self.result.loadout.progenitor.element.replace('_', ' ').title()} Progenitor"
+            if kind == "Progenitor": display_name = f"{self.result.build.progenitor.element.replace('_', ' ').title()} Progenitor"
             removal_value = removal[name]
             display_share = 0.0 if share == 0 else share
             display_removal = 0.0 if removal_value == 0 else removal_value
@@ -171,25 +171,25 @@ class Formatter:
         title = f"{metric_name} Contributions: {self.result.weapon.name} {self.result.weapon.attacks[self.result.selected_attack].name}{target_name}"
         return title, ("Contribution Rank", "Type", "Component", "Relative Contribution", "Removal Difference", "Impact"), rows
 
-    def contributions(self, metric: str = "total_dps", body_part: str | None = None, seed: int = 0) -> str:
-        table = self.contribution_table(metric=metric, body_part=body_part, seed=seed)
+    def build_summary(self, metric: str = "total_dps", body_part: str | None = None, seed: int = 0) -> str:
+        table = self.build_summary_table(metric=metric, body_part=body_part, seed=seed)
         if table is None: return ""
         title, headers, rows = table
         return self._table(headers, rows, title=title)
 
-    def loadout(self) -> str:
-        return format_loadout(self.result.loadout)
+    def build(self) -> str:
+        return format_build(self.result.build)
 
     def attack(self, name: str) -> str:
-        return self.summary(name)
+        return self.stat_summary(name)
 
     def pool(self, pool: DamageResult) -> str:
         return format_damage_result(pool)
 
-    def status(self) -> str:
-        return "\n".join(self.status_table()[1])
+    def status_summary(self) -> str:
+        return "\n".join(self.status_summary_table()[1])
 
-    def status_table(self) -> tuple[str, list[str]]:
+    def status_summary_table(self) -> tuple[str, list[str]]:
         attacks = [(key, self.result.weapon.attacks[key].name, calculated) for key, calculated in self.result.attacks.items()]
         type_order = ("impact", "puncture", "slash", "heat", "cold", "electricity", "toxin", "blast", "radiation", "gas", "magnetic", "viral", "corrosive", "void")
         present: set[str] = set()
@@ -254,7 +254,7 @@ class Formatter:
 
 
 def format_result(result: CalculationResult, *, attack: str | None = None) -> str:
-    return Formatter(result).summary(attack)
+    return Formatter(result).stat_summary(attack)
 
 
 

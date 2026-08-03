@@ -1,9 +1,9 @@
-from warframe_damage_calculator import Loadout, Progenitor, Calculator, Formatter, arsenal
+from warframe_damage_calculator import Build, Progenitor, Calculator, Formatter, arsenal
 
 
 weapon = arsenal.melee.get("Tenet Exec")
 target = arsenal.enemy.get("Heavy Gunner").set(level=100, steel_path=True)
-loadout = Loadout(
+build = Build(
     mods=[
         arsenal.mod.get("Rending Crane"),
         arsenal.mod.get("Galvanized Steel"),
@@ -14,9 +14,9 @@ loadout = Loadout(
     ],
     progenitor=Progenitor("electricity", 0.60)
 )
-calculator = Calculator(weapon, target, loadout)
+calculator = Calculator(weapon, target, build)
 result = calculator.resolve(attack="heavy_slam_attack", state={"stance_combo": "heavy"})
 
 formatter = Formatter(result)
-print(formatter.summary())
-print(formatter.contributions())
+print(formatter.stat_summary())
+print(formatter.build_summary())

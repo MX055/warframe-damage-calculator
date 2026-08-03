@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from ..domain.loadouts import Loadout
+from ..domain.builds import Build
 from ..domain.perks import Perk, PerkValues
 from ..domain.upgrades import Upgrade
 from ..domain.weapons import Weapon
@@ -31,8 +31,8 @@ def format_perk(perk: Perk, values: PerkValues | None = None) -> str:
     return "\n".join(lines)
 
 
-def format_loadout(loadout: Loadout) -> str:
-    mods = "\n".join(f"- {mod.name}" for mod in loadout.mods) or "- None"
-    arcanes = "\n".join(f"- {arcane.name}" for arcane in loadout.arcanes) or "- None"
-    perks = "\n".join(f"- {perk.name}" for perk in loadout.evolutions) or "- None"
+def format_build(build: Build) -> str:
+    mods = "\n".join(f"- {mod.name}" for mod in build.mods) or "- None"
+    arcanes = "\n".join(f"- {arcane.name}" for arcane in build.arcanes) or "- None"
+    perks = "\n".join(f"- {perk.name}" for perk in build.evolutions) or "- None"
     return f"Mods:\n{mods}\n\nArcanes:\n{arcanes}\n\nPerks:\n{perks}"

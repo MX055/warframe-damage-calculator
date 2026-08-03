@@ -1,6 +1,6 @@
 import unittest
 
-from warframe_damage_calculator import Calculator, Loadout, arsenal
+from warframe_damage_calculator import Calculator, Build, arsenal
 from warframe_damage_calculator.domain.damage import Dist
 from warframe_damage_calculator.domain.weapons import Attack, AttackStats, Primary
 
@@ -33,10 +33,10 @@ class EngineTests(unittest.TestCase):
         prime_value = next(effect.value for effect in prime.effects if effect.stat == "status_chance")
         self.assertNotEqual(telos_value, prime_value)
 
-    def test_loadout_evolutions_change_results(self):
+    def test_build_evolutions_change_results(self):
         weapon = arsenal.primary.get("Phenmor")
         baseline = Calculator(weapon).resolve(attack="incarnon_form")
-        evolved = Calculator(weapon, loadout=Loadout(evolutions=[arsenal.perk.get("Elemental Excess")])).resolve(attack="incarnon_form")
+        evolved = Calculator(weapon, build=Build(evolutions=[arsenal.perk.get("Elemental Excess")])).resolve(attack="incarnon_form")
         self.assertNotEqual(baseline.attacks["incarnon_form"].effective.status_chance, evolved.attacks["incarnon_form"].effective.status_chance)
 
 

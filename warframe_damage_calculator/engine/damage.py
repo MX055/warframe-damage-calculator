@@ -1,5 +1,5 @@
 from ..domain.damage import Dist
-from ..domain.loadouts import Progenitor
+from ..domain.builds import Progenitor
 from ..domain.weapons import Attack
 from .aggregation import DAMAGE_TYPES
 from .formulas import family_bonus

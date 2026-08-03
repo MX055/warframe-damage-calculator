@@ -1,12 +1,12 @@
-from warframe_damage_calculator import Calculator, Loadout, Optimizer, State, arsenal
+from warframe_damage_calculator import Calculator, Build, Optimizer, State, arsenal
 
 
-def test_optimizer_preserves_locked_loadout_and_uses_budget():
+def test_optimizer_preserves_locked_build_and_uses_budget():
     weapon = arsenal.primary.get("Braton Prime")
     locked = arsenal.mod.get("Serration")
-    optimizer = Optimizer(Calculator(weapon, loadout=Loadout(mods=[locked])))
+    optimizer = Optimizer(Calculator(weapon, build=Build(mods=[locked])))
     result = optimizer.resolve(metric=lambda calculation: calculation.aggregate.average.total_dps, evaluations=8)
-    assert locked in result.loadout.mods
+    assert locked in result.build.mods
     assert result.evaluations <= 8
     assert result.score >= 0
 
@@ -22,7 +22,7 @@ def test_optimizer_normalizes_attack_and_bodypart_weights():
 def test_optimizer_rebuilds_upgrade_generated_attack_trees():
     weapon = arsenal.primary.get("Kuva Ogris")
     napalm = arsenal.mod.get("Nightwatch Napalm")
-    optimizer = Optimizer(Calculator(weapon, loadout=Loadout(mods=[napalm])))
+    optimizer = Optimizer(Calculator(weapon, build=Build(mods=[napalm])))
     result = optimizer.resolve(attack="rocket_impact", evaluations=2, riven=False, evolutions=False, upgrade_blacklist=set(arsenal.mod) | set(arsenal.arcane), progress=None)
     assert "nightwatch_napalm_linger" in result.result.attacks
     generated = optimizer.resolve(attack="nightwatch_napalm_linger", evaluations=2, riven=False, evolutions=False, upgrade_blacklist=set(arsenal.mod) | set(arsenal.arcane), progress=None)
@@ -32,7 +32,7 @@ def test_optimizer_rebuilds_upgrade_generated_attack_trees():
 def test_parallel_optimizer_supports_status_generated_attacks():
     weapon = arsenal.melee.get("Xoris")
     influence = arsenal.arcane.get("Melee Influence")
-    optimizer = Optimizer(Calculator(weapon, loadout=Loadout(mods=[arsenal.mod.get("Shocking Touch")], arcanes=[influence])))
+    optimizer = Optimizer(Calculator(weapon, build=Build(mods=[arsenal.mod.get("Shocking Touch")], arcanes=[influence])))
     result = optimizer.resolve(evaluations=2, workers=2, riven=False, evolutions=False, upgrade_blacklist=set(arsenal.mod) | set(arsenal.arcane), progress=None)
     assert "melee_influence" in result.result.attacks
 
@@ -66,10 +66,10 @@ def test_parallel_optimizer_preserves_search_results():
     parallel = Optimizer(calculator).resolve(evaluations=64, workers=2, progress=None)
     assert parallel.evaluations == sequential.evaluations
     assert parallel.score == sequential.score
-    assert [mod.name for mod in parallel.loadout.mods] == [mod.name for mod in sequential.loadout.mods]
-    assert [arcane.name for arcane in parallel.loadout.arcanes] == [arcane.name for arcane in sequential.loadout.arcanes]
-    assert parallel.loadout.evolutions == sequential.loadout.evolutions
-    assert parallel.loadout.progenitor == sequential.loadout.progenitor
+    assert [mod.name for mod in parallel.build.mods] == [mod.name for mod in sequential.build.mods]
+    assert [arcane.name for arcane in parallel.build.arcanes] == [arcane.name for arcane in sequential.build.arcanes]
+    assert parallel.build.evolutions == sequential.build.evolutions
+    assert parallel.build.progenitor == sequential.build.progenitor
 
 
 def test_optimizer_propagates_state_to_parallel_scoring_and_results():
@@ -95,7 +95,7 @@ def test_optimizer_rejects_unknown_state_fields():
 def test_compact_optimizer_score_matches_full_result():
     from warframe_damage_calculator.optimizer import default_metric
 
-    optimizer = Optimizer(Calculator(arsenal.primary.get("Kuva Ogris"), loadout=Loadout(mods=[arsenal.mod.get("Nightwatch Napalm")])))
+    optimizer = Optimizer(Calculator(arsenal.primary.get("Kuva Ogris"), build=Build(mods=[arsenal.mod.get("Nightwatch Napalm")])))
     result = optimizer.resolve(attack="rocket_impact", evaluations=8, workers=1, progress=None)
     assert result.score == default_metric(result.result)
 
@@ -105,8 +105,8 @@ def test_default_metric_includes_generated_attack_spatial_mass():
 
     weapon = arsenal.melee.get("Xoris")
     electricity = arsenal.mod.get("Shocking Touch")
-    without = Calculator(weapon, loadout=Loadout(mods=[electricity])).resolve()
-    with_influence = Calculator(weapon, loadout=Loadout(mods=[electricity], arcanes=[arsenal.arcane.get("Melee Influence")])).resolve()
+    without = Calculator(weapon, build=Build(mods=[electricity])).resolve()
+    with_influence = Calculator(weapon, build=Build(mods=[electricity], arcanes=[arsenal.arcane.get("Melee Influence")])).resolve()
     assert "melee_influence" in with_influence.attacks
     assert with_influence.weapon.attacks["melee_influence"].hits_source is False
     assert with_influence.aggregate.average.total_dph == without.aggregate.average.total_dph
@@ -116,7 +116,7 @@ def test_default_metric_includes_generated_attack_spatial_mass():
 def test_optimizer_seeds_generated_attack_status_dependencies():
     optimizer = Optimizer(Calculator(arsenal.melee.get("Xoris")))
     pools = optimizer._candidate_pools(riven=False)
-    influence_seeds = [seed for seed in optimizer._seed_loadouts(optimizer.calculator.loadout, pools) if any(arcane.name == "Melee Influence" for arcane in seed.arcanes)]
+    influence_seeds = [seed for seed in optimizer._seed_builds(optimizer.calculator.build, pools) if any(arcane.name == "Melee Influence" for arcane in seed.arcanes)]
     assert influence_seeds
     assert any("electricity" in mod.stats for seed in influence_seeds for mod in seed.mods)
     assert any(not ({stat for mod in seed.mods for stat in mod.stats} & {"heat", "cold", "toxin"}) for seed in influence_seeds)
@@ -186,10 +186,10 @@ def test_optimizer_preserves_locked_riven():
 
     weapon = arsenal.primary.get("Vectis Prime")
     locked = Mod(name="Riven", stats=UpgradeStats(multishot=1.0))
-    optimizer = Optimizer(Calculator(weapon, loadout=Loadout(mods=[locked])))
+    optimizer = Optimizer(Calculator(weapon, build=Build(mods=[locked])))
     assert optimizer._candidate_pools()["rivens"] == ()
     result = optimizer.resolve(evaluations=2, progress=None)
-    assert any(mod.name == "Riven" for mod in result.loadout.mods)
+    assert any(mod.name == "Riven" for mod in result.build.mods)
 
 
 def test_optimizer_searches_all_progenitor_elements_when_unlocked():
@@ -199,8 +199,8 @@ def test_optimizer_searches_all_progenitor_elements_when_unlocked():
     optimizer = Optimizer(Calculator(weapon))
     pools = optimizer._candidate_pools()
     assert {progenitor.element for progenitor in pools["progenitors"]} == {"impact", "heat", "cold", "electricity", "toxin", "magnetic", "radiation"}
-    loadout = Loadout(progenitor=Progenitor("heat", 0.6))
-    neighbors = list(optimizer._exact_neighbors(loadout, pools))
+    build = Build(progenitor=Progenitor("heat", 0.6))
+    neighbors = list(optimizer._exact_neighbors(build, pools))
     assert {candidate.progenitor.element for candidate in neighbors if candidate.progenitor is not None} >= {"impact", "cold", "electricity", "toxin", "magnetic", "radiation"}
 
 
@@ -210,7 +210,7 @@ def test_optimizer_replaces_unlocked_evolutions_during_contextual_search():
     alternative = weapon.perk_choices[2][2]
     optimizer = Optimizer(Calculator(weapon))
     pools = optimizer._candidate_pools(riven=False)
-    neighbors = list(optimizer._exact_neighbors(Loadout(evolutions=[selected]), pools))
+    neighbors = list(optimizer._exact_neighbors(Build(evolutions=[selected]), pools))
     assert any(alternative in candidate.evolutions and selected not in candidate.evolutions for candidate in neighbors)
 
 
@@ -218,7 +218,7 @@ def test_optimizer_seeds_dot_weakpoint_synergies():
     weapon = arsenal.primary.get("Vectis Prime")
     optimizer = Optimizer(Calculator(weapon))
     pools = optimizer._candidate_pools(search_scale=2.0)
-    seeds = optimizer._seed_loadouts(optimizer.calculator.loadout, pools, search_scale=2.0)
+    seeds = optimizer._seed_builds(optimizer.calculator.build, pools, search_scale=2.0)
     required = {"Primary Acuity", "Rime Rounds", "Malignant Force"}
     assert any(required <= {mod.name for mod in seed.mods} and any(arcane.name == "Primary Merciless" for arcane in seed.arcanes) for seed in seeds)
 
@@ -237,7 +237,7 @@ def test_optimizer_can_disable_riven_search():
     optimizer = Optimizer(Calculator(weapon))
     assert optimizer._candidate_pools(riven=False)["rivens"] == ()
     result = optimizer.resolve(evaluations=2, progress=None, riven=False)
-    assert not any(mod.name == "Riven" for mod in result.loadout.mods)
+    assert not any(mod.name == "Riven" for mod in result.build.mods)
 
 
 def test_optimizer_validates_riven_flag():
@@ -266,15 +266,15 @@ def test_optimizer_can_disable_evolution_search():
     optimizer = Optimizer(Calculator(weapon))
     assert optimizer._candidate_pools(evolutions=False)["perks"] == {}
     result = optimizer.resolve(evaluations=2, progress=None, riven=False, evolutions=False)
-    assert not result.loadout.evolutions
+    assert not result.build.evolutions
 
 
 def test_optimizer_preserves_locked_evolutions_when_search_is_disabled():
     weapon = arsenal.primary.get("Phenmor")
     locked = arsenal.perk.get("Devouring Attrition")
-    optimizer = Optimizer(Calculator(weapon, loadout=Loadout(evolutions=[locked])))
+    optimizer = Optimizer(Calculator(weapon, build=Build(evolutions=[locked])))
     result = optimizer.resolve(evaluations=2, progress=None, riven=False, evolutions=False)
-    assert locked in result.loadout.evolutions
+    assert locked in result.build.evolutions
 
 
 def test_optimizer_validates_evolutions_flag():
