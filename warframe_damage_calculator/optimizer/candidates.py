@@ -23,6 +23,18 @@ class Candidate:
     result: CalculationResult | None = None
 
 
+@dataclass(frozen=True, slots=True)
+class DualCandidate:
+    build: Build
+    score_st: float
+    score_aoe: float
+    result: CalculationResult | None = None
+
+    @property
+    def score(self) -> float:
+        return self.score_st if self.score_st >= self.score_aoe else self.score_aoe
+
+
 class CandidatePreparation:
     def _build(self, *, mods=(), arcanes=(), evolutions=(), progenitor=None) -> Build:
         return Build._from_parts(mods=mods, arcanes=arcanes, evolutions=evolutions, progenitor=progenitor)

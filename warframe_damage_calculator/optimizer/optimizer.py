@@ -6,7 +6,9 @@ import time
 from concurrent import futures
 from collections.abc import Callable, Collection, Iterator
 from dataclasses import dataclass
+from functools import partial
 from itertools import combinations, repeat
+from typing import Literal
 
 from ..domain.enemies import Enemy
 from ..domain.generated_attacks import GENERATED_ATTACK_STAT
@@ -20,7 +22,7 @@ from ..engine.context import CalculationContext
 from ..engine.metrics import balanced_damage_components, balanced_damage_metric
 from ..engine.perks import resolve_perks
 from ..engine.weapon_calculator import WeaponCalculator
-from .candidates import DEFAULT_UPGRADE_BLACKLIST, Candidate, CandidatePreparation
+from .candidates import DEFAULT_UPGRADE_BLACKLIST, Candidate, CandidatePreparation, DualCandidate
 from .progress import ProgressCallback, _ProgressReporter, terminal_progress
 from .rivens import DEFAULT_RIVEN_STAT_BLACKLIST, RivenCandidates
 from .search import Search
@@ -28,6 +30,67 @@ from .search import Search
 
 Metric = Callable[[CalculationResult], float]
 CompactMetric = Callable[[float, float, float, float, float], float]
+SpatialMode = Literal["auto", "full", "none"]
+ResolvedSpatial = Literal["full", "none"]
+SPATIAL_MODES = frozenset(("auto", "full", "none"))
+
+
+def _result_damage_mass(result: CalculationResult) -> float:
+    damage = result.aggregate.damage
+    total_dph = damage.direct_dph + damage.dot_dph
+    if total_dph <= 0: return 1.0
+    weighted = sum((attack.damage.direct_dph + attack.damage.dot_dph) * (attack.spatial.damage_mass if attack.spatial.damage_mass is not None else 1.0) for attack in result.attacks.values())
+    return weighted / total_dph
+
+
+def _compact_force_unit_mass(compact_metric: CompactMetric, direct_dph: float, dot_dph: float, direct_dps: float, dot_dps: float, damage_mass: float) -> float:
+    return compact_metric(direct_dph, dot_dph, direct_dps, dot_dps, 1.0)
+
+
+def _balanced_damage_metric_single_target(result: CalculationResult) -> float:
+    damage = result.aggregate.damage
+    return balanced_damage_components(damage.direct_dph, damage.dot_dph, damage.direct_dps, damage.dot_dps, 1.0)
+
+
+def _score_with_spatial(result: CalculationResult, metric: Metric, compact_metric: CompactMetric | None, spatial: ResolvedSpatial) -> float:
+    damage = result.aggregate.damage
+    if compact_metric is not None:
+        mass = 1.0 if spatial == "none" else _result_damage_mass(result)
+        return float(compact_metric(damage.direct_dph, damage.dot_dph, damage.direct_dps, damage.dot_dps, mass))
+    if spatial == "none" and metric is balanced_damage_metric: return _balanced_damage_metric_single_target(result)
+    return float(metric(result))
+
+
+def _relative_advantage(own: float, other: float) -> float:
+    if other <= 0: return math.inf if own > 0 else 1.0
+    return own / other
+
+
+def _dual_scores_from_components(compact_metric: CompactMetric, direct_dph: float, dot_dph: float, direct_dps: float, dot_dps: float, damage_mass: float) -> tuple[float, float]:
+    return float(compact_metric(direct_dph, dot_dph, direct_dps, dot_dps, 1.0)), float(compact_metric(direct_dph, dot_dph, direct_dps, dot_dps, damage_mass))
+
+
+def _climb_mode(candidate: DualCandidate, best_st: DualCandidate, best_aoe: DualCandidate, *, in_st: bool, in_aoe: bool) -> ResolvedSpatial:
+    if in_st and not in_aoe: return "none"
+    if in_aoe and not in_st: return "full"
+    st_rel = candidate.score_st / best_st.score_st if best_st.score_st > 0 else (math.inf if candidate.score_st > 0 else 0.0)
+    aoe_rel = candidate.score_aoe / best_aoe.score_aoe if best_aoe.score_aoe > 0 else (math.inf if candidate.score_aoe > 0 else 0.0)
+    return "none" if st_rel >= aoe_rel else "full"
+
+
+def _dual_source_modes(pool: list[DualCandidate], best_st: DualCandidate, best_aoe: DualCandidate, limit: int) -> list[tuple[DualCandidate, ResolvedSpatial]]:
+    by_st = sorted(pool, key=lambda candidate: candidate.score_st, reverse=True)[:limit]
+    by_aoe = sorted(pool, key=lambda candidate: candidate.score_aoe, reverse=True)[:limit]
+    st_ids = {id(candidate) for candidate in by_st}
+    aoe_ids = {id(candidate) for candidate in by_aoe}
+    ordered: list[DualCandidate] = []
+    seen: set[int] = set()
+    for candidate in (*by_st, *by_aoe):
+        marker = id(candidate)
+        if marker in seen: continue
+        seen.add(marker)
+        ordered.append(candidate)
+    return [(candidate, _climb_mode(candidate, best_st, best_aoe, in_st=id(candidate) in st_ids, in_aoe=id(candidate) in aoe_ids)) for candidate in ordered]
 
 
 def _score_worker_batch(evaluator: Calculator, target: Enemy | None, attack: str, state: State, prepared_names: tuple[str, ...] | None, compact_metric: CompactMetric, indexed_builds: tuple[tuple[int, Build], ...]) -> tuple[tuple[int, float], ...]:
@@ -43,11 +106,25 @@ def _score_worker_batch(evaluator: Calculator, target: Enemy | None, attack: str
     return tuple(scores)
 
 
+def _score_worker_batch_dual(evaluator: Calculator, target: Enemy | None, attack: str, state: State, prepared_names: tuple[str, ...] | None, compact_metric: CompactMetric, indexed_builds: tuple[tuple[int, Build], ...]) -> tuple[tuple[int, float, float], ...]:
+    from warframe_damage_calculator.engine.perks import resolve_perks
+
+    scores = []
+    for index, build in indexed_builds:
+        resolved_perks = resolve_perks(evaluator.weapon, build.evolutions)
+        upgrade_effects = tuple(effect for upgrade in build.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual())
+        evaluator.build = build
+        score_st, score_aoe = _dual_scores_from_components(compact_metric, *evaluator._calculate_metric_components(attack, target, state, resolved_perks=resolved_perks, prepared_names=prepared_names, prepared_upgrade_effects=upgrade_effects))
+        scores.append((index, score_st, score_aoe))
+    return tuple(scores)
+
+
 @dataclass(frozen=True, slots=True)
 class OptimizationResult:
     build: Build
     result: CalculationResult
     score: float
+    spatial: ResolvedSpatial
     evaluations: int
     resolutions: int
     attempts: int = 0
@@ -61,7 +138,6 @@ class OptimizationResult:
     cache_hit_rate: float = 0.0
     workers: int = 1
 
-
 class Optimizer(Search, CandidatePreparation, RivenCandidates):
     __slots__ = ("calculator", "_priority_cache", "_component_id_cache", "_next_component_id", "_resolved_effect_cache", "_upgrade_effects_cache")
 
@@ -74,10 +150,11 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         self._resolved_effect_cache: dict[int, tuple[ResolvedEffect, ...]] = {}
         self._upgrade_effects_cache: dict[tuple[int, ...], tuple[ResolvedEffect, ...]] = {}
 
-    def resolve(self, metric: Metric = balanced_damage_metric, *, compact_metric: CompactMetric | None = None, attack: str | None = None, body_part: str | None = None, state: State | None = None, evaluations: int = 20_000, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] | None = DEFAULT_UPGRADE_BLACKLIST, riven_stat_blacklist: Collection[str] | None = DEFAULT_RIVEN_STAT_BLACKLIST, workers: int | None = None, progress: ProgressCallback | None = terminal_progress) -> OptimizationResult:
+    def resolve(self, metric: Metric = balanced_damage_metric, *, compact_metric: CompactMetric | None = None, spatial: SpatialMode = "auto", attack: str | None = None, body_part: str | None = None, state: State | None = None, evaluations: int = 20_000, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] | None = DEFAULT_UPGRADE_BLACKLIST, riven_stat_blacklist: Collection[str] | None = DEFAULT_RIVEN_STAT_BLACKLIST, workers: int | None = None, progress: ProgressCallback | None = terminal_progress) -> OptimizationResult:
         if not callable(metric): raise TypeError("metric must be callable")
         if compact_metric is None and metric is balanced_damage_metric: compact_metric = balanced_damage_components
         if compact_metric is not None and not callable(compact_metric): raise TypeError("compact_metric must be callable or None")
+        if spatial not in SPATIAL_MODES: raise ValueError("spatial must be 'auto', 'full', or 'none'")
         if evaluations < 1: raise ValueError("evaluations must be at least 1")
         if not isinstance(riven, bool): raise TypeError("riven must be a bool")
         if not isinstance(evolutions, bool): raise TypeError("evolutions must be a bool")
@@ -85,6 +162,11 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         if upgrade_blacklist is not None and (isinstance(upgrade_blacklist, (str, bytes)) or not isinstance(upgrade_blacklist, Collection)): raise TypeError("upgrade_blacklist must be a collection of upgrade names or None")
         if riven_stat_blacklist is not None and (isinstance(riven_stat_blacklist, (str, bytes)) or not isinstance(riven_stat_blacklist, Collection)): raise TypeError("riven_stat_blacklist must be a collection of stat names or None")
         if progress is not None and not callable(progress): raise TypeError("progress must be callable or None")
+        if spatial == "auto":
+            return self._resolve_auto(metric, compact_metric=compact_metric, attack=attack, body_part=body_part, state=state, evaluations=evaluations, riven=riven, evolutions=evolutions, upgrade_blacklist=upgrade_blacklist, riven_stat_blacklist=riven_stat_blacklist, workers=workers, progress=progress)
+        if spatial == "none":
+            if compact_metric is not None: compact_metric = partial(_compact_force_unit_mass, compact_metric)
+            if metric is balanced_damage_metric: metric = _balanced_damage_metric_single_target
         calculation_state = State() if state is None else State._from_values(state)
         allowed = frozenset(self.calculator.weapon.calculation_defaults) | {"combo_multiplier"}
         unknown_state = set(calculation_state) - allowed
@@ -342,6 +424,7 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             best.build.copy(),
             result,
             best.score,
+            spatial,  # narrowed to full|none after auto return
             evaluations_used,
             resolutions,
             attempts,
@@ -355,3 +438,279 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             cache_hits / attempts if attempts else 0.0,
             worker_count if executor_type is not None and use_compact_metric else 1,
         )
+
+    def _resolve_auto(self, metric: Metric, *, compact_metric: CompactMetric | None, attack: str | None, body_part: str | None, state: State | None, evaluations: int, riven: bool, evolutions: bool, upgrade_blacklist: Collection[str] | None, riven_stat_blacklist: Collection[str] | None, workers: int | None, progress: ProgressCallback | None) -> OptimizationResult:
+        calculation_state = State() if state is None else State._from_values(state)
+        allowed = frozenset(self.calculator.weapon.calculation_defaults) | {"combo_multiplier"}
+        unknown_state = set(calculation_state) - allowed
+        if unknown_state: raise TypeError(f"unknown calculation state fields: {', '.join(sorted(unknown_state))}")
+        resolved_state = State._from_values(dict(self.calculator.weapon.calculation_defaults) | dict(calculation_state))
+        started = time.perf_counter()
+        resolution_budget = evaluations
+        search_scale = max(0.25, math.sqrt(evaluations / 5_000))
+        mode_scale = 2.0
+        reporter = _ProgressReporter(progress, budget=evaluations)
+        pools = self._candidate_pools(riven=riven, evolutions=evolutions, upgrade_blacklist=upgrade_blacklist, riven_stat_blacklist=riven_stat_blacklist, search_scale=search_scale)
+        base = self._complete_fixed_build(self.calculator.build, evolutions=evolutions)
+        selected_attack = attack or self.calculator.weapon.default_attack
+        generated_attacks = {WeaponCalculator._generated_key(effect) for upgrade in base.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual() if effect.stat == GENERATED_ATTACK_STAT}
+        if selected_attack not in self.calculator.weapon.attacks and selected_attack not in generated_attacks: raise ValueError(f"unknown attack {selected_attack!r}")
+        evaluator = Calculator(self.calculator.weapon, self.calculator.target, base)
+        selected_body_part, target = evaluator._select_body_part(body_part)
+        context = CalculationContext(weapon=evaluator.weapon, target=target, attack=selected_attack, build=evaluator.build, resolved_perks=(), state=resolved_state)
+        attack_generators = (*base.ranked_upgrades, *pools["mods"], *pools["arcanes"])
+        prepared_names = None if any(GENERATED_ATTACK_STAT in upgrade.stats for upgrade in attack_generators) else tuple(WeaponCalculator(context).collect_attack_tree())
+        use_compact_metric = compact_metric is not None
+        worker_count = min(os.cpu_count() or 1, 4) if workers is None else workers
+        executor_type = getattr(futures, "InterpreterPoolExecutor", None)
+        executor = executor_type(max_workers=worker_count) if use_compact_metric and worker_count > 1 and executor_type is not None else None
+        cache: dict[tuple, DualCandidate] = {}
+        perk_cache: dict[tuple[int, ...], tuple[ResolvedPerk, ...]] = {}
+        evaluations_used = 0
+        resolutions = 0
+        attempts = 0
+        cache_hits = 0
+        best_st = DualCandidate(base, float("-inf"), float("-inf"))
+        best_aoe = DualCandidate(base, float("-inf"), float("-inf"))
+
+        def note_bests(candidate: DualCandidate) -> None:
+            nonlocal best_st, best_aoe
+            if candidate.score_st > best_st.score_st: best_st = candidate
+            if candidate.score_aoe > best_aoe.score_aoe: best_aoe = candidate
+
+        def evaluate(build: Build) -> tuple[DualCandidate, bool]:
+            nonlocal evaluations_used, resolutions, attempts, cache_hits
+            attempts += 1
+            key = self._build_key(build)
+            cached = cache.get(key)
+            if cached is not None:
+                cache_hits += 1
+                return cached, False
+            if evaluations_used >= resolution_budget: return best_st if best_st.score_st >= best_aoe.score_aoe else best_aoe, False
+            representative: CalculationResult | None = None
+            perk_key = tuple(self._component_id(perk) for perk in build.evolutions)
+            resolved_perks = perk_cache.get(perk_key)
+            if resolved_perks is None:
+                resolved_perks = resolve_perks(self.calculator.weapon, build.evolutions)
+                perk_cache[perk_key] = resolved_perks
+            prepared_upgrade_effects = self._compiled_upgrade_effects(build)
+            evaluator.build = build
+            if use_compact_metric:
+                score_st, score_aoe = _dual_scores_from_components(compact_metric, *evaluator._calculate_metric_components(selected_attack, target, calculation_state, resolved_perks=resolved_perks, prepared_names=prepared_names, prepared_upgrade_effects=prepared_upgrade_effects))
+            else:
+                result = evaluator._calculate(selected_attack, selected_body_part, target, calculation_state, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=prepared_upgrade_effects)
+                score_st, score_aoe = _score_with_spatial(result, metric, None, "none"), _score_with_spatial(result, metric, None, "full")
+                representative = result
+            if not math.isfinite(score_st) or not math.isfinite(score_aoe): raise ValueError("metric must return a finite number")
+            resolutions += 1
+            candidate = DualCandidate(build, score_st, score_aoe, representative)
+            cache[key] = candidate
+            evaluations_used += 1
+            note_bests(candidate)
+            reporter.record_evaluation(evaluations_used, resolutions=resolutions, attempts=attempts, cache_hits=cache_hits, best_score=max(best_st.score_st, best_aoe.score_aoe))
+            return candidate, True
+
+        def evaluate_many(builds: list[Build], limit: int) -> list[tuple[DualCandidate, bool]]:
+            nonlocal evaluations_used, resolutions, attempts, cache_hits
+            if executor is None:
+                results: list[tuple[DualCandidate, bool]] = []
+                for build in builds:
+                    if evaluations_used >= limit: break
+                    results.append(evaluate(build))
+                return results
+            results: list[tuple[DualCandidate, bool] | None] = [None] * len(builds)
+            pending: list[tuple[int, tuple, Build]] = []
+            pending_keys: dict[tuple, int] = {}
+            duplicates: list[tuple[int, int]] = []
+            for index, build in enumerate(builds):
+                if evaluations_used + len(pending) >= min(limit, resolution_budget):
+                    results = results[:index]
+                    break
+                attempts += 1
+                key = self._build_key(build)
+                cached = cache.get(key)
+                if cached is not None:
+                    cache_hits += 1
+                    results[index] = cached, False
+                elif key in pending_keys:
+                    cache_hits += 1
+                    duplicates.append((index, pending_keys[key]))
+                else:
+                    pending_keys[key] = index
+                    pending.append((index, key, build))
+            worker_batches = []
+            for offset in range(0, len(pending), 16):
+                stop = min(offset + 16, len(pending))
+                worker_batches.append(tuple((pending_index, pending[pending_index][2]) for pending_index in range(offset, stop)))
+            try:
+                scored_batches = executor.map(_score_worker_batch_dual, repeat(evaluator), repeat(target), repeat(selected_attack), repeat(calculation_state), repeat(prepared_names), repeat(compact_metric), worker_batches)
+                scores_by_index = {index: (score_st, score_aoe) for scored_batch in scored_batches for index, score_st, score_aoe in scored_batch}
+                batch_best = max(best_st.score_st, best_aoe.score_aoe)
+                for pending_index, (index, key, build) in enumerate(pending):
+                    score_st, score_aoe = scores_by_index[pending_index]
+                    if not math.isfinite(score_st) or not math.isfinite(score_aoe): raise ValueError("metric must return a finite number")
+                    candidate = DualCandidate(build, score_st, score_aoe)
+                    cache[key] = candidate
+                    evaluations_used += 1
+                    resolutions += 1
+                    results[index] = candidate, True
+                    note_bests(candidate)
+                    batch_best = max(batch_best, candidate.score)
+                    reporter.record_evaluation(evaluations_used, resolutions=resolutions, attempts=attempts, cache_hits=cache_hits, best_score=batch_best)
+            except BaseException:
+                executor.shutdown(cancel_futures=True)
+                raise
+            for index, source_index in duplicates: results[index] = results[source_index][0], False
+            return [result for result in results if result is not None]
+
+        def evaluated(builds: list[Build], limit: int) -> Iterator[tuple[DualCandidate, bool]]:
+            batch_size = max(worker_count * 64, 1)
+            for offset in range(0, len(builds), batch_size):
+                if evaluations_used >= min(limit, resolution_budget): break
+                yield from evaluate_many(builds[offset:offset + batch_size], limit)
+
+        def mode_score(candidate: DualCandidate, mode: ResolvedSpatial) -> float:
+            return candidate.score_st if mode == "none" else candidate.score_aoe
+
+        base_candidate, _ = evaluate(base)
+        pool = [base_candidate]
+        pool_limit = min(32, max(4, round(6 * mode_scale * search_scale ** 0.35)))
+
+        def retain(candidates: list[DualCandidate]) -> list[DualCandidate]:
+            return self._select_diverse([*candidates, best_st, best_aoe], pool_limit)
+
+        seed_builds = list(self._seed_builds(base, pools, search_scale=search_scale))
+        local_passes = min(4, max(1, round(2 * search_scale ** 0.35)))
+        local_sources = min(pool_limit, max(2, round(2 * search_scale ** 0.5)))
+        beam_sources = min(pool_limit, max(2, round(3 * search_scale ** 0.5)))
+        cleanup_pass_limit = min(8, max(2, round(3 * search_scale ** 0.35)))
+        reporter.set_estimated_total(max(resolution_budget, 1))
+        reporter.begin_phase("Seeds", min(len(seed_builds), resolution_budget - evaluations_used), completed=evaluations_used)
+        seed_candidates: list[DualCandidate] = []
+        for index, (build, evaluation) in enumerate(zip(seed_builds, evaluated(seed_builds, resolution_budget), strict=False)):
+            reporter.update_plan(min(len(seed_builds) - index, resolution_budget - evaluations_used))
+            candidate, consumed = evaluation
+            if not consumed: continue
+            seed_candidates.append(candidate)
+        pool = retain([*pool, *seed_candidates])
+
+        def change_group(origin: Build, candidate: Build) -> tuple[str, int]:
+            for index, (left, right) in enumerate(zip(origin.mods, candidate.mods)):
+                if left is not right: return "mod", index
+            if len(origin.mods) != len(candidate.mods): return "mod", min(len(origin.mods), len(candidate.mods))
+            for index, (left, right) in enumerate(zip(origin.arcanes, candidate.arcanes)):
+                if left is not right: return "arcane", index
+            if len(origin.arcanes) != len(candidate.arcanes): return "arcane", min(len(origin.arcanes), len(candidate.arcanes))
+            origin_perks = {self.calculator.weapon.perks[perk].tier: perk for perk in origin.evolutions if perk in self.calculator.weapon.perks}
+            candidate_perks = {self.calculator.weapon.perks[perk].tier: perk for perk in candidate.evolutions if perk in self.calculator.weapon.perks}
+            for tier in sorted(origin_perks.keys() | candidate_perks.keys()):
+                if origin_perks.get(tier) is not candidate_perks.get(tier): return "perk", tier
+            return "progenitor", 0
+
+        frontier: dict[tuple[str, int], DualCandidate] = {}
+        local_deadline = max(evaluations_used, round(resolution_budget * 0.48))
+        reporter.begin_phase("Local search", max(local_deadline - evaluations_used, 0), completed=evaluations_used)
+        for source, climb in _dual_source_modes(list(pool), best_st, best_aoe, local_sources):
+            if evaluations_used >= local_deadline: break
+            current = source
+            for _ in range(local_passes):
+                neighbors = list(self._exact_neighbors(current.build, pools))
+                reporter.update_plan(min(len(neighbors), local_deadline - evaluations_used))
+                improved = current
+                pass_candidates: list[DualCandidate] = []
+                for build, evaluation in zip(neighbors, evaluated(neighbors, local_deadline), strict=False):
+                    candidate, consumed = evaluation
+                    if not consumed: continue
+                    if mode_score(candidate, climb) > mode_score(improved, climb): improved = candidate
+                    pass_candidates.append(candidate)
+                    group = change_group(current.build, candidate.build)
+                    previous = frontier.get(group)
+                    if mode_score(candidate, climb) <= mode_score(current, climb) and (previous is None or mode_score(candidate, climb) > mode_score(previous, climb)): frontier[group] = candidate
+                pool = retain([*pool, *pass_candidates, improved])
+                if mode_score(improved, climb) <= mode_score(current, climb): break
+                current = improved
+            pool = retain([*pool, current])
+
+        beam_deadline = max(evaluations_used, round(resolution_budget * 0.85))
+        reporter.begin_phase("Perturbations", max(beam_deadline - evaluations_used, 0), completed=evaluations_used)
+        beam_starts = _dual_source_modes(list(frontier.values()) or list(pool), best_st, best_aoe, beam_sources)
+        for source, climb in beam_starts:
+            if evaluations_used >= beam_deadline: break
+            candidates: list[DualCandidate] = []
+            neighbors = list(self._exact_neighbors(source.build, pools))
+            reporter.update_plan(min(len(neighbors), beam_deadline - evaluations_used))
+            for build, evaluation in zip(neighbors, evaluated(neighbors, beam_deadline), strict=False):
+                candidate, consumed = evaluation
+                if not consumed: continue
+                candidates.append(candidate)
+            pool = retain([*pool, *candidates])
+
+        rebuild_deadline = max(evaluations_used, round(resolution_budget * 0.95))
+        reporter.begin_phase("Rebuilds", max(rebuild_deadline - evaluations_used, 0), completed=evaluations_used)
+        rebuild_starts = _dual_source_modes([best_st, best_aoe, *[candidate for candidate in pool if candidate is not best_st and candidate is not best_aoe]], best_st, best_aoe, max(2, round(3 * search_scale ** 0.4)))
+        for source_index, (source, climb) in enumerate(rebuild_starts):
+            if evaluations_used >= rebuild_deadline: break
+            fixed_mods = len(base.mods)
+            mutable = [index for index in range(fixed_mods, len(source.build.mods)) if source.build.mods[index].slot == "regular_mod" and not self._is_riven(source.build.mods[index])]
+            pairs = list(combinations(mutable, 2))
+            pair_limit = min(len(pairs), max(3, round(5 * search_scale ** 0.4)))
+            pair_offset = source_index * pair_limit % max(len(pairs), 1)
+            ordered_pairs = [*pairs[pair_offset:], *pairs[:pair_offset]]
+            for first, second in ordered_pairs[:pair_limit]:
+                if evaluations_used >= rebuild_deadline: break
+                mods = [mod for index, mod in enumerate(source.build.mods) if index not in {first, second}]
+                current = self._build(mods=mods, arcanes=source.build.arcanes, evolutions=source.build.evolutions, progenitor=source.build.progenitor)
+                current_candidate, _ = evaluate(current)
+                for _ in range(2):
+                    selected = {mod.name for mod in current.mods}
+                    improved = current_candidate
+                    additions = [candidate_build for mod in pools["mods"] if mod.slot == "regular_mod" and mod.name not in selected and self._legal(candidate_build := self._build(mods=[*current.mods, mod], arcanes=current.arcanes, evolutions=current.evolutions, progenitor=current.progenitor))]
+                    for candidate, _ in evaluated(additions, rebuild_deadline):
+                        if mode_score(candidate, climb) > mode_score(improved, climb): improved = candidate
+                    if mode_score(improved, climb) <= mode_score(current_candidate, climb): break
+                    current_candidate = improved
+                    current = improved.build
+                pool = retain([*pool, current_candidate])
+
+        cleanup_passes = 0
+        reporter.begin_phase("Cleanup", max(resolution_budget - evaluations_used, 0), completed=evaluations_used)
+        cleanup_origin_mode: ResolvedSpatial = "none"
+        while evaluations_used < resolution_budget and cleanup_passes < cleanup_pass_limit:
+            cleanup_passes += 1
+            cleanup_origin_mode = "full" if cleanup_origin_mode == "none" else "none"
+            origin = best_st if cleanup_origin_mode == "none" else best_aoe
+            improved = origin
+            neighbors = list(self._exact_neighbors(origin.build, pools))
+            reporter.update_plan(min(len(neighbors), resolution_budget - evaluations_used))
+            for build, evaluation in zip(neighbors, evaluated(neighbors, resolution_budget), strict=False):
+                candidate, _ = evaluation
+                if mode_score(candidate, cleanup_origin_mode) > mode_score(improved, cleanup_origin_mode): improved = candidate
+            if mode_score(improved, cleanup_origin_mode) <= mode_score(origin, cleanup_origin_mode):
+                if cleanup_passes >= 2: break
+                continue
+
+        if executor is not None: executor.shutdown()
+
+        def materialize(candidate: DualCandidate) -> CalculationResult:
+            result = candidate.result
+            if result is not None and all(name in result.weapon.attacks for name in result.attacks): return result
+            evaluator.build = candidate.build
+            perk_key = tuple(self._component_id(perk) for perk in candidate.build.evolutions)
+            resolved_perks = perk_cache.get(perk_key)
+            if resolved_perks is None:
+                resolved_perks = resolve_perks(self.calculator.weapon, candidate.build.evolutions)
+            return evaluator._calculate(selected_attack, selected_body_part, target, calculation_state, copy_inputs=True, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=self._compiled_upgrade_effects(candidate.build))
+
+        st_result = materialize(best_st)
+        aoe_result = materialize(best_aoe)
+        score_st = partial(_score_with_spatial, metric=metric, compact_metric=compact_metric, spatial="none")
+        score_aoe = partial(_score_with_spatial, metric=metric, compact_metric=compact_metric, spatial="full")
+        advantage_st = _relative_advantage(score_st(st_result), score_st(aoe_result))
+        advantage_aoe = _relative_advantage(score_aoe(aoe_result), score_aoe(st_result))
+        if advantage_st >= advantage_aoe:
+            chosen, chosen_spatial, chosen_result, chosen_score = best_st, "none", st_result, best_st.score_st
+        else:
+            chosen, chosen_spatial, chosen_result, chosen_score = best_aoe, "full", aoe_result, best_aoe.score_aoe
+        elapsed = time.perf_counter() - started
+        reporter.close(completed=evaluations_used, resolutions=resolutions, attempts=attempts, cache_hits=cache_hits, best_score=chosen_score)
+        return OptimizationResult(chosen.build.copy(), chosen_result, chosen_score, chosen_spatial, evaluations_used, resolutions, attempts, cache_hits, 0, elapsed, evaluations_used < resolution_budget, evaluations_used >= resolution_budget, evaluations, resolution_budget, cache_hits / attempts if attempts else 0.0, worker_count if executor_type is not None and use_compact_metric else 1)

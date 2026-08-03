@@ -5,7 +5,7 @@ def test_optimizer_preserves_locked_build_and_uses_budget():
     weapon = arsenal.primary.get("Braton Prime")
     locked = arsenal.mod.get("Serration")
     optimizer = Optimizer(Calculator(weapon, build=Build(mods=[locked])))
-    result = optimizer.resolve(metric=lambda calculation: calculation.aggregate.damage.total_dps, evaluations=8)
+    result = optimizer.resolve(spatial="full", metric=lambda calculation: calculation.aggregate.damage.total_dps, evaluations=8)
     assert locked in result.build.mods
     assert result.evaluations <= 8
     assert result.score >= 0
@@ -14,7 +14,7 @@ def test_optimizer_preserves_locked_build_and_uses_budget():
 def test_optimizer_normalizes_attack_and_body_part_weights():
     weapon = arsenal.primary.get("Braton Prime")
     optimizer = Optimizer(Calculator(weapon))
-    result = optimizer.resolve(attack=weapon.default_attack, body_part="body", evaluations=2)
+    result = optimizer.resolve(spatial="full", attack=weapon.default_attack, body_part="body", evaluations=2)
     assert result.evaluations <= 2
     assert result.resolutions >= result.evaluations
 
@@ -23,9 +23,9 @@ def test_optimizer_rebuilds_upgrade_generated_attack_trees():
     weapon = arsenal.primary.get("Kuva Ogris")
     napalm = arsenal.mod.get("Nightwatch Napalm")
     optimizer = Optimizer(Calculator(weapon, build=Build(mods=[napalm])))
-    result = optimizer.resolve(attack="rocket_impact", evaluations=2, riven=False, evolutions=False, upgrade_blacklist=set(arsenal.mod) | set(arsenal.arcane), progress=None)
+    result = optimizer.resolve(spatial="full", attack="rocket_impact", evaluations=2, riven=False, evolutions=False, upgrade_blacklist=set(arsenal.mod) | set(arsenal.arcane), progress=None)
     assert "nightwatch_napalm_linger" in result.result.attacks
-    generated = optimizer.resolve(attack="nightwatch_napalm_linger", evaluations=2, riven=False, evolutions=False, upgrade_blacklist=set(arsenal.mod) | set(arsenal.arcane), progress=None)
+    generated = optimizer.resolve(spatial="full", attack="nightwatch_napalm_linger", evaluations=2, riven=False, evolutions=False, upgrade_blacklist=set(arsenal.mod) | set(arsenal.arcane), progress=None)
     assert list(generated.result.attacks) == ["nightwatch_napalm_linger"]
 
 
@@ -33,7 +33,7 @@ def test_parallel_optimizer_supports_status_generated_attacks():
     weapon = arsenal.melee.get("Xoris")
     influence = arsenal.arcane.get("Melee Influence")
     optimizer = Optimizer(Calculator(weapon, build=Build(mods=[arsenal.mod.get("Shocking Touch")], arcanes=[influence])))
-    result = optimizer.resolve(evaluations=2, workers=2, riven=False, evolutions=False, upgrade_blacklist=set(arsenal.mod) | set(arsenal.arcane), progress=None)
+    result = optimizer.resolve(spatial="full", evaluations=2, workers=2, riven=False, evolutions=False, upgrade_blacklist=set(arsenal.mod) | set(arsenal.arcane), progress=None)
     assert "melee_influence" in result.result.attacks
 
 
@@ -46,7 +46,7 @@ def test_optimizer_does_not_select_unimplemented_perks():
 
 def test_optimizer_uses_terminal_progress_by_default(capsys):
     weapon = arsenal.primary.get("Braton Prime")
-    Optimizer(Calculator(weapon)).resolve(evaluations=2)
+    Optimizer(Calculator(weapon)).resolve(spatial="full", evaluations=2)
     output = capsys.readouterr().out
     assert "Optimizing " in output
     assert "Complete " not in output
@@ -56,14 +56,14 @@ def test_optimizer_uses_terminal_progress_by_default(capsys):
 
 def test_optimizer_can_disable_progress(capsys):
     weapon = arsenal.primary.get("Braton Prime")
-    Optimizer(Calculator(weapon)).resolve(evaluations=2, progress=None)
+    Optimizer(Calculator(weapon)).resolve(spatial="full", evaluations=2, progress=None)
     assert capsys.readouterr().out == ""
 
 
 def test_parallel_optimizer_preserves_search_results():
     calculator = Calculator(arsenal.primary.get("Kuva Ogris"))
-    sequential = Optimizer(calculator).resolve(evaluations=64, workers=1, progress=None)
-    parallel = Optimizer(calculator).resolve(evaluations=64, workers=2, progress=None)
+    sequential = Optimizer(calculator).resolve(spatial="full", evaluations=64, workers=1, progress=None)
+    parallel = Optimizer(calculator).resolve(spatial="full", evaluations=64, workers=2, progress=None)
     assert parallel.evaluations == sequential.evaluations
     assert parallel.score == sequential.score
     assert [mod.name for mod in parallel.build.mods] == [mod.name for mod in sequential.build.mods]
@@ -74,9 +74,9 @@ def test_parallel_optimizer_preserves_search_results():
 
 def test_optimizer_propagates_state_to_parallel_scoring_and_results():
     calculator = Calculator(arsenal.melee.get("Xoris"))
-    sequential = Optimizer(calculator).resolve(attack="heavy_slam_attack", state=State(combo_multiplier=12), evaluations=16, workers=1, progress=None)
-    parallel = Optimizer(calculator).resolve(attack="heavy_slam_attack", state={"combo_multiplier": 12}, evaluations=16, workers=2, progress=None)
-    default_state = Optimizer(calculator).resolve(attack="heavy_slam_attack", evaluations=16, workers=1, progress=None)
+    sequential = Optimizer(calculator).resolve(spatial="full", attack="heavy_slam_attack", state=State(combo_multiplier=12), evaluations=16, workers=1, progress=None)
+    parallel = Optimizer(calculator).resolve(spatial="full", attack="heavy_slam_attack", state={"combo_multiplier": 12}, evaluations=16, workers=2, progress=None)
+    default_state = Optimizer(calculator).resolve(spatial="full", attack="heavy_slam_attack", evaluations=16, workers=1, progress=None)
     assert parallel.score == sequential.score
     assert parallel.result.state == {"combo_multiplier": 12}
     assert parallel.score != default_state.score
@@ -85,7 +85,7 @@ def test_optimizer_propagates_state_to_parallel_scoring_and_results():
 def test_optimizer_rejects_unknown_state_fields():
     optimizer = Optimizer(Calculator(arsenal.primary.get("Braton Prime")))
     try:
-        optimizer.resolve(state={"unknown": True}, evaluations=1, progress=None)
+        optimizer.resolve(spatial="full", state={"unknown": True}, evaluations=1, progress=None)
     except TypeError as error:
         assert str(error) == "unknown calculation state fields: unknown"
     else:
@@ -96,7 +96,7 @@ def test_compact_optimizer_score_matches_full_result():
     from warframe_damage_calculator.optimizer import balanced_damage_metric
 
     optimizer = Optimizer(Calculator(arsenal.primary.get("Kuva Ogris"), build=Build(mods=[arsenal.mod.get("Nightwatch Napalm")])))
-    result = optimizer.resolve(attack="rocket_impact", evaluations=8, workers=1, progress=None)
+    result = optimizer.resolve(spatial="full", attack="rocket_impact", evaluations=8, workers=1, progress=None)
     assert result.score == balanced_damage_metric(result.result)
 
 
@@ -111,9 +111,9 @@ def test_custom_compact_metric_uses_parallel_workers():
     from concurrent import futures
 
     calculator = Calculator(arsenal.primary.get("Kuva Ogris"))
-    sequential = Optimizer(calculator).resolve(compact_metric=_half_aoe_compact, evaluations=64, workers=1, progress=None)
-    parallel = Optimizer(calculator).resolve(compact_metric=_half_aoe_compact, evaluations=64, workers=2, progress=None)
-    full_metric = Optimizer(calculator).resolve(metric=lambda result: result.aggregate.damage.total_dps, evaluations=8, workers=2, progress=None)
+    sequential = Optimizer(calculator).resolve(spatial="full", compact_metric=_half_aoe_compact, evaluations=64, workers=1, progress=None)
+    parallel = Optimizer(calculator).resolve(spatial="full", compact_metric=_half_aoe_compact, evaluations=64, workers=2, progress=None)
+    full_metric = Optimizer(calculator).resolve(spatial="full", metric=lambda result: result.aggregate.damage.total_dps, evaluations=8, workers=2, progress=None)
     assert parallel.evaluations == sequential.evaluations
     assert parallel.score == sequential.score
     assert [mod.name for mod in parallel.build.mods] == [mod.name for mod in sequential.build.mods]
@@ -125,11 +125,57 @@ def test_custom_compact_metric_uses_parallel_workers():
 def test_optimizer_rejects_non_callable_compact_metric():
     optimizer = Optimizer(Calculator(arsenal.primary.get("Braton Prime")))
     try:
-        optimizer.resolve(compact_metric="balanced", evaluations=1, progress=None)
+        optimizer.resolve(spatial="full", compact_metric="balanced", evaluations=1, progress=None)
     except TypeError as error:
         assert str(error) == "compact_metric must be callable or None"
     else:
         raise AssertionError("Expected TypeError")
+
+
+
+def test_optimizer_rejects_invalid_spatial_mode():
+    optimizer = Optimizer(Calculator(arsenal.primary.get("Braton Prime")))
+    try:
+        optimizer.resolve(spatial="half", evaluations=1, progress=None)
+    except ValueError as error:
+        assert str(error) == "spatial must be 'auto', 'full', or 'none'"
+    else:
+        raise AssertionError("Expected ValueError")
+
+
+def test_spatial_none_ignores_damage_mass():
+    from warframe_damage_calculator.engine.metrics import balanced_damage_components
+    from warframe_damage_calculator.optimizer import balanced_damage_metric
+    from warframe_damage_calculator.optimizer.optimizer import _balanced_damage_metric_single_target
+
+    optimizer = Optimizer(Calculator(arsenal.primary.get("Kuva Ogris"), build=Build(mods=[arsenal.mod.get("Nightwatch Napalm")])))
+    result = optimizer.resolve(attack="rocket_impact", spatial="none", evaluations=8, workers=1, progress=None)
+    assert result.score == _balanced_damage_metric_single_target(result.result)
+    assert result.score != balanced_damage_metric(result.result)
+    damage = result.result.aggregate.damage
+    assert result.score == balanced_damage_components(damage.direct_dph, damage.dot_dph, damage.direct_dps, damage.dot_dps, 1.0)
+
+
+def test_spatial_auto_runs_dual_metric_search_and_picks_one():
+    calculator = Calculator(arsenal.primary.get("Kuva Ogris"))
+    single = Optimizer(calculator).resolve(spatial="none", evaluations=16, workers=1, progress=None)
+    aoe = Optimizer(calculator).resolve(spatial="full", evaluations=16, workers=1, progress=None)
+    auto = Optimizer(calculator).resolve(spatial="auto", evaluations=16, workers=1, progress=None)
+    assert auto.evaluation_budget == 16
+    assert auto.evaluations <= 16
+    assert single.spatial == "none"
+    assert aoe.spatial == "full"
+    assert auto.spatial in {"full", "none"}
+    assert auto.score >= 0
+
+
+def test_dual_compact_scores_differ_when_damage_mass_matters():
+    from warframe_damage_calculator.engine.metrics import balanced_damage_components
+    from warframe_damage_calculator.optimizer.optimizer import _dual_scores_from_components
+
+    score_st, score_aoe = _dual_scores_from_components(balanced_damage_components, 100.0, 0.0, 100.0, 0.0, 8.0)
+    assert score_st != score_aoe
+    assert score_aoe > score_st
 
 
 def test_balanced_damage_metric_includes_generated_attack_spatial_mass():
@@ -158,7 +204,7 @@ def test_optimizer_validates_workers():
     optimizer = Optimizer(Calculator(arsenal.primary.get("Braton Prime")))
     for workers in (0, -1, True, 1.5):
         try:
-            optimizer.resolve(evaluations=1, workers=workers, progress=None)
+            optimizer.resolve(spatial="full", evaluations=1, workers=workers, progress=None)
         except ValueError as error:
             assert str(error) == "workers must be a positive integer or None"
         else:
@@ -170,7 +216,7 @@ def test_optimizer_reports_structured_progress():
 
     weapon = arsenal.primary.get("Braton Prime")
     snapshots = []
-    optimization = Optimizer(Calculator(weapon)).resolve(evaluations=2, progress=snapshots.append)
+    optimization = Optimizer(Calculator(weapon)).resolve(spatial="full", evaluations=2, progress=snapshots.append)
     assert snapshots
     assert all(isinstance(snapshot, OptimizationProgress) for snapshot in snapshots)
     assert snapshots[-1].complete
@@ -219,7 +265,7 @@ def test_optimizer_preserves_locked_riven():
     locked = Mod(name="Riven", stats=UpgradeStats(multishot=1.0))
     optimizer = Optimizer(Calculator(weapon, build=Build(mods=[locked])))
     assert optimizer._candidate_pools()["rivens"] == ()
-    result = optimizer.resolve(evaluations=2, progress=None)
+    result = optimizer.resolve(spatial="full", evaluations=2, progress=None)
     assert any(mod.name == "Riven" for mod in result.build.mods)
 
 
@@ -267,7 +313,7 @@ def test_optimizer_can_disable_riven_search():
     weapon = arsenal.primary.get("Vectis Prime")
     optimizer = Optimizer(Calculator(weapon))
     assert optimizer._candidate_pools(riven=False)["rivens"] == ()
-    result = optimizer.resolve(evaluations=2, progress=None, riven=False)
+    result = optimizer.resolve(spatial="full", evaluations=2, progress=None, riven=False)
     assert not any(mod.name == "Riven" for mod in result.build.mods)
 
 
@@ -275,7 +321,7 @@ def test_optimizer_validates_riven_flag():
     weapon = arsenal.primary.get("Vectis Prime")
     optimizer = Optimizer(Calculator(weapon))
     try:
-        optimizer.resolve(evaluations=2, progress=None, riven=1)
+        optimizer.resolve(spatial="full", evaluations=2, progress=None, riven=1)
     except TypeError as error:
         assert str(error) == "riven must be a bool"
     else:
@@ -284,6 +330,12 @@ def test_optimizer_validates_riven_flag():
 
 
 
+
+
+def test_optimizer_defaults_to_auto_spatial():
+    import inspect
+
+    assert inspect.signature(Optimizer.resolve).parameters["spatial"].default == "auto"
 
 
 def test_optimizer_defaults_to_20000_evaluations():
@@ -296,7 +348,7 @@ def test_optimizer_can_disable_evolution_search():
     weapon = arsenal.primary.get("Phenmor")
     optimizer = Optimizer(Calculator(weapon))
     assert optimizer._candidate_pools(evolutions=False)["perks"] == {}
-    result = optimizer.resolve(evaluations=2, progress=None, riven=False, evolutions=False)
+    result = optimizer.resolve(spatial="full", evaluations=2, progress=None, riven=False, evolutions=False)
     assert not result.build.evolutions
 
 
@@ -304,7 +356,7 @@ def test_optimizer_preserves_locked_evolutions_when_search_is_disabled():
     weapon = arsenal.primary.get("Phenmor")
     locked = arsenal.perk.get("Devouring Attrition")
     optimizer = Optimizer(Calculator(weapon, build=Build(evolutions=[locked])))
-    result = optimizer.resolve(evaluations=2, progress=None, riven=False, evolutions=False)
+    result = optimizer.resolve(spatial="full", evaluations=2, progress=None, riven=False, evolutions=False)
     assert locked in result.build.evolutions
 
 
@@ -312,7 +364,7 @@ def test_optimizer_validates_evolutions_flag():
     weapon = arsenal.primary.get("Phenmor")
     optimizer = Optimizer(Calculator(weapon))
     try:
-        optimizer.resolve(evaluations=2, progress=None, evolutions=1)
+        optimizer.resolve(spatial="full", evaluations=2, progress=None, evolutions=1)
     except TypeError as error:
         assert str(error) == "evolutions must be a bool"
     else:
@@ -322,7 +374,7 @@ def test_optimizer_validates_evolutions_flag():
 def test_optimizer_scales_with_evaluation_budget():
     weapon = arsenal.primary.get("Braton Prime")
     optimizer = Optimizer(Calculator(weapon))
-    result = optimizer.resolve(evaluations=8, progress=None, riven=False)
+    result = optimizer.resolve(spatial="full", evaluations=8, progress=None, riven=False)
     assert result.evaluations <= 8
     assert result.resolution_budget == 8
     assert result.budget_exhausted == (result.evaluations == 8)
