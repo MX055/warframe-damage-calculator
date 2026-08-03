@@ -335,7 +335,20 @@ On Python 3.14, the default metric is evaluated across up to four isolated inter
 optimized = Optimizer(calculator).resolve(attack="rocket_impact", body_part="body")
 ```
 
-The optional `state` argument has the same meaning and validation as `Calculator.resolve()` and is applied to every candidate, for example `state=State(combo_multiplier=12, stance_combo="heavy")` for an appropriate melee weapon. Use `workers=1` for sequential execution or set an explicit positive worker count to match the available CPU and memory. Custom callable metrics remain sequential because arbitrary callables and full result objects cannot safely be transferred between isolated interpreters.
+The optional `state` argument has the same meaning and validation as `Calculator.resolve()` and is applied to every candidate, for example `state=State(combo_multiplier=12, stance_combo="heavy")` for an appropriate melee weapon. Use `workers=1` for sequential execution or set an explicit positive worker count to match the available CPU and memory.
+
+Custom full-result metrics (`metric=callable`) stay sequential because arbitrary callables and full result objects cannot safely be transferred between isolated interpreters. Metrics that can score from the compact component tuple `(direct_dph, dot_dph, direct_dps, dot_dps, damage_mass)` can keep the parallel path by passing `compact_metric=...`. The default metric uses `balanced_damage_components` automatically. Prefer a top-level or otherwise picklable callable (for example `functools.partial` of a module function) so worker interpreters can import it:
+
+```python
+from functools import partial
+from warframe_damage_calculator import Optimizer, balanced_damage_components
+
+def aoe_weighted(direct_dph, dot_dph, direct_dps, dot_dps, damage_mass, aoe_weight=1.0):
+    mass = 1.0 + aoe_weight * (damage_mass - 1.0)
+    return balanced_damage_components(direct_dph, dot_dph, direct_dps, dot_dps, mass)
+
+optimized = Optimizer(calculator).resolve(compact_metric=partial(aoe_weighted, aoe_weight=0.5))
+```
 
 ## Contributions
 

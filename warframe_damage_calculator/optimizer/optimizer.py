@@ -27,9 +27,10 @@ from .search import Search
 
 
 Metric = Callable[[CalculationResult], float]
+CompactMetric = Callable[[float, float, float, float, float], float]
 
 
-def _score_worker_batch(evaluator: Calculator, target: Enemy | None, attack: str, state: State, prepared_names: tuple[str, ...] | None, indexed_builds: tuple[tuple[int, Build], ...]) -> tuple[tuple[int, float], ...]:
+def _score_worker_batch(evaluator: Calculator, target: Enemy | None, attack: str, state: State, prepared_names: tuple[str, ...] | None, compact_metric: CompactMetric, indexed_builds: tuple[tuple[int, Build], ...]) -> tuple[tuple[int, float], ...]:
     from warframe_damage_calculator.engine.perks import resolve_perks
 
     scores = []
@@ -37,7 +38,7 @@ def _score_worker_batch(evaluator: Calculator, target: Enemy | None, attack: str
         resolved_perks = resolve_perks(evaluator.weapon, build.evolutions)
         upgrade_effects = tuple(effect for upgrade in build.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual())
         evaluator.build = build
-        score = balanced_damage_components(*evaluator._calculate_metric_components(attack, target, state, resolved_perks=resolved_perks, prepared_names=prepared_names, prepared_upgrade_effects=upgrade_effects))
+        score = compact_metric(*evaluator._calculate_metric_components(attack, target, state, resolved_perks=resolved_perks, prepared_names=prepared_names, prepared_upgrade_effects=upgrade_effects))
         scores.append((index, score))
     return tuple(scores)
 
@@ -73,8 +74,10 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         self._resolved_effect_cache: dict[int, tuple[ResolvedEffect, ...]] = {}
         self._upgrade_effects_cache: dict[tuple[int, ...], tuple[ResolvedEffect, ...]] = {}
 
-    def resolve(self, metric: Metric = balanced_damage_metric, *, attack: str | None = None, body_part: str | None = None, state: State | None = None, evaluations: int = 20_000, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] | None = DEFAULT_UPGRADE_BLACKLIST, riven_stat_blacklist: Collection[str] | None = DEFAULT_RIVEN_STAT_BLACKLIST, workers: int | None = None, progress: ProgressCallback | None = terminal_progress) -> OptimizationResult:
+    def resolve(self, metric: Metric = balanced_damage_metric, *, compact_metric: CompactMetric | None = None, attack: str | None = None, body_part: str | None = None, state: State | None = None, evaluations: int = 20_000, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] | None = DEFAULT_UPGRADE_BLACKLIST, riven_stat_blacklist: Collection[str] | None = DEFAULT_RIVEN_STAT_BLACKLIST, workers: int | None = None, progress: ProgressCallback | None = terminal_progress) -> OptimizationResult:
         if not callable(metric): raise TypeError("metric must be callable")
+        if compact_metric is None and metric is balanced_damage_metric: compact_metric = balanced_damage_components
+        if compact_metric is not None and not callable(compact_metric): raise TypeError("compact_metric must be callable or None")
         if evaluations < 1: raise ValueError("evaluations must be at least 1")
         if not isinstance(riven, bool): raise TypeError("riven must be a bool")
         if not isinstance(evolutions, bool): raise TypeError("evolutions must be a bool")
@@ -102,7 +105,7 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         context = CalculationContext(weapon=evaluator.weapon, target=target, attack=selected_attack, build=evaluator.build, resolved_perks=(), state=resolved_state)
         attack_generators = (*base.ranked_upgrades, *pools["mods"], *pools["arcanes"])
         prepared_names = None if any(GENERATED_ATTACK_STAT in upgrade.stats for upgrade in attack_generators) else tuple(WeaponCalculator(context).collect_attack_tree())
-        use_compact_metric = metric is balanced_damage_metric
+        use_compact_metric = compact_metric is not None
         worker_count = min(os.cpu_count() or 1, 4) if workers is None else workers
         executor_type = getattr(futures, "InterpreterPoolExecutor", None)
         executor = executor_type(max_workers=worker_count) if use_compact_metric and worker_count > 1 and executor_type is not None else None
@@ -132,7 +135,7 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             prepared_upgrade_effects = self._compiled_upgrade_effects(build)
             evaluator.build = build
             if use_compact_metric:
-                score = balanced_damage_components(*evaluator._calculate_metric_components(selected_attack, target, calculation_state, resolved_perks=resolved_perks, prepared_names=prepared_names, prepared_upgrade_effects=prepared_upgrade_effects))
+                score = compact_metric(*evaluator._calculate_metric_components(selected_attack, target, calculation_state, resolved_perks=resolved_perks, prepared_names=prepared_names, prepared_upgrade_effects=prepared_upgrade_effects))
             else:
                 result = evaluator._calculate(selected_attack, selected_body_part, target, calculation_state, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=prepared_upgrade_effects)
                 score = float(metric(result))
@@ -178,7 +181,7 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
                 stop = min(offset + 16, len(pending))
                 worker_batches.append(tuple((pending_index, pending[pending_index][2]) for pending_index in range(offset, stop)))
             try:
-                scored_batches = executor.map(_score_worker_batch, repeat(evaluator), repeat(target), repeat(selected_attack), repeat(calculation_state), repeat(prepared_names), worker_batches)
+                scored_batches = executor.map(_score_worker_batch, repeat(evaluator), repeat(target), repeat(selected_attack), repeat(calculation_state), repeat(prepared_names), repeat(compact_metric), worker_batches)
                 scores_by_index = {index: score for scored_batch in scored_batches for index, score in scored_batch}
                 batch_best = best.score
                 for pending_index, (index, key, build) in enumerate(pending):

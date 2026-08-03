@@ -100,6 +100,38 @@ def test_compact_optimizer_score_matches_full_result():
     assert result.score == balanced_damage_metric(result.result)
 
 
+def _half_aoe_compact(direct_dph, dot_dph, direct_dps, dot_dps, damage_mass):
+    from warframe_damage_calculator.engine.metrics import balanced_damage_components
+
+    mass = 1.0 + 0.5 * (damage_mass - 1.0)
+    return balanced_damage_components(direct_dph, dot_dph, direct_dps, dot_dps, mass)
+
+
+def test_custom_compact_metric_uses_parallel_workers():
+    from concurrent import futures
+
+    calculator = Calculator(arsenal.primary.get("Kuva Ogris"))
+    sequential = Optimizer(calculator).resolve(compact_metric=_half_aoe_compact, evaluations=64, workers=1, progress=None)
+    parallel = Optimizer(calculator).resolve(compact_metric=_half_aoe_compact, evaluations=64, workers=2, progress=None)
+    full_metric = Optimizer(calculator).resolve(metric=lambda result: result.aggregate.damage.total_dps, evaluations=8, workers=2, progress=None)
+    assert parallel.evaluations == sequential.evaluations
+    assert parallel.score == sequential.score
+    assert [mod.name for mod in parallel.build.mods] == [mod.name for mod in sequential.build.mods]
+    if getattr(futures, "InterpreterPoolExecutor", None) is not None:
+        assert parallel.workers == 2
+        assert full_metric.workers == 1
+
+
+def test_optimizer_rejects_non_callable_compact_metric():
+    optimizer = Optimizer(Calculator(arsenal.primary.get("Braton Prime")))
+    try:
+        optimizer.resolve(compact_metric="balanced", evaluations=1, progress=None)
+    except TypeError as error:
+        assert str(error) == "compact_metric must be callable or None"
+    else:
+        raise AssertionError("Expected TypeError")
+
+
 def test_balanced_damage_metric_includes_generated_attack_spatial_mass():
     from warframe_damage_calculator.optimizer import balanced_damage_metric
 
