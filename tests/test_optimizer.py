@@ -161,8 +161,9 @@ def test_spatial_auto_runs_dual_metric_search_and_picks_one():
     single = Optimizer(calculator).resolve(spatial="none", evaluations=16, workers=1, progress=None)
     aoe = Optimizer(calculator).resolve(spatial="full", evaluations=16, workers=1, progress=None)
     auto = Optimizer(calculator).resolve(spatial="auto", evaluations=16, workers=1, progress=None)
-    assert auto.evaluation_budget == 16
-    assert auto.evaluations <= 16
+    assert auto.evaluation_budget == 32
+    assert auto.evaluations <= 32
+    assert auto.resolution_budget == 32
     assert single.spatial == "none"
     assert aoe.spatial == "full"
     assert auto.spatial in {"full", "none"}

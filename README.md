@@ -329,7 +329,7 @@ Each result records its selected attack and body part. Build optimizers can reus
 
 ## OptimizationResult
 
-On Python 3.14, the default metric is evaluated across up to four isolated interpreter workers. Candidate order, evaluation count, scores, and tie-breaking remain deterministic; parallelism changes only how independent scores in each search batch are calculated.
+On Python 3.14, the default metric is evaluated across isolated interpreter workers (up to four for `"full"` / `"none"`, up to eight for `"auto"`). Candidate order, evaluation count, scores, and tie-breaking remain deterministic; parallelism changes only how independent scores in each search batch are calculated.
 
 ```python
 optimized = Optimizer(calculator).resolve(attack="rocket_impact", body_part="body")
@@ -343,7 +343,7 @@ The optional `state` argument has the same meaning and validation as `Calculator
 - `"full"` — score with each attack's damage mass; matches the default contributions metric
 - `"none"` — ignore damage mass (treat mass as 1)
 
-`"auto"` shares pools and seeds, uses a single evaluation budget, and scores ST and AoE from one component calculation per candidate. Contributions still default to the full-mass balanced metric. The resolved mode is reported on `OptimizationResult.spatial` as `"full"` or `"none"` (never `"auto"`).
+`"auto"` shares pools and seeds in one dual-metric search, then runs phased specialist climbs (single-target half, then AoE half) so each objective gets dedicated local/perturbation/rebuild depth instead of mixed sources. It uses twice the requested evaluation budget so each spatial objective keeps roughly the same search depth as a dedicated pass, while every candidate still updates both bests from one component calculation. Contributions still default to the full-mass balanced metric. The resolved mode is reported on `OptimizationResult.spatial` as `"full"` or `"none"` (never `"auto"`).
 
 Custom full-result metrics (`metric=callable`) stay sequential because arbitrary callables and full result objects cannot safely be transferred between isolated interpreters. Metrics that can score from the compact component tuple `(direct_dph, dot_dph, direct_dps, dot_dps, damage_mass)` can keep the parallel path by passing `compact_metric=...`. The default metric uses `balanced_damage_components` automatically. Prefer a top-level or otherwise picklable callable (for example `functools.partial` of a module function) so worker interpreters can import it:
 

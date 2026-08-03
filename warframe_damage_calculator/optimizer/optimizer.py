@@ -70,29 +70,6 @@ def _dual_scores_from_components(compact_metric: CompactMetric, direct_dph: floa
     return float(compact_metric(direct_dph, dot_dph, direct_dps, dot_dps, 1.0)), float(compact_metric(direct_dph, dot_dph, direct_dps, dot_dps, damage_mass))
 
 
-def _climb_mode(candidate: DualCandidate, best_st: DualCandidate, best_aoe: DualCandidate, *, in_st: bool, in_aoe: bool) -> ResolvedSpatial:
-    if in_st and not in_aoe: return "none"
-    if in_aoe and not in_st: return "full"
-    st_rel = candidate.score_st / best_st.score_st if best_st.score_st > 0 else (math.inf if candidate.score_st > 0 else 0.0)
-    aoe_rel = candidate.score_aoe / best_aoe.score_aoe if best_aoe.score_aoe > 0 else (math.inf if candidate.score_aoe > 0 else 0.0)
-    return "none" if st_rel >= aoe_rel else "full"
-
-
-def _dual_source_modes(pool: list[DualCandidate], best_st: DualCandidate, best_aoe: DualCandidate, limit: int) -> list[tuple[DualCandidate, ResolvedSpatial]]:
-    by_st = sorted(pool, key=lambda candidate: candidate.score_st, reverse=True)[:limit]
-    by_aoe = sorted(pool, key=lambda candidate: candidate.score_aoe, reverse=True)[:limit]
-    st_ids = {id(candidate) for candidate in by_st}
-    aoe_ids = {id(candidate) for candidate in by_aoe}
-    ordered: list[DualCandidate] = []
-    seen: set[int] = set()
-    for candidate in (*by_st, *by_aoe):
-        marker = id(candidate)
-        if marker in seen: continue
-        seen.add(marker)
-        ordered.append(candidate)
-    return [(candidate, _climb_mode(candidate, best_st, best_aoe, in_st=id(candidate) in st_ids, in_aoe=id(candidate) in aoe_ids)) for candidate in ordered]
-
-
 def _score_worker_batch(evaluator: Calculator, target: Enemy | None, attack: str, state: State, prepared_names: tuple[str, ...] | None, compact_metric: CompactMetric, indexed_builds: tuple[tuple[int, Build], ...]) -> tuple[tuple[int, float], ...]:
     from warframe_damage_calculator.engine.perks import resolve_perks
 
@@ -446,10 +423,10 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         if unknown_state: raise TypeError(f"unknown calculation state fields: {', '.join(sorted(unknown_state))}")
         resolved_state = State._from_values(dict(self.calculator.weapon.calculation_defaults) | dict(calculation_state))
         started = time.perf_counter()
-        resolution_budget = evaluations
-        search_scale = max(0.25, math.sqrt(evaluations / 5_000))
+        resolution_budget = evaluations * 2
+        search_scale = max(0.25, math.sqrt(resolution_budget / 5_000))
         mode_scale = 2.0
-        reporter = _ProgressReporter(progress, budget=evaluations)
+        reporter = _ProgressReporter(progress, budget=resolution_budget)
         pools = self._candidate_pools(riven=riven, evolutions=evolutions, upgrade_blacklist=upgrade_blacklist, riven_stat_blacklist=riven_stat_blacklist, search_scale=search_scale)
         base = self._complete_fixed_build(self.calculator.build, evolutions=evolutions)
         selected_attack = attack or self.calculator.weapon.default_attack
@@ -461,7 +438,7 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         attack_generators = (*base.ranked_upgrades, *pools["mods"], *pools["arcanes"])
         prepared_names = None if any(GENERATED_ATTACK_STAT in upgrade.stats for upgrade in attack_generators) else tuple(WeaponCalculator(context).collect_attack_tree())
         use_compact_metric = compact_metric is not None
-        worker_count = min(os.cpu_count() or 1, 4) if workers is None else workers
+        worker_count = min(os.cpu_count() or 1, 8) if workers is None else workers
         executor_type = getattr(futures, "InterpreterPoolExecutor", None)
         executor = executor_type(max_workers=worker_count) if use_compact_metric and worker_count > 1 and executor_type is not None else None
         cache: dict[tuple, DualCandidate] = {}
@@ -572,6 +549,19 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         def mode_score(candidate: DualCandidate, mode: ResolvedSpatial) -> float:
             return candidate.score_st if mode == "none" else candidate.score_aoe
 
+        def specialist_sources(candidates: list[DualCandidate], mode: ResolvedSpatial, limit: int) -> list[DualCandidate]:
+            best = best_st if mode == "none" else best_aoe
+            ordered = sorted(candidates, key=lambda candidate: mode_score(candidate, mode), reverse=True)
+            selected: list[DualCandidate] = []
+            seen: set[tuple] = set()
+            for candidate in (best, *ordered):
+                key = self._build_key(candidate.build)
+                if key in seen: continue
+                seen.add(key)
+                selected.append(candidate)
+                if len(selected) >= limit: break
+            return selected
+
         base_candidate, _ = evaluate(base)
         pool = [base_candidate]
         pool_limit = min(32, max(4, round(6 * mode_scale * search_scale ** 0.35)))
@@ -607,77 +597,84 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
                 if origin_perks.get(tier) is not candidate_perks.get(tier): return "perk", tier
             return "progenitor", 0
 
-        frontier: dict[tuple[str, int], DualCandidate] = {}
-        local_deadline = max(evaluations_used, round(resolution_budget * 0.48))
-        reporter.begin_phase("Local search", max(local_deadline - evaluations_used, 0), completed=evaluations_used)
-        for source, climb in _dual_source_modes(list(pool), best_st, best_aoe, local_sources):
-            if evaluations_used >= local_deadline: break
-            current = source
-            for _ in range(local_passes):
-                neighbors = list(self._exact_neighbors(current.build, pools))
-                reporter.update_plan(min(len(neighbors), local_deadline - evaluations_used))
-                improved = current
-                pass_candidates: list[DualCandidate] = []
-                for build, evaluation in zip(neighbors, evaluated(neighbors, local_deadline), strict=False):
+        def run_specialist(climb: ResolvedSpatial, *, phase_end: int, label: str) -> None:
+            nonlocal pool
+            span = max(phase_end - evaluations_used, 0)
+            local_deadline = evaluations_used + round(span * 0.48)
+            beam_deadline = evaluations_used + round(span * 0.85)
+            rebuild_deadline = evaluations_used + round(span * 0.95)
+            frontier: dict[tuple[str, int], DualCandidate] = {}
+            reporter.begin_phase(f"{label} local", max(local_deadline - evaluations_used, 0), completed=evaluations_used)
+            for source in specialist_sources(list(pool), climb, local_sources):
+                if evaluations_used >= local_deadline: break
+                current = source
+                for _ in range(local_passes):
+                    neighbors = list(self._exact_neighbors(current.build, pools))
+                    reporter.update_plan(min(len(neighbors), local_deadline - evaluations_used))
+                    improved = current
+                    pass_candidates: list[DualCandidate] = []
+                    for build, evaluation in zip(neighbors, evaluated(neighbors, local_deadline), strict=False):
+                        candidate, consumed = evaluation
+                        if not consumed: continue
+                        if mode_score(candidate, climb) > mode_score(improved, climb): improved = candidate
+                        pass_candidates.append(candidate)
+                        group = change_group(current.build, candidate.build)
+                        previous = frontier.get(group)
+                        if mode_score(candidate, climb) <= mode_score(current, climb) and (previous is None or mode_score(candidate, climb) > mode_score(previous, climb)): frontier[group] = candidate
+                    pool = retain([*pool, *pass_candidates, improved])
+                    if mode_score(improved, climb) <= mode_score(current, climb): break
+                    current = improved
+                pool = retain([*pool, current])
+
+            reporter.begin_phase(f"{label} perturbations", max(beam_deadline - evaluations_used, 0), completed=evaluations_used)
+            beam_starts = specialist_sources(list(frontier.values()) or list(pool), climb, beam_sources)
+            for source in beam_starts:
+                if evaluations_used >= beam_deadline: break
+                neighbors = list(self._exact_neighbors(source.build, pools))
+                reporter.update_plan(min(len(neighbors), beam_deadline - evaluations_used))
+                candidates: list[DualCandidate] = []
+                for build, evaluation in zip(neighbors, evaluated(neighbors, beam_deadline), strict=False):
                     candidate, consumed = evaluation
                     if not consumed: continue
-                    if mode_score(candidate, climb) > mode_score(improved, climb): improved = candidate
-                    pass_candidates.append(candidate)
-                    group = change_group(current.build, candidate.build)
-                    previous = frontier.get(group)
-                    if mode_score(candidate, climb) <= mode_score(current, climb) and (previous is None or mode_score(candidate, climb) > mode_score(previous, climb)): frontier[group] = candidate
-                pool = retain([*pool, *pass_candidates, improved])
-                if mode_score(improved, climb) <= mode_score(current, climb): break
-                current = improved
-            pool = retain([*pool, current])
+                    candidates.append(candidate)
+                pool = retain([*pool, *candidates])
 
-        beam_deadline = max(evaluations_used, round(resolution_budget * 0.85))
-        reporter.begin_phase("Perturbations", max(beam_deadline - evaluations_used, 0), completed=evaluations_used)
-        beam_starts = _dual_source_modes(list(frontier.values()) or list(pool), best_st, best_aoe, beam_sources)
-        for source, climb in beam_starts:
-            if evaluations_used >= beam_deadline: break
-            candidates: list[DualCandidate] = []
-            neighbors = list(self._exact_neighbors(source.build, pools))
-            reporter.update_plan(min(len(neighbors), beam_deadline - evaluations_used))
-            for build, evaluation in zip(neighbors, evaluated(neighbors, beam_deadline), strict=False):
-                candidate, consumed = evaluation
-                if not consumed: continue
-                candidates.append(candidate)
-            pool = retain([*pool, *candidates])
-
-        rebuild_deadline = max(evaluations_used, round(resolution_budget * 0.95))
-        reporter.begin_phase("Rebuilds", max(rebuild_deadline - evaluations_used, 0), completed=evaluations_used)
-        rebuild_starts = _dual_source_modes([best_st, best_aoe, *[candidate for candidate in pool if candidate is not best_st and candidate is not best_aoe]], best_st, best_aoe, max(2, round(3 * search_scale ** 0.4)))
-        for source_index, (source, climb) in enumerate(rebuild_starts):
-            if evaluations_used >= rebuild_deadline: break
-            fixed_mods = len(base.mods)
-            mutable = [index for index in range(fixed_mods, len(source.build.mods)) if source.build.mods[index].slot == "regular_mod" and not self._is_riven(source.build.mods[index])]
-            pairs = list(combinations(mutable, 2))
-            pair_limit = min(len(pairs), max(3, round(5 * search_scale ** 0.4)))
-            pair_offset = source_index * pair_limit % max(len(pairs), 1)
-            ordered_pairs = [*pairs[pair_offset:], *pairs[:pair_offset]]
-            for first, second in ordered_pairs[:pair_limit]:
+            reporter.begin_phase(f"{label} rebuilds", max(rebuild_deadline - evaluations_used, 0), completed=evaluations_used)
+            rebuild_starts = specialist_sources([best_st if climb == "none" else best_aoe, *pool], climb, max(2, round(3 * search_scale ** 0.4)))
+            for source_index, source in enumerate(rebuild_starts):
                 if evaluations_used >= rebuild_deadline: break
-                mods = [mod for index, mod in enumerate(source.build.mods) if index not in {first, second}]
-                current = self._build(mods=mods, arcanes=source.build.arcanes, evolutions=source.build.evolutions, progenitor=source.build.progenitor)
-                current_candidate, _ = evaluate(current)
-                for _ in range(2):
-                    selected = {mod.name for mod in current.mods}
-                    improved = current_candidate
-                    additions = [candidate_build for mod in pools["mods"] if mod.slot == "regular_mod" and mod.name not in selected and self._legal(candidate_build := self._build(mods=[*current.mods, mod], arcanes=current.arcanes, evolutions=current.evolutions, progenitor=current.progenitor))]
-                    for candidate, _ in evaluated(additions, rebuild_deadline):
-                        if mode_score(candidate, climb) > mode_score(improved, climb): improved = candidate
-                    if mode_score(improved, climb) <= mode_score(current_candidate, climb): break
-                    current_candidate = improved
-                    current = improved.build
-                pool = retain([*pool, current_candidate])
+                fixed_mods = len(base.mods)
+                mutable = [index for index in range(fixed_mods, len(source.build.mods)) if source.build.mods[index].slot == "regular_mod" and not self._is_riven(source.build.mods[index])]
+                pairs = list(combinations(mutable, 2))
+                pair_limit = min(len(pairs), max(3, round(5 * search_scale ** 0.4)))
+                pair_offset = source_index * pair_limit % max(len(pairs), 1)
+                ordered_pairs = [*pairs[pair_offset:], *pairs[:pair_offset]]
+                for first, second in ordered_pairs[:pair_limit]:
+                    if evaluations_used >= rebuild_deadline: break
+                    mods = [mod for index, mod in enumerate(source.build.mods) if index not in {first, second}]
+                    current = self._build(mods=mods, arcanes=source.build.arcanes, evolutions=source.build.evolutions, progenitor=source.build.progenitor)
+                    current_candidate, _ = evaluate(current)
+                    for _ in range(2):
+                        selected = {mod.name for mod in current.mods}
+                        improved = current_candidate
+                        additions = [candidate_build for mod in pools["mods"] if mod.slot == "regular_mod" and mod.name not in selected and self._legal(candidate_build := self._build(mods=[*current.mods, mod], arcanes=current.arcanes, evolutions=current.evolutions, progenitor=current.progenitor))]
+                        for candidate, _ in evaluated(additions, rebuild_deadline):
+                            if mode_score(candidate, climb) > mode_score(improved, climb): improved = candidate
+                        if mode_score(improved, climb) <= mode_score(current_candidate, climb): break
+                        current_candidate = improved
+                        current = improved.build
+                    pool = retain([*pool, current_candidate])
+
+        half = max(evaluations_used, resolution_budget // 2)
+        run_specialist("none", phase_end=half, label="Single-target")
+        run_specialist("full", phase_end=max(evaluations_used, round(resolution_budget * 0.95)), label="AoE")
 
         cleanup_passes = 0
-        reporter.begin_phase("Cleanup", max(resolution_budget - evaluations_used, 0), completed=evaluations_used)
+        cleanup_stalls = 0
         cleanup_origin_mode: ResolvedSpatial = "none"
+        reporter.begin_phase("Cleanup", max(resolution_budget - evaluations_used, 0), completed=evaluations_used)
         while evaluations_used < resolution_budget and cleanup_passes < cleanup_pass_limit:
             cleanup_passes += 1
-            cleanup_origin_mode = "full" if cleanup_origin_mode == "none" else "none"
             origin = best_st if cleanup_origin_mode == "none" else best_aoe
             improved = origin
             neighbors = list(self._exact_neighbors(origin.build, pools))
@@ -686,8 +683,11 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
                 candidate, _ = evaluation
                 if mode_score(candidate, cleanup_origin_mode) > mode_score(improved, cleanup_origin_mode): improved = candidate
             if mode_score(improved, cleanup_origin_mode) <= mode_score(origin, cleanup_origin_mode):
-                if cleanup_passes >= 2: break
+                cleanup_origin_mode = "full" if cleanup_origin_mode == "none" else "none"
+                cleanup_stalls += 1
+                if cleanup_stalls >= 2: break
                 continue
+            cleanup_stalls = 0
 
         if executor is not None: executor.shutdown()
 
@@ -713,4 +713,4 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             chosen, chosen_spatial, chosen_result, chosen_score = best_aoe, "full", aoe_result, best_aoe.score_aoe
         elapsed = time.perf_counter() - started
         reporter.close(completed=evaluations_used, resolutions=resolutions, attempts=attempts, cache_hits=cache_hits, best_score=chosen_score)
-        return OptimizationResult(chosen.build.copy(), chosen_result, chosen_score, chosen_spatial, evaluations_used, resolutions, attempts, cache_hits, 0, elapsed, evaluations_used < resolution_budget, evaluations_used >= resolution_budget, evaluations, resolution_budget, cache_hits / attempts if attempts else 0.0, worker_count if executor_type is not None and use_compact_metric else 1)
+        return OptimizationResult(chosen.build.copy(), chosen_result, chosen_score, chosen_spatial, evaluations_used, resolutions, attempts, cache_hits, 0, elapsed, evaluations_used < resolution_budget, evaluations_used >= resolution_budget, resolution_budget, resolution_budget, cache_hits / attempts if attempts else 0.0, worker_count if executor_type is not None and use_compact_metric else 1)
