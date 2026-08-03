@@ -53,7 +53,12 @@ class OptimizationResult:
     cache_hits: int = 0
     approximations: int = 0
     elapsed: float = 0.0
-    summary: dict[str, int | float | str | bool] | None = None
+    converged: bool = False
+    budget_exhausted: bool = False
+    evaluation_budget: int = 0
+    resolution_budget: int = 0
+    cache_hit_rate: float = 0.0
+    workers: int = 1
 
 
 class Optimizer(Search, CandidatePreparation, RivenCandidates):
@@ -94,7 +99,7 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         if selected_attack not in self.calculator.weapon.attacks and selected_attack not in generated_attacks: raise ValueError(f"unknown attack {selected_attack!r}")
         evaluator = Calculator(self.calculator.weapon, self.calculator.target, base)
         selected_body_part, target = evaluator._select_body_part(body_part)
-        context = CalculationContext(weapon=evaluator.weapon, target=target if target is not None else Enemy(), attack=selected_attack, build=evaluator.build, resolved_perks=(), state=resolved_state)
+        context = CalculationContext(weapon=evaluator.weapon, target=target, attack=selected_attack, build=evaluator.build, resolved_perks=(), state=resolved_state)
         attack_generators = (*base.ranked_upgrades, *pools["mods"], *pools["arcanes"])
         prepared_names = None if any(GENERATED_ATTACK_STAT in upgrade.stats for upgrade in attack_generators) else tuple(WeaponCalculator(context).collect_attack_tree())
         use_compact_metric = metric is balanced_damage_metric
@@ -322,26 +327,28 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         if executor is not None: executor.shutdown()
         elapsed = time.perf_counter() - started
         reporter.close(completed=evaluations_used, resolutions=resolutions, attempts=attempts, cache_hits=cache_hits, best_score=best.score)
-        summary = {
-            "converged": evaluations_used < resolution_budget,
-            "budget_exhausted": evaluations_used >= resolution_budget,
-            "score": best.score,
-            "elapsed": elapsed,
-            "evaluations": evaluations_used,
-            "evaluation_budget": evaluations,
-            "resolutions": resolutions,
-            "resolution_budget": resolution_budget,
-            "attempts": attempts,
-            "cache_hits": cache_hits,
-            "cache_hit_rate": cache_hits / attempts if attempts else 0.0,
-            "workers": worker_count if executor_type is not None and use_compact_metric else 1,
-        }
         result = best.result
-        if result is None:
+        if result is None or any(name not in result.weapon.attacks for name in result.attacks):
             evaluator.build = best.build
             perk_key = tuple(self._component_id(perk) for perk in best.build.evolutions)
             resolved_perks = perk_cache.get(perk_key)
             if resolved_perks is None:
                 resolved_perks = resolve_perks(self.calculator.weapon, best.build.evolutions)
-            result = evaluator._calculate(selected_attack, selected_body_part, target, calculation_state, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=self._compiled_upgrade_effects(best.build))
-        return OptimizationResult(best.build.copy(), result, best.score, evaluations_used, resolutions, attempts, cache_hits, 0, elapsed, summary)
+            result = evaluator._calculate(selected_attack, selected_body_part, target, calculation_state, copy_inputs=True, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=self._compiled_upgrade_effects(best.build))
+        return OptimizationResult(
+            best.build.copy(),
+            result,
+            best.score,
+            evaluations_used,
+            resolutions,
+            attempts,
+            cache_hits,
+            0,
+            elapsed,
+            evaluations_used < resolution_budget,
+            evaluations_used >= resolution_budget,
+            evaluations,
+            resolution_budget,
+            cache_hits / attempts if attempts else 0.0,
+            worker_count if executor_type is not None and use_compact_metric else 1,
+        )

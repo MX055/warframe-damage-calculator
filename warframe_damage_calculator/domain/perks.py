@@ -9,45 +9,27 @@ from typing import Any, Self
 from .effects import Effect, Scalar, Source, resolve_automatic, resolve_source
 from .implementation import ImplementationStatus
 from .runtime import Runtime
-from .upgrades import ResolvedEffect, Upgrade, UpgradeStats
+from .upgrades import ResolvedEffect, Upgrade, UpgradeStats, _merge_runtime, _runtime_defaults
 
 PERK_DESCRIPTION_SOURCE = Source("$description")
-
-
-def _condition_defaults(stats: UpgradeStats) -> dict[str, Any]:
-    defaults: dict[str, Any] = {}
-    for effects in stats.values():
-        for effect in effects:
-            if effect.when is None: continue
-            maximum = effect.stacks
-            value = int(maximum) if maximum not in (None, "inf") else True
-            key = str(effect.when)
-            if isinstance(value, int) and not isinstance(value, bool): defaults[key] = max(int(defaults.get(key, 0)), value)
-            else: defaults.setdefault(key, value)
-    return defaults
 
 
 class Perk(Upgrade):
     type = "perk"
     __slots__ = ("description_source", "runtime")
 
-    def __init__(self, name: str, description: str | Source | Mapping[str, object] | None = None, stats: UpgradeStats | None = None, implementation_status: ImplementationStatus | None = None, runtime: Mapping[str, Any] | None = None) -> None:
-        super().__init__(name=name, description="", stats=stats, implementation_status=implementation_status)
+    def __init__(self, *, name: str, description: str | Source | None = None, stats: UpgradeStats | None = None, implementation_status: ImplementationStatus | None = None, runtime: Runtime | None = None) -> None:
+        super().__init__(name=name, description=None, stats=stats, implementation_status=implementation_status)
         self.description_source = self._parse_description(description)
-        defaults = _condition_defaults(self.stats)
-        defaults.update(runtime or {})
-        self.runtime = Runtime({*self.stats.manual_fields}, defaults)
+        defaults = _runtime_defaults(self.stats, base={})
+        self.runtime = _merge_runtime({*self.stats.manual_fields}, defaults, runtime)
 
     @staticmethod
-    def _parse_description(value: str | Source | Mapping[str, object] | None) -> Source:
+    def _parse_description(value: str | Source | None) -> Source:
         if value is None or value == "": return PERK_DESCRIPTION_SOURCE
         if isinstance(value, Source):
             if value.path != "$description": raise ValueError("perk description source must be '$description'")
             return value
-        if isinstance(value, Mapping):
-            source = Source.from_record(value)
-            if source.path != "$description": raise ValueError("perk description source must be '$description'")
-            return source
         raise TypeError("perk description must be a $description source expression")
 
     def set(self, **values: Any) -> Self:
@@ -55,11 +37,15 @@ class Perk(Upgrade):
         return self
 
     def copy(self) -> Self:
-        return type(self)(self.name, description=self.description_source, stats=self.stats.copy(), implementation_status=deepcopy(self.implementation_status), runtime=self.runtime.as_dict())
+        return type(self)(name=self.name, description=self.description_source, stats=self.stats.copy(), implementation_status=deepcopy(self.implementation_status), runtime=self.runtime.copy())
 
     @classmethod
     def from_record(cls, record: Mapping[str, Any]) -> Perk:
-        return cls(name=str(record["name"]), description=record.get("description"), stats=UpgradeStats.from_record(record.get("stats", {})), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")))
+        raw = record.get("description")
+        if isinstance(raw, Mapping): description: str | Source | None = Source.from_record(raw)
+        elif raw is None or isinstance(raw, str): description = raw
+        else: raise TypeError("perk description must be a string, source expression, or null")
+        return cls(name=str(record["name"]), description=description, stats=UpgradeStats.from_record(record.get("stats", {})), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")))
 
 
 @dataclass(frozen=True, slots=True)

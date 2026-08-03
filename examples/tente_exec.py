@@ -12,7 +12,7 @@ build = Build(
     arcanes=[
         arsenal.arcane.get("Melee Duplicate")
     ],
-    progenitor=Progenitor("electricity", 0.60)
+    progenitor=Progenitor(element="electricity", bonus=0.60)
 )
 calculator = Calculator(weapon, target, build)
 result = calculator.resolve(attack="heavy_slam_attack", state={"stance_combo": "heavy"})

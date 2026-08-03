@@ -200,9 +200,10 @@ def validate_database(database: dict[str, Any]) -> None:
                     for stat, stat_values in values.items():
                         if not isinstance(stat_values, list) or len(stat_values) != len(templates[stat]): raise ValueError(f"{path}.values.{stat}: expected {len(templates[stat])} values")
                         if any(not isinstance(value, (int, float, bool, str)) or isinstance(value, str) and not value for value in stat_values): raise ValueError(f"{path}.values.{stat}: invalid concrete value")
-    allowed_upgrade = {"name", "description", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats", "combos"}
+    allowed_mod = {"name", "description", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats", "combos"}
+    allowed_arcane = {"name", "description", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats"}
     effect_stats: set[str] = set()
-    for section, expected_slots in (("mods", {"regular_mod", "exilus_mod", "stance_mod"}), ("arcanes", {"regular_arcane"})):
+    for section, expected_slots, allowed_upgrade in (("mods", {"regular_mod", "exilus_mod", "stance_mod"}, allowed_mod), ("arcanes", {"regular_arcane"}, allowed_arcane)):
         for name, upgrade in database["upgrades"][section].items():
             path = f"upgrades.{section}.{name}"
             if set(upgrade) - allowed_upgrade: raise ValueError(f"{path}: invalid fields {sorted(set(upgrade) - allowed_upgrade)}")
@@ -214,7 +215,7 @@ def validate_database(database: dict[str, Any]) -> None:
             if set(compatibility) - {"types", "subtypes", "names", "categories", "triggers", "aoe"}: raise ValueError(f"{path}.compatibility: invalid fields")
             if "aoe" in compatibility and not isinstance(compatibility["aoe"], bool): raise ValueError(f"{path}.compatibility.aoe: expected a boolean")
             _effects(upgrade.get("stats", {}), f"{path}.stats")
-            _validate_combos(upgrade.get("combos"), f"{path}.combos")
+            if section == "mods": _validate_combos(upgrade.get("combos"), f"{path}.combos")
             effect_stats.update(upgrade.get("stats", {}))
     for perk in database["upgrades"]["perks"].values(): effect_stats.update(perk.get("stats", {}))
     unclassified = unclassified_effect_stats(effect_stats)

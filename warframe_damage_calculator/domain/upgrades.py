@@ -16,6 +16,7 @@ from .scaled_values import UpgradeValue, resolve_scalar
 
 COMBO_TYPES = frozenset({"aerial", "block", "finisher", "forward", "forward_block", "heavy", "neutral", "slam", "slide", "wall"})
 COMBO_FIELDS = frozenset({"type", "name", "multiplier", "hits", "duration"})
+type StatInput = Effect | EffectValue | Attack | Iterable[Effect | EffectValue | Attack]
 
 
 @dataclass(slots=True)
@@ -54,10 +55,153 @@ def _parse_combos(combos: Mapping[str, Combo | Mapping[str, object]] | None) -> 
     return parsed
 
 
+def _runtime_defaults(stats: UpgradeStats, *, base: dict[str, Any]) -> dict[str, Any]:
+    defaults = dict(base)
+    for effects in stats.values():
+        for effect in effects:
+            if effect.when is None: continue
+            maximum = effect.stacks
+            value = int(maximum) if maximum not in (None, "inf") else True
+            key = str(effect.when)
+            if isinstance(value, int) and not isinstance(value, bool): defaults[key] = max(int(defaults.get(key, 0)), value)
+            else: defaults.setdefault(key, value)
+    return defaults
+
+
+def _merge_runtime(allowed: set[str] | frozenset[str], defaults: dict[str, Any], runtime: Runtime | None) -> Runtime:
+    values = dict(defaults)
+    if runtime is not None: values.update(runtime.as_dict())
+    return Runtime(allowed, values)
+
+
 class UpgradeStats(Mapping[str, tuple[Effect, ...]]):
     __slots__ = ("_effects",)
 
-    def __init__(self, **stats: Effect | EffectValue | Attack | Iterable[Effect | EffectValue | Attack]) -> None:
+    def __init__(
+        self,
+        *,
+        accuracy: StatInput | None = None,
+        aerial_melee_attack_range: StatInput | None = None,
+        afflictions_proc_multiplier: StatInput | None = None,
+        ammo_efficiency: StatInput | None = None,
+        ammo_efficiency_chance: StatInput | None = None,
+        ammo_maximum: StatInput | None = None,
+        ammo_replenish_chance: StatInput | None = None,
+        ammo_restore: StatInput | None = None,
+        area_of_effect: StatInput | None = None,
+        armor_reduction: StatInput | None = None,
+        attack_speed: StatInput | None = None,
+        big_stagger_proc: StatInput | None = None,
+        blast_proc: StatInput | None = None,
+        bleed_on_impact: StatInput | None = None,
+        blind_proc: StatInput | None = None,
+        body_shot_crit_chance_multiplier: StatInput | None = None,
+        bullet_jump: StatInput | None = None,
+        cascadia_empowered_proc: StatInput | None = None,
+        cold: StatInput | None = None,
+        cold_proc: StatInput | None = None,
+        combo_count: StatInput | None = None,
+        combo_duration: StatInput | None = None,
+        combo_gain_chance: StatInput | None = None,
+        combo_on_ammo_pickup: StatInput | None = None,
+        combo_on_finisher: StatInput | None = None,
+        combo_timer_pause: StatInput | None = None,
+        condition_overload: StatInput | None = None,
+        corpus_damage: StatInput | None = None,
+        corrosive: StatInput | None = None,
+        corrosive_proc: StatInput | None = None,
+        crit_chance: StatInput | None = None,
+        crit_damage: StatInput | None = None,
+        crit_from_status: StatInput | None = None,
+        crit_reset_charges: StatInput | None = None,
+        crit_tier: StatInput | None = None,
+        damage: StatInput | None = None,
+        damage_bonus: StatInput | None = None,
+        damage_field_duration: StatInput | None = None,
+        debilitate_proc_chance: StatInput | None = None,
+        double_jump_strength: StatInput | None = None,
+        electricity: StatInput | None = None,
+        electricity_proc: StatInput | None = None,
+        explosion_radius: StatInput | None = None,
+        extra_jump: StatInput | None = None,
+        finisher_damage: StatInput | None = None,
+        fire_rate: StatInput | None = None,
+        fire_rate_lock: StatInput | None = None,
+        follow_through: StatInput | None = None,
+        gas: StatInput | None = None,
+        gas_proc: StatInput | None = None,
+        generated_attack: StatInput | None = None,
+        grineer_damage: StatInput | None = None,
+        health_regen: StatInput | None = None,
+        heat: StatInput | None = None,
+        heat_proc: StatInput | None = None,
+        heavy_attack_efficiency: StatInput | None = None,
+        heavy_attack_speed: StatInput | None = None,
+        holstered_reload: StatInput | None = None,
+        impact: StatInput | None = None,
+        impact_proc: StatInput | None = None,
+        impact_to_puncture_conversion: StatInput | None = None,
+        incarnon_charge_rate: StatInput | None = None,
+        infested_damage: StatInput | None = None,
+        initial_combo: StatInput | None = None,
+        instant_reload_chance: StatInput | None = None,
+        knockdown_proc: StatInput | None = None,
+        lifted_proc: StatInput | None = None,
+        magazine_capacity: StatInput | None = None,
+        magazine_restore_chance: StatInput | None = None,
+        magnetic: StatInput | None = None,
+        magnetic_proc: StatInput | None = None,
+        movement_speed: StatInput | None = None,
+        movement_speed_while_aiming: StatInput | None = None,
+        multishot: StatInput | None = None,
+        multishot_lock: StatInput | None = None,
+        murmur_damage: StatInput | None = None,
+        noise_level: StatInput | None = None,
+        orokin_damage: StatInput | None = None,
+        overguard_damage_multiplier: StatInput | None = None,
+        overshield: StatInput | None = None,
+        parkour_velocity: StatInput | None = None,
+        parry_angle: StatInput | None = None,
+        projectile_speed: StatInput | None = None,
+        punch_through: StatInput | None = None,
+        puncture: StatInput | None = None,
+        puncture_proc: StatInput | None = None,
+        radiation: StatInput | None = None,
+        radiation_proc: StatInput | None = None,
+        ragdoll_proc: StatInput | None = None,
+        random_proc: StatInput | None = None,
+        range: StatInput | None = None,
+        recoil: StatInput | None = None,
+        reload_speed: StatInput | None = None,
+        sentient_damage: StatInput | None = None,
+        sharpshot_bonus: StatInput | None = None,
+        slam_damage: StatInput | None = None,
+        slam_radius: StatInput | None = None,
+        slash: StatInput | None = None,
+        slash_proc: StatInput | None = None,
+        slide: StatInput | None = None,
+        slide_attack_range: StatInput | None = None,
+        slide_crit_chance: StatInput | None = None,
+        sprint_speed: StatInput | None = None,
+        stagger_proc: StatInput | None = None,
+        status_chance: StatInput | None = None,
+        status_damage: StatInput | None = None,
+        status_duration: StatInput | None = None,
+        status_from_crit: StatInput | None = None,
+        status_vulnerability: StatInput | None = None,
+        stun_on_finisher: StatInput | None = None,
+        stun_proc: StatInput | None = None,
+        toxin: StatInput | None = None,
+        toxin_proc: StatInput | None = None,
+        unique_enemy_vulnerability_multiplier: StatInput | None = None,
+        viral: StatInput | None = None,
+        viral_proc: StatInput | None = None,
+        void_proc: StatInput | None = None,
+        weak_point_crit_chance: StatInput | None = None,
+        weak_point_damage: StatInput | None = None,
+        zoom: StatInput | None = None
+    ) -> None:
+        stats = {name: value for name, value in locals().items() if name != "self" and value is not None}
         effects: dict[str, tuple[Effect, ...]] = {}
         for stat, source in stats.items():
             if stat == GENERATED_ATTACK_STAT:
@@ -116,6 +260,7 @@ class UpgradeStats(Mapping[str, tuple[Effect, ...]]):
                 parsed[stat] = tuple(Effect.from_record(effect) for effect in effects)
         return cls(**parsed)
 
+
 @dataclass(slots=True)
 class Compatibility:
     types: list[str] = field(default_factory=list)
@@ -123,7 +268,7 @@ class Compatibility:
     names: list[str] = field(default_factory=list)
     categories: list[str] = field(default_factory=list)
     triggers: list[str] = field(default_factory=list)
-    aoe: bool | None = None
+    aoe: bool = True
 
     @classmethod
     def from_record(cls, record: Mapping[str, Any]) -> Compatibility:
@@ -131,7 +276,8 @@ class Compatibility:
         unknown = set(record) - allowed
         if unknown: raise TypeError(f"unknown compatibility fields: {', '.join(sorted(unknown))}")
         if "aoe" in record and not isinstance(record["aoe"], bool): raise TypeError("compatibility aoe must be a bool")
-        return cls(list(record.get("types", [])), list(record.get("subtypes", [])), list(record.get("names", [])), list(record.get("categories", [])), list(record.get("triggers", [])), record.get("aoe"))
+        aoe = bool(record["aoe"]) if "aoe" in record else True
+        return cls(list(record.get("types", [])), list(record.get("subtypes", [])), list(record.get("names", [])), list(record.get("categories", [])), list(record.get("triggers", [])), aoe)
 
 
 @dataclass(frozen=True, slots=True)
@@ -149,7 +295,7 @@ class Upgrade:
     type: ClassVar[str] = "upgrade"
     __slots__ = ("name", "description", "implementation_status", "stats")
 
-    def __init__(self, *, name: str, description: str = "", implementation_status: ImplementationStatus | None = None, stats: UpgradeStats | None = None) -> None:
+    def __init__(self, *, name: str, description: str | None = None, implementation_status: ImplementationStatus | None = None, stats: UpgradeStats | None = None) -> None:
         self.name = name
         self.description = description
         self.implementation_status = implementation_status or ImplementationStatus()
@@ -164,26 +310,16 @@ class Upgrade:
 
 class _RankedUpgrade(Upgrade):
     default_slot: ClassVar[str]
-    __slots__ = ("slot", "max_rank", "compatibility", "conflicts", "combos", "runtime")
+    __slots__ = ("slot", "max_rank", "compatibility", "conflicts", "runtime")
 
-    def __init__(self, *, name: str, description: str = "", slot: str | None = None, max_rank: int = 0, implementation_status: ImplementationStatus | None = None, compatibility: Compatibility | None = None, conflicts: Iterable[str] = (), stats: UpgradeStats | None = None, combos: Mapping[str, Combo | Mapping[str, object]] | None = None, runtime: Mapping[str, Any] | None = None) -> None:
+    def __init__(self, *, name: str, description: str | None = None, slot: str | None = None, max_rank: int = 0, implementation_status: ImplementationStatus | None = None, compatibility: Compatibility | None = None, conflicts: Iterable[str] = (), stats: UpgradeStats | None = None, runtime: Runtime | None = None) -> None:
         super().__init__(name=name, description=description, implementation_status=implementation_status, stats=stats)
         self.slot = slot or self.default_slot
         self.max_rank = int(max_rank)
         self.compatibility = compatibility or Compatibility()
         self.conflicts = list(conflicts)
-        self.combos = _parse_combos(combos)
-        defaults: dict[str, Any] = {"rank": self.max_rank}
-        for effects in self.stats.values():
-            for effect in effects:
-                if effect.when is None: continue
-                maximum = effect.stacks
-                value = int(maximum) if maximum not in (None, "inf") else True
-                key = str(effect.when)
-                if isinstance(value, int) and not isinstance(value, bool): defaults[key] = max(int(defaults.get(key, 0)), value)
-                else: defaults.setdefault(key, value)
-        defaults.update(runtime or {})
-        self.runtime = Runtime({"rank", *self.stats.manual_fields}, defaults)
+        defaults = _runtime_defaults(self.stats, base={"rank": self.max_rank})
+        self.runtime = _merge_runtime({"rank", *self.stats.manual_fields}, defaults, runtime)
 
     def set(self, **values: Any) -> Self:
         self.runtime.set(**values)
@@ -191,13 +327,14 @@ class _RankedUpgrade(Upgrade):
 
     @classmethod
     def from_record(cls, record: Mapping[str, Any]) -> Self:
-        allowed = {"name", "description", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats", "combos"}
+        allowed = {"name", "description", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats"}
         unknown = set(record) - allowed
         if unknown: raise TypeError(f"unknown {cls.type} fields: {', '.join(sorted(unknown))}")
-        return cls(name=str(record["name"]), description=str(record.get("description", "")), slot=record.get("slot"), max_rank=int(record.get("max_rank", 0)), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")), compatibility=Compatibility.from_record(record.get("compatibility", {})), conflicts=record.get("conflicts", []), stats=UpgradeStats.from_record(record.get("stats", {})), combos=record.get("combos", {}))
+        description = record.get("description")
+        return cls(name=str(record["name"]), description=None if description is None else str(description), slot=record.get("slot"), max_rank=int(record.get("max_rank", 0)), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")), compatibility=Compatibility.from_record(record.get("compatibility", {})), conflicts=record.get("conflicts", []), stats=UpgradeStats.from_record(record.get("stats", {})))
 
     def copy(self) -> Self:
-        return type(self)(name=self.name, description=self.description, slot=self.slot, max_rank=self.max_rank, implementation_status=self.implementation_status, compatibility=deepcopy(self.compatibility), conflicts=self.conflicts, stats=self.stats.copy(), combos={combo_id: Combo(**combo.to_record()) for combo_id, combo in self.combos.items()}, runtime=self.runtime.as_dict())
+        return type(self)(name=self.name, description=self.description, slot=self.slot, max_rank=self.max_rank, implementation_status=self.implementation_status, compatibility=deepcopy(self.compatibility), conflicts=self.conflicts, stats=self.stats.copy(), runtime=self.runtime.copy())
 
     def __eq__(self, other: object) -> bool:
         return type(self) is type(other) and isinstance(other, _RankedUpgrade) and self.name == other.name and self.slot == other.slot
@@ -230,11 +367,36 @@ class _RankedUpgrade(Upgrade):
                 resolved.append(ResolvedEffect(self.name, stat, value, effect.mode, effect.family, effect.maximum, automatic))
         return tuple(resolved)
 
+
 class Mod(_RankedUpgrade):
     type = "mod"
     default_slot = "regular_mod"
+    __slots__ = ("combos",)
+
+    def __init__(self, *, name: str, description: str | None = None, slot: str | None = None, max_rank: int = 0, implementation_status: ImplementationStatus | None = None, compatibility: Compatibility | None = None, conflicts: Iterable[str] = (), stats: UpgradeStats | None = None, combos: Mapping[str, Combo] | None = None, runtime: Runtime | None = None) -> None:
+        super().__init__(name=name, description=description, slot=slot, max_rank=max_rank, implementation_status=implementation_status, compatibility=compatibility, conflicts=conflicts, stats=stats, runtime=runtime)
+        self.combos = _parse_combos(combos)
+
+    @classmethod
+    def from_record(cls, record: Mapping[str, Any]) -> Self:
+        allowed = {"name", "description", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats", "combos"}
+        unknown = set(record) - allowed
+        if unknown: raise TypeError(f"unknown {cls.type} fields: {', '.join(sorted(unknown))}")
+        description = record.get("description")
+        return cls(name=str(record["name"]), description=None if description is None else str(description), slot=record.get("slot"), max_rank=int(record.get("max_rank", 0)), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")), compatibility=Compatibility.from_record(record.get("compatibility", {})), conflicts=record.get("conflicts", []), stats=UpgradeStats.from_record(record.get("stats", {})), combos=_parse_combos(record.get("combos")))
+
+    def copy(self) -> Self:
+        return type(self)(name=self.name, description=self.description, slot=self.slot, max_rank=self.max_rank, implementation_status=self.implementation_status, compatibility=deepcopy(self.compatibility), conflicts=self.conflicts, stats=self.stats.copy(), combos={combo_id: Combo(**combo.to_record()) for combo_id, combo in self.combos.items()}, runtime=self.runtime.copy())
 
 
 class Arcane(_RankedUpgrade):
     type = "arcane"
     default_slot = "regular_arcane"
+
+    @classmethod
+    def from_record(cls, record: Mapping[str, Any]) -> Self:
+        allowed = {"name", "description", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats"}
+        unknown = set(record) - allowed
+        if unknown: raise TypeError(f"unknown {cls.type} fields: {', '.join(sorted(unknown))}")
+        description = record.get("description")
+        return cls(name=str(record["name"]), description=None if description is None else str(description), slot=record.get("slot"), max_rank=int(record.get("max_rank", 0)), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")), compatibility=Compatibility.from_record(record.get("compatibility", {})), conflicts=record.get("conflicts", []), stats=UpgradeStats.from_record(record.get("stats", {})))

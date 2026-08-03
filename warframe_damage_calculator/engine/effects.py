@@ -33,7 +33,7 @@ def evaluate(effect: ResolvedEffect, *, context: CalculationContext, attack: Att
     equipped_names = {name.casefold() for name in equipped}
     if any(str(name).casefold() not in equipped_names for name in _values(behavior, "equipped")): return None
     multiplier = 1.0
-    source = _value(behavior, "with")
+    source = _value(behavior, "source")
     maximum = _value(behavior, "stacks")
     stack_limit = None if maximum in (None, "inf") else int(maximum)
     if source == "unique_status_count": multiplier *= status.expected_active_types(stack_limit) * float(attack.stats.co_factor)

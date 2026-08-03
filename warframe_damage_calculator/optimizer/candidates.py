@@ -43,7 +43,7 @@ class CandidatePreparation:
         arcane_limit = min(96, max(18, round(54 * search_scale ** 0.4)))
         arcanes = self._prepare_pool(compatible_arcanes, arcane_limit)
         perks = {tier: implemented for tier, choices in weapon.perk_choices.items() if evolutions and (implemented := tuple(perk for perk in choices.values() if perk.implemented and perk.name.casefold() not in upgrade_blacklist and not (use_default_upgrade_blacklist and self._has_faction_damage(perk))))}
-        progenitors = tuple(Progenitor(element, 0.6) for element in ("impact", "heat", "cold", "electricity", "toxin", "magnetic", "radiation")) if "progenitor" in weapon.traits else ()
+        progenitors = tuple(Progenitor(element=element, bonus=0.6) for element in ("impact", "heat", "cold", "electricity", "toxin", "magnetic", "radiation")) if "progenitor" in weapon.traits else ()
         return {"mods": mods, "arcanes": arcanes, "perks": perks, "progenitors": progenitors, "rivens": rivens}
 
     def _has_faction_damage(self, upgrade: Mod | Arcane | Perk) -> bool:

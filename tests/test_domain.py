@@ -36,17 +36,17 @@ class DomainTests(unittest.TestCase):
         self.assertIsNot(build.upgrades[0], upgrade)
 
     def test_build_copies_evolutions(self):
-        perk = Perk("Example", stats=UpgradeStats(damage_bonus=Effect(Source("$values.damage_bonus[0]"), when="charged")))
+        perk = Perk(name="Example", stats=UpgradeStats(damage_bonus=Effect(Source("$values.damage_bonus[0]"), when="charged")))
         build = Build(evolutions=[perk])
         self.assertIsNot(build.evolutions[0], perk)
         self.assertTrue(build.evolutions[0].runtime.charged)
 
     def test_build_rejects_duplicate_perks(self):
-        perk = Perk("Example")
+        perk = Perk(name="Example")
         with self.assertRaises(ValueError): Build(evolutions=[perk, perk])
 
     def test_build_addition_preserves_evolutions(self):
-        perk = Perk("Example")
+        perk = Perk(name="Example")
         first = Build(evolutions=[perk])
         combined = first + Mod(name="Damage")
         self.assertEqual(combined.evolutions, [perk])
@@ -54,7 +54,7 @@ class DomainTests(unittest.TestCase):
         self.assertEqual([upgrade.name for upgrade in combined.ranked_upgrades], ["Damage"])
 
     def test_build_operators_support_perks(self):
-        perk = Perk("Example")
+        perk = Perk(name="Example")
         build = Build(mods=[Mod(name="Damage")]) + perk
         self.assertEqual(len(build), 2)
         self.assertEqual((build - perk).evolutions, [])
@@ -78,7 +78,7 @@ class DomainTests(unittest.TestCase):
         self.assertNotIn("combo_multiplier", weapon.calculation_defaults)
 
     def test_perk_conditions_use_runtime_defaults_and_set(self):
-        perk = Perk("Conditional", stats=UpgradeStats(damage_bonus=Effect(Source("$values.damage_bonus[0]"), when="charged", stacks=3)))
+        perk = Perk(name="Conditional", stats=UpgradeStats(damage_bonus=Effect(Source("$values.damage_bonus[0]"), when="charged", stacks=3)))
         values = PerkValues(perk, 1, 1, {"damage_bonus": (0.5,)})
         weapon = Primary(name="Test", attacks=[Attack("shot", stats=AttackStats(damage=Dist(impact=1)))], perks=[values])
         self.assertEqual(perk.runtime.charged, 3)

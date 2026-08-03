@@ -11,7 +11,7 @@ from .upgrades import Arcane, Mod, Upgrade
 class Progenitor:
     __slots__ = ("element", "bonus")
 
-    def __init__(self, element: str, bonus: float) -> None:
+    def __init__(self, *, element: str, bonus: float) -> None:
         normalized = element.strip().lower()
         allowed = BASE_ELEMENT_TYPES | {"impact", "magnetic", "radiation"}
         if normalized not in allowed: raise ValueError(f"unsupported progenitor element {element!r}")

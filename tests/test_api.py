@@ -23,7 +23,7 @@ class ApiTests(unittest.TestCase):
         )
         mod = Mod(name="Custom Mod", max_rank=5, compatibility=compatibility, stats=UpgradeStats(damage_bonus=0.2, generated_attack=generated))
         arcane = Arcane(name="Primary Custom Arcane", max_rank=5, compatibility=compatibility, stats=UpgradeStats(multishot=0.3))
-        perk = Perk("Custom Perk", stats=UpgradeStats(crit_chance=Effect(Source("$values.crit_chance[0]"), mode="flat")))
+        perk = Perk(name="Custom Perk", stats=UpgradeStats(crit_chance=Effect(Source("$values.crit_chance[0]"), mode="flat")))
         weapon = Primary(name="Custom Primary", attacks=[Attack("shot", stats=AttackStats(damage=Dist(impact=100), fire_rate=1))], reload_time=1, perks=[PerkValues(perk, 1, 1, {"crit_chance": (0.2,)})])
         result = Calculator(weapon, build=Build(mods=[mod], arcanes=[arcane], evolutions=[perk])).resolve()
         self.assertGreater(result.aggregate.damage.total_dps, 0)
@@ -69,7 +69,7 @@ class ApiTests(unittest.TestCase):
         self.assertNotIsInstance(effect.value, Source)
 
     def test_missing_and_unknown_weapon_values_are_rejected(self):
-        perk = Perk("Test", stats=UpgradeStats(damage_bonus=Effect(Source("$values.damage_bonus[0]"))))
+        perk = Perk(name="Test", stats=UpgradeStats(damage_bonus=Effect(Source("$values.damage_bonus[0]"))))
         attack = Attack("shot", stats=AttackStats(damage=Dist(impact=1)))
         missing = Primary(name="Missing", attacks=[attack], perks=[PerkValues(perk, 2, 1, {})])
         with self.assertRaisesRegex(ValueError, "supplies no values"): missing.resolve_perk(perk)
@@ -77,7 +77,7 @@ class ApiTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unknown values"): unknown.resolve_perk(perk)
 
     def test_calculator_uses_resolved_global_template(self):
-        perk = Perk("Flat Critical", stats=UpgradeStats(crit_chance=Effect(Source("$values.crit_chance[0]"), mode="flat")))
+        perk = Perk(name="Flat Critical", stats=UpgradeStats(crit_chance=Effect(Source("$values.crit_chance[0]"), mode="flat")))
         weapon = Primary(name="Template", attacks=[Attack("shot", stats=AttackStats(damage=Dist(impact=10), crit_chance=0.1))], reload_time=1, perks=[PerkValues(perk, 2, 1, {"crit_chance": (0.4,)})])
         result = Calculator(weapon, build=Build(evolutions=[perk])).resolve()
         self.assertAlmostEqual(result.attacks["shot"].effective.crit_chance, 0.5)
@@ -124,7 +124,7 @@ class ApiTests(unittest.TestCase):
 
     def test_implementation_status_and_progenitor_build(self):
         self.assertEqual(arsenal.primary.get("Kuva Chakkhurr").implementation_status, ImplementationStatus("partial", ("multiplicative_weak_point_crit_chance",)))
-        build = Build(progenitor=Progenitor("heat", 0.6))
+        build = Build(progenitor=Progenitor(element="heat", bonus=0.6))
         result = Calculator(arsenal.primary.get("Kuva Chakkhurr"), build=build).resolve()
         self.assertEqual(result.build.progenitor, build.progenitor)
         attack = result.attacks[result.selected_attack]
@@ -134,13 +134,13 @@ class ApiTests(unittest.TestCase):
 
     def test_progenitor_is_excluded_from_base_and_included_in_modded_damage(self):
         weapon = arsenal.melee.get("Tenet Exec")
-        result = Calculator(weapon, build=Build(progenitor=Progenitor("electricity", 0.6))).resolve(attack="heavy_slam_attack")
+        result = Calculator(weapon, build=Build(progenitor=Progenitor(element="electricity", bonus=0.6))).resolve(attack="heavy_slam_attack")
         attack = result.attacks["heavy_slam_attack"]
         self.assertEqual(attack.base.damage, Dist(impact=570))
         self.assertEqual(attack.base.status_chance, 0.22)
         self.assertEqual(attack.modded.damage, Dist(impact=570, electricity=342))
         self.assertEqual(attack.effective.damage, attack.modded.damage)
-        modded = Calculator(weapon, build=Build(mods=[arsenal.mod.get("Fever Strike")], progenitor=Progenitor("electricity", 0.6))).resolve(attack="heavy_slam_attack").attacks["heavy_slam_attack"]
+        modded = Calculator(weapon, build=Build(mods=[arsenal.mod.get("Fever Strike")], progenitor=Progenitor(element="electricity", bonus=0.6))).resolve(attack="heavy_slam_attack").attacks["heavy_slam_attack"]
         self.assertEqual(modded.base.damage, Dist(impact=570))
         self.assertEqual(modded.modded.damage, Dist(impact=570, corrosive=855))
 
@@ -148,7 +148,7 @@ class ApiTests(unittest.TestCase):
     def test_modded_stats_exclude_stance_and_combo_scaling(self):
         weapon = arsenal.melee.get("Tenet Exec")
         target = arsenal.enemy.get("Heavy Gunner").set(level=100, steel_path=True)
-        build = Build(mods=[arsenal.mod.get("Rending Crane"), arsenal.mod.get("Galvanized Steel"), arsenal.mod.get("Primed Pressure Point")], progenitor=Progenitor("electricity", 0.6))
+        build = Build(mods=[arsenal.mod.get("Rending Crane"), arsenal.mod.get("Galvanized Steel"), arsenal.mod.get("Primed Pressure Point")], progenitor=Progenitor(element="electricity", bonus=0.6))
         attack = Calculator(weapon, target, build).resolve(attack="heavy_slam_attack", state={"stance_combo": "heavy"}).attacks["heavy_slam_attack"]
         self.assertEqual(attack.base.damage, Dist(impact=570))
         self.assertEqual(attack.modded.damage, Dist(impact=1510.5, electricity=906.3))
@@ -200,8 +200,10 @@ class ApiTests(unittest.TestCase):
         resistant_target = Enemy(name="Heavy Gunner", body_parts={"armor": BodyPart("resistant", 0.5)})
         resistant = Formatter(Calculator(weapon, resistant_target, build).resolve(body_part="armor"))
         self.assertIn("Balanced Damage Contributions: Corinth Prime Buckshot vs Heavy Gunner Armor", resistant.build_summary())
-        self.assertEqual(Formatter._metric_name("dot_dps"), "DoT DPS")
-        contribution_table = targeted.build_summary(metric="total_dps")
+        from warframe_damage_calculator.engine.metrics import balanced_damage_metric as balanced_metric
+        self.assertEqual(Formatter._metric_label(balanced_metric), "Balanced Damage")
+        self.assertEqual(Formatter._metric_label(lambda result: result.aggregate.damage.dot_dps), "<lambda>")
+        contribution_table = targeted.build_summary(metric=lambda result: result.aggregate.damage.total_dps)
         self.assertNotIn("\x1b[", contribution_table)
         self.assertIn("+100.00%", contribution_table)
         self.assertIn("-460.51", contribution_table)
@@ -292,7 +294,7 @@ class ApiTests(unittest.TestCase):
         self.assertNotIn("crit_chance=", riven_table)
         self.assertNotIn("multishot=", riven_table)
 
-        progenitor_build = Build(mods=[arsenal.mod.get("Primed Pressure Point")], progenitor=Progenitor("electricity", 0.6))
+        progenitor_build = Build(mods=[arsenal.mod.get("Primed Pressure Point")], progenitor=Progenitor(element="electricity", bonus=0.6))
         progenitor_calculator = Calculator(arsenal.melee.get("Tenet Exec"), build=progenitor_build)
         progenitor_contributions = progenitor_calculator.contributions(attack="heavy_slam_attack", state={"stance_combo": "heavy"})
         progenitor_removal = progenitor_contributions.removal

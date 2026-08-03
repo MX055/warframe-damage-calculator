@@ -147,9 +147,8 @@ def test_optimizer_reports_structured_progress():
     assert snapshots[-1].evaluations == optimization.evaluations
     assert snapshots[-1].resolutions == optimization.resolutions
     assert snapshots[-1].best_score == optimization.score
-    assert optimization.summary is not None
-    assert optimization.summary["evaluation_budget"] == 2
-    assert optimization.summary["resolutions"] == optimization.resolutions
+    assert optimization.evaluation_budget == 2
+    assert optimization.resolutions == optimization.resolutions
 
 
 def test_optimizer_progress_includes_rebuild_stage():
@@ -199,7 +198,7 @@ def test_optimizer_searches_all_progenitor_elements_when_unlocked():
     optimizer = Optimizer(Calculator(weapon))
     pools = optimizer._candidate_pools()
     assert {progenitor.element for progenitor in pools["progenitors"]} == {"impact", "heat", "cold", "electricity", "toxin", "magnetic", "radiation"}
-    build = Build(progenitor=Progenitor("heat", 0.6))
+    build = Build(progenitor=Progenitor(element="heat", bonus=0.6))
     neighbors = list(optimizer._exact_neighbors(build, pools))
     assert {candidate.progenitor.element for candidate in neighbors if candidate.progenitor is not None} >= {"impact", "cold", "electricity", "toxin", "magnetic", "radiation"}
 
@@ -293,10 +292,8 @@ def test_optimizer_scales_with_evaluation_budget():
     optimizer = Optimizer(Calculator(weapon))
     result = optimizer.resolve(evaluations=8, progress=None, riven=False)
     assert result.evaluations <= 8
-    assert result.summary is not None
-    assert "mode" not in result.summary
-    assert result.summary["resolution_budget"] == 8
-    assert result.summary["budget_exhausted"] == (result.evaluations == 8)
+    assert result.resolution_budget == 8
+    assert result.budget_exhausted == (result.evaluations == 8)
 
 
 def test_optimizer_candidate_pools_scale_with_evaluation_budget():

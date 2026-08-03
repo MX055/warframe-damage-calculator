@@ -26,7 +26,7 @@ DEFERRED_STATS = frozenset({"random_proc", "crit_reset_charges", "crit_tier"})
 
 def _modded_pool_effect(effect: ResolvedEffect) -> bool:
     if effect.stat in DEFERRED_STATS: return False
-    if effect.stat == "crit_damage" and automatic_value(effect, "with") == "puncture_status_chance": return False
+    if effect.stat == "crit_damage" and automatic_value(effect, "source") == "puncture_status_chance": return False
     if automatic_value(effect, "on") in POSITION_EVENTS: return False
     if effect.family == "multishot_ammo": return True
     return not effect.automatic
@@ -88,7 +88,7 @@ def _hit_multiplier(chance: float, tier_bonus: float, damage: float, non_crit_da
 
 
 def _faction_factor(context: CalculationContext, total: ResolvedStats) -> float:
-    if context.target.faction not in {"corpus", "grineer", "infested", "orokin", "murmur", "sentient"}: return 1.0
+    if context.target is None or context.target.faction not in {"corpus", "grineer", "infested", "orokin", "murmur", "sentient"}: return 1.0
     return 1 + float(total.proportional.get(f"{context.target.faction}_damage", 0))
 
 
@@ -172,7 +172,7 @@ def _apply_position_mixture(context: CalculationContext, result: ResolvedAttack,
         damage_factor = 1.0
         for value in family_bonuses.values(): damage_factor *= max(1 + value, 1)
         multishot = max(float(effective.multishot) + multishot_bonus, 1)
-        zone = next(iter(context.target.body_parts.values())).type
+        zone = "normal" if context.target is None else next(iter(context.target.body_parts.values())).type
         damage = _zone_damage(context, result, zone, direct_hits=multishot, dot_multishot=multishot, damage_factor=damage_factor)
         if damage is None: continue
         direct, dot = damage
@@ -224,7 +224,7 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
         automatic_model = automatic_model_override
     upgrades_resolved, upgrade_positions = _resolve_effects(context, attack, upgrade_effects, provisional, automatic_model, equipped)
     evolution_resolved, evolution_positions = _resolve_effects(context, attack, evolution_effects, provisional, automatic_model, equipped)
-    upgrades = aggregate(effect for effect in upgrades_resolved if automatic_value(effect, "on") not in POSITION_EVENTS and effect.stat not in DEFERRED_STATS and not (effect.stat == "crit_damage" and automatic_value(effect, "with") == "puncture_status_chance"))
+    upgrades = aggregate(effect for effect in upgrades_resolved if automatic_value(effect, "on") not in POSITION_EVENTS and effect.stat not in DEFERRED_STATS and not (effect.stat == "crit_damage" and automatic_value(effect, "source") == "puncture_status_chance"))
     evolutions = aggregate(effect for effect in evolution_resolved if automatic_value(effect, "on") not in POSITION_EVENTS and effect.stat not in DEFERRED_STATS)
     total = _combined(upgrades, evolutions)
     base_damage, original, displayed_base_damage = _base_damage(context, attack, evolutions)
@@ -284,7 +284,7 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
         if context.weapon.type == "melee" and attack.category == "slide": modded_crit *= max(1 + float(modded_total.proportional.get("slide_crit_chance", 0)), 0)
         modded_crit_damage = _scalar(float(attack.stats.crit_damage), "crit_damage", modded_total, minimum=1)
     crit_damage = _scalar(float(attack.stats.crit_damage), "crit_damage", total, minimum=1)
-    doughty = next((effect for effect in (*upgrades_resolved, *evolution_resolved) if effect.stat == "crit_damage" and automatic_value(effect, "with") == "puncture_status_chance"), None)
+    doughty = next((effect for effect in (*upgrades_resolved, *evolution_resolved) if effect.stat == "crit_damage" and automatic_value(effect, "source") == "puncture_status_chance"), None)
     doughty_bonus = 0.0
     weak_point_common = float(total.proportional.get("weak_point_crit_chance", 0))
     weak_point_family = sum(float(family.get("weak_point_crit_chance", 0)) for family in total.families.values())
@@ -363,7 +363,7 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     if heavy:
         combo_multiplier = _resolved_combo_multiplier(context, float(category_stats.get("initial_combo", 0)))
     average.combo_multiplier = combo_multiplier
-    zone = next(iter(context.target.body_parts.values())).type
+    zone = "normal" if context.target is None else next(iter(context.target.body_parts.values())).type
     zone_damage = _zone_damage(context, result, zone, direct_hits=1 if context.weapon.type == "melee" else multishot, combo_multiplier=combo_multiplier)
     if zone_damage is not None:
         direct, dot = zone_damage
@@ -394,7 +394,7 @@ def derive_status_attack(context: CalculationContext, parent: ResolvedAttack, at
     falloff_multiplier, result.spatial = spatial_falloff(attack, result.effective)
     result.average.falloff_multiplier = falloff_multiplier
     result.average.procs_per_shot = model.expected_procs_per_attack
-    zone = next(iter(context.target.body_parts.values())).type
+    zone = "normal" if context.target is None else next(iter(context.target.body_parts.values())).type
     dot = _dot_value(context, result, zone) * parent.average.combo_multiplier
     result.effective.damage = parent.effective.damage.include(status_types)
     result.average.damage = result.effective.damage

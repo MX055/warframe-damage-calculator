@@ -9,7 +9,7 @@ calculator = Calculator(weapon, target, build)
 optimizer = Optimizer(calculator)
 
 optimized = optimizer.resolve(body_part="body", state=State(stance_combo="forward"))
-print(optimized.summary["elapsed"])
+print(optimized.elapsed)
 formatter = Formatter(optimized.result)
 
 print(formatter.stat_summary())

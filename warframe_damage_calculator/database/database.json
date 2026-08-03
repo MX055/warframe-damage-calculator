@@ -2799,7 +2799,7 @@
                 "reload_time": 1.8,
                 "magazine_size": 20,
                 "evolutions": {},
-                "description": "The expert engineers in Parvos Granum’s division have optimized the Ferrox’s lethal power."
+                "description": "The expert engineers in Parvos Granum\u2019s division have optimized the Ferrox\u2019s lethal power."
             },
             "Tenet Flux Rifle": {
                 "name": "Tenet Flux Rifle",
@@ -2861,7 +2861,7 @@
                 "reload_time": 2,
                 "magazine_size": 90,
                 "evolutions": {},
-                "description": "Advances on microelectronics have improved a Corpus classic. Tenet Glaxion’s photon beam strikes up to four enemies at once. It also boasts superior Damage, Critical Chance, and Status Chance."
+                "description": "Advances on microelectronics have improved a Corpus classic. Tenet Glaxion\u2019s photon beam strikes up to four enemies at once. It also boasts superior Damage, Critical Chance, and Status Chance."
             },
             "Tenet Tetra": {
                 "name": "Tenet Tetra",
@@ -3221,7 +3221,7 @@
                 "reload_time": 4,
                 "magazine_size": 8,
                 "evolutions": {},
-                "description": "This discreet rocket launcher is equally at home in a board meeting or on a casual outing. Aimed rockets are wire-guided for greater accuracy, but travel more slowly. The patented Granum Attaché System reloads the weapon when holstered."
+                "description": "This discreet rocket launcher is equally at home in a board meeting or on a casual outing. Aimed rockets are wire-guided for greater accuracy, but travel more slowly. The patented Granum Attach\u00e9 System reloads the weapon when holstered."
             },
             "Glaxion": {
                 "name": "Glaxion",
@@ -9359,7 +9359,7 @@
                 "reload_time": 2.3,
                 "magazine_size": 11,
                 "evolutions": {},
-                "description": "A golden version of Garuda’s versatile crossbow, as fashioned by the Orokin’s finest weaponsmiths. Alt-fire to let loose a barrage of bolts. All bolts have a chance to cause Bleeding, and Headshots have a chance to increase Reload Speed. When wielded by Garuda the Nagantaka gains a slight Punch Through effect."
+                "description": "A golden version of Garuda\u2019s versatile crossbow, as fashioned by the Orokin\u2019s finest weaponsmiths. Alt-fire to let loose a barrage of bolts. All bolts have a chance to cause Bleeding, and Headshots have a chance to increase Reload Speed. When wielded by Garuda the Nagantaka gains a slight Punch Through effect."
             },
             "Secura Penta": {
                 "name": "Secura Penta",
@@ -11363,7 +11363,7 @@
                 "reload_time": 2.2,
                 "magazine_size": 40,
                 "evolutions": {},
-                "description": "Smite the unrighteous with Harrow Prime’s signature speargun. Blast targets with corrosive plasma projectiles, or toss the scepter to inflict nearby enemies with an energy field that amplifies their brain waves to attract bullets."
+                "description": "Smite the unrighteous with Harrow Prime\u2019s signature speargun. Blast targets with corrosive plasma projectiles, or toss the scepter to inflict nearby enemies with an energy field that amplifies their brain waves to attract bullets."
             },
             "Latron": {
                 "name": "Latron",
@@ -14600,7 +14600,7 @@
                 "reload_time": 5,
                 "magazine_size": 200,
                 "evolutions": {},
-                "description": "Cyte-09’s signature rifle is an ideal match for forceful gunners. A precisely timed reload increases reload speed and infuses the new magazine with Heat Damage."
+                "description": "Cyte-09\u2019s signature rifle is an ideal match for forceful gunners. A precisely timed reload increases reload speed and infuses the new magazine with Heat Damage."
             },
             "Evensong": {
                 "name": "Evensong",
@@ -14685,7 +14685,7 @@
                 "reload_time": 0.6,
                 "magazine_size": 1,
                 "evolutions": {},
-                "description": "Counter the dread of battle with a song of praise. Enemies cannot hurt your allies while wounded by Evensong’s arrows. Kills with Evensong empower ally weapons with Multishot. Experience the true power of Jade's Ensemble when Evensong, Cantare, and Harmony sing together."
+                "description": "Counter the dread of battle with a song of praise. Enemies cannot hurt your allies while wounded by Evensong\u2019s arrows. Kills with Evensong empower ally weapons with Multishot. Experience the true power of Jade's Ensemble when Evensong, Cantare, and Harmony sing together."
             },
             "Rauta": {
                 "name": "Rauta",
@@ -14722,7 +14722,7 @@
                 "reload_time": 1.2,
                 "magazine_size": 4,
                 "evolutions": {},
-                "description": "Kullervo’s signature weapon boasts melee synergy. Every shot that lands increases the wielder's Melee Combo count. When Kullervo wields Rauta, it also increases his Melee Combo duration."
+                "description": "Kullervo\u2019s signature weapon boasts melee synergy. Every shot that lands increases the wielder's Melee Combo count. When Kullervo wields Rauta, it also increases his Melee Combo duration."
             },
             "Astilla": {
                 "name": "Astilla",
@@ -21970,7 +21970,7 @@
                 "reload_time": 1.05,
                 "magazine_size": 6,
                 "evolutions": {},
-                "description": "Parvos Granum’s engineers have made this already ferocious hand-cannon even more deadly with the addition of an alternate fire mode that empties an entire clip in one devastating burst."
+                "description": "Parvos Granum\u2019s engineers have made this already ferocious hand-cannon even more deadly with the addition of an alternate fire mode that empties an entire clip in one devastating burst."
             },
             "Tenet Plinx": {
                 "name": "Tenet Plinx",
@@ -22300,7 +22300,7 @@
                 "reload_time": 2.4,
                 "magazine_size": 8,
                 "evolutions": {},
-                "description": "Dominate rivals with this pistol’s lightning fast rail-slugs. Head-shots speed up reload."
+                "description": "Dominate rivals with this pistol\u2019s lightning fast rail-slugs. Head-shots speed up reload."
             },
             "Spectra Vandal": {
                 "name": "Spectra Vandal",
@@ -24585,7 +24585,7 @@
                 "reload_time": 1.6,
                 "magazine_size": 16,
                 "evolutions": {},
-                "description": "Versatile weapons complement deadly hunters. Khora Prime’s signature pistol rotates through hot, cold, electric, and toxic quills. When equipped on Khora, Hystrix Prime has a chance to instantly reload after headshots."
+                "description": "Versatile weapons complement deadly hunters. Khora Prime\u2019s signature pistol rotates through hot, cold, electric, and toxic quills. When equipped on Khora, Hystrix Prime has a chance to instantly reload after headshots."
             },
             "Catabolyst": {
                 "name": "Catabolyst",
@@ -25541,7 +25541,7 @@
                         "microwave_status"
                     ]
                 },
-                "description": "A highly-optimized Nukor that allows for the weapon’s microwave field to hit up to two additional targets."
+                "description": "A highly-optimized Nukor that allows for the weapon\u2019s microwave field to hit up to two additional targets."
             },
             "Kuva Seer": {
                 "name": "Kuva Seer",
@@ -25746,7 +25746,7 @@
                 "reload_time": 2.35,
                 "magazine_size": 8,
                 "evolutions": {},
-                "description": "A true masterpiece of Höllvanian engineering. Vesper 77's advanced laser sight highlights enemy Weak Points with precision. Aim to increase its Critical Damage Multiplier."
+                "description": "A true masterpiece of H\u00f6llvanian engineering. Vesper 77's advanced laser sight highlights enemy Weak Points with precision. Aim to increase its Critical Damage Multiplier."
             },
             "Lato Prime": {
                 "name": "Lato Prime",
@@ -29091,7 +29091,7 @@
                 "reload_time": 1.2,
                 "magazine_size": 6,
                 "evolutions": {},
-                "description": "In moments of despair, let the battle resonate with song. Cantare’s blades lodge into the battlefield and return upon reload. When returning blades strike enemies, Cantare empowers allies with increased Reload Speed. Experience the true power of Jade's Ensemble when Evensong, Cantare, and Harmony sing together."
+                "description": "In moments of despair, let the battle resonate with song. Cantare\u2019s blades lodge into the battlefield and return upon reload. When returning blades strike enemies, Cantare empowers allies with increased Reload Speed. Experience the true power of Jade's Ensemble when Evensong, Cantare, and Harmony sing together."
             },
             "Zakti": {
                 "name": "Zakti",
@@ -30015,7 +30015,7 @@
                 "reload_time": 2.6,
                 "magazine_size": 70,
                 "evolutions": {},
-                "description": "This sidearm’s circular design evokes Protea Prime’s perception of time."
+                "description": "This sidearm\u2019s circular design evokes Protea Prime\u2019s perception of time."
             },
             "Seer": {
                 "name": "Seer",
@@ -31473,7 +31473,7 @@
                 "reload_time": 0.1,
                 "magazine_size": 92,
                 "evolutions": {},
-                "description": "Itemize and execute with this pair of auto-lock-on, homing-projectile pistols. Shoot from the hip for a more conventional pistol experience. The patented Granum Attaché System reloads the pistols when holstered."
+                "description": "Itemize and execute with this pair of auto-lock-on, homing-projectile pistols. Shoot from the hip for a more conventional pistol experience. The patented Granum Attach\u00e9 System reloads the pistols when holstered."
             },
             "Scyotid": {
                 "name": "Scyotid",
@@ -35884,7 +35884,7 @@
                 "disposition": 0.95,
                 "progenitor": true,
                 "evolutions": {},
-                "description": "On Heavy Slide Attack this Corpus scythe launches a spinning energy disk that ricochets throughout the battlefield. Its lifetime is derived from the size of the Combo Counter. Note: The Granum Attaché system pauses the combo timer when holstered."
+                "description": "On Heavy Slide Attack this Corpus scythe launches a spinning energy disk that ricochets throughout the battlefield. Its lifetime is derived from the size of the Combo Counter. Note: The Granum Attach\u00e9 system pauses the combo timer when holstered."
             },
             "Tenet Livia": {
                 "name": "Tenet Livia",
@@ -36017,7 +36017,7 @@
                 "disposition": 0.95,
                 "progenitor": true,
                 "evolutions": {},
-                "description": "The sleek lines of the Granum Attaché case conceal an infinitely sharp two-handed blade. Blocked attacks have a chance to increase the blocking angle. Note: The Granum Attaché system pauses the combo timer when holstered."
+                "description": "The sleek lines of the Granum Attach\u00e9 case conceal an infinitely sharp two-handed blade. Blocked attacks have a chance to increase the blocking angle. Note: The Granum Attach\u00e9 system pauses the combo timer when holstered."
             },
             "Xoris": {
                 "name": "Xoris",
@@ -39235,7 +39235,7 @@
                 },
                 "disposition": 1.4,
                 "evolutions": {},
-                "description": "Each kill with this swooping blade adds bonus corrosive damage to the Djinn Sentinel’s next Fatal Attraction cast. In turn, each Fatal Attraction cast by the sentinel bestows the weapon with a period of corrosive damage."
+                "description": "Each kill with this swooping blade adds bonus corrosive damage to the Djinn Sentinel\u2019s next Fatal Attraction cast. In turn, each Fatal Attraction cast by the sentinel bestows the weapon with a period of corrosive damage."
             },
             "Dragon Nikana": {
                 "name": "Dragon Nikana",
@@ -40605,7 +40605,7 @@
                 },
                 "disposition": 0.8,
                 "evolutions": {},
-                "description": "The hunted will meet a quick end when faced with Khora Prime’s signature swords. Heavy Attack Efficiency is enhanced when wielded by Khora."
+                "description": "The hunted will meet a quick end when faced with Khora Prime\u2019s signature swords. Heavy Attack Efficiency is enhanced when wielded by Khora."
             },
             "Dual Skana": {
                 "name": "Dual Skana",
@@ -51170,7 +51170,7 @@
                 },
                 "disposition": 0.7,
                 "evolutions": {},
-                "description": "Ancient blades, perfected for today’s combat."
+                "description": "Ancient blades, perfected for today\u2019s combat."
             },
             "Kuva Shildeg": {
                 "name": "Kuva Shildeg",
@@ -58782,7 +58782,7 @@
                 },
                 "disposition": 0.9,
                 "evolutions": {},
-                "description": "Wield Xaku Prime’s elegant fan, its gilded edges crafted for both precision and prestige."
+                "description": "Wield Xaku Prime\u2019s elegant fan, its gilded edges crafted for both precision and prestige."
             },
             "Dual Keres": {
                 "name": "Dual Keres",
@@ -67148,7 +67148,7 @@
                 },
                 "disposition": 1.3,
                 "evolutions": {},
-                "description": "The glorious original Orokin casting of Gara’s signature glass hammer. Deceptively light and swift, while remaining lethally effective."
+                "description": "The glorious original Orokin casting of Gara\u2019s signature glass hammer. Deceptively light and swift, while remaining lethally effective."
             },
             "Gunsen": {
                 "name": "Gunsen",
@@ -70936,7 +70936,7 @@
                 },
                 "disposition": 1.05,
                 "evolutions": {},
-                "description": "Heavy Attacks briefly transform the Corufell into a Gunblade. After the Gunblade fires, the Corufell returns to its Heavy Scythe state. Its transformation is fastest in Citrine’s hands."
+                "description": "Heavy Attacks briefly transform the Corufell into a Gunblade. After the Gunblade fires, the Corufell returns to its Heavy Scythe state. Its transformation is fastest in Citrine\u2019s hands."
             },
             "Dark Dagger": {
                 "name": "Dark Dagger",
@@ -72087,7 +72087,7 @@
                 },
                 "disposition": 1.1,
                 "evolutions": {},
-                "description": "Archon Boreal’s signature trident. Thrust Korumm into the ground with a Tactical Combo and then rip it out in a shower of electricity."
+                "description": "Archon Boreal\u2019s signature trident. Thrust Korumm into the ground with a Tactical Combo and then rip it out in a shower of electricity."
             },
             "Lacerten": {
                 "name": "Lacerten",
@@ -73192,7 +73192,7 @@
                 },
                 "disposition": 1.1,
                 "evolutions": {},
-                "description": "Archon Nira’s spine-shattering whip. Has a unique Tactical Combo that whips out a wide wave of energy with each stroke."
+                "description": "Archon Nira\u2019s spine-shattering whip. Has a unique Tactical Combo that whips out a wide wave of energy with each stroke."
             },
             "Tonkkatt": {
                 "name": "Tonkkatt",
@@ -75890,7 +75890,7 @@
                 "reload_time": 4,
                 "magazine_size": 100,
                 "evolutions": {},
-                "description": "Blast through enemies with a double-barreled shot of energized slugs. This siphons their life essence which is then used to generate the secondary fire’s massive air-burst mortar. The ancient Entrati weapon was built for Necramechs but also functions as an Archgun."
+                "description": "Blast through enemies with a double-barreled shot of energized slugs. This siphons their life essence which is then used to generate the secondary fire\u2019s massive air-burst mortar. The ancient Entrati weapon was built for Necramechs but also functions as an Archgun."
             },
             "Phaedra": {
                 "name": "Phaedra",
@@ -100636,7 +100636,7 @@
                         {
                             "value": 0.4,
                             "automatic": {
-                                "with": "weapon_combo",
+                                "source": "weapon_combo",
                                 "stacks": 12
                             }
                         }
@@ -101687,7 +101687,7 @@
                             "value": 0.8,
                             "family": "unique_status",
                             "automatic": {
-                                "with": "unique_status_count"
+                                "source": "unique_status_count"
                             }
                         }
                     ]
@@ -102253,7 +102253,7 @@
                             "value": 0.6,
                             "family": "unique_status",
                             "automatic": {
-                                "with": "unique_status_count",
+                                "source": "unique_status_count",
                                 "stacks": 3
                             }
                         },
@@ -103980,7 +103980,7 @@
                             "when": "kill",
                             "stacks": 2,
                             "automatic": {
-                                "with": "unique_status_count"
+                                "source": "unique_status_count"
                             }
                         }
                     ]
@@ -104194,7 +104194,7 @@
                             "when": "kill",
                             "stacks": 2,
                             "automatic": {
-                                "with": "unique_status_count"
+                                "source": "unique_status_count"
                             }
                         }
                     ]
@@ -104258,7 +104258,7 @@
                             "when": "kill",
                             "stacks": 3,
                             "automatic": {
-                                "with": "unique_status_count"
+                                "source": "unique_status_count"
                             }
                         }
                     ]
@@ -113281,7 +113281,7 @@
                         {
                             "value": 0.4,
                             "automatic": {
-                                "with": "weapon_combo",
+                                "source": "weapon_combo",
                                 "stacks": 12
                             }
                         }
@@ -113855,7 +113855,7 @@
                     },
                     "zat_s_creed": {
                         "type": "forward",
-                        "name": "Zatōs Creed",
+                        "name": "Zat\u014ds Creed",
                         "multiplier": 1.8571,
                         "hits": 7,
                         "duration": 3.05
@@ -120024,7 +120024,7 @@
                 "stats": {},
                 "slot": "stance_mod",
                 "conflicts": [],
-                "description": "Archon Boreal’s signature trident. Thrust Korumm into the ground with a Tactical Combo and then rip it out in a shower of electricity."
+                "description": "Archon Boreal\u2019s signature trident. Thrust Korumm into the ground with a Tactical Combo and then rip it out in a shower of electricity."
             },
             "Nepheri": {
                 "name": "Nepheri",
@@ -120603,7 +120603,7 @@
                 "stats": {},
                 "slot": "stance_mod",
                 "conflicts": [],
-                "description": "On Heavy Slide Attack this Corpus scythe launches a spinning energy disk that ricochets throughout the battlefield. Its lifetime is derived from the size of the Combo Counter. Note: The Granum Attaché system pauses the combo timer when holstered."
+                "description": "On Heavy Slide Attack this Corpus scythe launches a spinning energy disk that ricochets throughout the battlefield. Its lifetime is derived from the size of the Combo Counter. Note: The Granum Attach\u00e9 system pauses the combo timer when holstered."
             },
             "Verdilac": {
                 "name": "Verdilac",
@@ -120667,7 +120667,7 @@
                 "stats": {},
                 "slot": "stance_mod",
                 "conflicts": [],
-                "description": "Archon Nira’s spine-shattering whip. Has a unique Tactical Combo that whips out a wide wave of energy with each stroke."
+                "description": "Archon Nira\u2019s spine-shattering whip. Has a unique Tactical Combo that whips out a wide wave of energy with each stroke."
             },
             "Vitrica": {
                 "name": "Vitrica",
@@ -121531,7 +121531,7 @@
                             "mode": "flat",
                             "max": 50,
                             "automatic": {
-                                "with": "puncture_status_chance",
+                                "source": "puncture_status_chance",
                                 "per": 0.1
                             }
                         }
@@ -121895,8 +121895,7 @@
                 "compatibility": {
                     "types": [
                         "primary"
-                    ],
-                    "aoe": true
+                    ]
                 },
                 "stats": {
                     "explosion_radius": [
@@ -121912,7 +121911,7 @@
                             "value": 1,
                             "when": "aim",
                             "automatic": {
-                                "with": "explosion_radius_lost"
+                                "source": "explosion_radius_lost"
                             }
                         }
                     ],
@@ -121921,7 +121920,7 @@
                             "value": 0.055,
                             "when": "aim",
                             "automatic": {
-                                "with": "explosion_radius_lost"
+                                "source": "explosion_radius_lost"
                             }
                         }
                     ]
@@ -123100,7 +123099,7 @@
                             },
                             "family": "unique_status",
                             "automatic": {
-                                "with": "unique_status_count"
+                                "source": "unique_status_count"
                             }
                         }
                     ]
@@ -123873,7 +123872,7 @@
                             },
                             "family": "unique_status",
                             "automatic": {
-                                "with": "unique_status_count"
+                                "source": "unique_status_count"
                             }
                         }
                     ],
@@ -125386,7 +125385,7 @@
                             },
                             "family": "multishot_ammo",
                             "automatic": {
-                                "with": "effective_multishot"
+                                "source": "effective_multishot"
                             }
                         }
                     ]
@@ -125618,7 +125617,7 @@
                             },
                             "family": "multishot_ammo",
                             "automatic": {
-                                "with": "effective_multishot"
+                                "source": "effective_multishot"
                             }
                         }
                     ]
@@ -126533,7 +126532,7 @@
                             "family": "multishot_ammo",
                             "when": "while_dread_and_hate_equipped",
                             "automatic": {
-                                "with": "effective_multishot"
+                                "source": "effective_multishot"
                             }
                         }
                     ],
@@ -126859,7 +126858,7 @@
                             },
                             "family": "unique_status",
                             "automatic": {
-                                "with": "unique_status_count"
+                                "source": "unique_status_count"
                             }
                         }
                     ]

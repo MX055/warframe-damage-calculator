@@ -33,22 +33,13 @@ class Calculator:
         selected_body_part, target = self._select_body_part(body_part)
         return self._calculate(selected_attack, selected_body_part, target, State() if state is None else State._from_values(state))
 
-    def contributions(self, *, attack: str | None = None, metric: str | Callable[[CalculationResult], float] = balanced_damage_metric, body_part: str | None = None, state: State | None = None) -> ContributionResult:
+    def contributions(self, *, attack: str | None = None, metric: Callable[[CalculationResult], float] = balanced_damage_metric, body_part: str | None = None, state: State | None = None) -> ContributionResult:
+        if not callable(metric): raise TypeError("metric must be callable")
         selected_attack = attack or self.weapon.default_attack
         selected_body_part, target = self._select_body_part(body_part)
         calculation_state = State() if state is None else State._from_values(state)
         evaluator = Calculator(self.weapon, self.target)
-        metric_name = None if callable(metric) else metric.rsplit(".", 1)[-1]
-        compact_metrics = {
-            "total_dps": lambda direct_dph, dot_dph, direct_dps, dot_dps, damage_mass: direct_dps + dot_dps,
-            "direct_dps": lambda direct_dph, dot_dph, direct_dps, dot_dps, damage_mass: direct_dps,
-            "dot_dps": lambda direct_dph, dot_dph, direct_dps, dot_dps, damage_mass: dot_dps,
-            "total_dph": lambda direct_dph, dot_dph, direct_dps, dot_dps, damage_mass: direct_dph + dot_dph,
-            "direct_dph": lambda direct_dph, dot_dph, direct_dps, dot_dps, damage_mass: direct_dph,
-            "dot_dph": lambda direct_dph, dot_dph, direct_dps, dot_dps, damage_mass: dot_dph,
-            "balanced_damage": balanced_damage_components,
-        }
-        compact_metric = balanced_damage_components if metric is balanced_damage_metric else compact_metrics.get(metric_name or "")
+        compact_metric = balanced_damage_components if metric is balanced_damage_metric else None
         effect_cache: dict[int, tuple[ResolvedEffect, ...]] = {}
         for upgrade in self.build.ranked_upgrades:
             if upgrade.implemented: effect_cache[id(upgrade)] = upgrade.resolve_manual()
@@ -59,7 +50,7 @@ class Calculator:
             baseline_perks = resolve_perks(self.weapon, self.build.evolutions)
             perk_cache[tuple(id(perk) for perk in self.build.evolutions)] = baseline_perks
             evaluator.build = self.build
-            prepared_names = tuple(WeaponCalculator(CalculationContext(weapon=self.weapon, target=target if target is not None else Enemy(), attack=selected_attack, build=self.build, resolved_perks=baseline_perks, state=self._merge_state(calculation_state))).collect_attack_tree())
+            prepared_names = tuple(WeaponCalculator(CalculationContext(weapon=self.weapon, target=target, attack=selected_attack, build=self.build, resolved_perks=baseline_perks, state=self._merge_state(calculation_state))).collect_attack_tree())
 
         def compiled_upgrade_effects(build: Build) -> tuple[ResolvedEffect, ...]:
             effects: list[ResolvedEffect] = []
@@ -83,10 +74,7 @@ class Calculator:
             if compact_metric is not None:
                 return float(compact_metric(*evaluator._calculate_metric_components(selected_attack, target, calculation_state, resolved_perks=resolved_perks, prepared_names=prepared_names, prepared_upgrade_effects=upgrade_effects)))
             result = evaluator._calculate(selected_attack, selected_body_part, target, calculation_state, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=upgrade_effects)
-            if callable(metric): return float(metric(result))
-            value: object = result
-            for name in metric.split(".") if "." in metric else ("aggregate", "damage", metric): value = getattr(value, name)
-            return float(value)
+            return float(metric(result))
 
         return calculate_contributions(self.build, evaluate)
 
@@ -110,7 +98,7 @@ class Calculator:
 
     def _calculate_metric_components(self, selected_attack: str, target: Enemy | None, state: State, *, resolved_perks: tuple[ResolvedPerk, ...], prepared_names: tuple[str, ...] | None, prepared_upgrade_effects: tuple[ResolvedEffect, ...] | None = None) -> tuple[float, float, float, float, float]:
         calculation_state = self._merge_state(state)
-        context = CalculationContext(weapon=self.weapon, target=target if target is not None else Enemy(), attack=selected_attack, build=self.build, resolved_perks=resolved_perks, state=calculation_state)
+        context = CalculationContext(weapon=self.weapon, target=target, attack=selected_attack, build=self.build, resolved_perks=resolved_perks, state=calculation_state)
         return calculate_metric_components(context, prepared_names, prepared_upgrade_effects)
 
     def _calculate_raw(self, selected_attack: str, target: Enemy | None, state: State, *, copy_inputs: bool = True, resolved_perks: tuple[ResolvedPerk, ...] | None = None, validate: bool = True, prepared_names: tuple[str, ...] | None = None, prepared_upgrade_effects: tuple[ResolvedEffect, ...] | None = None):
@@ -119,7 +107,7 @@ class Calculator:
         calculation_state = self._merge_state(state)
         resolved_perks = resolve_perks(self.weapon, self.build.evolutions) if resolved_perks is None else resolved_perks
         if validate: warn_build(self.weapon, self.build)
-        context_target = target.copy() if copy_inputs and target is not None else target if target is not None else Enemy()
+        context_target = target.copy() if copy_inputs and target is not None else target
         context_build = self.build.copy() if copy_inputs else self.build
         context = CalculationContext(weapon=self.weapon, target=context_target, attack=selected_attack, build=context_build, resolved_perks=resolved_perks, state=calculation_state)
         return calculate_weapon(context, prepared_names, prepared_upgrade_effects)

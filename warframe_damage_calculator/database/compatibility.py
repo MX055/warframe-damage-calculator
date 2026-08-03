@@ -38,7 +38,7 @@ def is_upgrade_compatible(upgrade: Mod | Arcane, weapon: Weapon, *, attack: str 
     if not any(
         (not compatibility.categories or candidate.category in compatibility.categories)
         and (not compatibility.triggers or candidate.trigger in compatibility.triggers)
-        and (compatibility.aoe is None or candidate.aoe is compatibility.aoe)
+        and (compatibility.aoe or not candidate.aoe)
         for candidate in attacks
     ): return False
     if isinstance(upgrade, Arcane) and not _arcane_compatible(upgrade, weapon): return False

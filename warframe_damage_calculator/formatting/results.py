@@ -19,9 +19,9 @@ class Formatter:
         self.result = result
 
     @staticmethod
-    def _metric_name(metric: str) -> str:
-        labels = {"direct": "Direct", "dot": "DoT", "total": "Total", "dph": "DPH", "dps": "DPS"}
-        return " ".join(labels.get(part, part.title()) for part in metric.split("_"))
+    def _metric_label(metric: Callable) -> str:
+        if metric is balanced_damage_metric: return "Balanced Damage"
+        return getattr(metric, "__name__", "Contribution")
 
     @staticmethod
     def _number(value: object | None) -> str:
@@ -143,7 +143,7 @@ class Formatter:
         title, headers, rows = self.stat_summary_table()
         return self._table(headers, rows, title=title)
 
-    def build_summary_table(self, metric: str | Callable = balanced_damage_metric, contributions=None) -> tuple[str, tuple[str, ...], list[tuple[str, ...]]] | None:
+    def build_summary_table(self, metric: Callable = balanced_damage_metric, contributions=None) -> tuple[str, tuple[str, ...], list[tuple[str, ...]]] | None:
         selected_body_part = self.result.selected_body_part
         if contributions is None:
             contributions = Calculator(self.result.weapon, self.result.target, self.result.build).contributions(attack=self.result.selected_attack, metric=metric, body_part=selected_body_part, state=self.result.state)
@@ -169,14 +169,12 @@ class Formatter:
             left = "·" * (10 - bar_length) + "█" * bar_length if share < 0 else "·" * 10
             right = "█" * bar_length + "·" * (10 - bar_length) if share > 0 else "·" * 10
             rows.append((str(rank), kind, display_name, f"{display_share:+.2%}", f"{display_removal:+,.2f}", f"{left}│{right}"))
-        if metric is balanced_damage_metric or metric in {"balanced_damage", "balanced_damage_metric"}: metric_name = "Balanced Damage"
-        elif isinstance(metric, str): metric_name = self._metric_name(metric)
-        else: metric_name = "Contribution"
+        metric_name = self._metric_label(metric)
         target_name = "" if self.result.target is None else f" vs {self.result.target.name} {self.result.target.body_parts[selected_body_part].name}"
         title = f"{metric_name} Contributions: {self.result.weapon.name} {self.result.weapon.attacks[self.result.selected_attack].name}{target_name}"
         return title, ("Contribution Rank", "Type", "Component", "Relative Contribution", "Removal Difference", "Impact"), rows
 
-    def build_summary(self, metric: str | Callable = balanced_damage_metric) -> str:
+    def build_summary(self, metric: Callable = balanced_damage_metric) -> str:
         table = self.build_summary_table(metric=metric)
         if table is None: return ""
         title, headers, rows = table
@@ -192,7 +190,7 @@ class Formatter:
         return "\n".join(self.status_summary_table()[1])
 
     def status_summary_table(self) -> tuple[str, list[str]]:
-        attacks = [(key, self.result.weapon.attacks[key].name, calculated) for key, calculated in self.result.attacks.items()]
+        attacks = [(key, self.result.weapon.attacks[key].name if key in self.result.weapon.attacks else key.replace("_", " ").title(), calculated) for key, calculated in self.result.attacks.items()]
         type_order = ("impact", "puncture", "slash", "heat", "cold", "electricity", "toxin", "blast", "radiation", "gas", "magnetic", "viral", "corrosive", "void")
         present: set[str] = set()
         for _, _, calculated in attacks:

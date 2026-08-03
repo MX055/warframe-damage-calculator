@@ -14,9 +14,9 @@ type EffectChannel = dict[str, ChannelValue]
 type EffectMode = Literal["proportional", "multiplicative", "base", "flat"]
 
 EFFECT_FIELDS = frozenset({"value", "mode", "family", "max", "when", "stacks", "for", "requires_rank", "automatic"})
-AUTOMATIC_FIELDS = frozenset({"when", "on", "with", "stacks", "for", "chance", "multiply", "reset", "refresh", "equipped", "per"})
+AUTOMATIC_FIELDS = frozenset({"when", "on", "source", "stacks", "for", "chance", "multiply", "reset", "refresh", "equipped", "per"})
 REPEATABLE_AUTOMATIC_FIELDS = frozenset({"when", "on", "equipped"})
-AUTOMATIC_INIT_FIELDS = frozenset({"when", "on", "with_", "stacks", "duration", "chance", "multiply", "reset", "refresh", "equipped", "per"})
+AUTOMATIC_INIT_FIELDS = frozenset({"when", "on", "source", "stacks", "duration", "chance", "multiply", "reset", "refresh", "equipped", "per"})
 
 
 @dataclass(frozen=True, slots=True)
@@ -163,7 +163,7 @@ def resolve_automatic(automatic: EffectChannel, rank: int, max_rank: int) -> dic
 class Automatic:
     when: ChannelValue | None = None
     on: ChannelValue | None = None
-    with_: ChannelValue | None = None
+    source: ChannelValue | None = None
     stacks: ChannelValue | None = None
     duration: ChannelValue | None = None
     chance: ChannelValue | None = None
@@ -177,7 +177,7 @@ class Automatic:
         raw: dict[str, object] = {}
         if self.when is not None: raw["when"] = self.when
         if self.on is not None: raw["on"] = self.on
-        if self.with_ is not None: raw["with"] = self.with_
+        if self.source is not None: raw["source"] = self.source
         if self.stacks is not None: raw["stacks"] = self.stacks
         if self.duration is not None: raw["for"] = self.duration
         if self.chance is not None: raw["chance"] = self.chance
@@ -197,7 +197,7 @@ class Automatic:
         return cls(
             when=normalized.get("when"),
             on=normalized.get("on"),
-            with_=normalized.get("with"),
+            source=normalized.get("source"),
             stacks=normalized.get("stacks"),
             duration=normalized.get("for"),
             chance=normalized.get("chance"),
@@ -260,8 +260,8 @@ class Effect:
         elif isinstance(automatic, Automatic): self.automatic = automatic.to_channel()
         else: self.automatic = _normalize_automatic(automatic)
 
-    def automate(self, *, when: object = None, on: object = None, with_: object = None, stacks: object = None, duration: object = None, chance: object = None, multiply: object = None, reset: object = None, refresh: object = None, equipped: object = None, per: object = None) -> Self:
-        self.automatic = Automatic(when=when, on=on, with_=with_, stacks=stacks, duration=duration, chance=chance, multiply=multiply, reset=reset, refresh=refresh, equipped=equipped, per=per).to_channel()
+    def automate(self, *, when: object = None, on: object = None, source: object = None, stacks: object = None, duration: object = None, chance: object = None, multiply: object = None, reset: object = None, refresh: object = None, equipped: object = None, per: object = None) -> Self:
+        self.automatic = Automatic(when=when, on=on, source=source, stacks=stacks, duration=duration, chance=chance, multiply=multiply, reset=reset, refresh=refresh, equipped=equipped, per=per).to_channel()
         return self
 
     @classmethod

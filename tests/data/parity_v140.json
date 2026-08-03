@@ -2206,20 +2206,20 @@
   "Coda Hema": {
     "attack": "normal_attack",
     "average": {
+      "flat_dph": 65.52,
       "flat_dotph": 0.0,
+      "total_dph": 65.52,
+      "flat_dps": 307.91030124908156,
       "flat_dotps": 0.0,
-      "flat_dph": 253.2196355620867,
-      "flat_dps": 1190.0020492689982,
-      "total_dph": 253.2196355620867,
-      "total_dps": 1190.0020492689982
+      "total_dps": 307.91030124908156
     },
     "final": {
+      "flat_dph": 65.52,
       "flat_dotph": 0.0,
+      "total_dph": 65.52,
+      "flat_dps": 307.91030124908156,
       "flat_dotps": 0.0,
-      "flat_dph": 253.2196355620867,
-      "flat_dps": 1190.0020492689982,
-      "total_dph": 253.2196355620867,
-      "total_dps": 1190.0020492689982
+      "total_dps": 307.91030124908156
     }
   },
   "Coda Hirudo": {
@@ -2282,20 +2282,20 @@
   "Coda Pathocyst": {
     "attack": "normal_attack",
     "average": {
-      "flat_dotph": 90.37277732673427,
-      "flat_dotps": 60.54976080891196,
-      "flat_dph": 510.7409707633334,
-      "flat_dps": 342.1964504114334,
-      "total_dph": 601.1137480900677,
-      "total_dps": 402.7462112203454
+      "flat_dph": 345.230025,
+      "flat_dotph": 61.08653497916667,
+      "total_dph": 406.3165599791667,
+      "flat_dps": 231.30411675000002,
+      "flat_dotps": 40.92797843604167,
+      "total_dps": 272.2320951860417
     },
     "final": {
-      "flat_dotph": 90.37277732673427,
-      "flat_dotps": 60.54976080891196,
-      "flat_dph": 510.7409707633334,
-      "flat_dps": 342.1964504114334,
-      "total_dph": 601.1137480900677,
-      "total_dps": 402.7462112203454
+      "flat_dph": 345.230025,
+      "flat_dotph": 61.08653497916667,
+      "total_dph": 406.3165599791667,
+      "flat_dps": 231.30411675000002,
+      "flat_dotps": 40.92797843604167,
+      "total_dps": 272.2320951860417
     }
   },
   "Coda Pox": {
@@ -2320,20 +2320,20 @@
   "Coda Sporothrix": {
     "attack": "normal_attack",
     "average": {
-      "flat_dotph": 476.509559862767,
-      "flat_dotps": 658.1226373953687,
-      "flat_dph": 982.2914035513646,
-      "flat_dps": 1356.6741649049036,
-      "total_dph": 1458.8009634141317,
-      "total_dps": 2014.7968023002725
+      "flat_dph": 427.8312216352201,
+      "flat_dotph": 207.54092561524524,
+      "total_dph": 635.3721472504653,
+      "flat_dps": 590.8914230886436,
+      "flat_dotps": 286.64142934030093,
+      "total_dps": 877.5328524289445
     },
     "final": {
-      "flat_dotph": 545.7892843689581,
-      "flat_dotps": 753.8070870907119,
-      "flat_dph": 1097.4576988343836,
-      "flat_dps": 1515.734029333526,
-      "total_dph": 1643.2469832033416,
-      "total_dps": 2269.5411164242378
+      "flat_dph": 477.99122163522014,
+      "flat_dotph": 237.71530061524524,
+      "total_dph": 715.7065222504654,
+      "flat_dps": 660.169007994304,
+      "flat_dotps": 328.3162265101123,
+      "total_dps": 988.4852345044162
     }
   },
   "Coda Synapse": {
@@ -4866,20 +4866,20 @@
   "Hema": {
     "attack": "normal_attack",
     "average": {
+      "flat_dph": 52.17,
       "flat_dotph": 0.0,
+      "total_dph": 52.17,
+      "flat_dps": 319.40816326530614,
       "flat_dotps": 0.0,
-      "flat_dph": 211.07556122448983,
-      "flat_dps": 1292.299354435652,
-      "total_dph": 211.07556122448983,
-      "total_dps": 1292.299354435652
+      "total_dps": 319.40816326530614
     },
     "final": {
+      "flat_dph": 52.17,
       "flat_dotph": 0.0,
+      "total_dph": 52.17,
+      "flat_dps": 319.40816326530614,
       "flat_dotps": 0.0,
-      "flat_dph": 211.07556122448983,
-      "flat_dps": 1292.299354435652,
-      "total_dph": 211.07556122448983,
-      "total_dps": 1292.299354435652
+      "total_dps": 319.40816326530614
     }
   },
   "Hespar": {
@@ -5322,20 +5322,20 @@
   "Keratinos": {
     "attack": "normal_attack",
     "average": {
-      "flat_dotph": 74.71739319562047,
-      "flat_dotps": 68.74000173997084,
-      "flat_dph": 344.0923303650492,
-      "flat_dps": 316.56494393584524,
-      "total_dph": 418.8097235606697,
-      "total_dps": 385.3049456758161
+      "flat_dph": 282.85398,
+      "flat_dotph": 61.41988697680327,
+      "total_dph": 344.2738669768032,
+      "flat_dps": 260.22566159999997,
+      "flat_dotps": 56.50629601865901,
+      "total_dps": 316.73195761865895
     },
     "final": {
-      "flat_dotph": 74.71739319562047,
-      "flat_dotps": 68.74000173997084,
-      "flat_dph": 344.0923303650492,
-      "flat_dps": 316.56494393584524,
-      "total_dph": 418.8097235606697,
-      "total_dps": 385.3049456758161
+      "flat_dph": 282.85398,
+      "flat_dotph": 61.41988697680327,
+      "total_dph": 344.2738669768032,
+      "flat_dps": 260.22566159999997,
+      "flat_dotps": 56.50629601865901,
+      "total_dps": 316.73195761865895
     }
   },
   "Kesheg": {
@@ -5512,58 +5512,58 @@
   "Komorex": {
     "attack": "normal_attack",
     "average": {
-      "flat_dotph": 117.47104311340208,
-      "flat_dotps": 266.97964343955016,
-      "flat_dph": 332.68199999999996,
-      "flat_dps": 756.0954545454543,
-      "total_dph": 450.153043113402,
-      "total_dps": 1023.0750979850045
+      "flat_dph": 114.35943749999998,
+      "flat_dotph": 40.380671070231955,
+      "total_dph": 154.74010857023194,
+      "flat_dps": 259.9078124999999,
+      "flat_dotps": 91.77425243234534,
+      "total_dps": 351.68206493234527
     },
     "final": {
-      "flat_dotph": 117.47104311340208,
-      "flat_dotps": 266.97964343955016,
-      "flat_dph": 477.73625454545447,
-      "flat_dps": 1085.7642148760328,
-      "total_dph": 595.2072976588565,
-      "total_dps": 1352.7438583155829
+      "flat_dph": 164.2218375,
+      "flat_dotph": 40.380671070231955,
+      "total_dph": 204.60250857023195,
+      "flat_dps": 373.23144886363633,
+      "flat_dotps": 91.77425243234534,
+      "total_dps": 465.0057012959816
     }
   },
   "Kompressa": {
     "attack": "normal_attack",
     "average": {
+      "flat_dph": 8.384,
       "flat_dotph": 0.0,
+      "total_dph": 8.384,
+      "flat_dps": 19.714289749323296,
       "flat_dotps": 0.0,
-      "flat_dph": 35.632000000000005,
-      "flat_dps": 83.78573143462401,
-      "total_dph": 35.632000000000005,
-      "total_dps": 83.78573143462401
+      "total_dps": 19.714289749323296
     },
     "final": {
+      "flat_dph": 166.84160000000003,
       "flat_dotph": 0.0,
+      "total_dph": 166.84160000000003,
+      "flat_dps": 392.3143660115336,
       "flat_dotps": 0.0,
-      "flat_dph": 709.0768,
-      "flat_dps": 1667.3360555490176,
-      "total_dph": 709.0768,
-      "total_dps": 1667.3360555490176
+      "total_dps": 392.3143660115336
     }
   },
   "Kompressa Prime": {
     "attack": "normal_attack",
     "average": {
+      "flat_dph": 9.024000000000001,
       "flat_dotph": 0.0,
+      "total_dph": 9.024000000000001,
+      "flat_dps": 21.219197363775454,
       "flat_dotps": 0.0,
-      "flat_dph": 38.352000000000004,
-      "flat_dps": 90.18158879604569,
-      "total_dph": 38.352000000000004,
-      "total_dps": 90.18158879604569
+      "total_dps": 21.219197363775454
     },
     "final": {
+      "flat_dph": 195.82080000000002,
       "flat_dotph": 0.0,
+      "total_dph": 195.82080000000002,
+      "flat_dps": 460.4565827939274,
       "flat_dotps": 0.0,
-      "flat_dph": 832.2384000000001,
-      "flat_dps": 1956.9404768741913,
-      "total_dph": 832.2384000000001,
-      "total_dps": 1956.9404768741913
+      "total_dps": 460.4565827939274
     }
   },
   "Korrudo": {
@@ -7735,20 +7735,20 @@
   "Pathocyst": {
     "attack": "normal_attack",
     "average": {
-      "flat_dotph": 63.86667090962359,
-      "flat_dotps": 42.79066950944781,
-      "flat_dph": 435.4168040156488,
-      "flat_dps": 291.7292586904847,
-      "total_dph": 499.28347492527234,
-      "total_dps": 334.5199281999325
+      "flat_dph": 308.87815,
+      "flat_dotph": 45.30605841412213,
+      "total_dph": 354.1842084141221,
+      "flat_dps": 206.9483605,
+      "flat_dotps": 30.355059137461826,
+      "total_dps": 237.30341963746181
     },
     "final": {
-      "flat_dotph": 63.86667090962359,
-      "flat_dotps": 42.79066950944781,
-      "flat_dph": 435.4168040156488,
-      "flat_dps": 291.7292586904847,
-      "total_dph": 499.28347492527234,
-      "total_dps": 334.5199281999325
+      "flat_dph": 308.87815,
+      "flat_dotph": 45.30605841412213,
+      "total_dph": 354.1842084141221,
+      "flat_dps": 206.9483605,
+      "flat_dotps": 30.355059137461826,
+      "total_dps": 237.30341963746181
     }
   },
   "Pennant": {
@@ -7849,20 +7849,20 @@
   "Phage": {
     "attack": "normal_attack",
     "average": {
+      "flat_dph": 41.65,
       "flat_dotph": 0.0,
+      "total_dph": 41.65,
+      "flat_dps": 443.1724137931035,
       "flat_dotps": 0.0,
-      "flat_dph": 177.0125,
-      "flat_dps": 1883.4827586206898,
-      "total_dph": 177.0125,
-      "total_dps": 1883.4827586206898
+      "total_dps": 443.1724137931035
     },
     "final": {
+      "flat_dph": 41.65,
       "flat_dotph": 0.0,
+      "total_dph": 41.65,
+      "flat_dps": 443.1724137931035,
       "flat_dotps": 0.0,
-      "flat_dph": 177.0125,
-      "flat_dps": 1883.4827586206898,
-      "total_dph": 177.0125,
-      "total_dps": 1883.4827586206898
+      "total_dps": 443.1724137931035
     }
   },
   "Phantasma": {
@@ -7925,39 +7925,39 @@
   "Plague Keewar": {
     "attack": "normal_attack",
     "average": {
-      "flat_dotph": 0.006322733802,
-      "flat_dotps": 0.006322733802,
-      "flat_dph": 1.013746,
-      "flat_dps": 1.013746,
-      "total_dph": 1.020068733802,
-      "total_dps": 1.020068733802
+      "flat_dph": 1.0,
+      "flat_dotph": 0.0062369999999999995,
+      "total_dph": 1.006237,
+      "flat_dps": 1.0,
+      "flat_dotps": 0.0062369999999999995,
+      "total_dps": 1.006237
     },
     "final": {
-      "flat_dotph": 0.006322733802,
-      "flat_dotps": 0.006322733802,
-      "flat_dph": 1.013746,
-      "flat_dps": 1.013746,
-      "total_dph": 1.020068733802,
-      "total_dps": 1.020068733802
+      "flat_dph": 1.0,
+      "flat_dotph": 0.0062369999999999995,
+      "total_dph": 1.006237,
+      "flat_dps": 1.0,
+      "flat_dotps": 0.0062369999999999995,
+      "total_dps": 1.006237
     }
   },
   "Plague Kripath": {
     "attack": "normal_attack",
     "average": {
-      "flat_dotph": 0.00491694,
-      "flat_dotps": 0.00491694,
-      "flat_dph": 1.018,
-      "flat_dps": 1.018,
-      "total_dph": 1.02291694,
-      "total_dps": 1.02291694
+      "flat_dph": 1.0,
+      "flat_dotph": 0.004829999999999999,
+      "total_dph": 1.00483,
+      "flat_dps": 1.0,
+      "flat_dotps": 0.004829999999999999,
+      "total_dps": 1.00483
     },
     "final": {
-      "flat_dotph": 0.00491694,
-      "flat_dotps": 0.00491694,
-      "flat_dph": 1.018,
-      "flat_dps": 1.018,
-      "total_dph": 1.02291694,
-      "total_dps": 1.02291694
+      "flat_dph": 1.0,
+      "flat_dotph": 0.004829999999999999,
+      "total_dph": 1.00483,
+      "flat_dps": 1.0,
+      "flat_dotps": 0.004829999999999999,
+      "total_dps": 1.00483
     }
   },
   "Plasma Sword": {
@@ -8343,20 +8343,20 @@
   "Proboscis Cernos": {
     "attack": "charged_shot",
     "average": {
-      "flat_dotph": 346.20004581909313,
-      "flat_dotps": 266.3077275531486,
-      "flat_dph": 737.2860674228921,
-      "flat_dps": 567.1431287868402,
-      "total_dph": 1083.486113241985,
-      "total_dps": 833.4508563399887
+      "flat_dph": 299.3178530769231,
+      "flat_dotph": 140.5476910908,
+      "total_dph": 439.8655441677231,
+      "flat_dps": 230.24450236686397,
+      "flat_dotps": 108.11360853138463,
+      "total_dps": 338.3581108982486
     },
     "final": {
-      "flat_dotph": 465.8987521326448,
-      "flat_dotps": 358.3836554866499,
-      "flat_dph": 2942.636909309911,
-      "flat_dps": 2263.5668533153166,
-      "total_dph": 3408.535661442556,
-      "total_dps": 2621.9505088019664
+      "flat_dph": 1194.6296030769229,
+      "flat_dotph": 189.1420717158,
+      "total_dph": 1383.771674792723,
+      "flat_dps": 918.9458485207101,
+      "flat_dotps": 145.49390131984617,
+      "total_dps": 1064.4397498405563
     }
   },
   "Prova": {
@@ -8400,39 +8400,39 @@
   "Pulmonars": {
     "attack": "normal_attack",
     "average": {
+      "flat_dph": 361.63,
       "flat_dotph": 0.0,
+      "total_dph": 361.63,
+      "flat_dps": 332.69960000000003,
       "flat_dotps": 0.0,
-      "flat_dph": 581.9689143999999,
-      "flat_dps": 535.411401248,
-      "total_dph": 581.9689143999999,
-      "total_dps": 535.411401248
+      "total_dps": 332.69960000000003
     },
     "final": {
+      "flat_dph": 361.63,
       "flat_dotph": 0.0,
+      "total_dph": 361.63,
+      "flat_dps": 332.69960000000003,
       "flat_dotps": 0.0,
-      "flat_dph": 581.9689143999999,
-      "flat_dps": 535.411401248,
-      "total_dph": 581.9689143999999,
-      "total_dps": 535.411401248
+      "total_dps": 332.69960000000003
     }
   },
   "Pupacyst": {
     "attack": "normal_attack",
     "average": {
+      "flat_dph": 302.46,
       "flat_dotph": 0.0,
+      "total_dph": 302.46,
+      "flat_dps": 251.04179999999997,
       "flat_dotps": 0.0,
-      "flat_dph": 510.09985499999993,
-      "flat_dps": 423.38287964999995,
-      "total_dph": 510.09985499999993,
-      "total_dps": 423.38287964999995
+      "total_dps": 251.04179999999997
     },
     "final": {
+      "flat_dph": 302.46,
       "flat_dotph": 0.0,
+      "total_dph": 302.46,
+      "flat_dps": 251.04179999999997,
       "flat_dotps": 0.0,
-      "flat_dph": 510.09985499999993,
-      "flat_dps": 423.38287964999995,
-      "total_dph": 510.09985499999993,
-      "total_dps": 423.38287964999995
+      "total_dps": 251.04179999999997
     }
   },
   "Purgator 1": {
@@ -9958,20 +9958,20 @@
   "Sporothrix": {
     "attack": "normal_attack",
     "average": {
-      "flat_dotph": 404.0589777025473,
-      "flat_dotps": 514.2455268341669,
-      "flat_dph": 864.3712354052694,
-      "flat_dps": 1100.0845566126875,
-      "total_dph": 1268.4302131078166,
-      "total_dps": 1614.3300834468541
+      "flat_dph": 389.5527679506993,
+      "flat_dotph": 182.10033690623393,
+      "total_dph": 571.6531048569333,
+      "flat_dps": 495.78348567715153,
+      "flat_dotps": 231.7589482146413,
+      "total_dps": 727.5424338917928
     },
     "final": {
-      "flat_dotph": 456.70622074961716,
-      "flat_dotps": 581.2496295298814,
-      "flat_dph": 952.5251586646775,
-      "flat_dps": 1212.2779818566755,
-      "total_dph": 1409.2313794142947,
-      "total_dps": 1793.527611386557
+      "flat_dph": 429.2817679506993,
+      "flat_dotph": 205.82727090623393,
+      "total_dph": 635.1090388569332,
+      "flat_dps": 546.346551128044,
+      "flat_dotps": 261.9561974983133,
+      "total_dps": 808.3027486263574
     }
   },
   "Stahlta": {

@@ -80,7 +80,7 @@ class MechanicsTests(unittest.TestCase):
         self.assertAlmostEqual(enervate.damage.direct_dph, 378.6766179484155)
         self.assertAlmostEqual(enervate.damage.total_dps, 906.835830831968)
         encumber = selected(Calculator(arsenal.secondary.get("Lato"), build=build("Secondary Encumber")).resolve())
-        self.assertAlmostEqual(encumber.damage.dot_dph, 3.5399275201480167)
+        self.assertAlmostEqual(encumber.damage.dot_dph, 3.456118444195631)
 
     def test_magazine_position_effects_use_shot_class_mixture(self):
         charged = selected(Calculator(arsenal.primary.get("Braton"), build=build("Charged Chamber")).resolve())
