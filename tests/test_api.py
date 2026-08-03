@@ -254,7 +254,7 @@ class ApiTests(unittest.TestCase):
         locked_contributions = Calculator(arsenal.primary.get("Vectis Prime"), loadout=locked_fire_rate).contributions()
         self.assertEqual(locked_contributions.contribution["Vile Precision"], 0)
         self.assertEqual(locked_contributions.removal["Vile Precision"], 0)
-        self.assertIn("Build Contribution", Formatter(Calculator(arsenal.primary.get("Vectis Prime"), loadout=locked_fire_rate).resolve()).contributions())
+        self.assertIn("Total DPS Contributions", Formatter(Calculator(arsenal.primary.get("Vectis Prime"), loadout=locked_fire_rate).resolve()).contributions())
         self.assertNotIn("Shapley", Formatter(Calculator(arsenal.primary.get("Vectis Prime"), loadout=locked_fire_rate).resolve()).contributions())
 
         riven = Mod(name="Riven", stats=UpgradeStats(crit_chance=1.0, multishot=1.0))

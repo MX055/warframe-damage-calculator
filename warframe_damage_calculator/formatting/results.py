@@ -137,6 +137,10 @@ class Formatter:
     def contributions(self, metric: str = "total_dps", body_part: str | None = None, seed: int = 0) -> str:
         selected_bodypart = body_part or self.result.selected_bodypart
         contributions = Calculator(self.result.weapon, self.result.target, self.result.loadout).contributions(attack=self.result.selected_attack, metric=metric, body_part=selected_bodypart, state=self.result.state, seed=seed)
+        return self.format_contributions(contributions, metric=metric, body_part=selected_bodypart)
+
+    def format_contributions(self, contributions, metric: str = "total_dps", body_part: str | None = None) -> str:
+        selected_bodypart = body_part or self.result.selected_bodypart
         contribution = contributions.contribution
         if not contribution: return ""
         removal = contributions.removal
@@ -162,8 +166,7 @@ class Formatter:
         metric_name = self._metric_name(metric) if isinstance(metric, str) else "Contribution"
         target_name = "" if self.result.target is None else f" vs {self.result.target.name} {self.result.target.bodyparts[selected_bodypart].name}"
         title = f"{metric_name} Contributions: {self.result.weapon.name} {self.result.weapon.attacks[self.result.selected_attack].name}{target_name}"
-        table = self._table(("Contribution Rank", "Type", "Component", "Relative Contribution", "Removal Difference", "Impact"), rows, title=title)
-        return table
+        return self._table(("Contribution Rank", "Type", "Component", "Relative Contribution", "Removal Difference", "Impact"), rows, title=title)
 
     def loadout(self) -> str:
         return format_loadout(self.result.loadout)
