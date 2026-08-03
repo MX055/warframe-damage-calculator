@@ -93,7 +93,7 @@ class Formatter:
         values.append(bottom)
         return "\n".join(values)
 
-    def summary(self, attack: str | None = None) -> str:
+    def summary_table(self, attack: str | None = None) -> tuple[str, tuple[str, ...], list[tuple[str, ...]]]:
         attack_name = self.result.selected_attack if attack is None else attack
         selected = self.result.attacks[attack_name]
         attack_definition = self.result.weapon.attacks[attack_name]
@@ -132,13 +132,20 @@ class Formatter:
         weapon_name = getattr(self.result.weapon, "name", "Weapon")
         target_name = "" if self.result.target is None else f"vs {self.result.target.name} {self.result.target.bodyparts[self.result.selected_bodypart].name}"
         title = f"Summary: {weapon_name} {self.result.weapon.attacks[attack_name].name} {target_name}"
-        return self._table(("Stat", "Base", "Modded", "Effective", "Average"), [tuple(cell for index, cell in enumerate(row) if index != 5) for row in rows], title=title)
+        headers = ("Stat", "Base", "Modded", "Effective", "Average")
+        display_rows = [tuple(cell for index, cell in enumerate(row) if index != 5) for row in rows]
+        return title, headers, display_rows
 
-    def contributions(self, metric: str = "total_dps", body_part: str | None = None, seed: int = 0) -> str:
+    def summary(self, attack: str | None = None) -> str:
+        title, headers, rows = self.summary_table(attack)
+        return self._table(headers, rows, title=title)
+
+    def contribution_table(self, metric: str = "total_dps", body_part: str | None = None, seed: int = 0, contributions=None) -> tuple[str, tuple[str, ...], list[tuple[str, ...]]] | None:
         selected_bodypart = body_part or self.result.selected_bodypart
-        contributions = Calculator(self.result.weapon, self.result.target, self.result.loadout).contributions(attack=self.result.selected_attack, metric=metric, body_part=selected_bodypart, state=self.result.state, seed=seed)
+        if contributions is None:
+            contributions = Calculator(self.result.weapon, self.result.target, self.result.loadout).contributions(attack=self.result.selected_attack, metric=metric, body_part=selected_bodypart, state=self.result.state, seed=seed)
         contribution = contributions.contribution
-        if not contribution: return ""
+        if not contribution: return None
         removal = contributions.removal
         component_types = {upgrade.name: upgrade.slot.replace("_", " ").title() for upgrade in self.result.loadout.ranked_upgrades}
         component_types.update({perk.name: "Perk" for perk in self.result.loadout.evolutions})
@@ -162,7 +169,13 @@ class Formatter:
         metric_name = self._metric_name(metric) if isinstance(metric, str) else "Contribution"
         target_name = "" if self.result.target is None else f" vs {self.result.target.name} {self.result.target.bodyparts[selected_bodypart].name}"
         title = f"{metric_name} Contributions: {self.result.weapon.name} {self.result.weapon.attacks[self.result.selected_attack].name}{target_name}"
-        return self._table(("Contribution Rank", "Type", "Component", "Relative Contribution", "Removal Difference", "Impact"), rows, title=title)
+        return title, ("Contribution Rank", "Type", "Component", "Relative Contribution", "Removal Difference", "Impact"), rows
+
+    def contributions(self, metric: str = "total_dps", body_part: str | None = None, seed: int = 0) -> str:
+        table = self.contribution_table(metric=metric, body_part=body_part, seed=seed)
+        if table is None: return ""
+        title, headers, rows = table
+        return self._table(headers, rows, title=title)
 
     def loadout(self) -> str:
         return format_loadout(self.result.loadout)
