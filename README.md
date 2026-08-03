@@ -349,7 +349,7 @@ removal = contributions.removal
 contribution = contributions.contribution
 ```
 
-Build contribution percentages are leave-one-out removal differences normalized to sum to 1 (a component that does not change the metric gets 0%). A metric name selects a field on `aggregate.damage`. `body_part` selects an enemy body-part key such as `"body"` or `"head"`. A dotted path or callable may select another result value.
+Build contribution percentages are leave-one-out removal differences normalized to sum to 1 (a component that does not change the metric gets 0%). The default metric is `balanced_damage_metric`, the same score the optimizer uses by default. Pass `metric="total_dps"` or another aggregate damage field name for a simpler metric, or any callable of a `CalculationResult`. `body_part` selects an enemy body-part key such as `"body"` or `"head"`. A dotted path may select another result value.
 
 ## Spatial output
 

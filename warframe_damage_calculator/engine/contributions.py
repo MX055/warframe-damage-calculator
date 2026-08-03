@@ -35,9 +35,9 @@ def _normalize_contributions(values: dict[str, float]) -> dict[str, float]:
     return {name: value / denominator for name, value in values.items()} if denominator else {name: 0.0 for name in values}
 
 
-def calculate_contributions(build: Build, evaluate: Callable[[Build], float], seed: int = 0) -> ContributionResult:
+def calculate_contributions(build: Build, evaluate: Callable[[Build], float]) -> ContributionResult:
     components = _components(build)
-    if not components: return ContributionResult({}, {}, 0, 0)
+    if not components: return ContributionResult({}, {}, 0)
     size = len(components)
     full_mask = (1 << size) - 1
     coalition_values: dict[int, float] = {}
@@ -49,4 +49,4 @@ def calculate_contributions(build: Build, evaluate: Callable[[Build], float], se
     full = coalition_value(full_mask)
     removal = {component_id(component): coalition_value(full_mask ^ (1 << index)) - full for index, component in enumerate(components)}
     contribution = _normalize_contributions({name: -value for name, value in removal.items()})
-    return ContributionResult(contribution, removal, len(coalition_values), 0)
+    return ContributionResult(contribution, removal, len(coalition_values))

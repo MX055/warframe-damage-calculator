@@ -13,6 +13,7 @@ from ..domain.generated_attacks import GENERATED_ATTACK_STAT
 from ..domain.weapons import Weapon
 from .context import CalculationContext
 from .contributions import calculate_contributions
+from .metrics import balanced_damage_components, balanced_damage_metric
 from .perks import resolve_perks
 from .result_builder import build_aggregate, build_calculated_attack
 from .validation import warn_build
@@ -32,7 +33,7 @@ class Calculator:
         selected_body_part, target = self._select_body_part(body_part)
         return self._calculate(selected_attack, selected_body_part, target, State() if state is None else State._from_values(state))
 
-    def contributions(self, *, attack: str | None = None, metric: str | Callable[[CalculationResult], float] = "total_dps", body_part: str | None = None, state: State | None = None, seed: int = 0) -> ContributionResult:
+    def contributions(self, *, attack: str | None = None, metric: str | Callable[[CalculationResult], float] = balanced_damage_metric, body_part: str | None = None, state: State | None = None) -> ContributionResult:
         selected_attack = attack or self.weapon.default_attack
         selected_body_part, target = self._select_body_part(body_part)
         calculation_state = State() if state is None else State._from_values(state)
@@ -45,8 +46,9 @@ class Calculator:
             "total_dph": lambda direct_dph, dot_dph, direct_dps, dot_dps, damage_mass: direct_dph + dot_dph,
             "direct_dph": lambda direct_dph, dot_dph, direct_dps, dot_dps, damage_mass: direct_dph,
             "dot_dph": lambda direct_dph, dot_dph, direct_dps, dot_dps, damage_mass: dot_dph,
+            "balanced_damage": balanced_damage_components,
         }
-        compact_metric = compact_metrics.get(metric_name or "")
+        compact_metric = balanced_damage_components if metric is balanced_damage_metric else compact_metrics.get(metric_name or "")
         effect_cache: dict[int, tuple[ResolvedEffect, ...]] = {}
         for upgrade in self.build.ranked_upgrades:
             if upgrade.implemented: effect_cache[id(upgrade)] = upgrade.resolve_manual()
@@ -86,7 +88,7 @@ class Calculator:
             for name in metric.split(".") if "." in metric else ("aggregate", "damage", metric): value = getattr(value, name)
             return float(value)
 
-        return calculate_contributions(self.build, evaluate, seed)
+        return calculate_contributions(self.build, evaluate)
 
     def _select_body_part(self, body_part: str | None) -> tuple[str, Enemy | None]:
         if self.target is None:

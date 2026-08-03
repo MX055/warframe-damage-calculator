@@ -76,7 +76,7 @@ class DatabaseTests(unittest.TestCase):
         self.assertEqual(list(arsenal.mod.get("Maiming Strike").stats), ["slide_crit_chance"])
         self.assertEqual(arsenal.mod.get("Maiming Strike").stats["slide_crit_chance"][0].value.value, 1.5)
         influence = arsenal.arcane.get("Melee Influence")
-        self.assertEqual(influence.description, "On Melee\nElectricity Status:\n20% chance for elemental Melee Status Effects to apply to enemies within 20m for 18s. Cannot refresh while active.")
+        self.assertEqual(influence.description, "On Melee Electricity Status:\n20% chance for elemental Melee Status Effects to apply to enemies within 20m for 18s. Cannot refresh while active.")
 
     def test_perk_descriptions_resolve_from_weapon_evolutions(self):
         perk = arsenal.perk.get("Elemental Balance")

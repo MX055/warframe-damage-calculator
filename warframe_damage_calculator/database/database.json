@@ -121144,7 +121144,7 @@
                 },
                 "slot": "regular_arcane",
                 "conflicts": [],
-                "description": "On\nHeat Status Effect:\n+12% Damage for 10s. Stacks up to 480%."
+                "description": "On Heat Status Effect:\n+12% Damage for 10s. Stacks up to 480%."
             },
             "Cascadia Overcharge": {
                 "name": "Cascadia Overcharge",
@@ -121206,7 +121206,7 @@
                 },
                 "slot": "regular_arcane",
                 "conflicts": [],
-                "description": "On\nElectricity Status Effect:\n+1.5% Reload Speed and +3% Multishot for 12s. Stacks up to 40x."
+                "description": "On Electricity Status Effect:\n+1.5% Reload Speed and +3% Multishot for 12s. Stacks up to 40x."
             },
             "Exodia Brave": {
                 "name": "Exodia Brave",
@@ -121539,7 +121539,7 @@
                 },
                 "slot": "regular_arcane",
                 "conflicts": [],
-                "description": "Gain 1.0x Critical Damage for every 10%\nPuncture Status chance on your Melee Weapon."
+                "description": "Gain 1.0x Critical Damage for every 10% Puncture Status chance on your Melee Weapon."
             },
             "Melee Duplicate": {
                 "name": "Melee Duplicate",
@@ -121604,7 +121604,7 @@
                 },
                 "slot": "regular_arcane",
                 "conflicts": [],
-                "description": "On Ability Cast:\nGain 60%\nCorrosive Damage on Melee strikes for 25s. Stacks up to 240%."
+                "description": "On Ability Cast:\nGain 60% Corrosive Damage on Melee strikes for 25s. Stacks up to 240%."
             },
             "Melee Fortification": {
                 "name": "Melee Fortification",
@@ -121711,7 +121711,7 @@
                 },
                 "slot": "regular_arcane",
                 "conflicts": [],
-                "description": "On Melee\nElectricity Status:\n20% chance for elemental Melee Status Effects to apply to enemies within 20m for 18s. Cannot refresh while active."
+                "description": "On Melee Electricity Status:\n20% chance for elemental Melee Status Effects to apply to enemies within 20m for 18s. Cannot refresh while active."
             },
             "Melee Retaliation": {
                 "name": "Melee Retaliation",
@@ -121749,7 +121749,7 @@
                         "upgrade_effects"
                     ]
                 },
-                "description": "Kill an enemy affected by\nMagnetic Status for a 45% chance to pull in enemies within 18m radius"
+                "description": "Kill an enemy affected by Magnetic Status for a 45% chance to pull in enemies within 18m radius"
             },
             "Pax Bolt": {
                 "name": "Pax Bolt",
@@ -121859,7 +121859,7 @@
                 },
                 "slot": "regular_arcane",
                 "conflicts": [],
-                "description": "On\nToxin Status Effect:\n+3.6% Critical Damage and +1.8% Multishot for 12s. Stacks up to 40x."
+                "description": "On Toxin Status Effect:\n+3.6% Critical Damage and +1.8% Multishot for 12s. Stacks up to 40x."
             },
             "Primary Bulwark": {
                 "name": "Primary Bulwark",
@@ -122059,7 +122059,7 @@
                         "upgrade_effects"
                     ]
                 },
-                "description": "On Weapon\nImpact Status Effect:\n+1.2 Energy Regen/s for 10s. Stacks up to 3x."
+                "description": "On Weapon Impact Status Effect:\n+1.2 Energy Regen/s for 10s. Stacks up to 3x."
             },
             "Primary Frostbite": {
                 "name": "Primary Frostbite",
@@ -122093,7 +122093,7 @@
                 },
                 "slot": "regular_arcane",
                 "conflicts": [],
-                "description": "On\nCold Status Effect:\n+3% Critical Damage and +2.25% Multishot for 12s. Stacks up to 40x."
+                "description": "On Cold Status Effect:\n+3% Critical Damage and +2.25% Multishot for 12s. Stacks up to 40x."
             },
             "Primary Merciless": {
                 "name": "Primary Merciless",
@@ -122142,7 +122142,7 @@
                         "upgrade_effects"
                     ]
                 },
-                "description": "On Weapon\nMagnetic Status Effect:\nEnemy weapons jam within 15m of target. Cooldown 10s."
+                "description": "On Weapon Magnetic Status Effect:\nEnemy weapons jam within 15m of target. Cooldown 10s."
             },
             "Primary Overcharge": {
                 "name": "Primary Overcharge",
@@ -122208,7 +122208,7 @@
                         "upgrade_effects"
                     ]
                 },
-                "description": "On Kitgun Kill:\n20% chance to spawn volatile hives for 12s that explode when enemies approach for 80\nHeat Damage in 10m. Standing in the area applies\nHeat Damage type to Theorem Arcanes."
+                "description": "On Kitgun Kill:\n20% chance to spawn volatile hives for 12s that explode when enemies approach for 80 Heat Damage in 10m. Standing in the area applies Heat Damage type to Theorem Arcanes."
             },
             "Residual Malodor": {
                 "name": "Residual Malodor",
@@ -122227,7 +122227,7 @@
                         "upgrade_effects"
                     ]
                 },
-                "description": "On Kitgun Kill:\n20% chance to create a frigid mist for 12s, dealing 40\nCold Damage/s. Standing in the area applies\nCold Damage to Theorem Arcanes."
+                "description": "On Kitgun Kill:\n20% chance to create a frigid mist for 12s, dealing 40 Cold Damage/s. Standing in the area applies Cold Damage to Theorem Arcanes."
             },
             "Residual Shock": {
                 "name": "Residual Shock",
@@ -122246,7 +122246,7 @@
                         "upgrade_effects"
                     ]
                 },
-                "description": "On Kitgun Kill:\n20% chance to spawn an electrified spike for 12s, dealing 200\nElectricity Damage to enemies within 10m. Standing in the area applies\nElectricity Damage to Theorem Arcanes."
+                "description": "On Kitgun Kill:\n20% chance to spawn an electrified spike for 12s, dealing 200 Electricity Damage to enemies within 10m. Standing in the area applies Electricity Damage to Theorem Arcanes."
             },
             "Residual Viremia": {
                 "name": "Residual Viremia",
@@ -122265,7 +122265,7 @@
                         "upgrade_effects"
                     ]
                 },
-                "description": "On Kitgun Kill:\n20% chance to create pool of toxic blood for 12s, dealing 40\nToxin Damage/s. Standing in the area applies the\nToxin Damage to Theorem Arcanes."
+                "description": "On Kitgun Kill:\n20% chance to create pool of toxic blood for 12s, dealing 40 Toxin Damage/s. Standing in the area applies the Toxin Damage to Theorem Arcanes."
             },
             "Secondary Cryogenic": {
                 "name": "Secondary Cryogenic",
@@ -122546,7 +122546,7 @@
                         "automatic_cold_status_proc"
                     ]
                 },
-                "description": "Enemies take +45% damage per\nCold Status"
+                "description": "Enemies take +45% damage per Cold Status"
             },
             "Secondary Surge": {
                 "name": "Secondary Surge",

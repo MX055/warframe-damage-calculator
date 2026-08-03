@@ -17,6 +17,7 @@ from ..domain.state import State
 from ..domain.upgrades import ResolvedEffect
 from ..engine.calculator import Calculator
 from ..engine.context import CalculationContext
+from ..engine.metrics import balanced_damage_components, balanced_damage_metric
 from ..engine.perks import resolve_perks
 from ..engine.weapon_calculator import WeaponCalculator
 from .candidates import DEFAULT_UPGRADE_BLACKLIST, Candidate, CandidatePreparation
@@ -27,48 +28,18 @@ from .search import Search
 
 Metric = Callable[[CalculationResult], float]
 
-def _score_worker_batch(evaluator: Calculator, target: Enemy | None, attack: str, state: State, prepared_names: tuple[str, ...] | None, indexed_builds: tuple[tuple[int, Build], ...]) -> tuple[tuple[int, float], ...]:
-    import math
-    from warframe_damage_calculator.engine.perks import resolve_perks
 
-    def balanced_damage(direct: float, dot: float) -> float:
-        direct = max(float(direct), 0.0)
-        dot = max(float(dot), 0.0)
-        total = direct + dot
-        if total == 0: return 0.0
-        return total * (1 + 0.1 * 2 * math.sqrt(direct * dot) / total)
+def _score_worker_batch(evaluator: Calculator, target: Enemy | None, attack: str, state: State, prepared_names: tuple[str, ...] | None, indexed_builds: tuple[tuple[int, Build], ...]) -> tuple[tuple[int, float], ...]:
+    from warframe_damage_calculator.engine.perks import resolve_perks
 
     scores = []
     for index, build in indexed_builds:
         resolved_perks = resolve_perks(evaluator.weapon, build.evolutions)
         upgrade_effects = tuple(effect for upgrade in build.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual())
         evaluator.build = build
-        direct_dph, dot_dph, direct_dps, dot_dps, damage_mass = evaluator._calculate_metric_components(attack, target, state, resolved_perks=resolved_perks, prepared_names=prepared_names, prepared_upgrade_effects=upgrade_effects)
-        dps = balanced_damage(direct_dps, dot_dps)
-        dph = balanced_damage(direct_dph, dot_dph)
-        score = (dps * dph * damage_mass) ** (1 / 3) if dps > 0 and dph > 0 and damage_mass > 0 else 0.0
+        score = balanced_damage_components(*evaluator._calculate_metric_components(attack, target, state, resolved_perks=resolved_perks, prepared_names=prepared_names, prepared_upgrade_effects=upgrade_effects))
         scores.append((index, score))
     return tuple(scores)
-
-
-def _balanced_damage(direct: float, dot: float, balance_bonus: float = 0.1) -> float:
-    direct = max(float(direct), 0.0)
-    dot = max(float(dot), 0.0)
-    total = direct + dot
-    if total == 0: return 0.0
-    balance = 2 * math.sqrt(direct * dot) / total
-    return total * (1 + balance_bonus * balance)
-
-
-def balanced_damage_metric(result: CalculationResult) -> float:
-    damage = result.aggregate.damage
-    dps = _balanced_damage(damage.direct_dps, damage.dot_dps)
-    dph = _balanced_damage(damage.direct_dph, damage.dot_dph)
-    total_dph = damage.direct_dph + damage.dot_dph
-    weighted_damage_mass = sum((attack.damage.direct_dph + attack.damage.dot_dph) * (attack.spatial.damage_mass if attack.spatial.damage_mass is not None else 1.0) for attack in result.attacks.values())
-    damage_mass = weighted_damage_mass / total_dph if total_dph > 0 else 1.0
-    if dps <= 0 or dph <= 0 or damage_mass <= 0: return 0.0
-    return (dps * dph * damage_mass) ** (1 / 3)
 
 
 @dataclass(frozen=True, slots=True)
@@ -156,10 +127,7 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             prepared_upgrade_effects = self._compiled_upgrade_effects(build)
             evaluator.build = build
             if use_compact_metric:
-                direct_dph, dot_dph, direct_dps, dot_dps, damage_mass = evaluator._calculate_metric_components(selected_attack, target, calculation_state, resolved_perks=resolved_perks, prepared_names=prepared_names, prepared_upgrade_effects=prepared_upgrade_effects)
-                dps = _balanced_damage(direct_dps, dot_dps)
-                dph = _balanced_damage(direct_dph, dot_dph)
-                score = (dps * dph * damage_mass) ** (1 / 3) if dps > 0 and dph > 0 and damage_mass > 0 else 0.0
+                score = balanced_damage_components(*evaluator._calculate_metric_components(selected_attack, target, calculation_state, resolved_perks=resolved_perks, prepared_names=prepared_names, prepared_upgrade_effects=prepared_upgrade_effects))
             else:
                 result = evaluator._calculate(selected_attack, selected_body_part, target, calculation_state, copy_inputs=False, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=prepared_upgrade_effects)
                 score = float(metric(result))

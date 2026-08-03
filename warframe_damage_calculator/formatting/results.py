@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Callable
 
 from ..domain.results import AttackSpatialMetrics, AttackStatusMetrics, CalculationResult, DamageResult
 from ..engine.calculator import Calculator
+from ..engine.metrics import balanced_damage_metric
 from .objects import format_build
 
 
@@ -93,11 +95,11 @@ class Formatter:
         values.append(bottom)
         return "\n".join(values)
 
-    def stat_summary_table(self, attack: str | None = None) -> tuple[str, tuple[str, ...], list[tuple[str, ...]]]:
-        attack_name = self.result.selected_attack if attack is None else attack
+    def stat_summary_table(self) -> tuple[str, tuple[str, ...], list[tuple[str, ...]]]:
+        attack_name = self.result.selected_attack
         selected = self.result.attacks[attack_name]
         attack_definition = self.result.weapon.attacks[attack_name]
-        output_damage = self.result.aggregate.damage if attack is None else selected.damage
+        output_damage = self.result.aggregate.damage
         base, modded, effective = selected.base, selected.modded, selected.effective
         damage, critical, timing, status, spatial = selected.damage, selected.critical, selected.timing, selected.status, selected.spatial
         rows: list[tuple[str, ...]] = [self._section("DAMAGE")]
@@ -137,14 +139,14 @@ class Formatter:
         display_rows = [tuple(cell for index, cell in enumerate(row) if index != 5) for row in rows]
         return title, headers, display_rows
 
-    def stat_summary(self, attack: str | None = None) -> str:
-        title, headers, rows = self.stat_summary_table(attack)
+    def stat_summary(self) -> str:
+        title, headers, rows = self.stat_summary_table()
         return self._table(headers, rows, title=title)
 
-    def build_summary_table(self, metric: str = "total_dps", body_part: str | None = None, seed: int = 0, contributions=None) -> tuple[str, tuple[str, ...], list[tuple[str, ...]]] | None:
-        selected_body_part = body_part or self.result.selected_body_part
+    def build_summary_table(self, metric: str | Callable = balanced_damage_metric, contributions=None) -> tuple[str, tuple[str, ...], list[tuple[str, ...]]] | None:
+        selected_body_part = self.result.selected_body_part
         if contributions is None:
-            contributions = Calculator(self.result.weapon, self.result.target, self.result.build).contributions(attack=self.result.selected_attack, metric=metric, body_part=selected_body_part, state=self.result.state, seed=seed)
+            contributions = Calculator(self.result.weapon, self.result.target, self.result.build).contributions(attack=self.result.selected_attack, metric=metric, body_part=selected_body_part, state=self.result.state)
         contribution = contributions.contribution
         if not contribution: return None
         removal = contributions.removal
@@ -167,22 +169,21 @@ class Formatter:
             left = "·" * (10 - bar_length) + "█" * bar_length if share < 0 else "·" * 10
             right = "█" * bar_length + "·" * (10 - bar_length) if share > 0 else "·" * 10
             rows.append((str(rank), kind, display_name, f"{display_share:+.2%}", f"{display_removal:+,.2f}", f"{left}│{right}"))
-        metric_name = self._metric_name(metric) if isinstance(metric, str) else "Contribution"
+        if metric is balanced_damage_metric or metric in {"balanced_damage", "balanced_damage_metric"}: metric_name = "Balanced Damage"
+        elif isinstance(metric, str): metric_name = self._metric_name(metric)
+        else: metric_name = "Contribution"
         target_name = "" if self.result.target is None else f" vs {self.result.target.name} {self.result.target.body_parts[selected_body_part].name}"
         title = f"{metric_name} Contributions: {self.result.weapon.name} {self.result.weapon.attacks[self.result.selected_attack].name}{target_name}"
         return title, ("Contribution Rank", "Type", "Component", "Relative Contribution", "Removal Difference", "Impact"), rows
 
-    def build_summary(self, metric: str = "total_dps", body_part: str | None = None, seed: int = 0) -> str:
-        table = self.build_summary_table(metric=metric, body_part=body_part, seed=seed)
+    def build_summary(self, metric: str | Callable = balanced_damage_metric) -> str:
+        table = self.build_summary_table(metric=metric)
         if table is None: return ""
         title, headers, rows = table
         return self._table(headers, rows, title=title)
 
     def build(self) -> str:
         return format_build(self.result.build)
-
-    def attack(self, name: str) -> str:
-        return self.stat_summary(name)
 
     def pool(self, pool: DamageResult) -> str:
         return format_damage_result(pool)
@@ -219,9 +220,9 @@ class Formatter:
                 weight = 0.0 if total <= 0 or amount <= 0 else amount / total
                 cells = (
                     self._number(amount) if amount else "—",
-                    self._percent(weight) if weight else "—",
+                    self._number(weight) if weight else "—",
                     self._number(forced_amount) if forced_amount else "—",
-                    self._number(procs) if procs else "—",
+                    self._percent(procs) if procs else "—",
                 )
                 rows.append(cells)
                 for index, cell in enumerate(cells): widths[index] = max(widths[index], self._visible_length(cell))
@@ -254,8 +255,8 @@ class Formatter:
         return "No spatial output" if spatial.damage_mass is None else format_spatial(spatial)
 
 
-def format_result(result: CalculationResult, *, attack: str | None = None) -> str:
-    return Formatter(result).stat_summary(attack)
+def format_result(result: CalculationResult) -> str:
+    return Formatter(result).stat_summary()
 
 
 def format_damage_result(result: DamageResult) -> str:

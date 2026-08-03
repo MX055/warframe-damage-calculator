@@ -6,4 +6,3 @@ class ContributionResult:
     contribution: dict[str, float]
     removal: dict[str, float]
     evaluations: int
-    samples: int
