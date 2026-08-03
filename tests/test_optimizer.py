@@ -108,6 +108,8 @@ def test_default_metric_includes_generated_attack_spatial_mass():
     without = Calculator(weapon, loadout=Loadout(mods=[electricity])).resolve()
     with_influence = Calculator(weapon, loadout=Loadout(mods=[electricity], arcanes=[arsenal.arcane.get("Melee Influence")])).resolve()
     assert "melee_influence" in with_influence.attacks
+    assert with_influence.weapon.attacks["melee_influence"].hits_source is False
+    assert with_influence.aggregate.average.total_dph == without.aggregate.average.total_dph
     assert default_metric(with_influence) > default_metric(without)
 
 

@@ -111,6 +111,7 @@ class AttackInheritanceTests(unittest.TestCase):
         self.assertEqual((generated.stats.crit_chance, generated.stats.crit_damage, generated.stats.status_chance, generated.stats.multishot), (0.8, 4, 0, 1))
         self.assertEqual((generated.stats.co_factor, generated.stats.co_effect, generated.links.children), (2, "multiplies", None))
         self.assertEqual(generated.category, "heavy")
+        self.assertFalse(generated.hits_source)
         self.assertEqual(result.attacks["melee_influence"].generated_from, "heavy")
         self.assertEqual(result.attacks["melee_influence"].average.combo_multiplier, 5)
         self.assertNotIn("slash", result.attacks["melee_influence"].status.sustained_procs)

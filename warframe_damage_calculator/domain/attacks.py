@@ -11,7 +11,7 @@ from .scaled_values import is_scaled_value_record
 
 PARENT_SELECTOR_FIELDS = frozenset({"names", "triggers", "deliveries", "forms", "categories", "aoe"})
 RELATED_ATTACK_FIELDS = PARENT_SELECTOR_FIELDS
-ATTACK_RECORD_FIELDS = frozenset({"name", "trigger", "delivery", "form", "category", "aoe", "inheritance", "links", "automatic", "stats"})
+ATTACK_RECORD_FIELDS = frozenset({"name", "trigger", "delivery", "form", "category", "aoe", "hits_source", "inheritance", "links", "automatic", "stats"})
 INHERITANCE_TOP_LEVEL = frozenset({"trigger", "delivery", "form", "category", "aoe", "links", "stats"})
 FALLOFF_FIELDS = frozenset({"start_range", "end_range", "final_multiplier"})
 
@@ -294,6 +294,7 @@ class Attack:
     form: str = "normal"
     category: str = "normal"
     aoe: bool = False
+    hits_source: bool = True
     inheritance: Inheritance | None = None
     links: Links = field(default_factory=Links)
     automatic: Automatic | None = None
@@ -326,6 +327,7 @@ class Attack:
         if self.form != "normal": record["form"] = self.form
         if self.category != "normal": record["category"] = self.category
         if self.aoe: record["aoe"] = True
+        if not self.hits_source: record["hits_source"] = False
         if self.inheritance is not None: record["inheritance"] = self.inheritance.to_record()
         links = self.links.to_record()
         if links: record["links"] = links
@@ -338,7 +340,7 @@ class Attack:
         return record
 
     def copy(self) -> Attack:
-        return Attack(name=self.name, trigger=self.trigger, delivery=self.delivery, form=self.form, category=self.category, aoe=self.aoe, inheritance=self.inheritance, links=self.links.copy(), automatic=self.automatic, stats=self.stats if isinstance(self.stats, AttackStats) else deepcopy(dict(self.stats)))
+        return Attack(name=self.name, trigger=self.trigger, delivery=self.delivery, form=self.form, category=self.category, aoe=self.aoe, hits_source=self.hits_source, inheritance=self.inheritance, links=self.links.copy(), automatic=self.automatic, stats=self.stats if isinstance(self.stats, AttackStats) else deepcopy(dict(self.stats)))
 
     def to_generated_value(self) -> dict[str, Any]:
         """Serialize generated-attack payload without automatic (stored on Effect.automatic)."""

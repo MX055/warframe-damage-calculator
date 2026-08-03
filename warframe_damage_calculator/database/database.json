@@ -121638,6 +121638,7 @@
                         {
                             "name": "Melee Influence",
                             "aoe": true,
+                            "hits_source": false,
                             "stats": {
                                 "falloff": {
                                     "start_range": 0,

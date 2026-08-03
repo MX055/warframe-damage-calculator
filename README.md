@@ -165,12 +165,13 @@ Melee Duplicate lists every gameplay field it copies explicitly and does not inh
   }
 }
 ```
-Melee Influence is represented through the same generated-attack pipeline as an expected-value abstraction, not as a literal independent random attack. It inherits elemental damage and forced-proc fields plus crit and Condition Overload inputs. Activation chance is fixed (`"chance": 0.2`). Duration scales with rank (`"for": {"value": 18, "rank_scale": true}` → 3 at rank 0, 18 at rank 5). Range stays a fixed `20` because the in-game 10→20 progression does not match the project's linear rank formula. The `automatic.on` list of elemental status-proc events drives the averaged occurrence rate; Influence does not roll status chance again:
+Melee Influence is represented through the same generated-attack pipeline as an expected-value abstraction, not as a literal independent random attack. It inherits elemental damage and forced-proc fields plus crit and Condition Overload inputs. Activation chance is fixed (`"chance": 0.2`). Duration scales with rank (`"for": {"value": 18, "rank_scale": true}` → 3 at rank 0, 18 at rank 5). Range stays a fixed `20` because the in-game 10→20 progression does not match the project's linear rank formula. `"hits_source": false` excludes Influence from single-target aggregate damage and status: in-game it only applies elemental melee statuses to other enemies in range, not the hit that triggered it. The Influence attack still reports per-nearby-target DoT and spatial mass so crowd metrics can value it. The `automatic.on` list of elemental status-proc events drives the averaged occurrence rate; Influence does not roll status chance again:
 
 ```json
 {
   "name": "Melee Influence",
   "aoe": true,
+  "hits_source": false,
   "inheritance": {
     "include": [
       "trigger", "delivery", "form", "category",

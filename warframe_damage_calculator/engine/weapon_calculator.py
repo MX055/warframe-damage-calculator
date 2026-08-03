@@ -426,7 +426,8 @@ class WeaponCalculator:
 
     def aggregate_attack_tree(self, results: dict[str, AttackResult], names: list[str], root_duration: float) -> tuple[AverageAttackStats, StatusModel, dict[str, float]]:
         root = results[self.root_name]
-        group_model = StatusModel.combine([results[name].effective.status_model for name in names], root.average.attack_rate, root_duration)
+        status_names = [name for name in names if results[name].attack.hits_source]
+        group_model = StatusModel.combine([results[name].effective.status_model for name in status_names], root.average.attack_rate, root_duration)
         status_effects = group_model.non_damage_effects()
         status_effects["armor_reduction"] = min(status_effects.get("puncture", 0) * _special_value(root.effective.special_effects, "armor_reduction"), 1)
         aggregate = AverageAttackStats(**{name: deepcopy(getattr(root.average, name)) for name in root.average.__dataclass_fields__})
@@ -443,7 +444,7 @@ class WeaponCalculator:
                 collect(child, path | {name})
 
         collect(self.root_name)
-        self._fold_metrics(aggregate, root.average, [results[name].average for name in descendants])
+        self._fold_metrics(aggregate, root.average, [results[name].average for name in descendants if results[name].attack.hits_source])
         return aggregate, group_model, status_effects
 
     def calculate_metric_components(self) -> tuple[float, float, float, float, float]:
@@ -456,8 +457,9 @@ class WeaponCalculator:
         self.derive_status_attacks(results, names)
         self.derive_event_attacks(results, names)
         root = results[self.root_name]
-        direct_dph = sum(float(results[name].average.flat_dph or 0) for name in names)
-        dot_dph = sum(float(results[name].average.flat_dotph or 0) for name in names)
+        source_names = [name for name in names if results[name].attack.hits_source]
+        direct_dph = sum(float(results[name].average.flat_dph or 0) for name in source_names)
+        dot_dph = sum(float(results[name].average.flat_dotph or 0) for name in source_names)
         attack_rate = float(root.average.attack_rate)
         total_dph = direct_dph + dot_dph
         weighted_damage_mass = sum((float(results[name].average.flat_dph or 0) + float(results[name].average.flat_dotph or 0)) * (float(results[name].spatial.damage_mass) if results[name].spatial.damage_mass is not None else 1.0) for name in names)
