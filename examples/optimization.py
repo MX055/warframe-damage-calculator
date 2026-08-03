@@ -18,7 +18,20 @@ print(formatter.build_summary())
 
 
 
+weapon = arsenal.primary.get("Kuva Ogris")
+target = arsenal.enemy.get("Exo Gokstad Officer").set(level=235, steel_path=True)
+build = Build()
 
+calculator = Calculator(weapon, target, build)
+optimizer = Optimizer(calculator)
+
+optimized = optimizer.resolve(body_part="body")
+print(optimized.elapsed)
+formatter = Formatter(optimized.result)
+
+print(formatter.stat_summary())
+print(formatter.status_summary())
+print(formatter.build_summary())
 
 
 

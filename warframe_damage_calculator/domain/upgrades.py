@@ -102,6 +102,7 @@ class UpgradeStats(Mapping[str, tuple[Effect, ...]]):
         cold_proc: StatInput | None = None,
         combo_count: StatInput | None = None,
         combo_duration: StatInput | None = None,
+        combo_gain_block_chance: StatInput | None = None,
         combo_gain_chance: StatInput | None = None,
         combo_on_ammo_pickup: StatInput | None = None,
         combo_on_finisher: StatInput | None = None,

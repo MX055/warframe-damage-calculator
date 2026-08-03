@@ -16,7 +16,7 @@ HANDLED_EFFECT_STATS = frozenset({
 })
 NON_CALCULATION_EFFECT_STATS = frozenset({
     "aerial_melee_attack_range", "ammo_efficiency_chance", "ammo_replenish_chance", "ammo_restore", "body_shot_crit_chance_multiplier",
-    "bullet_jump", "combo_count", "combo_duration", "combo_gain_chance", "combo_on_ammo_pickup", "combo_on_finisher", "combo_timer_pause",
+    "bullet_jump", "combo_count", "combo_duration", "combo_gain_block_chance", "combo_gain_chance", "combo_on_ammo_pickup", "combo_on_finisher", "combo_timer_pause",
     "damage_field_duration", "double_jump_strength", "extra_jump", "finisher_damage", "follow_through", "health_regen", "holstered_reload",
     "incarnon_charge_rate", "instant_reload_chance", "magazine_restore_chance", "movement_speed", "movement_speed_while_aiming", "overshield",
     "parkour_velocity", "parry_angle", "slide", "slide_attack_range", "sprint_speed", "stun_on_finisher",
