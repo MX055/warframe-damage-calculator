@@ -7,8 +7,8 @@ build = Build()
 
 calculator = Calculator(weapon, target, build)
 optimizer = Optimizer(calculator)
-
-optimized = optimizer.resolve(body_part="body", state=State(stance_combo="forward"))
+state = State(stance_combo="forward")
+optimized = optimizer.resolve(body_part="body", state=state)
 print(optimized.elapsed)
 formatter = Formatter(optimized.result)
 
