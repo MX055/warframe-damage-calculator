@@ -9,12 +9,11 @@ calculator = Calculator(weapon, target, build)
 optimizer = Optimizer(calculator)
 state = State(stance_combo="forward")
 optimized = optimizer.resolve(body_part="body", state=state)
-print(optimized.elapsed)
 formatter = Formatter(optimized.result)
 
-#print(formatter.stat_summary())
-#print(formatter.status_summary())
-#print(formatter.build_summary())
+print(formatter.stat_summary())
+print(formatter.status_summary())
+print(formatter.build_summary())
 
 
 
@@ -24,14 +23,12 @@ build = Build()
 
 calculator = Calculator(weapon, target, build)
 optimizer = Optimizer(calculator)
-
 optimized = optimizer.resolve(body_part="body")
-print(optimized.elapsed)
 formatter = Formatter(optimized.result)
 
-#print(formatter.stat_summary())
-#print(formatter.status_summary())
-#print(formatter.build_summary())
+print(formatter.stat_summary())
+print(formatter.status_summary())
+print(formatter.build_summary())
 
 
 

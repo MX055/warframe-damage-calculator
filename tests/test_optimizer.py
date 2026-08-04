@@ -49,8 +49,9 @@ def test_optimizer_uses_terminal_progress_by_default(capsys):
     Optimizer(Calculator(weapon)).resolve(spatial="full", evaluations=2)
     output = capsys.readouterr().out
     assert "Optimizing " in output
-    assert "Complete " not in output
-    assert output.endswith("\r")
+    assert output.count("Optimized ·") == 1
+    assert "s elapsed" in output
+    assert output.rstrip().endswith("s elapsed")
     assert "[" not in output
 
 
@@ -247,6 +248,7 @@ def test_optimizer_reports_structured_progress():
     snapshots = []
     optimization = Optimizer(Calculator(weapon)).resolve(spatial="full", evaluations=2, progress=snapshots.append)
     assert snapshots
+    assert sum(1 for snapshot in snapshots if snapshot.complete) == 1
     assert all(isinstance(snapshot, OptimizationProgress) for snapshot in snapshots)
     assert snapshots[-1].complete
     assert snapshots[-1].stage == "Complete"

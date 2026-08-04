@@ -29,18 +29,24 @@ ProgressCallback = Callable[[OptimizationProgress], None]
 
 
 class _TerminalProgress:
-    __slots__ = ("_lock", "_last_length")
+    __slots__ = ("_lock", "_last_length", "_finished")
 
     def __init__(self) -> None:
         self._lock = threading.Lock()
         self._last_length = 0
+        self._finished = False
 
     def __call__(self, progress: OptimizationProgress) -> None:
         with self._lock:
             if progress.complete:
+                if self._finished:
+                    return
+                self._finished = True
                 if self._last_length: print(f"\r{' ' * self._last_length}\r", end="", file=sys.stdout, flush=True)
+                print(f"Optimized · {progress.elapsed:,.1f}s elapsed", file=sys.stdout, flush=True)
                 self._last_length = 0
                 return
+            self._finished = False
             width = 30
             filled = min(width - 1, int(progress.fraction * width))
             bar = "█" * filled + "·" * (width - filled)
@@ -137,7 +143,7 @@ class _ProgressReporter:
         assert self._thread is not None
         self._thread.join()
         self._check_error()
-        self._publish()
+        self._publish(final=True)
         self._check_error()
 
     def _run(self) -> None:
@@ -189,12 +195,14 @@ class _ProgressReporter:
         self._progress = min(max(self._progress, estimated, budget_fraction), 0.985)
         return self._progress, stage_fraction
 
-    def _publish(self) -> None:
+    def _publish(self, *, final: bool = False) -> None:
         if self._callback is None or self._error is not None: return
         with self._publish_lock:
             try:
                 with self._lock:
                     state = _ProgressState(**{field: getattr(self._state, field) for field in _ProgressState.__dataclass_fields__})
+                if state.complete and not final:
+                    return
                 elapsed = time.perf_counter() - self._started
                 fraction, stage_fraction = (1.0, 1.0) if state.complete else self._fractions(state)
                 eta = None if state.complete else self._eta(state.completed, state.estimated_total)

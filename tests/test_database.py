@@ -50,13 +50,13 @@ class DatabaseTests(unittest.TestCase):
     def test_perks_are_loaded_from_database(self):
         self.assertEqual(arsenal.database["schema_version"], 24)
         self.assertIn("Devouring Attrition", arsenal.database["upgrades"]["perks"])
-        self.assertEqual(arsenal.database["upgrades"]["perks"]["Devouring Attrition"]["stats"]["damage_bonus"][0]["value"], {"source": "$values.damage_bonus[0]"})
+        self.assertEqual(arsenal.database["upgrades"]["perks"]["Devouring Attrition"]["stats"]["damage_bonus"][0]["value"], {"source": "$values.damage_bonus.base", "default": 0})
 
-    def test_weapon_records_contain_only_perk_values(self):
+    def test_weapon_records_contain_only_perk_stats(self):
         record = arsenal.database["weapons"]["primaries"]["Phenmor"]["evolutions"]["5"]["1"]
         self.assertEqual(record["perk"], "Devouring Attrition")
-        self.assertNotIn("stats", record)
-        self.assertEqual(record["values"]["damage_bonus"], [20])
+        self.assertNotIn("values", record)
+        self.assertEqual(record["stats"]["damage_bonus"], [{"family": "non_critical_hit", "automatic": {"on": "non_critical_hit", "chance": 0.5}, "value": 20}])
 
     def test_repositories_are_case_insensitive(self):
         self.assertEqual(arsenal.primary.get("corinth prime").name, "Corinth Prime")
@@ -239,7 +239,8 @@ class DatabaseTests(unittest.TestCase):
         metadata_only = {name for name, record in arsenal.database["upgrades"]["perks"].items() if not record["stats"]}
         self.assertEqual(metadata_only, METADATA_ONLY_PERKS)
 
-    def test_database_wide_perk_value_invariants(self):
+    def test_database_wide_perk_stat_invariants(self):
+        from warframe_damage_calculator.domain.perks import effect_signature
         database = arsenal.database
         for category, weapons in database["weapons"].items():
             for weapon_name, weapon in weapons.items():
@@ -247,10 +248,17 @@ class DatabaseTests(unittest.TestCase):
                     for choice, record in choices.items():
                         with self.subTest(weapon=weapon_name, tier=tier, choice=choice):
                             template = database["upgrades"]["perks"][record["perk"]]["stats"]
-                            self.assertEqual(set(record["values"]), set(template))
-                            for stat, effects in template.items():
-                                self.assertEqual(len(record["values"][stat]), len(effects))
-                                self.assertTrue(all(isinstance(value, (int, float, bool, str)) for value in record["values"][stat]))
+                            self.assertTrue(set(record.get("stats", {})) <= set(template))
+                            for stat, effects in record.get("stats", {}).items():
+                                self.assertTrue(effects)
+                                remaining = list(template[stat])
+                                for effect in effects:
+                                    self.assertNotEqual(effect.get("value"), 0)
+                                    self.assertNotEqual(effect.get("value"), 0.0)
+                                    signature = effect_signature(effect)
+                                    match = next((i for i, item in enumerate(remaining) if effect_signature(item) == signature), None)
+                                    self.assertIsNotNone(match)
+                                    remaining.pop(match)
 
     def test_every_weapon_perk_resolves_to_concrete_effects(self):
         for repository in (arsenal.primary, arsenal.secondary, arsenal.melee, arsenal.archgun):

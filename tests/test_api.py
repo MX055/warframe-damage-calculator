@@ -23,8 +23,8 @@ class ApiTests(unittest.TestCase):
         )
         mod = Mod(name="Custom Mod", max_rank=5, compatibility=compatibility, stats=UpgradeStats(damage_bonus=0.2, generated_attack=generated))
         arcane = Arcane(name="Primary Custom Arcane", max_rank=5, compatibility=compatibility, stats=UpgradeStats(multishot=0.3))
-        perk = Perk(name="Custom Perk", stats=UpgradeStats(crit_chance=Effect(Source("$values.crit_chance[0]"), mode="flat")))
-        weapon = Primary(name="Custom Primary", attacks=[Attack("shot", stats=AttackStats(damage=Dist(impact=100), fire_rate=1))], reload_time=1, perks=[PerkValues(perk, 1, 1, {"crit_chance": (0.2,)})])
+        perk = Perk(name="Custom Perk", stats=UpgradeStats(crit_chance=Effect(Source("$values.crit_chance.flat", default=0), mode="flat")))
+        weapon = Primary(name="Custom Primary", attacks=[Attack("shot", stats=AttackStats(damage=Dist(impact=100), fire_rate=1))], reload_time=1, perks=[PerkValues(perk, 1, 1, {"crit_chance": {"flat": 0.2}})])
         result = Calculator(weapon, build=Build(mods=[mod], arcanes=[arcane], evolutions=[perk])).resolve()
         self.assertGreater(result.aggregate.damage.total_dps, 0)
         self.assertIn("aftershock", result.attacks)
@@ -69,16 +69,18 @@ class ApiTests(unittest.TestCase):
         self.assertNotIsInstance(effect.value, Source)
 
     def test_missing_and_unknown_weapon_values_are_rejected(self):
-        perk = Perk(name="Test", stats=UpgradeStats(damage_bonus=Effect(Source("$values.damage_bonus[0]"))))
+        perk = Perk(name="Test", stats=UpgradeStats(damage_bonus=Effect(Source("$values.damage_bonus.base", default=0))))
         attack = Attack("shot", stats=AttackStats(damage=Dist(impact=1)))
-        missing = Primary(name="Missing", attacks=[attack], perks=[PerkValues(perk, 2, 1, {})])
-        with self.assertRaisesRegex(ValueError, "supplies no values"): missing.resolve_perk(perk)
-        unknown = Primary(name="Unknown", attacks=[attack], perks=[PerkValues(perk, 2, 1, {"damage_bonus": (1,), "crit_chance": (1,)})])
+        ok_missing = Primary(name="Missing", attacks=[attack], perks=[PerkValues(perk, 2, 1, {})])
+        self.assertEqual(ok_missing.resolve_perk(perk).effects[0].value, 0)
+        unknown = Primary(name="Unknown", attacks=[attack], perks=[PerkValues(perk, 2, 1, {"damage_bonus": {"base": 1}, "crit_chance": {"base": 1}})])
         with self.assertRaisesRegex(ValueError, "unknown values"): unknown.resolve_perk(perk)
+        bad_key = Primary(name="BadKey", attacks=[attack], perks=[PerkValues(perk, 2, 1, {"damage_bonus": {"nope": 1}})])
+        with self.assertRaisesRegex(ValueError, "unknown .* value keys"): bad_key.resolve_perk(perk)
 
     def test_calculator_uses_resolved_global_template(self):
-        perk = Perk(name="Flat Critical", stats=UpgradeStats(crit_chance=Effect(Source("$values.crit_chance[0]"), mode="flat")))
-        weapon = Primary(name="Template", attacks=[Attack("shot", stats=AttackStats(damage=Dist(impact=10), crit_chance=0.1))], reload_time=1, perks=[PerkValues(perk, 2, 1, {"crit_chance": (0.4,)})])
+        perk = Perk(name="Flat Critical", stats=UpgradeStats(crit_chance=Effect(Source("$values.crit_chance.flat", default=0), mode="flat")))
+        weapon = Primary(name="Template", attacks=[Attack("shot", stats=AttackStats(damage=Dist(impact=10), crit_chance=0.1))], reload_time=1, perks=[PerkValues(perk, 2, 1, {"crit_chance": {"flat": 0.4}})])
         result = Calculator(weapon, build=Build(evolutions=[perk])).resolve()
         self.assertAlmostEqual(result.attacks["shot"].effective.crit_chance, 0.5)
 

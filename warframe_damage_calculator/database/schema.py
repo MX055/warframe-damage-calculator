@@ -9,6 +9,7 @@ from ..domain.generated_attacks import GENERATED_ATTACK_STAT
 from ..domain.scaled_values import is_scaled_value_record, UpgradeValue
 from ..domain.attacks import ATTACK_RECORD_FIELDS, Inheritance, RelatedAttacks, Attack
 from ..domain.upgrades import COMBO_FIELDS, Combo
+from ..domain.perks import effect_signature, perk_value_keys
 
 
 def _validate_scaled_value(value: Any, path: str) -> None:
@@ -119,7 +120,17 @@ def _effects(stats: Any, path: str, *, sources: bool = False) -> None:
             if "rank_scale" in effect: raise ValueError(f"{location}: entry-level rank_scale is not allowed; wrap individual numeric values")
             try: parsed = Effect.from_record(effect)
             except (TypeError, ValueError) as error: raise ValueError(f"{location}: {error}") from error
-            if sources and (not isinstance(parsed.value, Source) or not parsed.value.path.startswith("$values.")): raise ValueError(f"{location}: expected a $values source")
+            if sources:
+                if not isinstance(parsed.value, Source) or not parsed.value.path.startswith("$values."):
+                    raise ValueError(f"{location}: expected a $values source")
+                expected_prefix = f"$values.{stat}."
+                if not parsed.value.path.startswith(expected_prefix) or parsed.value.path == expected_prefix:
+                    raise ValueError(f"{location}: expected named source {expected_prefix}<key>")
+                key = parsed.value.path[len(expected_prefix):]
+                if "." in key or "[" in key or not key:
+                    raise ValueError(f"{location}: value key must be a single path segment")
+                if parsed.value.default != 0:
+                    raise ValueError(f"{location}: value sources require default 0")
             if parsed.mode == "multiplicative" and stat not in MULTIPLICATIVE_EFFECT_STATS: raise ValueError(f"{location}: {stat} does not support multiplicative effects")
             if isinstance(effect["value"], dict) and "source" not in effect["value"] and not is_scaled_value_record(effect["value"]): raise ValueError(f"{location}: value must be scalar, scaled value, or source")
             elif isinstance(effect["value"], list): raise ValueError(f"{location}: value must be scalar")
@@ -169,7 +180,16 @@ def validate_database(database: dict[str, Any]) -> None:
         if perk.get("name") != name: raise ValueError(f"upgrades.perks.{name}: invalid name")
         _validate_perk_description(perk.get("description"), f"upgrades.perks.{name}.description")
         _implementation_status(perk.get("implementation_status"), f"upgrades.perks.{name}.implementation_status")
-        _effects(perk.get("stats", {}), f"upgrades.perks.{name}.stats", sources=True)
+        stats = perk.get("stats", {})
+        _effects(stats, f"upgrades.perks.{name}.stats", sources=True)
+        for stat, effects in stats.items():
+            keys = perk_value_keys(name, stat, effects)
+            if len(keys) != len(set(keys)):
+                raise ValueError(f"upgrades.perks.{name}.stats.{stat}: duplicate value keys {keys}")
+            for index, (effect, key) in enumerate(zip(effects, keys, strict=True)):
+                source = effect.get("value", {})
+                if not isinstance(source, dict) or source.get("source") != f"$values.{stat}.{key}":
+                    raise ValueError(f"upgrades.perks.{name}.stats.{stat}[{index}]: expected source $values.{stat}.{key}")
     weapon_categories = {"primaries", "secondaries", "melees", "archguns"}
     if set(database["weapons"]) != weapon_categories: raise ValueError(f"weapons: expected categories {sorted(weapon_categories)}")
     for category, weapons in database["weapons"].items():
@@ -187,19 +207,30 @@ def validate_database(database: dict[str, Any]) -> None:
             for tier, choices in weapon.get("evolutions", {}).items():
                 for choice, record in choices.items():
                     path = f"weapons.{category}.{name}.evolutions.{tier}.{choice}"
-                    if not isinstance(record, dict) or set(record) - {"perk", "description", "values"}: raise ValueError(f"{path}: invalid fields")
+                    if not isinstance(record, dict) or set(record) - {"perk", "description", "stats"}: raise ValueError(f"{path}: invalid fields")
+                    if "values" in record: raise ValueError(f"{path}: field 'values' was renamed to 'stats'")
                     perk_name = record.get("perk")
                     if perk_name not in database["upgrades"]["perks"]: raise ValueError(f"{path}: unknown perk {perk_name!r}")
-                    values = record.get("values")
+                    stats = record.get("stats", {})
                     templates = database["upgrades"]["perks"][perk_name].get("stats", {})
-                    if not isinstance(values, dict): raise ValueError(f"{path}.values: expected an object")
-                    missing = set(templates) - set(values)
-                    unknown = set(values) - set(templates)
-                    if missing: raise ValueError(f"{path}.values: missing stats {sorted(missing)}")
-                    if unknown: raise ValueError(f"{path}.values: unknown stats {sorted(unknown)}")
-                    for stat, stat_values in values.items():
-                        if not isinstance(stat_values, list) or len(stat_values) != len(templates[stat]): raise ValueError(f"{path}.values.{stat}: expected {len(templates[stat])} values")
-                        if any(not isinstance(value, (int, float, bool, str)) or isinstance(value, str) and not value for value in stat_values): raise ValueError(f"{path}.values.{stat}: invalid concrete value")
+                    if not isinstance(stats, dict): raise ValueError(f"{path}.stats: expected an object")
+                    unknown = set(stats) - set(templates)
+                    if unknown: raise ValueError(f"{path}.stats: unknown stats {sorted(unknown)}")
+                    if stats:
+                        _effects(stats, f"{path}.stats", sources=False)
+                    for stat, effects in stats.items():
+                        if not effects:
+                            raise ValueError(f"{path}.stats.{stat}: omit empty effect lists")
+                        remaining = list(templates[stat])
+                        for index, effect in enumerate(effects):
+                            value = effect.get("value")
+                            if value == 0 or value == 0.0:
+                                raise ValueError(f"{path}.stats.{stat}[{index}]: omit zero-valued entries")
+                            signature = effect_signature(effect)
+                            match = next((i for i, template in enumerate(remaining) if effect_signature(template) == signature), None)
+                            if match is None:
+                                raise ValueError(f"{path}.stats.{stat}[{index}]: unmatched perk template effect")
+                            remaining.pop(match)
     allowed_mod = {"name", "description", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats", "combos"}
     allowed_arcane = {"name", "description", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats"}
     effect_stats: set[str] = set()

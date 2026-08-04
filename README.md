@@ -259,7 +259,7 @@ Perks are loaded independently of weapons:
 perk = arsenal.perk.get("Devouring Attrition")
 ```
 
-A global `Perk` owns the complete effect template: affected stats, modes, families, conditions, automatic behavior, and `$values` source expressions. A weapon owns a `PerkValues` entry containing the concrete values referenced by those expressions. Custom definitions use `Source("$values.stat_name[0]")` for the same representation.
+A global `Perk` owns the complete effect template: affected stats, modes, families, conditions, automatic behavior, and `$values` source expressions. A weapon evolution choice stores concrete upgrade-style `stats` for those templates, for example `{"status_chance": [{"value": 0.2, "mode": "flat", "automatic": {}}]}`. Zero-valued slots are omitted. At load time those effects map onto the named `$values.stat.key` slots used by the global template. Custom definitions use `Source("$values.stat_name.slot_key", default=0)` for the same representation.
 
 ```text
 global Perk template + weapon PerkValues -> ResolvedPerk -> effect pipeline

@@ -326,7 +326,9 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     for stat in ("range", "punch_through", "accuracy", "recoil", "zoom", "ammo_maximum"):
         base_value = float(getattr(attack.stats, stat, 0)) if hasattr(attack.stats, stat) else 0
         modifiers = range_total if stat == "range" else total
-        effective[stat] = _additive_scalar(base_value, stat, modifiers) if stat == "punch_through" else _scalar(base_value, stat, modifiers)
+        additive = stat in {"punch_through", "recoil", "zoom"}
+        minimum = -1 if stat == "recoil" else 0
+        effective[stat] = _additive_scalar(base_value, stat, modifiers, minimum=minimum) if additive else _scalar(base_value, stat, modifiers, minimum=minimum)
     projectile_speed = max(1 + float(total.proportional.get("projectile_speed", 0)), 0)
     effective.projectile_speed = projectile_speed
     range_scale = _radius_scale(attack, range_total) if is_aoe_attack(attack) else projectile_speed
@@ -345,6 +347,12 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
         base = BaseAttackStats(damage=displayed_base_damage, forced_procs=attack.stats.forced_procs, crit_chance=attack.stats.crit_chance, crit_damage=attack.stats.crit_damage, status_chance=attack.stats.status_chance, status_duration=attack.stats.status_duration, multishot=attack.stats.multishot, fire_rate=attack.stats.fire_rate, **base_category_stats)
         modded_duration = _scalar(float(attack.stats.status_duration), "status_duration", modded_total)
         modded = ModdedAttackStats(damage=modded_damage, crit_chance=modded_crit, crit_damage=modded_crit_damage, status_chance=modded_status, status_duration=modded_duration, multishot=modded_multishot, fire_rate=modded_instant_rate, **modded_category_stats)
+        for stat in ("range", "punch_through", "accuracy", "recoil", "zoom", "ammo_maximum"):
+            base_value = float(getattr(attack.stats, stat, 0)) if hasattr(attack.stats, stat) else 0
+            additive = stat in {"punch_through", "recoil", "zoom"}
+            minimum = -1 if stat == "recoil" else 0
+            base[stat] = base_value
+            modded[stat] = _additive_scalar(base_value, stat, modded_total, minimum=minimum) if additive else _scalar(base_value, stat, modded_total, minimum=minimum)
     body_crit, weak_crit = crit, weak_point_crit
     if context.weapon.type == "secondary":
         per_stack, reset = enervate_parameters([*upgrades_resolved, *evolution_resolved])

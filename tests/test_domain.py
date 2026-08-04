@@ -20,7 +20,7 @@ class DomainTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "damage_bonus does not support"): UpgradeStats(damage_bonus=Effect(2, mode="multiplicative"))
 
     def test_source_expressions_round_trip_through_effect_records(self):
-        source = Source("$values.damage_bonus[0]", multiplier=0.5)
+        source = Source("$values.damage_bonus.base", multiplier=0.5, default=0)
         effect = Effect(source, mode="flat")
         restored = Effect.from_record(effect.to_record())
         self.assertEqual(restored.value.path, source.path)
@@ -36,7 +36,7 @@ class DomainTests(unittest.TestCase):
         self.assertIsNot(build.upgrades[0], upgrade)
 
     def test_build_copies_evolutions(self):
-        perk = Perk(name="Example", stats=UpgradeStats(damage_bonus=Effect(Source("$values.damage_bonus[0]"), when="charged")))
+        perk = Perk(name="Example", stats=UpgradeStats(damage_bonus=Effect(Source("$values.damage_bonus.charged", default=0), when="charged")))
         build = Build(evolutions=[perk])
         self.assertIsNot(build.evolutions[0], perk)
         self.assertTrue(build.evolutions[0].runtime.charged)
@@ -78,8 +78,8 @@ class DomainTests(unittest.TestCase):
         self.assertNotIn("combo_multiplier", weapon.calculation_defaults)
 
     def test_perk_conditions_use_runtime_defaults_and_set(self):
-        perk = Perk(name="Conditional", stats=UpgradeStats(damage_bonus=Effect(Source("$values.damage_bonus[0]"), when="charged", stacks=3)))
-        values = PerkValues(perk, 1, 1, {"damage_bonus": (0.5,)})
+        perk = Perk(name="Conditional", stats=UpgradeStats(damage_bonus=Effect(Source("$values.damage_bonus.charged", default=0), when="charged", stacks=3)))
+        values = PerkValues(perk, 1, 1, {"damage_bonus": {"charged": 0.5}})
         weapon = Primary(name="Test", attacks=[Attack("shot", stats=AttackStats(damage=Dist(impact=1)))], perks=[values])
         self.assertEqual(perk.runtime.charged, 3)
         self.assertEqual(len(weapon.resolve_perk(perk).effects), 1)

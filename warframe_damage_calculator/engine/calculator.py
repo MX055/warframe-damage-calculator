@@ -33,7 +33,7 @@ class Calculator:
         selected_body_part, target = self._select_body_part(body_part)
         return self._calculate(selected_attack, selected_body_part, target, State() if state is None else State._from_values(state))
 
-    def contributions(self, *, attack: str | None = None, metric: Callable[[CalculationResult], float] = balanced_damage_metric, body_part: str | None = None, state: State | None = None) -> ContributionResult:
+    def contributions(self, *, attack: str | None = None, body_part: str | None = None, state: State | None = None, metric: Callable[[CalculationResult], float] = balanced_damage_metric) -> ContributionResult:
         if not callable(metric): raise TypeError("metric must be callable")
         selected_attack = attack or self.weapon.default_attack
         selected_body_part, target = self._select_body_part(body_part)
