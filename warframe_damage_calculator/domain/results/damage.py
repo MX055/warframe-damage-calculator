@@ -49,6 +49,8 @@ class AttackTimingMetrics:
     reload_time: float
     ammo_cost: float
     ammo_efficiency: float
+    accuracy: float
+    recoil: float
     burst_count: float
     burst_delay: float
     charge_time: float

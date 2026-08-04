@@ -35,5 +35,5 @@ result = calculator.resolve()
 formatter = Formatter(result)
 
 print(formatter.stat_summary())
-print(formatter.status_summary())
+print(formatter.damage_summary())
 print(formatter.build_summary())

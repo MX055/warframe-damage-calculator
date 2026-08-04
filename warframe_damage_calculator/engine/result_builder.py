@@ -56,7 +56,7 @@ def _attack_critical(source: ResolvedAttackMetrics) -> AttackCriticalMetrics:
 
 
 def _attack_timing(source: ResolvedAttackMetrics) -> AttackTimingMetrics:
-    return AttackTimingMetrics(float(source.fire_rate), float(source.attack_speed), float(source.attack_rate), float(source.multishot), float(source.magazine_capacity), float(source.reload_time), float(source.ammo_cost), float(source.ammo_efficiency), float(source.burst_count), float(source.burst_delay), float(source.charge_time), float(source.heavy_attack_speed), float(source.heavy_attack_efficiency), float(source.initial_combo))
+    return AttackTimingMetrics(float(source.fire_rate), float(source.attack_speed), float(source.attack_rate), float(source.multishot), float(source.magazine_capacity), float(source.reload_time), float(source.ammo_cost), float(source.ammo_efficiency), float(source.accuracy), float(source.recoil), float(source.burst_count), float(source.burst_delay), float(source.charge_time), float(source.heavy_attack_speed), float(source.heavy_attack_efficiency), float(source.initial_combo))
 
 
 def build_calculated_attack(result: ResolvedAttack) -> AttackResult:

@@ -23,6 +23,8 @@ class ResolvedAttackMetrics:
     ammo_cost: float = 0
     ammo_efficiency: float = 0
     punch_through: float = 0
+    accuracy: float = 0
+    recoil: float = 0
     burst_count: float = 1
     burst_delay: float = 0
     charge_time: float = 0

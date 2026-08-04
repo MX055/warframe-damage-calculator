@@ -3,8 +3,12 @@ from __future__ import annotations
 import re
 from collections.abc import Callable
 
+from ..domain.builds import Progenitor
+from ..domain.perks import Perk, perk_value_keys
 from ..domain.results import AttackSpatialMetrics, AttackStatusMetrics, CalculationResult, DamageResult
+from ..domain.upgrades import Arcane, Mod
 from ..engine.calculator import Calculator
+from ..engine.contributions import progenitor_component_id
 from ..engine.metrics import balanced_damage_metric
 from .objects import format_build
 
@@ -20,7 +24,6 @@ class Formatter:
 
     @staticmethod
     def _metric_label(metric: Callable) -> str:
-        if metric is balanced_damage_metric: return "Balanced Damage"
         return getattr(metric, "__name__", "Contribution")
 
     @staticmethod
@@ -123,8 +126,8 @@ class Formatter:
             ))
             if float(effective.get("punch_through", 0)) > 0: rows.append(("Punch Through", self._meters(base.get("punch_through", attack_definition.stats.punch_through)), self._meters(modded.get("punch_through")), self._meters(effective.get("punch_through")), self._meters(spatial.punch_through), "—"))
             base_accuracy = float(base.get("accuracy", attack_definition.stats.accuracy) or 0)
-            if base_accuracy or float(effective.get("accuracy", 0) or 0) != base_accuracy: rows.append(("Accuracy", self._number(base.get("accuracy", attack_definition.stats.accuracy)), self._number(modded.get("accuracy")), self._number(effective.get("accuracy")), "—", "—"))
-            if float(effective.get("recoil", 0) or 0) or float(modded.get("recoil", 0) or 0): rows.append(("Recoil", self._percent(base.get("recoil", attack_definition.stats.recoil)), self._percent(modded.get("recoil")), self._percent(effective.get("recoil")), "—", "—"))
+            if base_accuracy or float(effective.get("accuracy", 0) or 0) != base_accuracy: rows.append(("Accuracy", self._number(base.get("accuracy", attack_definition.stats.accuracy)), self._number(modded.get("accuracy")), self._number(effective.get("accuracy")), self._number(timing.accuracy), "—"))
+            if float(effective.get("recoil", 0) or 0) or float(modded.get("recoil", 0) or 0): rows.append(("Recoil", self._percent(base.get("recoil", attack_definition.stats.recoil)), self._percent(modded.get("recoil")), self._percent(effective.get("recoil")), self._percent(timing.recoil), "—"))
             if int(effective.get("burst_count", 1)) > 1: rows.append(("Burst Count", str(int(base.get("burst_count", attack_definition.stats.burst_count))), str(int(modded.get("burst_count", 1))), str(int(effective.get("burst_count"))), str(int(timing.burst_count)), "—"))
             if float(effective.get("burst_delay", 0)) > 0: rows.append(("Burst Delay", self._seconds(base.get("burst_delay", attack_definition.stats.burst_delay)), self._seconds(modded.get("burst_delay")), self._seconds(effective.get("burst_delay")), self._seconds(timing.burst_delay), "—"))
             if float(effective.get("charge_time", 0)) > 0: rows.append(("Charge Time", self._seconds(base.get("charge_time", attack_definition.stats.charge_time)), self._seconds(modded.get("charge_time")), self._seconds(effective.get("charge_time")), self._seconds(timing.charge_time), "—"))
@@ -137,7 +140,7 @@ class Formatter:
         for label, attribute in metrics: rows.append((label, "—", "—", "—", self._number(getattr(output_damage, attribute)), "—"))
         weapon_name = getattr(self.result.weapon, "name", "Weapon")
         target_name = "" if self.result.target is None else f"vs {self.result.target.name} {self.result.target.body_parts[self.result.selected_body_part].name}"
-        title = f"Summary: {weapon_name} {self.result.weapon.attacks[attack_name].name} {target_name}"
+        title = f"Stats: {weapon_name} {self.result.weapon.attacks[attack_name].name} {target_name}"
         headers = ("Stat", "Base", "Modded", "Effective", "Average")
         display_rows = [tuple(cell for index, cell in enumerate(row) if index != 5) for row in rows]
         return title, headers, display_rows
@@ -146,6 +149,34 @@ class Formatter:
         title, headers, rows = self.stat_summary_table()
         return self._table(headers, rows, title=title)
 
+    @staticmethod
+    def _format_condition(key: str, value: object) -> str | None:
+        label = key.replace("_", " ").title()
+        if value is True: return label
+        if value is False or value == 0: return None
+        if isinstance(value, (int, float)) and not isinstance(value, bool): return f"{label} ×{int(value)}"
+        return f"{label}={value}"
+
+    def _conditions(self, component: Mod | Arcane | Perk | Progenitor) -> str:
+        if isinstance(component, Progenitor): return "—"
+        if isinstance(component, Perk):
+            perk_values = self.result.weapon.perks.get(component)
+            if perk_values is None or not perk_values.values: return "—"
+            relevant: set[str] = set()
+            for stat, slots in perk_values.values.items():
+                templates = component.stats.get(stat, ())
+                for key, template in zip(perk_value_keys(component.name, stat, templates), templates, strict=True):
+                    if key not in slots: continue
+                    if template.when is not None: relevant.add(str(template.when))
+                    elif key not in {"base", "flat"}: relevant.add(key)
+            if not relevant: return "—"
+            runtime = component.runtime.as_dict()
+            parts = [formatted for key in sorted(relevant) if (formatted := self._format_condition(key, runtime.get(key, True)))]
+            return ", ".join(parts) if parts else "—"
+        runtime = component.runtime
+        parts = [formatted for key, value in sorted(runtime.as_dict().items()) if key != "rank" and (formatted := self._format_condition(key, value))]
+        return ", ".join(parts) if parts else "—"
+
     def build_summary_table(self, metric: Callable = balanced_damage_metric, contributions=None) -> tuple[str, tuple[str, ...], list[tuple[str, ...]]] | None:
         selected_body_part = self.result.selected_body_part
         if contributions is None:
@@ -153,29 +184,33 @@ class Formatter:
         contribution = contributions.contribution
         if not contribution: return None
         removal = contributions.removal
-        component_types = {upgrade.name: upgrade.slot.replace("_", " ").title() for upgrade in self.result.build.ranked_upgrades}
-        component_types.update({perk.name: "Perk" for perk in self.result.build.evolutions})
+        components: dict[str, Mod | Arcane | Perk | Progenitor] = {upgrade.name: upgrade for upgrade in self.result.build.ranked_upgrades}
+        components.update({perk.name: perk for perk in self.result.build.evolutions})
         if self.result.build.progenitor is not None:
-            for name in contribution:
-                if name not in component_types: component_types[name] = "Progenitor"
+            components[progenitor_component_id(self.result.build.progenitor)] = self.result.build.progenitor
         maximum = max((abs(value) for value in contribution.values()), default=0)
         ordered = sorted(contribution.items(), key=lambda item: item[1], reverse=True)
         rows = []
         for rank, (name, share) in enumerate(ordered, 1):
-            kind = component_types[name]
-            display_name = "Riven" if kind == "Regular Mod" and name.casefold().startswith("riven (") else name
-            if kind == "Progenitor": display_name = f"{self.result.build.progenitor.element.replace('_', ' ').title()} Progenitor"
+            component = components[name]
+            if isinstance(component, Progenitor):
+                kind, display_name = "Progenitor", f"{component.element.replace('_', ' ').title()} Progenitor"
+            else:
+                kind = component.type.replace("_", " ").title()
+                slot = getattr(component, "slot", None)
+                slot_label = "—" if slot is None else str(slot).replace("_", " ").title()
+                display_name = "Riven" if slot_label == "Regular Mod" and name.casefold().startswith("riven (") else name
             removal_value = removal[name]
             display_share = 0.0 if share == 0 else share
             display_removal = 0.0 if removal_value == 0 else removal_value
             bar_length = 0 if maximum == 0 or share == 0 else max(1, round(abs(share) / maximum * 5))
             left = "·" * (10 - bar_length) + "█" * bar_length if share < 0 else "·" * 10
             right = "█" * bar_length + "·" * (10 - bar_length) if share > 0 else "·" * 10
-            rows.append((str(rank), kind, display_name, f"{display_share:+.2%}", f"{display_removal:+,.2f}", f"{left}│{right}"))
+            rows.append((str(rank), kind, display_name, self._conditions(component), f"{display_share:+.2%}", f"{display_removal:+,.2f}", f"{left}│{right}"))
         metric_name = self._metric_label(metric)
         target_name = "" if self.result.target is None else f" vs {self.result.target.name} {self.result.target.body_parts[selected_body_part].name}"
-        title = f"{metric_name} Contributions: {self.result.weapon.name} {self.result.weapon.attacks[self.result.selected_attack].name}{target_name}"
-        return title, ("Contribution Rank", "Type", "Component", "Relative Contribution", "Removal Difference", "Impact"), rows
+        title = f"Build: {self.result.weapon.name} {self.result.weapon.attacks[self.result.selected_attack].name}{target_name} (metric: {metric_name})"
+        return title, ("Podium", "Type", "Component", "Conditions", "Relative Contribution", "Removal Difference", "Impact"), rows
 
     def build_summary(self, metric: Callable = balanced_damage_metric) -> str:
         table = self.build_summary_table(metric=metric)
@@ -189,10 +224,10 @@ class Formatter:
     def pool(self, pool: DamageResult) -> str:
         return format_damage_result(pool)
 
-    def status_summary(self) -> str:
-        return "\n".join(self.status_summary_table()[1])
+    def damage_summary(self) -> str:
+        return "\n".join(self.damage_summary_table()[1])
 
-    def status_summary_table(self) -> tuple[str, list[str]]:
+    def damage_summary_table(self) -> tuple[str, list[str]]:
         attacks = [(key, self.result.weapon.attacks[key].name if key in self.result.weapon.attacks else key.replace("_", " ").title(), calculated) for key, calculated in self.result.attacks.items()]
         type_order = ("impact", "puncture", "slash", "heat", "cold", "electricity", "toxin", "blast", "radiation", "gas", "magnetic", "viral", "corrosive", "void")
         present: set[str] = set()
@@ -234,21 +269,32 @@ class Formatter:
         if not groups:
             groups.append(("—", [self._visible_length(header) for header in subheaders], []))
             damage_types = []
-        top = "┌" + "─" * (left_width + 2) + "".join("┬" + "─" * (sum(widths) + 3 * (len(widths) - 1) + 2) for _, widths, _ in groups) + "┐"
+        weapon_name = getattr(self.result.weapon, "name", "Weapon")
+        selected = self.result.selected_attack
+        attack_label = self.result.weapon.attacks[selected].name if selected in self.result.weapon.attacks else selected.replace("_", " ").title()
+        target_name = "" if self.result.target is None else f" vs {self.result.target.name} {self.result.target.body_parts[self.result.selected_body_part].name}"
+        title = f"Damage: {weapon_name} {attack_label}{target_name}"
+        table_inner = left_width + 2 + sum(1 + sum(widths) + 3 * (len(widths) - 1) + 2 for _, widths, _ in groups)
+        overflow = self._visible_length(title) - (table_inner - 2)
+        if overflow > 0:
+            name, widths, rows = groups[-1]
+            widths[-1] += overflow
+            groups[-1] = (name, widths, rows)
+            table_inner += overflow
+        top = "┌" + "─" * table_inner + "┐"
+        title_row = "│ " + self._pad(title, table_inner - 2) + " │"
+        title_rule = "├" + "─" * (left_width + 2) + "".join("┬" + "─" * (sum(widths) + 3 * (len(widths) - 1) + 2) for _, widths, _ in groups) + "┤"
         attack_row = "│ " + self._pad("", left_width) + " │ " + " │ ".join(self._pad(name, sum(widths) + 3 * (len(widths) - 1)) for name, widths, _ in groups) + " │"
         split = "│ " + self._pad(left_header, left_width) + " ├" + "┼".join("┬".join("─" * (width + 2) for width in widths) for _, widths, _ in groups) + "┤"
         subheader_row = "│ " + self._pad("", left_width) + " │ " + " │ ".join(" │ ".join(self._pad(header, widths[index]) for index, header in enumerate(subheaders)) for _, widths, _ in groups) + " │"
         header_rule = "├" + "─" * (left_width + 2) + "".join("┼" + "┼".join("─" * (width + 2) for width in widths) for _, widths, _ in groups) + "┤"
         bottom = "└" + "─" * (left_width + 2) + "".join("┴" + "┴".join("─" * (width + 2) for width in widths) for _, widths, _ in groups) + "┘"
-        lines = [top, attack_row, split, subheader_row, header_rule]
+        lines = [top, title_row, title_rule, attack_row, split, subheader_row, header_rule]
         for row_index, kind in enumerate(damage_types):
             label = kind.replace("_", " ").title()
             cells = " │ ".join(" │ ".join(self._pad(group[2][row_index][index], group[1][index]) for index in range(4)) for group in groups)
             lines.append("│ " + self._pad(label, left_width) + " │ " + cells + " │")
         lines.append(bottom)
-        weapon_name = getattr(self.result.weapon, "name", "Weapon")
-        target_name = "" if self.result.target is None else f" vs {self.result.target.name} {self.result.target.body_parts[self.result.selected_body_part].name}"
-        title = f"Status: {weapon_name}{target_name}"
         return title, lines
 
     def spatial(self, attack: str) -> str:

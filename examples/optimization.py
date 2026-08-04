@@ -12,7 +12,7 @@ optimized = optimizer.resolve(body_part="body", state=state)
 formatter = Formatter(optimized.result)
 
 print(formatter.stat_summary())
-print(formatter.status_summary())
+print(formatter.damage_summary())
 print(formatter.build_summary())
 
 
@@ -27,7 +27,7 @@ optimized = optimizer.resolve(body_part="body")
 formatter = Formatter(optimized.result)
 
 print(formatter.stat_summary())
-print(formatter.status_summary())
+print(formatter.damage_summary())
 print(formatter.build_summary())
 
 

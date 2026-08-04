@@ -17,8 +17,9 @@ build = Build(
     ]
 )
 calculator = Calculator(weapon, target, build)
-body = calculator.resolve()
-head = calculator.resolve(body_part="head")
+result = calculator.resolve(body_part="head")
 
-print(Formatter(body).stat_summary())
-print(Formatter(head).build_summary())
+formatter = Formatter(result)
+print(formatter.stat_summary())
+print(formatter.damage_summary())
+print(formatter.build_summary())
