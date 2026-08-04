@@ -47,8 +47,8 @@ class Calculator:
         has_generated = any(GENERATED_ATTACK_STAT in upgrade.stats for upgrade in self.build.ranked_upgrades)
         prepared_names = None
         if not has_generated:
-            baseline_perks = resolve_perks(self.weapon, self.build.evolutions)
-            perk_cache[tuple(id(perk) for perk in self.build.evolutions)] = baseline_perks
+            baseline_perks = resolve_perks(self.weapon, self.build.perks)
+            perk_cache[tuple(id(perk) for perk in self.build.perks)] = baseline_perks
             evaluator.build = self.build
             prepared_names = tuple(WeaponCalculator(CalculationContext(weapon=self.weapon, target=target, attack=selected_attack, build=self.build, resolved_perks=baseline_perks, state=self._merge_state(calculation_state))).collect_attack_tree())
 
@@ -65,10 +65,10 @@ class Calculator:
 
         def evaluate(build: Build) -> float:
             evaluator.build = build
-            perk_key = tuple(id(perk) for perk in build.evolutions)
+            perk_key = tuple(id(perk) for perk in build.perks)
             resolved_perks = perk_cache.get(perk_key)
             if resolved_perks is None:
-                resolved_perks = resolve_perks(self.weapon, build.evolutions)
+                resolved_perks = resolve_perks(self.weapon, build.perks)
                 perk_cache[perk_key] = resolved_perks
             upgrade_effects = compiled_upgrade_effects(build)
             if compact_metric is not None:
@@ -105,7 +105,7 @@ class Calculator:
         generated_attacks = {WeaponCalculator._generated_key(effect) for upgrade in self.build.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual() if effect.stat == GENERATED_ATTACK_STAT}
         if selected_attack not in self.weapon.attacks and selected_attack not in generated_attacks: raise ValueError(f"unknown attack {selected_attack!r}")
         calculation_state = self._merge_state(state)
-        resolved_perks = resolve_perks(self.weapon, self.build.evolutions) if resolved_perks is None else resolved_perks
+        resolved_perks = resolve_perks(self.weapon, self.build.perks) if resolved_perks is None else resolved_perks
         if validate: warn_build(self.weapon, self.build)
         context_target = target.copy() if copy_inputs and target is not None else target
         context_build = self.build.copy() if copy_inputs else self.build

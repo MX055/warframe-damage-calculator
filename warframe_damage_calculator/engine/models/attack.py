@@ -88,7 +88,7 @@ class ResolvedAttack:
     modded: ModdedAttackStats
     effective: EffectiveAttackStats
     upgrades: ResolvedStats
-    evolutions: ResolvedStats
+    perks: ResolvedStats
     average: ResolvedAttackMetrics
     spatial: SpatialMetrics
     status_effects: dict[str, float] = field(default_factory=dict)

@@ -36,8 +36,47 @@ class EngineTests(unittest.TestCase):
     def test_build_evolutions_change_results(self):
         weapon = arsenal.primary.get("Phenmor")
         baseline = Calculator(weapon).resolve(attack="incarnon_form")
-        evolved = Calculator(weapon, build=Build(evolutions=[arsenal.perk.get("Elemental Excess")])).resolve(attack="incarnon_form")
+        evolved = Calculator(weapon, build=Build(perks=[arsenal.perk.get("Elemental Excess")])).resolve(attack="incarnon_form")
         self.assertNotEqual(baseline.attacks["incarnon_form"].effective.status_chance, evolved.attacks["incarnon_form"].effective.status_chance)
+
+    def test_resolve_perks_rejects_unknown_weapon_perks(self):
+        from warframe_damage_calculator.engine.perks import resolve_perks
+
+        weapon = arsenal.primary.get("Vectis Prime")
+        with self.assertRaisesRegex(ValueError, "not compatible with Vectis Prime"):
+            resolve_perks(weapon, [arsenal.perk.get("Devouring Attrition")])
+
+    def test_resolve_perks_warns_on_wrong_list_position_but_pairs_correctly(self):
+        import warnings
+
+        from warframe_damage_calculator.domain.warnings import PerkCompatibilityWarning
+        from warframe_damage_calculator.engine.perks import resolve_perks
+
+        weapon = arsenal.primary.get("Vectis Prime")
+        inciting = weapon.perk_choices[2]["Inciting Incident"]
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always", PerkCompatibilityWarning)
+            resolved = resolve_perks(weapon, [inciting])
+        self.assertTrue(any(issubclass(item.category, PerkCompatibilityWarning) for item in caught))
+        self.assertTrue(any("position 1" in str(item.message) for item in caught))
+        matched = next(item for item in resolved if item.perk.name == "Inciting Incident")
+        self.assertEqual(matched.tier, 2)
+        self.assertEqual(matched.effects, weapon.resolve_perk(inciting).effects)
+
+    def test_resolve_perks_warns_on_duplicate_tier_and_keeps_first(self):
+        import warnings
+
+        from warframe_damage_calculator.domain.warnings import PerkCompatibilityWarning
+        from warframe_damage_calculator.engine.perks import resolve_perks
+
+        weapon = arsenal.primary.get("Vectis Prime")
+        inciting = weapon.perk_choices[2]["Inciting Incident"]
+        lone = weapon.perk_choices[2]["Lone Enforcer"]
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always", PerkCompatibilityWarning)
+            resolved = resolve_perks(weapon, [inciting, lone])
+        self.assertTrue(any("keeping Inciting Incident" in str(item.message) for item in caught))
+        self.assertEqual([item.perk.name for item in resolved if item.tier == 2], ["Inciting Incident"])
 
 
 if __name__ == "__main__": unittest.main()

@@ -17,13 +17,13 @@ def format_weapon(weapon: Weapon) -> str:
 
 def format_upgrade(upgrade: Upgrade) -> str:
     stats = ", ".join(upgrade.stats) or "None"
-    lines = [upgrade.name, f"Type: {upgrade.type}", f"Slot: {getattr(upgrade, 'slot', '-')}", f"Stats: {stats}"]
+    lines = [upgrade.name, f"Type: {upgrade.type}", f"Slot Type: {getattr(upgrade, 'slot_type', '-')}", f"Stats: {stats}"]
     if upgrade.description: lines.insert(1, f"Description: {upgrade.description}")
     return "\n".join(lines)
 
 
 def format_perk(perk: Perk, values: PerkValues | None = None) -> str:
-    stats = ", ".join(perk.stats) or "None"
+    stats = ", ".join(values.stats if values is not None else perk.stats) or "None"
     lines = [perk.name, f"Stats: {stats}"]
     if values is not None:
         description = str(resolve_source(perk.description_source, {"description": values.description}))
@@ -34,5 +34,5 @@ def format_perk(perk: Perk, values: PerkValues | None = None) -> str:
 def format_build(build: Build) -> str:
     mods = "\n".join(f"- {mod.name}" for mod in build.mods) or "- None"
     arcanes = "\n".join(f"- {arcane.name}" for arcane in build.arcanes) or "- None"
-    perks = "\n".join(f"- {perk.name}" for perk in build.evolutions) or "- None"
+    perks = "\n".join(f"- {perk.name}" for perk in build.perks) or "- None"
     return f"Mods:\n{mods}\n\nArcanes:\n{arcanes}\n\nPerks:\n{perks}"

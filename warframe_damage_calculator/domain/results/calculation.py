@@ -42,7 +42,7 @@ class AttackResult:
     modded: AttackStatsResult
     effective: AttackStatsResult
     upgrades: ResolvedStatsResult
-    evolutions: ResolvedStatsResult
+    perks: ResolvedStatsResult
     damage: AttackDamageMetrics
     critical: AttackCriticalMetrics
     timing: AttackTimingMetrics

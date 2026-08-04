@@ -9,7 +9,7 @@ build = Build(
         arsenal.mod.get("Galvanized Aptitude"),
         arsenal.mod.get("Critical Delay")
     ],
-    evolutions=[
+    perks=[
         arsenal.perk.get("Incarnon Transmutation"),
         arsenal.perk.get("Inciting Incident"),
         arsenal.perk.get("Rapid Reinforcement"),

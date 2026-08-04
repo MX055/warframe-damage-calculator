@@ -3,23 +3,24 @@ from warframe_damage_calculator import *
 mod = Mod(
     name="Example Recursive Mod",
     description="Placeholder",
-    slot="regular_mod",
+    slot_type="regular_mod",
     max_rank=2,
     compatibility=Compatibility(subtypes=["rifle"]),
     stats=UpgradeStats(
-        generated_attack=Attack(
+        generated_attack=GeneratedAttack(
             name="Generated Attack",
-            aoe=True,
+            parent=RelatedAttacks(names=["Normal Attack"]),
+            children=["Generated Attack"],
             inheritance=Inheritance(
                 include=["trigger", "delivery", "form", "category", "stats"],
                 exclude=["stats.forced_procs"],
-            ),
-            stats=AttackStats(
-                falloff=Falloff(start_range=5, end_range=10, final_multiplier=0.5)
-            ),
-            links=Links(
-                parents=RelatedAttacks(names=["Normal Attack"]),
-                children=RelatedAttacks(names=["Generated Attack"]),
+                override={
+                    "aoe": True,
+                    "stats.forced_procs": {"source": "stats.damage.slash", "multilplier": 0.1},
+                    "stats.falloff.start_range": 5,
+                    "stats.falloff.end_range": 10,
+                    "stats.falloff.final_multiplier": 0.5,
+                },
             ),
             automatic=Automatic(on="impact_status_proc")
         )

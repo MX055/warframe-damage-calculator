@@ -9,7 +9,7 @@ build = Build(
         arsenal.mod.get("Galvanized Aptitude"),
         arsenal.mod.get("Primed Cryo Rounds")
     ],
-    evolutions=[
+    perks=[
         arsenal.perk.get("Incarnon Transmutation"),
         arsenal.perk.get("Void's Guidance"),
         arsenal.perk.get("Retribution's Vessel"),

@@ -24,9 +24,9 @@ def _arcane_compatible(arcane: Arcane, weapon: Weapon) -> bool:
     return True
 
 
-def is_upgrade_compatible(upgrade: Mod | Arcane, weapon: Weapon, *, attack: str | Attack | None = None, slot: str | None = None, implemented: bool | None = None, selected: Iterable[Upgrade] = ()) -> bool:
+def is_upgrade_compatible(upgrade: Mod | Arcane, weapon: Weapon, *, attack: str | Attack | None = None, slot_type: str | None = None, implemented: bool | None = None, selected: Iterable[Upgrade] = ()) -> bool:
     if implemented is not None and upgrade.implemented is not implemented: return False
-    if slot is not None and upgrade.slot != slot: return False
+    if slot_type is not None and upgrade.slot_type != slot_type: return False
     compatibility = upgrade.compatibility
     types = {value.casefold() for value in compatibility.types}
     subtypes = {value.casefold() for value in compatibility.subtypes}
@@ -42,7 +42,7 @@ def is_upgrade_compatible(upgrade: Mod | Arcane, weapon: Weapon, *, attack: str 
         for candidate in attacks
     ): return False
     if isinstance(upgrade, Arcane) and not _arcane_compatible(upgrade, weapon): return False
-    if isinstance(upgrade, Mod) and upgrade.slot == "exilus_mod" and "range" in upgrade.stats and not any(candidate.delivery == "beam" for candidate in attacks): return False
+    if isinstance(upgrade, Mod) and upgrade.slot_type == "exilus_mod" and "range" in upgrade.stats and not any(candidate.delivery == "beam" for candidate in attacks): return False
     for other in selected:
         if other.name in upgrade.conflicts or upgrade.name in getattr(other, "conflicts", ()): return False
     return True

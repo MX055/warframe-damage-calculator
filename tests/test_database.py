@@ -48,13 +48,14 @@ class DatabaseTests(unittest.TestCase):
         self.assertTrue(all(arsenal.arcane.get(name).type == "arcane" for name in arsenal.arcane))
 
     def test_perks_are_loaded_from_database(self):
-        self.assertEqual(arsenal.database["schema_version"], 24)
+        self.assertEqual(arsenal.database["schema_version"], 28)
         self.assertIn("Devouring Attrition", arsenal.database["upgrades"]["perks"])
-        self.assertEqual(arsenal.database["upgrades"]["perks"]["Devouring Attrition"]["stats"]["damage_bonus"][0]["value"], {"source": "$values.damage_bonus.base", "default": 0})
+        self.assertEqual(arsenal.database["upgrades"]["perks"]["Devouring Attrition"]["description"], "$description")
+        self.assertEqual(arsenal.database["upgrades"]["perks"]["Devouring Attrition"]["stats"], "$stats")
 
     def test_weapon_records_contain_only_perk_stats(self):
-        record = arsenal.database["weapons"]["primaries"]["Phenmor"]["evolutions"]["5"]["1"]
-        self.assertEqual(record["perk"], "Devouring Attrition")
+        record = arsenal.database["weapons"]["primaries"]["Phenmor"]["evolutions"]["5"]["Devouring Attrition"]
+        self.assertNotIn("perk", record)
         self.assertNotIn("values", record)
         self.assertEqual(record["stats"]["damage_bonus"], [{"family": "non_critical_hit", "automatic": {"on": "non_critical_hit", "chance": 0.5}, "value": 20}])
 
@@ -180,8 +181,8 @@ class DatabaseTests(unittest.TestCase):
         self.assertEqual(influence_effect.automatic["chance"], 0.2)
         self.assertEqual(influence_effect.automatic["on"][0], "heat_status_proc")
         self.assertEqual(influence_effect.automatic["refresh"], False)
-        self.assertFalse(influence_effect.value["hits_source"])
-        self.assertEqual(influence_effect.value["links"]["parents"], {"deliveries": ["melee"]})
+        self.assertFalse(influence_effect.value["inheritance"]["override"]["hits_source"])
+        self.assertEqual(influence_effect.value["parent"], {"deliveries": ["melee"]})
         self.assertIn("stats.crit_chance", influence_effect.value["inheritance"]["include"])
         self.assertIn("stats.damage.electricity", influence_effect.value["inheritance"]["include"])
         self.assertNotIn("attacks", arsenal.database["upgrades"]["arcanes"]["Melee Influence"])
@@ -214,7 +215,7 @@ class DatabaseTests(unittest.TestCase):
         duplicate = arsenal.arcane.get("Melee Duplicate")
         self.assertEqual(set(duplicate.stats), {"generated_attack"})
         effect = duplicate.stats.generated_attack[0]
-        self.assertEqual(effect.value, {"name": "Melee Duplicate", "inheritance": {"include": ["trigger", "delivery", "aoe", "form", "category", "stats"]}, "links": {"parents": {"deliveries": ["melee"]}}})
+        self.assertEqual(effect.value, {"name": "Melee Duplicate", "parent": {"deliveries": ["melee"]}, "inheritance": {"include": ["trigger", "delivery", "aoe", "form", "category", "stats"]}})
         self.assertEqual(effect.automatic["on"], "near_yellow_critical_hit")
         self.assertEqual(effect.automatic["chance"], ScaledValue(1, True))
         for rank, chance in enumerate([1 / 6, 2 / 6, 3 / 6, 4 / 6, 5 / 6, 1]):
@@ -225,7 +226,7 @@ class DatabaseTests(unittest.TestCase):
 
     def test_upgrade_repository_supports_attack_slot_and_conflict_filters(self):
         ignis = arsenal.primary.get("Ignis Wraith")
-        beam_exilus = {mod.name for mod in arsenal.mod.filter(weapon=ignis, slot="exilus_mod", implemented=True)}
+        beam_exilus = {mod.name for mod in arsenal.mod.filter(weapon=ignis, slot_type="exilus_mod", implemented=True)}
         self.assertIn("Sinister Reach", beam_exilus)
         vectis = arsenal.primary.get("Vectis Prime")
         self.assertFalse(arsenal.mod.is_compatible("Tainted Mag", weapon=vectis))
@@ -236,29 +237,30 @@ class DatabaseTests(unittest.TestCase):
         self.assertEqual(len(normalized), len(set(normalized)))
 
     def test_metadata_only_perks_are_explicit(self):
-        metadata_only = {name for name, record in arsenal.database["upgrades"]["perks"].items() if not record["stats"]}
+        supplied = set()
+        for weapons in arsenal.database["weapons"].values():
+            for weapon in weapons.values():
+                for choices in weapon.get("evolutions", {}).values():
+                    for perk_name, record in choices.items():
+                        if record.get("stats"):
+                            supplied.add(perk_name)
+        metadata_only = set(arsenal.database["upgrades"]["perks"]) - supplied
         self.assertEqual(metadata_only, METADATA_ONLY_PERKS)
 
     def test_database_wide_perk_stat_invariants(self):
-        from warframe_damage_calculator.domain.perks import effect_signature
         database = arsenal.database
         for category, weapons in database["weapons"].items():
             for weapon_name, weapon in weapons.items():
                 for tier, choices in weapon.get("evolutions", {}).items():
-                    for choice, record in choices.items():
-                        with self.subTest(weapon=weapon_name, tier=tier, choice=choice):
-                            template = database["upgrades"]["perks"][record["perk"]]["stats"]
-                            self.assertTrue(set(record.get("stats", {})) <= set(template))
+                    for perk_name, record in choices.items():
+                        with self.subTest(weapon=weapon_name, tier=tier, perk=perk_name):
+                            self.assertEqual(database["upgrades"]["perks"][perk_name]["stats"], "$stats")
                             for stat, effects in record.get("stats", {}).items():
                                 self.assertTrue(effects)
-                                remaining = list(template[stat])
                                 for effect in effects:
                                     self.assertNotEqual(effect.get("value"), 0)
                                     self.assertNotEqual(effect.get("value"), 0.0)
-                                    signature = effect_signature(effect)
-                                    match = next((i for i, item in enumerate(remaining) if effect_signature(item) == signature), None)
-                                    self.assertIsNotNone(match)
-                                    remaining.pop(match)
+                                    self.assertNotIn("source", effect.get("value") if isinstance(effect.get("value"), dict) else {})
 
     def test_every_weapon_perk_resolves_to_concrete_effects(self):
         for repository in (arsenal.primary, arsenal.secondary, arsenal.melee, arsenal.archgun):

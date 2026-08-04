@@ -20,7 +20,7 @@ class DomainTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "damage_bonus does not support"): UpgradeStats(damage_bonus=Effect(2, mode="multiplicative"))
 
     def test_source_expressions_round_trip_through_effect_records(self):
-        source = Source("$values.damage_bonus.base", multiplier=0.5, default=0)
+        source = Source("$stats.damage_bonus.base", multiplier=0.5, default=0)
         effect = Effect(source, mode="flat")
         restored = Effect.from_record(effect.to_record())
         self.assertEqual(restored.value.path, source.path)
@@ -36,20 +36,21 @@ class DomainTests(unittest.TestCase):
         self.assertIsNot(build.upgrades[0], upgrade)
 
     def test_build_copies_evolutions(self):
-        perk = Perk(name="Example", stats=UpgradeStats(damage_bonus=Effect(Source("$values.damage_bonus.charged", default=0), when="charged")))
-        build = Build(evolutions=[perk])
-        self.assertIsNot(build.evolutions[0], perk)
-        self.assertTrue(build.evolutions[0].runtime.charged)
+        perk = Perk(name="Example")
+        build = Build(perks=[perk])
+        self.assertIsNot(build.perks[0], perk)
+        build.perks[0].set(charged=True)
+        self.assertTrue(build.perks[0].runtime.charged)
 
     def test_build_rejects_duplicate_perks(self):
         perk = Perk(name="Example")
-        with self.assertRaises(ValueError): Build(evolutions=[perk, perk])
+        with self.assertRaises(ValueError): Build(perks=[perk, perk])
 
     def test_build_addition_preserves_evolutions(self):
         perk = Perk(name="Example")
-        first = Build(evolutions=[perk])
+        first = Build(perks=[perk])
         combined = first + Mod(name="Damage")
-        self.assertEqual(combined.evolutions, [perk])
+        self.assertEqual(combined.perks, [perk])
         self.assertEqual([upgrade.name for upgrade in combined.upgrades], ["Damage", "Example"])
         self.assertEqual([upgrade.name for upgrade in combined.ranked_upgrades], ["Damage"])
 
@@ -57,7 +58,7 @@ class DomainTests(unittest.TestCase):
         perk = Perk(name="Example")
         build = Build(mods=[Mod(name="Damage")]) + perk
         self.assertEqual(len(build), 2)
-        self.assertEqual((build - perk).evolutions, [])
+        self.assertEqual((build - perk).perks, [])
 
     def test_state_rejects_unknown_fields_and_conditions(self):
         with self.assertRaises(TypeError): State(combo=5)
@@ -78,16 +79,15 @@ class DomainTests(unittest.TestCase):
         self.assertNotIn("combo_multiplier", weapon.calculation_defaults)
 
     def test_perk_conditions_use_runtime_defaults_and_set(self):
-        perk = Perk(name="Conditional", stats=UpgradeStats(damage_bonus=Effect(Source("$values.damage_bonus.charged", default=0), when="charged", stacks=3)))
-        values = PerkValues(perk, 1, 1, {"damage_bonus": {"charged": 0.5}})
+        perk = Perk(name="Conditional")
+        values = PerkValues(perk, 1, UpgradeStats(damage_bonus=Effect(0.5, when="charged", stacks=3)))
         weapon = Primary(name="Test", attacks=[Attack("shot", stats=AttackStats(damage=Dist(impact=1)))], perks=[values])
-        self.assertEqual(perk.runtime.charged, 3)
         self.assertEqual(len(weapon.resolve_perk(perk).effects), 1)
         self.assertEqual(weapon.resolve_perk(perk).effects[0].value, 1.5)
         disabled = perk.copy().set(charged=False)
         self.assertEqual(resolve_perk(values, weapon_name=weapon.name, perk=disabled).effects, ())
-        build = Build(evolutions=[perk]).set(charged=0)
-        self.assertEqual(build.evolutions[0].runtime.charged, 0)
+        build = Build(perks=[perk]).set(charged=0)
+        self.assertEqual(build.perks[0].runtime.charged, 0)
 
     def test_omitted_combo_multiplier_uses_initial_combo(self):
         weapon = Melee(name="Test Blade", attacks=[Attack("heavy_attack", category="heavy", stats=AttackStats(damage=Dist(slash=100), initial_combo=40, fire_rate=1))], combo={"max_combo": 12})
@@ -100,7 +100,8 @@ class DomainTests(unittest.TestCase):
         weapon = pickle.loads(pickle.dumps(arsenal.primary.get("Vectis Prime")))
         self.assertEqual((weapon.name, list(weapon.attacks), list(weapon.perk_choices)), ("Vectis Prime", ["normal_attack", "incarnon_form", "incarnon_form_aoe", "incarnon_form_embed"], [1, 2, 3, 4]))
         perk = next(iter(weapon.perks))
-        self.assertTrue(all(isinstance(effect.value, Source) for effects in perk.stats.values() for effect in effects))
+        self.assertEqual(list(perk.stats), [])
+        self.assertTrue(any(weapon.perks[perk].stats for perk in weapon.perks))
 
 
 if __name__ == "__main__": unittest.main()

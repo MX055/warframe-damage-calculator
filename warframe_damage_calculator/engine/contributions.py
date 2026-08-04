@@ -27,7 +27,7 @@ def _components(build: Build) -> list[ContributionComponent]:
 
 def _coalition_build(components: list[ContributionComponent], mask: int) -> Build:
     selected = [component for index, component in enumerate(components) if mask & (1 << index)]
-    return Build._from_parts(mods=[component for component in selected if isinstance(component, Mod)], arcanes=[component for component in selected if isinstance(component, Arcane)], evolutions=[component for component in selected if isinstance(component, Perk)], progenitor=next((component for component in selected if isinstance(component, Progenitor)), None))
+    return Build._from_parts(mods=[component for component in selected if isinstance(component, Mod)], arcanes=[component for component in selected if isinstance(component, Arcane)], perks=[component for component in selected if isinstance(component, Perk)], progenitor=next((component for component in selected if isinstance(component, Progenitor)), None))
 
 
 def _normalize_contributions(values: dict[str, float]) -> dict[str, float]:

@@ -61,7 +61,7 @@ def _attack_timing(source: ResolvedAttackMetrics) -> AttackTimingMetrics:
 
 def build_calculated_attack(result: ResolvedAttack) -> AttackResult:
     average = result.average
-    return AttackResult(result.base, result.modded, result.effective, result.upgrades, result.evolutions, _attack_damage(average), _attack_critical(average), _attack_timing(average), _status(result), _spatial(result), result.generated_by, result.generated_from)
+    return AttackResult(result.base, result.modded, result.effective, result.upgrades, result.perks, _attack_damage(average), _attack_critical(average), _attack_timing(average), _status(result), _spatial(result), result.generated_by, result.generated_from)
 
 
 def build_aggregate(average: ResolvedAttackMetrics, status_model: StatusModel, status_effects: Mapping[str, float]) -> AggregateResult:

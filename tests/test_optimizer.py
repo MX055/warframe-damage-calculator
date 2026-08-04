@@ -23,9 +23,9 @@ def test_optimizer_rebuilds_upgrade_generated_attack_trees():
     weapon = arsenal.primary.get("Kuva Ogris")
     napalm = arsenal.mod.get("Nightwatch Napalm")
     optimizer = Optimizer(Calculator(weapon, build=Build(mods=[napalm])))
-    result = optimizer.resolve(spatial="full", attack="rocket_impact", evaluations=2, riven=False, evolutions=False, upgrade_blacklist=set(arsenal.mod) | set(arsenal.arcane), progress=None)
+    result = optimizer.resolve(spatial="full", attack="rocket_impact", evaluations=2, riven=False, perks=False, upgrade_blacklist=set(arsenal.mod) | set(arsenal.arcane), progress=None)
     assert "nightwatch_napalm_linger" in result.result.attacks
-    generated = optimizer.resolve(spatial="full", attack="nightwatch_napalm_linger", evaluations=2, riven=False, evolutions=False, upgrade_blacklist=set(arsenal.mod) | set(arsenal.arcane), progress=None)
+    generated = optimizer.resolve(spatial="full", attack="nightwatch_napalm_linger", evaluations=2, riven=False, perks=False, upgrade_blacklist=set(arsenal.mod) | set(arsenal.arcane), progress=None)
     assert list(generated.result.attacks) == ["nightwatch_napalm_linger"]
 
 
@@ -33,7 +33,7 @@ def test_parallel_optimizer_supports_status_generated_attacks():
     weapon = arsenal.melee.get("Xoris")
     influence = arsenal.arcane.get("Melee Influence")
     optimizer = Optimizer(Calculator(weapon, build=Build(mods=[arsenal.mod.get("Shocking Touch")], arcanes=[influence])))
-    result = optimizer.resolve(spatial="full", evaluations=2, workers=2, riven=False, evolutions=False, upgrade_blacklist=set(arsenal.mod) | set(arsenal.arcane), progress=None)
+    result = optimizer.resolve(spatial="full", evaluations=2, workers=2, riven=False, perks=False, upgrade_blacklist=set(arsenal.mod) | set(arsenal.arcane), progress=None)
     assert "melee_influence" in result.result.attacks
 
 
@@ -69,7 +69,7 @@ def test_parallel_optimizer_preserves_search_results():
     assert parallel.score == sequential.score
     assert [mod.name for mod in parallel.build.mods] == [mod.name for mod in sequential.build.mods]
     assert [arcane.name for arcane in parallel.build.arcanes] == [arcane.name for arcane in sequential.build.arcanes]
-    assert parallel.build.evolutions == sequential.build.evolutions
+    assert parallel.build.perks == sequential.build.perks
     assert parallel.build.progenitor == sequential.build.progenitor
 
 
@@ -181,8 +181,8 @@ def test_auto_search_scale_matches_requested_evaluations_not_doubled_budget(monk
 
     monkeypatch.setattr(Optimizer, "_candidate_pools", capture)
     calculator = Calculator(arsenal.primary.get("Braton Prime"))
-    Optimizer(calculator).resolve(spatial="full", evaluations=5_000, workers=1, progress=None, riven=False, evolutions=False)
-    Optimizer(calculator).resolve(spatial="auto", evaluations=5_000, workers=1, progress=None, riven=False, evolutions=False)
+    Optimizer(calculator).resolve(spatial="full", evaluations=5_000, workers=1, progress=None, riven=False, perks=False)
+    Optimizer(calculator).resolve(spatial="auto", evaluations=5_000, workers=1, progress=None, riven=False, perks=False)
     assert len(scales) >= 2
     assert scales[0] == scales[1]
     assert abs(scales[0] - (5_000 / 5_000) ** 0.5) < 1e-12
@@ -192,7 +192,7 @@ def test_auto_default_workers_cap_at_four():
     from concurrent import futures
 
     calculator = Calculator(arsenal.primary.get("Braton Prime"))
-    result = Optimizer(calculator).resolve(spatial="auto", evaluations=8, progress=None, riven=False, evolutions=False)
+    result = Optimizer(calculator).resolve(spatial="auto", evaluations=8, progress=None, riven=False, perks=False)
     if getattr(futures, "InterpreterPoolExecutor", None) is None:
         assert result.workers == 1
     else:
@@ -300,7 +300,7 @@ def test_optimizer_generates_riven_candidates_when_unlocked():
     assert pools["rivens"]
     assert all(mod.name == "Riven" for mod in pools["rivens"])
     assert len({tuple((stat, tuple(effect.value for effect in effects)) for stat, effects in mod.stats.items()) for mod in pools["rivens"]}) == len(pools["rivens"])
-    assert all(mod.slot == "regular_mod" for mod in pools["rivens"])
+    assert all(mod.slot_type == "regular_mod" for mod in pools["rivens"])
 
 
 def test_optimizer_preserves_locked_riven():
@@ -328,12 +328,12 @@ def test_optimizer_searches_all_progenitor_elements_when_unlocked():
 
 def test_optimizer_replaces_unlocked_evolutions_during_contextual_search():
     weapon = arsenal.primary.get("Vectis Prime")
-    selected = weapon.perk_choices[2][1]
-    alternative = weapon.perk_choices[2][2]
+    selected = weapon.perk_choices[2]["Inciting Incident"]
+    alternative = weapon.perk_choices[2]["Lone Enforcer"]
     optimizer = Optimizer(Calculator(weapon))
     pools = optimizer._candidate_pools(riven=False)
-    neighbors = list(optimizer._exact_neighbors(Build(evolutions=[selected]), pools))
-    assert any(alternative in candidate.evolutions and selected not in candidate.evolutions for candidate in neighbors)
+    neighbors = list(optimizer._exact_neighbors(Build(perks=[selected]), pools))
+    assert any(alternative in candidate.perks and selected not in candidate.perks for candidate in neighbors)
 
 
 def test_optimizer_seeds_dot_weak_point_synergies():
@@ -386,32 +386,32 @@ def test_optimizer_defaults_to_auto_spatial():
 def test_optimizer_defaults_to_20000_evaluations():
     import inspect
 
-    assert inspect.signature(Optimizer.resolve).parameters["evaluations"].default == 20_000
+    assert inspect.signature(Optimizer.resolve).parameters["evaluations"].default == 10_000
 
 
 def test_optimizer_can_disable_evolution_search():
     weapon = arsenal.primary.get("Phenmor")
     optimizer = Optimizer(Calculator(weapon))
-    assert optimizer._candidate_pools(evolutions=False)["perks"] == {}
-    result = optimizer.resolve(spatial="full", evaluations=2, progress=None, riven=False, evolutions=False)
-    assert not result.build.evolutions
+    assert optimizer._candidate_pools(perks=False)["perks"] == {}
+    result = optimizer.resolve(spatial="full", evaluations=2, progress=None, riven=False, perks=False)
+    assert not result.build.perks
 
 
 def test_optimizer_preserves_locked_evolutions_when_search_is_disabled():
     weapon = arsenal.primary.get("Phenmor")
     locked = arsenal.perk.get("Devouring Attrition")
-    optimizer = Optimizer(Calculator(weapon, build=Build(evolutions=[locked])))
-    result = optimizer.resolve(spatial="full", evaluations=2, progress=None, riven=False, evolutions=False)
-    assert locked in result.build.evolutions
+    optimizer = Optimizer(Calculator(weapon, build=Build(perks=[locked])))
+    result = optimizer.resolve(spatial="full", evaluations=2, progress=None, riven=False, perks=False)
+    assert locked in result.build.perks
 
 
-def test_optimizer_validates_evolutions_flag():
+def test_optimizer_validates_perks_flag():
     weapon = arsenal.primary.get("Phenmor")
     optimizer = Optimizer(Calculator(weapon))
     try:
-        optimizer.resolve(spatial="full", evaluations=2, progress=None, evolutions=1)
+        optimizer.resolve(spatial="full", evaluations=2, progress=None, perks=1)
     except TypeError as error:
-        assert str(error) == "evolutions must be a bool"
+        assert str(error) == "perks must be a bool"
     else:
         raise AssertionError("Expected TypeError")
 

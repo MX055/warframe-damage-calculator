@@ -49,12 +49,12 @@ class Repository(Generic[T, N]):
 
 
 class UpgradeRepository(Repository[U, N], Generic[U, N]):
-    def is_compatible(self, upgrade: N | U, *, weapon: Weapon, attack: str | Attack | None = None, slot: str | None = None, implemented: bool | None = None, selected: tuple[Upgrade, ...] = ()) -> bool:
+    def is_compatible(self, upgrade: N | U, *, weapon: Weapon, attack: str | Attack | None = None, slot_type: str | None = None, implemented: bool | None = None, selected: tuple[Upgrade, ...] = ()) -> bool:
         item = self.get(upgrade) if isinstance(upgrade, str) else upgrade
-        return is_upgrade_compatible(item, weapon, attack=attack, slot=slot, implemented=implemented, selected=selected)
+        return is_upgrade_compatible(item, weapon, attack=attack, slot_type=slot_type, implemented=implemented, selected=selected)
 
-    def filter(self, *, weapon: Weapon, attack: str | Attack | None = None, slot: str | None = None, implemented: bool | None = None, selected: tuple[Upgrade, ...] = ()) -> tuple[U, ...]:
-        return tuple(item for name in self.names if self.is_compatible(item := self.get(name), weapon=weapon, attack=attack, slot=slot, implemented=implemented, selected=selected))
+    def filter(self, *, weapon: Weapon, attack: str | Attack | None = None, slot_type: str | None = None, implemented: bool | None = None, selected: tuple[Upgrade, ...] = ()) -> tuple[U, ...]:
+        return tuple(item for name in self.names if self.is_compatible(item := self.get(name), weapon=weapon, attack=attack, slot_type=slot_type, implemented=implemented, selected=selected))
 
 
 class Arsenal:

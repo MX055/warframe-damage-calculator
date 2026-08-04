@@ -7,12 +7,12 @@ from warframe_damage_calculator.domain.enemies import BodyPart, Enemy, EnemyStat
 from warframe_damage_calculator.domain.weapons import Attack, AttackStats, Primary
 
 
-def perk(weapon, tier, choice):
-    return weapon.perk_choices[tier][choice]
+def perk(weapon, tier, name):
+    return weapon.perk_choices[tier][name]
 
 
-def build(*names, evolutions=()):
-    return Build(mods=[arsenal.mod.get(name) for name in names if name not in arsenal.arcane.names], arcanes=[arsenal.arcane.get(name) for name in names if name in arsenal.arcane.names], evolutions=evolutions)
+def build(*names, perks=()):
+    return Build(mods=[arsenal.mod.get(name) for name in names if name not in arsenal.arcane.names], arcanes=[arsenal.arcane.get(name) for name in names if name in arsenal.arcane.names], perks=perks)
 
 
 def selected(calculation):
@@ -91,7 +91,7 @@ class MechanicsTests(unittest.TestCase):
 
     def test_incarnon_form_condition_and_multishot_ammo_mechanics(self):
         weapon = arsenal.primary.get("Braton")
-        calculation = Calculator(weapon, build=Build(evolutions=[perk(weapon, 2, 2)])).resolve(attack="incarnon_form")
+        calculation = Calculator(weapon, build=Build(perks=[perk(weapon, 2, "Munitions Grit")])).resolve(attack="incarnon_form")
         result = selected(calculation)
         self.assertAlmostEqual(result.effective.multishot, 1.2)
         self.assertAlmostEqual(result.effective.ammo_cost, 1.2)
@@ -134,8 +134,8 @@ class MechanicsTests(unittest.TestCase):
 
     def test_evolution_base_stats_and_form_condition(self):
         weapon = arsenal.primary.get("Braton")
-        evolutions = [perk(weapon, 2, 1), perk(weapon, 3, 1), perk(weapon, 4, 1)]
-        calculation = Calculator(weapon, build=Build(evolutions=evolutions)).resolve(attack="incarnon_form")
+        evolutions = [perk(weapon, 2, "Daring Reverie Increase Damage by +24 (Braton) / +28 (MK1) / +4 (Prime) / +12 (Vandal). With Channeled Ability active"), perk(weapon, 3, "Mercenary Chamber"), perk(weapon, 4, "Critical Parallel")]
+        calculation = Calculator(weapon, build=Build(perks=evolutions)).resolve(attack="incarnon_form")
         result = selected(calculation)
         self.assertAlmostEqual(result.effective.damage.total, 104)
         self.assertAlmostEqual(result.effective.crit_chance, 0.46688995215311)
@@ -159,7 +159,7 @@ class MechanicsTests(unittest.TestCase):
 
     def test_non_crit_family_uses_event_chance_without_changing_effective_damage(self):
         weapon = arsenal.secondary.get("Laetum")
-        result = selected(Calculator(weapon, build=Build(evolutions=[perk(weapon, 5, 1)])).resolve())
+        result = selected(Calculator(weapon, build=Build(perks=[perk(weapon, 5, "Devouring Attrition")])).resolve())
         self.assertAlmostEqual(result.effective.damage.total, 160)
         self.assertAlmostEqual(result.damage.direct_dph, 1450.24)
         self.assertAlmostEqual(result.damage.dot_dph, 402.006528)

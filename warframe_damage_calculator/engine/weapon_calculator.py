@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from copy import deepcopy
 
-from ..domain.attacks import Attack, AttackStats, Falloff, Inheritance, Links, RelatedAttacks, match_related_keys
+from ..domain.attacks import Attack, AttackStats, Falloff, Inheritance, RelatedAttacks, match_related_keys
 from ..domain.damage import Dist
 from ..domain.status import StatusModel, _product
 from ..domain.effects import Source, resolve_source
@@ -31,16 +31,13 @@ def _attack_definition(attack: Attack) -> dict[str, object]:
                 stats[field_name] = deepcopy(value)
     else:
         stats = deepcopy(dict(attack.stats))
-    links: dict[str, object] = {}
-    if attack.links.children is not None: links["children"] = attack.links.children.to_record()
-    if attack.links.parents is not None: links["parents"] = attack.links.parents.to_record()
     return {
         "trigger": deepcopy(attack.trigger),
         "delivery": deepcopy(attack.delivery),
         "form": deepcopy(attack.form),
         "category": deepcopy(attack.category),
         "aoe": deepcopy(attack.aoe),
-        "links": links,
+        "hits_source": deepcopy(attack.hits_source),
         "stats": stats,
     }
 
@@ -85,17 +82,46 @@ def _delete_field(target: dict[str, object], path: str) -> None:
     if isinstance(destination, dict): destination.pop(parts[-1], None)
 
 
+def _set_override_field(target: dict[str, object], path: str, value: object) -> None:
+    parts = path.split(".")
+    destination = target
+    for part in parts[:-1]:
+        existing = destination.get(part)
+        if existing is None:
+            nested: dict[str, object] = {}
+            destination[part] = nested
+            destination = nested
+        elif isinstance(existing, dict):
+            destination = existing
+        else:
+            raise ValueError(f"attack inheritance override field {path!r} conflicts with another override field")
+    destination[parts[-1]] = deepcopy(value)
+
+
+def _expand_override_paths(override: Mapping[str, object]) -> dict[str, object]:
+    expanded: dict[str, object] = {}
+    for path, value in override.items():
+        _set_override_field(expanded, str(path), value)
+    return expanded
+
+
 def resolve_attack_inheritance(definition: Mapping[str, object], parent: Attack) -> dict[str, object]:
     inheritance_record = definition.get("inheritance")
     inherited: dict[str, object] = {}
+    inheritance = None
     if inheritance_record is not None:
         inheritance = inheritance_record if isinstance(inheritance_record, Inheritance) else Inheritance.from_record(inheritance_record)
         if inheritance is not None:
             parent_definition = _attack_definition(parent)
             for path in inheritance.include: _inherit_field(parent_definition, inherited, path)
             for path in inheritance.exclude: _delete_field(inherited, path)
-    explicit = {key: value for key, value in definition.items() if key not in {"inheritance", "automatic"}}
-    return _merge_attack_mappings(inherited, explicit)
+    override = {} if inheritance is None else inheritance.override
+    merged = _merge_attack_mappings(inherited, _expand_override_paths(override)) if override else inherited
+    name = definition.get("name")
+    if isinstance(name, str) and name: merged["name"] = name
+    children = definition.get("children")
+    if children is not None: merged["children"] = deepcopy(children)
+    return merged
 
 
 def _resolve_attack_expressions(value: object, parent: Attack) -> object:
@@ -108,12 +134,12 @@ def _resolve_attack_expressions(value: object, parent: Attack) -> object:
 
 
 class WeaponCalculator:
-    __slots__ = ("context", "upgrade_effects", "evolution_effects", "attack_effects", "definitions", "origins", "attacks", "root_name", "prepared_names", "prepared_upgrade_effects")
+    __slots__ = ("context", "upgrade_effects", "perk_effects", "attack_effects", "definitions", "origins", "attacks", "root_name", "prepared_names", "prepared_upgrade_effects")
 
     def __init__(self, context: CalculationContext, prepared_names: tuple[str, ...] | None = None, prepared_upgrade_effects: tuple[ResolvedEffect, ...] | None = None) -> None:
         self.context = context
         self.upgrade_effects: tuple[ResolvedEffect, ...] = ()
-        self.evolution_effects: tuple[ResolvedEffect, ...] = ()
+        self.perk_effects: tuple[ResolvedEffect, ...] = ()
         self.attack_effects: tuple[ResolvedEffect, ...] = ()
         self.definitions = dict(context.weapon.attacks)
         self.origins: dict[str, tuple[str, str]] = {}
@@ -126,9 +152,9 @@ class WeaponCalculator:
         resolved = self.prepared_upgrade_effects if self.prepared_upgrade_effects is not None else tuple(effect for upgrade in self.context.build.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual())
         self.attack_effects = tuple(effect for effect in resolved if effect.stat == GENERATED_ATTACK_STAT)
         self.upgrade_effects = tuple(effect for effect in resolved if effect.stat != GENERATED_ATTACK_STAT)
-        self.evolution_effects = tuple(effect for perk in self.context.resolved_perks for effect in perk.effects)
+        self.perk_effects = tuple(effect for perk in self.context.resolved_perks for effect in perk.effects)
         self.origins = {}
-        self.attacks = AttackCalculator(self.context, self.upgrade_effects, self.evolution_effects)
+        self.attacks = AttackCalculator(self.context, self.upgrade_effects, self.perk_effects)
 
     @staticmethod
     def _attack_template(effect: ResolvedEffect) -> Mapping[str, object]:
@@ -138,10 +164,9 @@ class WeaponCalculator:
     @staticmethod
     def _parents(effect: ResolvedEffect) -> RelatedAttacks | None:
         template = WeaponCalculator._attack_template(effect)
-        links = template.get("links")
-        if links is None: return None
-        parsed = links if isinstance(links, Links) else Links.from_record(links)
-        return parsed.parents
+        parent = template.get("parent")
+        if parent is None: return None
+        return parent if isinstance(parent, RelatedAttacks) else RelatedAttacks.from_record(parent)
 
     @staticmethod
     def _matches_parent(name: str, attack: Attack, selector: RelatedAttacks) -> bool:
@@ -172,10 +197,14 @@ class WeaponCalculator:
         stats = values.get("stats", {})
         if not isinstance(stats, Mapping): raise TypeError("generated_attack.stats must be an object")
         values["stats"] = AttackStats.from_record(stats)
-        values["links"] = Links.from_record(values.get("links"))
+        children = values.get("children", [])
+        if not isinstance(children, list): raise TypeError("generated_attack.children must be a list of names")
+        values["children"] = [str(item) for item in children]
         values.pop("inheritance", None)
         values.pop("automatic", None)
-        return Attack(**{key: value for key, value in values.items() if key in Attack.__dataclass_fields__})
+        values.pop("parent", None)
+        allowed = {"name", "trigger", "delivery", "form", "category", "aoe", "hits_source", "children", "stats"}
+        return Attack(**{key: value for key, value in values.items() if key in allowed})
 
     @classmethod
     def _generated_key(cls, effect: ResolvedEffect) -> str:
@@ -188,7 +217,22 @@ class WeaponCalculator:
         on_events = [str(event) for event in automatic_values(effect, "on")]
         typed = {event.removesuffix("_status_proc") for event in on_events if event.endswith("_status_proc") and event != "status_proc"}
         if typed: return typed
-        stats = cls._attack_template(effect).get("stats", {})
+        template = cls._attack_template(effect)
+        inheritance = template.get("inheritance", {})
+        override = {}
+        if isinstance(inheritance, Inheritance):
+            override = inheritance.override
+        elif isinstance(inheritance, Mapping):
+            override = inheritance.get("override", {}) or {}
+        damage_types: set[str] = set()
+        if isinstance(override, Mapping):
+            for path, value in override.items():
+                if path == "stats.damage" and isinstance(value, Mapping):
+                    damage_types.update(str(key) for key in value)
+                elif path.startswith("stats.damage."):
+                    damage_types.add(path.split(".", 2)[2])
+        if damage_types: return damage_types
+        stats = template.get("stats", {})
         damage = stats.get("damage", {}) if isinstance(stats, Mapping) else {}
         return set(damage) if isinstance(damage, Mapping) else set()
 
@@ -202,17 +246,10 @@ class WeaponCalculator:
 
     @staticmethod
     def _strip_stale_generated_children(attack: Attack, stale_keys: set[str]) -> None:
-        children = attack.links.children
-        if children is None or children.names is None: return
-        remaining = [name for name in children.names if name.casefold() not in stale_keys and name.replace(" ", "_").casefold() not in stale_keys]
-        if len(remaining) == len(children.names): return
-        if remaining:
-            attack.links.children = RelatedAttacks(names=remaining, triggers=children.triggers, deliveries=children.deliveries, forms=children.forms, categories=children.categories, aoe=children.aoe)
-            return
-        if any(value is not None for value in (children.triggers, children.deliveries, children.forms, children.categories, children.aoe)):
-            attack.links.children = RelatedAttacks(triggers=children.triggers, deliveries=children.deliveries, forms=children.forms, categories=children.categories, aoe=children.aoe)
-        else:
-            attack.links.children = None
+        if not attack.children: return
+        remaining = [name for name in attack.children if name.casefold() not in stale_keys and name.replace(" ", "_").casefold() not in stale_keys]
+        if len(remaining) == len(attack.children): return
+        attack.children = remaining
 
     def _base_definitions(self) -> dict[str, Attack]:
         # Result weapons retain previously derived generated attacks. Strip keys that
@@ -246,7 +283,7 @@ class WeaponCalculator:
             if name in self.definitions: raise ValueError(f"duplicate generated attack {name!r}")
             parent = self.definitions[parent_name].copy()
             generated = self._generated_attack(effect, parent, parent_name)
-            parent.links.add_child_key(name)
+            parent.add_child_key(name)
             self.definitions[parent_name] = parent
             self.definitions[name] = generated
             self.origins[name] = (effect.source, parent_name)
@@ -260,11 +297,12 @@ class WeaponCalculator:
                 return
             if name in ordered: return
             ordered.append(name)
-            children = self.definitions[name].links.children
-            if children is not None:
-                for child in match_related_keys(children, self.definitions):
-                    if child == name: continue
-                    collect(child, path | {name})
+            for child_name in self.definitions[name].children:
+                matches = match_related_keys(RelatedAttacks(names=[child_name]), self.definitions)
+                if not matches: raise ValueError(f"unknown child attack {child_name!r}")
+                child = matches[0]
+                if child == name: continue
+                collect(child, path | {name})
 
         collect(self.root_name)
         return ordered
@@ -332,7 +370,7 @@ class WeaponCalculator:
             if name in results: raise ValueError(f"duplicate generated attack {name!r}")
             attack = self._generated_attack(effect, parent.attack, parent_name)
             parent.attack = deepcopy(parent.attack)
-            parent.attack.links.add_child_key(name)
+            parent.attack.add_child_key(name)
             self.definitions[parent_name] = parent.attack
             self.definitions[name] = attack
             self.origins[name] = (effect.source, parent_name)
@@ -365,7 +403,7 @@ class WeaponCalculator:
             if name in results: raise ValueError(f"duplicate generated attack {name!r}")
             attack = self._generated_attack(effect, parent.attack, parent_name)
             parent.attack = deepcopy(parent.attack)
-            parent.attack.links.add_child_key(name)
+            parent.attack.add_child_key(name)
             self.definitions[parent_name] = parent.attack
             self.definitions[name] = attack
             self.origins[name] = (effect.source, parent_name)
@@ -377,16 +415,13 @@ class WeaponCalculator:
     @classmethod
     def _effect_self_triggers(cls, effect: ResolvedEffect) -> bool:
         template = cls._attack_template(effect)
-        links = template.get("links")
-        if not isinstance(links, Mapping): return False
-        children = links.get("children")
-        if children is None: return False
-        selector = children if isinstance(children, RelatedAttacks) else RelatedAttacks.from_record(children)
+        children = template.get("children", [])
+        if not isinstance(children, list) or not children: return False
         name = template.get("name")
         if not isinstance(name, str) or not name: return False
         key = name.replace(" ", "_").casefold()
-        stub = Attack(name=name)
-        return key in match_related_keys(selector, {key: stub})
+        expected = {str(item).casefold() for item in children}
+        return key in expected or name.casefold() in expected
 
     @staticmethod
     def _event_probability(effect: ResolvedEffect, crit_chance: float) -> float:
@@ -435,9 +470,10 @@ class WeaponCalculator:
 
         def collect(name: str, path: frozenset[str] = frozenset()) -> None:
             if name in path: raise ValueError(f"attack relationship cycle at {name!r}")
-            children = results[name].attack.links.children
-            if children is None: return
-            for child in match_related_keys(children, {key: result.attack for key, result in results.items()}):
+            for child_name in results[name].attack.children:
+                matches = match_related_keys(RelatedAttacks(names=[child_name]), {key: result.attack for key, result in results.items()})
+                if not matches: continue
+                child = matches[0]
                 if child == name: continue
                 if child not in results: continue
                 if child not in descendants: descendants.append(child)

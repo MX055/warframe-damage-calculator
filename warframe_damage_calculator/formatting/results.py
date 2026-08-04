@@ -4,7 +4,7 @@ import re
 from collections.abc import Callable
 
 from ..domain.builds import Progenitor
-from ..domain.perks import Perk, perk_value_keys
+from ..domain.perks import Perk
 from ..domain.results import AttackSpatialMetrics, AttackStatusMetrics, CalculationResult, DamageResult
 from ..domain.upgrades import Arcane, Mod
 from ..engine.calculator import Calculator
@@ -161,14 +161,16 @@ class Formatter:
         if isinstance(component, Progenitor): return "—"
         if isinstance(component, Perk):
             perk_values = self.result.weapon.perks.get(component)
-            if perk_values is None or not perk_values.values: return "—"
+            if perk_values is None or not perk_values.stats: return "—"
             relevant: set[str] = set()
-            for stat, slots in perk_values.values.items():
-                templates = component.stats.get(stat, ())
-                for key, template in zip(perk_value_keys(component.name, stat, templates), templates, strict=True):
-                    if key not in slots: continue
-                    if template.when is not None: relevant.add(str(template.when))
-                    elif key not in {"base", "flat"}: relevant.add(key)
+            for effects in perk_values.stats.values():
+                for effect in effects:
+                    if effect.when is not None:
+                        relevant.add(str(effect.when))
+                    else:
+                        automatic = effect.automatic or {}
+                        if automatic.get("when"):
+                            relevant.add(str(automatic["when"]))
             if not relevant: return "—"
             runtime = component.runtime.as_dict()
             parts = [formatted for key in sorted(relevant) if (formatted := self._format_condition(key, runtime.get(key, True)))]
@@ -185,7 +187,7 @@ class Formatter:
         if not contribution: return None
         removal = contributions.removal
         components: dict[str, Mod | Arcane | Perk | Progenitor] = {upgrade.name: upgrade for upgrade in self.result.build.ranked_upgrades}
-        components.update({perk.name: perk for perk in self.result.build.evolutions})
+        components.update({perk.name: perk for perk in self.result.build.perks})
         if self.result.build.progenitor is not None:
             components[progenitor_component_id(self.result.build.progenitor)] = self.result.build.progenitor
         maximum = max((abs(value) for value in contribution.values()), default=0)
@@ -197,7 +199,7 @@ class Formatter:
                 kind, display_name = "Progenitor", f"{component.element.replace('_', ' ').title()} Progenitor"
             else:
                 kind = component.type.replace("_", " ").title()
-                slot = getattr(component, "slot", None)
+                slot = getattr(component, "slot_type", None)
                 slot_label = "—" if slot is None else str(slot).replace("_", " ").title()
                 display_name = "Riven" if slot_label == "Regular Mod" and name.casefold().startswith("riven (") else name
             removal_value = removal[name]

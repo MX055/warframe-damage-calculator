@@ -11,8 +11,8 @@ from .scaled_values import is_scaled_value_record
 
 PARENT_SELECTOR_FIELDS = frozenset({"names", "triggers", "deliveries", "forms", "categories", "aoe"})
 RELATED_ATTACK_FIELDS = PARENT_SELECTOR_FIELDS
-ATTACK_RECORD_FIELDS = frozenset({"name", "trigger", "delivery", "form", "category", "aoe", "hits_source", "inheritance", "links", "automatic", "stats"})
-INHERITANCE_TOP_LEVEL = frozenset({"trigger", "delivery", "form", "category", "aoe", "links", "stats"})
+ATTACK_RECORD_FIELDS = frozenset({"name", "trigger", "delivery", "form", "category", "aoe", "hits_source", "children", "stats"})
+INHERITANCE_TOP_LEVEL = frozenset({"trigger", "delivery", "form", "category", "aoe", "hits_source", "stats"})
 FALLOFF_FIELDS = frozenset({"start_range", "end_range", "final_multiplier"})
 
 
@@ -28,6 +28,13 @@ def _stats_from_record(record: Mapping[str, Any] | None) -> AttackStats | dict[s
     raw = dict(record or {})
     if _contains_attack_expressions(raw): return raw
     return AttackStats.from_record(raw)
+
+
+def _parse_children(value: object) -> list[str]:
+    if value is None: return []
+    if not isinstance(value, list): raise TypeError("attack children must be a list of names")
+    if any(not isinstance(item, str) or not item for item in value): raise ValueError("attack children must be a list of nonempty strings")
+    return [str(item) for item in value]
 
 
 @dataclass(slots=True)
@@ -139,39 +146,63 @@ def _validate_inheritance_path(path: str, *, label: str) -> None:
     stat_fields = set(AttackStats.__dataclass_fields__)
     if any(not part for part in parts) or parts[0] not in INHERITANCE_TOP_LEVEL: raise ValueError(f"invalid attack inheritance field {path!r}")
     if len(parts) == 1: return
-    if parts[0] == "links":
-        if len(parts) == 2 and parts[1] in {"children", "parents"}: return
-        raise ValueError(f"invalid attack inheritance field {path!r}")
     if parts[0] != "stats" or parts[1] not in stat_fields or len(parts) > 3 or len(parts) == 3 and parts[1] not in nested_mappings: raise ValueError(f"invalid attack inheritance field {path!r}")
     if len(parts) == 3 and parts[1] == "falloff" and parts[2] not in FALLOFF_FIELDS: raise ValueError(f"invalid attack inheritance field {path!r}")
+
+
+def _validate_override_paths(override: Mapping[str, Any]) -> None:
+    paths = [str(path) for path in override]
+    for path in paths: _validate_inheritance_path(path, label="override")
+    for index, path in enumerate(paths):
+        prefix = path + "."
+        for other in paths[index + 1:]:
+            if other.startswith(prefix) or path.startswith(other + "."):
+                raise ValueError(f"attack inheritance override paths conflict: {path!r} and {other!r}")
+
 
 @dataclass(slots=True)
 class Inheritance:
     include: list[str] = field(default_factory=list)
     exclude: list[str] = field(default_factory=list)
+    override: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         self.include = [str(path) for path in self.include]
         self.exclude = [str(path) for path in self.exclude]
+        if isinstance(self.override, Mapping): self.override = {str(path): deepcopy(value) for path, value in self.override.items()}
+        else: raise TypeError("attack inheritance override must be an object")
         if not self.include and self.exclude: raise ValueError("attack inheritance exclude requires include")
         for path in self.include: _validate_inheritance_path(path, label="include")
         for path in self.exclude: _validate_inheritance_path(path, label="exclude")
+        _validate_override_paths(self.override)
+
+    def __bool__(self) -> bool:
+        return bool(self.include or self.exclude or self.override)
 
     @classmethod
     def from_record(cls, record: Mapping[str, object] | None) -> Inheritance | None:
         if record is None: return None
-        if set(record) - {"include", "exclude"}: raise ValueError("attack inheritance only supports include and exclude")
+        if set(record) - {"include", "exclude", "override"}: raise ValueError("attack inheritance only supports include, exclude, and override")
         include = record.get("include", [])
         exclude = record.get("exclude", [])
+        override = record.get("override", {})
         if not isinstance(include, list) or not isinstance(exclude, list): raise TypeError("attack inheritance include/exclude must be lists")
         if any(not isinstance(path, str) for path in (*include, *exclude)): raise TypeError("attack inheritance paths must be strings")
-        if not include and not exclude: return None
-        return cls(list(include), list(exclude))
+        if override is None: override = {}
+        if not isinstance(override, Mapping): raise TypeError("attack inheritance override must be an object")
+        if any(not isinstance(path, str) or not path for path in override): raise TypeError("attack inheritance override keys must be nonempty strings")
+        if not include and not exclude and not override: return None
+        return cls(list(include), list(exclude), dict(override))
 
-    def to_record(self) -> dict[str, list[str]]:
-        record: dict[str, list[str]] = {"include": list(self.include)}
+    def to_record(self) -> dict[str, Any]:
+        record: dict[str, Any] = {}
+        if self.include: record["include"] = list(self.include)
         if self.exclude: record["exclude"] = list(self.exclude)
+        if self.override: record["override"] = deepcopy(self.override)
         return record
+
+    def copy(self) -> Inheritance:
+        return Inheritance(list(self.include), list(self.exclude), deepcopy(self.override))
 
 
 @dataclass(slots=True)
@@ -229,63 +260,6 @@ class RelatedAttacks:
         return self.aoe in (None, attack.aoe)
 
 
-def _parse_related(value: object, *, label: str) -> RelatedAttacks | None:
-    if value is None: return None
-    if isinstance(value, RelatedAttacks): return value
-    if isinstance(value, Mapping): return RelatedAttacks.from_record(value)
-    if isinstance(value, list):
-        if not value: return None
-        if len(value) == 1: return _parse_related(value[0], label=label)
-        names: list[str] = []
-        for item in value:
-            selector = _parse_related(item, label=label)
-            if selector is None or selector.names is None or any(field is not None for field in (selector.triggers, selector.deliveries, selector.forms, selector.categories, selector.aoe)):
-                raise ValueError(f"links.{label}: multiple selectors must be name-only RelatedAttacks entries")
-            names.extend(selector.names)
-        return RelatedAttacks(names=names)
-    raise TypeError(f"links.{label} must be a related attacks selector")
-
-
-@dataclass(slots=True)
-class Links:
-    parents: RelatedAttacks | None = None
-    children: RelatedAttacks | None = None
-
-    def __post_init__(self) -> None:
-        if self.parents is not None and not isinstance(self.parents, RelatedAttacks): self.parents = RelatedAttacks.from_record(self.parents)
-        if self.children is not None and not isinstance(self.children, RelatedAttacks): self.children = RelatedAttacks.from_record(self.children)
-
-    @classmethod
-    def from_record(cls, record: Mapping[str, object] | None) -> Links:
-        if record is None: return Links()
-        if set(record) - {"parents", "children"}: raise ValueError("links only supports parents and children")
-        return cls(_parse_related(record.get("parents"), label="parents"), _parse_related(record.get("children"), label="children"))
-
-    def to_record(self) -> dict[str, object]:
-        record: dict[str, object] = {}
-        if self.parents is not None: record["parents"] = self.parents.to_record()
-        if self.children is not None: record["children"] = self.children.to_record()
-        return record
-
-    def copy(self) -> Links:
-        return Links(None if self.parents is None else self.parents.copy(), None if self.children is None else self.children.copy())
-
-    def has_named(self, key: str, *, side: str) -> bool:
-        selector = self.parents if side == "parents" else self.children
-        if selector is None or selector.names is None: return False
-        expected = key.casefold()
-        return any(name.casefold() == expected for name in selector.names)
-
-    def add_child_key(self, key: str) -> None:
-        if self.has_named(key, side="children"): return
-        if self.children is None:
-            self.children = RelatedAttacks(names=[key])
-            return
-        if self.children.names is None:
-            raise ValueError("cannot add a named child to a non-name children selector")
-        self.children.names = [*self.children.names, key]
-
-
 @dataclass(slots=True)
 class Attack:
     name: str
@@ -295,28 +269,26 @@ class Attack:
     category: str = "normal"
     aoe: bool = False
     hits_source: bool = True
-    inheritance: Inheritance | None = None
-    links: Links = field(default_factory=Links)
-    automatic: Automatic | None = None
+    children: list[str] = field(default_factory=list)
     stats: AttackStats | dict[str, Any] = field(default_factory=AttackStats)
 
     def __post_init__(self) -> None:
         self.name = str(self.name)
         if not self.name: raise ValueError("attack name is required")
-        if isinstance(self.links, Mapping): self.links = Links.from_record(self.links)
-        if isinstance(self.inheritance, Mapping): self.inheritance = Inheritance.from_record(self.inheritance)
-        if isinstance(self.automatic, Mapping): self.automatic = Automatic.from_record(self.automatic)
+        self.children = _parse_children(self.children)
         if isinstance(self.stats, Mapping) and not isinstance(self.stats, AttackStats):
             self.stats = _stats_from_record(self.stats)
 
     @classmethod
     def from_record(cls, record: Mapping[str, Any]) -> Attack:
+        if "links" in record: raise ValueError("attack field 'links' was removed; use children")
+        if "parent" in record: raise ValueError("attack field 'parent' is only valid on generated attacks")
+        if "inheritance" in record: raise ValueError("attack field 'inheritance' is only valid on generated attacks")
+        if "automatic" in record: raise ValueError("attack field 'automatic' is only valid on generated attacks")
         if set(record) - ATTACK_RECORD_FIELDS: raise ValueError(f"unknown attack fields: {sorted(set(record) - ATTACK_RECORD_FIELDS)}")
         values = dict(record)
         values["name"] = str(values["name"])
-        values["links"] = Links.from_record(values.get("links"))
-        values["inheritance"] = Inheritance.from_record(values.get("inheritance"))
-        values["automatic"] = Automatic.from_record(values.get("automatic"))
+        values["children"] = _parse_children(values.get("children"))
         values["stats"] = _stats_from_record(values.get("stats", {}))
         return cls(**values)
 
@@ -328,10 +300,7 @@ class Attack:
         if self.category != "normal": record["category"] = self.category
         if self.aoe: record["aoe"] = True
         if not self.hits_source: record["hits_source"] = False
-        if self.inheritance is not None: record["inheritance"] = self.inheritance.to_record()
-        links = self.links.to_record()
-        if links: record["links"] = links
-        if self.automatic is not None and self.automatic.to_channel(): record["automatic"] = self.automatic.to_record()
+        if self.children: record["children"] = list(self.children)
         if isinstance(self.stats, AttackStats):
             stats = self.stats.to_record()
         else:
@@ -340,22 +309,24 @@ class Attack:
         return record
 
     def copy(self) -> Attack:
-        return Attack(name=self.name, trigger=self.trigger, delivery=self.delivery, form=self.form, category=self.category, aoe=self.aoe, hits_source=self.hits_source, inheritance=self.inheritance, links=self.links.copy(), automatic=self.automatic, stats=self.stats if isinstance(self.stats, AttackStats) else deepcopy(dict(self.stats)))
+        return Attack(name=self.name, trigger=self.trigger, delivery=self.delivery, form=self.form, category=self.category, aoe=self.aoe, hits_source=self.hits_source, children=list(self.children), stats=self.stats if isinstance(self.stats, AttackStats) else deepcopy(dict(self.stats)))
 
-    def to_generated_value(self) -> dict[str, Any]:
-        """Serialize generated-attack payload without automatic (stored on Effect.automatic)."""
-        record = self.to_record()
-        record.pop("automatic", None)
-        return record
+    def add_child_key(self, key: str) -> None:
+        expected = key.casefold()
+        if any(child.casefold() == expected for child in self.children): return
+        self.children = [*self.children, key]
 
 
 def match_related_keys(selector: RelatedAttacks, attacks: Mapping[str, Attack]) -> list[str]:
     return [key for key, attack in attacks.items() if selector.matches(key, attack)]
 
 
-def resolve_child_keys(children: RelatedAttacks | None, attacks: Mapping[str, Attack]) -> RelatedAttacks | None:
-    if children is None: return None
-    matches = match_related_keys(children, attacks)
-    if not matches: raise ValueError(f"unknown child attack {children.to_record()!r}")
-    return RelatedAttacks(names=matches)
-
+def resolve_child_keys(children: list[str], attacks: Mapping[str, Attack]) -> list[str]:
+    if not children: return []
+    resolved: list[str] = []
+    for name in children:
+        matches = match_related_keys(RelatedAttacks(names=[name]), attacks)
+        if not matches: raise ValueError(f"unknown child attack {name!r}")
+        if len(matches) > 1: raise ValueError(f"child attack {name!r} matches multiple attacks: {', '.join(matches)}")
+        if matches[0] not in resolved: resolved.append(matches[0])
+    return resolved

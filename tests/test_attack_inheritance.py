@@ -1,7 +1,7 @@
 import unittest
 from copy import deepcopy
 
-from warframe_damage_calculator import Attack, AttackStats, Automatic, Calculator, Compatibility, Dist, Inheritance, Links, Build, Melee, Mod, RelatedAttacks, UpgradeStats, UpgradeValue, arsenal
+from warframe_damage_calculator import Attack, AttackStats, Automatic, Calculator, Compatibility, Dist, GeneratedAttack, Inheritance, Build, Melee, Mod, RelatedAttacks, UpgradeStats, UpgradeValue, arsenal
 from warframe_damage_calculator.database.schema import validate_database
 from warframe_damage_calculator.engine.weapon_calculator import _resolve_attack_expressions, resolve_attack_inheritance
 
@@ -15,7 +15,7 @@ class AttackInheritanceTests(unittest.TestCase):
             form="incarnon",
             category="heavy",
             aoe=True,
-            links=Links(children=RelatedAttacks(names=["native_child"])),
+            children=["native_child"],
             stats=AttackStats(damage=Dist(heat=20, cold=5), forced_procs=Dist(heat=1), crit_chance=0.8, crit_damage=4, status_chance=0.6, multishot=3, co_factor=2, co_effect="multiplies", falloff={"start_range": 2, "end_range": 10, "final_multiplier": 0.5}),
         )
 
@@ -23,13 +23,12 @@ class AttackInheritanceTests(unittest.TestCase):
         self.assertEqual(resolve_attack_inheritance({"name": "Generated"}, self.parent), {"name": "Generated"})
 
     def test_explicit_complete_inheritance_copies_every_listed_field(self):
-        resolved = resolve_attack_inheritance({"inheritance": {"include": ["trigger", "delivery", "aoe", "form", "category", "stats", "links.children"]}, "name": "Generated"}, self.parent)
+        resolved = resolve_attack_inheritance({"inheritance": {"include": ["trigger", "delivery", "aoe", "form", "category", "stats"]}, "name": "Generated"}, self.parent)
         self.assertEqual(resolved["trigger"], "semi")
         self.assertEqual(resolved["stats"]["crit_chance"], 0.8)
-        self.assertEqual(resolved["links"]["children"], {"names": ["native_child"]})
-        resolved["links"]["children"]["names"].append("generated_child")
+        self.assertNotIn("children", resolved)
         resolved["stats"]["damage"]["heat"] = 100
-        self.assertEqual(self.parent.links.children, RelatedAttacks(names=["native_child"]))
+        self.assertEqual(self.parent.children, ["native_child"])
         self.assertEqual(self.parent.stats.damage["heat"], 20)
 
     def test_unlisted_parent_fields_are_not_copied(self):
@@ -48,13 +47,18 @@ class AttackInheritanceTests(unittest.TestCase):
 
     def test_explicit_values_recursively_override_mappings_and_replace_lists(self):
         definition = {
-            "inheritance": {"include": ["stats", "links.children"]},
+            "inheritance": {
+                "include": ["stats"],
+                "override": {
+                    "stats.damage.heat": 10,
+                    "stats.falloff.end_range": 20,
+                },
+            },
             "name": "Generated",
-            "links": {"children": {"names": ["replacement"]}},
-            "stats": {"damage": {"heat": 10}, "falloff": {"end_range": 20}},
+            "children": ["replacement"],
         }
         resolved = resolve_attack_inheritance(definition, self.parent)
-        self.assertEqual(resolved["links"]["children"], {"names": ["replacement"]})
+        self.assertEqual(resolved["children"], ["replacement"])
         self.assertEqual(resolved["stats"]["damage"], {"heat": 10, "cold": 5.0})
         self.assertEqual(resolved["stats"]["falloff"], {"start_range": 2, "end_range": 20, "final_multiplier": 0.5})
         self.assertEqual(resolved["stats"]["crit_chance"], 0.8)
@@ -64,9 +68,9 @@ class AttackInheritanceTests(unittest.TestCase):
         self.assertIn("damage", resolved["stats"])
         self.assertNotIn("forced_procs", resolved["stats"])
 
-    def test_children_are_not_inherited_unless_requested(self):
+    def test_children_are_not_inherited(self):
         resolved = resolve_attack_inheritance({"inheritance": {"include": ["trigger"]}, "name": "Generated"}, self.parent)
-        self.assertNotIn("links", resolved)
+        self.assertNotIn("children", resolved)
 
     def test_invalid_inheritance_field_and_wildcard_fail(self):
         with self.assertRaisesRegex(ValueError, "invalid attack inheritance field"): resolve_attack_inheritance({"inheritance": {"include": ["stats.unknown"]}}, self.parent)
@@ -90,16 +94,16 @@ class AttackInheritanceTests(unittest.TestCase):
     def test_melee_duplicate_is_a_full_copy_without_recursive_children(self):
         duplicate = arsenal.arcane.get("Melee Duplicate")
         weapon = Melee(name="Duplicate Test", subtype="sword", attacks={
-            "parent": Attack("Parent", trigger="melee", delivery="melee", links=Links(children=RelatedAttacks(names=["native_child"])), stats=AttackStats(damage=Dist(slash=10), crit_chance=1, crit_damage=3, status_chance=0.5, fire_rate=1)),
+            "parent": Attack("Parent", trigger="melee", delivery="melee", children=["native_child"], stats=AttackStats(damage=Dist(slash=10), crit_chance=1, crit_damage=3, status_chance=0.5, fire_rate=1)),
             "native_child": Attack("Native Child", trigger="melee", delivery="melee", stats=AttackStats(damage=Dist(impact=2), fire_rate=1)),
         })
         result = Calculator(weapon, build=Build(arcanes=[duplicate])).resolve(attack="parent")
         parent = result.weapon.attacks["parent"]
         generated = result.weapon.attacks["melee_duplicate"]
         self.assertEqual(generated.stats, parent.stats)
-        self.assertIsNone(generated.links.children)
+        self.assertEqual(generated.children, [])
         self.assertEqual((result.attacks["melee_duplicate"].generated_by, result.attacks["melee_duplicate"].generated_from), ("Melee Duplicate", "parent"))
-        self.assertFalse(generated.links.has_named("melee_duplicate", side="children"))
+        self.assertNotIn("melee_duplicate", generated.children)
 
     def test_melee_influence_definition_is_selective_but_uses_resolved_parent_status(self):
         influence = arsenal.arcane.get("Melee Influence")
@@ -109,7 +113,7 @@ class AttackInheritanceTests(unittest.TestCase):
         self.assertEqual(generated.stats.damage, Dist(electricity=10))
         self.assertEqual(generated.stats.forced_procs, Dist())
         self.assertEqual((generated.stats.crit_chance, generated.stats.crit_damage, generated.stats.status_chance, generated.stats.multishot), (0.8, 4, 0, 1))
-        self.assertEqual((generated.stats.co_factor, generated.stats.co_effect, generated.links.children), (2, "multiplies", None))
+        self.assertEqual((generated.stats.co_factor, generated.stats.co_effect, generated.children), (2, "multiplies", []))
         self.assertEqual(generated.category, "heavy")
         self.assertFalse(generated.hits_source)
         self.assertEqual(result.attacks["melee_influence"].generated_from, "heavy")
@@ -156,13 +160,11 @@ class AttackInheritanceTests(unittest.TestCase):
             max_rank=2,
             compatibility=Compatibility(subtypes=["rifle"]),
             stats=UpgradeStats(
-                generated_attack=Attack(
+                generated_attack=GeneratedAttack(
                     name="Generated Attack",
+                    parent=RelatedAttacks(names=["Normal Attack"]),
+                    children=["Generated Attack"],
                     inheritance=Inheritance(include=["trigger", "delivery", "form", "category", "stats"]),
-                    links=Links(
-                        parents=RelatedAttacks(names=["Normal Attack"]),
-                        children=RelatedAttacks(names=["Generated Attack"]),
-                    ),
                     automatic=Automatic(on="hit", chance=UpgradeValue(0.3, False)),
                 )
             ),
@@ -192,14 +194,14 @@ class AttackInheritanceTests(unittest.TestCase):
         self.assertGreater(contributions.contribution["Melee Duplicate"], 0)
 
     def test_typed_construction_api(self):
-        attack = Attack(
+        attack = GeneratedAttack(
             name="Aftershock",
-            aoe=True,
-            inheritance=Inheritance(include=["trigger", "delivery"], exclude=[]),
-            links=Links(parents=RelatedAttacks(names=["Rocket Explosion"]), children=None),
+            parent=RelatedAttacks(names=["Rocket Explosion"]),
+            inheritance=Inheritance(include=["trigger", "delivery"], exclude=[], override={"aoe": True}),
             automatic=Automatic(on="hit", chance=UpgradeValue(0.3, True)),
         )
-        self.assertEqual(attack.links.parents.names, ["Rocket Explosion"])
+        self.assertEqual(attack.parent.names, ["Rocket Explosion"])
+        self.assertTrue(attack.inheritance.override["aoe"])
         self.assertEqual(attack.automatic.chance, UpgradeValue(0.3, True))
 
     def test_generated_attack_on_hit_scales_by_chance(self):
@@ -208,10 +210,10 @@ class AttackInheritanceTests(unittest.TestCase):
             max_rank=2,
             compatibility=Compatibility(subtypes=["rifle"]),
             stats=UpgradeStats(
-                generated_attack=Attack(
+                generated_attack=GeneratedAttack(
                     name="Hit Echo",
+                    parent=RelatedAttacks(names=["Normal Attack"]),
                     inheritance=Inheritance(include=["trigger", "delivery", "form", "category", "stats"]),
-                    links=Links(parents=RelatedAttacks(names=["Normal Attack"])),
                     automatic=Automatic(on="hit", chance=UpgradeValue(0.3, False)),
                 )
             ),
@@ -229,13 +231,11 @@ class AttackInheritanceTests(unittest.TestCase):
             max_rank=2,
             compatibility=Compatibility(subtypes=["rifle"]),
             stats=UpgradeStats(
-                generated_attack=Attack(
+                generated_attack=GeneratedAttack(
                     name="Recursive Echo",
+                    parent=RelatedAttacks(names=["Normal Attack"]),
+                    children=["Recursive Echo"],
                     inheritance=Inheritance(include=["trigger", "delivery", "form", "category", "stats"]),
-                    links=Links(
-                        parents=RelatedAttacks(names=["Normal Attack"]),
-                        children=RelatedAttacks(names=["Recursive Echo"]),
-                    ),
                     automatic=Automatic(on="hit", chance=UpgradeValue(0.3, False)),
                 )
             ),

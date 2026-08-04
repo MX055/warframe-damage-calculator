@@ -5,11 +5,10 @@ from typing import Any
 
 from ..domain.effect_stats import MULTIPLICATIVE_EFFECT_STATS, unclassified_effect_stats
 from ..domain.effects import AUTOMATIC_FIELDS, EFFECT_FIELDS, REPEATABLE_AUTOMATIC_FIELDS, Effect, Source
-from ..domain.generated_attacks import GENERATED_ATTACK_STAT
+from ..domain.generated_attacks import GENERATED_ATTACK_RECORD_FIELDS, GENERATED_ATTACK_STAT, GeneratedAttack
 from ..domain.scaled_values import is_scaled_value_record, UpgradeValue
 from ..domain.attacks import ATTACK_RECORD_FIELDS, Inheritance, RelatedAttacks, Attack
 from ..domain.upgrades import COMBO_FIELDS, Combo
-from ..domain.perks import effect_signature, perk_value_keys
 
 
 def _validate_scaled_value(value: Any, path: str) -> None:
@@ -63,16 +62,10 @@ def _validate_related_attacks(related: Any, path: str, *, display_names: bool = 
         raise ValueError(f"{path}.names: expected display names")
 
 
-def _validate_links(links: Any, path: str, *, require_parents: bool = False, display_child_names: bool = False) -> None:
-    if links is None: return
-    if not isinstance(links, dict) or set(links) - {"parents", "children"}: raise ValueError(f"{path}: invalid links fields")
-    if "parents" in links:
-        if require_parents and not links["parents"]: raise ValueError(f"{path}.parents: expected a parent selector")
-        _validate_related_attacks(links["parents"], f"{path}.parents")
-    elif require_parents:
-        raise ValueError(f"{path}.parents: expected a parent selector")
-    if "children" in links:
-        _validate_related_attacks(links["children"], f"{path}.children", display_names=display_child_names)
+def _validate_children_names(children: Any, path: str) -> None:
+    if children is None: return
+    if not isinstance(children, list): raise ValueError(f"{path}: expected a list of names")
+    if any(not isinstance(item, str) or not item or "_" in item for item in children): raise ValueError(f"{path}: expected display names")
 
 
 def _validate_combos(combos: Any, path: str) -> None:
@@ -89,21 +82,39 @@ def _validate_combos(combos: Any, path: str) -> None:
         if set(record) - COMBO_FIELDS: raise ValueError(f"{location}: invalid fields")
 
 
-def _validate_attack_record(attack: Any, path: str, *, generated: bool = False) -> None:
+def _validate_attack_record(attack: Any, path: str) -> None:
     if not isinstance(attack, dict) or set(attack) - ATTACK_RECORD_FIELDS: raise ValueError(f"{path}: invalid fields")
+    if "links" in attack: raise ValueError(f"{path}: field 'links' was removed; use children")
     if "rank_scale" in attack: raise ValueError(f"{path}: entry-level rank_scale is not allowed")
     display_name = attack.get("name")
     if not isinstance(display_name, str) or not display_name or "_" in display_name: raise ValueError(f"{path}.name: expected a display name")
-    inheritance = attack.get("inheritance")
-    if inheritance is not None:
-        try: Inheritance.from_record(inheritance)
-        except (TypeError, ValueError) as error: raise ValueError(f"{path}.inheritance: {error}") from error
-    _validate_links(attack.get("links"), f"{path}.links", require_parents=generated, display_child_names=not generated)
-    if generated and not attack.get("links", {}).get("parents"): raise ValueError(f"{path}.links.parents: expected at least one parent selector")
-    if "automatic" in attack: _validate_automatic(attack.get("automatic") or {}, f"{path}.automatic")
+    _validate_children_names(attack.get("children"), f"{path}.children")
     if not isinstance(attack.get("stats", {}), dict): raise ValueError(f"{path}.stats: expected an object")
     _validate_attack_expressions(attack.get("stats", {}), f"{path}.stats")
     try: Attack.from_record({key: value for key, value in attack.items() if key in ATTACK_RECORD_FIELDS})
+    except (TypeError, ValueError) as error: raise ValueError(f"{path}: {error}") from error
+
+
+def _validate_generated_attack_record(attack: Any, path: str) -> None:
+    if not isinstance(attack, dict): raise ValueError(f"{path}: invalid fields")
+    if "links" in attack: raise ValueError(f"{path}: field 'links' was removed; use parent and children")
+    if "override" in attack: raise ValueError(f"{path}: field 'override' was removed; use inheritance.override")
+    if set(attack) - GENERATED_ATTACK_RECORD_FIELDS: raise ValueError(f"{path}: invalid fields")
+    if "rank_scale" in attack: raise ValueError(f"{path}: entry-level rank_scale is not allowed")
+    display_name = attack.get("name")
+    if not isinstance(display_name, str) or not display_name or "_" in display_name: raise ValueError(f"{path}.name: expected a display name")
+    if "parent" not in attack: raise ValueError(f"{path}.parent: expected a parent selector")
+    _validate_related_attacks(attack["parent"], f"{path}.parent")
+    _validate_children_names(attack.get("children"), f"{path}.children")
+    inheritance = attack.get("inheritance")
+    if inheritance is not None:
+        try: parsed = Inheritance.from_record(inheritance)
+        except (TypeError, ValueError) as error: raise ValueError(f"{path}.inheritance: {error}") from error
+        if parsed is not None:
+            for key, value in parsed.override.items():
+                _validate_attack_expressions(value, f"{path}.inheritance.override[{key!r}]")
+    if "automatic" in attack: _validate_automatic(attack.get("automatic") or {}, f"{path}.automatic")
+    try: GeneratedAttack.from_record(attack)
     except (TypeError, ValueError) as error: raise ValueError(f"{path}: {error}") from error
 
 
@@ -114,23 +125,23 @@ def _effects(stats: Any, path: str, *, sources: bool = False) -> None:
         for index, effect in enumerate(effects):
             location = f"{path}.{stat}[{index}]"
             if stat == GENERATED_ATTACK_STAT:
-                _validate_attack_record(effect, location, generated=True)
+                _validate_generated_attack_record(effect, location)
                 continue
             if not isinstance(effect, dict) or not set(effect) <= EFFECT_FIELDS | {"rank_scale"} or "value" not in effect or "automatic" not in effect: raise ValueError(f"{location}: invalid effect fields")
             if "rank_scale" in effect: raise ValueError(f"{location}: entry-level rank_scale is not allowed; wrap individual numeric values")
             try: parsed = Effect.from_record(effect)
             except (TypeError, ValueError) as error: raise ValueError(f"{location}: {error}") from error
             if sources:
-                if not isinstance(parsed.value, Source) or not parsed.value.path.startswith("$values."):
-                    raise ValueError(f"{location}: expected a $values source")
-                expected_prefix = f"$values.{stat}."
+                if not isinstance(parsed.value, Source) or not parsed.value.path.startswith("$stats."):
+                    raise ValueError(f"{location}: expected a $stats source")
+                expected_prefix = f"$stats.{stat}."
                 if not parsed.value.path.startswith(expected_prefix) or parsed.value.path == expected_prefix:
                     raise ValueError(f"{location}: expected named source {expected_prefix}<key>")
                 key = parsed.value.path[len(expected_prefix):]
                 if "." in key or "[" in key or not key:
-                    raise ValueError(f"{location}: value key must be a single path segment")
+                    raise ValueError(f"{location}: stats key must be a single path segment")
                 if parsed.value.default != 0:
-                    raise ValueError(f"{location}: value sources require default 0")
+                    raise ValueError(f"{location}: stats sources require default 0")
             if parsed.mode == "multiplicative" and stat not in MULTIPLICATIVE_EFFECT_STATS: raise ValueError(f"{location}: {stat} does not support multiplicative effects")
             if isinstance(effect["value"], dict) and "source" not in effect["value"] and not is_scaled_value_record(effect["value"]): raise ValueError(f"{location}: value must be scalar, scaled value, or source")
             elif isinstance(effect["value"], list): raise ValueError(f"{location}: value must be scalar")
@@ -142,12 +153,11 @@ def _validate_description(value: Any, path: str) -> None:
 
 
 def _validate_perk_description(value: Any, path: str) -> None:
-    if not isinstance(value, dict): raise ValueError(f"{path}: expected a source expression")
-    try:
-        source = Source.from_record(value)
-    except (TypeError, ValueError) as error:
-        raise ValueError(f"{path}: {error}") from error
-    if source.path != "$description": raise ValueError(f"{path}: expected source '$description'")
+    if value != "$description": raise ValueError(f"{path}: expected '$description'")
+
+
+def _validate_perk_stats(value: Any, path: str) -> None:
+    if value != "$stats": raise ValueError(f"{path}: expected '$stats'")
 
 
 def _implementation_status(value: Any, path: str) -> None:
@@ -168,7 +178,7 @@ def validate_database(database: dict[str, Any]) -> None:
     unexpected_root = set(database) - allowed_root
     if missing_root: raise ValueError(f"database: missing fields {sorted(missing_root)}")
     if unexpected_root: raise ValueError(f"database: unexpected fields {sorted(unexpected_root)}")
-    if database.get("schema_version") != 24: raise ValueError("schema version 24 is required")
+    if database.get("schema_version") != 28: raise ValueError("schema version 28 is required")
     for section in ("weapons", "upgrades", "enemies", "riven_stats"):
         if not isinstance(database.get(section), dict): raise ValueError(f"{section}: expected an object")
     upgrade_categories = {"mods", "arcanes", "perks"}
@@ -176,22 +186,15 @@ def validate_database(database: dict[str, Any]) -> None:
     for category in upgrade_categories:
         if not isinstance(database["upgrades"][category], dict): raise ValueError(f"upgrades.{category}: expected an object")
     for name, perk in database["upgrades"]["perks"].items():
-        if not isinstance(perk, dict) or set(perk) - {"name", "description", "stats", "implementation_status"}: raise ValueError(f"upgrades.perks.{name}: invalid fields")
+        if not isinstance(perk, dict) or set(perk) - {"name", "description", "slot_type", "stats", "implementation_status"}: raise ValueError(f"upgrades.perks.{name}: invalid fields")
         if perk.get("name") != name: raise ValueError(f"upgrades.perks.{name}: invalid name")
+        if perk.get("slot_type") != "perk": raise ValueError(f"upgrades.perks.{name}: invalid slot_type")
         _validate_perk_description(perk.get("description"), f"upgrades.perks.{name}.description")
+        _validate_perk_stats(perk.get("stats"), f"upgrades.perks.{name}.stats")
         _implementation_status(perk.get("implementation_status"), f"upgrades.perks.{name}.implementation_status")
-        stats = perk.get("stats", {})
-        _effects(stats, f"upgrades.perks.{name}.stats", sources=True)
-        for stat, effects in stats.items():
-            keys = perk_value_keys(name, stat, effects)
-            if len(keys) != len(set(keys)):
-                raise ValueError(f"upgrades.perks.{name}.stats.{stat}: duplicate value keys {keys}")
-            for index, (effect, key) in enumerate(zip(effects, keys, strict=True)):
-                source = effect.get("value", {})
-                if not isinstance(source, dict) or source.get("source") != f"$values.{stat}.{key}":
-                    raise ValueError(f"upgrades.perks.{name}.stats.{stat}[{index}]: expected source $values.{stat}.{key}")
     weapon_categories = {"primaries", "secondaries", "melees", "archguns"}
     if set(database["weapons"]) != weapon_categories: raise ValueError(f"weapons: expected categories {sorted(weapon_categories)}")
+    effect_stats: set[str] = set()
     for category, weapons in database["weapons"].items():
         if not isinstance(weapons, dict): raise ValueError(f"weapons.{category}: expected an object")
         for name, weapon in weapons.items():
@@ -202,38 +205,29 @@ def validate_database(database: dict[str, Any]) -> None:
             if weapon.get("name") != name or "ammo" in weapon: raise ValueError(f"weapons.{category}.{name}: invalid record")
             if not weapon.get("attacks"): raise ValueError(f"weapons.{category}.{name}: attacks are required")
             for attack_name, attack in weapon["attacks"].items():
-                _validate_attack_record(attack, f"weapons.{category}.{name}.attacks.{attack_name}", generated=False)
+                _validate_attack_record(attack, f"weapons.{category}.{name}.attacks.{attack_name}")
                 if "trigger" not in attack or "delivery" not in attack: raise ValueError(f"weapons.{category}.{name}.attacks.{attack_name}: trigger and delivery are required")
             for tier, choices in weapon.get("evolutions", {}).items():
-                for choice, record in choices.items():
-                    path = f"weapons.{category}.{name}.evolutions.{tier}.{choice}"
-                    if not isinstance(record, dict) or set(record) - {"perk", "description", "stats"}: raise ValueError(f"{path}: invalid fields")
+                for perk_name, record in choices.items():
+                    path = f"weapons.{category}.{name}.evolutions.{tier}.{perk_name}"
+                    if not isinstance(record, dict) or set(record) - {"description", "stats"}: raise ValueError(f"{path}: invalid fields")
                     if "values" in record: raise ValueError(f"{path}: field 'values' was renamed to 'stats'")
-                    perk_name = record.get("perk")
+                    if "perk" in record: raise ValueError(f"{path}: perk name is the evolution key; remove 'perk' field")
                     if perk_name not in database["upgrades"]["perks"]: raise ValueError(f"{path}: unknown perk {perk_name!r}")
                     stats = record.get("stats", {})
-                    templates = database["upgrades"]["perks"][perk_name].get("stats", {})
                     if not isinstance(stats, dict): raise ValueError(f"{path}.stats: expected an object")
-                    unknown = set(stats) - set(templates)
-                    if unknown: raise ValueError(f"{path}.stats: unknown stats {sorted(unknown)}")
                     if stats:
                         _effects(stats, f"{path}.stats", sources=False)
+                    effect_stats.update(stats)
                     for stat, effects in stats.items():
                         if not effects:
                             raise ValueError(f"{path}.stats.{stat}: omit empty effect lists")
-                        remaining = list(templates[stat])
                         for index, effect in enumerate(effects):
                             value = effect.get("value")
                             if value == 0 or value == 0.0:
                                 raise ValueError(f"{path}.stats.{stat}[{index}]: omit zero-valued entries")
-                            signature = effect_signature(effect)
-                            match = next((i for i, template in enumerate(remaining) if effect_signature(template) == signature), None)
-                            if match is None:
-                                raise ValueError(f"{path}.stats.{stat}[{index}]: unmatched perk template effect")
-                            remaining.pop(match)
-    allowed_mod = {"name", "description", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats", "combos"}
-    allowed_arcane = {"name", "description", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats"}
-    effect_stats: set[str] = set()
+    allowed_mod = {"name", "description", "slot_type", "max_rank", "implementation_status", "compatibility", "conflicts", "stats", "combos"}
+    allowed_arcane = {"name", "description", "slot_type", "max_rank", "implementation_status", "compatibility", "conflicts", "stats"}
     for section, expected_slots, allowed_upgrade in (("mods", {"regular_mod", "exilus_mod", "stance_mod"}, allowed_mod), ("arcanes", {"regular_arcane"}, allowed_arcane)):
         for name, upgrade in database["upgrades"][section].items():
             path = f"upgrades.{section}.{name}"
@@ -241,14 +235,13 @@ def validate_database(database: dict[str, Any]) -> None:
             _implementation_status(upgrade.get("implementation_status"), f"{path}.implementation_status")
             if upgrade.get("name") != name: raise ValueError(f"{path}: invalid name")
             _validate_description(upgrade.get("description"), f"{path}.description")
-            if upgrade.get("slot") not in expected_slots: raise ValueError(f"{path}: invalid slot")
+            if upgrade.get("slot_type") not in expected_slots: raise ValueError(f"{path}: invalid slot_type")
             compatibility = upgrade.get("compatibility", {})
             if set(compatibility) - {"types", "subtypes", "names", "categories", "triggers", "aoe"}: raise ValueError(f"{path}.compatibility: invalid fields")
             if "aoe" in compatibility and not isinstance(compatibility["aoe"], bool): raise ValueError(f"{path}.compatibility.aoe: expected a boolean")
             _effects(upgrade.get("stats", {}), f"{path}.stats")
             if section == "mods": _validate_combos(upgrade.get("combos"), f"{path}.combos")
             effect_stats.update(upgrade.get("stats", {}))
-    for perk in database["upgrades"]["perks"].values(): effect_stats.update(perk.get("stats", {}))
     unclassified = unclassified_effect_stats(effect_stats)
     if unclassified: raise ValueError(f"unclassified effect stats: {sorted(unclassified)}")
     allowed_enemy = {"name", "faction", "base_level", "stats", "body_parts", "modifiers"}

@@ -60,14 +60,14 @@ def _explosion_radius_lost(attack: Attack, total: ResolvedStats) -> float:
     return max(expanded - radius * _radius_scale(attack, total), 0)
 
 
-def _provisional(context: CalculationContext, attack: Attack, upgrade_effects: tuple[ResolvedEffect, ...], evolution_effects: tuple[ResolvedEffect, ...], static_upgrades: ResolvedStats | None = None, static_evolutions: ResolvedStats | None = None) -> tuple[Stats, StatusModel]:
+def _provisional(context: CalculationContext, attack: Attack, upgrade_effects: tuple[ResolvedEffect, ...], perk_effects: tuple[ResolvedEffect, ...], static_upgrades: ResolvedStats | None = None, static_perks: ResolvedStats | None = None) -> tuple[Stats, StatusModel]:
     upgrades = static_upgrades if static_upgrades is not None else aggregate(effect for effect in upgrade_effects if not effect.automatic)
-    evolutions = static_evolutions if static_evolutions is not None else aggregate(effect for effect in evolution_effects if not effect.automatic)
-    total = _combined(upgrades, evolutions)
-    base, original, _ = _base_damage(context, attack, evolutions)
-    damage = _damage(attack, base, original, upgrades, evolutions)
+    perks = static_perks if static_perks is not None else aggregate(effect for effect in perk_effects if not effect.automatic)
+    total = _combined(upgrades, perks)
+    base, original, _ = _base_damage(context, attack, perks)
+    damage = _damage(attack, base, original, upgrades, perks)
     crit = _scalar(float(attack.stats.crit_chance), "crit_chance", total)
-    status = _scalar(float(attack.stats.status_chance), "status_chance", total) * _status_vulnerability((*upgrade_effects, *evolution_effects))
+    status = _scalar(float(attack.stats.status_chance), "status_chance", total) * _status_vulnerability((*upgrade_effects, *perk_effects))
     crit, status = _derived_chances(crit, status, total)
     ms_bonus = 0 if context.weapon.type == "melee" or total.proportional.get("multishot_lock") else float(total.proportional.get("multishot", 0))
     multishot = max(float(attack.stats.multishot) * (1 + ms_bonus), 1)
@@ -188,9 +188,9 @@ def _apply_position_mixture(context: CalculationContext, result: ResolvedAttack,
     refresh_spatial(spatial, average.attack_rate)
 
 
-def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effects: tuple[ResolvedEffect, ...], evolution_effects: tuple[ResolvedEffect, ...], *, static_upgrades: ResolvedStats | None = None, static_evolutions: ResolvedStats | None = None, automatic_model_override: StatusModel | None = None, status_effects_override: dict[str, float] | None = None, random_proc_probability: float = 0, preliminary: bool = False, compact: bool = False, provisional_override: Stats | None = None, generated_by: str | None = None) -> ResolvedAttack | PreliminaryAttack:
+def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effects: tuple[ResolvedEffect, ...], perk_effects: tuple[ResolvedEffect, ...], *, static_upgrades: ResolvedStats | None = None, static_perks: ResolvedStats | None = None, automatic_model_override: StatusModel | None = None, status_effects_override: dict[str, float] | None = None, random_proc_probability: float = 0, preliminary: bool = False, compact: bool = False, provisional_override: Stats | None = None, generated_by: str | None = None) -> ResolvedAttack | PreliminaryAttack:
     if provisional_override is None:
-        provisional, provisional_model = _provisional(context, attack, upgrade_effects, evolution_effects, static_upgrades, static_evolutions)
+        provisional, provisional_model = _provisional(context, attack, upgrade_effects, perk_effects, static_upgrades, static_perks)
     else:
         provisional = provisional_override
         provisional_model = None
@@ -198,15 +198,15 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     if automatic_model_override is None:
         if provisional_model is None: raise RuntimeError("an automatic model or provisional status model is required")
         initial_upgrade_effects, _ = _resolve_effects(context, attack, upgrade_effects, provisional, provisional_model, equipped)
-        initial_evolution_effects, _ = _resolve_effects(context, attack, evolution_effects, provisional, provisional_model, equipped)
+        initial_perk_effects, _ = _resolve_effects(context, attack, perk_effects, provisional, provisional_model, equipped)
         stable = lambda effect: not any(str(value).endswith("_status_proc") for value in automatic_values(effect, "when"))
         initial_upgrades = aggregate(effect for effect in initial_upgrade_effects if stable(effect) and effect.stat not in DEFERRED_STATS)
-        initial_evolutions = aggregate(effect for effect in initial_evolution_effects if stable(effect) and effect.stat not in DEFERRED_STATS)
-        initial_total = _combined(initial_upgrades, initial_evolutions)
+        initial_perks = aggregate(effect for effect in initial_perk_effects if stable(effect) and effect.stat not in DEFERRED_STATS)
+        initial_total = _combined(initial_upgrades, initial_perks)
         initial_heavy = context.weapon.type == "melee" and attack.category in HEAVY_CATEGORIES
         initial_upgrade_crit = float(initial_upgrades.proportional.get("crit_chance", 0)) * (2 if initial_heavy else 1)
-        initial_crit = max((float(attack.stats.crit_chance) + float(initial_total.base.get("crit_chance", 0))) * (1 + initial_upgrade_crit + float(initial_evolutions.proportional.get("crit_chance", 0))) * family_factor(initial_total, "crit_chance") + float(initial_total.flat.get("crit_chance", 0)), 0)
-        initial_status = _scalar(float(attack.stats.status_chance), "status_chance", initial_total) * _status_vulnerability((*initial_upgrade_effects, *initial_evolution_effects))
+        initial_crit = max((float(attack.stats.crit_chance) + float(initial_total.base.get("crit_chance", 0))) * (1 + initial_upgrade_crit + float(initial_perks.proportional.get("crit_chance", 0))) * family_factor(initial_total, "crit_chance") + float(initial_total.flat.get("crit_chance", 0)), 0)
+        initial_status = _scalar(float(attack.stats.status_chance), "status_chance", initial_total) * _status_vulnerability((*initial_upgrade_effects, *initial_perk_effects))
         initial_crit, initial_status = _derived_chances(initial_crit, initial_status, initial_total)
         initial_ms_bonus = 0 if context.weapon.type == "melee" or initial_total.proportional.get("multishot_lock") else float(initial_total.proportional.get("multishot", 0))
         initial_multishot = max(float(attack.stats.multishot) * (1 + initial_ms_bonus), 1)
@@ -217,24 +217,24 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
             acquisition_attempts = initial_multishot
             _, initial_rate, _ = _ranged_rate(context, attack, initial_total, initial_multishot)
         initial_duration = _scalar(float(attack.stats.status_duration), "status_duration", initial_total)
-        initial_effects = (*initial_upgrade_effects, *initial_evolution_effects)
+        initial_effects = (*initial_upgrade_effects, *initial_perk_effects)
         initial_forced = _forced_procs(attack, initial_effects)
         automatic_model = _status_model(provisional_model.damage, initial_forced, initial_status, acquisition_attempts, initial_rate, initial_duration, initial_effects, initial_crit, afflictions=bool(AFFLICTIONS_CATEGORIES & set(initial_forced)))
     else:
         automatic_model = automatic_model_override
     upgrades_resolved, upgrade_positions = _resolve_effects(context, attack, upgrade_effects, provisional, automatic_model, equipped)
-    evolution_resolved, evolution_positions = _resolve_effects(context, attack, evolution_effects, provisional, automatic_model, equipped)
+    perk_resolved, perk_positions = _resolve_effects(context, attack, perk_effects, provisional, automatic_model, equipped)
     upgrades = aggregate(effect for effect in upgrades_resolved if automatic_value(effect, "on") not in POSITION_EVENTS and effect.stat not in DEFERRED_STATS and not (effect.stat == "crit_damage" and automatic_value(effect, "source") == "puncture_status_chance"))
-    evolutions = aggregate(effect for effect in evolution_resolved if automatic_value(effect, "on") not in POSITION_EVENTS and effect.stat not in DEFERRED_STATS)
-    total = _combined(upgrades, evolutions)
-    base_damage, original, displayed_base_damage = _base_damage(context, attack, evolutions)
+    perks = aggregate(effect for effect in perk_resolved if automatic_value(effect, "on") not in POSITION_EVENTS and effect.stat not in DEFERRED_STATS)
+    total = _combined(upgrades, perks)
+    base_damage, original, displayed_base_damage = _base_damage(context, attack, perks)
     progenitor = context.build.progenitor if "progenitor" in context.weapon.traits else None
-    damage = _damage(attack, base_damage, original, upgrades, evolutions, progenitor)
+    damage = _damage(attack, base_damage, original, upgrades, perks, progenitor)
     heavy = context.weapon.type == "melee" and attack.category in HEAVY_CATEGORIES
     upgrade_crit = float(upgrades.proportional.get("crit_chance", 0)) * (2 if heavy else 1)
     crit_base = float(attack.stats.crit_chance) + float(total.base.get("crit_chance", 0))
-    crit = max(crit_base * (1 + upgrade_crit + float(evolutions.proportional.get("crit_chance", 0))) * family_factor(total, "crit_chance") + float(total.flat.get("crit_chance", 0)), 0)
-    resolved_effects = (*upgrades_resolved, *evolution_resolved)
+    crit = max(crit_base * (1 + upgrade_crit + float(perks.proportional.get("crit_chance", 0))) * family_factor(total, "crit_chance") + float(total.flat.get("crit_chance", 0)), 0)
+    resolved_effects = (*upgrades_resolved, *perk_resolved)
     status = _scalar(float(attack.stats.status_chance), "status_chance", total) * _status_vulnerability(resolved_effects)
     crit, status = _derived_chances(crit, status, total)
     if context.weapon.type == "melee" and attack.category == "slide":
@@ -253,7 +253,7 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     else:
         instant_rate, fire_rate, category_stats = _ranged_rate(context, attack, total, multishot)
     duration = _scalar(float(attack.stats.status_duration), "status_duration", total)
-    forced = _forced_procs(attack, (*upgrades_resolved, *evolution_resolved))
+    forced = _forced_procs(attack, (*upgrades_resolved, *perk_resolved))
     trigger_crit_chance = crit
     status_attempts = multishot
     afflictions = bool(AFFLICTIONS_CATEGORIES & set(forced))
@@ -269,29 +269,29 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     range_total = total
     if generated_by is not None:
         range_upgrades = aggregate(effect for effect in upgrades_resolved if effect.mode != "multiplicative" or effect.stat not in RANGE_EFFECT_STATS or effect.source == generated_by)
-        range_total = _combined(range_upgrades, evolutions)
+        range_total = _combined(range_upgrades, perks)
     if not compact:
         modded_upgrades = aggregate(effect for effect in upgrades_resolved if _modded_pool_effect(effect))
-        modded_evolutions = aggregate(effect for effect in evolution_resolved if _modded_pool_effect(effect))
-        modded_total = _combined(modded_upgrades, modded_evolutions)
-        modded_base_damage, modded_original, _ = _base_damage(context, attack, modded_evolutions)
-        modded_damage = _damage(attack, modded_base_damage, modded_original, modded_upgrades, modded_evolutions, progenitor)
+        modded_perks = aggregate(effect for effect in perk_resolved if _modded_pool_effect(effect))
+        modded_total = _combined(modded_upgrades, modded_perks)
+        modded_base_damage, modded_original, _ = _base_damage(context, attack, modded_perks)
+        modded_damage = _damage(attack, modded_base_damage, modded_original, modded_upgrades, modded_perks, progenitor)
         modded_upgrade_crit = float(modded_upgrades.proportional.get("crit_chance", 0)) * (2 if heavy else 1)
         modded_crit_base = float(attack.stats.crit_chance) + float(modded_total.base.get("crit_chance", 0))
-        modded_crit = max(modded_crit_base * (1 + modded_upgrade_crit + float(modded_evolutions.proportional.get("crit_chance", 0))) * family_factor(modded_total, "crit_chance") + float(modded_total.flat.get("crit_chance", 0)), 0)
+        modded_crit = max(modded_crit_base * (1 + modded_upgrade_crit + float(modded_perks.proportional.get("crit_chance", 0))) * family_factor(modded_total, "crit_chance") + float(modded_total.flat.get("crit_chance", 0)), 0)
         modded_status = _scalar(float(attack.stats.status_chance), "status_chance", modded_total)
         modded_crit, modded_status = _derived_chances(modded_crit, modded_status, modded_total)
         if context.weapon.type == "melee" and attack.category == "slide": modded_crit *= max(1 + float(modded_total.proportional.get("slide_crit_chance", 0)), 0)
         modded_crit_damage = _scalar(float(attack.stats.crit_damage), "crit_damage", modded_total, minimum=1)
     crit_damage = _scalar(float(attack.stats.crit_damage), "crit_damage", total, minimum=1)
-    doughty = next((effect for effect in (*upgrades_resolved, *evolution_resolved) if effect.stat == "crit_damage" and automatic_value(effect, "source") == "puncture_status_chance"), None)
+    doughty = next((effect for effect in (*upgrades_resolved, *perk_resolved) if effect.stat == "crit_damage" and automatic_value(effect, "source") == "puncture_status_chance"), None)
     doughty_bonus = 0.0
     weak_point_common = float(total.proportional.get("weak_point_crit_chance", 0))
     weak_point_family = sum(float(family.get("weak_point_crit_chance", 0)) for family in total.families.values())
     crit_before_puncture = crit - puncture_bonus
     weak_point_crit = 0.0 if context.weapon.type == "melee" else max(crit_before_puncture + float(attack.stats.crit_chance) * (weak_point_common + weak_point_family) + float(total.flat.get("weak_point_crit_chance", 0)), 0)
     if puncture_bonus: weak_point_crit += puncture_bonus
-    crit_tier_chance = clamp(_special_value((*upgrades_resolved, *evolution_resolved), "crit_tier", "critical_hit"), 0, 1)
+    crit_tier_chance = clamp(_special_value((*upgrades_resolved, *perk_resolved), "crit_tier", "critical_hit"), 0, 1)
     if not compact:
         modded_ms_bonus = 0 if context.weapon.type == "melee" or modded_total.proportional.get("multishot_lock") else float(modded_total.proportional.get("multishot", 0))
         modded_multishot = max(float(attack.stats.multishot) * (1 + modded_ms_bonus), 1)
@@ -319,10 +319,10 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     crit_damage += 1.0 if cold_stacks >= 10 else min(0.1 * min(cold_stacks, 1) + 0.05 * max(cold_stacks - 1, 0), 0.5)
     faction = _faction_factor(context, total)
     non_crit_damage = family_bonus(total, "non_critical_hit", "damage_bonus") + float(total.proportional.get("non_crit_bonus_damage", 0))
-    non_crit_chance = max((float(automatic_value(effect, "chance", 0) or 0) for effect in (*upgrades_resolved, *evolution_resolved) if effect.family == "non_critical_hit"), default=0)
+    non_crit_chance = max((float(automatic_value(effect, "chance", 0) or 0) for effect in (*upgrades_resolved, *perk_resolved) if effect.family == "non_critical_hit"), default=0)
     weak_point_bonus = max(float(total.proportional.get("weak_point_damage", 0)) + float(total.proportional.get("sharpshot_bonus", 0)), 0)
     overguard_effect = float(total.proportional.get("overguard_damage_multiplier", 0))
-    effective = EffectiveAttackStats(damage=damage, dot_base_damage=_dot_base_damage(attack, base_damage, original, upgrades, evolutions), dot_elemental_bonuses=_elemental_dot_bonuses(total, progenitor), forced_procs=forced, status_model=status_model, crit_chance=crit, weak_point_crit_chance=weak_point_crit, crit_damage=crit_damage, status_chance=status, status_duration=duration, status_damage=max(1 + float(total.proportional.get("status_damage", 0)), 1), multishot=multishot, fire_rate=instant_rate, attack_event_rate=fire_rate, faction_damage=faction, target_vulnerability=max(1 + float(total.proportional.get("unique_enemy_vulnerability_multiplier", 0)), 0), overguard_damage_multiplier=overguard_effect if overguard_effect else 1, non_crit_bonus_damage=non_crit_damage, non_crit_bonus_chance=non_crit_chance, weak_point_damage_bonus=weak_point_bonus, special_effects=tuple(resolved_effects), trigger_crit_chance=crit_before_puncture, **category_stats)
+    effective = EffectiveAttackStats(damage=damage, dot_base_damage=_dot_base_damage(attack, base_damage, original, upgrades, perks), dot_elemental_bonuses=_elemental_dot_bonuses(total, progenitor), forced_procs=forced, status_model=status_model, crit_chance=crit, weak_point_crit_chance=weak_point_crit, crit_damage=crit_damage, status_chance=status, status_duration=duration, status_damage=max(1 + float(total.proportional.get("status_damage", 0)), 1), multishot=multishot, fire_rate=instant_rate, attack_event_rate=fire_rate, faction_damage=faction, target_vulnerability=max(1 + float(total.proportional.get("unique_enemy_vulnerability_multiplier", 0)), 0), overguard_damage_multiplier=overguard_effect if overguard_effect else 1, non_crit_bonus_damage=non_crit_damage, non_crit_bonus_chance=non_crit_chance, weak_point_damage_bonus=weak_point_bonus, special_effects=tuple(resolved_effects), trigger_crit_chance=crit_before_puncture, **category_stats)
     for stat in ("range", "punch_through", "accuracy", "recoil", "zoom", "ammo_maximum"):
         base_value = float(getattr(attack.stats, stat, 0)) if hasattr(attack.stats, stat) else 0
         modifiers = range_total if stat == "range" else total
@@ -355,7 +355,7 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
             modded[stat] = _additive_scalar(base_value, stat, modded_total, minimum=minimum) if additive else _scalar(base_value, stat, modded_total, minimum=minimum)
     body_crit, weak_crit = crit, weak_point_crit
     if context.weapon.type == "secondary":
-        per_stack, reset = enervate_parameters([*upgrades_resolved, *evolution_resolved])
+        per_stack, reset = enervate_parameters([*upgrades_resolved, *perk_resolved])
         body_bonus = average_enervate_bonus(crit, per_stack, reset)
         weak_bonus = average_enervate_bonus(weak_point_crit, per_stack, reset)
         body_crit += body_bonus
@@ -366,7 +366,7 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
     weak_tier_bonus = min(weak_crit, 1) * crit_tier_chance
     falloff_multiplier, spatial = spatial_falloff(attack, effective)
     average = ResolvedAttackMetrics(damage=damage, crit_chance=body_crit, crit_damage=crit_damage, status_chance=status, status_duration=duration, multishot=multishot, fire_rate=instant_rate, magazine_capacity=float(category_stats.get("magazine_capacity", 0)), reload_time=float(category_stats.get("reload_time", 0)), ammo_cost=float(category_stats.get("ammo_cost", 0)), ammo_efficiency=float(category_stats.get("ammo_efficiency", 0)), punch_through=float(effective.get("punch_through", 0)), accuracy=float(effective.get("accuracy", 0)), recoil=float(effective.get("recoil", 0)), burst_count=float(category_stats.get("burst_count", 1)), burst_delay=float(category_stats.get("burst_delay", 0)), charge_time=float(category_stats.get("charge_time", 0)), attack_speed=float(category_stats.get("attack_speed", instant_rate if context.weapon.type == "melee" else 0)), heavy_attack_speed=float(category_stats.get("heavy_attack_speed", 1)), heavy_attack_efficiency=float(category_stats.get("heavy_attack_efficiency", 0)), initial_combo=float(category_stats.get("initial_combo", 0)), crit_multiplier=crit_multiplier(body_crit + body_tier_bonus, crit_damage), weak_point_crit_chance=weak_crit, weak_point_crit_multiplier=crit_multiplier(weak_crit + weak_tier_bonus, crit_damage), attack_rate=fire_rate, procs_per_shot=status_model.expected_procs_per_attack, puncture_status_crit_damage_bonus=doughty_bonus, crit_tier_bonus=body_tier_bonus, weak_point_crit_tier_bonus=weak_tier_bonus, secondary_enervate_bonus=body_bonus, weak_point_secondary_enervate_bonus=weak_bonus, falloff_multiplier=falloff_multiplier)
-    result = ResolvedAttack(attack, base, modded, effective, upgrades, evolutions, average, spatial, status_effects)
+    result = ResolvedAttack(attack, base, modded, effective, upgrades, perks, average, spatial, status_effects)
     combo_multiplier = 1
     if heavy:
         combo_multiplier = _resolved_combo_multiplier(context, float(category_stats.get("initial_combo", 0)))
@@ -378,7 +378,7 @@ def _calculate_attack(context: CalculationContext, attack: Attack, upgrade_effec
         set_damage(average, spatial, direct, dot)
     refresh_metrics(average)
     refresh_spatial(spatial, average.attack_rate)
-    _apply_position_mixture(context, result, [*upgrade_positions, *evolution_positions])
+    _apply_position_mixture(context, result, [*upgrade_positions, *perk_positions])
     return result
 
 
@@ -432,21 +432,21 @@ def derive_event_attack(parent: ResolvedAttack, attack: Attack, probability: flo
 
 
 class AttackCalculator:
-    __slots__ = ("context", "upgrade_effects", "evolution_effects", "static_upgrades", "static_evolutions")
+    __slots__ = ("context", "upgrade_effects", "perk_effects", "static_upgrades", "static_perks")
 
-    def __init__(self, context: CalculationContext, upgrade_effects: tuple[ResolvedEffect, ...], evolution_effects: tuple[ResolvedEffect, ...]) -> None:
+    def __init__(self, context: CalculationContext, upgrade_effects: tuple[ResolvedEffect, ...], perk_effects: tuple[ResolvedEffect, ...]) -> None:
         self.context = context
         self.upgrade_effects = upgrade_effects
-        self.evolution_effects = evolution_effects
+        self.perk_effects = perk_effects
         self.static_upgrades = aggregate(effect for effect in upgrade_effects if not effect.automatic)
-        self.static_evolutions = aggregate(effect for effect in evolution_effects if not effect.automatic)
+        self.static_perks = aggregate(effect for effect in perk_effects if not effect.automatic)
 
     def calculate(self, attack: Attack, *, automatic_model: StatusModel | None = None, status_effects: dict[str, float] | None = None, random_proc_probability: float = 0, compact: bool = False, provisional: Stats | None = None, generated_by: str | None = None) -> ResolvedAttack:
-        result = _calculate_attack(self.context, attack, self.upgrade_effects, self.evolution_effects, static_upgrades=self.static_upgrades, static_evolutions=self.static_evolutions, automatic_model_override=automatic_model, status_effects_override=status_effects, random_proc_probability=random_proc_probability, compact=compact, provisional_override=provisional, generated_by=generated_by)
+        result = _calculate_attack(self.context, attack, self.upgrade_effects, self.perk_effects, static_upgrades=self.static_upgrades, static_perks=self.static_perks, automatic_model_override=automatic_model, status_effects_override=status_effects, random_proc_probability=random_proc_probability, compact=compact, provisional_override=provisional, generated_by=generated_by)
         if isinstance(result, PreliminaryAttack): raise RuntimeError("full attack calculation returned preliminary data")
         return result
 
     def calculate_preliminary(self, attack: Attack) -> PreliminaryAttack:
-        result = _calculate_attack(self.context, attack, self.upgrade_effects, self.evolution_effects, static_upgrades=self.static_upgrades, static_evolutions=self.static_evolutions, preliminary=True)
+        result = _calculate_attack(self.context, attack, self.upgrade_effects, self.perk_effects, static_upgrades=self.static_upgrades, static_perks=self.static_perks, preliminary=True)
         if isinstance(result, ResolvedAttack): raise RuntimeError("preliminary attack calculation returned a full result")
         return result

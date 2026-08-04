@@ -8,7 +8,7 @@ from .domain.perks import Perk, PerkValues
 from .domain.scaled_values import UpgradeValue
 from .domain.state import State
 from .domain.upgrades import Arcane, Combo, Compatibility, Mod, Upgrade, UpgradeStats
-from .domain.weapons import Archgun, Attack, AttackStats, Falloff, Inheritance, Links, Melee, Primary, RelatedAttacks, Secondary
+from .domain.weapons import Archgun, Attack, AttackStats, Falloff, GeneratedAttack, Inheritance, Melee, Primary, RelatedAttacks, Secondary
 from .engine.calculator import Calculator
 from .formatting.results import Formatter
 from .optimizer import OptimizationProgress, Optimizer, balanced_damage_components, balanced_damage_metric
@@ -32,9 +32,9 @@ __all__ = (
     "EnemyStats",
     "Falloff",
     "Formatter",
+    "GeneratedAttack",
     "ImplementationStatus",
     "Inheritance",
-    "Links",
     "Melee",
     "Mod",
     "OptimizationProgress",

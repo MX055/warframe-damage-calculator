@@ -8,7 +8,7 @@ from typing import Any, ClassVar, Self
 from .attacks import Attack
 from .effect_stats import MULTIPLICATIVE_EFFECT_STATS
 from .effects import Automatic, Effect, EffectChannel, EffectMode, EffectValue, Source, resolve_automatic
-from .generated_attacks import GENERATED_ATTACK_STAT, resolve_generated_payload
+from .generated_attacks import GENERATED_ATTACK_STAT, GeneratedAttack, resolve_generated_payload
 from .implementation import ImplementationStatus
 from .runtime import Runtime
 from .scaled_values import UpgradeValue, resolve_scalar
@@ -16,7 +16,7 @@ from .scaled_values import UpgradeValue, resolve_scalar
 
 COMBO_TYPES = frozenset({"aerial", "block", "finisher", "forward", "forward_block", "heavy", "neutral", "slam", "slide", "wall"})
 COMBO_FIELDS = frozenset({"type", "name", "multiplier", "hits", "duration"})
-type StatInput = Effect | EffectValue | Attack | Iterable[Effect | EffectValue | Attack]
+type StatInput = Effect | EffectValue | Attack | GeneratedAttack | Iterable[Effect | EffectValue | Attack | GeneratedAttack]
 
 
 @dataclass(slots=True)
@@ -206,19 +206,19 @@ class UpgradeStats(Mapping[str, tuple[Effect, ...]]):
         effects: dict[str, tuple[Effect, ...]] = {}
         for stat, source in stats.items():
             if stat == GENERATED_ATTACK_STAT:
-                values = (source,) if isinstance(source, (Effect, Attack, Mapping)) and not isinstance(source, (str, bytes)) else tuple(source)
+                values = (source,) if isinstance(source, (Effect, GeneratedAttack, Mapping)) and not isinstance(source, (str, bytes)) else tuple(source)
                 if not values: raise TypeError(f"{stat} requires one or more effect values")
                 parsed: list[Effect] = []
                 for value in values:
                     if isinstance(value, Effect): parsed.append(value)
-                    elif isinstance(value, Attack):
+                    elif isinstance(value, GeneratedAttack):
                         effect = Effect(value.to_generated_value(), rank_scale=None)
                         effect.automatic = (value.automatic or Automatic()).to_channel()
                         parsed.append(effect)
                     else:
-                        attack = Attack.from_record(value)
-                        effect = Effect(attack.to_generated_value(), rank_scale=None)
-                        effect.automatic = (attack.automatic or Automatic()).to_channel()
+                        generated = GeneratedAttack.from_record(value)
+                        effect = Effect(generated.to_generated_value(), rank_scale=None)
+                        effect.automatic = (generated.automatic or Automatic()).to_channel()
                         parsed.append(effect)
                 effects[stat] = tuple(parsed)
                 continue
@@ -252,9 +252,9 @@ class UpgradeStats(Mapping[str, tuple[Effect, ...]]):
             if stat == GENERATED_ATTACK_STAT:
                 items: list[Effect] = []
                 for effect in effects:
-                    attack = Attack.from_record(effect)
-                    item = Effect(attack.to_generated_value(), rank_scale=None)
-                    item.automatic = (attack.automatic or Automatic()).to_channel()
+                    generated = GeneratedAttack.from_record(effect)
+                    item = Effect(generated.to_generated_value(), rank_scale=None)
+                    item.automatic = (generated.automatic or Automatic()).to_channel()
                     items.append(item)
                 parsed[stat] = tuple(items)
             else:
@@ -310,12 +310,12 @@ class Upgrade:
 
 
 class _RankedUpgrade(Upgrade):
-    default_slot: ClassVar[str]
-    __slots__ = ("slot", "max_rank", "compatibility", "conflicts", "runtime")
+    default_slot_type: ClassVar[str]
+    __slots__ = ("slot_type", "max_rank", "compatibility", "conflicts", "runtime")
 
-    def __init__(self, *, name: str, description: str | None = None, slot: str | None = None, max_rank: int = 0, implementation_status: ImplementationStatus | None = None, compatibility: Compatibility | None = None, conflicts: Iterable[str] = (), stats: UpgradeStats | None = None, runtime: Runtime | None = None) -> None:
+    def __init__(self, *, name: str, description: str | None = None, slot_type: str | None = None, max_rank: int = 0, implementation_status: ImplementationStatus | None = None, compatibility: Compatibility | None = None, conflicts: Iterable[str] = (), stats: UpgradeStats | None = None, runtime: Runtime | None = None) -> None:
         super().__init__(name=name, description=description, implementation_status=implementation_status, stats=stats)
-        self.slot = slot or self.default_slot
+        self.slot_type = slot_type or self.default_slot_type
         self.max_rank = int(max_rank)
         self.compatibility = compatibility or Compatibility()
         self.conflicts = list(conflicts)
@@ -328,19 +328,19 @@ class _RankedUpgrade(Upgrade):
 
     @classmethod
     def from_record(cls, record: Mapping[str, Any]) -> Self:
-        allowed = {"name", "description", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats"}
+        allowed = {"name", "description", "slot_type", "max_rank", "implementation_status", "compatibility", "conflicts", "stats"}
         unknown = set(record) - allowed
         if unknown: raise TypeError(f"unknown {cls.type} fields: {', '.join(sorted(unknown))}")
         description = record.get("description")
-        return cls(name=str(record["name"]), description=None if description is None else str(description), slot=record.get("slot"), max_rank=int(record.get("max_rank", 0)), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")), compatibility=Compatibility.from_record(record.get("compatibility", {})), conflicts=record.get("conflicts", []), stats=UpgradeStats.from_record(record.get("stats", {})))
+        return cls(name=str(record["name"]), description=None if description is None else str(description), slot_type=record.get("slot_type"), max_rank=int(record.get("max_rank", 0)), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")), compatibility=Compatibility.from_record(record.get("compatibility", {})), conflicts=record.get("conflicts", []), stats=UpgradeStats.from_record(record.get("stats", {})))
 
     def copy(self) -> Self:
-        return type(self)(name=self.name, description=self.description, slot=self.slot, max_rank=self.max_rank, implementation_status=self.implementation_status, compatibility=deepcopy(self.compatibility), conflicts=self.conflicts, stats=self.stats.copy(), runtime=self.runtime.copy())
+        return type(self)(name=self.name, description=self.description, slot_type=self.slot_type, max_rank=self.max_rank, implementation_status=self.implementation_status, compatibility=deepcopy(self.compatibility), conflicts=self.conflicts, stats=self.stats.copy(), runtime=self.runtime.copy())
 
     def __eq__(self, other: object) -> bool:
-        return type(self) is type(other) and isinstance(other, _RankedUpgrade) and self.name == other.name and self.slot == other.slot
+        return type(self) is type(other) and isinstance(other, _RankedUpgrade) and self.name == other.name and self.slot_type == other.slot_type
 
-    def __hash__(self) -> int: return hash((type(self), self.name, self.slot))
+    def __hash__(self) -> int: return hash((type(self), self.name, self.slot_type))
 
     def resolve_manual(self) -> tuple[ResolvedEffect, ...]:
         rank = min(max(int(self.runtime.rank), 0), self.max_rank)
@@ -371,33 +371,33 @@ class _RankedUpgrade(Upgrade):
 
 class Mod(_RankedUpgrade):
     type = "mod"
-    default_slot = "regular_mod"
+    default_slot_type = "regular_mod"
     __slots__ = ("combos",)
 
-    def __init__(self, *, name: str, description: str | None = None, slot: str | None = None, max_rank: int = 0, implementation_status: ImplementationStatus | None = None, compatibility: Compatibility | None = None, conflicts: Iterable[str] = (), stats: UpgradeStats | None = None, combos: Mapping[str, Combo] | None = None, runtime: Runtime | None = None) -> None:
-        super().__init__(name=name, description=description, slot=slot, max_rank=max_rank, implementation_status=implementation_status, compatibility=compatibility, conflicts=conflicts, stats=stats, runtime=runtime)
+    def __init__(self, *, name: str, description: str | None = None, slot_type: str | None = None, max_rank: int = 0, implementation_status: ImplementationStatus | None = None, compatibility: Compatibility | None = None, conflicts: Iterable[str] = (), stats: UpgradeStats | None = None, combos: Mapping[str, Combo] | None = None, runtime: Runtime | None = None) -> None:
+        super().__init__(name=name, description=description, slot_type=slot_type, max_rank=max_rank, implementation_status=implementation_status, compatibility=compatibility, conflicts=conflicts, stats=stats, runtime=runtime)
         self.combos = _parse_combos(combos)
 
     @classmethod
     def from_record(cls, record: Mapping[str, Any]) -> Self:
-        allowed = {"name", "description", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats", "combos"}
+        allowed = {"name", "description", "slot_type", "max_rank", "implementation_status", "compatibility", "conflicts", "stats", "combos"}
         unknown = set(record) - allowed
         if unknown: raise TypeError(f"unknown {cls.type} fields: {', '.join(sorted(unknown))}")
         description = record.get("description")
-        return cls(name=str(record["name"]), description=None if description is None else str(description), slot=record.get("slot"), max_rank=int(record.get("max_rank", 0)), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")), compatibility=Compatibility.from_record(record.get("compatibility", {})), conflicts=record.get("conflicts", []), stats=UpgradeStats.from_record(record.get("stats", {})), combos=_parse_combos(record.get("combos")))
+        return cls(name=str(record["name"]), description=None if description is None else str(description), slot_type=record.get("slot_type"), max_rank=int(record.get("max_rank", 0)), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")), compatibility=Compatibility.from_record(record.get("compatibility", {})), conflicts=record.get("conflicts", []), stats=UpgradeStats.from_record(record.get("stats", {})), combos=_parse_combos(record.get("combos")))
 
     def copy(self) -> Self:
-        return type(self)(name=self.name, description=self.description, slot=self.slot, max_rank=self.max_rank, implementation_status=self.implementation_status, compatibility=deepcopy(self.compatibility), conflicts=self.conflicts, stats=self.stats.copy(), combos={combo_id: Combo(**combo.to_record()) for combo_id, combo in self.combos.items()}, runtime=self.runtime.copy())
+        return type(self)(name=self.name, description=self.description, slot_type=self.slot_type, max_rank=self.max_rank, implementation_status=self.implementation_status, compatibility=deepcopy(self.compatibility), conflicts=self.conflicts, stats=self.stats.copy(), combos={combo_id: Combo(**combo.to_record()) for combo_id, combo in self.combos.items()}, runtime=self.runtime.copy())
 
 
 class Arcane(_RankedUpgrade):
     type = "arcane"
-    default_slot = "regular_arcane"
+    default_slot_type = "regular_arcane"
 
     @classmethod
     def from_record(cls, record: Mapping[str, Any]) -> Self:
-        allowed = {"name", "description", "slot", "max_rank", "implementation_status", "compatibility", "conflicts", "stats"}
+        allowed = {"name", "description", "slot_type", "max_rank", "implementation_status", "compatibility", "conflicts", "stats"}
         unknown = set(record) - allowed
         if unknown: raise TypeError(f"unknown {cls.type} fields: {', '.join(sorted(unknown))}")
         description = record.get("description")
-        return cls(name=str(record["name"]), description=None if description is None else str(description), slot=record.get("slot"), max_rank=int(record.get("max_rank", 0)), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")), compatibility=Compatibility.from_record(record.get("compatibility", {})), conflicts=record.get("conflicts", []), stats=UpgradeStats.from_record(record.get("stats", {})))
+        return cls(name=str(record["name"]), description=None if description is None else str(description), slot_type=record.get("slot_type"), max_rank=int(record.get("max_rank", 0)), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")), compatibility=Compatibility.from_record(record.get("compatibility", {})), conflicts=record.get("conflicts", []), stats=UpgradeStats.from_record(record.get("stats", {})))

@@ -13,17 +13,17 @@ from .candidates import Candidate
 class Search:
     def _neighbors(self, build: Build, pools: dict[str, tuple], rng: random.Random):
         fixed = self.calculator.build
-        mod_slots = 8 + (1 if any(mod.slot == "exilus_mod" for mod in pools["mods"]) else 0) + (1 if self.calculator.weapon.type == "melee" and any(mod.slot == "stance_mod" for mod in pools["mods"]) else 0)
+        mod_slots = 8 + (1 if any(mod.slot_type == "exilus_mod" for mod in pools["mods"]) else 0) + (1 if self.calculator.weapon.type == "melee" and any(mod.slot_type == "stance_mod" for mod in pools["mods"]) else 0)
         arcane_slots = 1
         if len(build.mods) < mod_slots:
             selected = {mod.name for mod in build.mods}
             for mod in self._shortlist(pools["mods"], selected, 36):
-                candidate = self._build(mods=[*build.mods, mod], arcanes=build.arcanes, evolutions=build.evolutions, progenitor=build.progenitor)
+                candidate = self._build(mods=[*build.mods, mod], arcanes=build.arcanes, perks=build.perks, progenitor=build.progenitor)
                 if self._legal(candidate): yield candidate
         if len(build.arcanes) < arcane_slots:
             selected = {arcane.name for arcane in build.arcanes}
             for arcane in self._shortlist(pools["arcanes"], selected, 24):
-                candidate = self._build(mods=build.mods, arcanes=[*build.arcanes, arcane], evolutions=build.evolutions, progenitor=build.progenitor)
+                candidate = self._build(mods=build.mods, arcanes=[*build.arcanes, arcane], perks=build.perks, progenitor=build.progenitor)
                 if self._legal(candidate): yield candidate
         fixed_mods = len(fixed.mods)
         for index in range(fixed_mods, len(build.mods)):
@@ -31,22 +31,22 @@ class Search:
             for mod in self._shortlist(pools["mods"], selected, 12):
                 mods = list(build.mods)
                 mods[index] = mod
-                candidate = self._build(mods=mods, arcanes=build.arcanes, evolutions=build.evolutions, progenitor=build.progenitor)
+                candidate = self._build(mods=mods, arcanes=build.arcanes, perks=build.perks, progenitor=build.progenitor)
                 if self._legal(candidate): yield candidate
-        occupied = {self.calculator.weapon.perks[perk].tier for perk in build.evolutions if perk in self.calculator.weapon.perks}
+        occupied = {self.calculator.weapon.perks[perk].tier for perk in build.perks if perk in self.calculator.weapon.perks}
         for tier, choices in pools["perks"].items():
             if tier in occupied: continue
-            for perk in choices: yield self._build(mods=build.mods, arcanes=build.arcanes, evolutions=[*build.evolutions, perk], progenitor=build.progenitor)
+            for perk in choices: yield self._build(mods=build.mods, arcanes=build.arcanes, perks=[*build.perks, perk], progenitor=build.progenitor)
         if fixed.progenitor is None:
             for progenitor in pools["progenitors"]:
-                if progenitor != build.progenitor: yield self._build(mods=build.mods, arcanes=build.arcanes, evolutions=build.evolutions, progenitor=progenitor)
+                if progenitor != build.progenitor: yield self._build(mods=build.mods, arcanes=build.arcanes, perks=build.perks, progenitor=progenitor)
         if len(build.mods) >= mod_slots and len(build.mods) > fixed_mods:
             indices = list(range(fixed_mods, len(build.mods)))
             rng.shuffle(indices)
             for index in indices[:4]:
                 mods = list(build.mods)
                 mods.pop(index)
-                yield self._build(mods=mods, arcanes=build.arcanes, evolutions=build.evolutions, progenitor=build.progenitor)
+                yield self._build(mods=mods, arcanes=build.arcanes, perks=build.perks, progenitor=build.progenitor)
 
 
     def _seed_builds(self, base: Build, pools: dict[str, tuple], *, search_scale: float = 1.0):
@@ -84,13 +84,13 @@ class Search:
             arcanes_value = list(base.arcanes)
             if isinstance(generator, Mod):
                 if generator.name in {mod.name for mod in base.mods}: continue
-                seed_base = self._build(mods=[*base.mods, generator], arcanes=base.arcanes, evolutions=base.evolutions, progenitor=base.progenitor)
+                seed_base = self._build(mods=[*base.mods, generator], arcanes=base.arcanes, perks=base.perks, progenitor=base.progenitor)
                 if not self._legal(seed_base): continue
             else:
                 if base.arcanes: continue
                 arcanes_value = [generator]
             mods = self._profile_mods(seed_base, allowed_mods, {"damage_bonus", "base_damage", "crit_chance", "crit_damage", "status_chance", "status_damage", *dependencies})
-            candidate = self._build(mods=mods, arcanes=arcanes_value, evolutions=base.evolutions, progenitor=base.progenitor)
+            candidate = self._build(mods=mods, arcanes=arcanes_value, perks=base.perks, progenitor=base.progenitor)
             key = self._build_key(candidate)
             if key not in seen and self._legal(candidate):
                 seen.add(key)
@@ -103,7 +103,7 @@ class Search:
                     profile_arcane_limit = min(len(arcanes), max(2, round(16 * search_scale ** 0.35)))
                     for arcane in arcanes[:profile_arcane_limit]:
                         arcanes_value = list(base.arcanes) if base.arcanes else ([] if arcane is None else [arcane])
-                        candidate = self._build(mods=mods, arcanes=arcanes_value, evolutions=perks, progenitor=progenitor)
+                        candidate = self._build(mods=mods, arcanes=arcanes_value, perks=perks, progenitor=progenitor)
                         key = self._build_key(candidate)
                         if key not in seen and self._legal(candidate):
                             seen.add(key)
@@ -112,18 +112,18 @@ class Search:
             riven_seed_limit = min(len(pools.get("rivens", ())), max(4, round(32 * search_scale ** 0.5)))
             for riven in pools.get("rivens", ())[:riven_seed_limit]:
                 mods = self._profile_mods(base, tuple(mod for mod in pools["mods"] if not self._is_riven(mod)), set())
-                regular_indices = [index for index, mod in enumerate(mods) if mod.slot == "regular_mod" and index >= len(base.mods)]
+                regular_indices = [index for index, mod in enumerate(mods) if mod.slot_type == "regular_mod" and index >= len(base.mods)]
                 if regular_indices:
                     mods[regular_indices[-1]] = riven
-                elif sum(mod.slot == "regular_mod" for mod in mods) < 8:
+                elif sum(mod.slot_type == "regular_mod" for mod in mods) < 8:
                     mods.append(riven)
-                candidate = self._build(mods=mods, arcanes=base.arcanes, evolutions=base.evolutions, progenitor=base.progenitor)
+                candidate = self._build(mods=mods, arcanes=base.arcanes, perks=base.perks, progenitor=base.progenitor)
                 key = self._build_key(candidate)
                 if key not in seen and self._legal(candidate):
                     seen.add(key)
                     yield candidate
         for perks in perk_sets:
-            candidate = self._build(mods=self._profile_mods(base, pools["mods"], set()), arcanes=base.arcanes, evolutions=perks, progenitor=base.progenitor)
+            candidate = self._build(mods=self._profile_mods(base, pools["mods"], set()), arcanes=base.arcanes, perks=perks, progenitor=base.progenitor)
             key = self._build_key(candidate)
             if key not in seen and self._legal(candidate):
                 seen.add(key)
@@ -135,15 +135,15 @@ class Search:
         ranked = sorted((mod for mod in pool if mod.name not in selected), key=lambda mod: self._profile_priority(mod, profile), reverse=True)
         limits = {"regular_mod": 8, "exilus_mod": 1, "stance_mod": 1}
         counts: dict[str, int] = {}
-        for mod in mods: counts[mod.slot] = counts.get(mod.slot, 0) + 1
+        for mod in mods: counts[mod.slot_type] = counts.get(mod.slot_type, 0) + 1
         for mod in ranked:
-            limit = limits.get(mod.slot, 0)
-            if counts.get(mod.slot, 0) >= limit: continue
-            trial = self._build(mods=[*mods, mod], arcanes=base.arcanes, evolutions=base.evolutions, progenitor=base.progenitor)
+            limit = limits.get(mod.slot_type, 0)
+            if counts.get(mod.slot_type, 0) >= limit: continue
+            trial = self._build(mods=[*mods, mod], arcanes=base.arcanes, perks=base.perks, progenitor=base.progenitor)
             if not self._legal(trial): continue
             mods.append(mod)
             selected.add(mod.name)
-            counts[mod.slot] = counts.get(mod.slot, 0) + 1
+            counts[mod.slot_type] = counts.get(mod.slot_type, 0) + 1
         return mods
 
     @staticmethod
@@ -166,8 +166,8 @@ class Search:
         return matched * 100.0 + priority, priority, stat_count, name
 
     def _perk_sets(self, base: Build, pools: dict[str, tuple], limit: int) -> list[list[Perk]]:
-        sets = [list(base.evolutions)]
-        fixed_tiers = {self.calculator.weapon.perks[perk].tier for perk in base.evolutions if perk in self.calculator.weapon.perks}
+        sets = [list(base.perks)]
+        fixed_tiers = {self.calculator.weapon.perks[perk].tier for perk in base.perks if perk in self.calculator.weapon.perks}
         for tier, choices in pools["perks"].items():
             if tier in fixed_tiers: continue
             expanded = []
@@ -190,7 +190,7 @@ class Search:
                 if mod.name in selected: continue
                 mods = list(build.mods)
                 mods[index] = mod
-                candidate = self._build(mods=mods, arcanes=build.arcanes, evolutions=build.evolutions, progenitor=build.progenitor)
+                candidate = self._build(mods=mods, arcanes=build.arcanes, perks=build.perks, progenitor=build.progenitor)
                 key = self._build_key(candidate)
                 if key not in seen and self._legal(candidate):
                     seen.add(key)
@@ -201,21 +201,21 @@ class Search:
                 if arcane.name in selected: continue
                 arcanes = list(build.arcanes)
                 arcanes[index] = arcane
-                candidate = self._build(mods=build.mods, arcanes=arcanes, evolutions=build.evolutions, progenitor=build.progenitor)
+                candidate = self._build(mods=build.mods, arcanes=arcanes, perks=build.perks, progenitor=build.progenitor)
                 key = self._build_key(candidate)
                 if key not in seen and self._legal(candidate):
                     seen.add(key)
                     yield candidate
-        fixed_tiers = {self.calculator.weapon.perks[perk].tier for perk in fixed.evolutions if perk in self.calculator.weapon.perks}
-        tier_indices = {self.calculator.weapon.perks[perk].tier: index for index, perk in enumerate(build.evolutions) if perk in self.calculator.weapon.perks}
+        fixed_tiers = {self.calculator.weapon.perks[perk].tier for perk in fixed.perks if perk in self.calculator.weapon.perks}
+        tier_indices = {self.calculator.weapon.perks[perk].tier: index for index, perk in enumerate(build.perks) if perk in self.calculator.weapon.perks}
         for tier, choices in pools["perks"].items():
             if tier in fixed_tiers or tier not in tier_indices: continue
             index = tier_indices[tier]
             for perk in choices:
-                if perk is build.evolutions[index]: continue
-                evolutions = list(build.evolutions)
-                evolutions[index] = perk
-                candidate = self._build(mods=build.mods, arcanes=build.arcanes, evolutions=evolutions, progenitor=build.progenitor)
+                if perk is build.perks[index]: continue
+                perks = list(build.perks)
+                perks[index] = perk
+                candidate = self._build(mods=build.mods, arcanes=build.arcanes, perks=perks, progenitor=build.progenitor)
                 key = self._build_key(candidate)
                 if key not in seen:
                     seen.add(key)
@@ -239,7 +239,7 @@ class Search:
                         if first.name == second.name: continue
                         mods = list(build.mods)
                         mods[left], mods[right] = first, second
-                        candidate = self._build(mods=mods, arcanes=build.arcanes, evolutions=build.evolutions, progenitor=build.progenitor)
+                        candidate = self._build(mods=mods, arcanes=build.arcanes, perks=build.perks, progenitor=build.progenitor)
                         key = self._build_key(candidate)
                         if key not in seen and self._legal(candidate):
                             seen.add(key)
@@ -256,7 +256,7 @@ class Search:
                         mods[index] = mod
                         arcanes = list(build.arcanes)
                         arcanes[len(fixed.arcanes)] = arcane
-                        candidate = self._build(mods=mods, arcanes=arcanes, evolutions=build.evolutions, progenitor=build.progenitor)
+                        candidate = self._build(mods=mods, arcanes=arcanes, perks=build.perks, progenitor=build.progenitor)
                         key = self._build_key(candidate)
                         if key not in seen and self._legal(candidate):
                             seen.add(key)
@@ -274,7 +274,7 @@ class Search:
             if stats & {"status_chance", "status_damage"}: orientation.add("status")
             if stats & {"multishot"}: orientation.add("multishot")
             if stats & {"fire_rate", "multiplicative_fire_rate", "attack_speed"}: orientation.add("speed")
-        perks = tuple(sorted((self.calculator.weapon.perks[perk].tier, perk.name) for perk in build.evolutions if perk in self.calculator.weapon.perks))
+        perks = tuple(sorted((self.calculator.weapon.perks[perk].tier, perk.name) for perk in build.perks if perk in self.calculator.weapon.perks))
         progenitor = None if build.progenitor is None else build.progenitor.element
         riven = next((self._riven_signature(mod) for mod in build.mods if self._is_riven(mod)), ())
         return arcane, tuple(sorted(elements)), tuple(sorted(orientation)), perks, progenitor, riven
@@ -322,7 +322,7 @@ class Search:
                     left, right = rng.sample(replacements, 2)
                     mods = list(build.mods)
                     mods[first], mods[second] = left, right
-                    candidate = self._build(mods=mods, arcanes=build.arcanes, evolutions=build.evolutions, progenitor=build.progenitor)
+                    candidate = self._build(mods=mods, arcanes=build.arcanes, perks=build.perks, progenitor=build.progenitor)
                     if self._legal(candidate): yield candidate
         if build.arcanes and len(build.mods) > len(fixed.mods):
             arcane_index = len(fixed.arcanes)
@@ -338,7 +338,7 @@ class Search:
                         mods[mod_index] = rng.choice(choices)
                         arcanes = list(build.arcanes)
                         arcanes[arcane_index] = arcane
-                        candidate = self._build(mods=mods, arcanes=arcanes, evolutions=build.evolutions, progenitor=build.progenitor)
+                        candidate = self._build(mods=mods, arcanes=arcanes, perks=build.perks, progenitor=build.progenitor)
                         if self._legal(candidate): yield candidate
 
     def _random_build(self, base: Build, pools: dict[str, tuple], rng: random.Random) -> Build:
@@ -350,12 +350,12 @@ class Search:
                 selected.add(mod.name)
         arcanes = list(base.arcanes)
         if not arcanes and pools["arcanes"]: arcanes.append(rng.choice(pools["arcanes"]))
-        perks = list(base.evolutions)
+        perks = list(base.perks)
         occupied = {self.calculator.weapon.perks[perk].tier for perk in perks if perk in self.calculator.weapon.perks}
         for tier, choices in pools["perks"].items():
             if tier not in occupied: perks.append(rng.choice(choices))
         progenitor = base.progenitor or (rng.choice(pools["progenitors"]) if pools["progenitors"] else None)
-        candidate = self._build(mods=mods, arcanes=arcanes, evolutions=perks, progenitor=progenitor)
+        candidate = self._build(mods=mods, arcanes=arcanes, perks=perks, progenitor=progenitor)
         return candidate if self._legal(candidate) else base.copy()
 
     def _shortlist(self, pool: tuple, selected: set[str], limit: int) -> tuple:

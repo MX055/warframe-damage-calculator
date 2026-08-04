@@ -75,7 +75,7 @@ def _score_worker_batch(evaluator: Calculator, target: Enemy | None, attack: str
 
     scores = []
     for index, build in indexed_builds:
-        resolved_perks = resolve_perks(evaluator.weapon, build.evolutions)
+        resolved_perks = resolve_perks(evaluator.weapon, build.perks)
         upgrade_effects = tuple(effect for upgrade in build.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual())
         evaluator.build = build
         score = compact_metric(*evaluator._calculate_metric_components(attack, target, state, resolved_perks=resolved_perks, prepared_names=prepared_names, prepared_upgrade_effects=upgrade_effects))
@@ -88,7 +88,7 @@ def _score_worker_batch_dual(evaluator: Calculator, target: Enemy | None, attack
 
     scores = []
     for index, build in indexed_builds:
-        resolved_perks = resolve_perks(evaluator.weapon, build.evolutions)
+        resolved_perks = resolve_perks(evaluator.weapon, build.perks)
         upgrade_effects = tuple(effect for upgrade in build.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual())
         evaluator.build = build
         score_st, score_aoe = _dual_scores_from_components(compact_metric, *evaluator._calculate_metric_components(attack, target, state, resolved_perks=resolved_perks, prepared_names=prepared_names, prepared_upgrade_effects=upgrade_effects))
@@ -127,20 +127,20 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         self._resolved_effect_cache: dict[int, tuple[ResolvedEffect, ...]] = {}
         self._upgrade_effects_cache: dict[tuple[int, ...], tuple[ResolvedEffect, ...]] = {}
 
-    def resolve(self, metric: Metric = balanced_damage_metric, *, compact_metric: CompactMetric | None = None, spatial: SpatialMode = "auto", attack: str | None = None, body_part: str | None = None, state: State | None = None, evaluations: int = 10_000, riven: bool = True, evolutions: bool = True, upgrade_blacklist: Collection[str] | None = DEFAULT_UPGRADE_BLACKLIST, riven_stat_blacklist: Collection[str] | None = DEFAULT_RIVEN_STAT_BLACKLIST, workers: int | None = None, progress: ProgressCallback | None = terminal_progress) -> OptimizationResult:
+    def resolve(self, metric: Metric = balanced_damage_metric, *, compact_metric: CompactMetric | None = None, spatial: SpatialMode = "auto", attack: str | None = None, body_part: str | None = None, state: State | None = None, evaluations: int = 10_000, riven: bool = True, perks: bool = True, upgrade_blacklist: Collection[str] | None = DEFAULT_UPGRADE_BLACKLIST, riven_stat_blacklist: Collection[str] | None = DEFAULT_RIVEN_STAT_BLACKLIST, workers: int | None = None, progress: ProgressCallback | None = terminal_progress) -> OptimizationResult:
         if not callable(metric): raise TypeError("metric must be callable")
         if compact_metric is None and metric is balanced_damage_metric: compact_metric = balanced_damage_components
         if compact_metric is not None and not callable(compact_metric): raise TypeError("compact_metric must be callable or None")
         if spatial not in SPATIAL_MODES: raise ValueError("spatial must be 'auto', 'full', or 'none'")
         if evaluations < 1: raise ValueError("evaluations must be at least 1")
         if not isinstance(riven, bool): raise TypeError("riven must be a bool")
-        if not isinstance(evolutions, bool): raise TypeError("evolutions must be a bool")
+        if not isinstance(perks, bool): raise TypeError("perks must be a bool")
         if workers is not None and (not isinstance(workers, int) or isinstance(workers, bool) or workers < 1): raise ValueError("workers must be a positive integer or None")
         if upgrade_blacklist is not None and (isinstance(upgrade_blacklist, (str, bytes)) or not isinstance(upgrade_blacklist, Collection)): raise TypeError("upgrade_blacklist must be a collection of upgrade names or None")
         if riven_stat_blacklist is not None and (isinstance(riven_stat_blacklist, (str, bytes)) or not isinstance(riven_stat_blacklist, Collection)): raise TypeError("riven_stat_blacklist must be a collection of stat names or None")
         if progress is not None and not callable(progress): raise TypeError("progress must be callable or None")
         if spatial == "auto":
-            return self._resolve_auto(metric, compact_metric=compact_metric, attack=attack, body_part=body_part, state=state, evaluations=evaluations, riven=riven, evolutions=evolutions, upgrade_blacklist=upgrade_blacklist, riven_stat_blacklist=riven_stat_blacklist, workers=workers, progress=progress)
+            return self._resolve_auto(metric, compact_metric=compact_metric, attack=attack, body_part=body_part, state=state, evaluations=evaluations, riven=riven, perks=perks, upgrade_blacklist=upgrade_blacklist, riven_stat_blacklist=riven_stat_blacklist, workers=workers, progress=progress)
         if spatial == "none":
             if compact_metric is not None: compact_metric = partial(_compact_force_unit_mass, compact_metric)
             if metric is balanced_damage_metric: metric = _balanced_damage_metric_single_target
@@ -154,8 +154,8 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         search_scale = max(0.25, math.sqrt(evaluations / 5_000))
         mode_scale = 2.0
         reporter = _ProgressReporter(progress, budget=evaluations)
-        pools = self._candidate_pools(riven=riven, evolutions=evolutions, upgrade_blacklist=upgrade_blacklist, riven_stat_blacklist=riven_stat_blacklist, search_scale=search_scale)
-        base = self._complete_fixed_build(self.calculator.build, evolutions=evolutions)
+        pools = self._candidate_pools(riven=riven, perks=perks, upgrade_blacklist=upgrade_blacklist, riven_stat_blacklist=riven_stat_blacklist, search_scale=search_scale)
+        base = self._complete_fixed_build(self.calculator.build, perks=perks)
         selected_attack = attack or self.calculator.weapon.default_attack
         generated_attacks = {WeaponCalculator._generated_key(effect) for upgrade in base.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual() if effect.stat == GENERATED_ATTACK_STAT}
         if selected_attack not in self.calculator.weapon.attacks and selected_attack not in generated_attacks: raise ValueError(f"unknown attack {selected_attack!r}")
@@ -186,10 +186,10 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             if evaluations_used >= resolution_budget: return best, False
             score = 0.0
             representative: CalculationResult | None = None
-            perk_key = tuple(self._component_id(perk) for perk in build.evolutions)
+            perk_key = tuple(self._component_id(perk) for perk in build.perks)
             resolved_perks = perk_cache.get(perk_key)
             if resolved_perks is None:
-                resolved_perks = resolve_perks(self.calculator.weapon, build.evolutions)
+                resolved_perks = resolve_perks(self.calculator.weapon, build.perks)
                 perk_cache[perk_key] = resolved_perks
             prepared_upgrade_effects = self._compiled_upgrade_effects(build)
             evaluator.build = build
@@ -298,8 +298,8 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             for index, (left, right) in enumerate(zip(origin.arcanes, candidate.arcanes)):
                 if left is not right: return "arcane", index
             if len(origin.arcanes) != len(candidate.arcanes): return "arcane", min(len(origin.arcanes), len(candidate.arcanes))
-            origin_perks = {self.calculator.weapon.perks[perk].tier: perk for perk in origin.evolutions if perk in self.calculator.weapon.perks}
-            candidate_perks = {self.calculator.weapon.perks[perk].tier: perk for perk in candidate.evolutions if perk in self.calculator.weapon.perks}
+            origin_perks = {self.calculator.weapon.perks[perk].tier: perk for perk in origin.perks if perk in self.calculator.weapon.perks}
+            candidate_perks = {self.calculator.weapon.perks[perk].tier: perk for perk in candidate.perks if perk in self.calculator.weapon.perks}
             for tier in sorted(origin_perks.keys() | candidate_perks.keys()):
                 if origin_perks.get(tier) is not candidate_perks.get(tier): return "perk", tier
             return "progenitor", 0
@@ -350,7 +350,7 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         for source_index, source in enumerate(rebuild_sources):
             if evaluations_used >= rebuild_deadline: break
             fixed_mods = len(base.mods)
-            mutable = [index for index in range(fixed_mods, len(source.build.mods)) if source.build.mods[index].slot == "regular_mod" and not self._is_riven(source.build.mods[index])]
+            mutable = [index for index in range(fixed_mods, len(source.build.mods)) if source.build.mods[index].slot_type == "regular_mod" and not self._is_riven(source.build.mods[index])]
             pairs = list(combinations(mutable, 2))
             pair_limit = min(len(pairs), max(3, round(5 * search_scale ** 0.4)))
             pair_offset = source_index * pair_limit % max(len(pairs), 1)
@@ -358,12 +358,12 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             for first, second in ordered_pairs[:pair_limit]:
                 if evaluations_used >= rebuild_deadline: break
                 mods = [mod for index, mod in enumerate(source.build.mods) if index not in {first, second}]
-                current = self._build(mods=mods, arcanes=source.build.arcanes, evolutions=source.build.evolutions, progenitor=source.build.progenitor)
+                current = self._build(mods=mods, arcanes=source.build.arcanes, perks=source.build.perks, progenitor=source.build.progenitor)
                 current_candidate, _ = evaluate(current)
                 for _ in range(2):
                     selected = {mod.name for mod in current.mods}
                     improved = current_candidate
-                    additions = [candidate_build for mod in pools["mods"] if mod.slot == "regular_mod" and mod.name not in selected and self._legal(candidate_build := self._build(mods=[*current.mods, mod], arcanes=current.arcanes, evolutions=current.evolutions, progenitor=current.progenitor))]
+                    additions = [candidate_build for mod in pools["mods"] if mod.slot_type == "regular_mod" and mod.name not in selected and self._legal(candidate_build := self._build(mods=[*current.mods, mod], arcanes=current.arcanes, perks=current.perks, progenitor=current.progenitor))]
                     for candidate, _ in evaluated(additions, rebuild_deadline):
                         if candidate.score > improved.score: improved = candidate
                     if improved.score <= current_candidate.score: break
@@ -392,10 +392,10 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         result = best.result
         if result is None or any(name not in result.weapon.attacks for name in result.attacks):
             evaluator.build = best.build
-            perk_key = tuple(self._component_id(perk) for perk in best.build.evolutions)
+            perk_key = tuple(self._component_id(perk) for perk in best.build.perks)
             resolved_perks = perk_cache.get(perk_key)
             if resolved_perks is None:
-                resolved_perks = resolve_perks(self.calculator.weapon, best.build.evolutions)
+                resolved_perks = resolve_perks(self.calculator.weapon, best.build.perks)
             result = evaluator._calculate(selected_attack, selected_body_part, target, calculation_state, copy_inputs=True, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=self._compiled_upgrade_effects(best.build))
         return OptimizationResult(
             best.build.copy(),
@@ -416,7 +416,7 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             worker_count if executor_type is not None and use_compact_metric else 1,
         )
 
-    def _resolve_auto(self, metric: Metric, *, compact_metric: CompactMetric | None, attack: str | None, body_part: str | None, state: State | None, evaluations: int, riven: bool, evolutions: bool, upgrade_blacklist: Collection[str] | None, riven_stat_blacklist: Collection[str] | None, workers: int | None, progress: ProgressCallback | None) -> OptimizationResult:
+    def _resolve_auto(self, metric: Metric, *, compact_metric: CompactMetric | None, attack: str | None, body_part: str | None, state: State | None, evaluations: int, riven: bool, perks: bool, upgrade_blacklist: Collection[str] | None, riven_stat_blacklist: Collection[str] | None, workers: int | None, progress: ProgressCallback | None) -> OptimizationResult:
         calculation_state = State() if state is None else State._from_values(state)
         allowed = frozenset(self.calculator.weapon.calculation_defaults) | {"combo_multiplier"}
         unknown_state = set(calculation_state) - allowed
@@ -427,8 +427,8 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
         search_scale = max(0.25, math.sqrt(evaluations / 5_000))
         mode_scale = 1.0
         reporter = _ProgressReporter(progress, budget=resolution_budget)
-        pools = self._candidate_pools(riven=riven, evolutions=evolutions, upgrade_blacklist=upgrade_blacklist, riven_stat_blacklist=riven_stat_blacklist, search_scale=search_scale)
-        base = self._complete_fixed_build(self.calculator.build, evolutions=evolutions)
+        pools = self._candidate_pools(riven=riven, perks=perks, upgrade_blacklist=upgrade_blacklist, riven_stat_blacklist=riven_stat_blacklist, search_scale=search_scale)
+        base = self._complete_fixed_build(self.calculator.build, perks=perks)
         selected_attack = attack or self.calculator.weapon.default_attack
         generated_attacks = {WeaponCalculator._generated_key(effect) for upgrade in base.ranked_upgrades if upgrade.implemented for effect in upgrade.resolve_manual() if effect.stat == GENERATED_ATTACK_STAT}
         if selected_attack not in self.calculator.weapon.attacks and selected_attack not in generated_attacks: raise ValueError(f"unknown attack {selected_attack!r}")
@@ -465,10 +465,10 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
                 return cached, False
             if evaluations_used >= resolution_budget: return best_st if best_st.score_st >= best_aoe.score_aoe else best_aoe, False
             representative: CalculationResult | None = None
-            perk_key = tuple(self._component_id(perk) for perk in build.evolutions)
+            perk_key = tuple(self._component_id(perk) for perk in build.perks)
             resolved_perks = perk_cache.get(perk_key)
             if resolved_perks is None:
-                resolved_perks = resolve_perks(self.calculator.weapon, build.evolutions)
+                resolved_perks = resolve_perks(self.calculator.weapon, build.perks)
                 perk_cache[perk_key] = resolved_perks
             prepared_upgrade_effects = self._compiled_upgrade_effects(build)
             evaluator.build = build
@@ -591,8 +591,8 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             for index, (left, right) in enumerate(zip(origin.arcanes, candidate.arcanes)):
                 if left is not right: return "arcane", index
             if len(origin.arcanes) != len(candidate.arcanes): return "arcane", min(len(origin.arcanes), len(candidate.arcanes))
-            origin_perks = {self.calculator.weapon.perks[perk].tier: perk for perk in origin.evolutions if perk in self.calculator.weapon.perks}
-            candidate_perks = {self.calculator.weapon.perks[perk].tier: perk for perk in candidate.evolutions if perk in self.calculator.weapon.perks}
+            origin_perks = {self.calculator.weapon.perks[perk].tier: perk for perk in origin.perks if perk in self.calculator.weapon.perks}
+            candidate_perks = {self.calculator.weapon.perks[perk].tier: perk for perk in candidate.perks if perk in self.calculator.weapon.perks}
             for tier in sorted(origin_perks.keys() | candidate_perks.keys()):
                 if origin_perks.get(tier) is not candidate_perks.get(tier): return "perk", tier
             return "progenitor", 0
@@ -644,7 +644,7 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             for source_index, source in enumerate(rebuild_starts):
                 if evaluations_used >= rebuild_deadline: break
                 fixed_mods = len(base.mods)
-                mutable = [index for index in range(fixed_mods, len(source.build.mods)) if source.build.mods[index].slot == "regular_mod" and not self._is_riven(source.build.mods[index])]
+                mutable = [index for index in range(fixed_mods, len(source.build.mods)) if source.build.mods[index].slot_type == "regular_mod" and not self._is_riven(source.build.mods[index])]
                 pairs = list(combinations(mutable, 2))
                 pair_limit = min(len(pairs), max(3, round(5 * search_scale ** 0.4)))
                 pair_offset = source_index * pair_limit % max(len(pairs), 1)
@@ -652,12 +652,12 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
                 for first, second in ordered_pairs[:pair_limit]:
                     if evaluations_used >= rebuild_deadline: break
                     mods = [mod for index, mod in enumerate(source.build.mods) if index not in {first, second}]
-                    current = self._build(mods=mods, arcanes=source.build.arcanes, evolutions=source.build.evolutions, progenitor=source.build.progenitor)
+                    current = self._build(mods=mods, arcanes=source.build.arcanes, perks=source.build.perks, progenitor=source.build.progenitor)
                     current_candidate, _ = evaluate(current)
                     for _ in range(2):
                         selected = {mod.name for mod in current.mods}
                         improved = current_candidate
-                        additions = [candidate_build for mod in pools["mods"] if mod.slot == "regular_mod" and mod.name not in selected and self._legal(candidate_build := self._build(mods=[*current.mods, mod], arcanes=current.arcanes, evolutions=current.evolutions, progenitor=current.progenitor))]
+                        additions = [candidate_build for mod in pools["mods"] if mod.slot_type == "regular_mod" and mod.name not in selected and self._legal(candidate_build := self._build(mods=[*current.mods, mod], arcanes=current.arcanes, perks=current.perks, progenitor=current.progenitor))]
                         for candidate, _ in evaluated(additions, rebuild_deadline):
                             if mode_score(candidate, climb) > mode_score(improved, climb): improved = candidate
                         if mode_score(improved, climb) <= mode_score(current_candidate, climb): break
@@ -695,10 +695,10 @@ class Optimizer(Search, CandidatePreparation, RivenCandidates):
             result = candidate.result
             if result is not None and all(name in result.weapon.attacks for name in result.attacks): return result
             evaluator.build = candidate.build
-            perk_key = tuple(self._component_id(perk) for perk in candidate.build.evolutions)
+            perk_key = tuple(self._component_id(perk) for perk in candidate.build.perks)
             resolved_perks = perk_cache.get(perk_key)
             if resolved_perks is None:
-                resolved_perks = resolve_perks(self.calculator.weapon, candidate.build.evolutions)
+                resolved_perks = resolve_perks(self.calculator.weapon, candidate.build.perks)
             return evaluator._calculate(selected_attack, selected_body_part, target, calculation_state, copy_inputs=True, resolved_perks=resolved_perks, validate=False, prepared_names=prepared_names, prepared_upgrade_effects=self._compiled_upgrade_effects(candidate.build))
 
         st_result = materialize(best_st)

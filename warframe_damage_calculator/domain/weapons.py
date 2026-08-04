@@ -5,11 +5,12 @@ from copy import deepcopy
 from types import MappingProxyType
 from typing import Any, ClassVar, Self
 
-from .attacks import Attack, AttackStats, Falloff, Inheritance, Links, RelatedAttacks, resolve_child_keys
+from .generated_attacks import GeneratedAttack
+from .attacks import Attack, AttackStats, Falloff, Inheritance, RelatedAttacks, resolve_child_keys
 from .implementation import ImplementationStatus
 from .perks import Perk, PerkValues, ResolvedPerk, resolve_perk
 
-__all__ = ("Attack", "AttackStats", "Falloff", "Inheritance", "Links", "RelatedAttacks", "Archgun", "Melee", "Primary", "Secondary", "Weapon")
+__all__ = ("Attack", "AttackStats", "Falloff", "GeneratedAttack", "Inheritance", "RelatedAttacks", "Archgun", "Melee", "Primary", "Secondary", "Weapon")
 
 def _restore_weapon(cls: type[Weapon], values: dict[str, Any]) -> Weapon:
     return cls(**values)
@@ -27,7 +28,7 @@ class Weapon:
         self.subtype = subtype
         loaded = dict(attacks) if isinstance(attacks, Mapping) else {attack.name.replace(" ", "_").casefold(): attack for attack in attacks}
         for attack in loaded.values():
-            attack.links.children = resolve_child_keys(attack.links.children, loaded)
+            attack.children = resolve_child_keys(attack.children, loaded)
         self.attacks = loaded
         self.intrinsic_attacks = frozenset(loaded) if intrinsic_attacks is None else frozenset(intrinsic_attacks)
         self.disposition = float(disposition)
@@ -40,8 +41,8 @@ class Weapon:
         perk_values = list(perks or ())
         if len({values.perk for values in perk_values}) != len(perk_values): raise ValueError(f"{name} contains duplicate perk definitions")
         self.perks = MappingProxyType({values.perk: values for values in perk_values})
-        choices: dict[int, dict[int, Perk]] = {}
-        for values in perk_values: choices.setdefault(values.tier, {})[values.choice] = values.perk
+        choices: dict[int, dict[str, Perk]] = {}
+        for values in perk_values: choices.setdefault(values.tier, {})[values.perk.name] = values.perk
         self.perk_choices = MappingProxyType({tier: MappingProxyType(dict(sorted(tier_choices.items()))) for tier, tier_choices in sorted(choices.items())})
         self.traits = set(traits or ())
         self.combo = deepcopy(dict(combo or {}))
@@ -71,7 +72,7 @@ class Weapon:
         attacks = {name: Attack.from_record(attack) for name, attack in record["attacks"].items()}
         traits = {name for name in ("exalted", "pseudo_exalted", "progenitor", "companion") if record.get(name)}
         perk_index = perks or {}
-        perk_values = [PerkValues.from_record(perk_index[str(choice["perk"])], int(tier), int(choice_number), choice) for tier, choices in record.get("evolutions", {}).items() for choice_number, choice in choices.items()]
+        perk_values = [PerkValues.from_record(perk_index[str(perk_name)], int(tier), choice) for tier, choices in record.get("evolutions", {}).items() for perk_name, choice in choices.items()]
         description = record.get("description")
         return cls(name=str(record["name"]), description=None if description is None else str(description), subtype=record.get("subtype"), attacks=attacks, disposition=float(record.get("disposition", 0)), reload_time=float(record.get("reload_time", 0)), magazine_size=float(record.get("magazine_size", 1)), recharge_delay=record.get("recharge_delay"), recharge_rate=record.get("recharge_rate"), incarnon_charges=record.get("incarnon_charges"), incarnon_recharge_count=record.get("incarnon_recharge_count"), perks=perk_values, traits=traits, combo=record.get("combo"), implementation_status=ImplementationStatus.from_record(record.get("implementation_status")))
 

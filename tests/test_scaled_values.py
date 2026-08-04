@@ -72,29 +72,39 @@ class ScaledValueTests(unittest.TestCase):
 
     def test_database_has_no_entry_level_rank_scale_or_nested_generated_attack(self):
         database = arsenal.database
-        self.assertEqual(database["schema_version"], 24)
-        for category in database["upgrades"].values():
-            for upgrade in category.values():
+        self.assertEqual(database["schema_version"], 28)
+        for section in ("mods", "arcanes"):
+            for upgrade in database["upgrades"][section].values():
                 self.assertNotIn("extra_attack", upgrade.get("stats", {}))
                 for effects in upgrade.get("stats", {}).values():
                     for effect in effects:
                         self.assertNotIn("rank_scale", effect)
-                        if "name" in effect and "links" in effect:
-                            self.assertIn("parents", effect["links"])
+                        if "name" in effect and "parent" in effect:
+                            self.assertNotIn("links", effect)
+                            self.assertNotIn("override", effect)
                             self.assertNotIn("kind", effect)
-                            self.assertNotIn("parent", effect)
                             self.assertNotIn("attack", effect)
                             self.assertNotIn("value", effect)
+                            self.assertNotIn("aoe", effect)
+                            self.assertNotIn("hits_source", effect)
+                            self.assertNotIn("stats", effect)
+        for weapons in database["weapons"].values():
+            for weapon in weapons.values():
+                for choices in weapon.get("evolutions", {}).values():
+                    for record in choices.values():
+                        for effects in record.get("stats", {}).values():
+                            for effect in effects:
+                                self.assertNotIn("rank_scale", effect)
         validate_database(deepcopy(database))
 
     def test_nightwatch_napalm_scales_only_the_damage_multiplier(self):
         napalm = arsenal.mod.get("Nightwatch Napalm")
         resolved_zero = napalm.set(rank=0).resolve_manual()[0].value
         resolved_max = napalm.set(rank=5).resolve_manual()[0].value
-        self.assertAlmostEqual(resolved_zero["stats"]["damage"]["heat"]["multiplier"], 0.05)
-        self.assertAlmostEqual(resolved_max["stats"]["damage"]["heat"]["multiplier"], 0.3)
-        self.assertEqual(resolved_max["stats"]["falloff"]["end_range"]["multiplier"], 0.9)
-        self.assertEqual(resolved_max["stats"]["multishot"], 5)
+        self.assertAlmostEqual(resolved_zero["inheritance"]["override"]["stats.damage.heat"]["multiplier"], 0.05)
+        self.assertAlmostEqual(resolved_max["inheritance"]["override"]["stats.damage.heat"]["multiplier"], 0.3)
+        self.assertEqual(resolved_max["inheritance"]["override"]["stats.falloff.end_range"]["multiplier"], 0.9)
+        self.assertEqual(resolved_max["inheritance"]["override"]["stats.multishot"], 5)
 
     def test_melee_influence_scales_duration_not_chance_or_range(self):
         influence = arsenal.arcane.get("Melee Influence")
@@ -104,7 +114,7 @@ class ScaledValueTests(unittest.TestCase):
         self.assertEqual(maximum.automatic["chance"], 0.2)
         self.assertEqual(zero.automatic["for"], 3)
         self.assertEqual(maximum.automatic["for"], 18)
-        self.assertEqual(maximum.value["stats"]["falloff"]["end_range"], 20)
+        self.assertEqual(maximum.value["inheritance"]["override"]["stats.falloff.end_range"], 20)
 
     def test_melee_duplicate_chance_scales_linearly(self):
         duplicate = arsenal.arcane.get("Melee Duplicate")

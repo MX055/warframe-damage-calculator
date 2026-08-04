@@ -15,7 +15,7 @@ build = Build(
         arsenal.mod.get("Galvanized Chamber"),
         arsenal.mod.get("Critical Delay"),
     ],
-    evolutions=[
+    perks=[
         arsenal.perk.get("Elemental Excess"),
         arsenal.perk.get("Devouring Attrition"),
     ],
@@ -39,7 +39,7 @@ result = calculator.resolve(attack="heavy_attack", body_part="head", state=State
 Definition types are available directly from the package root, so custom content does not depend on internal module paths:
 
 ```python
-from warframe_damage_calculator import Attack, AttackStats, Calculator, Compatibility, Dist, Effect, Inheritance, Links, Build, Mod, Primary, RelatedAttacks, Source, UpgradeStats
+from warframe_damage_calculator import Attack, AttackStats, Calculator, Compatibility, Dist, Effect, GeneratedAttack, Inheritance, Build, Mod, Primary, RelatedAttacks, Source, UpgradeStats
 
 weapon = Primary(
     name="Custom Primary",
@@ -52,15 +52,17 @@ mod = Mod(
     compatibility=Compatibility(types=["primary"]),
     stats=UpgradeStats(
         damage_bonus=0.2,
-        generated_attack=Attack(
+        generated_attack=GeneratedAttack(
             name="Aftershock",
-            aoe=True,
-            inheritance=Inheritance(include=["trigger", "delivery", "form", "category"]),
-            links=Links(parents=RelatedAttacks(names=["shot"])),
-            stats={
-                "damage": {"heat": {"source": "$parent.stats.damage.total", "multiplier": 0.1}},
-                "falloff": {"end_range": 2},
-            },
+            parent=RelatedAttacks(names=["shot"]),
+            inheritance=Inheritance(
+                include=["trigger", "delivery", "form", "category"],
+                override={
+                    "aoe": True,
+                    "stats.damage.heat": {"source": "$parent.stats.damage.total", "multiplier": 0.1},
+                    "stats.falloff.end_range": 2,
+                },
+            ),
         ),
     ),
 )
@@ -108,20 +110,18 @@ multiplicative: 1 + (encoded_value - 1) * factor
 
 Rank scaling is resolved once when an upgrade is loaded for its selected rank. Generated-attack construction then uses already-resolved numbers.
 
-The database schema version is `24`.
+The database schema version is `28`.
 
 ### Generated attacks
 
-Weapon attacks and upgrade-generated attacks share one `Attack` record. A generated attack is stored flat under `stats.generated_attack` (no `kind` / `parent` / `attack` envelope):
+Weapon attacks use `Attack`. Upgrade-generated attacks use a separate `GeneratedAttack` record under `stats.generated_attack`:
 
 ```json
 {
   "name": "Melee Duplicate",
+  "parent": {"deliveries": ["melee"]},
   "inheritance": {
     "include": ["trigger", "delivery", "aoe", "form", "category", "stats"]
-  },
-  "links": {
-    "parents": {"deliveries": ["melee"]}
   },
   "automatic": {
     "on": "near_yellow_critical_hit",
@@ -130,13 +130,11 @@ Weapon attacks and upgrade-generated attacks share one `Attack` record. A genera
 }
 ```
 
-`links.parents` and `links.children` are each an optional `RelatedAttacks` selector (`names`, `triggers`, `deliveries`, `forms`, `categories`, `aoe`). Multiple targets are listed on the selector axes (for example `names: ["Initial Blast", "Bubble Collapse"]`). Display names are preferred in `names`; weapon map keys stay stable ids. `$parent` is the lexical reference to the selected parent during inheritance and expression resolution. Generated attacks inherit nothing by default.
+`parent` is a `RelatedAttacks` selector (`names`, `triggers`, `deliveries`, `forms`, `categories`, `aoe`) and exists only on generated attacks. `children` is a list of display names on both weapon attacks and generated attacks (for example `["Rocket Explosion"]` or a self-name for recursion). `$parent` is the lexical reference to the selected parent during inheritance and expression resolution. Generated attacks inherit nothing by default.
 
-A generated attack that lists itself in `links.children` is a recursive self-trigger. The tree walk does not expand that cycle; expected contribution is folded analytically as the geometric series `p + p² + p³ + … = p / (1 - p)` for trigger chance `p < 1`.
+A generated attack that lists itself in `children` is a recursive self-trigger. The tree walk does not expand that cycle; expected contribution is folded analytically as the geometric series `p + p² + p³ + … = p / (1 - p)` for trigger chance `p < 1`.
 
-`inheritance.include` is an allowlist of exact top-level or nested paths to deep-copy, such as `trigger` or `stats.damage.heat`. `inheritance.exclude` removes paths after include (so `include=["stats"]` with `exclude=["stats.forced_procs"]` works). Wildcard inheritance is not supported. Explicit values merge recursively over inherited mappings, while explicit scalars and lists replace inherited values. Dynamic source expressions are resolved after inheritance and use complete paths such as `$parent.stats.damage.total`; `default` supplies a value when an optional source path is absent.
-
-Native weapon attacks store child relationships as `links.children` (typically `{"names": ["Rocket Explosion"]}`) instead of a top-level `children` key.
+`inheritance.include` is an allowlist of exact top-level or nested paths to deep-copy, such as `trigger` or `stats.damage.heat`. `inheritance.exclude` removes paths after include (so `include=["stats"]` with `exclude=["stats.forced_procs"]` works). Wildcard inheritance is not supported. Explicit values live under `inheritance.override` as a flat path→value map (for example `"aoe": true` or `"stats.falloff.end_range": 20`). Override paths use the same path rules as include/exclude and must not nest under one another. After include/exclude, override paths are expanded into a nested attack definition and deep-merged over inherited mappings; scalars and lists replace. Dynamic source expressions are resolved after inheritance and use complete paths such as `$parent.stats.damage.total`; `default` supplies a value when an optional source path is absent.
 
 `automatic` controls activation and averaged occurrence:
 
@@ -148,16 +146,14 @@ Native weapon attacks store child relationships as `links.children` (typically `
 
 Typed status events such as `heat_status_proc` expose their status type to the generated-attack resolver. Multiple `on` events combine expected rates without inventing an independent status-chance roll for the generated attack.
 
-Melee Duplicate lists every gameplay field it copies explicitly and does not inherit `links`, so a duplicated hit cannot reproduce native secondary attacks or recursively duplicate itself. Trigger chance scales linearly to 100% at max rank. No damage value is rank-scaled:
+Melee Duplicate lists every gameplay field it copies explicitly and does not declare `children`, so a duplicated hit cannot reproduce native secondary attacks or recursively duplicate itself. Trigger chance scales linearly to 100% at max rank. No damage value is rank-scaled:
 
 ```json
 {
   "name": "Melee Duplicate",
+  "parent": {"deliveries": ["melee"]},
   "inheritance": {
     "include": ["trigger", "delivery", "aoe", "form", "category", "stats"]
-  },
-  "links": {
-    "parents": {"deliveries": ["melee"]}
   },
   "automatic": {
     "on": "near_yellow_critical_hit",
@@ -170,8 +166,7 @@ Melee Influence is represented through the same generated-attack pipeline as an 
 ```json
 {
   "name": "Melee Influence",
-  "aoe": true,
-  "hits_source": false,
+  "parent": {"deliveries": ["melee"]},
   "inheritance": {
     "include": [
       "trigger", "delivery", "form", "category",
@@ -183,12 +178,15 @@ Melee Influence is represented through the same generated-attack pipeline as an 
       "stats.forced_procs.toxin", "stats.forced_procs.blast", "stats.forced_procs.radiation",
       "stats.forced_procs.gas", "stats.forced_procs.magnetic", "stats.forced_procs.viral",
       "stats.forced_procs.corrosive"
-    ]
+    ],
+    "override": {
+      "aoe": true,
+      "hits_source": false,
+      "stats.falloff.start_range": 0,
+      "stats.falloff.end_range": 20,
+      "stats.falloff.final_multiplier": 1
+    }
   },
-  "links": {
-    "parents": {"deliveries": ["melee"]}
-  },
-  "stats": {"falloff": {"start_range": 0, "end_range": 20, "final_multiplier": 1}},
   "automatic": {
     "when": "electricity_status_proc",
     "chance": 0.2,
@@ -206,32 +204,28 @@ Nightwatch Napalm is an independently calculated child. Only the heat damage mul
 ```json
 {
   "name": "Nightwatch Napalm Linger",
-  "aoe": true,
+  "parent": {"names": ["Rocket Explosion"]},
   "inheritance": {
-    "include": ["trigger", "delivery", "form", "category"]
-  },
-  "links": {
-    "parents": {"names": ["Rocket Explosion"]}
-  },
-  "stats": {
-    "damage": {"heat": {"source": "$parent.stats.damage.total", "multiplier": {"value": 0.3, "rank_scale": true}}},
-    "forced_procs": {"heat": 1},
-    "falloff": {
-      "start_range": 0,
-      "end_range": {"source": "$parent.stats.falloff.end_range", "multiplier": 0.9},
-      "final_multiplier": 1
-    },
-    "crit_chance": 0,
-    "crit_damage": 0,
-    "status_chance": 0,
-    "multishot": 5,
-    "co_factor": 1,
-    "co_effect": "adds"
+    "include": ["trigger", "delivery", "form", "category"],
+    "override": {
+      "aoe": true,
+      "stats.damage.heat": {"source": "$parent.stats.damage.total", "multiplier": {"value": 0.3, "rank_scale": true}},
+      "stats.forced_procs.heat": 1,
+      "stats.falloff.start_range": 0,
+      "stats.falloff.end_range": {"source": "$parent.stats.falloff.end_range", "multiplier": 0.9},
+      "stats.falloff.final_multiplier": 1,
+      "stats.crit_chance": 0,
+      "stats.crit_damage": 0,
+      "stats.status_chance": 0,
+      "stats.multishot": 5,
+      "stats.co_factor": 1,
+      "stats.co_effect": "adds"
+    }
   }
 }
 ```
 
-Generated attacks retain the generating upgrade and selected parent as provenance. Generic parent selectors do not select upgrade-generated attacks; selecting one requires its explicit generated-attack key. This prevents Melee Influence, Melee Duplicate, and Nightwatch Napalm from generating themselves. Rank-resolved values are not scaled again during attack construction. The same root API exposes `Arcane`, `Perk`, `PerkValues`, `Effect`, `Source`, `Inheritance`, `Links`, `RelatedAttacks`, `Combo`, `Automatic`, `UpgradeValue`, `Falloff`, all concrete weapon categories, and the enemy definition types. Calculation-result models and optimizer implementation details remain in their dedicated modules.
+Generated attacks retain the generating upgrade and selected parent as provenance. Generic parent selectors do not select upgrade-generated attacks; selecting one requires its explicit generated-attack key. This prevents Melee Influence, Melee Duplicate, and Nightwatch Napalm from generating themselves. Rank-resolved values are not scaled again during attack construction. The same root API exposes `Arcane`, `Perk`, `PerkValues`, `Effect`, `Source`, `Inheritance`, `GeneratedAttack`, `RelatedAttacks`, `Combo`, `Automatic`, `UpgradeValue`, `Falloff`, all concrete weapon categories, and the enemy definition types. Calculation-result models and optimizer implementation details remain in their dedicated modules.
 
 Stance mods store combos by stable id with an explicit `type`:
 
@@ -259,13 +253,13 @@ Perks are loaded independently of weapons:
 perk = arsenal.perk.get("Devouring Attrition")
 ```
 
-A global `Perk` owns the complete effect template: affected stats, modes, families, conditions, automatic behavior, and `$values` source expressions. A weapon evolution choice stores concrete upgrade-style `stats` for those templates, for example `{"status_chance": [{"value": 0.2, "mode": "flat", "automatic": {}}]}`. Zero-valued slots are omitted. At load time those effects map onto the named `$values.stat.key` slots used by the global template. Custom definitions use `Source("$values.stat_name.slot_key", default=0)` for the same representation.
+A global `Perk` is an identity marker: `description` is `"$description"` and `stats` is `"$stats"`. A weapon evolution choice stores the concrete upgrade-style effects, for example `{"status_chance": [{"value": 0.2, "mode": "flat", "automatic": {}}]}`. Zero-valued effects are omitted. At resolve time those weapon effects become the perk’s resolved effects directly—there is no global template slot list and no explicit `default: 0` source fill-in. Custom definitions use the same shorthand on `Perk`, with concrete values supplied via `PerkValues`.
 
 ```text
-global Perk template + weapon PerkValues -> ResolvedPerk -> effect pipeline
+global Perk markers + weapon PerkValues -> ResolvedPerk -> effect pipeline
 ```
 
-The same template can resolve to different values:
+The same perk name can resolve to different values on different weapons:
 
 ```python
 perk = arsenal.perk.get("Elemental Balance")
@@ -273,7 +267,7 @@ telos = arsenal.primary.get("Telos Boltor").resolve_perk(perk)
 prime = arsenal.primary.get("Boltor Prime").resolve_perk(perk)
 ```
 
-Every selected item in `Build.evolutions` is resolved through the weapon before calculation. Missing values, unknown values, duplicate tier selections, and perks unavailable to the weapon are rejected. Tier and choice data are retained in `weapon.perk_choices` for selection and optimizer search spaces; calculation does not convert selected perks back into database instructions. Conditional perk effects use perk runtime (`perk.set(...)` / `build.set(...)`) with defaults of `True` or max stacks, matching ranked upgrades.
+Every selected item in `Build.perks` is resolved through the weapon before calculation. A perk not available on the weapon raises an error. Selecting a perk at the wrong list index for its tier (1-based: `perks[i]` should be tier `i+1`) or selecting two perks of the same tier emits a `PerkCompatibilityWarning`; the wrong-position perk still pairs with that perk’s weapon values, and for duplicate tiers the first selection is kept. Tier and choice data are retained in `weapon.perk_choices` (keyed by perk name within each tier) for selection and optimizer search spaces; calculation does not convert selected perks back into database instructions. Conditional perk effects use defaults from the weapon’s concrete effects (`True` or max stacks), with overrides via `perk.set(...)` / `build.set(...)`.
 
 ## Result navigation
 
@@ -292,7 +286,7 @@ projectile.base
 projectile.modded
 projectile.effective
 projectile.upgrades
-projectile.evolutions
+projectile.perks
 projectile.damage
 projectile.critical
 projectile.timing
@@ -398,7 +392,7 @@ from warframe_damage_calculator.formatting.results import format_result
 
 print(format_weapon(weapon))
 print(format_upgrade(build.upgrades[0]))
-print(format_perk(build.evolutions[0]))
+print(format_perk(build.perks[0]))
 print(format_build(build))
 print(format_result(result))
 print(Formatter(result).stat_summary())

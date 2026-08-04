@@ -24,10 +24,10 @@ def _additive_scalar(base: float, stat: str, modifiers: ResolvedStats, *, minimu
     return max(value * float(modifiers.multiplicative.get(stat, 1)) + float(modifiers.flat.get(stat, 0)), minimum)
 
 
-def _combined(upgrades: ResolvedStats, evolutions: ResolvedStats) -> ResolvedStats:
+def _combined(upgrades: ResolvedStats, perks: ResolvedStats) -> ResolvedStats:
     total = ResolvedStats()
     merge(total, upgrades)
-    merge(total, evolutions)
+    merge(total, perks)
     return total
 
 
